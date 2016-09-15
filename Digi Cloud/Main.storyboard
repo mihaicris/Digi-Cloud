@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="Digi_Cloud" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mihai.cristescu@gmail.com" borderStyle="roundedRect" placeholder="Email address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dro-ch-fVl">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="KnQ-Lr-oK8"/>
+                                    <constraint firstAttribute="width" constant="300" id="d2k-6e-VDl"/>
+                                </constraints>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="kJM-YQ-E0S"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="QxSi69uqOp9r" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vJF-xE-eqK">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="FEE-kZ-9dL"/>
+                                    <constraint firstAttribute="width" constant="300" id="wOa-dA-sSK"/>
+                                </constraints>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="aMX-fe-ihY"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2fi-cF-FsO">
+                                <color key="backgroundColor" red="0.23236393928527832" green="0.21447756886482239" blue="0.57945549488067627" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="fAl-db-v5v"/>
+                                    <constraint firstAttribute="height" constant="40" id="yhe-CF-emf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="LOGIN">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginButtonTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nme-7r-WzA"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.30267110466957092" green="0.27598893642425537" blue="0.73368799686431885" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="vJF-xE-eqK" firstAttribute="top" secondItem="dro-ch-fVl" secondAttribute="bottom" constant="40" id="0Kh-lc-BBD"/>
+                            <constraint firstItem="dro-ch-fVl" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="48b-FS-vEG"/>
+                            <constraint firstItem="vJF-xE-eqK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XtE-1S-67x"/>
+                            <constraint firstItem="2fi-cF-FsO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Yvx-UU-Ukz"/>
+                            <constraint firstItem="2fi-cF-FsO" firstAttribute="top" secondItem="vJF-xE-eqK" secondAttribute="bottom" constant="60" id="hme-aj-5BV"/>
+                            <constraint firstItem="dro-ch-fVl" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="100" id="scr-45-CCZ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="emailTextField" destination="dro-ch-fVl" id="Mvo-Ys-u0B"/>
+                        <outlet property="loginButton" destination="2fi-cF-FsO" id="qg3-kU-IfX"/>
+                        <outlet property="passwordTextField" destination="vJF-xE-eqK" id="ppX-ug-9kd"/>
+                        <segue destination="wMc-wT-LaY" kind="show" identifier="Locations" id="hPd-FP-dNR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="200.00000000000003" y="132.88043478260872"/>
+        </scene>
+        <!--Folders-->
+        <scene sceneID="XGS-1q-bZx">
+            <objects>
+                <tableViewController id="JOK-wS-iu9" customClass="LocationsTableViewController" customModule="Digi_Cloud" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Zyg-li-LTG">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationCell" id="foD-UX-qsh">
+                                <rect key="frame" x="0.0" y="92" width="768" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="foD-UX-qsh" id="yj7-nN-Yn6">
+                                    <frame key="frameInset" width="768" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="JOK-wS-iu9" id="4hQ-Bg-vQy"/>
+                            <outlet property="delegate" destination="JOK-wS-iu9" id="rQZ-Rh-hT5"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Folders" id="Ot2-zs-LxD"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LED-ZT-Ntp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1743" y="133"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="7AQ-Je-xbM">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wMc-wT-LaY" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7Gv-Cw-kfK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="JOK-wS-iu9" kind="relationship" relationship="rootViewController" id="7ki-hH-NFB"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="m5f-uI-ANQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="980" y="130.88455772113943"/>
+        </scene>
+    </scenes>
+</document>
