@@ -103,6 +103,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if let navController = segue.destination as? UINavigationController {
                 if let nextViewController = navController.topViewController as? LocationsTableViewController {
                     nextViewController.token = self.token!
+                    nextViewController.title = "Digi Storage"
                 }
             }
         }

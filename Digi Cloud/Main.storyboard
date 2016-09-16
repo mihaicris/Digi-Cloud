@@ -35,7 +35,7 @@
                                     <constraint firstAttribute="height" constant="40" id="FEE-kZ-9dL"/>
                                     <constraint firstAttribute="width" constant="300" id="wOa-dA-sSK"/>
                                 </constraints>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                 <connections>
@@ -82,26 +82,26 @@
             </objects>
             <point key="canvasLocation" x="200.00000000000003" y="132.88043478260872"/>
         </scene>
-        <!--Locations-->
+        <!--Locations Table View Controller-->
         <scene sceneID="XGS-1q-bZx">
             <objects>
                 <tableViewController id="JOK-wS-iu9" customClass="LocationsTableViewController" customModule="Digi_Cloud" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Zyg-li-LTG">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="93" sectionHeaderHeight="28" sectionFooterHeight="28" id="Zyg-li-LTG">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationCell" textLabel="o7s-8S-1I8" style="IBUITableViewCellStyleDefault" id="foD-UX-qsh">
-                                <rect key="frame" x="0.0" y="92" width="768" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationCell" textLabel="o7s-8S-1I8" rowHeight="93" style="IBUITableViewCellStyleDefault" id="foD-UX-qsh">
+                                <rect key="frame" x="0.0" y="92" width="768" height="93"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="foD-UX-qsh" id="yj7-nN-Yn6">
-                                    <frame key="frameInset" width="768" height="43"/>
+                                    <frame key="frameInset" width="768" height="92"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o7s-8S-1I8">
-                                            <frame key="frameInset" minX="48" width="672" height="43"/>
+                                            <frame key="frameInset" minX="48" width="672" height="92"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -114,11 +114,13 @@
                             <outlet property="delegate" destination="JOK-wS-iu9" id="rQZ-Rh-hT5"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Locations" id="Ot2-zs-LxD"/>
+                    <navigationItem key="navigationItem" id="Ot2-zs-LxD">
+                        <barButtonItem key="rightBarButtonItem" title="Settings" id="Q0w-gZ-g14"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LED-ZT-Ntp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1743" y="133"/>
+            <point key="canvasLocation" x="1742.96875" y="132.421875"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7AQ-Je-xbM">
