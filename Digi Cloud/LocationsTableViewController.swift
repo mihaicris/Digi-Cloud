@@ -19,7 +19,7 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-       let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.User,
+       let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Mounts,
                                             parameters: nil)
         
         var request = URLRequest(url: url)
@@ -47,20 +47,20 @@ class LocationsTableViewController: UITableViewController {
             
             if let data = dataResponse {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments)
-                    if let dict = json as? [String: String] {
+                    let json = try JSONSerialization.jsonObject(with: data,
+                                                                options: JSONSerialization.ReadingOptions.allowFragments)
+                    if let dict = json as? [String: AnyObject] {
+                        if let mounts = dict["mounts"] as? [AnyObject] {
+                            for item in mounts  {
+                                if let mount = item as? [String:AnyObject] {
+                                    print(mount["name"]!)
+                                }
+                            }
+                        }
                         
-                        self.user = User(firstName: dict["firstName"]!,
-                                    lastName: dict["lastName"]!,
-                                    email: dict["email"]!)
                     }
                     
-                    DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "Welcome", message: self.user.firstName + 	" " + self.user.lastName, preferredStyle: UIAlertControllerStyle.alert)
-                        let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
-                        alert.addAction(actionOK)
-                        self.present(alert, animated: false, completion: nil)
-                    }
+                    
                     
                     
                 }
