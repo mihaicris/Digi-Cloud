@@ -32,9 +32,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         guard let email = emailTextField.text else { return }
         guard let pass = passwordTextField.text else { return }
         
-        let url = URL(string: api_base + "/token")
+        let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Token,
+                                             parameters: nil)
         
-        var request = URLRequest(url: url!)
+        var request = URLRequest(url: url)
         
         request.addValue(email, forHTTPHeaderField: "X-Koofr-Email")
         request.addValue(pass, forHTTPHeaderField: "X-Koofr-Password")

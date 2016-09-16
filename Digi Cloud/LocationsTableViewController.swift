@@ -19,9 +19,10 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-       let url = URL(string: api_base + "/api/v2/user")
+       let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.User,
+                                            parameters: nil)
         
-        var request = URLRequest(url: url!)
+        var request = URLRequest(url: url)
         
         request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
 
