@@ -12,10 +12,12 @@ class LocationsTableViewController: UITableViewController {
     
     var token: String!
     
-    var user: User!
+    var mounts: [String] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
-    var locations = [String]()
-
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -50,19 +52,17 @@ class LocationsTableViewController: UITableViewController {
                     let json = try JSONSerialization.jsonObject(with: data,
                                                                 options: JSONSerialization.ReadingOptions.allowFragments)
                     if let dict = json as? [String: AnyObject] {
-                        if let mounts = dict["mounts"] as? [AnyObject] {
-                            for item in mounts  {
+                        if let mountsList = dict["mounts"] as? [AnyObject] {
+                            for item in mountsList  {
                                 if let mount = item as? [String:AnyObject] {
-                                    print(mount["name"]!)
+                                    if let mountName = mount["name"] as? String {
+                                        self.mounts.append(mountName)
+                                    }
                                 }
                             }
                         }
                         
                     }
-                    
-                    
-                    
-                    
                 }
                 catch let error {
                     print(error)
@@ -75,34 +75,28 @@ class LocationsTableViewController: UITableViewController {
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Digi Storage"
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return locations.count
+        return mounts.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath)
 
-        // Configure the cell...
+        cell.textLabel?.text = mounts[indexPath.row]
 
         return cell
     }
-    */
-    
-
     
     // MARK: - Navigation
 

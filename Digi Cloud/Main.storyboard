@@ -30,7 +30,7 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="kJM-YQ-E0S"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="QxSi69uqOp9r" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vJF-xE-eqK">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vJF-xE-eqK">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="FEE-kZ-9dL"/>
                                     <constraint firstAttribute="width" constant="300" id="wOa-dA-sSK"/>
@@ -56,6 +56,7 @@
                                     <action selector="loginButtonTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nme-7r-WzA"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="2BZ-G9-yCi"/>
                         </subviews>
                         <color key="backgroundColor" red="0.30267110466957092" green="0.27598893642425537" blue="0.73368799686431885" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -65,12 +66,15 @@
                             <constraint firstItem="2fi-cF-FsO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Yvx-UU-Ukz"/>
                             <constraint firstItem="2fi-cF-FsO" firstAttribute="top" secondItem="vJF-xE-eqK" secondAttribute="bottom" constant="60" id="hme-aj-5BV"/>
                             <constraint firstItem="dro-ch-fVl" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="100" id="scr-45-CCZ"/>
+                            <constraint firstItem="2BZ-G9-yCi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="uiy-pB-G1V"/>
+                            <constraint firstItem="2BZ-G9-yCi" firstAttribute="top" secondItem="2fi-cF-FsO" secondAttribute="bottom" constant="50" id="xRk-G7-bVe"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="emailTextField" destination="dro-ch-fVl" id="Mvo-Ys-u0B"/>
                         <outlet property="loginButton" destination="2fi-cF-FsO" id="qg3-kU-IfX"/>
                         <outlet property="passwordTextField" destination="vJF-xE-eqK" id="ppX-ug-9kd"/>
+                        <outlet property="spinner" destination="2BZ-G9-yCi" id="y5A-0G-Eyq"/>
                         <segue destination="wMc-wT-LaY" kind="show" identifier="Locations" id="hPd-FP-dNR"/>
                     </connections>
                 </viewController>
@@ -78,7 +82,7 @@
             </objects>
             <point key="canvasLocation" x="200.00000000000003" y="132.88043478260872"/>
         </scene>
-        <!--Folders-->
+        <!--Locations-->
         <scene sceneID="XGS-1q-bZx">
             <objects>
                 <tableViewController id="JOK-wS-iu9" customClass="LocationsTableViewController" customModule="Digi_Cloud" customModuleProvider="target" sceneMemberID="viewController">
@@ -87,12 +91,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationCell" id="foD-UX-qsh">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationCell" textLabel="o7s-8S-1I8" style="IBUITableViewCellStyleDefault" id="foD-UX-qsh">
                                 <rect key="frame" x="0.0" y="92" width="768" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="foD-UX-qsh" id="yj7-nN-Yn6">
                                     <frame key="frameInset" width="768" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o7s-8S-1I8">
+                                            <frame key="frameInset" minX="48" width="672" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -101,7 +114,7 @@
                             <outlet property="delegate" destination="JOK-wS-iu9" id="rQZ-Rh-hT5"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Folders" id="Ot2-zs-LxD"/>
+                    <navigationItem key="navigationItem" title="Locations" id="Ot2-zs-LxD"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LED-ZT-Ntp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -27,6 +27,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             loginButton.layer.shadowColor = UIColor.white.cgColor
         }
     }
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
     @IBAction func loginButtonTouchUp(_ sender: UIButton) {
         
         guard let email = emailTextField.text else { return }
@@ -41,6 +43,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         request.addValue(pass, forHTTPHeaderField: "X-Koofr-Password")
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        spinner.startAnimating()
         
         let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
         
@@ -52,10 +55,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.spinner.stopAnimating()
+
             }
             
             if error != nil {
-                print("Session error")
+                print("Error: \(error!.localizedDescription)")
                 return
             }
             
