@@ -15,9 +15,9 @@ class FilesTableViewController: UITableViewController {
     var mount: String!
     
     var url: URL!
-
+    
     var content: [File] = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -59,7 +59,7 @@ class FilesTableViewController: UITableViewController {
                             let modified = item["modified"] as? TimeInterval,
                             let size = item["size"] as? Double,
                             let contentType = item["contentType"] as? String
-                        else {
+                            else {
                                 print("Could not parce keys")
                                 return
                         }
@@ -84,15 +84,15 @@ class FilesTableViewController: UITableViewController {
             }
         }
         datatask?.resume()
-
+        
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return content.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath)
         cell.textLabel?.text = content[indexPath.row].name
@@ -103,22 +103,25 @@ class FilesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let newVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
             
-            newVC.token = token
-            newVC.mount = mount
-            newVC.title = content[indexPath.row].name
-            
-            let urlComponents = URLComponents(string: url.absoluteString)
-            let queryItems = urlComponents?.queryItems
-            var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
-            if path != "/" {
-                path += "/"
+            if content[indexPath.row].type == "dir" {
+                
+                newVC.token = token
+                newVC.mount = mount
+                newVC.title = content[indexPath.row].name
+                
+                let urlComponents = URLComponents(string: url.absoluteString)
+                let queryItems = urlComponents?.queryItems
+                var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
+                if path != "/" {
+                    path += "/"
+                }
+                
+                let newPath = path + content[indexPath.row].name
+                
+                newVC.url = Utils.getURLForMountContent(mount: mount, path: newPath)
+                print(newVC.url.absoluteString)
+                self.navigationController?.pushViewController(newVC, animated: true)
             }
-            
-            let newPath = path + content[indexPath.row].name
-            
-            newVC.url = Utils.getURLForMountContent(mount: mount, path: newPath)
-            print(newVC.url.absoluteString)
-            self.navigationController?.pushViewController(newVC, animated: true)
         }
     }
 }
