@@ -10,19 +10,11 @@ import UIKit
 
 class FileCell: UITableViewCell {
 
-    @IBOutlet weak var fileNameLabel: UILabel!
+    @IBOutlet var fileNameLabel: UILabel!
     
-    @IBOutlet weak var fileSizeLabel: UILabel!
+    @IBOutlet var fileSizeLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
 }

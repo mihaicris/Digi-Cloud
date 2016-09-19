@@ -96,26 +96,20 @@ class FilesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let data = content[indexPath.row]
-        let cell = UITableViewCell()
         
-        switch content[indexPath.row].type {
-        
-        case "dir":
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as? DirectoryCell {
-                cell.folderNameLabel.text = data.name
-            }
-        case "file":
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as? FileCell {
-                cell.fileNameLabel.text = data.name
-                cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file)
-            }
-            
-        default:
+        if data.type == "dir" {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as! DirectoryCell
+            cell.folderNameLabel.text = data.name
+            return cell
+
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
+            cell.fileNameLabel.text = data.name
+            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file)
             return cell
         }
-        
-        return cell
     }
+    
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

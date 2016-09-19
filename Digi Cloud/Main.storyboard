@@ -102,7 +102,7 @@
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o7s-8S-1I8">
                                             <frame key="frameInset" minX="48" width="654" height="77"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="36"/>
+                                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="30"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -153,7 +153,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="FileCell" rowHeight="50" id="5xW-Qs-Moa" customClass="FileCell" customModule="Digi_Cloud" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="FileCell" rowHeight="50" id="5xW-Qs-Moa" userLabel="File" customClass="FileCell" customModule="Digi_Cloud" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="768" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5xW-Qs-Moa" id="sHf-uO-t9s">
@@ -192,7 +192,7 @@
                                     <outlet property="fileSizeLabel" destination="0fD-z2-ofW" id="BNU-aO-WAG"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="DirectoryCell" rowHeight="50" id="c3f-R9-rky" customClass="DirectoryCell" customModule="Digi_Cloud" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="DirectoryCell" rowHeight="50" id="c3f-R9-rky" userLabel="Directory" customClass="DirectoryCell" customModule="Digi_Cloud" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="142" width="768" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="c3f-R9-rky" id="PXl-b7-Enq">
