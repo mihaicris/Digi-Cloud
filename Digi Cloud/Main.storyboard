@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -147,27 +148,80 @@
         <scene sceneID="fzD-fa-GYQ">
             <objects>
                 <tableViewController storyboardIdentifier="FilesTableViewController" id="Fy9-Iu-kd7" customClass="FilesTableViewController" customModule="Digi_Cloud" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="40" sectionHeaderHeight="28" sectionFooterHeight="28" id="eEI-E6-CSg">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="eEI-E6-CSg">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="FileCell" textLabel="KiN-4t-7fJ" style="IBUITableViewCellStyleDefault" id="5xW-Qs-Moa">
-                                <rect key="frame" x="0.0" y="92" width="768" height="40"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="FileCell" rowHeight="50" id="5xW-Qs-Moa" customClass="FileCell" customModule="Digi_Cloud" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="768" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5xW-Qs-Moa" id="sHf-uO-t9s">
-                                    <frame key="frameInset" width="702" height="39"/>
+                                    <frame key="frameInset" width="768" height="49"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KiN-4t-7fJ">
-                                            <frame key="frameInset" minX="48" width="654" height="39"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="20"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FileIcon" translatesAutoresizingMaskIntoConstraints="NO" id="fNi-xD-caC">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="28" id="9QY-wl-MFS"/>
+                                                <constraint firstAttribute="height" constant="28" id="o7M-WM-njK"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="File.txt" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2a-ZK-2dg">
+                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="18"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 KB" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0fD-z2-ofW">
+                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="12"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="fNi-xD-caC" firstAttribute="leading" secondItem="sHf-uO-t9s" secondAttribute="leadingMargin" constant="5" id="57x-Fn-XyM"/>
+                                        <constraint firstItem="O2a-ZK-2dg" firstAttribute="top" secondItem="fNi-xD-caC" secondAttribute="top" constant="-4" id="FSg-eO-X7U"/>
+                                        <constraint firstItem="0fD-z2-ofW" firstAttribute="top" secondItem="O2a-ZK-2dg" secondAttribute="bottom" constant="-5" id="UAL-YB-lSY"/>
+                                        <constraint firstItem="fNi-xD-caC" firstAttribute="centerY" secondItem="sHf-uO-t9s" secondAttribute="centerY" id="YRo-Wp-1PZ"/>
+                                        <constraint firstItem="O2a-ZK-2dg" firstAttribute="leading" secondItem="fNi-xD-caC" secondAttribute="trailing" constant="10" id="ff0-e3-tMA"/>
+                                        <constraint firstItem="0fD-z2-ofW" firstAttribute="leading" secondItem="O2a-ZK-2dg" secondAttribute="leading" id="vaB-bJ-PT8"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <inset key="separatorInset" minX="53" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <connections>
+                                    <outlet property="fileNameLabel" destination="O2a-ZK-2dg" id="G0x-cX-mO6"/>
+                                    <outlet property="fileSizeLabel" destination="0fD-z2-ofW" id="BNU-aO-WAG"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="DirectoryCell" rowHeight="50" id="c3f-R9-rky" customClass="DirectoryCell" customModule="Digi_Cloud" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="142" width="768" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="c3f-R9-rky" id="PXl-b7-Enq">
+                                    <frame key="frameInset" width="768" height="49"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FolderIcon" translatesAutoresizingMaskIntoConstraints="NO" id="F9Z-DM-kWO">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="28" id="Ye6-7D-xGC"/>
+                                                <constraint firstAttribute="height" constant="28" id="qup-Um-bSN"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Folder" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yA3-7Y-Rkr">
+                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Medium" family="Avenir Next Condensed" pointSize="18"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="F9Z-DM-kWO" firstAttribute="leading" secondItem="PXl-b7-Enq" secondAttribute="leadingMargin" constant="5" id="7OB-Qn-2cb"/>
+                                        <constraint firstItem="yA3-7Y-Rkr" firstAttribute="centerY" secondItem="F9Z-DM-kWO" secondAttribute="centerY" constant="1" id="JgV-OY-riR"/>
+                                        <constraint firstItem="yA3-7Y-Rkr" firstAttribute="leading" secondItem="F9Z-DM-kWO" secondAttribute="trailing" constant="10" id="Rht-k8-aim"/>
+                                        <constraint firstItem="F9Z-DM-kWO" firstAttribute="centerY" secondItem="PXl-b7-Enq" secondAttribute="centerY" id="z0A-X0-MDV"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="53" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <connections>
+                                    <outlet property="folderNameLabel" destination="yA3-7Y-Rkr" id="u12-yU-ZA1"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -181,7 +235,11 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KzF-sl-Nqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2483" y="131"/>
+            <point key="canvasLocation" x="2482.8125" y="130.6640625"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="FileIcon" width="60" height="60"/>
+        <image name="FolderIcon" width="370" height="335"/>
+    </resources>
 </document>
