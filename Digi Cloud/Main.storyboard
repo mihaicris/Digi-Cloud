@@ -108,7 +108,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="Fy9-Iu-kd7" kind="show" id="PtM-HX-WeY"/>
+                                    <segue destination="Fy9-Iu-kd7" kind="show" identifier="toFiles" id="PtM-HX-WeY"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

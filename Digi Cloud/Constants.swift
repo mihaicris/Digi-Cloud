@@ -10,7 +10,7 @@ import Foundation
 
 struct Constants {
     
-    struct  DigiAPI {
+    struct DigiAPI {
         static let Scheme = "https"
         static let Host = "storage.rcs-rds.ro"
         
@@ -22,5 +22,9 @@ struct Constants {
             static let Bookmarks = "/api/v2/user/bookmarks"
             static let Mounts = "/api/v2/mounts"
         }
+    }
+    
+    struct Segues {
+        static let toFiles = "toFiles"
     }
 }

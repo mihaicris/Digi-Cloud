@@ -12,16 +12,13 @@ class LocationsTableViewController: UITableViewController {
     
     var token: String!
     
-    var content: [File] = []
+    var mounts: [Mount] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //       let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Mounts,
-        //                                            parameters: nil)
+        let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Mounts, parameters: nil)
         
-        let url = Utils.getURLForMountContent(mount: "51e44dfa-d3e1-4eea-9de4-6c3068aab39b", path: "/Ebooks/C")
-                
         var request = URLRequest(url: url)
         
         request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
@@ -47,47 +44,19 @@ class LocationsTableViewController: UITableViewController {
             
             if let data = dataResponse {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data,
-                                                                options: JSONSerialization.ReadingOptions.allowFragments)
-                    
-                    guard let dict = json as? [String: AnyObject] else { return }
-                    
-                    guard let objs = dict["files"] as? [[String:AnyObject]] else { return }
-                    
-                    for item in objs {
-                        guard let name = item["name"] as? String else {
-                            print("Error guard name");
-                            return }
-                        
-                        guard let type = item["type"] as? String else {
-                            print("Error guard type");
-                            return }
-                        
-                        guard let modified = item["modified"] as? TimeInterval else {
-                            print("Error guard modified");
-                            return }
-                        
-                        guard let size = item["size"] as? Double else {
-                            print("Error guard size");
-                            return }
-                        
-                        guard let contentType = item["contentType"] as? String else {
-                            print("Error guard contentType");
-                            return }
-                        
-                        let newFile = File(name: name, type: type, modified: modified, size: size, contentType: contentType)
-
-                        self.content.append(newFile)
+                    let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments)
+                    guard let dict = json as? [String: AnyObject],
+                        let mountsList = dict["mounts"] as? [AnyObject] else { return }
+                    for item in mountsList  {
+                        guard let mount = item as? [String:AnyObject],
+                            let mountName = mount["name"] as? String,
+                            let mountId = mount["id"] as? String else { return }
+                        let mountObject = Mount(id: mountId, name: mountName)
+                        self.mounts.append(mountObject)
                     }
-                    
-                    self.content.sort {
-                        return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type)
-                    }
-                    
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-
                 }
                 catch let error {
                     print(error)
@@ -108,21 +77,29 @@ class LocationsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return content.count
+        return mounts.count
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath)
         
-        cell.textLabel?.text = content[indexPath.row].name
-        
+        cell.textLabel?.text = mounts[indexPath.row].name
         return cell
     }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+        if segue.identifier == Constants.Segues.toFiles {
+            if let destVC = segue.destination as? FilesTableViewController {
+                guard let cell = sender as? UITableViewCell else { return }
+                guard let indexPath = tableView.indexPath(for: cell) else { return }
+                destVC.token = token
+                destVC.title = mounts[indexPath.row].name
+                destVC.url = Utils.getURLForMountContent(mount: mounts[indexPath.row].id, path: "/")
+            }
+        }
+        
     }
 }
