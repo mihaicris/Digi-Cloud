@@ -12,7 +12,6 @@ class LocationsTableViewController: UITableViewController {
     
     var token: String!
     
-    
     var content: [File] = []
     
     override func viewDidLoad() {
@@ -20,7 +19,6 @@ class LocationsTableViewController: UITableViewController {
         
         //       let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Mounts,
         //                                            parameters: nil)
-        
         
         let url = Utils.getURLForMountContent(mount: "51e44dfa-d3e1-4eea-9de4-6c3068aab39b", path: "/Ebooks/C")
         
@@ -85,9 +83,20 @@ class LocationsTableViewController: UITableViewController {
                         self.content.append(newFile)
                     }
                     
-                    self.tableView.reloadData()
+
+                    let dirs = self.content.filter {
+                        $0.type == "dir"
+                    }
                     
+                    let files = self.content.filter {
+                        $0.type == "file"
+                    }
                     
+                    self.content = dirs + files
+                    
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                     
                     
                     
