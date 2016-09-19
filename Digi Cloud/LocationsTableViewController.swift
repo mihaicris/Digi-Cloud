@@ -21,9 +21,7 @@ class LocationsTableViewController: UITableViewController {
         //                                            parameters: nil)
         
         let url = Utils.getURLForMountContent(mount: "51e44dfa-d3e1-4eea-9de4-6c3068aab39b", path: "/Ebooks/C")
-        
-        print(url.absoluteURL)
-        
+                
         var request = URLRequest(url: url)
         
         request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
@@ -77,51 +75,26 @@ class LocationsTableViewController: UITableViewController {
                             print("Error guard contentType");
                             return }
                         
-                        
                         let newFile = File(name: name, type: type, modified: modified, size: size, contentType: contentType)
-                        
+
                         self.content.append(newFile)
                     }
                     
-
-                    let dirs = self.content.filter {
-                        $0.type == "dir"
+                    self.content.sort {
+                        return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type)
                     }
-                    
-                    let files = self.content.filter {
-                        $0.type == "file"
-                    }
-                    
-                    self.content = dirs + files
                     
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-                    
-                    
-                    
-                    //                    if let dict = json as? [String: AnyObject] {
-                    //                        if let mountsList = dict["mounts"] as? [AnyObject] {
-                    //                            for item in mountsList  {
-                    //                                if let mount = item as? [String:AnyObject] {
-                    //                                    if let mountName = mount["name"] as? String {
-                    //                                        self.mounts.append(mountName)
-                    //                                    }
-                    //                                }
-                    //                            }
-                    //                        }
-                    //
-                    //                    }
+
                 }
                 catch let error {
                     print(error)
                 }
             }
         }
-        
         datatask?.resume()
-        
-        
     }
     
     // MARK: - Table view data source
@@ -148,12 +121,8 @@ class LocationsTableViewController: UITableViewController {
     }
     
     // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    
-    
 }
