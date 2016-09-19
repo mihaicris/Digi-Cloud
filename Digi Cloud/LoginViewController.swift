@@ -8,6 +8,10 @@
 
 import UIKit
 
+extension UITextField {
+    
+}
+
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
     var token: String?
@@ -30,7 +34,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     @IBAction func loginButtonTouchUp(_ sender: UIButton) {
-        
+
         guard let email = emailTextField.text else { return }
         guard let pass = passwordTextField.text else { return }
         
