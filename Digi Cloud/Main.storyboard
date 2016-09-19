@@ -95,11 +95,11 @@
                                 <rect key="frame" x="0.0" y="92" width="768" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="foD-UX-qsh" id="yj7-nN-Yn6">
-                                    <frame key="frameInset" width="702" height="39.5"/>
+                                    <frame key="frameInset" width="702" height="39"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o7s-8S-1I8">
-                                            <frame key="frameInset" minX="48" width="654" height="39.5"/>
+                                            <frame key="frameInset" minX="48" width="654" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="17"/>
                                             <color key="textColor" red="0.086951907178232687" green="0.14866008150129734" blue="0.22501814985384616" alpha="1" colorSpace="calibratedRGB"/>
@@ -107,6 +107,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="Fy9-Iu-kd7" kind="show" id="PtM-HX-WeY"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -140,5 +143,51 @@
             </objects>
             <point key="canvasLocation" x="980" y="130.88455772113943"/>
         </scene>
+        <!--Files Table View Controller-->
+        <scene sceneID="fzD-fa-GYQ">
+            <objects>
+                <tableViewController id="Fy9-Iu-kd7" customClass="FilesTableViewController" customModule="Digi_Cloud" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="40" sectionHeaderHeight="28" sectionFooterHeight="28" id="eEI-E6-CSg">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="FileCell" textLabel="KiN-4t-7fJ" style="IBUITableViewCellStyleDefault" id="5xW-Qs-Moa">
+                                <rect key="frame" x="0.0" y="92" width="768" height="40"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5xW-Qs-Moa" id="sHf-uO-t9s">
+                                    <frame key="frameInset" width="702" height="39"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KiN-4t-7fJ">
+                                            <frame key="frameInset" minX="48" width="654" height="39"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="17"/>
+                                            <color key="textColor" red="0.086951907179999996" green="0.14866008150000001" blue="0.22501814989999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="Fy9-Iu-kd7" kind="show" id="4FB-OS-6zi"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Fy9-Iu-kd7" id="Nf2-Nf-7iP"/>
+                            <outlet property="delegate" destination="Fy9-Iu-kd7" id="RlY-P6-JQL"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="GKU-Hh-0Jv">
+                        <barButtonItem key="rightBarButtonItem" title="Settings" id="Sgg-Y7-5s0"/>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KzF-sl-Nqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2483" y="131"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="PtM-HX-WeY"/>
+    </inferredMetricsTieBreakers>
 </document>
