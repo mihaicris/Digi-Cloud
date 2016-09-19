@@ -69,7 +69,6 @@
 			isa = PBXGroup;
 			children = (
 				83EF1D461D8FBDC400ACE008 /* Model */,
-				839BAE211D8BE03B00A43452 /* Services */,
 				839BAE221D8BE05000A43452 /* Utils */,
 				839BAE231D8BE06E00A43452 /* Views */,
 				839BAE201D8BE00E00A43452 /* Controllers */,
@@ -89,13 +88,6 @@
 				83EF1D691D8FDB1900ACE008 /* FilesTableViewController.swift */,
 			);
 			name = Controllers;
-			sourceTree = "<group>";
-		};
-		839BAE211D8BE03B00A43452 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Services;
 			sourceTree = "<group>";
 		};
 		839BAE221D8BE05000A43452 /* Utils */ = {

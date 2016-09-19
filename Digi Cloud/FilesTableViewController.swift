@@ -12,13 +12,17 @@ class FilesTableViewController: UITableViewController {
     
     var token: String!
     
+    var mount: String!
+    
     var url: URL!
 
     var content: [File] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
+        print(url.absoluteString)
+
         var request = URLRequest(url: url)
         
         request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
@@ -100,6 +104,30 @@ class FilesTableViewController: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constants.Segues.toFiles {
+            if let destVC = segue.destination as? FilesTableViewController {
+                
+                guard let cell = sender as? UITableViewCell else { return }
+                guard let indexPath = tableView.indexPath(for: cell) else { return }
+                
+                destVC.token = token
+                destVC.mount = mount
+                destVC.title = content[indexPath.row].name
+                
+                let urlComponents = URLComponents(string: url.absoluteString)
+                let queryItems = urlComponents?.queryItems
+                var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
+                if path != "/" {
+                    path += "/"
+                }
+                
+                let newPath = path + content[indexPath.row].name
+                
+                destVC.url = Utils.getURLForMountContent(mount: mount, path: newPath)
+                print(destVC.url.absoluteString)
+            }
+        }
+        
     }
 
 }

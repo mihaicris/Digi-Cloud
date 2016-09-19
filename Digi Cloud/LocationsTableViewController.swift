@@ -96,6 +96,7 @@ class LocationsTableViewController: UITableViewController {
                 guard let cell = sender as? UITableViewCell else { return }
                 guard let indexPath = tableView.indexPath(for: cell) else { return }
                 destVC.token = token
+                destVC.mount = mounts[indexPath.row].id
                 destVC.title = mounts[indexPath.row].name
                 destVC.url = Utils.getURLForMountContent(mount: mounts[indexPath.row].id, path: "/")
             }
