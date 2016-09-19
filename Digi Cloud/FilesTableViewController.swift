@@ -21,8 +21,6 @@ class FilesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(url.absoluteString)
-
         var request = URLRequest(url: url)
         
         request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
@@ -100,34 +98,27 @@ class FilesTableViewController: UITableViewController {
         cell.textLabel?.text = content[indexPath.row].name
         return cell
     }
+    // MARK: - Table view delegate
     
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == Constants.Segues.toFiles {
-            if let destVC = segue.destination as? FilesTableViewController {
-                
-                guard let cell = sender as? UITableViewCell else { return }
-                guard let indexPath = tableView.indexPath(for: cell) else { return }
-                
-                destVC.token = token
-                destVC.mount = mount
-                destVC.title = content[indexPath.row].name
-                
-                let urlComponents = URLComponents(string: url.absoluteString)
-                let queryItems = urlComponents?.queryItems
-                var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
-                if path != "/" {
-                    path += "/"
-                }
-                
-                let newPath = path + content[indexPath.row].name
-                
-                destVC.url = Utils.getURLForMountContent(mount: mount, path: newPath)
-                print(destVC.url.absoluteString)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let newVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
+            
+            newVC.token = token
+            newVC.mount = mount
+            newVC.title = content[indexPath.row].name
+            
+            let urlComponents = URLComponents(string: url.absoluteString)
+            let queryItems = urlComponents?.queryItems
+            var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
+            if path != "/" {
+                path += "/"
             }
+            
+            let newPath = path + content[indexPath.row].name
+            
+            newVC.url = Utils.getURLForMountContent(mount: mount, path: newPath)
+            print(newVC.url.absoluteString)
+            self.navigationController?.pushViewController(newVC, animated: true)
         }
-        
     }
-
 }
