@@ -31,7 +31,6 @@ class FilesTableViewController: UITableViewController {
         
         let datatask: URLSessionDataTask?
         
-        
         datatask = defaultSession.dataTask(with: request) {
             (dataResponse: Data?, response: URLResponse?, error: Error?) in
             

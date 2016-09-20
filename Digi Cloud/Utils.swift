@@ -32,7 +32,7 @@ struct Utils {
         components.host = Constants.DigiAPI.Host
         components.path = Constants.DigiAPI.Paths.Mounts + "/" + mount + "/files/list"
         components.queryItems = [URLQueryItem(name: "path", value: path)]
-        components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B").replacingOccurrences(of: "%20", with: "+")
+        components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         return components.url!
     }
 }
