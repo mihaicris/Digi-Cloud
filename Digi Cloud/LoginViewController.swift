@@ -12,7 +12,7 @@ extension UITextField {
     
 }
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController {
     
     var token: String?
     
@@ -34,12 +34,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     @IBAction func loginButtonTouchUp(_ sender: UIButton) {
-
+        
         guard let email = emailTextField.text else { return }
         guard let pass = passwordTextField.text else { return }
         
-        let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Token,
-                                             parameters: nil)
+        let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Token, parameters: nil)
         
         var request = URLRequest(url: url)
         
@@ -60,7 +59,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.spinner.stopAnimating()
-
+                
             }
             
             if error != nil {
@@ -115,17 +114,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
+}
+
+extension LoginViewController: UITextFieldDelegate {
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 

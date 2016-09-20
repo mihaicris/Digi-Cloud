@@ -101,6 +101,5 @@ class LocationsTableViewController: UITableViewController {
                 destVC.url = Utils.getURLForMountContent(mount: mounts[indexPath.row].id, path: "/")
             }
         }
-        
     }
 }

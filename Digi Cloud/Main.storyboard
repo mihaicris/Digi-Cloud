@@ -66,7 +66,7 @@
                             <constraint firstItem="vJF-xE-eqK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XtE-1S-67x"/>
                             <constraint firstItem="2fi-cF-FsO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Yvx-UU-Ukz"/>
                             <constraint firstItem="2fi-cF-FsO" firstAttribute="top" secondItem="vJF-xE-eqK" secondAttribute="bottom" constant="30" id="hme-aj-5BV"/>
-                            <constraint firstItem="dro-ch-fVl" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-100" id="lXT-bc-uRg"/>
+                            <constraint firstItem="dro-ch-fVl" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-150" id="lXT-bc-uRg"/>
                             <constraint firstItem="2BZ-G9-yCi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="uiy-pB-G1V"/>
                             <constraint firstItem="2BZ-G9-yCi" firstAttribute="top" secondItem="2fi-cF-FsO" secondAttribute="bottom" constant="20" id="xRk-G7-bVe"/>
                         </constraints>
@@ -153,7 +153,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="FileCell" rowHeight="50" id="5xW-Qs-Moa" userLabel="File" customClass="FileCell" customModule="Digi_Cloud" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FileCell" rowHeight="50" id="5xW-Qs-Moa" userLabel="File" customClass="FileCell" customModule="Digi_Cloud" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="768" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5xW-Qs-Moa" id="sHf-uO-t9s">
@@ -179,6 +179,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="fNi-xD-caC" firstAttribute="leading" secondItem="sHf-uO-t9s" secondAttribute="leadingMargin" constant="5" id="57x-Fn-XyM"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="O2a-ZK-2dg" secondAttribute="trailing" constant="50" id="5df-NF-QUp"/>
                                         <constraint firstItem="O2a-ZK-2dg" firstAttribute="top" secondItem="fNi-xD-caC" secondAttribute="top" id="FSg-eO-X7U"/>
                                         <constraint firstItem="0fD-z2-ofW" firstAttribute="top" secondItem="O2a-ZK-2dg" secondAttribute="bottom" constant="-1" id="UAL-YB-lSY"/>
                                         <constraint firstItem="fNi-xD-caC" firstAttribute="centerY" secondItem="sHf-uO-t9s" secondAttribute="centerY" id="YRo-Wp-1PZ"/>
@@ -192,7 +193,7 @@
                                     <outlet property="fileSizeLabel" destination="0fD-z2-ofW" id="BNU-aO-WAG"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="DirectoryCell" rowHeight="50" id="c3f-R9-rky" userLabel="Directory" customClass="DirectoryCell" customModule="Digi_Cloud" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="DirectoryCell" rowHeight="50" id="c3f-R9-rky" userLabel="Directory" customClass="DirectoryCell" customModule="Digi_Cloud" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="142" width="768" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="c3f-R9-rky" id="PXl-b7-Enq">
@@ -215,6 +216,7 @@
                                         <constraint firstItem="F9Z-DM-kWO" firstAttribute="leading" secondItem="PXl-b7-Enq" secondAttribute="leadingMargin" constant="5" id="7OB-Qn-2cb"/>
                                         <constraint firstItem="yA3-7Y-Rkr" firstAttribute="centerY" secondItem="F9Z-DM-kWO" secondAttribute="centerY" constant="4" id="JgV-OY-riR"/>
                                         <constraint firstItem="yA3-7Y-Rkr" firstAttribute="leading" secondItem="F9Z-DM-kWO" secondAttribute="trailing" constant="10" id="Rht-k8-aim"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="yA3-7Y-Rkr" secondAttribute="trailing" constant="50" id="aSc-fi-Af2"/>
                                         <constraint firstItem="F9Z-DM-kWO" firstAttribute="centerY" secondItem="PXl-b7-Enq" secondAttribute="centerY" id="z0A-X0-MDV"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -239,7 +241,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="FileIcon" width="60" height="60"/>
+        <image name="FileIcon" width="40" height="40"/>
         <image name="FolderIcon" width="370" height="335"/>
     </resources>
 </document>

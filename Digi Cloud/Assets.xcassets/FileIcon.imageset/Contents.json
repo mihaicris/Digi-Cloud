@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "ipad",
-      "filename" : "text-file-5-xxl@2x.png",
+      "filename" : "text-file-5-xxl.png",
       "scale" : "1x"
     },
     {
       "idiom" : "ipad",
-      "filename" : "text-file-5-xxl@3x.png",
+      "filename" : "text-file-5-xxl@2x.png",
       "scale" : "2x"
     }
   ],

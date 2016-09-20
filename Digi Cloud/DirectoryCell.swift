@@ -9,10 +9,7 @@
 import UIKit
 
 class DirectoryCell: UITableViewCell {
-
+    
     @IBOutlet var folderNameLabel: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 }
