@@ -22,7 +22,6 @@ struct Utils {
                 components.queryItems!.append(queryItem)
             }
         }
-
         return components.url!
     }
     
