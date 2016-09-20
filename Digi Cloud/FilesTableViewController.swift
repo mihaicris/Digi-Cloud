@@ -49,9 +49,9 @@ class FilesTableViewController: UITableViewController {
                     let json = try JSONSerialization.jsonObject(with: data,
                                                                 options: JSONSerialization.ReadingOptions.allowFragments)
                     
-                    guard let dict = json as? [String: AnyObject] else { return }
+                    guard let dict = json as? [String: Any] else { return }
                     
-                    guard let objs = dict["files"] as? [[String:AnyObject]] else { return }
+                    guard let objs = dict["files"] as? [[String:Any]] else { return }
                     
                     for item in objs {
                         guard let name = item["name"] as? String,

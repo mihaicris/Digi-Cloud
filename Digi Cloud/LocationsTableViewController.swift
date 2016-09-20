@@ -45,10 +45,10 @@ class LocationsTableViewController: UITableViewController {
             if let data = dataResponse {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments)
-                    guard let dict = json as? [String: AnyObject],
-                        let mountsList = dict["mounts"] as? [AnyObject] else { return }
+                    guard let dict = json as? [String: Any],
+                        let mountsList = dict["mounts"] as? [Any] else { return }
                     for item in mountsList  {
-                        guard let mount = item as? [String:AnyObject],
+                        guard let mount = item as? [String:Any],
                             let mountName = mount["name"] as? String,
                             let mountId = mount["id"] as? String else { return }
                         let mountObject = Mount(id: mountId, name: mountName)
