@@ -46,7 +46,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2fi-cF-FsO">
                                 <color key="backgroundColor" red="0.23236393928527832" green="0.21447756886482239" blue="0.57945549488067627" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="fAl-db-v5v"/>
+                                    <constraint firstAttribute="width" constant="150" id="fAl-db-v5v"/>
                                     <constraint firstAttribute="height" constant="40" id="yhe-CF-emf"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -61,14 +61,14 @@
                         </subviews>
                         <color key="backgroundColor" red="0.30267110466957092" green="0.27598893642425537" blue="0.73368799686431885" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="vJF-xE-eqK" firstAttribute="top" secondItem="dro-ch-fVl" secondAttribute="bottom" constant="40" id="0Kh-lc-BBD"/>
+                            <constraint firstItem="vJF-xE-eqK" firstAttribute="top" secondItem="dro-ch-fVl" secondAttribute="bottom" constant="30" id="0Kh-lc-BBD"/>
                             <constraint firstItem="dro-ch-fVl" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="48b-FS-vEG"/>
                             <constraint firstItem="vJF-xE-eqK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XtE-1S-67x"/>
                             <constraint firstItem="2fi-cF-FsO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Yvx-UU-Ukz"/>
-                            <constraint firstItem="2fi-cF-FsO" firstAttribute="top" secondItem="vJF-xE-eqK" secondAttribute="bottom" constant="60" id="hme-aj-5BV"/>
-                            <constraint firstItem="dro-ch-fVl" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="100" id="scr-45-CCZ"/>
+                            <constraint firstItem="2fi-cF-FsO" firstAttribute="top" secondItem="vJF-xE-eqK" secondAttribute="bottom" constant="30" id="hme-aj-5BV"/>
+                            <constraint firstItem="dro-ch-fVl" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-100" id="lXT-bc-uRg"/>
                             <constraint firstItem="2BZ-G9-yCi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="uiy-pB-G1V"/>
-                            <constraint firstItem="2BZ-G9-yCi" firstAttribute="top" secondItem="2fi-cF-FsO" secondAttribute="bottom" constant="50" id="xRk-G7-bVe"/>
+                            <constraint firstItem="2BZ-G9-yCi" firstAttribute="top" secondItem="2fi-cF-FsO" secondAttribute="bottom" constant="20" id="xRk-G7-bVe"/>
                         </constraints>
                     </view>
                     <connections>
@@ -167,20 +167,20 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="File.txt" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2a-ZK-2dg">
-                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="18"/>
+                                            <fontDescription key="fontDescription" name="MalayalamSangamMN" family="Malayalam Sangam MN" pointSize="16"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 KB" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0fD-z2-ofW">
-                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="12"/>
+                                            <fontDescription key="fontDescription" name="MalayalamSangamMN" family="Malayalam Sangam MN" pointSize="12"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="fNi-xD-caC" firstAttribute="leading" secondItem="sHf-uO-t9s" secondAttribute="leadingMargin" constant="5" id="57x-Fn-XyM"/>
-                                        <constraint firstItem="O2a-ZK-2dg" firstAttribute="top" secondItem="fNi-xD-caC" secondAttribute="top" constant="-4" id="FSg-eO-X7U"/>
-                                        <constraint firstItem="0fD-z2-ofW" firstAttribute="top" secondItem="O2a-ZK-2dg" secondAttribute="bottom" constant="-5" id="UAL-YB-lSY"/>
+                                        <constraint firstItem="O2a-ZK-2dg" firstAttribute="top" secondItem="fNi-xD-caC" secondAttribute="top" id="FSg-eO-X7U"/>
+                                        <constraint firstItem="0fD-z2-ofW" firstAttribute="top" secondItem="O2a-ZK-2dg" secondAttribute="bottom" constant="-1" id="UAL-YB-lSY"/>
                                         <constraint firstItem="fNi-xD-caC" firstAttribute="centerY" secondItem="sHf-uO-t9s" secondAttribute="centerY" id="YRo-Wp-1PZ"/>
                                         <constraint firstItem="O2a-ZK-2dg" firstAttribute="leading" secondItem="fNi-xD-caC" secondAttribute="trailing" constant="10" id="ff0-e3-tMA"/>
                                         <constraint firstItem="0fD-z2-ofW" firstAttribute="leading" secondItem="O2a-ZK-2dg" secondAttribute="leading" id="vaB-bJ-PT8"/>
@@ -206,14 +206,14 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Folder" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yA3-7Y-Rkr">
-                                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Medium" family="Avenir Next Condensed" pointSize="18"/>
+                                            <fontDescription key="fontDescription" name="MalayalamSangamMN-Bold" family="Malayalam Sangam MN" pointSize="16"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="F9Z-DM-kWO" firstAttribute="leading" secondItem="PXl-b7-Enq" secondAttribute="leadingMargin" constant="5" id="7OB-Qn-2cb"/>
-                                        <constraint firstItem="yA3-7Y-Rkr" firstAttribute="centerY" secondItem="F9Z-DM-kWO" secondAttribute="centerY" constant="1" id="JgV-OY-riR"/>
+                                        <constraint firstItem="yA3-7Y-Rkr" firstAttribute="centerY" secondItem="F9Z-DM-kWO" secondAttribute="centerY" constant="4" id="JgV-OY-riR"/>
                                         <constraint firstItem="yA3-7Y-Rkr" firstAttribute="leading" secondItem="F9Z-DM-kWO" secondAttribute="trailing" constant="10" id="Rht-k8-aim"/>
                                         <constraint firstItem="F9Z-DM-kWO" firstAttribute="centerY" secondItem="PXl-b7-Enq" secondAttribute="centerY" id="z0A-X0-MDV"/>
                                     </constraints>
