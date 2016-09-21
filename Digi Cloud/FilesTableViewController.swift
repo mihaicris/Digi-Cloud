@@ -70,10 +70,14 @@ class FilesTableViewController: UITableViewController {
                         self.content.append(newFile)
                     }
                     
-                    self.content.sort {
-                        return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type)
-                    }
+                    // TODO: Implement sorting filters in the interface
                     
+                    self.content.sort {
+                        /*  Order items by name (ascending), directories are shown first */
+                        return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type)
+                        /* Order items by Date (descending), directories are shown first */
+                        // return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
+                    }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
@@ -98,15 +102,26 @@ class FilesTableViewController: UITableViewController {
         
         let data = content[indexPath.row]
         
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        formatter.locale = Locale.current
+        formatter.dateFormat = "dd.MM.YYY, HH:mm"
+        
         if data.type == "dir" {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as! DirectoryCell
             cell.folderNameLabel.text = data.name
             return cell
-
+            
         } else {
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
+            
+            let modifiedDate = formatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
+            
             cell.fileNameLabel.text = data.name
-            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file)
+            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
+            
             return cell
         }
     }
