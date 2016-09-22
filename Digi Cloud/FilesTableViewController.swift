@@ -148,7 +148,6 @@ class FilesTableViewController: UITableViewController {
             }
 
         } else {
-            print(indexPath.row)
             if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 cellForInset = cell

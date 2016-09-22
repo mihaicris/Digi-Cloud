@@ -12,4 +12,7 @@ class DirectoryCell: UITableViewCell {
     
     @IBOutlet var folderNameLabel: UILabel!
     
+    @IBAction func action(_ sender: UIButton) {
+        
+    }
 }

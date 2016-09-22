@@ -52,7 +52,6 @@ class LoginViewController: UIViewController {
         
         let datatask: URLSessionDataTask?
         
-        
         datatask = defaultSession.dataTask(with: request) {
             (data: Data?, response: URLResponse?, error: Error?) in
             

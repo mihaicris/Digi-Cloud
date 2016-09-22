@@ -181,6 +181,9 @@
                                             <state key="normal" title="…">
                                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="action:" destination="5xW-Qs-Moa" eventType="touchUpInside" id="Z14-qv-s68"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -197,6 +200,7 @@
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="53" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
+                                    <outlet property="actionButton" destination="n49-CU-7mR" id="fgZ-gw-GF6"/>
                                     <outlet property="fileNameLabel" destination="O2a-ZK-2dg" id="G0x-cX-mO6"/>
                                     <outlet property="fileSizeLabel" destination="0fD-z2-ofW" id="BNU-aO-WAG"/>
                                 </connections>
@@ -224,6 +228,9 @@
                                             <state key="normal" title="…">
                                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="action:" destination="c3f-R9-rky" eventType="touchUpInside" id="8KS-Us-qIh"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
