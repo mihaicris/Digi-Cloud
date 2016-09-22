@@ -103,11 +103,9 @@ class LoginViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Locations" {
-            if let navController = segue.destination as? UINavigationController {
-                if let nextViewController = navController.topViewController as? LocationsTableViewController {
+            if let nextViewController = segue.destination.contentViewController as? LocationsTableViewController {
                     nextViewController.token = self.token!
                     nextViewController.title = "Digi Storage"
-                }
             }
         }
     }
@@ -126,6 +124,16 @@ extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+extension UIViewController {
+    var contentViewController: UIViewController {
+        if let navigationController = self as? UINavigationController {
+            return navigationController.visibleViewController ?? self
+        } else {
+            return self
+        }
     }
 }
 
