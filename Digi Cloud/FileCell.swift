@@ -19,7 +19,7 @@ class FileCell: UITableViewCell {
         if selected {
             self.contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
             self.fileNameLabel.textColor = UIColor.white
-            self.fileSizeLabel.textColor = UIColor(colorLiteralRed: 190/255, green: 190/255, blue: 190/255, alpha: 1.0)
+            self.fileSizeLabel.textColor = UIColor(colorLiteralRed: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
             self.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         } else {
             self.contentView.backgroundColor = nil
