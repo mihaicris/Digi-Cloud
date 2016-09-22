@@ -126,10 +126,9 @@ class FilesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let newVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
+        if content[indexPath.row].type == "dir" {
             
-            if content[indexPath.row].type == "dir" {
-                
+            if let newVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
                 newVC.token = token
                 newVC.mount = mount
                 newVC.title = content[indexPath.row].name
@@ -140,17 +139,19 @@ class FilesTableViewController: UITableViewController {
                 if path != "/" {
                     path += "/"
                 }
-                
                 let newPath = path + content[indexPath.row].name
                 
                 newVC.url = Utils.getURLForMountContent(mount: mount, path: newPath)
                 self.navigationController?.pushViewController(newVC, animated: true)
             } else {
-                print(indexPath.row)
-                if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
-                    cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                    cellForInset = cell
-                }
+                print("Error loading new controller")
+            }
+
+        } else {
+            print(indexPath.row)
+            if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                cellForInset = cell
             }
         }
     }
