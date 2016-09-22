@@ -25,7 +25,7 @@
                                     <constraint firstAttribute="width" constant="300" id="d2k-6e-VDl"/>
                                 </constraints>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="kJM-YQ-E0S"/>
@@ -37,7 +37,7 @@
                                     <constraint firstAttribute="width" constant="300" id="wOa-dA-sSK"/>
                                 </constraints>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="aMX-fe-ihY"/>
@@ -167,23 +167,31 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="File.txt" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2a-ZK-2dg">
-                                            <fontDescription key="fontDescription" name="MalayalamSangamMN" family="Malayalam Sangam MN" pointSize="16"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 KB" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0fD-z2-ofW">
-                                            <fontDescription key="fontDescription" name="MalayalamSangamMN" family="Malayalam Sangam MN" pointSize="12"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="11"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n49-CU-7mR">
+                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                            <state key="normal" title="…">
+                                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="fNi-xD-caC" firstAttribute="leading" secondItem="sHf-uO-t9s" secondAttribute="leadingMargin" constant="5" id="57x-Fn-XyM"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="O2a-ZK-2dg" secondAttribute="trailing" constant="50" id="5df-NF-QUp"/>
-                                        <constraint firstItem="O2a-ZK-2dg" firstAttribute="top" secondItem="fNi-xD-caC" secondAttribute="top" id="FSg-eO-X7U"/>
-                                        <constraint firstItem="0fD-z2-ofW" firstAttribute="top" secondItem="O2a-ZK-2dg" secondAttribute="bottom" constant="-1" id="UAL-YB-lSY"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="O2a-ZK-2dg" secondAttribute="trailing" constant="80" id="5df-NF-QUp"/>
+                                        <constraint firstItem="O2a-ZK-2dg" firstAttribute="top" secondItem="fNi-xD-caC" secondAttribute="top" constant="-2" id="FSg-eO-X7U"/>
+                                        <constraint firstItem="n49-CU-7mR" firstAttribute="centerY" secondItem="sHf-uO-t9s" secondAttribute="centerY" id="S1I-Pj-RBv"/>
+                                        <constraint firstItem="0fD-z2-ofW" firstAttribute="top" secondItem="O2a-ZK-2dg" secondAttribute="bottom" constant="1" id="UAL-YB-lSY"/>
                                         <constraint firstItem="fNi-xD-caC" firstAttribute="centerY" secondItem="sHf-uO-t9s" secondAttribute="centerY" id="YRo-Wp-1PZ"/>
                                         <constraint firstItem="O2a-ZK-2dg" firstAttribute="leading" secondItem="fNi-xD-caC" secondAttribute="trailing" constant="10" id="ff0-e3-tMA"/>
+                                        <constraint firstAttribute="trailing" secondItem="n49-CU-7mR" secondAttribute="trailing" constant="20" id="s5L-1Y-ugY"/>
                                         <constraint firstItem="0fD-z2-ofW" firstAttribute="leading" secondItem="O2a-ZK-2dg" secondAttribute="leading" id="vaB-bJ-PT8"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -207,17 +215,25 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Folder" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yA3-7Y-Rkr">
-                                            <fontDescription key="fontDescription" name="MalayalamSangamMN-Bold" family="Malayalam Sangam MN" pointSize="16"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JDS-SY-cCJ">
+                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                            <state key="normal" title="…">
+                                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="JDS-SY-cCJ" secondAttribute="trailing" constant="20" id="4wi-cf-XDY"/>
                                         <constraint firstItem="F9Z-DM-kWO" firstAttribute="leading" secondItem="PXl-b7-Enq" secondAttribute="leadingMargin" constant="5" id="7OB-Qn-2cb"/>
-                                        <constraint firstItem="yA3-7Y-Rkr" firstAttribute="centerY" secondItem="F9Z-DM-kWO" secondAttribute="centerY" constant="4" id="JgV-OY-riR"/>
+                                        <constraint firstItem="yA3-7Y-Rkr" firstAttribute="centerY" secondItem="PXl-b7-Enq" secondAttribute="centerY" constant="1" id="Gke-fh-Vy9"/>
                                         <constraint firstItem="yA3-7Y-Rkr" firstAttribute="leading" secondItem="F9Z-DM-kWO" secondAttribute="trailing" constant="10" id="Rht-k8-aim"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="yA3-7Y-Rkr" secondAttribute="trailing" constant="50" id="aSc-fi-Af2"/>
-                                        <constraint firstItem="F9Z-DM-kWO" firstAttribute="centerY" secondItem="PXl-b7-Enq" secondAttribute="centerY" id="z0A-X0-MDV"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="yA3-7Y-Rkr" secondAttribute="trailing" constant="80" id="aSc-fi-Af2"/>
+                                        <constraint firstItem="JDS-SY-cCJ" firstAttribute="centerY" secondItem="PXl-b7-Enq" secondAttribute="centerY" id="su6-yH-KzI"/>
+                                        <constraint firstItem="F9Z-DM-kWO" firstAttribute="centerY" secondItem="PXl-b7-Enq" secondAttribute="centerY" constant="-2" id="z0A-X0-MDV"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="53" minY="0.0" maxX="0.0" maxY="0.0"/>
