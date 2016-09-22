@@ -9,7 +9,7 @@
 import Foundation
 
 struct Utils {
-    static func getURLFromParameters(path: String, parameters: [String:Any]?) -> URL {
+    static func getURLFromParameters(path: String, parameters: [String: Any]?) -> URL {
         var components = URLComponents()
         components.scheme = Constants.DigiAPI.Scheme
         components.host = Constants.DigiAPI.Host

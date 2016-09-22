@@ -44,13 +44,21 @@ class LocationsTableViewController: UITableViewController {
             
             if let data = dataResponse {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments)
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
                     guard let dict = json as? [String: Any],
-                        let mountsList = dict["mounts"] as? [Any] else { return }
+                        let mountsList = dict["mounts"] as? [Any]
+                        else {
+                            print("Could not get mounts list")
+                            return
+                    }
                     for item in mountsList  {
-                        guard let mount = item as? [String:Any],
+                        guard let mount = item as? [String: Any],
                             let mountName = mount["name"] as? String,
-                            let mountId = mount["id"] as? String else { return }
+                            let mountId = mount["id"] as? String
+                            else {
+                                print("Could not get mount info")
+                                return
+                        }
                         let mountObject = Mount(id: mountId, name: mountName)
                         self.mounts.append(mountObject)
                     }

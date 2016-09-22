@@ -47,13 +47,13 @@ class FilesTableViewController: UITableViewController {
             
             if let data = dataResponse {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data,
-                                                                options: JSONSerialization.ReadingOptions.allowFragments)
-                    
-                    guard let dict = json as? [String: Any] else { return }
-                    
-                    guard let objs = dict["files"] as? [[String:Any]] else { return }
-                    
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    guard let dict = json as? [String: Any],
+                        let objs = dict["files"] as? [[String: Any]]
+                        else {
+                            print("Could not parce objects from json")
+                            return
+                    }
                     for item in objs {
                         guard let name = item["name"] as? String,
                             let type = item["type"] as? String,
@@ -64,14 +64,11 @@ class FilesTableViewController: UITableViewController {
                                 print("Could not parce keys")
                                 return
                         }
-                        
                         let newFile = File(name: name, type: type, modified: modified, size: size, contentType: contentType)
-                        
                         self.content.append(newFile)
                     }
                     
                     // TODO: Implement sorting filters in the interface
-                    
                     self.content.sort {
                         /*  Order items by name (ascending), directories are shown first */
                         return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type)
@@ -81,7 +78,6 @@ class FilesTableViewController: UITableViewController {
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-                    
                 }
                 catch let error {
                     print(error)
@@ -106,7 +102,7 @@ class FilesTableViewController: UITableViewController {
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
         formatter.locale = Locale.current
-        formatter.dateFormat = "dd.MM.YYY, HH:mm"
+        formatter.dateFormat = "dd.MM.YYY・HH:mm"
         
         if data.type == "dir" {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as! DirectoryCell
