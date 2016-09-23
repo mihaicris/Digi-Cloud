@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		835405FD1D94FCC300019D53 /* JSONDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* JSONDecodable.swift */; };
+		835406051D952FFD00019D53 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* Extensions.swift */; };
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
 		837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		835405FC1D94FCC300019D53 /* JSONDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONDecodable.swift; sourceTree = "<group>"; };
+		835406041D952FFD00019D53 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8370411C1D8B1DEE000EDBAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -102,6 +104,14 @@
 			name = Managers;
 			sourceTree = "<group>";
 		};
+		835406031D952FD900019D53 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				835406041D952FFD00019D53 /* Extensions.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		837041091D8B1DED000EDBAE = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +131,7 @@
 		837041141D8B1DED000EDBAE /* Digi Cloud */ = {
 			isa = PBXGroup;
 			children = (
+				835406031D952FD900019D53 /* Extensions */,
 				835405FE1D95175E00019D53 /* Application Delegate */,
 				839BAE221D8BE05000A43452 /* Configurations */,
 				835406021D95180F00019D53 /* Managers */,
@@ -251,6 +262,7 @@
 				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,
 				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
 				83EF1D481D8FBDDA00ACE008 /* File.swift in Sources */,
+				835406051D952FFD00019D53 /* Extensions.swift in Sources */,
 				83EF1D6A1D8FDB1900ACE008 /* FilesTableViewController.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
 				837041281D8B21DE000EDBAE /* Utils.swift in Sources */,

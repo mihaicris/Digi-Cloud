@@ -35,8 +35,3 @@ struct Utils {
         return components.url!
     }
 }
-
-
-
-
-

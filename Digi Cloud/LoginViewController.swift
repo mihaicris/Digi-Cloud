@@ -8,13 +8,9 @@
 
 import UIKit
 
-extension UITextField {
-    
-}
-
 class LoginViewController: UIViewController {
     
-    var token: String?
+    // MARK: - Outlets
     
     @IBOutlet weak var emailTextField: UITextField!
     
@@ -31,7 +27,10 @@ class LoginViewController: UIViewController {
             loginButton.layer.shadowColor = UIColor.white.cgColor
         }
     }
+    
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    // MARK: - Actions
     
     @IBAction func loginButtonTouchUp(_ sender: UIButton) {
         
@@ -100,6 +99,12 @@ class LoginViewController: UIViewController {
         datatask?.resume()
     }
     
+    // MARK: - Properties
+
+    var token: String?
+
+    // MARK: - Navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Locations" {
             if let nextViewController = segue.destination.contentViewController as? LocationsTableViewController {
@@ -109,9 +114,13 @@ class LoginViewController: UIViewController {
         }
     }
     
+    // MARK: - View Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    // MARK: - View Methods
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -126,13 +135,4 @@ extension LoginViewController: UITextFieldDelegate {
     }
 }
 
-extension UIViewController {
-    var contentViewController: UIViewController {
-        if let navigationController = self as? UINavigationController {
-            return navigationController.visibleViewController ?? self
-        } else {
-            return self
-        }
-    }
-}
 

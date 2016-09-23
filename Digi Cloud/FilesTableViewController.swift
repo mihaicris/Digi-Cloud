@@ -10,6 +10,8 @@ import UIKit
 
 class FilesTableViewController: UITableViewController {
     
+    // MARK: - Properties
+    
     var token: String!
     
     var mount: String!
@@ -19,6 +21,8 @@ class FilesTableViewController: UITableViewController {
     private var content: [File] = []
     
     private var cellForInset: UITableViewCell!
+    
+    // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +85,7 @@ class FilesTableViewController: UITableViewController {
         
     }
     
-    // MARK: - Table view data source
+    // MARK: - Table View Data Source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return content.count
