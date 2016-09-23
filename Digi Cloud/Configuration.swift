@@ -23,4 +23,5 @@ struct API {
 
 struct Segues {
     static let toFiles = "toFiles"
+    static let toContent = "toContent"
 }

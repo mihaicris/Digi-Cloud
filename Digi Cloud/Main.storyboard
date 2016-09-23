@@ -257,10 +257,31 @@
                     <navigationItem key="navigationItem" id="GKU-Hh-0Jv">
                         <barButtonItem key="rightBarButtonItem" title="Settings" id="Sgg-Y7-5s0"/>
                     </navigationItem>
+                    <connections>
+                        <segue destination="okL-fe-hAE" kind="show" identifier="toContent" id="abe-uf-XBX"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KzF-sl-Nqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2482.8125" y="130.6640625"/>
+        </scene>
+        <!--Content View Controller-->
+        <scene sceneID="aN5-bX-5DH">
+            <objects>
+                <viewController id="okL-fe-hAE" customClass="ContentViewController" customModule="Digi_Cloud" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xXS-wH-dzR"/>
+                        <viewControllerLayoutGuide type="bottom" id="ehh-As-77m"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="m4Z-2g-a1z">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HLW-AF-wGj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3253" y="131"/>
         </scene>
     </scenes>
     <resources>

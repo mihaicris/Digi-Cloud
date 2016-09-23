@@ -51,4 +51,15 @@ struct Utils {
         components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         return components.url!
     }
+    
+    static func getURLForFileContent(mount: String, path: String) -> URL {
+        var components = URLComponents()
+        components.scheme = API.Scheme
+        components.host = API.Host
+        components.path = API.Paths.Mounts + "/" + mount + "/files/get"
+        components.queryItems = [URLQueryItem(name: "path", value: path)]
+        components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+        return components.url!
+    }
+    
 }

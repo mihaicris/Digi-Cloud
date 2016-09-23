@@ -129,15 +129,13 @@ class FilesTableViewController: UITableViewController {
                 newVC.token = token
                 newVC.mount = mount
                 newVC.title = content[indexPath.row].name
-                
-                let urlComponents = URLComponents(string: url.absoluteString)
+                var urlComponents = URLComponents(string: url.absoluteString)
                 let queryItems = urlComponents?.queryItems
                 var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
                 if path != "/" {
                     path += "/"
                 }
                 let newPath = path + content[indexPath.row].name
-                
                 newVC.url = Utils.getURLForMountContent(mount: mount, path: newPath)
                 self.navigationController?.pushViewController(newVC, animated: true)
             } else {
@@ -145,10 +143,13 @@ class FilesTableViewController: UITableViewController {
             }
             
         } else {
+            
             if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 cellForInset = cell
             }
+            performSegue(withIdentifier: Segues.toContent, sender: content[indexPath.row])
+            
         }
     }
     
@@ -156,5 +157,30 @@ class FilesTableViewController: UITableViewController {
         if cellForInset != nil {
             cellForInset.separatorInset = UIEdgeInsets(top: 0, left: 53, bottom: 0, right: 0)
         }
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == Segues.toContent,
+            let file = sender as? File
+            else { return }
+        
+        if let contentVC = segue.destination as? ContentViewController {
+            
+            var urlComponents = URLComponents(string: url.absoluteString)
+            let queryItems = urlComponents?.queryItems
+            var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
+            if path != "/" {
+                path += "/"
+            }
+            let newPath = path + file.name
+            contentVC.token = token
+            contentVC.mount = mount
+            contentVC.title = file.name
+            contentVC.url = Utils.getURLForFileContent(mount: mount, path: newPath)
+            print(file.contentType)
+        }
+        
     }
 }
