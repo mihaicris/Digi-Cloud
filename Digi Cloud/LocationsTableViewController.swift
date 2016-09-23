@@ -17,7 +17,7 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Mounts, parameters: nil)
+        let url = Utils.getURLFromParameters(path: API.Paths.Mounts, parameters: nil)
         
         var request = URLRequest(url: url)
         
@@ -51,6 +51,7 @@ class LocationsTableViewController: UITableViewController {
                             print("Could not get mounts list")
                             return
                     }
+                    
                     for item in mountsList  {
                         if let mountObject = Mount(JSON: item) {
                             self.mounts.append(mountObject)
@@ -94,7 +95,7 @@ class LocationsTableViewController: UITableViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == Constants.Segues.toFiles {
+        if segue.identifier == Segues.toFiles {
             if let destVC = segue.destination as? FilesTableViewController {
                 guard let cell = sender as? UITableViewCell else { return }
                 guard let indexPath = tableView.indexPath(for: cell) else { return }

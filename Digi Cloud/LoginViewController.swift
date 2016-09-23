@@ -38,7 +38,7 @@ class LoginViewController: UIViewController {
         guard let email = emailTextField.text else { return }
         guard let pass = passwordTextField.text else { return }
         
-        let url = Utils.getURLFromParameters(path: Constants.DigiAPI.Paths.Token, parameters: nil)
+        let url = Utils.getURLFromParameters(path: API.Paths.Token, parameters: nil)
         
         var request = URLRequest(url: url)
         

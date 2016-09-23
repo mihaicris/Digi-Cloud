@@ -54,10 +54,10 @@ class FilesTableViewController: UITableViewController {
                             print("Could not parce objects from json")
                             return
                     }
+                    
                     for item in objs {
                         if let newFile = File(JSON: item) {
                             self.content.append(newFile)
-                            
                         }
                     }
                     

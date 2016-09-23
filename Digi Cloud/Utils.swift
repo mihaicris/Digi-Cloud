@@ -11,8 +11,8 @@ import Foundation
 struct Utils {
     static func getURLFromParameters(path: String, parameters: [String: Any]?) -> URL {
         var components = URLComponents()
-        components.scheme = Constants.DigiAPI.Scheme
-        components.host = Constants.DigiAPI.Host
+        components.scheme = API.Scheme
+        components.host = API.Host
         components.path = path
 
         if parameters != nil {
@@ -27,9 +27,9 @@ struct Utils {
     
     static func getURLForMountContent(mount: String, path: String) -> URL {
         var components = URLComponents()
-        components.scheme = Constants.DigiAPI.Scheme
-        components.host = Constants.DigiAPI.Host
-        components.path = Constants.DigiAPI.Paths.Mounts + "/" + mount + "/files/list"
+        components.scheme = API.Scheme
+        components.host = API.Host
+        components.path = API.Paths.Mounts + "/" + mount + "/files/list"
         components.queryItems = [URLQueryItem(name: "path", value: path)]
         components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         return components.url!
