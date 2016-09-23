@@ -35,15 +35,10 @@ class LoginViewController: UIViewController {
     @IBAction func loginButtonTouchUp(_ sender: UIButton) {
         
         guard let email = emailTextField.text else { return }
-        guard let pass = passwordTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
         
-        let url = Utils.getURLFromParameters(path: API.Paths.Token, parameters: nil)
-        
-        var request = URLRequest(url: url)
-        
-        request.addValue(email, forHTTPHeaderField: "X-Koofr-Email")
-        request.addValue(pass, forHTTPHeaderField: "X-Koofr-Password")
-        
+        let request = Utils.getRequestForAuthentication(email: email, password: password)
+
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         spinner.startAnimating()
         
@@ -90,9 +85,7 @@ class LoginViewController: UIViewController {
                         self.present(alert, animated: false, completion: nil)
                         
                     }
-                    
                 }
-                
             }
         }
         
