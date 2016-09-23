@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
 		837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8370411C1D8B1DEE000EDBAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -53,6 +55,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		835405FB1D94FCA900019D53 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				835405FC1D94FCC300019D53 /* Protocols.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
 		837041091D8B1DED000EDBAE = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +127,7 @@
 		83EF1D461D8FBDC400ACE008 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				835405FB1D94FCA900019D53 /* Protocols */,
 				83EF1D471D8FBDDA00ACE008 /* File.swift */,
 				83EF1D6B1D8FE26400ACE008 /* Mount.swift */,
 			);
@@ -199,6 +210,7 @@
 				8370412E1D8B2264000EDBAE /* LocationsTableViewController.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
+				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
 				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,
 				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
 				83EF1D481D8FBDDA00ACE008 /* File.swift in Sources */,

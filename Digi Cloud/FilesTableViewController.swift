@@ -55,17 +55,10 @@ class FilesTableViewController: UITableViewController {
                             return
                     }
                     for item in objs {
-                        guard let name = item["name"] as? String,
-                            let type = item["type"] as? String,
-                            let modified = item["modified"] as? TimeInterval,
-                            let size = item["size"] as? Double,
-                            let contentType = item["contentType"] as? String
-                            else {
-                                print("Could not parce keys")
-                                return
+                        if let newFile = File(JSON: item) {
+                            self.content.append(newFile)
+                            
                         }
-                        let newFile = File(name: name, type: type, modified: modified, size: size, contentType: contentType)
-                        self.content.append(newFile)
                     }
                     
                     // TODO: Implement sorting filters in the interface
@@ -146,7 +139,7 @@ class FilesTableViewController: UITableViewController {
             } else {
                 print("Error loading new controller")
             }
-
+            
         } else {
             if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
