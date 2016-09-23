@@ -27,9 +27,8 @@ struct File {
 extension File: JSONDecodable {
     init?(JSON: Any) {
         
-        guard let JSON = JSON as? [String: Any] else { return nil }
-        
-        guard let name = JSON["name"] as? String,
+        guard let JSON = JSON as? [String: Any],
+            let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
             let modified = JSON["modified"] as? TimeInterval,
             let size = JSON["size"] as? Double,

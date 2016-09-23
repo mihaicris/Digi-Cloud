@@ -52,16 +52,11 @@ class LocationsTableViewController: UITableViewController {
                             return
                     }
                     for item in mountsList  {
-                        guard let mount = item as? [String: Any],
-                            let mountName = mount["name"] as? String,
-                            let mountId = mount["id"] as? String
-                            else {
-                                print("Could not get mount info")
-                                return
+                        if let mountObject = Mount(JSON: item) {
+                            self.mounts.append(mountObject)
                         }
-                        let mountObject = Mount(id: mountId, name: mountName)
-                        self.mounts.append(mountObject)
                     }
+                    
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
