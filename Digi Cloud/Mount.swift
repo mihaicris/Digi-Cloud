@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Mount {
+struct Mount {
     let id: String
     let name: String
 

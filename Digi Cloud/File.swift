@@ -8,7 +8,7 @@
 
 import Foundation
 
-class File {
+struct File {
     let name: String
     let type: String
     let modified: TimeInterval
