@@ -14,6 +14,8 @@ class DigiClient {
     
     // MARK: - Properties
     var token: String!
+    var currentMount: String!
+    var currentPath: [String] = []
     
     // Shared Session
     var session = URLSession.shared
@@ -50,7 +52,7 @@ class DigiClient {
                      headers: [String: String]?,
                      json: [String: String]?,
                      parameters: [String: Any]?,
-                     completionHandler: @escaping (_ data: Any?, _ error: Error?) -> Void) -> URLSessionDataTask
+                     completionHandler: @escaping (_ data: Any?, _ error: Error?) -> Void)
     {
         
         /* 1. Build the URL, Configure the request */
@@ -101,13 +103,11 @@ class DigiClient {
         
         /* 4. Start the request */
         task.resume()
-        
-        return task
     }
     
     // MARK: - Helper Functions
     
-    private func getURL(method: String, parameters: [String: Any]?) -> URL {
+    func getURL(method: String, parameters: [String: Any]?) -> URL {
         var components = URLComponents()
         components.scheme = API.Scheme
         components.host = API.Host
@@ -119,6 +119,7 @@ class DigiClient {
                 let queryItem = URLQueryItem(name: key, value: "\(value)")
                 components.queryItems!.append(queryItem)
             }
+            components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         }
         return components.url!
     }

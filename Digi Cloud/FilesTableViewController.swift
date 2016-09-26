@@ -12,10 +12,6 @@ class FilesTableViewController: UITableViewController {
     
     // MARK: - Properties
     
-    var mount: String!
-    
-    var url: URL!
-    
     private var content: [File] = []
     
     private var cellForInset: UITableViewCell!
@@ -25,62 +21,40 @@ class FilesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var request = URLRequest(url: url)
-        
-        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
-        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
-        let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
-        
-        let datatask: URLSessionDataTask?
-        
-        datatask = defaultSession.dataTask(with: request) {
-            (dataResponse: Data?, response: URLResponse?, error: Error?) in
+        DigiClient.shared().getLocationContent(mount: DigiClient.shared().currentMount, queryPath: DigiClient.shared().currentPath.last!) {
+            (content, error) in
             
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
             
             if error != nil {
-                print("Session error")
-                return
+                print("Error: \(error)")
+            }
+            if let content = content  {
+                self.content = content
+                
+                // TODO: Implement sorting filters in the interface
+                self.content.sort {
+                    /*  Order items by name (ascending), directories are shown first */
+                    return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type)
+                    /* Order items by Date (descending), directories are shown first */
+                    // return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
+                }
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
             
-            if let data = dataResponse {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    guard let dict = json as? [String: Any],
-                        let objs = dict["files"] as? [[String: Any]]
-                        else {
-                            print("Could not parce objects from json")
-                            return
-                    }
-                    
-                    for item in objs {
-                        if let newFile = File(JSON: item) {
-                            self.content.append(newFile)
-                        }
-                    }
-                    
-                    // TODO: Implement sorting filters in the interface
-                    self.content.sort {
-                        /*  Order items by name (ascending), directories are shown first */
-                        return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type)
-                        /* Order items by Date (descending), directories are shown first */
-                        // return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
-                    }
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }
-                catch let error {
-                    print(error)
-                }
-            }
+            
         }
-        datatask?.resume()
-        
+    }
+    
+    deinit {
+        DigiClient.shared().currentPath.removeLast()
     }
     
     // MARK: - Table View Data Source
@@ -123,30 +97,22 @@ class FilesTableViewController: UITableViewController {
         
         if content[indexPath.row].type == "dir" {
             
-            if let newVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
-                newVC.mount = mount
-                newVC.title = content[indexPath.row].name
-                var urlComponents = URLComponents(string: url.absoluteString)
-                let queryItems = urlComponents?.queryItems
-                var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
-                if path != "/" {
-                    path += "/"
-                }
-                let newPath = path + content[indexPath.row].name
-                newVC.url = Utils.getURLForMountContent(mount: mount, path: newPath)
-                self.navigationController?.pushViewController(newVC, animated: true)
+            if let contentVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
+                contentVC.title = content[indexPath.row].name
+                
+                DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + content[indexPath.row].name + "/")
+                self.navigationController?.pushViewController(contentVC, animated: true)
             } else {
                 print("Error loading new controller")
             }
             
         } else {
-            
+            // type == "file"
             if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 cellForInset = cell
             }
             performSegue(withIdentifier: Segues.toContent, sender: content[indexPath.row])
-            
         }
     }
     
@@ -164,18 +130,8 @@ class FilesTableViewController: UITableViewController {
             else { return }
         
         if let contentVC = segue.destination as? ContentViewController {
-            
-            var urlComponents = URLComponents(string: url.absoluteString)
-            let queryItems = urlComponents?.queryItems
-            var path = (queryItems?.filter({$0.name == "path"}).first?.value)!
-            if path != "/" {
-                path += "/"
-            }
-            let newPath = path + file.name
-            contentVC.mount = mount
             contentVC.title = file.name
-            contentVC.url = Utils.getURLForFileContent(mount: mount, path: newPath)
-            print(file.contentType)
+            DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + file.name)
         }
         
     }

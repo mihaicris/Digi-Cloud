@@ -21,7 +21,7 @@ class LocationsTableViewController: UITableViewController {
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-        _ = DigiClient.shared().getLocations() {
+        DigiClient.shared().getLocations() {
             (mounts, error) in
             
             DispatchQueue.main.async {
@@ -39,63 +39,6 @@ class LocationsTableViewController: UITableViewController {
                 }
             }
         }
-        
-        
-//        let url = Utils.getURLFromParameters(path: Methods.Mounts, parameters: nil)
-        
-//        var request = URLRequest(url: url)
-        
-//        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
-        
-        
-//        let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
-//        
-//        let datatask: URLSessionDataTask?
-//        
-//        datatask = defaultSession.dataTask(with: request) {
-//            (dataResponse: Data?, response: URLResponse?, error: Error?) in
-//            
-//            DispatchQueue.main.async {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//            }
-//            
-//            if error != nil {
-//                print("Session error")
-//                return
-//            }
-//            
-//            if let data = dataResponse {
-//                do {
-//                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-//                    guard let dict = json as? [String: Any],
-//                        let mountsList = dict["mounts"] as? [Any]
-//                        else {
-//                            print("Could not get mounts list")
-//                            return
-//                    }
-//                    
-//                    for item in mountsList  {
-//                        if let mountObject = Mount(JSON: item) {
-//                            self.mounts.append(mountObject)
-//                        }
-//                    }
-//                    
-//                    DispatchQueue.main.async {
-//                        self.tableView.reloadData()
-//                    }
-//                }
-//                catch let error {
-//                    print(error)
-//                }
-//            }
-//        }
-//        datatask?.resume()
-    }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
     }
     
     // MARK: - Navigation
@@ -106,9 +49,10 @@ class LocationsTableViewController: UITableViewController {
             if let destVC = segue.destination as? FilesTableViewController {
                 guard let cell = sender as? UITableViewCell else { return }
                 guard let indexPath = tableView.indexPath(for: cell) else { return }
-                destVC.mount = mounts[indexPath.row].id
+                DigiClient.shared().currentMount = mounts[indexPath.row].id
+                DigiClient.shared().currentPath.append("/")
                 destVC.title = mounts[indexPath.row].name
-                destVC.url = Utils.getURLForMountContent(mount: mounts[indexPath.row].id, path: "/")
+
             }
         }
     }

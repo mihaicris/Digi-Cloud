@@ -41,7 +41,7 @@ class LoginViewController: UIViewController {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         spinner.startAnimating()
         
-        _ = DigiClient.shared().authenticate(email: email, password: password) { (success, error) in
+        DigiClient.shared().authenticate(email: email, password: password) { (success, error) in
             
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

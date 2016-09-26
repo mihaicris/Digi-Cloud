@@ -38,7 +38,8 @@ struct Methods {
     static let Password     = "/api/v2/user/password"
     static let Bookmarks    = "/api/v2/user/bookmarks"
     static let Mounts       = "/api/v2/mounts"
-    static let Files        = "/api/v2/mount/{id}/files/get"
+    static let ListFiles    = "/api/v2/mounts/{id}/files/list"
+    static let GetFile      = "/api/v2/mounts/{id}/files/get"
 }
 
 struct Segues {

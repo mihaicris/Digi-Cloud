@@ -14,27 +14,27 @@ class ContentViewController: UIViewController {
     
     // MARK: - Properties
     
-    var token: String!
-    
-    var mount: String!
-    
-    var url: URL!
-    
     @IBOutlet var webView: UIView! = nil
     
     // View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let contentView = WKWebView(frame: self.view.bounds)
         self.view = contentView
         
-        var request = URLRequest(url: url)
-
-        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
+        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: DigiClient.shared().currentMount)
+        let parameters = [ParametersKeys.Path: DigiClient.shared().currentPath.last!]
+        let url = DigiClient.shared().getURL(method: method, parameters: parameters)
         
+        var request = URLRequest(url: url)
+        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
         contentView.load(request)
+    }
+    
+    deinit {
+        DigiClient.shared().currentPath.removeLast()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
