@@ -34,98 +34,124 @@ class LoginViewController: UIViewController {
     
     @IBAction func loginButtonTouchUp(_ sender: UIButton) {
         
+        
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
         
-        let request = Utils.getRequestForAuthentication(email: email, password: password)
-
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         spinner.startAnimating()
         
-        let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
+        DigiClient.sharedInstance().authenticate(email: email, password: password) { (success, error) in
+            
+            print("test")
+            
+//            if success {
+//                
+//                DispatchQueue.main.async {
+//                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                    self.spinner.stopAnimating()
+//                    self.performSegue(withIdentifier: "Locations", sender: nil)
+//                }
+//            } else {
+//                DispatchQueue.main.async {
+//                    let alert = UIAlertController(title: "Error", message: "Unauthorized access", preferredStyle: UIAlertControllerStyle.alert)
+//                    let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+//                    alert.addAction(actionOK)
+//                    self.present(alert, animated: false, completion: nil)
+//                }
+//            }
+            
+            //        let request = Utils.getRequestForAuthentication(email: email, password: password)
+            
+            
+            
+            //        let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
+            
+            //        let datatask: URLSessionDataTask?
+            
+            //        datatask = defaultSession.dataTask(with: request) {
+            //            (data: Data?, response: URLResponse?, error: Error?) in
+            //
+            //            DispatchQueue.main.async {
+            //                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            //                self.spinner.stopAnimating()
+            //
+            //            }
+            //
+            //            if error != nil {
+            //                print("Error: \(error!.localizedDescription)")
+            //                return
+            //            }
+            //
+            //            if let httpResponse = response as? HTTPURLResponse {
+            //
+            //                if httpResponse.statusCode == 200 {
+            //                    for header in httpResponse.allHeaderFields {
+            //                        if let key = header.key as? String,
+            //                            key == "x-koofr-token" {
+            //                            self.token = header.value as? String
+            //                            if self.token != nil {
+            //
+            //                                DispatchQueue.main.async {
+            //                                    self.performSegue(withIdentifier: "Locations", sender: nil)
+            //                                }
+            //                            }
+            //
+            //                        }
+            //                    }
+            //                } else {
+            //
+            //                    DispatchQueue.main.async {
+            //                        let alert = UIAlertController(title: "Error", message: "Unauthorized access", preferredStyle: UIAlertControllerStyle.alert)
+            //                        let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+            //                        alert.addAction(actionOK)
+            //                        self.present(alert, animated: false, completion: nil)
+            //
+            //                    }
+            //                }
+            //            }
+            //        }
+            //
+            //        datatask?.resume()
+        }
+    }
+    
+        // MARK: - Properties
         
-        let datatask: URLSessionDataTask?
+        var token: String?
         
-        datatask = defaultSession.dataTask(with: request) {
-            (data: Data?, response: URLResponse?, error: Error?) in
-            
-            DispatchQueue.main.async {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.spinner.stopAnimating()
-                
-            }
-            
-            if error != nil {
-                print("Error: \(error!.localizedDescription)")
-                return
-            }
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                
-                if httpResponse.statusCode == 200 {
-                    for header in httpResponse.allHeaderFields {
-                        if let key = header.key as? String,
-                            key == "x-koofr-token" {
-                            self.token = header.value as? String
-                            if self.token != nil {
-                                
-                                DispatchQueue.main.async {
-                                    self.performSegue(withIdentifier: "Locations", sender: nil)
-                                }
-                            }
-                            
-                        }
-                    }
-                } else {
+        // MARK: - Navigation
+        
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "Locations" {
+                if let nextViewController = segue.destination.contentViewController as? LocationsTableViewController {
                     
-                    DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "Error", message: "Unauthorized access", preferredStyle: UIAlertControllerStyle.alert)
-                        let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
-                        alert.addAction(actionOK)
-                        self.present(alert, animated: false, completion: nil)
-                        
-                    }
+                    nextViewController.token = DigiClient.sharedInstance().token
+                    //                    nextViewController.token = self.token!
+                    nextViewController.title = "Digi Storage"
                 }
             }
         }
         
-        datatask?.resume()
-    }
-    
-    // MARK: - Properties
-
-    var token: String?
-
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Locations" {
-            if let nextViewController = segue.destination.contentViewController as? LocationsTableViewController {
-                    nextViewController.token = self.token!
-                    nextViewController.title = "Digi Storage"
-            }
+        // MARK: - View Life Cycle
+        
+        override func viewDidLoad() {
+            super.viewDidLoad()
+        }
+        
+        // MARK: - View Methods
+        
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            self.view.endEditing(true)
         }
     }
     
-    // MARK: - View Life Cycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    // MARK: - View Methods
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-}
-
-extension LoginViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
+    extension LoginViewController: UITextFieldDelegate {
+        
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder()
+            return true
+        }
 }
 
 

@@ -21,7 +21,7 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let url = Utils.getURLFromParameters(path: API.Paths.Mounts, parameters: nil)
+        let url = Utils.getURLFromParameters(path: Methods.Mounts, parameters: nil)
         
         var request = URLRequest(url: url)
         

@@ -14,11 +14,12 @@
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
 		837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */; };
-		837041281D8B21DE000EDBAE /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041271D8B21DE000EDBAE /* Utils.swift */; };
+		837041281D8B21DE000EDBAE /* DigiHelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041271D8B21DE000EDBAE /* DigiHelperFunctions.swift */; };
 		8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412A1D8B2264000EDBAE /* LoginViewController.swift */; };
 		8370412E1D8B2264000EDBAE /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */; };
 		837041301D8B2320000EDBAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370412F1D8B2320000EDBAE /* Main.storyboard */; };
-		839BAE251D8BFD6500A43452 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* Configuration.swift */; };
+		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
+		83EBD0791D994F9500C80397 /* DIGIConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBD0781D994F9500C80397 /* DIGIConvenience.swift */; };
 		83EF1D481D8FBDDA00ACE008 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* File.swift */; };
 		83EF1D6A1D8FDB1900ACE008 /* FilesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D691D8FDB1900ACE008 /* FilesTableViewController.swift */; };
 		83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6B1D8FE26400ACE008 /* Mount.swift */; };
@@ -36,11 +37,12 @@
 		8370411C1D8B1DEE000EDBAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8370411F1D8B1DEE000EDBAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		837041211D8B1DEE000EDBAE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		837041271D8B21DE000EDBAE /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		837041271D8B21DE000EDBAE /* DigiHelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiHelperFunctions.swift; sourceTree = "<group>"; };
 		8370412A1D8B2264000EDBAE /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8370412F1D8B2320000EDBAE /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		839BAE241D8BFD6500A43452 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
+		83EBD0781D994F9500C80397 /* DIGIConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIGIConvenience.swift; sourceTree = "<group>"; };
 		83EF1D471D8FBDDA00ACE008 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = File.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83EF1D691D8FDB1900ACE008 /* FilesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTableViewController.swift; sourceTree = "<group>"; };
 		83EF1D6B1D8FE26400ACE008 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mount.swift; sourceTree = "<group>"; };
@@ -103,8 +105,10 @@
 		835406021D95180F00019D53 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				837041271D8B21DE000EDBAE /* Utils.swift */,
+				839BAE241D8BFD6500A43452 /* DigiConstants.swift */,
+				837041271D8B21DE000EDBAE /* DigiHelperFunctions.swift */,
 				831B9F581D992BD7003DAF42 /* DigiClient.swift */,
+				83EBD0781D994F9500C80397 /* DIGIConvenience.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -138,7 +142,6 @@
 			children = (
 				835406031D952FD900019D53 /* Extensions */,
 				835405FE1D95175E00019D53 /* Application Delegate */,
-				839BAE221D8BE05000A43452 /* Configurations */,
 				835406021D95180F00019D53 /* Managers */,
 				83EF1D461D8FBDC400ACE008 /* Models */,
 				835405FB1D94FCA900019D53 /* Protocols */,
@@ -160,14 +163,6 @@
 				8321FC5A1D9568FE002D6413 /* ContentViewController.swift */,
 			);
 			name = "View Controllers";
-			sourceTree = "<group>";
-		};
-		839BAE221D8BE05000A43452 /* Configurations */ = {
-			isa = PBXGroup;
-			children = (
-				839BAE241D8BFD6500A43452 /* Configuration.swift */,
-			);
-			name = Configurations;
 			sourceTree = "<group>";
 		};
 		839BAE231D8BE06E00A43452 /* Table View Cells */ = {
@@ -272,9 +267,10 @@
 				835406051D952FFD00019D53 /* Extensions.swift in Sources */,
 				83EF1D6A1D8FDB1900ACE008 /* FilesTableViewController.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
+				83EBD0791D994F9500C80397 /* DIGIConvenience.swift in Sources */,
 				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
-				837041281D8B21DE000EDBAE /* Utils.swift in Sources */,
-				839BAE251D8BFD6500A43452 /* Configuration.swift in Sources */,
+				837041281D8B21DE000EDBAE /* DigiHelperFunctions.swift in Sources */,
+				839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

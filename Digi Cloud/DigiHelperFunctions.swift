@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+
 struct Utils {
     
     static func getRequestForAuthentication(email: String, password: String) -> URLRequest {
@@ -16,7 +18,7 @@ struct Utils {
         var components = URLComponents()
         components.scheme   = API.Scheme
         components.host     = API.Host
-        components.path     = API.Paths.Token
+        components.path     = Methods.Token
         
         // Create request with headers for authentication
         var request = URLRequest(url: components.url!)
@@ -46,7 +48,7 @@ struct Utils {
         var components = URLComponents()
         components.scheme = API.Scheme
         components.host = API.Host
-        components.path = API.Paths.Mounts + "/" + mount + "/files/list"
+        components.path = Methods.Mounts + "/" + mount + "/files/list"
         components.queryItems = [URLQueryItem(name: "path", value: path)]
         components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         return components.url!
@@ -56,7 +58,7 @@ struct Utils {
         var components = URLComponents()
         components.scheme = API.Scheme
         components.host = API.Host
-        components.path = API.Paths.Mounts + "/" + mount + "/files/get"
+        components.path = Methods.Mounts + "/" + mount + "/files/get"
         components.queryItems = [URLQueryItem(name: "path", value: path)]
         components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         return components.url!
