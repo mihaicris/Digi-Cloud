@@ -45,42 +45,47 @@ class DigiClient {
     }
     
     // MARK: - GET 
-    func networkTask(requestType: String, method: String,
-                     headers: [String: String]?, json: [String: String],
+    func networkTask(requestType: String,
+                     method: String,
+                     headers: [String: String]?,
+                     json: [String: String]?,
                      parameters: [String: Any]?,
-                     completionHandlerForGET: @escaping (_ data: Any?, _ error: Error?) -> Void) -> URLSessionDataTask
+                     completionHandler: @escaping (_ data: Any?, _ error: Error?) -> Void) -> URLSessionDataTask
     {
         
         /* 1. Build the URL, Configure the request */
-        let url = getURL(method: method, parameters: parameters)
+        let url = self.getURL(method: method, parameters: parameters)
     
-        var request = getURLRequest(url: url, requestType: requestType, headers: headers)
+        var request = self.getURLRequest(url: url, requestType: requestType, headers: headers)
         
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: json, options: [])
-        } catch {
-            print("jsonBody is empty")
-            completionHandlerForGET(nil, JSONError.parce("jsonBody is empty"))
+        
+        // add json object to request
+        if let json = json {
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: json, options: [])
+            } catch {
+                completionHandler(nil, JSONError.parce("Could not convert json into data!"))
+            }
         }
-        
+
         /* 2. Make the request */
         let task = session.dataTask(with: request) { (data, response, error) in
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                completionHandlerForGET(nil, NetworkingError.get("There was an error with your request: \(error)"))
+                completionHandler(nil, NetworkingError.get("There was an error with your request: \(error)"))
                 return
             }
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                completionHandlerForGET(nil, NetworkingError.wrongStatus("Your request returned a status code other than 2xx!"))
+                completionHandler(nil, NetworkingError.wrongStatus("Your request returned a status code other than 2xx!"))
                 return
             }
             
             /* GUARD: Was there any data returned? */
             guard let data = data else {
-                completionHandlerForGET(nil, NetworkingError.data("No data was returned by the request!"))
+                completionHandler(nil, NetworkingError.data("No data was returned by the request!"))
                 return
             }
             
@@ -88,9 +93,9 @@ class DigiClient {
             
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                completionHandlerForGET(json, nil)
+                completionHandler(json, nil)
             } catch {
-                completionHandlerForGET(nil, JSONError.parce("Could not parse the data as JSON"))
+                completionHandler(nil, JSONError.parce("Could not parse the data as JSON"))
             }
         }
         
@@ -99,6 +104,8 @@ class DigiClient {
         
         return task
     }
+    
+    // MARK: - Helper Functions
     
     private func getURL(method: String, parameters: [String: Any]?) -> URL {
         var components = URLComponents()
@@ -128,6 +135,5 @@ class DigiClient {
         
         return request
     }
-
 }
 

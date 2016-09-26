@@ -19,56 +19,83 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let url = Utils.getURLFromParameters(path: Methods.Mounts, parameters: nil)
-        
-        var request = URLRequest(url: url)
-        
-        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
-        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        
-        let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
-        
-        let datatask: URLSessionDataTask?
-        
-        datatask = defaultSession.dataTask(with: request) {
-            (dataResponse: Data?, response: URLResponse?, error: Error?) in
+
+        _ = DigiClient.shared().getLocations() {
+            (mounts, error) in
             
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
             
             if error != nil {
-                print("Session error")
-                return
+                print("Error: \(error)")
             }
-            
-            if let data = dataResponse {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    guard let dict = json as? [String: Any],
-                        let mountsList = dict["mounts"] as? [Any]
-                        else {
-                            print("Could not get mounts list")
-                            return
-                    }
-                    
-                    for item in mountsList  {
-                        if let mountObject = Mount(JSON: item) {
-                            self.mounts.append(mountObject)
-                        }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }
-                catch let error {
-                    print(error)
+            if let mounts = mounts  {
+                self.mounts = mounts
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
                 }
             }
         }
-        datatask?.resume()
+        
+        
+//        let url = Utils.getURLFromParameters(path: Methods.Mounts, parameters: nil)
+        
+//        var request = URLRequest(url: url)
+        
+//        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
+        
+        
+//        let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
+//        
+//        let datatask: URLSessionDataTask?
+//        
+//        datatask = defaultSession.dataTask(with: request) {
+//            (dataResponse: Data?, response: URLResponse?, error: Error?) in
+//            
+//            DispatchQueue.main.async {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//            }
+//            
+//            if error != nil {
+//                print("Session error")
+//                return
+//            }
+//            
+//            if let data = dataResponse {
+//                do {
+//                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+//                    guard let dict = json as? [String: Any],
+//                        let mountsList = dict["mounts"] as? [Any]
+//                        else {
+//                            print("Could not get mounts list")
+//                            return
+//                    }
+//                    
+//                    for item in mountsList  {
+//                        if let mountObject = Mount(JSON: item) {
+//                            self.mounts.append(mountObject)
+//                        }
+//                    }
+//                    
+//                    DispatchQueue.main.async {
+//                        self.tableView.reloadData()
+//                    }
+//                }
+//                catch let error {
+//                    print(error)
+//                }
+//            }
+//        }
+//        datatask?.resume()
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
     }
     
     // MARK: - Navigation

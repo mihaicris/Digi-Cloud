@@ -9,7 +9,6 @@
 import Foundation
 
 
-
 struct Utils {
     
     static func getRequestForAuthentication(email: String, password: String) -> URLRequest {

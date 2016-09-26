@@ -41,11 +41,15 @@ class LoginViewController: UIViewController {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         spinner.startAnimating()
         
-        DigiClient.shared().authenticate(email: email, password: password) { (success, error) in
+        _ = DigiClient.shared().authenticate(email: email, password: password) { (success, error) in
+            
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.spinner.stopAnimating()
+            }
+            
             if success {
                 DispatchQueue.main.async {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                    self.spinner.stopAnimating()
                     self.performSegue(withIdentifier: "Locations", sender: nil)
                 }
             } else {
@@ -59,10 +63,6 @@ class LoginViewController: UIViewController {
         }
     }
     
-        // MARK: - Properties
-        
-        var token: String?
-        
         // MARK: - Navigation
         
         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
