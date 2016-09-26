@@ -32,7 +32,7 @@ class ContentViewController: UIViewController {
         
         var request = URLRequest(url: url)
 
-        request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
+        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
         
         contentView.load(request)
     }

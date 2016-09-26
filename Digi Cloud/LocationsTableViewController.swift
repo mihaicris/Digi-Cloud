@@ -12,8 +12,6 @@ class LocationsTableViewController: UITableViewController {
         
     // MARK: - Properties
     
-    var token: String!
-    
     var mounts: [Mount] = []
     
     // MARK: - View Life Cycle
@@ -25,7 +23,7 @@ class LocationsTableViewController: UITableViewController {
         
         var request = URLRequest(url: url)
         
-        request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
+        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
@@ -81,7 +79,6 @@ class LocationsTableViewController: UITableViewController {
             if let destVC = segue.destination as? FilesTableViewController {
                 guard let cell = sender as? UITableViewCell else { return }
                 guard let indexPath = tableView.indexPath(for: cell) else { return }
-                destVC.token = token
                 destVC.mount = mounts[indexPath.row].id
                 destVC.title = mounts[indexPath.row].name
                 destVC.url = Utils.getURLForMountContent(mount: mounts[indexPath.row].id, path: "/")

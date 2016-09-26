@@ -12,8 +12,6 @@ class FilesTableViewController: UITableViewController {
     
     // MARK: - Properties
     
-    var token: String!
-    
     var mount: String!
     
     var url: URL!
@@ -29,7 +27,7 @@ class FilesTableViewController: UITableViewController {
         
         var request = URLRequest(url: url)
         
-        request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
+        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
@@ -126,7 +124,6 @@ class FilesTableViewController: UITableViewController {
         if content[indexPath.row].type == "dir" {
             
             if let newVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
-                newVC.token = token
                 newVC.mount = mount
                 newVC.title = content[indexPath.row].name
                 var urlComponents = URLComponents(string: url.absoluteString)
@@ -175,7 +172,6 @@ class FilesTableViewController: UITableViewController {
                 path += "/"
             }
             let newPath = path + file.name
-            contentVC.token = token
             contentVC.mount = mount
             contentVC.title = file.name
             contentVC.url = Utils.getURLForFileContent(mount: mount, path: newPath)

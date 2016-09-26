@@ -13,10 +13,10 @@ import Foundation
 class DigiClient {
     
     // MARK: - Properties
-    var token: String? = nil
+    var token: String!
     
     // Shared Session
-    var session = URLSession(configuration: URLSessionConfiguration.default)
+    var session = URLSession.shared
     
     // MARK: - Initializers
     init() {}
