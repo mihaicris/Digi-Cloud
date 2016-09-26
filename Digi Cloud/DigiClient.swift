@@ -13,14 +13,12 @@ import Foundation
 class DigiClient {
     
     // MARK: - Properties
-    
     var token: String? = nil
     
     // Shared Session
     var session: URLSession = URLSession.shared
     
     // MARK: - Initializers
-    
     init() {}
     
     // MAKR: - Shared instance
@@ -31,9 +29,10 @@ class DigiClient {
         return Singleton.sharedInstance
     }
     
-    
     // MARK: - GET 
-    func taskForGETMethod() -> URLSessionDataTask {
+    func taskForGETMethod(method: String,
+                          parameters: [String: Any],
+                          completionHandlerForGET: (_ result: Any?, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         let url = URL(string: "www.google.com")!
         
@@ -46,7 +45,10 @@ class DigiClient {
     }
     
     // MARK: - POST
-    func taskForPOSTMethod() -> URLSessionDataTask {
+    func taskForPOSTMethod(method: String,
+                           parameters: [String: Any],
+                           jsonBody: String,
+                           completionHandlerForGET: (_ result: Any?, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         let url = URL(string: "www.google.com")!
         
@@ -59,7 +61,10 @@ class DigiClient {
     }
     
     // MARK: - DELETE
-    func taskForDELETEMethod() -> URLSessionDataTask {
+    func taskForDELETEMethod(method: String,
+                             parameters: [String: Any],
+                             jsonBody: String,
+                             completionHandlerForGET: (_ result: Any?, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         let url = URL(string: "www.google.com")!
         
