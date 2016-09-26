@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B9F581D992BD7003DAF42 /* DigiClient.swift */; };
 		8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
 		835405FD1D94FCC300019D53 /* JSONDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* JSONDecodable.swift */; };
 		835406051D952FFD00019D53 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* Extensions.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		831B9F581D992BD7003DAF42 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiClient.swift; sourceTree = "<group>"; };
 		8321FC5A1D9568FE002D6413 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		835405FC1D94FCC300019D53 /* JSONDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONDecodable.swift; sourceTree = "<group>"; };
 		835406041D952FFD00019D53 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				837041271D8B21DE000EDBAE /* Utils.swift */,
+				831B9F581D992BD7003DAF42 /* DigiClient.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				835406051D952FFD00019D53 /* Extensions.swift in Sources */,
 				83EF1D6A1D8FDB1900ACE008 /* FilesTableViewController.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
+				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
 				837041281D8B21DE000EDBAE /* Utils.swift in Sources */,
 				839BAE251D8BFD6500A43452 /* Configuration.swift in Sources */,
 			);
