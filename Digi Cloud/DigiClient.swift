@@ -16,7 +16,7 @@ class DigiClient {
     var token: String? = nil
     
     // Shared Session
-    var session: URLSession = URLSession.shared
+    var session = URLSession(configuration: URLSessionConfiguration.default)
     
     // MARK: - Initializers
     init() {}
@@ -37,28 +37,25 @@ class DigiClient {
     }
     
     // MAKR: - Shared instance
-    class func sharedInstance() -> DigiClient {
+    class func shared() -> DigiClient {
         struct Singleton {
-            static var sharedInstance = DigiClient()
+            static var shared = DigiClient()
         }
-        return Singleton.sharedInstance
+        return Singleton.shared
     }
     
     // MARK: - GET 
-    func networkTask(type: String,
-                     method: String,
-                     headers: [String: String]?,
-                     json: [String: String],
+    func networkTask(requestType: String, method: String,
+                     headers: [String: String]?, json: [String: String],
                      parameters: [String: Any]?,
-                     completionHandlerForGET: @escaping (_ result: Any?, _ error: Error?) -> Void) -> URLSessionDataTask {
+                     completionHandlerForGET: @escaping (_ data: Any?, _ error: Error?) -> Void) -> URLSessionDataTask
+    {
         
         /* 1. Build the URL, Configure the request */
         let url = getURL(method: method, parameters: parameters)
+    
+        var request = getURLRequest(url: url, requestType: requestType, headers: headers)
         
-        print(url.absoluteString)
-        print(json)
-        
-        var request = getURLRequest(url: url, headers: headers)
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: json, options: [])
         } catch {
@@ -90,12 +87,11 @@ class DigiClient {
         /* 3. Parse the data and use the data (happens in completion handler) */
             
             do {
-                let parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                completionHandlerForGET(parsedResult, nil)
+                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                completionHandlerForGET(json, nil)
             } catch {
                 completionHandlerForGET(nil, JSONError.parce("Could not parse the data as JSON"))
             }
-            
         }
         
         /* 4. Start the request */
@@ -120,8 +116,9 @@ class DigiClient {
         return components.url!
     }
     
-    private func getURLRequest(url: URL, headers: [String: String]?) -> URLRequest {
+    private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
         var request = URLRequest(url: url)
+        request.httpMethod = requestType
         
         if let headers = headers {
             for (key, value) in headers {

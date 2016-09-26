@@ -41,78 +41,21 @@ class LoginViewController: UIViewController {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         spinner.startAnimating()
         
-        DigiClient.sharedInstance().authenticate(email: email, password: password) { (success, error) in
-            
-            print("test")
-            
-//            if success {
-//                
-//                DispatchQueue.main.async {
-//                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                    self.spinner.stopAnimating()
-//                    self.performSegue(withIdentifier: "Locations", sender: nil)
-//                }
-//            } else {
-//                DispatchQueue.main.async {
-//                    let alert = UIAlertController(title: "Error", message: "Unauthorized access", preferredStyle: UIAlertControllerStyle.alert)
-//                    let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
-//                    alert.addAction(actionOK)
-//                    self.present(alert, animated: false, completion: nil)
-//                }
-//            }
-            
-            //        let request = Utils.getRequestForAuthentication(email: email, password: password)
-            
-            
-            
-            //        let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
-            
-            //        let datatask: URLSessionDataTask?
-            
-            //        datatask = defaultSession.dataTask(with: request) {
-            //            (data: Data?, response: URLResponse?, error: Error?) in
-            //
-            //            DispatchQueue.main.async {
-            //                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            //                self.spinner.stopAnimating()
-            //
-            //            }
-            //
-            //            if error != nil {
-            //                print("Error: \(error!.localizedDescription)")
-            //                return
-            //            }
-            //
-            //            if let httpResponse = response as? HTTPURLResponse {
-            //
-            //                if httpResponse.statusCode == 200 {
-            //                    for header in httpResponse.allHeaderFields {
-            //                        if let key = header.key as? String,
-            //                            key == "x-koofr-token" {
-            //                            self.token = header.value as? String
-            //                            if self.token != nil {
-            //
-            //                                DispatchQueue.main.async {
-            //                                    self.performSegue(withIdentifier: "Locations", sender: nil)
-            //                                }
-            //                            }
-            //
-            //                        }
-            //                    }
-            //                } else {
-            //
-            //                    DispatchQueue.main.async {
-            //                        let alert = UIAlertController(title: "Error", message: "Unauthorized access", preferredStyle: UIAlertControllerStyle.alert)
-            //                        let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
-            //                        alert.addAction(actionOK)
-            //                        self.present(alert, animated: false, completion: nil)
-            //
-            //                    }
-            //                }
-            //            }
-            //        }
-            //
-            //        datatask?.resume()
+        DigiClient.shared().authenticate(email: email, password: password) { (success, error) in
+            if success {
+                DispatchQueue.main.async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    self.spinner.stopAnimating()
+                    self.performSegue(withIdentifier: "Locations", sender: nil)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Error", message: "Unauthorized access", preferredStyle: UIAlertControllerStyle.alert)
+                    let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                    alert.addAction(actionOK)
+                    self.present(alert, animated: false, completion: nil)
+                }
+            }
         }
     }
     
@@ -124,10 +67,8 @@ class LoginViewController: UIViewController {
         
         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             if segue.identifier == "Locations" {
-                if let nextViewController = segue.destination.contentViewController as? LocationsTableViewController {
-                    
-                    nextViewController.token = DigiClient.sharedInstance().token
-                    //                    nextViewController.token = self.token!
+                if let nextViewController = segue.destination.contentViewController as? LocationsTableViewController {                    
+                    nextViewController.token = DigiClient.shared().token
                     nextViewController.title = "Digi Storage"
                 }
             }
