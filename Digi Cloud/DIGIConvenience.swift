@@ -45,22 +45,15 @@ extension DigiClient {
                         completionHandler(nil, JSONError.parce("Could not parce mountlist"))
                         return
                     }
-                    var mounts: [Mount] = []
-                    
-                    for item in mountsList  {
-                        if let mountObject = Mount(JSON: item) {
-                            mounts.append(mountObject)
-                        }
+                    let mounts = mountsList.flatMap { Mount(JSON: $0) }
                     completionHandler(mounts, nil)
-                    
-                    }
+
                 } else {
                     completionHandler(nil, JSONError.parce("Could not parce data (getLocations)"))
                 }
             }
         }
     }
-    
     
     func getLocationContent(mount: String, queryPath: String, completionHandler: @escaping (_ result: [File]?, _ error: Error?) -> Void)
     {
@@ -79,13 +72,7 @@ extension DigiClient {
                         completionHandler(nil, JSONError.parce("Could not parce filelist"))
                         return
                     }
-                    var content: [File] = []
-                    
-                    for item in fileList  {
-                        if let file = File(JSON: item) {
-                            content.append(file)
-                        }
-                    }                    
+                    let content = fileList.flatMap { File(JSON: $0) }
                     completionHandler(content, nil)
                     
                 } else {
