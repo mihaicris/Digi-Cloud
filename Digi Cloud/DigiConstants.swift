@@ -13,7 +13,6 @@ struct API {
     static let Host         = "storage.rcs-rds.ro"
 }
 
-
 struct DefaultHeaders {
     static let Headers = ["Content-Type": "application/json",
                           "Accept": "application/json"]

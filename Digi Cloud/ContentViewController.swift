@@ -11,7 +11,6 @@ import WebKit
 
 class ContentViewController: UIViewController {
 
-    
     // MARK: - Properties
     
     @IBOutlet var webView: UIView! = nil

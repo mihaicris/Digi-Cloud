@@ -9,7 +9,7 @@
 import UIKit
 
 class LocationsTableViewController: UITableViewController {
-        
+    
     // MARK: - Properties
     
     var mounts: [Mount] = []
@@ -20,20 +20,17 @@ class LocationsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-
+        
         DigiClient.shared().getLocations() {
             (mounts, error) in
-            
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
-            
             if error != nil {
                 print("Error: \(error)")
             }
             if let mounts = mounts  {
                 self.mounts = mounts
-                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -52,7 +49,6 @@ class LocationsTableViewController: UITableViewController {
                 DigiClient.shared().currentMount = mounts[indexPath.row].id
                 DigiClient.shared().currentPath.append("/")
                 destVC.title = mounts[indexPath.row].name
-
             }
         }
     }
@@ -73,9 +69,7 @@ class LocationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath)
-        
         cell.textLabel?.text = mounts[indexPath.row].name
         return cell
     }
-    
 }

@@ -23,7 +23,6 @@ struct Utils {
         var request = URLRequest(url: components.url!)
         request.addValue(email,     forHTTPHeaderField: "X-Koofr-Email")
         request.addValue(password,  forHTTPHeaderField: "X-Koofr-Password")
-        
         return request
     }
     
@@ -32,7 +31,7 @@ struct Utils {
         components.scheme   = API.Scheme
         components.host     = API.Host
         components.path     = path
-
+        
         if parameters != nil {
             components.queryItems = [URLQueryItem]()
             for (key, value) in parameters! {

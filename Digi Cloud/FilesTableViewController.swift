@@ -43,13 +43,10 @@ class FilesTableViewController: UITableViewController {
                     /* Order items by Date (descending), directories are shown first */
                     // return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
                 }
-                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
             }
-            
-            
         }
     }
     
@@ -77,16 +74,12 @@ class FilesTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as! DirectoryCell
             cell.folderNameLabel.text = data.name
             return cell
-            
         } else {
-            
             let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
-            
             let modifiedDate = formatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
-            
             cell.fileNameLabel.text = data.name
-            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
-            
+            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size),
+                                                                countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
             return cell
         }
     }
@@ -96,16 +89,13 @@ class FilesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if content[indexPath.row].type == "dir" {
-            
             if let contentVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
                 contentVC.title = content[indexPath.row].name
-                
                 DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + content[indexPath.row].name + "/")
                 self.navigationController?.pushViewController(contentVC, animated: true)
             } else {
                 print("Error loading new controller")
             }
-            
         } else {
             // type == "file"
             if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
@@ -133,6 +123,5 @@ class FilesTableViewController: UITableViewController {
             contentVC.title = file.name
             DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + file.name)
         }
-        
     }
 }

@@ -27,7 +27,7 @@ class DigiClient {
     enum NetworkingError: Error {
         case get(String)
         case post(String)
-        case delete(String)
+        case del(String)
         case wrongStatus(String)
         case data(String)
     }
@@ -60,7 +60,6 @@ class DigiClient {
     
         var request = self.getURLRequest(url: url, requestType: requestType, headers: headers)
         
-        
         // add json object to request
         if let json = json {
             do {
@@ -71,7 +70,8 @@ class DigiClient {
         }
 
         /* 2. Make the request */
-        let task = session.dataTask(with: request) { (data, response, error) in
+        let task = session.dataTask(with: request) {
+            (data, response, error) in
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
@@ -92,7 +92,6 @@ class DigiClient {
             }
             
         /* 3. Parse the data and use the data (happens in completion handler) */
-            
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                 completionHandler(json, nil)
@@ -133,7 +132,6 @@ class DigiClient {
                 request.addValue(value, forHTTPHeaderField: key)
             }
         }
-        
         return request
     }
 }

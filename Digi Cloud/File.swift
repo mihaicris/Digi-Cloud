@@ -37,12 +37,10 @@ extension File: JSONDecodable {
                 print("Could not parce keys")
                 return nil
         }
-        
         self.name = name
         self.type = type
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        
     }
 }
