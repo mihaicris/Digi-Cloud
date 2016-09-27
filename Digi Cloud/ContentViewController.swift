@@ -36,8 +36,4 @@ class ContentViewController: UIViewController {
     deinit {
         DigiClient.shared().currentPath.removeLast()
     }
-    
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        (webView as? WKWebView)?.evaluateJavaScript("location.reload();", completionHandler: nil)
-    }
 }
