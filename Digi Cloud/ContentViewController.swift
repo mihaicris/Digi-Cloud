@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 class ContentViewController: UIViewController {
-
+    
     // MARK: - Properties
     
     @IBOutlet var webView: UIView! = nil
@@ -29,6 +29,7 @@ class ContentViewController: UIViewController {
         
         var request = URLRequest(url: url)
         request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
+        
         contentView.load(request)
     }
     
@@ -36,3 +37,15 @@ class ContentViewController: UIViewController {
         DigiClient.shared().currentPath.removeLast()
     }
 }
+
+extension ContentViewController: URLSessionDownloadDelegate {
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {}
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {}
+}
+
+extension ContentViewController: URLSessionDelegate {
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {}
+}
+
+
+
