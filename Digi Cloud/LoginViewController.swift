@@ -65,7 +65,7 @@ class LoginViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Locations" {
             if let nextViewController = segue.destination.contentViewController as? LocationsTableViewController {
-                nextViewController.title = "Digi Storage"
+                nextViewController.title = "Locations"
             }
         }
     }
