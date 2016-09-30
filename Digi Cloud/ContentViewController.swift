@@ -11,36 +11,107 @@ import WebKit
 
 class ContentViewController: UIViewController {
     
-    // MARK: - Properties
+    let fileManager = FileManager.default
     
-    @IBOutlet var webView: UIView! = nil
+    var fileUrl: URL!
+    
+    var webView: WKWebView!
+    
+    var session: URLSession!
+    
+    @IBOutlet weak var progressView: UIProgressView!
     
     // View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        webView = WKWebView(frame: self.view.bounds)
+        view.insertSubview(webView, at: 0)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         
-        let contentView = WKWebView(frame: self.view.bounds)
-        self.view = contentView
+        // Show progress view
+        progressView.isHidden = false
         
-        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: DigiClient.shared().currentMount)
-        let parameters = [ParametersKeys.Path: DigiClient.shared().currentPath.last!]
-        let url = DigiClient.shared().getURL(method: method, parameters: parameters)
+        // Start downloading File
+        session = DigiClient.shared().startFileDownload(delegate: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
         
-        var request = URLRequest(url: url)
-        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
+        // close session and delegate
+        session.invalidateAndCancel()
         
-        contentView.load(request)
+        //  Delete downloaded file if exists
+        deleteDocumentsFolder()
+        
+        // Remove file from current path
+        DigiClient.shared().currentPath.removeLast()
+    }
+    
+    fileprivate func deleteDocumentsFolder() {
+        
+        // get the Documents Folder in the user space
+        let documentsUrl =  fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        
+        // delete all content of the Documents directory
+        do {
+            let directoryContents = try fileManager.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
+            for url in directoryContents {
+                try fileManager.removeItem(at: url)
+            }
+        } catch {
+            print("Could not delete the content of Documents folder: \(error.localizedDescription)")
+        }
     }
     
     deinit {
-        DigiClient.shared().currentPath.removeLast()
+        print("Deinit: ContentViewController")
     }
 }
 
+
 extension ContentViewController: URLSessionDownloadDelegate {
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {}
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {}
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        
+        // avoid memory leak (self cannot be deinitialize because it is a delegate of the session
+        session.invalidateAndCancel()
+        
+        // get the Documents Folder in the user space
+        let documentsUrl =  fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        
+        // get the file name from current path
+        let fileName: String = DigiClient.shared().currentPath.last!.components(separatedBy: "/").last!
+        
+        // create destination file url
+        self.fileUrl = documentsUrl.appendingPathComponent(fileName)
+        
+        // get the downloaded file from temp folder
+        do {
+            try fileManager.moveItem(at: location, to: self.fileUrl)
+            
+            // load downloded file in the view
+            DispatchQueue.main.async {
+                self.progressView.isHidden = true
+                self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
+            }
+        } catch let error {
+            print("Could not move file to disk: \(error.localizedDescription)")
+        }
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        
+        // update the progress status
+        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+
+        // Update the progress on screen
+        DispatchQueue.main.async {
+            self.progressView.progress = progress
+        }
+    }
+    
 }
 
 extension ContentViewController: URLSessionDelegate {

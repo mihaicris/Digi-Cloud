@@ -78,7 +78,34 @@ extension DigiClient {
                 } else {
                     completionHandler(nil, JSONError.parce("Could not parce data (getFiles)"))
                 }
-            } // end if
-        } // end networkTasl
-    } // end getLocationContent
+            }
+        }
+    }
+    
+    func startFileDownload(delegate: AnyObject) -> URLSession {
+        
+        // create the special session with custom delegate for download task
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration, delegate: delegate as? ContentViewController, delegateQueue: nil)
+        
+        // prepare the method string for download file by inserting the current mount
+        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: DigiClient.shared().currentMount)
+        
+        // prepare the query paramenter path with the current File path
+        let parameters = [ParametersKeys.Path: DigiClient.shared().currentPath.last!]
+        
+        // create url from method and paramenters
+        let url = DigiClient.shared().getURL(method: method, parameters: parameters)
+        
+        // create url request with the current token in the HTTP headers
+        var request = URLRequest(url: url)
+        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
+        
+        // create and start download task
+        let downloadTask = session.downloadTask(with: request)
+        downloadTask.resume()
+        
+        return session
+    }
+    
 }
