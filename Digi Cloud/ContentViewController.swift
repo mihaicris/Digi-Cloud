@@ -26,6 +26,7 @@ class ContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         webView = WKWebView(frame: self.view.bounds)
+        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.insertSubview(webView, at: 0)
     }
     
@@ -49,7 +50,7 @@ class ContentViewController: UIViewController {
         // Remove file from current path
         DigiClient.shared().currentPath.removeLast()
     }
-    
+  
     fileprivate func deleteDocumentsFolder() {
         
         // get the Documents Folder in the user space
@@ -70,7 +71,6 @@ class ContentViewController: UIViewController {
         print("Deinit: ContentViewController")
     }
 }
-
 
 extension ContentViewController: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
@@ -103,7 +103,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         
-        // update the progress status
+        // calculate the progress value
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
 
         // Update the progress on screen
@@ -111,7 +111,6 @@ extension ContentViewController: URLSessionDownloadDelegate {
             self.progressView.progress = progress
         }
     }
-    
 }
 
 extension ContentViewController: URLSessionDelegate {
