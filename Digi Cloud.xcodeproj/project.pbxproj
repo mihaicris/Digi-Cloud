@@ -17,6 +17,7 @@
 		8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412A1D8B2264000EDBAE /* LoginViewController.swift */; };
 		8370412E1D8B2264000EDBAE /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */; };
 		837041301D8B2320000EDBAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370412F1D8B2320000EDBAE /* Main.storyboard */; };
+		8373C1E31DA2F25E00A1BC45 /* CustomLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
 		83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* CustomTextField.swift */; };
 		83EBD0791D994F9500C80397 /* DIGIConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBD0781D994F9500C80397 /* DIGIConvenience.swift */; };
@@ -40,6 +41,7 @@
 		8370412A1D8B2264000EDBAE /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8370412F1D8B2320000EDBAE /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLoginButton.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		83EBD0781D994F9500C80397 /* DIGIConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIGIConvenience.swift; sourceTree = "<group>"; };
@@ -80,7 +82,6 @@
 		835405FF1D95178A00019D53 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				83D280FF1D9D744B00D74661 /* Custom */,
 				8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */,
 				8370412F1D8B2320000EDBAE /* Main.storyboard */,
 			);
@@ -145,6 +146,7 @@
 				835406021D95180F00019D53 /* Managers */,
 				83EF1D461D8FBDC400ACE008 /* Models */,
 				835405FB1D94FCA900019D53 /* Protocols */,
+				83D280FF1D9D744B00D74661 /* Custom UI */,
 				835406011D9517BE00019D53 /* Resources */,
 				835405FF1D95178A00019D53 /* Storyboards */,
 				835406001D9517AB00019D53 /* Supporting Files */,
@@ -174,12 +176,13 @@
 			name = "Table View Cells";
 			sourceTree = "<group>";
 		};
-		83D280FF1D9D744B00D74661 /* Custom */ = {
+		83D280FF1D9D744B00D74661 /* Custom UI */ = {
 			isa = PBXGroup;
 			children = (
 				83D281001D9D747A00D74661 /* CustomTextField.swift */,
+				8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */,
 			);
-			name = Custom;
+			name = "Custom UI";
 			sourceTree = "<group>";
 		};
 		83EF1D461D8FBDC400ACE008 /* Models */ = {
@@ -266,6 +269,7 @@
 			files = (
 				8370412E1D8B2264000EDBAE /* LocationsTableViewController.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
+				8373C1E31DA2F25E00A1BC45 /* CustomLoginButton.swift in Sources */,
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
 				8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */,
 				83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */,

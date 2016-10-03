@@ -12,53 +12,22 @@ class LoginViewController: UIViewController {
 
     // MARK: - Create UI Elements
     
-    var emailTextField: UITextField = {
-        let field = UITextField()
+    var emailTextField: CustomTextField = {
+        let field = CustomTextField()
         field.text = "mihai.cristescu@gmail.com"
-        
-        field.textColor = UIColor(colorLiteralRed: 63/255, green: 63/255, blue: 63/255, alpha: 1.0)
-        field.font = UIFont(name: "Helvetica-Bold", size: 16)
-        field.backgroundColor = .white
-        field.borderStyle = .roundedRect
-        field.autocorrectionType = .no
-        field.spellCheckingType = .no
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.contentVerticalAlignment = .bottom
-        
         return field
     }()
     
-    var passwordTextField: UITextField = {
-        let field = UITextField()
-        
-        field.textColor = UIColor(colorLiteralRed: 63/255, green: 63/255, blue: 63/255, alpha: 1.0)
-        field.font = UIFont(name: "Helvetica-Bold", size: 16)
-        field.backgroundColor = .white
-        field.borderStyle = .roundedRect
-        field.autocorrectionType = .no
-        field.spellCheckingType = .no
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.contentVerticalAlignment = .bottom
-        
+    var passwordTextField: CustomTextField = {
+        let field = CustomTextField()
+        field.text = "bambambam"
         field.isSecureTextEntry = true
         return field
     }()
     
-    var loginButton: UIButton = {
-        let button = UIButton()
+    var loginButton: CustomLoginButton = {
+        let button = CustomLoginButton()
         button.setTitle("LOGIN", for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        button.setTitleColor(.white, for: UIControlState.normal)
-        button.backgroundColor = UIColor(colorLiteralRed: 59/255, green: 55/255, blue: 148/255, alpha: 1.0)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(nil, action: #selector(LoginViewController.handleLogin), for: .touchUpInside)
-        button.layer.cornerRadius = 20
-        button.layer.borderWidth = 0.8
-        button.layer.borderColor = UIColor.white.cgColor
-        button.layer.shadowRadius = 40
-        button.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        button.layer.shadowOpacity = 0.5
-        button.layer.shadowColor = UIColor.white.cgColor
         return button
     }()
     
@@ -111,27 +80,38 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(colorLiteralRed: 77/255, green: 70/255, blue: 187/255, alpha: 1.0)
+        view.backgroundColor = UIColor(colorLiteralRed: 96/255, green: 95/255, blue: 199/255, alpha: 1.0)
         
         view.addSubview(emailTextField)
         view.addSubview(passwordTextField)
         view.addSubview(loginButton)
+        
+        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+
         view.addSubview(spinner)
         
-        let views: [String: AnyObject] = ["v0": emailTextField, "v1": passwordTextField, "v2": loginButton, "v3": spinner]
+//        let views: [String: AnyObject] = ["v0": emailTextField, "v1": passwordTextField, "v2": loginButton, "v3": spinner]
         
         emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emailTextField.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        emailTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        
         passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         passwordTextField.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        passwordTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        
         loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-300-[v0(50)]-30-[v1(50)]-30-[v2(40)]-30-[v3]",
-                                                           options: NSLayoutFormatOptions(),
-                                                           metrics: nil,
-                                                           views: views))
+        emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -150).isActive = true
+        passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30).isActive = true
+        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30).isActive = true
+        spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20)
         
     }
     
