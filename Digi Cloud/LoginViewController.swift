@@ -10,25 +10,33 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
-    // MARK: - Outlets
+    var emailTextField: UITextField = {
+        let field = UITextField()
+        return field
+    }()
     
-    @IBOutlet weak var emailTextField: UITextField!
+    var passwordTextField: UITextField = {
+        let field = UITextField()
+        return field
+    }()
     
-    @IBOutlet weak var passwordTextField: UITextField!
+    var loginButton: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 20
+        button.layer.borderWidth = 0.8
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.shadowRadius = 40
+        button.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        button.layer.shadowOpacity = 0.5
+        button.layer.shadowColor = UIColor.white.cgColor
+        return button
+    }()
     
-    @IBOutlet weak var loginButton: UIButton! {
-        didSet {
-            loginButton.layer.cornerRadius = 20
-            loginButton.layer.borderWidth = 0.8
-            loginButton.layer.borderColor = UIColor.white.cgColor
-            loginButton.layer.shadowRadius = 40
-            loginButton.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-            loginButton.layer.shadowOpacity = 0.5
-            loginButton.layer.shadowColor = UIColor.white.cgColor
-        }
-    }
-    
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
     
     // MARK: - Actions
     
