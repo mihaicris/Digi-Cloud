@@ -18,6 +18,7 @@
 		8370412E1D8B2264000EDBAE /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */; };
 		837041301D8B2320000EDBAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370412F1D8B2320000EDBAE /* Main.storyboard */; };
 		8373C1E31DA2F25E00A1BC45 /* CustomLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */; };
+		8373C1E51DA2F8E300A1BC45 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E41DA2F8E300A1BC45 /* CustomLabel.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
 		83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* CustomTextField.swift */; };
 		83EBD0791D994F9500C80397 /* DIGIConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBD0781D994F9500C80397 /* DIGIConvenience.swift */; };
@@ -42,6 +43,7 @@
 		8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8370412F1D8B2320000EDBAE /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLoginButton.swift; sourceTree = "<group>"; };
+		8373C1E41DA2F8E300A1BC45 /* CustomLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		83EBD0781D994F9500C80397 /* DIGIConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIGIConvenience.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 			children = (
 				83D281001D9D747A00D74661 /* CustomTextField.swift */,
 				8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */,
+				8373C1E41DA2F8E300A1BC45 /* CustomLabel.swift */,
 			);
 			name = "Custom UI";
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				8373C1E31DA2F25E00A1BC45 /* CustomLoginButton.swift in Sources */,
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
 				8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */,
+				8373C1E51DA2F8E300A1BC45 /* CustomLabel.swift in Sources */,
 				83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */,
 				835405FD1D94FCC300019D53 /* JSONDecodable.swift in Sources */,
 				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,

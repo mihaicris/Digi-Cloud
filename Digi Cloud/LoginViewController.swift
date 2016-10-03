@@ -9,7 +9,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    
     // MARK: - Create UI Elements
     
     var emailTextField: CustomTextField = {
@@ -38,11 +38,84 @@ class LoginViewController: UIViewController {
         return spinner
     }()
     
+    var userLabel: CustomLabel = {
+        let label = CustomLabel()
+        label.text = "EMAIL ADDRESS"
+        return label
+    }()
+    
+    var passLabel: CustomLabel = {
+        let label = CustomLabel()
+        label.text = "PASSWORD"
+        return label
+    }()
+    
+    // MARK: - Navigation
+    
+    func openLocations() {
+        
+        let navigationController = UINavigationController(rootViewController: LocationsTableViewController())
+        navigationController.navigationItem.title = "Locations"
+        present(navigationController, animated: true, completion: nil)
+    }
+    
+    // MARK: - View Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupViews()
+        
+        loginButton.addTarget(self, action: #selector(LoginViewController.handleLogin), for: .touchUpInside)
+        
+    }
+    
+    private func setupViews() {
+        
+        view.backgroundColor = UIColor(colorLiteralRed: 96/255, green: 95/255, blue: 199/255, alpha: 1.0)
+        
+        view.addSubview(emailTextField)
+        view.addSubview(passwordTextField)
+        view.addSubview(loginButton)
+        view.addSubview(spinner)
+        view.addSubview(userLabel)
+        view.addSubview(passLabel)
+        
+        emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -150).isActive = true
+        emailTextField.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        emailTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30).isActive = true
+        passwordTextField.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        passwordTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30).isActive = true
+        loginButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20)
+        
+        userLabel.leadingAnchor.constraint(equalTo: emailTextField.leadingAnchor, constant: 8).isActive = true
+        userLabel.topAnchor.constraint(equalTo: emailTextField.topAnchor, constant: 8).isActive = true
+        
+        passLabel.leadingAnchor.constraint(equalTo: passwordTextField.leadingAnchor, constant: 8).isActive = true
+        passLabel.topAnchor.constraint(equalTo: passwordTextField.topAnchor, constant: 8).isActive = true
+        
+        
+    }
+    
     func handleLogin() {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
+        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        
         spinner.startAnimating()
+        
         DigiClient.shared().authenticate(email: email, password: password) {
             (success, error) in
             DispatchQueue.main.async {
@@ -64,55 +137,6 @@ class LoginViewController: UIViewController {
                 }
             }
         }
-    }
-    
-    // MARK: - Navigation
-    
-    func openLocations() {
-        
-        let navigationController = UINavigationController(rootViewController: LocationsTableViewController())
-        navigationController.navigationItem.title = "Locations"
-        present(navigationController, animated: true, completion: nil)
-    }
-    
-    // MARK: - View Life Cycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = UIColor(colorLiteralRed: 96/255, green: 95/255, blue: 199/255, alpha: 1.0)
-        
-        view.addSubview(emailTextField)
-        view.addSubview(passwordTextField)
-        view.addSubview(loginButton)
-        
-        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
-
-        view.addSubview(spinner)
-        
-//        let views: [String: AnyObject] = ["v0": emailTextField, "v1": passwordTextField, "v2": loginButton, "v3": spinner]
-        
-        emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emailTextField.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        emailTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-
-        
-        passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        passwordTextField.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        passwordTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-
-        
-        loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        loginButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
-        spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -150).isActive = true
-        passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30).isActive = true
-        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30).isActive = true
-        spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20)
-        
     }
     
     // MARK: - View Methods
