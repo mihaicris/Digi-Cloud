@@ -9,19 +9,49 @@
 import UIKit
 
 class LoginViewController: UIViewController {
+
+    // MARK: - Create UI Elements
     
     var emailTextField: UITextField = {
         let field = UITextField()
+        field.text = "mihai.cristescu@gmail.com"
+        
+        field.textColor = UIColor(colorLiteralRed: 63/255, green: 63/255, blue: 63/255, alpha: 1.0)
+        field.font = UIFont(name: "Helvetica-Bold", size: 16)
+        field.backgroundColor = .white
+        field.borderStyle = .roundedRect
+        field.autocorrectionType = .no
+        field.spellCheckingType = .no
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.contentVerticalAlignment = .bottom
+        
         return field
     }()
     
     var passwordTextField: UITextField = {
         let field = UITextField()
+        
+        field.textColor = UIColor(colorLiteralRed: 63/255, green: 63/255, blue: 63/255, alpha: 1.0)
+        field.font = UIFont(name: "Helvetica-Bold", size: 16)
+        field.backgroundColor = .white
+        field.borderStyle = .roundedRect
+        field.autocorrectionType = .no
+        field.spellCheckingType = .no
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.contentVerticalAlignment = .bottom
+        
+        field.isSecureTextEntry = true
         return field
     }()
     
     var loginButton: UIButton = {
         let button = UIButton()
+        button.setTitle("LOGIN", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        button.setTitleColor(.white, for: UIControlState.normal)
+        button.backgroundColor = UIColor(colorLiteralRed: 59/255, green: 55/255, blue: 148/255, alpha: 1.0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(nil, action: #selector(LoginViewController.handleLogin), for: .touchUpInside)
         button.layer.cornerRadius = 20
         button.layer.borderWidth = 0.8
         button.layer.borderColor = UIColor.white.cgColor
@@ -33,14 +63,13 @@ class LoginViewController: UIViewController {
     }()
     
     var spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.hidesWhenStopped = true
         return spinner
     }()
     
-    // MARK: - Actions
-    
-    @IBAction func loginButtonTouchUp(_ sender: UIButton) {
+    func handleLogin() {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -53,7 +82,7 @@ class LoginViewController: UIViewController {
             }
             if success {
                 DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "Locations", sender: nil)
+                    self.openLocations()
                 }
             } else {
                 DispatchQueue.main.async {
@@ -70,18 +99,40 @@ class LoginViewController: UIViewController {
     
     // MARK: - Navigation
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Locations" {
-            if let nextViewController = segue.destination.contentViewController as? LocationsTableViewController {
-                nextViewController.title = "Locations"
-            }
-        }
+    func openLocations() {
+        
+        let navigationController = UINavigationController(rootViewController: LocationsTableViewController())
+        navigationController.navigationItem.title = "Locations"
+        present(navigationController, animated: true, completion: nil)
     }
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(colorLiteralRed: 77/255, green: 70/255, blue: 187/255, alpha: 1.0)
+        
+        view.addSubview(emailTextField)
+        view.addSubview(passwordTextField)
+        view.addSubview(loginButton)
+        view.addSubview(spinner)
+        
+        let views: [String: AnyObject] = ["v0": emailTextField, "v1": passwordTextField, "v2": loginButton, "v3": spinner]
+        
+        emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emailTextField.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        passwordTextField.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loginButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-300-[v0(50)]-30-[v1(50)]-30-[v2(40)]-30-[v3]",
+                                                           options: NSLayoutFormatOptions(),
+                                                           metrics: nil,
+                                                           views: views))
+        
     }
     
     // MARK: - View Methods

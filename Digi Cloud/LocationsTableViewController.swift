@@ -18,7 +18,7 @@ class LocationsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
         DigiClient.shared().getLocations() {
@@ -40,33 +40,27 @@ class LocationsTableViewController: UITableViewController {
     
     // MARK: - Navigation
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == Segues.toFiles {
-            if let destVC = segue.destination as? FilesTableViewController {
-                guard let cell = sender as? UITableViewCell else { return }
-                guard let indexPath = tableView.indexPath(for: cell) else { return }
-                DigiClient.shared().currentMount = mounts[indexPath.row].id
-                DigiClient.shared().currentPath.append("/")
-                destVC.title = mounts[indexPath.row].name
-            }
+    func openMount() {
+            let controller = FilesTableViewController()
+            DigiClient.shared().currentMount = mounts[0].id
+            DigiClient.shared().currentPath.append("/")
+            controller.title = mounts[0].name
+            navigationController?.pushViewController(controller, animated: true)
         }
-    }
-    
-    // MARK: - Table View Data Source
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mounts.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath)
-        cell.textLabel?.text = mounts[indexPath.row].name
-        return cell
-    }
+        
+        // MARK: - Table View Data Source
+        
+        override func numberOfSections(in tableView: UITableView) -> Int {
+            return 1
+        }
+        
+        override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return mounts.count
+        }
+        
+        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath)
+            cell.textLabel?.text = mounts[indexPath.row].name
+            return cell
+        }
 }
