@@ -14,12 +14,14 @@ class LoginViewController: UIViewController {
     
     let emailTextField: CustomTextField = {
         let field = CustomTextField()
+        field.textFieldName = "EMAIL ADDRESS"
         field.text = "mihai.cristescu@gmail.com"
         return field
     }()
     
     let passwordTextField: CustomTextField = {
         let field = CustomTextField()
+        field.textFieldName = "PASSWORD"
         field.text = "bambambam"
         field.isSecureTextEntry = true
         return field
@@ -36,18 +38,6 @@ class LoginViewController: UIViewController {
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.hidesWhenStopped = true
         return spinner
-    }()
-    
-    let userLabel: CustomLabel = {
-        let label = CustomLabel()
-        label.text = "EMAIL ADDRESS"
-        return label
-    }()
-    
-    let passLabel: CustomLabel = {
-        let label = CustomLabel()
-        label.text = "PASSWORD"
-        return label
     }()
     
     // MARK: - Navigation
@@ -78,8 +68,6 @@ class LoginViewController: UIViewController {
         view.addSubview(passwordTextField)
         view.addSubview(loginButton)
         view.addSubview(spinner)
-        view.addSubview(userLabel)
-        view.addSubview(passLabel)
         
         emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -150).isActive = true
@@ -98,13 +86,6 @@ class LoginViewController: UIViewController {
         
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20)
-        
-        userLabel.leadingAnchor.constraint(equalTo: emailTextField.leadingAnchor, constant: 8).isActive = true
-        userLabel.topAnchor.constraint(equalTo: emailTextField.topAnchor, constant: 8).isActive = true
-        
-        passLabel.leadingAnchor.constraint(equalTo: passwordTextField.leadingAnchor, constant: 8).isActive = true
-        passLabel.topAnchor.constraint(equalTo: passwordTextField.topAnchor, constant: 8).isActive = true
-        
         
     }
     

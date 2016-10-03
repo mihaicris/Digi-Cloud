@@ -18,7 +18,7 @@ class CustomLoginButton: UIButton {
         backgroundColor = UIColor(colorLiteralRed: 76/255, green: 76/255, blue: 165/255, alpha: 1.0)
         translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = 20
-        layer.borderWidth = 0.8
+        layer.borderWidth = 0.9
         layer.borderColor = UIColor.white.cgColor
         layer.shadowRadius = 40
         layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
