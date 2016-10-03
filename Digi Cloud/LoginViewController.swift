@@ -12,39 +12,39 @@ class LoginViewController: UIViewController {
     
     // MARK: - Create UI Elements
     
-    var emailTextField: CustomTextField = {
+    let emailTextField: CustomTextField = {
         let field = CustomTextField()
         field.text = "mihai.cristescu@gmail.com"
         return field
     }()
     
-    var passwordTextField: CustomTextField = {
+    let passwordTextField: CustomTextField = {
         let field = CustomTextField()
         field.text = "bambambam"
         field.isSecureTextEntry = true
         return field
     }()
     
-    var loginButton: CustomLoginButton = {
+    let loginButton: CustomLoginButton = {
         let button = CustomLoginButton()
         button.setTitle("LOGIN", for: .normal)
         return button
     }()
     
-    var spinner: UIActivityIndicatorView = {
+    let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.hidesWhenStopped = true
         return spinner
     }()
     
-    var userLabel: CustomLabel = {
+    let userLabel: CustomLabel = {
         let label = CustomLabel()
         label.text = "EMAIL ADDRESS"
         return label
     }()
     
-    var passLabel: CustomLabel = {
+    let passLabel: CustomLabel = {
         let label = CustomLabel()
         label.text = "PASSWORD"
         return label
