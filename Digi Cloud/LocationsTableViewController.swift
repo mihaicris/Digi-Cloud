@@ -18,7 +18,17 @@ class LocationsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
+        navigationItem.title = "Locations"
+        
+        tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
+        tableView.rowHeight = 78
+        tableView.tableFooterView = UIView()
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+//        tableView.contentInset = UIEdgeInsets(top: 100, left: 100, bottom: 0, right: 0)
+
+        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
         DigiClient.shared().getLocations() {
@@ -59,8 +69,38 @@ class LocationsTableViewController: UITableViewController {
         }
         
         override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath)
-            cell.textLabel?.text = mounts[indexPath.row].name
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as! LocationCell
+            cell.locationLabel.text = mounts[indexPath.row].name
             return cell
         }
 }
+
+class LocationCell: UITableViewCell {
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        setupViews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    let locationLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "Helvetica", size: 30)
+        return label
+    }()
+    
+    func setupViews() {
+
+        contentView.addSubview(locationLabel)
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : locationLabel]))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : locationLabel]))
+    }
+    
+}
+
+
