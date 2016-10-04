@@ -21,6 +21,9 @@ class FilesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(FileCell.self, forCellReuseIdentifier: "FileCell")
+        tableView.register(DirectoryCell.self, forCellReuseIdentifier: "DirectoryCell")
+        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
         DigiClient.shared().getLocationContent(mount: DigiClient.shared().currentMount, queryPath: DigiClient.shared().currentPath.last!) {

@@ -122,6 +122,15 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		836276361DA396DD005D9FD8 /* Login Elements */ = {
+			isa = PBXGroup;
+			children = (
+				83D281001D9D747A00D74661 /* CustomTextField.swift */,
+				8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */,
+			);
+			name = "Login Elements";
+			sourceTree = "<group>";
+		};
 		837041091D8B1DED000EDBAE = {
 			isa = PBXGroup;
 			children = (
@@ -150,7 +159,6 @@
 				835406011D9517BE00019D53 /* Resources */,
 				835405FF1D95178A00019D53 /* Storyboards */,
 				835406001D9517AB00019D53 /* Supporting Files */,
-				839BAE231D8BE06E00A43452 /* Table View Cells */,
 				839BAE201D8BE00E00A43452 /* View Controllers */,
 			);
 			path = "Digi Cloud";
@@ -179,8 +187,8 @@
 		83D280FF1D9D744B00D74661 /* Custom UI */ = {
 			isa = PBXGroup;
 			children = (
-				83D281001D9D747A00D74661 /* CustomTextField.swift */,
-				8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */,
+				839BAE231D8BE06E00A43452 /* Table View Cells */,
+				836276361DA396DD005D9FD8 /* Login Elements */,
 			);
 			name = "Custom UI";
 			sourceTree = "<group>";
