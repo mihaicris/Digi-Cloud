@@ -26,8 +26,7 @@ class LocationsTableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         tableView.cellLayoutMarginsFollowReadableWidth = false
-//        tableView.contentInset = UIEdgeInsets(top: 100, left: 100, bottom: 0, right: 0)
-
+        
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
@@ -50,35 +49,45 @@ class LocationsTableViewController: UITableViewController {
     
     // MARK: - Navigation
     
-    func openMount() {
-            let controller = FilesTableViewController()
-            DigiClient.shared().currentMount = mounts[0].id
-            DigiClient.shared().currentPath.append("/")
-            controller.title = mounts[0].name
-            navigationController?.pushViewController(controller, animated: true)
-        }
-        
-        // MARK: - Table View Data Source
-        
-        override func numberOfSections(in tableView: UITableView) -> Int {
-            return 1
-        }
-        
-        override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return mounts.count
-        }
-        
-        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as! LocationCell
-            cell.locationLabel.text = mounts[indexPath.row].name
-            return cell
-        }
+    func openMount(index: Int) {
+        let controller = FilesTableViewController()
+        DigiClient.shared().currentMount = mounts[index].id
+        DigiClient.shared().currentPath.append("/")
+        controller.title = mounts[index].name
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    // MARK: - Table View Data Source
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return mounts.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as! LocationCell
+        cell.locationLabel.text = mounts[indexPath.row].name
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        openMount(index: indexPath.row)
+    }
+    
+    
 }
 
 class LocationCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        selectionStyle = .blue
+        accessoryType = .disclosureIndicator
+        indentationWidth = 10
         
         setupViews()
     }
@@ -95,7 +104,8 @@ class LocationCell: UITableViewCell {
     }()
     
     func setupViews() {
-
+        
+        
         contentView.addSubview(locationLabel)
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : locationLabel]))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : locationLabel]))
