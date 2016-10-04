@@ -87,7 +87,6 @@ class LocationCell: UITableViewCell {
         
         selectionStyle = .blue
         accessoryType = .disclosureIndicator
-        indentationWidth = 10
         
         setupViews()
     }
@@ -98,17 +97,17 @@ class LocationCell: UITableViewCell {
     
     let locationLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Helvetica", size: 30)
         return label
     }()
     
     func setupViews() {
         
-        
         contentView.addSubview(locationLabel)
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : locationLabel]))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : locationLabel]))
+    
+        contentView.addConstraints(with: "H:|-15-[v0]|", views: locationLabel)
+        contentView.addConstraints(with: "V:|[v0]|", views: locationLabel)
+    
     }
     
 }

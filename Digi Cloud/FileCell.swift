@@ -9,30 +9,58 @@
 import UIKit
 
 class FileCell: UITableViewCell {
-
-    @IBOutlet var fileNameLabel: UILabel!
     
-    @IBOutlet var fileSizeLabel: UILabel!
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        setupViews()
+    }
     
-    @IBOutlet weak var actionButton: UIButton!
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
-    @IBAction func action(_ sender: UIButton) {
+    var fileIcon: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "FileIcon"))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    var fileNameLabel: UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
+    var fileSizeLabel: UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
+    var actionButton: UIButton = {
+        let button = UIButton()
+        return button
+    }()
+    
+    func setupViews() {
+        addSubview(fileNameLabel)
+        addSubview(fileSizeLabel)
+        addSubview(actionButton)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         if selected {
-            self.contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
-            self.fileNameLabel.textColor = UIColor.white
-            self.fileSizeLabel.textColor = UIColor(colorLiteralRed: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
-            self.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-            self.actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+            contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
+            fileNameLabel.textColor = UIColor.white
+            fileSizeLabel.textColor = UIColor(colorLiteralRed: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
+            separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+            actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
         } else {
-            self.contentView.backgroundColor = nil
-            self.fileNameLabel.textColor = UIColor.black
-            self.fileSizeLabel.textColor = UIColor.darkGray
-            self.separatorInset = UIEdgeInsets(top: 0.0, left: 53.0, bottom: 0.0, right: 0.0)
-            self.actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
+            contentView.backgroundColor = nil
+            fileNameLabel.textColor = UIColor.black
+            fileSizeLabel.textColor = UIColor.darkGray
+            separatorInset = UIEdgeInsets(top: 0.0, left: 53.0, bottom: 0.0, right: 0.0)
+            actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
         }
     }
 }

@@ -23,6 +23,8 @@ class FilesTableViewController: UITableViewController {
         
         tableView.register(FileCell.self, forCellReuseIdentifier: "FileCell")
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: "DirectoryCell")
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.rowHeight = 50
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
@@ -73,18 +75,17 @@ class FilesTableViewController: UITableViewController {
         formatter.locale = Locale.current
         formatter.dateFormat = "dd.MM.YYY・HH:mm"
         
-        if data.type == "dir" {
+//        if data.type == "dir" {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as! DirectoryCell
             cell.folderNameLabel.text = data.name
             return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
-            let modifiedDate = formatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
-            cell.fileNameLabel.text = data.name
-            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size),
-                                                                countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
-            return cell
-        }
+//        } else {
+////            let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
+////            let modifiedDate = formatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
+////            cell.fileNameLabel.text = data.name
+////            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
+////            return cell
+//        }
     }
     
     // MARK: - Table view delegate
@@ -92,20 +93,18 @@ class FilesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if content[indexPath.row].type == "dir" {
-            if let contentVC = self.storyboard?.instantiateViewController(withIdentifier: "FilesTableViewController") as? FilesTableViewController {
-                contentVC.title = content[indexPath.row].name
-                DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + content[indexPath.row].name + "/")
-                self.navigationController?.pushViewController(contentVC, animated: true)
-            } else {
-                print("Error loading new controller")
-            }
+            let contentVC = FilesTableViewController()
+            contentVC.title = content[indexPath.row].name
+            DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + content[indexPath.row].name + "/")
+            self.navigationController?.pushViewController(contentVC, animated: true)
+            
         } else {
             // type == "file"
             if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 cellForInset = cell
             }
-            performSegue(withIdentifier: Segues.toContent, sender: content[indexPath.row])
+            // performSegue(withIdentifier: Segues.toContent, sender: content[indexPath.row])
         }
     }
     
