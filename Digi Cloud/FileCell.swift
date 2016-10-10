@@ -12,7 +12,6 @@ class FileCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         setupViews()
     }
     
@@ -23,28 +22,58 @@ class FileCell: UITableViewCell {
     var fileIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "FileIcon"))
         imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     var fileNameLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "HelveticaNeue", size: 15)
+        label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
     
     var fileSizeLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "HelveticaNeue", size: 11)
+        label.textColor = UIColor.darkGray
         return label
     }()
     
     var actionButton: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("...", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
+        button.contentHorizontalAlignment = .right
+        button.setTitleColor(UIColor.darkGray, for: .normal)
         return button
     }()
     
+    
     func setupViews() {
-        addSubview(fileNameLabel)
-        addSubview(fileSizeLabel)
-        addSubview(actionButton)
+        
+        separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
+        
+        contentView.addSubview(fileIcon)
+        contentView.addSubview(fileNameLabel)
+        contentView.addSubview(fileSizeLabel)
+        contentView.addSubview(actionButton)
+        
+        contentView.addConstraints(with: "H:|-15-[v0(28)]-10-[v1]-80-|", views: fileIcon, fileNameLabel)
+        contentView.addConstraints(with: "H:[v0]-10-[v1]", views: fileIcon, fileSizeLabel)
+        contentView.addConstraints(with: "H:[v0]-20-|", views: actionButton)
+        contentView.addConstraints(with: "V:[v0]-2-[v1]", views: fileNameLabel, fileSizeLabel)
+        
+        fileIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
+        fileIcon.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        fileNameLabel.topAnchor.constraint(equalTo: fileIcon.topAnchor, constant: -3).isActive = true
+        
+        actionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        
+        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

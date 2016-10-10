@@ -75,17 +75,17 @@ class FilesTableViewController: UITableViewController {
         formatter.locale = Locale.current
         formatter.dateFormat = "dd.MM.YYY・HH:mm"
         
-//        if data.type == "dir" {
+        if data.type == "dir" {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as! DirectoryCell
             cell.folderNameLabel.text = data.name
             return cell
-//        } else {
-////            let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
-////            let modifiedDate = formatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
-////            cell.fileNameLabel.text = data.name
-////            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
-////            return cell
-//        }
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
+            let modifiedDate = formatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
+            cell.fileNameLabel.text = data.name
+            cell.fileSizeLabel.text = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
+            return cell
+        }
     }
     
     // MARK: - Table view delegate
@@ -104,26 +104,12 @@ class FilesTableViewController: UITableViewController {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 cellForInset = cell
             }
-            // performSegue(withIdentifier: Segues.toContent, sender: content[indexPath.row])
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if cellForInset != nil {
-            cellForInset.separatorInset = UIEdgeInsets(top: 0, left: 53, bottom: 0, right: 0)
-        }
-    }
-    
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard segue.identifier == Segues.toContent,
-            let file = sender as? File
-            else { return }
-        
-        if let contentVC = segue.destination as? ContentViewController {
-            contentVC.title = file.name
+            let file = content[indexPath.row]
+            let controller = ContentViewController()
+            controller.title = file.name
             DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + file.name)
+            navigationController?.pushViewController(controller, animated: true)
         }
     }
+    
 }

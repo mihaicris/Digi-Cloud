@@ -22,7 +22,6 @@ class DirectoryCell: UITableViewCell {
     
     var folderIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "FolderIcon"))
-        imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -45,7 +44,7 @@ class DirectoryCell: UITableViewCell {
     
     func setupViews() {
         
-        separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
+        separatorInset = UIEdgeInsets(top: 0, left: 53, bottom: 0, right: 0)
         
         contentView.addSubview(folderIcon)
         contentView.addSubview(folderNameLabel)
@@ -53,7 +52,7 @@ class DirectoryCell: UITableViewCell {
         
         // Horizontal contraints
 
-        contentView.addConstraints(with: "H:|-10-[v0(28)]-10-[v1]-80-|", views: folderIcon, folderNameLabel)
+        contentView.addConstraints(with: "H:|-15-[v0(28)]-10-[v1]-80-|", views: folderIcon, folderNameLabel)
         contentView.addConstraints(with: "H:[v0]-20-|", views: actionButton)
         
         // Vertical constraints
