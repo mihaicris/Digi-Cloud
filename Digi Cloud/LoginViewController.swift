@@ -12,18 +12,20 @@ class LoginViewController: UIViewController {
     
     // MARK: - Create UI Elements
     
-    let emailTextField: CustomTextField = {
+    lazy var emailTextField: CustomTextField = {
         let field = CustomTextField()
         field.textFieldName = "EMAIL ADDRESS"
         field.text = "mihai.cristescu@gmail.com"
+        field.delegate = self
         return field
     }()
     
-    let passwordTextField: CustomTextField = {
+    lazy var passwordTextField: CustomTextField = {
         let field = CustomTextField()
         field.textFieldName = "PASSWORD"
         field.text = "bambambam"
         field.isSecureTextEntry = true
+        field.delegate = self
         return field
     }()
     
