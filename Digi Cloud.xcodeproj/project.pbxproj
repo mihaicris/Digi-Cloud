@@ -122,15 +122,6 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
-		836276361DA396DD005D9FD8 /* Login Elements */ = {
-			isa = PBXGroup;
-			children = (
-				83D281001D9D747A00D74661 /* CustomTextField.swift */,
-				8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */,
-			);
-			name = "Login Elements";
-			sourceTree = "<group>";
-		};
 		837041091D8B1DED000EDBAE = {
 			isa = PBXGroup;
 			children = (
@@ -155,7 +146,6 @@
 				835406021D95180F00019D53 /* Managers */,
 				83EF1D461D8FBDC400ACE008 /* Models */,
 				835405FB1D94FCA900019D53 /* Protocols */,
-				83D280FF1D9D744B00D74661 /* Custom UI */,
 				835406011D9517BE00019D53 /* Resources */,
 				835405FF1D95178A00019D53 /* Storyboards */,
 				835406001D9517AB00019D53 /* Supporting Files */,
@@ -167,30 +157,48 @@
 		839BAE201D8BE00E00A43452 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8370412A1D8B2264000EDBAE /* LoginViewController.swift */,
-				8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */,
-				83EF1D691D8FDB1900ACE008 /* FilesTableViewController.swift */,
-				8321FC5A1D9568FE002D6413 /* ContentViewController.swift */,
+				83A1DF231DAC0D5E003C0683 /* Login Controller */,
+				83A1DF241DAC0D65003C0683 /* Locations Controller */,
+				83A1DF251DAC0D72003C0683 /* List Controller */,
+				83A1DF261DAC0D86003C0683 /* Content Controller */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
 		};
-		839BAE231D8BE06E00A43452 /* Table View Cells */ = {
+		83A1DF231DAC0D5E003C0683 /* Login Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8370412A1D8B2264000EDBAE /* LoginViewController.swift */,
+				8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */,
+				83D281001D9D747A00D74661 /* CustomTextField.swift */,
+			);
+			name = "Login Controller";
+			sourceTree = "<group>";
+		};
+		83A1DF241DAC0D65003C0683 /* Locations Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */,
+			);
+			name = "Locations Controller";
+			sourceTree = "<group>";
+		};
+		83A1DF251DAC0D72003C0683 /* List Controller */ = {
 			isa = PBXGroup;
 			children = (
 				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
 				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
+				83EF1D691D8FDB1900ACE008 /* FilesTableViewController.swift */,
 			);
-			name = "Table View Cells";
+			name = "List Controller";
 			sourceTree = "<group>";
 		};
-		83D280FF1D9D744B00D74661 /* Custom UI */ = {
+		83A1DF261DAC0D86003C0683 /* Content Controller */ = {
 			isa = PBXGroup;
 			children = (
-				839BAE231D8BE06E00A43452 /* Table View Cells */,
-				836276361DA396DD005D9FD8 /* Login Elements */,
+				8321FC5A1D9568FE002D6413 /* ContentViewController.swift */,
 			);
-			name = "Custom UI";
+			name = "Content Controller";
 			sourceTree = "<group>";
 		};
 		83EF1D461D8FBDC400ACE008 /* Models */ = {

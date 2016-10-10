@@ -15,19 +15,13 @@ class ContentViewController: UIViewController {
     
     var fileUrl: URL!
     
-    var webView: WKWebView!
-    
     var session: URLSession!
-    
-    @IBOutlet weak var progressView: UIProgressView!
-    
+
     // View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        webView = WKWebView(frame: self.view.bounds)
-        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.insertSubview(webView, at: 0)
+        setupViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,7 +44,25 @@ class ContentViewController: UIViewController {
         // Remove file from current path
         DigiClient.shared().currentPath.removeLast()
     }
-  
+    
+    
+    fileprivate let webView = WKWebView()
+
+    fileprivate let progressView: UIProgressView = {
+       let view = UIProgressView(progressViewStyle: .default)
+        view.progress = 0
+        return view
+    }()
+    
+    private func setupViews() {
+        view.addSubview(webView)
+        view.addSubview(progressView)
+        view.addConstraints(with: "H:|[v0]|", views: webView)
+        view.addConstraints(with: "V:|[v0]|", views: webView)
+        view.addConstraints(with: "H:|[v0]|", views: progressView)
+        view.addConstraints(with: "V:|-64-[v0(2)]|", views: progressView)
+    }
+    
     fileprivate func deleteDocumentsFolder() {
         
         // get the Documents Folder in the user space
@@ -74,7 +86,7 @@ class ContentViewController: UIViewController {
 
 extension ContentViewController: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        
+//        return
         // avoid memory leak (self cannot be deinitialize because it is a delegate of the session
         session.invalidateAndCancel()
         
@@ -102,10 +114,11 @@ extension ContentViewController: URLSessionDownloadDelegate {
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+//        return
         
         // calculate the progress value
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-
+        
         // Update the progress on screen
         DispatchQueue.main.async {
             self.progressView.progress = progress
