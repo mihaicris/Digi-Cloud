@@ -27,9 +27,10 @@ class LoginViewController: UIViewController {
         return field
     }()
     
-    let loginButton: CustomLoginButton = {
+    lazy var loginButton: CustomLoginButton = {
         let button = CustomLoginButton()
         button.setTitle("LOGIN", for: .normal)
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
     
@@ -53,11 +54,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupViews()
-        
-        loginButton.addTarget(self, action: #selector(LoginViewController.handleLogin), for: .touchUpInside)
-        
     }
     
     private func setupViews() {
