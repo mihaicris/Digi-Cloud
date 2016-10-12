@@ -28,6 +28,9 @@ class ContentViewController: UIViewController {
         
         // Show progress view
         progressView.isHidden = false
+
+        //  Delete downloaded file if exists
+        deleteDocumentsFolder()
         
         // Start downloading File
         session = DigiClient.shared().startFileDownload(delegate: self)
@@ -37,9 +40,6 @@ class ContentViewController: UIViewController {
         
         // close session and delegate
         session.invalidateAndCancel()
-        
-        //  Delete downloaded file if exists
-        deleteDocumentsFolder()
         
         // Remove file from current path
         DigiClient.shared().currentPath.removeLast()
@@ -60,7 +60,7 @@ class ContentViewController: UIViewController {
         view.addConstraints(with: "H:|[v0]|", views: webView)
         view.addConstraints(with: "V:|[v0]|", views: webView)
         view.addConstraints(with: "H:|[v0]|", views: progressView)
-        view.addConstraints(with: "V:|-64-[v0(2)]|", views: progressView)
+        view.addConstraints(with: "V:|-64-[v0(2)]", views: progressView)
     }
     
     fileprivate func deleteDocumentsFolder() {
@@ -105,7 +105,12 @@ extension ContentViewController: URLSessionDownloadDelegate {
             
             // load downloded file in the view
             DispatchQueue.main.async {
-                self.progressView.isHidden = true
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.progressView.alpha = 0
+                    self.progressView.setProgress(1.0, animated: true)
+                })
+                
                 self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
             }
         } catch let error {
@@ -117,11 +122,10 @@ extension ContentViewController: URLSessionDownloadDelegate {
 //        return
         
         // calculate the progress value
-        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-        
+        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite) / 1.1
         // Update the progress on screen
         DispatchQueue.main.async {
-            self.progressView.progress = progress
+            self.progressView.setProgress(progress, animated: true)
         }
     }
 }
@@ -129,6 +133,3 @@ extension ContentViewController: URLSessionDownloadDelegate {
 extension ContentViewController: URLSessionDelegate {
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {}
 }
-
-
-

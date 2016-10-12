@@ -16,10 +16,7 @@ class DigiClient {
     var token: String!
     var currentMount: String!
     var currentPath: [String] = []
-    
-    // Shared Session
-    var session = URLSession.shared
-    
+        
     // MARK: - Initializers
     init() {}
     
@@ -70,7 +67,7 @@ class DigiClient {
         }
 
         /* 2. Make the request */
-        let task = session.dataTask(with: request) {
+        let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             
             /* GUARD: Was there an error? */
