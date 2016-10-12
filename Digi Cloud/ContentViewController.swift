@@ -82,10 +82,6 @@ class ContentViewController: UIViewController {
             print("Could not delete the content of Documents folder: \(error.localizedDescription)")
         }
     }
-    
-    deinit {
-        print("Deinit: ContentViewController")
-    }
 }
 
 extension ContentViewController: URLSessionDownloadDelegate {

@@ -15,7 +15,12 @@ class LoginViewController: UIViewController {
     lazy var emailTextField: CustomTextField = {
         let field = CustomTextField()
         field.textFieldName = "EMAIL ADDRESS"
-        field.text = "mihai.cristescu@gmail.com"
+        
+        #if DEBUG
+            let dict = ProcessInfo.processInfo.environment
+            field.text = dict["USERNAME"] ?? ""
+        #endif
+        
         field.delegate = self
         return field
     }()
@@ -23,7 +28,12 @@ class LoginViewController: UIViewController {
     lazy var passwordTextField: CustomTextField = {
         let field = CustomTextField()
         field.textFieldName = "PASSWORD"
-        field.text = ""
+        
+        #if DEBUG
+            let dict = ProcessInfo.processInfo.environment
+            field.text = dict["PASSWORD"] ?? ""
+        #endif
+        
         field.isSecureTextEntry = true
         field.delegate = self
         return field
