@@ -23,7 +23,7 @@ class LoginViewController: UIViewController {
     lazy var passwordTextField: CustomTextField = {
         let field = CustomTextField()
         field.textFieldName = "PASSWORD"
-        field.text = "bambambam"
+        field.text = ""
         field.isSecureTextEntry = true
         field.delegate = self
         return field

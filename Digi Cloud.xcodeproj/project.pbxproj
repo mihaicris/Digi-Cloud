@@ -447,7 +447,7 @@
 				837041231D8B1DEE000EDBAE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		837041241D8B1DEE000EDBAE /* Build configuration list for PBXNativeTarget "Digi Cloud" */ = {
 			isa = XCConfigurationList;
@@ -456,7 +456,7 @@
 				837041261D8B1DEE000EDBAE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

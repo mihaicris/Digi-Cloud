@@ -46,7 +46,11 @@ class ContentViewController: UIViewController {
     }
     
     
-    fileprivate let webView = WKWebView()
+    fileprivate lazy var webView: WKWebView = {
+        let view = WKWebView()
+        view.navigationDelegate = self
+        return view
+    }()
 
     fileprivate let progressView: UIProgressView = {
        let view = UIProgressView(progressViewStyle: .default)
@@ -103,14 +107,10 @@ extension ContentViewController: URLSessionDownloadDelegate {
         do {
             try fileManager.moveItem(at: location, to: self.fileUrl)
             
-            // load downloded file in the view
+
             DispatchQueue.main.async {
-                
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.progressView.alpha = 0
-                    self.progressView.setProgress(1.0, animated: true)
-                })
-                
+
+                // load downloded file in the view
                 self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
             }
         } catch let error {
@@ -119,10 +119,10 @@ extension ContentViewController: URLSessionDownloadDelegate {
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-//        return
         
         // calculate the progress value
-        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite) / 1.1
+        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+
         // Update the progress on screen
         DispatchQueue.main.async {
             self.progressView.setProgress(progress, animated: true)
@@ -132,4 +132,15 @@ extension ContentViewController: URLSessionDownloadDelegate {
 
 extension ContentViewController: URLSessionDelegate {
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {}
+}
+
+extension ContentViewController: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+       
+        UIView.animate(withDuration: 0.5, animations: {
+            self.progressView.alpha = 0
+        })
+    }
+    
 }
