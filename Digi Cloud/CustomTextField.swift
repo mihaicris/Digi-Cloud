@@ -29,6 +29,7 @@ class CustomTextField: UITextField {
         font = UIFont(name: "Helvetica-Bold", size: 16)
         backgroundColor = .white
         borderStyle = .roundedRect
+        autocapitalizationType = .none
         autocorrectionType = .no
         spellCheckingType = .no
         translatesAutoresizingMaskIntoConstraints = false
