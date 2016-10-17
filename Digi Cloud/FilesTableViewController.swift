@@ -28,7 +28,7 @@ class FilesTableViewController: UITableViewController {
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
-        DigiClient.shared().getLocationContent(mount: DigiClient.shared().currentMount, queryPath: DigiClient.shared().currentPath.last!) {
+        DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
             
             DispatchQueue.main.async {
@@ -56,7 +56,7 @@ class FilesTableViewController: UITableViewController {
     }
     
     deinit {
-        DigiClient.shared().currentPath.removeLast()
+        DigiClient.shared.currentPath.removeLast()
     }
     
     // MARK: - Table View Data Source
@@ -95,7 +95,7 @@ class FilesTableViewController: UITableViewController {
         if content[indexPath.row].type == "dir" {
             let contentVC = FilesTableViewController()
             contentVC.title = content[indexPath.row].name
-            DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + content[indexPath.row].name + "/")
+            DigiClient.shared.currentPath.append(DigiClient.shared.currentPath.last! + content[indexPath.row].name + "/")
             self.navigationController?.pushViewController(contentVC, animated: true)
             
         } else {
@@ -107,7 +107,7 @@ class FilesTableViewController: UITableViewController {
             let file = content[indexPath.row]
             let controller = ContentViewController()
             controller.title = file.name
-            DigiClient.shared().currentPath.append(DigiClient.shared().currentPath.last! + file.name)
+            DigiClient.shared.currentPath.append(DigiClient.shared.currentPath.last! + file.name)
             navigationController?.pushViewController(controller, animated: true)
         }
     }

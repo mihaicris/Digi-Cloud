@@ -33,7 +33,7 @@ class ContentViewController: UIViewController {
         deleteDocumentsFolder()
         
         // Start downloading File
-        session = DigiClient.shared().startFileDownload(delegate: self)
+        session = DigiClient.shared.startFileDownload(delegate: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -42,7 +42,7 @@ class ContentViewController: UIViewController {
         session.invalidateAndCancel()
         
         // Remove file from current path
-        DigiClient.shared().currentPath.removeLast()
+        DigiClient.shared.currentPath.removeLast()
     }
     
     
@@ -94,7 +94,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
         let documentsUrl =  fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         
         // get the file name from current path
-        let fileName: String = DigiClient.shared().currentPath.last!.components(separatedBy: "/").last!
+        let fileName: String = DigiClient.shared.currentPath.last!.components(separatedBy: "/").last!
         
         // create destination file url
         self.fileUrl = documentsUrl.appendingPathComponent(fileName)

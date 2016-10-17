@@ -30,7 +30,7 @@ class LocationsTableViewController: UITableViewController {
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
-        DigiClient.shared().getLocations() {
+        DigiClient.shared.getLocations() {
             (mounts, error) in
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -51,8 +51,8 @@ class LocationsTableViewController: UITableViewController {
     
     func openMount(index: Int) {
         let controller = FilesTableViewController()
-        DigiClient.shared().currentMount = mounts[index].id
-        DigiClient.shared().currentPath.append("/")
+        DigiClient.shared.currentMount = mounts[index].id
+        DigiClient.shared.currentPath.append("/")
         controller.title = mounts[index].name
         navigationController?.pushViewController(controller, animated: true)
     }

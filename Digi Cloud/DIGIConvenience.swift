@@ -33,7 +33,7 @@ extension DigiClient {
     {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
-        headers["Authorization"] = "Token \(DigiClient.shared().token!)"
+        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
         
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) {
             (data, error) in
@@ -59,7 +59,7 @@ extension DigiClient {
     {
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: mount)
         var headers = DefaultHeaders.Headers
-        headers["Authorization"] = "Token \(DigiClient.shared().token!)"
+        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
         let parameters = [ParametersKeys.Path: queryPath]
         
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) {
@@ -89,17 +89,17 @@ extension DigiClient {
         let session = URLSession(configuration: configuration, delegate: delegate as? ContentViewController, delegateQueue: nil)
         
         // prepare the method string for download file by inserting the current mount
-        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: DigiClient.shared().currentMount)
+        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
         
         // prepare the query paramenter path with the current File path
-        let parameters = [ParametersKeys.Path: DigiClient.shared().currentPath.last!]
+        let parameters = [ParametersKeys.Path: DigiClient.shared.currentPath.last!]
         
         // create url from method and paramenters
-        let url = DigiClient.shared().getURL(method: method, parameters: parameters)
+        let url = DigiClient.shared.getURL(method: method, parameters: parameters)
         
         // create url request with the current token in the HTTP headers
         var request = URLRequest(url: url)
-        request.addValue("Token " + DigiClient.shared().token, forHTTPHeaderField: "Authorization")
+        request.addValue("Token " + DigiClient.shared.token, forHTTPHeaderField: "Authorization")
         
         // create and start download task
         let downloadTask = session.downloadTask(with: request)

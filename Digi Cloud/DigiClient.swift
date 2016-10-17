@@ -10,7 +10,7 @@ import Foundation
 
 // Singleton class for DIGI Client
 
-class DigiClient {
+final class DigiClient {
     
     // MARK: - Properties
     var token: String!
@@ -18,7 +18,7 @@ class DigiClient {
     var currentPath: [String] = []
         
     // MARK: - Initializers
-    init() {}
+    private init() {}
     
     // MARK: - Errors
     enum NetworkingError: Error {
@@ -36,12 +36,7 @@ class DigiClient {
     }
     
     // MAKR: - Shared instance
-    class func shared() -> DigiClient {
-        struct Singleton {
-            static var shared = DigiClient()
-        }
-        return Singleton.shared
-    }
+    static let shared: DigiClient = DigiClient()
     
     // MARK: - GET 
     func networkTask(requestType: String,
