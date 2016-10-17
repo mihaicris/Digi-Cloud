@@ -16,19 +16,24 @@ class ContentViewController: UIViewController {
     var fileUrl: URL!
     
     var session: URLSession!
-
+    
     // View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupViews()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
         // Show progress view
         progressView.isHidden = false
-
+        
         //  Delete downloaded file if exists
         deleteDocumentsFolder()
         
@@ -45,15 +50,22 @@ class ContentViewController: UIViewController {
         DigiClient.shared.currentPath.removeLast()
     }
     
+    func handleAction() {
+        let controller = UIActivityViewController(activityItems: [fileUrl], applicationActivities: nil)
+        controller.excludedActivityTypes = nil
+        controller.modalPresentationStyle = .popover
+        controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(controller, animated: true, completion: nil)
+    }
     
     fileprivate lazy var webView: WKWebView = {
         let view = WKWebView()
         view.navigationDelegate = self
         return view
     }()
-
+    
     fileprivate let progressView: UIProgressView = {
-       let view = UIProgressView(progressViewStyle: .default)
+        let view = UIProgressView(progressViewStyle: .default)
         view.progress = 0
         return view
     }()
@@ -86,7 +98,7 @@ class ContentViewController: UIViewController {
 
 extension ContentViewController: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-//        return
+
         // avoid memory leak (self cannot be deinitialize because it is a delegate of the session
         session.invalidateAndCancel()
         
@@ -103,11 +115,16 @@ extension ContentViewController: URLSessionDownloadDelegate {
         do {
             try fileManager.moveItem(at: location, to: self.fileUrl)
             
-
+            
             DispatchQueue.main.async {
-
+                
                 // load downloded file in the view
                 self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
+                
+                // enable rightbarbutton for exporting
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
+                
+                
             }
         } catch let error {
             print("Could not move file to disk: \(error.localizedDescription)")
@@ -118,7 +135,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
         
         // calculate the progress value
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-
+        
         // Update the progress on screen
         DispatchQueue.main.async {
             self.progressView.setProgress(progress, animated: true)
@@ -133,10 +150,20 @@ extension ContentViewController: URLSessionDelegate {
 extension ContentViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-       
+        
         UIView.animate(withDuration: 0.5, animations: {
             self.progressView.alpha = 0
         })
     }
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        
+        // TODO: - Show UIView for Export recommendation
+        print(error)
+        self.progressView.alpha = 0
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
+    }
+    
+    
     
 }
