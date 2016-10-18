@@ -31,5 +31,21 @@ extension UIView {
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
     }
+}
+
+extension UserDefaults {
+    
+    enum UserDefaultsKeys: String {
+        case isLoggedIn
+    }
+    
+    func setLoginToken(value: String) {
+        set(value, forKey: UserDefaultsKeys.isLoggedIn.rawValue)
+        synchronize()
+    }
+    
+    func getLoginToken() -> String? {
+        return string(forKey: UserDefaultsKeys.isLoggedIn.rawValue)
+    }
     
 }

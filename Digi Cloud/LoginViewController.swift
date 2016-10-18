@@ -53,15 +53,6 @@ class LoginViewController: UIViewController {
         return spinner
     }()
     
-    // MARK: - Navigation
-    
-    func openLocations() {
-        
-        let navigationController = UINavigationController(rootViewController: LocationsTableViewController())
-        navigationController.navigationItem.title = "Locations"
-        present(navigationController, animated: true, completion: nil)
-    }
-    
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
@@ -114,8 +105,19 @@ class LoginViewController: UIViewController {
             }
             if success {
                 DispatchQueue.main.async {
-                    self.openLocations()
+
+                    let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                    
+                    guard let mainNavigationController = rootViewController as? MainNavigationController else { return }
+                    
+                    mainNavigationController.viewControllers = [LocationsTableViewController()]
+                    
+                    UserDefaults.standard.setLoginToken(value: DigiClient.shared.token)
+                    
+                    self.dismiss(animated: true, completion: nil)
+                    
                 }
+                
             } else {
                 DispatchQueue.main.async {
                     let alert = UIAlertController(title: "Error",

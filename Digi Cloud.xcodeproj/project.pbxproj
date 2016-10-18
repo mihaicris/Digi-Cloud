@@ -19,6 +19,7 @@
 		837041301D8B2320000EDBAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370412F1D8B2320000EDBAE /* Main.storyboard */; };
 		8373C1E31DA2F25E00A1BC45 /* CustomLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
+		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
 		83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* CustomTextField.swift */; };
 		83EBD0791D994F9500C80397 /* DIGIConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBD0781D994F9500C80397 /* DIGIConvenience.swift */; };
 		83EF1D481D8FBDDA00ACE008 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* File.swift */; };
@@ -43,6 +44,7 @@
 		8370412F1D8B2320000EDBAE /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLoginButton.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
+		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		83EBD0781D994F9500C80397 /* DIGIConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIGIConvenience.swift; sourceTree = "<group>"; };
 		83EF1D471D8FBDDA00ACE008 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = File.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -157,6 +159,7 @@
 		839BAE201D8BE00E00A43452 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				83B2DAF11DB661F8000955B7 /* MainNavigationController */,
 				83A1DF231DAC0D5E003C0683 /* Login Controller */,
 				83A1DF241DAC0D65003C0683 /* Locations Controller */,
 				83A1DF251DAC0D72003C0683 /* List Controller */,
@@ -199,6 +202,14 @@
 				8321FC5A1D9568FE002D6413 /* ContentViewController.swift */,
 			);
 			name = "Content Controller";
+			sourceTree = "<group>";
+		};
+		83B2DAF11DB661F8000955B7 /* MainNavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				83B2DAF21DB66219000955B7 /* MainNavigationController.swift */,
+			);
+			name = MainNavigationController;
 			sourceTree = "<group>";
 		};
 		83EF1D461D8FBDC400ACE008 /* Models */ = {
@@ -285,6 +296,7 @@
 			files = (
 				8370412E1D8B2264000EDBAE /* LocationsTableViewController.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
+				83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */,
 				8373C1E31DA2F25E00A1BC45 /* CustomLoginButton.swift in Sources */,
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
 				8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */,
