@@ -13,9 +13,7 @@ class FilesTableViewController: UITableViewController {
     // MARK: - Properties
     
     private var content: [File] = []
-    
-    private var cellForInset: UITableViewCell!
-    
+
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
@@ -100,10 +98,6 @@ class FilesTableViewController: UITableViewController {
             
         } else {
             // type == "file"
-            if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1 , section: indexPath.section)) {
-                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                cellForInset = cell
-            }
             let file = content[indexPath.row]
             let controller = ContentViewController()
             controller.title = file.name

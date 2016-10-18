@@ -12,7 +12,6 @@ class DirectoryCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-       
         setupViews()
     }
     
@@ -44,13 +43,13 @@ class DirectoryCell: UITableViewCell {
     
     func setupViews() {
         
-        separatorInset = UIEdgeInsets(top: 0, left: 53, bottom: 0, right: 0)
+        separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
         
         contentView.addSubview(folderIcon)
         contentView.addSubview(folderNameLabel)
         contentView.addSubview(actionButton)
         
-        // Horizontal contraints
+        // Horizontal constraints
 
         contentView.addConstraints(with: "H:|-15-[v0(28)]-10-[v1]-80-|", views: folderIcon, folderNameLabel)
         contentView.addConstraints(with: "H:[v0]-20-|", views: actionButton)

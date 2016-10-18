@@ -82,13 +82,11 @@ class FileCell: UITableViewCell {
             contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
             fileNameLabel.textColor = UIColor.white
             fileSizeLabel.textColor = UIColor(colorLiteralRed: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
-            separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
             actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
         } else {
             contentView.backgroundColor = nil
             fileNameLabel.textColor = UIColor.black
             fileSizeLabel.textColor = UIColor.darkGray
-            separatorInset = UIEdgeInsets(top: 0.0, left: 53.0, bottom: 0.0, right: 0.0)
             actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
         }
     }
