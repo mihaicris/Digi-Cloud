@@ -41,7 +41,3 @@ struct Methods {
     static let GetFile      = "/api/v2/mounts/{id}/files/get"
 }
 
-struct Segues {
-    static let toFiles      = "toFiles"
-    static let toContent    = "toContent"
-}

@@ -104,18 +104,15 @@ class LoginViewController: UIViewController {
                 self.spinner.stopAnimating()
             }
             if success {
+                
+                let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                guard let mainNavigationController = rootViewController as? MainNavigationController else { return }
+                mainNavigationController.viewControllers = [LocationsTableViewController()]
+                
+                UserDefaults.standard.setLoginToken(value: DigiClient.shared.token)
+                
                 DispatchQueue.main.async {
-
-                    let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-                    
-                    guard let mainNavigationController = rootViewController as? MainNavigationController else { return }
-                    
-                    mainNavigationController.viewControllers = [LocationsTableViewController()]
-                    
-                    UserDefaults.standard.setLoginToken(value: DigiClient.shared.token)
-                    
                     self.dismiss(animated: true, completion: nil)
-                    
                 }
                 
             } else {
