@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol FilesTableViewControllerDelegate: class {
-    func showActionController(for sourceView: UIView)
-}
-
 class FilesTableViewController: UITableViewController {
     
     // MARK: - Properties

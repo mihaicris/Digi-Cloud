@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol FilesTableViewControllerDelegate: class {
+    func showActionController(for sourceView: UIView)
+}
+
 class BaseListCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
