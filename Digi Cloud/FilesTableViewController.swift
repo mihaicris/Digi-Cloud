@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol FilesTableViewControllerDelegate: class {
+    func showActionController(for sourceView: UIView)
+}
+
 class FilesTableViewController: UITableViewController {
     
     // MARK: - Properties
@@ -69,11 +73,15 @@ class FilesTableViewController: UITableViewController {
         
         if data.type == "dir" {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as! DirectoryCell
+            cell.delegate = self
+            
             cell.folderNameLabel.text = data.name
+            
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
-            
+            cell.delegate = self
+           
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .none
@@ -120,3 +128,19 @@ class FilesTableViewController: UITableViewController {
     }
     
 }
+
+extension FilesTableViewController: FilesTableViewControllerDelegate {
+
+    func showActionController(for sourceView: UIView) {
+        let controller = ActionsViewController()
+        controller.modalPresentationStyle = .popover
+        controller.preferredContentSize = CGSize(width: 300, height: 400)
+        controller.popoverPresentationController?.sourceView = sourceView
+        controller.popoverPresentationController?.sourceRect = sourceView.bounds
+        present(controller, animated: true, completion: nil)
+    }
+    
+}
+
+
+
