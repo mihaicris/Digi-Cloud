@@ -49,3 +49,9 @@ extension UserDefaults {
     }
     
 }
+
+extension UIColor {
+    static var defaultColor: UIColor {
+        return UIColor(colorLiteralRed: 6/255, green: 96/255, blue: 254/255, alpha: 1.0)
+    }
+}

@@ -12,7 +12,7 @@ class FilesTableViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private var content: [File] = []
+    var content: [File] = []
 
     // MARK: - View Life Cycle
     
@@ -98,6 +98,8 @@ class FilesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        tableView.deselectRow(at: indexPath, animated: false)
+        
         let itemName = content[indexPath.row].name
         let previousPath = DigiClient.shared.currentPath.last!
         
@@ -122,15 +124,20 @@ class FilesTableViewController: UITableViewController {
             navigationController?.pushViewController(controller, animated: true)
         }
     }
-    
 }
 
 extension FilesTableViewController: FilesTableViewControllerDelegate {
 
     func showActionController(for sourceView: UIView) {
-        let controller = ActionsViewController()
+        
+        let buttonPosition = sourceView.convert(CGPoint.zero, to: self.tableView)
+        guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
+        
+        let controller = ActionsViewController(style: .plain)
+        
+        controller.element = self.content[indexPath.row]
         controller.modalPresentationStyle = .popover
-        controller.preferredContentSize = CGSize(width: 300, height: 400)
+        
         controller.popoverPresentationController?.sourceView = sourceView
         controller.popoverPresentationController?.sourceRect = sourceView.bounds
         present(controller, animated: true, completion: nil)
