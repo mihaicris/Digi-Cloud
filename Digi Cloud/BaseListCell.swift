@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol FilesTableViewControllerDelegate: class {
+protocol BaseListCellDelegate: class {
     func showActionController(for sourceView: UIView)
 }
 
@@ -23,7 +23,7 @@ class BaseListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    weak var delegate: FilesTableViewControllerDelegate?
+    weak var delegate: BaseListCellDelegate?
     
     lazy var actionButton: UIButton = {
         let button = UIButton(type: UIButtonType.system)

@@ -8,9 +8,16 @@
 
 import UIKit
 
+
+protocol ActionsViewControllerDelegate: class {
+    func didSelectOption(tag: Int)
+}
+
 class ActionsViewController: UITableViewController {
     
     var element: File!
+    
+    weak var delegate: ActionsViewControllerDelegate?
     
     var contextMenuFileActions: [ActionCell] = []
     var contextMenuFolderActions: [ActionCell] = []
@@ -103,27 +110,18 @@ class ActionsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let tag = tableView.cellForRow(at: indexPath)?.tag {
-            print(tag)
-            dismiss(animated: true, completion: nil)
+            dismiss(animated: true) {
+                DispatchQueue.main.async {
+                    self.delegate?.didSelectOption(tag: tag)
+                }
+            }
         }
     }
     
-    @objc fileprivate func handleRename(){
-        guard let name = element?.name else { return }
-        let parentPath = DigiClient.shared.currentPath.last!
-        let elementPath = parentPath + name
-        let newName = "test.txt"
-        
-        DigiClient.shared.renameElement(mount: DigiClient.shared.currentMount, elementPath: elementPath, newName: newName) { (status, error) in
-            
-            if error != nil {
-                print(error)
-            } else {
-                print(status)
-            }
-        }
-        //        delegate?.renameElement(at: elementPath)
-        dismiss(animated: true, completion: nil)
+    deinit {
+        #if DEBUG
+            print("Action Controller deinit")
+        #endif
     }
 }
 

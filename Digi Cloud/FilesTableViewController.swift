@@ -13,7 +13,8 @@ class FilesTableViewController: UITableViewController {
     // MARK: - Properties
     
     var content: [File] = []
-
+    fileprivate var currentElement: File?
+    
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
@@ -53,6 +54,12 @@ class FilesTableViewController: UITableViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let nr = navigationController!.childViewControllers.count
+        print("Number of controllers in the navigation stack: \(nr)")
+    }
+    
     deinit {
         DigiClient.shared.currentPath.removeLast()
     }
@@ -77,7 +84,7 @@ class FilesTableViewController: UITableViewController {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
             cell.delegate = self
-           
+            
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .none
@@ -117,7 +124,7 @@ class FilesTableViewController: UITableViewController {
             // This is a file
             let controller = ContentViewController()
             controller.title = itemName
-
+            
             let filePath = previousPath + itemName
             DigiClient.shared.currentPath.append(filePath)
             
@@ -126,14 +133,17 @@ class FilesTableViewController: UITableViewController {
     }
 }
 
-extension FilesTableViewController: FilesTableViewControllerDelegate {
-
+extension FilesTableViewController: BaseListCellDelegate {
+    
     func showActionController(for sourceView: UIView) {
         
         let buttonPosition = sourceView.convert(CGPoint.zero, to: self.tableView)
         guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
         
+        currentElement = content[indexPath.row]
+        
         let controller = ActionsViewController(style: .plain)
+        controller.delegate = self
         
         controller.element = self.content[indexPath.row]
         controller.modalPresentationStyle = .popover
@@ -144,6 +154,31 @@ extension FilesTableViewController: FilesTableViewControllerDelegate {
     }
     
 }
+
+extension FilesTableViewController: ActionsViewControllerDelegate {
+    func didSelectOption(tag: Int) {
+        print("Tag selected: \(tag)")
+        print("Element to be changed: \(currentElement!.name)")
+        
+        switch tag {
+        case 2:
+            guard let element = currentElement else { return }
+            
+            let controller = RenameViewController(element: element)
+            
+            let navController = UINavigationController(rootViewController: controller)
+            navController.modalPresentationStyle = .formSheet
+            
+            present(navController, animated: true, completion: nil)
+            
+        default:
+            return
+        }
+        
+        
+    }
+}
+
 
 
 
