@@ -39,19 +39,20 @@ class ActionsViewController: UITableViewController {
     
     override func viewDidLoad() {
         
-        let folderActions = [ActionCell(title: "Share", tag: 0),
-                             ActionCell(title: "Copy", tag: 3),
-                             ActionCell(title: "Move", tag: 4),
-                             ActionCell(title: "Folder info", tag: 6)]
+        let folderActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), tag: 0),
+                             ActionCell(title: NSLocalizedString("Rename", comment: ""), tag: 2),
+                             ActionCell(title: NSLocalizedString("Copy", comment: ""), tag: 3),
+                             ActionCell(title: NSLocalizedString("Move", comment: ""), tag: 4),
+                             ActionCell(title: NSLocalizedString("Folder info", comment: ""), tag: 6)]
         
         contextMenuFolderActions.append(contentsOf: folderActions)
         
-        let fileActions = [ActionCell(title: "Share", tag: 0),
-                           ActionCell(title: "Make available offline", tag: 1),
-                           ActionCell(title: "Rename", tag: 2),
-                           ActionCell(title: "Copy", tag: 3),
-                           ActionCell(title: "Move", tag: 4),
-                           ActionCell(title: "Delete", tag: 5)]
+        let fileActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), tag: 0),
+                           ActionCell(title: NSLocalizedString("Make available offline", comment: ""), tag: 1),
+                           ActionCell(title: NSLocalizedString("Rename", comment: ""), tag: 2),
+                           ActionCell(title: NSLocalizedString("Copy", comment: ""), tag: 3),
+                           ActionCell(title: NSLocalizedString("Move", comment: ""), tag: 4),
+                           ActionCell(title: NSLocalizedString("Delete", comment: ""), tag: 5)]
         
         contextMenuFileActions.append(contentsOf: fileActions)
         

@@ -40,10 +40,14 @@ class RenameViewController: UITableViewController {
     }
     
     func handleCancel() {
+        textField.resignFirstResponder()
         dismiss(animated: true, completion: nil)
     }
     
     func handleRename() {
+        
+        // TODO Handle Rename Network request
+        textField.resignFirstResponder()
         dismiss(animated: true, completion: nil)
     }
     
