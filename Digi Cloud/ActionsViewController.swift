@@ -77,7 +77,8 @@ class ActionsViewController: UITableViewController {
         headerView.addSubview(iconImage)
         headerView.addSubview(elementName)
         
-        headerView.addConstraints(with: "H:|-22-[v0(26)]-10-[v1]-10-|", views: iconImage, elementName)
+        let offset = element.type == "dir" ? 22 : 20
+        headerView.addConstraints(with: "H:|-\(offset)-[v0(26)]-10-[v1]-10-|", views: iconImage, elementName)
         headerView.addConstraints(with: "V:[v0(26)]", views: iconImage)
         iconImage.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         elementName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
@@ -135,7 +136,7 @@ class ActionCell: UITableViewCell {
     convenience init(title: String, tag: Int) {
         self.init()
         self.textLabel?.text = title
-        self.textLabel?.textColor = .defaultColor
+        self.textLabel?.textColor = tag == 5 ? .red : .defaultColor
         self.textLabel?.font = UIFont.systemFont(ofSize: 16)
         self.tag = tag
     }
