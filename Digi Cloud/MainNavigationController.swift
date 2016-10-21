@@ -9,12 +9,12 @@
 import UIKit
 
 class MainNavigationController: UINavigationController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-
+        
         if let token = UserDefaults.standard.getLoginToken() {
             
             DigiClient.shared.token = token
@@ -23,13 +23,12 @@ class MainNavigationController: UINavigationController {
             viewControllers = [controller]
             
         } else {
+            
             // present modally the login view, after a very small delay
-            perform(#selector(showLoginController), with: nil, afterDelay: 0.01)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(50), execute: {
+                let controller = LoginViewController()
+                self.present(controller, animated: true, completion: nil)
+            })
         }
-    }
-    
-    func showLoginController() {
-        let controller = LoginViewController()
-        present(controller, animated: true, completion: nil)
     }
 }
