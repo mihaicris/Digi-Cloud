@@ -12,6 +12,9 @@ class ActionsViewController: UITableViewController {
     
     var element: File!
     
+    var contextMenuFileActions: [ActionCell] = []
+    var contextMenuFolderActions: [ActionCell] = []
+    
     override init(style: UITableViewStyle) {
         super.init(style: style)
     }
@@ -28,6 +31,22 @@ class ActionsViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
+        
+        let folderActions = [ActionCell(title: "Share", tag: 0),
+                             ActionCell(title: "Copy", tag: 3),
+                             ActionCell(title: "Move", tag: 4),
+                             ActionCell(title: "Folder info", tag: 6)]
+        
+        contextMenuFolderActions.append(contentsOf: folderActions)
+        
+        let fileActions = [ActionCell(title: "Share", tag: 0),
+                           ActionCell(title: "Make available offline", tag: 1),
+                           ActionCell(title: "Rename", tag: 2),
+                           ActionCell(title: "Copy", tag: 3),
+                           ActionCell(title: "Move", tag: 4),
+                           ActionCell(title: "Delete", tag: 5)]
+        
+        contextMenuFileActions.append(contentsOf: fileActions)
         
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 54))
@@ -74,38 +93,17 @@ class ActionsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if element.type == "dir" {
-            return 3
-        } else {
-            return 6
-        }
+        return element.type == "dir" ? contextMenuFolderActions.count :contextMenuFileActions.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if element.type == "dir" {
-            switch(indexPath.row) {
-            case 0: return ActionCell(title: "Share", tag: 0)
-            case 1: return ActionCell(title: "Copy", tag: 3)
-            case 2: return ActionCell(title: "Delete", tag: 5)
-            case 3: return ActionCell(title: "Folder info", tag: 6)
-            default: fatalError("Unknown row in section 0")
-            }
-        } else {
-            switch(indexPath.row) {
-            case 0: return ActionCell(title: "Share", tag: 0)
-            case 1: return ActionCell(title: "Make available offline", tag: 1)
-            case 2: return ActionCell(title: "Rename", tag: 2)
-            case 3: return ActionCell(title: "Copy", tag: 3)
-            case 4: return ActionCell(title: "Move", tag: 4)
-            case 5: return ActionCell(title: "Delete", tag: 5)
-            default: fatalError("Unknown row in section 0")
-            }
-        }
+        return element.type == "dir" ? contextMenuFolderActions[indexPath.row] : contextMenuFileActions[indexPath.row]
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let tag = tableView.cellForRow(at: indexPath)?.tag {
             print(tag)
+            dismiss(animated: true, completion: nil)
         }
     }
     
@@ -126,10 +124,6 @@ class ActionsViewController: UITableViewController {
         //        delegate?.renameElement(at: elementPath)
         dismiss(animated: true, completion: nil)
     }
-    
-    @objc fileprivate func handleCopy(){}
-    
-    @objc fileprivate func handleMove(){}
 }
 
 class ActionCell: UITableViewCell {
