@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "ipad",
-      "filename" : "Group.png",
+      "filename" : "folderIcon.png",
       "scale" : "1x"
     },
     {
       "idiom" : "ipad",
-      "filename" : "Group@2x.png",
+      "filename" : "folderIcon@2x-1.png",
       "scale" : "2x"
     }
   ],
