@@ -32,8 +32,8 @@ class DirectoryCell: BaseListCell {
         
         // Horizontal constraints
 
-        contentView.addConstraints(with: "H:|-15-[v0(28)]-10-[v1]-80-|", views: folderIcon, folderNameLabel)
-        contentView.addConstraints(with: "V:[v0(28)]", views: folderIcon)
+        contentView.addConstraints(with: "H:|-15-[v0(26)]-10-[v1]-80-|", views: folderIcon, folderNameLabel)
+        contentView.addConstraints(with: "V:[v0(26)]", views: folderIcon)
         
         // Vertical constraints
         
@@ -41,5 +41,18 @@ class DirectoryCell: BaseListCell {
         folderNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 1).isActive = true
         
         super.setupViews()
+    }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        if highlighted {
+            contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
+            folderNameLabel.textColor = UIColor.white
+            actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+        } else {
+            contentView.backgroundColor = nil
+            folderNameLabel.textColor = UIColor.black
+            actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
+        }
     }
 }

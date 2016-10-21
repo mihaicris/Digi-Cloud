@@ -43,20 +43,18 @@ class FileCell: BaseListCell {
         contentView.addSubview(fileNameLabel)
         contentView.addSubview(fileSizeLabel)
         
-        contentView.addConstraints(with: "H:|-15-[v0(28)]-10-[v1]-80-|", views: fileIcon, fileNameLabel)
+        contentView.addConstraints(with: "H:|-15-[v0(26)]-10-[v1]-80-|", views: fileIcon, fileNameLabel)
         contentView.addConstraints(with: "H:[v0]-10-[v1]", views: fileIcon, fileSizeLabel)
+        contentView.addConstraints(with: "V:[v0(26)]", views: fileIcon)
         contentView.addConstraints(with: "V:[v0]-2-[v1]", views: fileNameLabel, fileSizeLabel)
         
         fileIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
-        fileIcon.heightAnchor.constraint(equalToConstant: 28).isActive = true
         fileNameLabel.topAnchor.constraint(equalTo: fileIcon.topAnchor, constant: -3).isActive = true
-        
-
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        if selected {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        if highlighted {
             contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
             fileNameLabel.textColor = UIColor.white
             fileSizeLabel.textColor = UIColor(colorLiteralRed: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
