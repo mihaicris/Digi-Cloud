@@ -13,7 +13,7 @@ class FilesTableViewController: UITableViewController {
     // MARK: - Properties
     
     var content: [File] = []
-    fileprivate var currentElement: File?
+    fileprivate var currentIndex: IndexPath!
     
     // MARK: - View Life Cycle
     
@@ -25,14 +25,8 @@ class FilesTableViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = 50
         
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
-            
-            DispatchQueue.main.async {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
             
             if error != nil {
                 print("Error: \(error)")
@@ -53,17 +47,7 @@ class FilesTableViewController: UITableViewController {
             }
         }
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let nr = navigationController!.childViewControllers.count
-        print("Number of controllers in the navigation stack: \(nr)")
-    }
-    
-    deinit {
-        DigiClient.shared.currentPath.removeLast()
-    }
-    
+
     // MARK: - Table View Data Source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -131,6 +115,11 @@ class FilesTableViewController: UITableViewController {
             navigationController?.pushViewController(controller, animated: true)
         }
     }
+
+    deinit {
+        DigiClient.shared.currentPath.removeLast()
+    }
+
 }
 
 extension FilesTableViewController: BaseListCellDelegate {
@@ -140,7 +129,7 @@ extension FilesTableViewController: BaseListCellDelegate {
         let buttonPosition = sourceView.convert(CGPoint.zero, to: self.tableView)
         guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
         
-        currentElement = content[indexPath.row]
+        currentIndex = indexPath
         
         let controller = ActionsViewController(style: .plain)
         controller.delegate = self
@@ -152,30 +141,21 @@ extension FilesTableViewController: BaseListCellDelegate {
         controller.popoverPresentationController?.sourceRect = sourceView.bounds
         present(controller, animated: true, completion: nil)
     }
-    
 }
 
 extension FilesTableViewController: ActionsViewControllerDelegate {
     func didSelectOption(tag: Int) {
-        print("Tag selected: \(tag)")
-        print("Element to be changed: \(currentElement!.name)")
-        
         switch tag {
         case 2:
-            guard let element = currentElement else { return }
-            
-            let controller = RenameViewController(element: element)
+            let controller = RenameViewController(controller: self, indexPath: currentIndex)
             
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             
             present(navController, animated: true, completion: nil)
-            
         default:
             return
         }
-        
-        
     }
 }
 

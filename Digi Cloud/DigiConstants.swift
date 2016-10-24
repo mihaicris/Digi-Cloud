@@ -32,12 +32,13 @@ struct ParametersKeys {
 }
 
 struct Methods {
-    static let Token        = "/token"
-    static let User         = "/api/v2/user"
-    static let Password     = "/api/v2/user/password"
-    static let Bookmarks    = "/api/v2/user/bookmarks"
-    static let Mounts       = "/api/v2/mounts"
-    static let ListFiles    = "/api/v2/mounts/{id}/files/list"
-    static let GetFile      = "/api/v2/mounts/{id}/files/get"
+    static let Token            = "/token"
+    static let User             = "/api/v2/user"
+    static let Password         = "/api/v2/user/password"
+    static let Bookmarks        = "/api/v2/user/bookmarks"
+    static let Mounts           = "/api/v2/mounts"
+    static let ListFiles        = "/api/v2/mounts/{id}/files/list"
+    static let GetFile          = "/api/v2/mounts/{id}/files/get"
+    static let RenameElements   = "/api/v2/mounts/{id}/files/rename"
 }
 

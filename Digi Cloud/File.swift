@@ -9,7 +9,7 @@
 import Foundation
 
 struct File {
-    let name: String
+    var name: String
     let type: String
     let modified: TimeInterval
     let size: Double

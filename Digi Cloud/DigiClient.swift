@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 // Singleton class for DIGI Client
 
@@ -39,14 +40,11 @@ final class DigiClient {
     static let shared: DigiClient = DigiClient()
     
     // MARK: - GET 
-    func networkTask(requestType: String,
-                     method: String,
-                     headers: [String: String]?,
-                     json: [String: String]?,
-                     parameters: [String: Any]?,
-                     completionHandler: @escaping (_ data: Any?, _ error: Error?) -> Void)
-    {
-        
+    func networkTask(requestType: String, method: String, headers: [String: String]?,
+                     json: [String: String]?, parameters: [String: Any]?,
+                     completionHandler: @escaping (_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+
         /* 1. Build the URL, Configure the request */
         let url = self.getURL(method: method, parameters: parameters)
     
@@ -57,38 +55,53 @@ final class DigiClient {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: json, options: [])
             } catch {
-                completionHandler(nil, JSONError.parce("Could not convert json into data!"))
+                completionHandler(nil, nil, JSONError.parce("Could not convert json into data!"))
             }
         }
 
         /* 2. Make the request */
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
-            
+            // stop network indication
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            }
+
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                completionHandler(nil, NetworkingError.get("There was an error with your request: \(error)"))
+                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error)"))
                 return
             }
             
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                completionHandler(nil, NetworkingError.wrongStatus("Your request returned a status code other than 2xx!"))
+            /* GUARD: Did we get a statusCode? */
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error)"))
+                return
+            }
+
+            // Did we get a succesfull status code?
+            if statusCode < 200 && statusCode > 299 {
+                completionHandler(nil, statusCode, NetworkingError.wrongStatus("Your request returned a status code other than 2xx!"))
                 return
             }
             
             /* GUARD: Was there any data returned? */
             guard let data = data else {
-                completionHandler(nil, NetworkingError.data("No data was returned by the request!"))
+                completionHandler(nil, statusCode, NetworkingError.data("No data was returned by the request!"))
                 return
             }
-            
+
+            guard data.count > 0 else {
+                completionHandler(data, statusCode, nil)
+                return
+            }
+
         /* 3. Parse the data and use the data (happens in completion handler) */
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                completionHandler(json, nil)
+                completionHandler(json, statusCode, nil)
             } catch {
-                completionHandler(nil, JSONError.parce("Could not parse the data as JSON"))
+                completionHandler(nil, statusCode, JSONError.parce("Could not parse the data as JSON"))
             }
         }
         

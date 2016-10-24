@@ -20,7 +20,7 @@ extension UIViewController {
 }
 
 extension UIView {
-    
+
     func addConstraints(with format: String, views: UIView...) {
         var viewsDictionary = [String: UIView]()
         for (index, view) in views.enumerated() {
@@ -28,26 +28,25 @@ extension UIView {
             viewsDictionary[key] = view
             view.translatesAutoresizingMaskIntoConstraints = false
         }
-        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
     }
 }
 
 extension UserDefaults {
-    
+
     enum UserDefaultsKeys: String {
         case isLoggedIn
     }
-    
+
     func setLoginToken(value: String) {
         set(value, forKey: UserDefaultsKeys.isLoggedIn.rawValue)
         synchronize()
     }
-    
+
     func getLoginToken() -> String? {
         return string(forKey: UserDefaultsKeys.isLoggedIn.rawValue)
     }
-    
+
 }
 
 extension UIColor {

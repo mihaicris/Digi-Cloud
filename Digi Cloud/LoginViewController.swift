@@ -92,15 +92,12 @@ class LoginViewController: UIViewController {
     func handleLogin() {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
-        
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        
+
         spinner.startAnimating()
         
         DigiClient.shared.authenticate(email: email, password: password) {
             (success, error) in
             DispatchQueue.main.async {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.spinner.stopAnimating()
             }
             if success {
