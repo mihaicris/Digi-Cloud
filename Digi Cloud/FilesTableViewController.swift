@@ -121,8 +121,10 @@ class FilesTableViewController: UITableViewController {
 
     deinit {
         DigiClient.shared.currentPath.removeLast()
+        #if DEBUG
+        print("Files Controller deinit")
+        #endif
     }
-
 }
 
 extension FilesTableViewController: BaseListCellDelegate {
@@ -157,7 +159,7 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
                     self.tableView.reloadData()
                 }
             }
-            
+
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             

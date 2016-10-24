@@ -134,6 +134,12 @@ class LoginViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
+
+    deinit {
+        #if DEBUG
+        print("Login Controller deinit")
+        #endif
+    }
 }
 
 extension LoginViewController: UITextFieldDelegate {

@@ -71,7 +71,11 @@ class LocationsTableViewController: UITableViewController {
         openMount(index: indexPath.row)
     }
     
-    
+    deinit {
+        #if DEBUG
+        print("Locations Controller deinit")
+        #endif
+    }
 }
 
 class LocationCell: UITableViewCell {
