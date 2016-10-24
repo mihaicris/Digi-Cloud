@@ -136,7 +136,6 @@ class ActionCell: UITableViewCell {
         self.init()
         self.textLabel?.text = title
         self.textLabel?.textColor = tag == 5 ? .red : .defaultColor
-        self.textLabel?.font = UIFont.systemFont(ofSize: 16)
         self.tag = tag
     }
     
