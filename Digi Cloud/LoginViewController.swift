@@ -17,8 +17,8 @@ class LoginViewController: UIViewController {
         field.textFieldName = "EMAIL ADDRESS"
         
         #if DEBUG
-            let dict = ProcessInfo.processInfo.environment
-            field.text = dict["USERNAME"] ?? ""
+        let dict = ProcessInfo.processInfo.environment
+        field.text = dict["USERNAME"] ?? ""
         #endif
         
         field.delegate = self
@@ -30,8 +30,8 @@ class LoginViewController: UIViewController {
         field.textFieldName = "PASSWORD"
         
         #if DEBUG
-            let dict = ProcessInfo.processInfo.environment
-            field.text = dict["PASSWORD"] ?? ""
+        let dict = ProcessInfo.processInfo.environment
+        field.text = dict["PASSWORD"] ?? ""
         #endif
         
         field.isSecureTextEntry = true

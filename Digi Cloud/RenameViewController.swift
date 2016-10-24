@@ -10,17 +10,16 @@ import UIKit
 
 class RenameViewController: UITableViewController {
 
-    var elementIndexPath: IndexPath
-    var controller: FilesTableViewController
+    var didRenamed: ((_ newName: String) -> Void)?
+
     fileprivate var element: File
     fileprivate let oldName: String
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var textField: UITextField!
+    fileprivate var messageLabel: UILabel!
 
-    init(controller: FilesTableViewController, indexPath: IndexPath) {
-        self.elementIndexPath = indexPath
-        self.controller = controller
-        element = controller.content[indexPath.row]
+    init(element: File) {
+        self.element = element
         oldName = element.name
         super.init(style: .grouped)
     }
@@ -31,8 +30,62 @@ class RenameViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
+    }
 
-        tableView.tableFooterView = UIView(frame: CGRect.zero)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        enterEditMode()
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.selectionStyle = .none
+
+        let elementIcon: UIImageView = {
+            let imageName = element.type == "dir" ? "FolderIcon" : "FileIcon"
+            let imageView = UIImageView(image: UIImage(named: imageName))
+            imageView.contentMode = .scaleAspectFit
+            return imageView
+        }()
+
+        textField = UITextField()
+        textField.text = element.name
+        textField.clearButtonMode = .whileEditing
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        textField.delegate = self
+        textField.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
+
+        cell.contentView.addSubview(elementIcon)
+        cell.contentView.addSubview(textField)
+        cell.contentView.addConstraints(with: "H:|-12-[v0(26)]-10-[v1]-12-|", views: elementIcon, textField)
+        cell.contentView.addConstraints(with: "V:[v0(26)]", views: elementIcon)
+        cell.contentView.addConstraints(with: "V:|[v0]|", views: textField)
+        elementIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+
+        return cell
+    }
+
+    private func setupViews() {
+
+        messageLabel = {
+            let label = UILabel()
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.textColor = .darkGray
+            label.alpha = 0.0
+            return label
+        }()
+
+        tableView.addSubview(messageLabel)
+        tableView.addConstraints(with: "V:|-100-[v0]|", views: messageLabel)
+        tableView.centerXAnchor.constraint(equalTo: messageLabel.centerXAnchor).isActive = true
+
         tableView.isScrollEnabled = false
 
         let leftBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
@@ -48,42 +101,7 @@ class RenameViewController: UITableViewController {
         self.title = title
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        enterEditMode()
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-
-        let elementIcon: UIImageView = {
-            let imageName = element.type == "dir" ? "FolderIcon" : "FileIcon"
-            let imageView = UIImageView(image: UIImage(named: imageName))
-            imageView.contentMode = .scaleAspectFit
-            return imageView
-        }()
-
-        textField = UITextField()
-        textField.text = element.name
-        textField.clearButtonMode = .whileEditing
-        textField.delegate = self
-        textField.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
-
-        cell.contentView.addSubview(elementIcon)
-        cell.contentView.addSubview(textField)
-        cell.contentView.addConstraints(with: "H:|-12-[v0(26)]-10-[v1]-12-|", views: elementIcon, textField)
-        cell.contentView.addConstraints(with: "V:[v0(26)]", views: elementIcon)
-        cell.contentView.addConstraints(with: "V:|[v0]|", views: textField)
-        elementIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
-
-        return cell
-    }
-
-    private func enterEditMode() {
+    fileprivate func enterEditMode() {
         textField.becomeFirstResponder()
 
         guard let elementName = textField.text else { return }
@@ -133,14 +151,13 @@ class RenameViewController: UITableViewController {
             if let status = status {
                 switch status {
                 case 200...299:
+                    self.didRenamed?(name)
                     DispatchQueue.main.async {
-                        self.controller.content[self.elementIndexPath.row].name = name
-                        self.controller.tableView.reloadRows(at: [self.elementIndexPath], with: .automatic)
+                        self.textField.resignFirstResponder()
                         self.dismiss(animated: true, completion: nil)
                     }
                 case 400:
-                    // TODO: File already exists
-                    print(status)
+                    self.showErrorMessage(true)
                 case 404:
                     // TODO: Bad request ( File do not exists, invalid file name?)
                     print(status)
@@ -159,13 +176,29 @@ class RenameViewController: UITableViewController {
             }
         }
     }
+    fileprivate func showErrorMessage(_ value: Bool) {
+        DispatchQueue.main.async {
+            self.messageLabel.text = NSLocalizedString("This name already exists. Please choose a different name.", comment: "Error message")
+            UIView.animate(withDuration: 0.4, animations: {
+                self.view.layoutSubviews()
+                self.messageLabel.alpha = value ? 1.0 : 0.0
+            })
+        }
+    }
 
     deinit {
+        #if DEBUG
         print("Rename deinit")
+        #endif
     }
 }
 
 extension RenameViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        showErrorMessage(false)
+        enterEditMode()
+    }
+
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return !(textField.text?.isEmpty ?? true)
     }

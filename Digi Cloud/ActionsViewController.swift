@@ -121,7 +121,7 @@ class ActionsViewController: UITableViewController {
     
     deinit {
         #if DEBUG
-            print("Action Controller deinit")
+        print("Action Controller deinit")
         #endif
     }
 }
