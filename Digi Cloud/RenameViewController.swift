@@ -199,10 +199,6 @@ extension RenameViewController: UITextFieldDelegate {
         enterEditMode()
     }
 
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        return !(textField.text?.isEmpty ?? true)
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
