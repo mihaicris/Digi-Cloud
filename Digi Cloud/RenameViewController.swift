@@ -35,7 +35,8 @@ class RenameViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        enterEditMode()
+        textField.becomeFirstResponder()
+        positionCursor()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -101,9 +102,7 @@ class RenameViewController: UITableViewController {
         self.title = title
     }
 
-    fileprivate func enterEditMode() {
-        textField.becomeFirstResponder()
-
+    fileprivate func positionCursor() {
         guard let elementName = textField.text else { return }
 
         // file has an extension?
@@ -196,7 +195,7 @@ class RenameViewController: UITableViewController {
 extension RenameViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         showErrorMessage(false)
-        enterEditMode()
+        positionCursor()
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

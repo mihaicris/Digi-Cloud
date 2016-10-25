@@ -21,6 +21,7 @@ class FilesTableViewController: UITableViewController {
                 /* Order items by Date (descending), directories are shown first */
                 // return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
             }
+            DispatchQueue.main.async { self.tableView.reloadData() }
         }
     }
     fileprivate var currentIndex: IndexPath!
@@ -37,17 +38,10 @@ class FilesTableViewController: UITableViewController {
 
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
-
             if error != nil {
                 print("Error: \(error)")
             }
-            if let content = content  {
-                self.content = content
-
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
+            self.content = content ?? []
         }
     }
 
@@ -151,18 +145,16 @@ extension FilesTableViewController: BaseListCellDelegate {
 extension FilesTableViewController: ActionsViewControllerDelegate {
     func didSelectOption(tag: Int) {
         switch tag {
+        // rename action
         case 2:
             let controller = RenameViewController(element: content[currentIndex.row])
-            controller.didRenamed = { newName in
-                self.content[self.currentIndex.row].name = newName
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+            controller.didRenamed = { [weak self] (newName) in
+                if let fileController = self {
+                fileController.content[fileController.currentIndex.row].name = newName
                 }
             }
-
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
-            
             present(navController, animated: true, completion: nil)
         default:
             return
