@@ -61,6 +61,7 @@ class RenameViewController: UITableViewController {
         textField.clearButtonMode = .whileEditing
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
+        textField.returnKeyType = .done
         textField.delegate = self
         textField.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
 
@@ -74,7 +75,7 @@ class RenameViewController: UITableViewController {
         return cell
     }
 
-    private func setupViews() {
+    fileprivate func setupViews() {
 
         messageLabel = {
             let label = UILabel()
@@ -123,12 +124,12 @@ class RenameViewController: UITableViewController {
         }
     }
 
-    func handleCancel() {
+    @objc fileprivate func handleCancel() {
         textField.resignFirstResponder()
         dismiss(animated: true, completion: shouldRefreshContent ? onRefreshFolder : nil)
     }
 
-    func handleRename() {
+    @objc fileprivate func handleRename() {
 
         textField.resignFirstResponder()
 
@@ -153,7 +154,6 @@ class RenameViewController: UITableViewController {
                 print(error!)
             }
             if let status = status {
-
                 switch status {
                 case 200...299:
                     // Rename successfully completed
@@ -184,30 +184,43 @@ class RenameViewController: UITableViewController {
         }
     }
 
-    func handleTextFieldChange() {
+    @objc fileprivate func handleTextFieldChange() {
         if let newName = textField.text {
             if newName.isEmpty {
-                let message = NSLocalizedString("Name cannot be empty.", comment: "Information")
+                let message = NSLocalizedString("The name cannot be empty.", comment: "Information")
                 setMessage(onScreen: true, message)
-            } else if newName.contains("/") {
-                let message = NSLocalizedString("Character / is not allowed in the name.", comment: "Information")
+                setRenameButton(false)
+            } else if hasInvalidCharacters(name: newName) {
+                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed for the name.", comment: "Information")
                 setMessage(onScreen: true, message)
+                setRenameButton(false)
             } else if oldName == newName {
-                let message = NSLocalizedString("Name cannot be the same.", comment: "Information")
+                let message = NSLocalizedString("The name cannot be the same.", comment: "Information")
                 setMessage(onScreen: true, message)
+                setRenameButton(false)
             } else {
                 setMessage(onScreen: false)
+                setRenameButton(true)
             }
         }
     }
-    fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
+
+    fileprivate func hasInvalidCharacters(name: String) -> Bool {
+        let charset: Set<Character> = ["\\", "/", ":", "?", "<", ">", "\"", "|"]
+        return !charset.isDisjoint(with: name.characters)
+    }
+
+    fileprivate func setRenameButton(_ value: Bool) {
         DispatchQueue.main.async {
-            if onScreen {
-                self.messageLabel.text = message
-                self.rightBarButton.isEnabled = false
-            } else {
-                self.rightBarButton.isEnabled = true
-            }
+            self.rightBarButton.isEnabled = value
+        }
+    }
+
+    fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
+        if onScreen {
+            self.messageLabel.text = message
+        }
+        DispatchQueue.main.async {
             UIView.animate(withDuration: onScreen ? 0.0 : 0.5, animations: {
                 self.messageLabel.alpha = onScreen ? 1.0 : 0.0
             })
@@ -228,8 +241,13 @@ extension RenameViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+        if rightBarButton.isEnabled {
+            textField.resignFirstResponder()
+            handleRename()
+            return false
+        } else {
+            return false
+        }
     }
 }
 
