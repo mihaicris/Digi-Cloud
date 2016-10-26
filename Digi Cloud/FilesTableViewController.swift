@@ -24,6 +24,7 @@ class FilesTableViewController: UITableViewController {
             DispatchQueue.main.async { self.tableView.reloadData() }
         }
     }
+
     fileprivate var currentIndex: IndexPath!
 
     // MARK: - View Life Cycle
@@ -36,6 +37,10 @@ class FilesTableViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = 50
 
+        getFolderContent()
+    }
+
+    fileprivate func getFolderContent() {
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
             if error != nil {
@@ -116,15 +121,13 @@ class FilesTableViewController: UITableViewController {
     deinit {
         DigiClient.shared.currentPath.removeLast()
         #if DEBUG
-        print("Files Controller deinit")
+            print("Files Controller deinit")
         #endif
     }
 }
 
 extension FilesTableViewController: BaseListCellDelegate {
-
     func showActionController(for sourceView: UIView) {
-
         let buttonPosition = sourceView.convert(CGPoint.zero, to: self.tableView)
         guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
 
@@ -148,10 +151,13 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
         // rename action
         case 2:
             let controller = RenameViewController(element: content[currentIndex.row])
-            controller.didRenamed = { [weak self] (newName) in
+            controller.onSuccess = { [weak self] (newName) in
                 if let fileController = self {
-                fileController.content[fileController.currentIndex.row].name = newName
+                    fileController.content[fileController.currentIndex.row].name = newName
                 }
+            }
+            controller.onRefreshFolder = { [weak self] in
+                self?.getFolderContent()
             }
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
