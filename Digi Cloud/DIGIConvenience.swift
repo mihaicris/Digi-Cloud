@@ -108,9 +108,9 @@ extension DigiClient {
         return session
     }
 
-    func renameElement(path: String, newName: String, completionHandler: @escaping (_ result: Int?, _ error: Error?) -> Void) {
+    func rename(path: String, newName: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the element by inserting the current mount
-        let method = Methods.RenameElements.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+        let method = Methods.Rename.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
         // prepare headers
         var headers = DefaultHeaders.Headers
@@ -122,11 +122,11 @@ extension DigiClient {
         // prepare new name in request body
         let jsonBody = ["name": newName]
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: jsonBody, parameters: parameters) { (data, responseCode, error) in
+        networkTask(requestType: "PUT", method: method, headers: headers, json: jsonBody, parameters: parameters) { (data, statusCode, error) in
             if let error = error {
-                completionHandler(responseCode, error)
+                completionHandler(statusCode, error)
             } else {
-                completionHandler(responseCode, nil)
+                completionHandler(statusCode, nil)
             }
 
         }

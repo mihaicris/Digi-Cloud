@@ -14,15 +14,13 @@ class RenameViewController: UITableViewController {
     var onRefreshFolder: (() -> Void)?
 
     fileprivate var element: File
-    fileprivate let oldName: String
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var textField: UITextField!
     fileprivate var messageLabel: UILabel!
-    fileprivate var shouldRefreshContent: Bool = false
+    fileprivate var shouldRefreshFolder: Bool = false
 
     init(element: File) {
         self.element = element
-        oldName = element.name
         super.init(style: .grouped)
     }
 
@@ -101,8 +99,7 @@ class RenameViewController: UITableViewController {
         // disable Rename button for now
         rightBarButton.isEnabled = false
 
-        let title = element.type == "dir" ? NSLocalizedString("Rename folder", comment: "") : NSLocalizedString("Rename file", comment: "")
-        self.title = title
+        self.title = element.type == "dir" ? NSLocalizedString("Rename folder", comment: "") : NSLocalizedString("Rename file", comment: "")
     }
 
     fileprivate func positionCursor() {
@@ -126,7 +123,7 @@ class RenameViewController: UITableViewController {
 
     @objc fileprivate func handleCancel() {
         textField.resignFirstResponder()
-        dismiss(animated: true, completion: shouldRefreshContent ? onRefreshFolder : nil)
+        dismiss(animated: true, completion: shouldRefreshFolder ? onRefreshFolder : nil)
     }
 
     @objc fileprivate func handleRename() {
@@ -139,27 +136,25 @@ class RenameViewController: UITableViewController {
         guard let name = textField.text else { return }
 
         //build the path of element to be renamed
-        let elementPath = DigiClient.shared.currentPath.last! + oldName
+        let elementPath = DigiClient.shared.currentPath.last! + element.name
 
         // block a second Rename request
         rightBarButton.isEnabled = false
 
         // network request for rename
-        DigiClient.shared.renameElement(path: elementPath, newName: name) { (status, error) in
-
+        DigiClient.shared.rename(path: elementPath, newName: name) { (statusCode, error) in
             // TODO: Stop spinner
-
             if error != nil {
                 // TODO Show message for error
                 print(error!)
+                return
             }
-            if let status = status {
-                switch status {
+            if let code = statusCode {
+                switch code {
                 case 200...299:
                     // Rename successfully completed
                     self.onSuccess?(name)
                     DispatchQueue.main.async {
-                        self.textField.resignFirstResponder()
                         self.dismiss(animated: true, completion: nil)
                     }
                 case 400:
@@ -171,14 +166,12 @@ class RenameViewController: UITableViewController {
                     // Not Found (Element do not exists anymore)
                     // show message and set flag to should refresh folder content, after Cancel network request for
                     // refresh is triggered
-
                     let message = NSLocalizedString("The file is not available any more. Tap Cancel to refresh the folder.", comment: "Error message")
                     self.setMessage(onScreen: true, message)
-                    self.shouldRefreshContent = true
-
+                    self.shouldRefreshFolder = true
                 default :
                     let message = NSLocalizedString("Error status code: ", comment: "Error message")
-                    self.setMessage(onScreen: true, message + String(status))
+                    self.setMessage(onScreen: true, message + String(code))
                 }
             }
         }
@@ -194,7 +187,7 @@ class RenameViewController: UITableViewController {
                 let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed for the name.", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)
-            } else if oldName == newName {
+            } else if element.name == newName {
                 let message = NSLocalizedString("The name cannot be the same.", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)
@@ -211,16 +204,15 @@ class RenameViewController: UITableViewController {
     }
 
     fileprivate func setRenameButton(_ value: Bool) {
-        DispatchQueue.main.async {
-            self.rightBarButton.isEnabled = value
-        }
+        self.rightBarButton.isEnabled = value
+
     }
 
     fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
-        if onScreen {
-            self.messageLabel.text = message
-        }
         DispatchQueue.main.async {
+            if onScreen {
+                self.messageLabel.text = message
+            }
             UIView.animate(withDuration: onScreen ? 0.0 : 0.5, animations: {
                 self.messageLabel.alpha = onScreen ? 1.0 : 0.0
             })
@@ -239,7 +231,7 @@ extension RenameViewController: UITextFieldDelegate {
         setMessage(onScreen: false)
         positionCursor()
     }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if rightBarButton.isEnabled {
             textField.resignFirstResponder()

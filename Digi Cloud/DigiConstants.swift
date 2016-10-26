@@ -40,5 +40,6 @@ struct Methods {
     static let ListFiles        = "/api/v2/mounts/{id}/files/list"
     static let GetFile          = "/api/v2/mounts/{id}/files/get"
     static let RenameElements   = "/api/v2/mounts/{id}/files/rename"
+    static let Rename           = "/api/v2/mounts/{id}/files/rename"
 }
 
