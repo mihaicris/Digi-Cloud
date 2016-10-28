@@ -30,7 +30,7 @@ class DeleteFileViewController: UITableViewController {
 
     fileprivate func setupViews() {
         let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
             view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
             return view
         }()
@@ -39,7 +39,7 @@ class DeleteFileViewController: UITableViewController {
         let message: UILabel = {
             let label = UILabel()
             label.textAlignment = .center
-            label.text = NSLocalizedString("Are you sure you want to delete the file?", comment: "Message")
+            label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "Message")
             label.font = UIFont.systemFont(ofSize: 14)
             return label
         }()
@@ -67,7 +67,6 @@ class DeleteFileViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.preferredContentSize.width = 400
         self.preferredContentSize.height = tableView.contentSize.height - 1
 
     }
@@ -87,7 +86,7 @@ class DeleteFileViewController: UITableViewController {
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = color
         cell.textLabel?.text = title
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 18)
         return cell
     }
 
