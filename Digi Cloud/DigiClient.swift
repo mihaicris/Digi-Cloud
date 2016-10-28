@@ -49,7 +49,7 @@ final class DigiClient {
         let url = self.getURL(method: method, parameters: parameters)
     
         var request = self.getURLRequest(url: url, requestType: requestType, headers: headers)
-        
+
         // add json object to request
         if let json = json {
             do {
@@ -96,6 +96,8 @@ final class DigiClient {
                 return
             }
 
+            print(String(data: data, encoding: .utf8) ?? "")
+
         /* 3. Parse the data and use the data (happens in completion handler) */
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
@@ -131,12 +133,7 @@ final class DigiClient {
     private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = requestType
-        
-        if let headers = headers {
-            for (key, value) in headers {
-                request.addValue(value, forHTTPHeaderField: key)
-            }
-        }
+        request.allHTTPHeaderFields = headers
         return request
     }
 }

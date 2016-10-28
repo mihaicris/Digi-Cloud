@@ -122,13 +122,25 @@ extension DigiClient {
         // prepare new name in request body
         let jsonBody = ["name": newName]
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: jsonBody, parameters: parameters) { (data, statusCode, error) in
-            if let error = error {
-                completionHandler(statusCode, error)
-            } else {
-                completionHandler(statusCode, nil)
-            }
-
+        networkTask(requestType: "PUT", method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
+            completionHandler(statusCode, error)
         }
     }
+
+    func delete(path: String, name: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+        // prepare the method string for rename the element by inserting the current mount
+        let method = Methods.Remove.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+
+        // prepare headers
+        var headers: [String: String] = [ : ]
+        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+
+        // prepare parameters (element path to be renamed
+        let parameters = [ParametersKeys.Path: path]
+
+        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
+            completionHandler(statusCode, error)
+        }
+    }
+
 }

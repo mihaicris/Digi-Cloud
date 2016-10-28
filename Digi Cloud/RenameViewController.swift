@@ -130,7 +130,7 @@ class RenameViewController: UITableViewController {
 
         textField.resignFirstResponder()
 
-        // TODO Show on screen spinner for rename request
+        // TODO: Show on screen spinner for rename request
 
         // get the new name
         guard let name = textField.text else { return }
@@ -145,7 +145,7 @@ class RenameViewController: UITableViewController {
         DigiClient.shared.rename(path: elementPath, newName: name) { (statusCode, error) in
             // TODO: Stop spinner
             if error != nil {
-                // TODO Show message for error
+                // TODO: Show message for error
                 print(error!)
                 return
             }

@@ -10,20 +10,13 @@ import UIKit
 
 class FilesTableViewController: UITableViewController {
 
+    enum Sorting {
+        case ascending
+        case descending
+    }
     // MARK: - Properties
 
-    var content: [File] = [] {
-        didSet {
-            // TODO: Implement sorting filters in the interface
-            self.content.sort {
-                /*  Order items by name (ascending), directories are shown first */
-                return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
-                /* Order items by Date (descending), directories are shown first */
-                // return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
-            }
-            DispatchQueue.main.async { self.tableView.reloadData() }
-        }
-    }
+    var content: [File] = []
 
     fileprivate var currentIndex: IndexPath!
 
@@ -40,6 +33,46 @@ class FilesTableViewController: UITableViewController {
         getFolderContent()
     }
 
+    // TODO: Implement sorting filters in the interface
+
+    fileprivate func sortContent() {
+
+        // check settings and choose appropriate sorting function name/size/date
+        sortByName(directoryFirst: true, direction: .ascending)
+    }
+
+    fileprivate func sortByName(directoryFirst: Bool, direction: Sorting) {
+        self.content.sort {
+            if directoryFirst {
+                if direction == .ascending {
+                    // Order items by name (ascending), directories are shown first
+                    return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
+                } else {
+                    return $0.type == $1.type ? ($0.name.lowercased() > $1.name.lowercased()) : ($0.type < $1.type)
+                }
+            } else {
+                //  Order items by name (ascending)
+                if direction == .ascending {
+                    return $0.name.lowercased() < $1.name.lowercased()
+                } else {
+                    return $0.name.lowercased() > $1.name.lowercased()
+                }
+            }
+        }
+    }
+
+    fileprivate func sortByDate(directoryFirst: Bool, direction: Sorting) {
+
+        // TODO: Implement sort by date
+        /* Order items by Date (descending), directories are shown first */
+        // return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
+    }
+
+    fileprivate func sortBySize(directoryFirst: Bool, direction: Sorting) {
+        // TODO: Implement sort by size
+    }
+
+
     fileprivate func getFolderContent() {
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
@@ -47,6 +80,8 @@ class FilesTableViewController: UITableViewController {
                 print("Error: \(error)")
             }
             self.content = content ?? []
+            self.sortContent()
+            DispatchQueue.main.async { self.tableView.reloadData() }
         }
     }
 
@@ -150,10 +185,16 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
         switch tag {
         // rename action
         case 2:
+
+            // TODO: Refactor sort, refresh
             let controller = RenameViewController(element: content[currentIndex.row])
             controller.onSuccess = { [weak self] (newName) in
-                if let fileController = self {
-                    fileController.content[fileController.currentIndex.row].name = newName
+                if let vc = self {
+                    vc.content[vc.currentIndex.row].name = newName
+                    vc.sortContent()
+                    DispatchQueue.main.async {
+                        vc.tableView.reloadData()
+                    }
                 }
             }
             controller.onRefreshFolder = { [weak self] in
@@ -162,6 +203,30 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
+
+        // delete action
+        case 5:
+            let element = content[currentIndex.row]
+            switch element.type {
+            case "file":
+                let controller = DeleteFileViewController(element: content[currentIndex.row])
+                controller.onSuccess = { [weak self] in
+                    if let vc = self {
+                        vc.content.remove(at: vc.currentIndex.row)
+                        DispatchQueue.main.async {
+                            vc.tableView.deleteRows(at: [vc.currentIndex], with: .left)
+                        }
+                    }
+                }
+                let view = tableView.cellForRow(at: currentIndex)!.contentView.subviews[0].subviews[0]
+                controller.modalPresentationStyle = .popover
+                controller.popoverPresentationController?.sourceView = view
+                controller.popoverPresentationController?.sourceRect = view.bounds
+                present(controller, animated: true, completion: nil)
+            default:
+                return
+            }
+            
         default:
             return
         }
