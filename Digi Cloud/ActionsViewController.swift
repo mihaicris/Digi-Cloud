@@ -33,7 +33,7 @@ class ActionsViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         self.preferredContentSize.width = 400
-        self.preferredContentSize.height = tableView.contentSize.height - 1
+        self.preferredContentSize.height = tableView.contentSize.height
         super.viewWillAppear(animated)
     }
     
@@ -98,7 +98,7 @@ class ActionsViewController: UITableViewController {
         tableView.isScrollEnabled = false
         tableView.rowHeight = 50
         tableView.tableHeaderView = headerView
-        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
