@@ -20,6 +20,12 @@ class MainNavigationController: UINavigationController {
             // present modally the login view, after a very small delay
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(50), execute: {
                 let controller = LoginViewController()
+                controller.onFinish = {
+                    DispatchQueue.main.async {
+                        self.viewControllers = [LocationsTableViewController()]
+                        self.dismiss(animated: true, completion: nil) // dismiss LoginViewController
+                    }
+                }
                 self.present(controller, animated: true, completion: nil)
             })
         }

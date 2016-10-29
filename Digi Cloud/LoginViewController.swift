@@ -10,6 +10,8 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    var onFinish: (() -> Void)?
+
     // MARK: - Create UI Elements
 
     lazy var emailTextField: CustomTextField = {
@@ -101,17 +103,9 @@ class LoginViewController: UIViewController {
                 self.spinner.stopAnimating()
             }
             if success {
-
-                let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-                guard let mainNavigationController = rootViewController as? MainNavigationController else { return }
-                mainNavigationController.viewControllers = [LocationsTableViewController()]
-
+                // save token for automatic login
                 UserDefaults.standard.setLoginToken(value: DigiClient.shared.token)
-
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil)
-                }
-
+                self.onFinish?()
             } else {
                 DispatchQueue.main.async {
                     let alert = UIAlertController(title: "Error",

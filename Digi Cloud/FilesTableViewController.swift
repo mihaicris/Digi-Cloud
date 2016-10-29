@@ -181,23 +181,25 @@ extension FilesTableViewController: BaseListCellDelegate {
 
 extension FilesTableViewController: ActionsViewControllerDelegate {
     func didSelectOption(tag: Int) {
+        dismiss(animated: true, completion: nil) // dismiss ActionsViewController
         switch tag {
         // rename action
         case 2:
-
             // TODO: Refactor sort, refresh
             let controller = RenameViewController(element: content[currentIndex.row])
-            controller.onSuccess = { [weak self] (newName) in
+            controller.onFinish = { [weak self] (newName) in
                 if let vc = self {
-                    vc.content[vc.currentIndex.row].name = newName
-                    vc.sortContent()
                     DispatchQueue.main.async {
-                        vc.tableView.reloadData()
+                        vc.dismiss(animated: true, completion: nil) // dismiss RenameViewController
+                        if let name = newName{
+                            vc.content[vc.currentIndex.row].name = name
+                            vc.sortContent()
+                            vc.tableView.reloadData()
+                        } else {
+                            self?.getFolderContent()
+                        }
                     }
                 }
-            }
-            controller.onRefreshFolder = { [weak self] in
-                self?.getFolderContent()
             }
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
@@ -209,11 +211,17 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
             switch element.type {
             case "file":
                 let controller = DeleteFileViewController(element: content[currentIndex.row])
-                controller.onSuccess = { [weak self] in
+                controller.onFinish = { [weak self] (success) in
                     if let vc = self {
-                        vc.content.remove(at: vc.currentIndex.row)
                         DispatchQueue.main.async {
-                            vc.tableView.deleteRows(at: [vc.currentIndex], with: .left)
+                            vc.dismiss(animated: true, completion: nil) // dismiss DeleteFileViewController
+                            if success {
+                                vc.content.remove(at: vc.currentIndex.row)
+                                vc.tableView.deleteRows(at: [vc.currentIndex], with: .left)
+                            }
+                            else {
+                                vc.getFolderContent()
+                            }
                         }
                     }
                 }

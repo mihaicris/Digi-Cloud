@@ -10,14 +10,13 @@ import UIKit
 
 class RenameViewController: UITableViewController {
 
-    var onSuccess: ((_ newName: String) -> Void)?
-    var onRefreshFolder: (() -> Void)?
+    var onFinish: ((_ newName: String?) -> Void)?
 
     fileprivate var element: File
+    fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var textField: UITextField!
     fileprivate var messageLabel: UILabel!
-    fileprivate var shouldRefreshFolder: Bool = false
 
     init(element: File) {
         self.element = element
@@ -90,7 +89,7 @@ class RenameViewController: UITableViewController {
 
         tableView.isScrollEnabled = false
 
-        let leftBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        leftBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         rightBarButton = UIBarButtonItem(title: "Rename", style: .plain, target: self, action: #selector(handleRename))
 
         self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
@@ -123,7 +122,7 @@ class RenameViewController: UITableViewController {
 
     @objc fileprivate func handleCancel() {
         textField.resignFirstResponder()
-        dismiss(animated: true, completion: shouldRefreshFolder ? onRefreshFolder : nil)
+        onFinish?(nil)
     }
 
     @objc fileprivate func handleRename() {
@@ -153,22 +152,19 @@ class RenameViewController: UITableViewController {
                 switch code {
                 case 200...299:
                     // Rename successfully completed
-                    self.onSuccess?(name)
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: true, completion: nil)
-                    }
+                    self.onFinish?(name)
                 case 400:
                     // Bad request ( Element already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
-                    let message = NSLocalizedString("This name already exists. Please choose a different one.", comment: "Error message")
+                    let message = NSLocalizedString("This name already exists. Please choose a different one", comment: "Error message")
                     self.setMessage(onScreen:true, message)
                 case 404:
-                    // Not Found (Element do not exists anymore)
-                    // show message and set flag to should refresh folder content, after Cancel network request for
-                    // refresh is triggered
-                    let message = NSLocalizedString("The file is not available any more. Tap Cancel to refresh the folder.", comment: "Error message")
-                    self.setMessage(onScreen: true, message)
-                    self.shouldRefreshFolder = true
+                    // Not Found (Element do not exists anymore), folder will refresh
+                    let message = NSLocalizedString("File is no longer available. Folder will refresh", comment: "Error message")
+                    DispatchQueue.main.async {
+                        self.leftBarButton.title = NSLocalizedString("Done", comment: "Title")
+                    }
+                    self.setMessage(onScreen:true, message)
                 default :
                     let message = NSLocalizedString("Error status code: ", comment: "Error message")
                     self.setMessage(onScreen: true, message + String(code))
@@ -231,7 +227,7 @@ extension RenameViewController: UITextFieldDelegate {
         setMessage(onScreen: false)
         positionCursor()
     }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if rightBarButton.isEnabled {
             textField.resignFirstResponder()

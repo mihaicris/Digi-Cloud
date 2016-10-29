@@ -10,7 +10,7 @@ import UIKit
 
 class DeleteFileViewController: UITableViewController {
 
-    var onSuccess: (() -> Void)?
+    var onFinish: ((_ success: Bool) -> Void)?
 
     fileprivate var element: File
 
@@ -108,22 +108,16 @@ class DeleteFileViewController: UITableViewController {
                 switch code {
                 case 200:
                     // Delete successfully completed
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: true, completion: self.onSuccess)
-                    }
+                    self.onFinish?(true)
                 case 400:
                     // TODO: Alert Bad Request
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: true, completion: nil)
-                    }
+                    self.onFinish?(false)
                 case 404:
-                    // Not Found (Element do not exists anymore)
-                    // TODO: Alert Not Found, try aagain later
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: true, completion: self.onSuccess)
-                    }
+                    // File not found, folder will be refreshed
+                    self.onFinish?(false)
                 default :
                     // TODO: Alert Status Code server
+                    self.onFinish?(false)
                     return
                 }
             }

@@ -113,13 +113,10 @@ class ActionsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let tag = tableView.cellForRow(at: indexPath)?.tag {
-            dismiss(animated: true) {
-                DispatchQueue.main.async {
-                    self.delegate?.didSelectOption(tag: tag)
-                }
-            }
+            self.delegate?.didSelectOption(tag: tag)
         }
     }
+
     #if DEBUG
     deinit { print("Action Controller deinit") }
     #endif
