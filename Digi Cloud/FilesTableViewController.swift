@@ -72,7 +72,6 @@ class FilesTableViewController: UITableViewController {
         // TODO: Implement sort by size
     }
 
-
     fileprivate func getFolderContent() {
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
@@ -156,7 +155,7 @@ class FilesTableViewController: UITableViewController {
     deinit {
         DigiClient.shared.currentPath.removeLast()
         #if DEBUG
-            print("Files Controller deinit")
+            print("FilesTableViewController deinit")
         #endif
     }
 }
@@ -232,7 +231,4 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
         }
     }
 }
-
-
-
 

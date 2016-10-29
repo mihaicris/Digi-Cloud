@@ -35,7 +35,6 @@ class DeleteFileViewController: UITableViewController {
             return view
         }()
 
-
         let message: UILabel = {
             let label = UILabel()
             label.textAlignment = .center
@@ -49,7 +48,6 @@ class DeleteFileViewController: UITableViewController {
             view.backgroundColor = UIColor(white: 0.8, alpha: 1)
             return view
         }()
-
 
         headerView.addSubview(message)
         headerView.addConstraints(with: "H:|-10-[v0]-10-|", views: message)
@@ -74,11 +72,11 @@ class DeleteFileViewController: UITableViewController {
         return 1
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            return createCell(title: "Delete", color: .red)
+        return createCell(title: "Delete", color: .red)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            handleDelete()
+        handleDelete()
     }
 
     private func createCell(title: String, color: UIColor) -> UITableViewCell {
@@ -132,9 +130,7 @@ class DeleteFileViewController: UITableViewController {
         }
     }
     
-    deinit {
-        #if DEBUG
-            print("Delete deinit")
-        #endif
-    }
+    #if DEBUG
+    deinit { print("DeleteFileViewController deinit") }
+    #endif
 }

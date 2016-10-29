@@ -219,11 +219,11 @@ class RenameViewController: UITableViewController {
         }
     }
 
+    #if DEBUG
     deinit {
-        #if DEBUG
-            print("Rename deinit")
-        #endif
+        print("RenameViewController deinit")
     }
+    #endif
 }
 
 extension RenameViewController: UITextFieldDelegate {
@@ -237,10 +237,8 @@ extension RenameViewController: UITextFieldDelegate {
             textField.resignFirstResponder()
             handleRename()
             return false
-        } else {
-            return false
         }
+        return false
     }
 }
-
 

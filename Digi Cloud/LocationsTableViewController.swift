@@ -9,18 +9,18 @@
 import UIKit
 
 class LocationsTableViewController: UITableViewController {
-    
+
     // MARK: - Properties
-    
+
     var mounts: [Mount] = []
-    
+
     // MARK: - View Life Cycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         navigationItem.title = "Locations"
-        
+
         tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
         tableView.rowHeight = 78
         tableView.tableFooterView = UIView()
@@ -40,9 +40,9 @@ class LocationsTableViewController: UITableViewController {
             }
         }
     }
-    
+
     // MARK: - Navigation
-    
+
     func openMount(index: Int) {
         let controller = FilesTableViewController()
         DigiClient.shared.currentMount = mounts[index].id
@@ -50,64 +50,61 @@ class LocationsTableViewController: UITableViewController {
         controller.title = mounts[index].name
         navigationController?.pushViewController(controller, animated: true)
     }
-    
+
     // MARK: - Table View Data Source
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mounts.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as! LocationCell
         cell.locationLabel.text = mounts[indexPath.row].name
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         openMount(index: indexPath.row)
     }
-    
-    deinit {
-        #if DEBUG
-        print("Locations Controller deinit")
-        #endif
-    }
+
+    #if DEBUG
+    deinit { print("LocationsTableViewController deinit") }
+    #endif
 }
 
 class LocationCell: UITableViewCell {
-    
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         selectionStyle = .blue
         accessoryType = .disclosureIndicator
-        
+
         setupViews()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     let locationLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Helvetica", size: 30)
         return label
     }()
-    
+
     func setupViews() {
-        
+
         contentView.addSubview(locationLabel)
-    
+
         contentView.addConstraints(with: "H:|-15-[v0]|", views: locationLabel)
         contentView.addConstraints(with: "V:|[v0]|", views: locationLabel)
-    
+        
     }
     
 }
-
 

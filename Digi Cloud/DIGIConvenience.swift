@@ -9,13 +9,13 @@
 import Foundation
 
 extension DigiClient {
-    
+
     func authenticate(email: String, password: String, completionHandlerforAuth: @escaping (_ success: Bool, _ error: Error?) -> Void)
     {
         let method = Methods.Token
         let headers = DefaultHeaders.Headers
         let jsonBody = ["password": password, "email": email]
-        
+
         networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: nil) {
             (data, responseCode, error) in
             if let error = error {
@@ -28,13 +28,13 @@ extension DigiClient {
             }
         }
     }
-    
+
     func getLocations(completionHandler: @escaping (_ result: [Mount]?, _ error: Error?) -> Void)
     {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
-        
+
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) {
             (data, responseCode, error) in
             if let error = error {
@@ -54,14 +54,14 @@ extension DigiClient {
             }
         }
     }
-    
+
     func getLocationContent(mount: String, queryPath: String, completionHandler: @escaping (_ result: [File]?, _ error: Error?) -> Void)
     {
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: mount)
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
         let parameters = [ParametersKeys.Path: queryPath]
-        
+
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) {
             (data, responseCode, error) in
             if let error = error {
@@ -74,7 +74,7 @@ extension DigiClient {
                     }
                     let content = fileList.flatMap { File(JSON: $0) }
                     completionHandler(content, nil)
-                    
+
                 } else {
                     completionHandler(nil, JSONError.parce("Could not parce data (getFiles)"))
                 }
@@ -142,5 +142,5 @@ extension DigiClient {
             completionHandler(statusCode, error)
         }
     }
-
+    
 }

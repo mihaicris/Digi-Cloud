@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 protocol ActionsViewControllerDelegate: class {
     func didSelectOption(tag: Int)
 }
@@ -121,20 +120,17 @@ class ActionsViewController: UITableViewController {
             }
         }
     }
-
-    deinit {
-        #if DEBUG
-            print("Action Controller deinit")
-        #endif
-    }
+    #if DEBUG
+    deinit { print("Action Controller deinit") }
+    #endif
 }
 
 class ActionCell: UITableViewCell {
-    
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
-    
+
     convenience init(title: String, tag: Int) {
         self.init()
         self.textLabel?.text = title
@@ -147,14 +143,3 @@ class ActionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -12,15 +12,15 @@ import UIKit
 // Singleton class for DIGI Client
 
 final class DigiClient {
-    
+
     // MARK: - Properties
     var token: String!
     var currentMount: String!
     var currentPath: [String] = []
-        
+
     // MARK: - Initializers
     private init() {}
-    
+
     // MARK: - Errors
     enum NetworkingError: Error {
         case get(String)
@@ -35,11 +35,11 @@ final class DigiClient {
     enum Authentication: Error {
         case login(String)
     }
-    
+
     // MAKR: - Shared instance
     static let shared: DigiClient = DigiClient()
-    
-    // MARK: - GET 
+
+    // MARK: - GET
     func networkTask(requestType: String, method: String, headers: [String: String]?,
                      json: [String: String]?, parameters: [String: Any]?,
                      completionHandler: @escaping (_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
@@ -47,7 +47,7 @@ final class DigiClient {
 
         /* 1. Build the URL, Configure the request */
         let url = self.getURL(method: method, parameters: parameters)
-    
+
         var request = self.getURLRequest(url: url, requestType: requestType, headers: headers)
 
         // add json object to request
@@ -72,7 +72,7 @@ final class DigiClient {
                 completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error)"))
                 return
             }
-            
+
             /* GUARD: Did we get a statusCode? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
                 completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error)"))
@@ -84,7 +84,7 @@ final class DigiClient {
                 completionHandler(nil, statusCode, NetworkingError.wrongStatus("Your request returned a status code other than 2xx!"))
                 return
             }
-            
+
             /* GUARD: Was there any data returned? */
             guard let data = data else {
                 completionHandler(nil, statusCode, NetworkingError.data("No data was returned by the request!"))
@@ -96,9 +96,7 @@ final class DigiClient {
                 return
             }
 
-            print(String(data: data, encoding: .utf8) ?? "")
-
-        /* 3. Parse the data and use the data (happens in completion handler) */
+            /* 3. Parse the data and use the data (happens in completion handler) */
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                 completionHandler(json, statusCode, nil)
@@ -106,19 +104,19 @@ final class DigiClient {
                 completionHandler(nil, statusCode, JSONError.parce("Could not parse the data as JSON"))
             }
         }
-        
+
         /* 4. Start the request */
         task.resume()
     }
-    
+
     // MARK: - Helper Functions
-    
+
     func getURL(method: String, parameters: [String: Any]?) -> URL {
         var components = URLComponents()
         components.scheme = API.Scheme
         components.host = API.Host
         components.path = method
-        
+
         if let parameters = parameters {
             components.queryItems = [URLQueryItem]()
             for (key, value) in parameters {
@@ -129,7 +127,7 @@ final class DigiClient {
         }
         return components.url!
     }
-    
+
     private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = requestType

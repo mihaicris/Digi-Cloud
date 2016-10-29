@@ -13,18 +13,18 @@ protocol BaseListCellDelegate: class {
 }
 
 class BaseListCell: UITableViewCell {
-    
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     weak var delegate: BaseListCellDelegate?
-    
+
     lazy var actionButton: UIButton = {
         let button = UIButton(type: UIButtonType.system)
         button.setTitle("...", for: .normal)
@@ -34,11 +34,11 @@ class BaseListCell: UITableViewCell {
         button.addTarget(self, action: #selector(handleAction), for: .touchUpInside)
         return button
     }()
-    
+
     @objc fileprivate func handleAction(){
         delegate?.showActionController(for: self.actionButton)
     }
-    
+
     func setupViews() {
         contentView.addSubview(actionButton)
         contentView.addConstraints(with: "H:[v0(40)]-10-|", views: actionButton)

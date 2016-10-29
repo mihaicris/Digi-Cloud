@@ -12,7 +12,7 @@ class CustomLoginButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         setTitleColor(.white, for: UIControlState.normal)
         backgroundColor = UIColor(colorLiteralRed: 76/255, green: 76/255, blue: 165/255, alpha: 1.0)
@@ -25,7 +25,7 @@ class CustomLoginButton: UIButton {
         layer.shadowOpacity = 0.5
         layer.shadowColor = UIColor.white.cgColor
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
