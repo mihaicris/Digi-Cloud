@@ -131,8 +131,10 @@ class RenameViewController: UITableViewController {
 
         // TODO: Show on screen spinner for rename request
 
-        // get the new name
-        guard let name = textField.text else { return }
+        // get the new name, space trimmed
+        let charSet = CharacterSet(charactersIn: " ")
+        guard let name = textField.text?.trimmingCharacters(in: charSet) else { return }
+
 
         //build the path of element to be renamed
         let elementPath = DigiClient.shared.currentPath.last! + element.name
