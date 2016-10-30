@@ -123,7 +123,9 @@ final class DigiClient {
                 let queryItem = URLQueryItem(name: key, value: "\(value)")
                 components.queryItems!.append(queryItem)
             }
-            components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+            components.percentEncodedQuery = components.percentEncodedQuery?
+                .replacingOccurrences(of: "+", with: "%2B")
+                .replacingOccurrences(of: ";", with: "%3B")
         }
         return components.url!
     }
