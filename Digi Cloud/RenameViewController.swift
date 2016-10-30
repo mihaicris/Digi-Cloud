@@ -178,15 +178,15 @@ class RenameViewController: UITableViewController {
     @objc fileprivate func handleTextFieldChange() {
         if let newName = textField.text {
             if newName.isEmpty {
-                let message = NSLocalizedString("The name cannot be empty.", comment: "Information")
+                let message = NSLocalizedString("Please provide a new name", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)
             } else if hasInvalidCharacters(name: newName) {
-                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed for the name.", comment: "Information")
+                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed for the name", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)
             } else if element.name == newName {
-                let message = NSLocalizedString("The name cannot be the same.", comment: "Information")
+                let message = NSLocalizedString("The new name is the same", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)
             } else {

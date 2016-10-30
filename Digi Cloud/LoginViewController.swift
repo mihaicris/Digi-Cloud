@@ -62,8 +62,12 @@ class LoginViewController: UIViewController {
         setupViews()
     }
 
-    private func setupViews() {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        emailTextField.becomeFirstResponder()
+    }
 
+    private func setupViews() {
         view.backgroundColor = UIColor(colorLiteralRed: 96/255, green: 95/255, blue: 199/255, alpha: 1.0)
 
         view.addSubview(emailTextField)
@@ -88,10 +92,11 @@ class LoginViewController: UIViewController {
 
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20)
-
     }
 
     func handleLogin() {
+        emailTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
 
