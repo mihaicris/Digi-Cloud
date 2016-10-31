@@ -92,13 +92,13 @@ class RenameViewController: UITableViewController {
         leftBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         rightBarButton = UIBarButtonItem(title: "Rename", style: .plain, target: self, action: #selector(handleRename))
 
-        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
-        self.navigationItem.setRightBarButton(rightBarButton, animated: true)
+        self.navigationItem.setLeftBarButton(leftBarButton, animated: false)
+        self.navigationItem.setRightBarButton(rightBarButton, animated: false)
 
-        // disable Rename button for now
+        // disable Rename button
         rightBarButton.isEnabled = false
 
-        self.title = element.type == "dir" ? NSLocalizedString("Rename folder", comment: "") : NSLocalizedString("Rename file", comment: "")
+        self.title = element.type == "dir" ? NSLocalizedString("Rename Folder", comment: "") : NSLocalizedString("Rename File", comment: "")
     }
 
     fileprivate func positionCursor() {
@@ -134,7 +134,6 @@ class RenameViewController: UITableViewController {
         // get the new name, space trimmed
         let charSet = CharacterSet(charactersIn: " ")
         guard let name = textField.text?.trimmingCharacters(in: charSet) else { return }
-
 
         //build the path of element to be renamed
         let elementPath = DigiClient.shared.currentPath.last! + element.name
