@@ -142,5 +142,23 @@ extension DigiClient {
             completionHandler(statusCode, error)
         }
     }
-    
+
+    func createFolder(path: String , name: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+        // prepare the method string for create new folder
+        let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+
+        // prepare headers
+        var headers = DefaultHeaders.Headers
+        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+
+        // prepare parameters (element path to be renamed
+        let parameters = [ParametersKeys.Path: path]
+
+        // prepare new folder name in request body
+        let jsonBody = ["name": name]
+
+        networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
+            completionHandler(statusCode, error)
+        }
+    }
 }

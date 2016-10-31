@@ -41,5 +41,6 @@ struct Methods {
     static let GetFile          = "/api/v2/mounts/{id}/files/get"
     static let Rename           = "/api/v2/mounts/{id}/files/rename"
     static let Remove           = "/api/v2/mounts/{id}/files/remove"
+    static let CreateFolder     = "/api/v2/mounts/{id}/files/folder"
 }
 

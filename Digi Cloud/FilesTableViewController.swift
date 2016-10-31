@@ -29,12 +29,35 @@ class FilesTableViewController: UITableViewController {
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: "DirectoryCell")
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = 50
-
+        setupViews()
         getFolderContent()
     }
 
-    // TODO: Implement sorting filters in the interface
+    fileprivate func setupViews() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(handleAddFolder))
+    }
 
+    @objc fileprivate func handleAddFolder() {
+        let controller = CreateFolderViewController()
+        controller.onFinish = { [weak self] (folderName) in
+                if let vc = self {
+                    DispatchQueue.main.async {
+                        vc.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
+                        if folderName != nil {
+                            vc.getFolderContent()
+                        } else {
+                            return // Cancel
+                        }
+                    }
+                }
+        }
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = .formSheet
+        navigationController.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(navigationController, animated: true, completion: nil)
+    }
+
+    // TODO: Implement sorting filters in the interface
     fileprivate func sortContent() {
 
         // check settings and choose appropriate sorting function name/size/date
@@ -196,7 +219,7 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
                             vc.sortContent()
                             vc.tableView.reloadData()
                         } else {
-                            self?.getFolderContent()
+                            vc.getFolderContent()
                         }
                     }
                 }
