@@ -17,14 +17,18 @@ extension DigiClient {
         let jsonBody = ["password": password, "email": email]
 
         networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: nil) {
-            (data, responseCode, error) in
+            (json, statusCode, error) in
             if let error = error {
                 completionHandlerforAuth(false, error)
-            } else {
-                if let data = data as? [String: String] {
-                    self.token = data["token"]
+                return
+            }
+            if statusCode == 200 {
+                if let json = json as? [String: String] {
+                    self.token = json["token"]
+                    completionHandlerforAuth(true, nil)
                 }
-                completionHandlerforAuth(true, nil)
+            } else {
+                completionHandlerforAuth(false, nil)
             }
         }
     }
