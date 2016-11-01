@@ -30,8 +30,9 @@ class CreateFolderViewController: UITableViewController {
         setupViews()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        textField.becomeFirstResponder()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -52,7 +53,7 @@ class CreateFolderViewController: UITableViewController {
         textField.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
 
         cell.contentView.addSubview(textField)
-        cell.contentView.addConstraints(with: "H:|-12-[v0]-12-|", views: textField)
+        cell.contentView.addConstraints(with: "H:|-20-[v0]-12-|", views: textField)
         cell.contentView.addConstraints(with: "V:|[v0]|", views: textField)
 
         return cell
@@ -144,8 +145,6 @@ class CreateFolderViewController: UITableViewController {
     @objc fileprivate func handleTextFieldChange() {
         if let name = textField.text {
             if name.isEmpty {
-                let message = NSLocalizedString("Please provide a new name", comment: "Information")
-                setMessage(onScreen: true, message)
                 setCreateFolderButton(false)
             } else if hasInvalidCharacters(name: name) {
                 let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed for the name", comment: "Information")

@@ -64,7 +64,7 @@ class RenameViewController: UITableViewController {
 
         cell.contentView.addSubview(elementIcon)
         cell.contentView.addSubview(textField)
-        cell.contentView.addConstraints(with: "H:|-12-[v0(26)]-10-[v1]-12-|", views: elementIcon, textField)
+        cell.contentView.addConstraints(with: "H:|-20-[v0(26)]-12-[v1]-12-|", views: elementIcon, textField)
         cell.contentView.addConstraints(with: "V:[v0(26)]", views: elementIcon)
         cell.contentView.addConstraints(with: "V:|[v0]|", views: textField)
         elementIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
@@ -132,7 +132,7 @@ class RenameViewController: UITableViewController {
         // TODO: Show on screen spinner for rename request
 
         // get the new name, space trimmed
-        let charSet = CharacterSet(charactersIn: " ")
+        let charSet = CharacterSet.whitespaces
         guard let name = textField.text?.trimmingCharacters(in: charSet) else { return }
 
         //build the path of element to be renamed
@@ -177,8 +177,6 @@ class RenameViewController: UITableViewController {
     @objc fileprivate func handleTextFieldChange() {
         if let newName = textField.text {
             if newName.isEmpty {
-                let message = NSLocalizedString("Please provide a new name", comment: "Information")
-                setMessage(onScreen: true, message)
                 setRenameButton(false)
             } else if hasInvalidCharacters(name: newName) {
                 let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed for the name", comment: "Information")
