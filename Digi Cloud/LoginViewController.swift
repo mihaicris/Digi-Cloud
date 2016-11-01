@@ -91,7 +91,7 @@ class LoginViewController: UIViewController {
         loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
 
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20)
+        spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20).isActive = true
     }
 
     func handleLogin() {
