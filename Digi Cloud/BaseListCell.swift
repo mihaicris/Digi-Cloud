@@ -27,7 +27,8 @@ class BaseListCell: UITableViewCell {
 
     lazy var actionButton: UIButton = {
         let button = UIButton(type: UIButtonType.system)
-        button.setTitle("...", for: .normal)
+        button.setTitle("⋮", for: .normal)
+        button.tag = 1
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         button.contentHorizontalAlignment = .center
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -41,7 +42,8 @@ class BaseListCell: UITableViewCell {
 
     func setupViews() {
         contentView.addSubview(actionButton)
-        contentView.addConstraints(with: "H:[v0(40)]-10-|", views: actionButton)
+        contentView.addConstraints(with: "H:[v0(64)]-(-4)-|", views: actionButton)
+        actionButton.heightAnchor.constraint(equalToConstant: AppSettings.tableViewRowHeight * 0.95).isActive = true
         actionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 }

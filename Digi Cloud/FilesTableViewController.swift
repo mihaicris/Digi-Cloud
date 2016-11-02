@@ -28,7 +28,7 @@ class FilesTableViewController: UITableViewController {
         tableView.register(FileCell.self, forCellReuseIdentifier: "FileCell")
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: "DirectoryCell")
         tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.rowHeight = 50
+        tableView.rowHeight = AppSettings.tableViewRowHeight
         setupViews()
         getFolderContent()
     }
@@ -40,16 +40,16 @@ class FilesTableViewController: UITableViewController {
     @objc fileprivate func handleAddFolder() {
         let controller = CreateFolderViewController()
         controller.onFinish = { [weak self] (folderName) in
-                if let vc = self {
-                    DispatchQueue.main.async {
-                        vc.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
-                        if folderName != nil {
-                            vc.getFolderContent()
-                        } else {
-                            return // Cancel
-                        }
+            if let vc = self {
+                DispatchQueue.main.async {
+                    vc.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
+                    if folderName != nil {
+                        vc.getFolderContent()
+                    } else {
+                        return // Cancel
                     }
                 }
+            }
         }
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
@@ -105,6 +105,16 @@ class FilesTableViewController: UITableViewController {
             self.sortContent()
             DispatchQueue.main.async { self.tableView.reloadData() }
         }
+    }
+
+    func animateActionButton(active: Bool) {
+        let actionButton = (tableView.cellForRow(at: currentIndex) as! BaseListCell).actionButton
+        let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(M_PI)) : CGAffineTransform.identity
+        let color: UIColor = active ? .black : .darkGray
+        actionButton.setTitleColor(color, for: .normal)
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
+            actionButton.transform = transform
+        }, completion: nil)
     }
 
     // MARK: - Table View Data Source
@@ -189,21 +199,36 @@ extension FilesTableViewController: BaseListCellDelegate {
         guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
 
         currentIndex = indexPath
+        animateActionButton(active: true)
 
         let controller = ActionsViewController(style: .plain)
+        controller.element = self.content[indexPath.row]
         controller.delegate = self
 
-        controller.element = self.content[indexPath.row]
+        var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
+        for view in sourceView.subviews {
+            if view.tag == 1 {
+                sourceView = view.subviews[0]
+            }
+        }
         controller.modalPresentationStyle = .popover
-
         controller.popoverPresentationController?.sourceView = sourceView
         controller.popoverPresentationController?.sourceRect = sourceView.bounds
+        controller.popoverPresentationController?.delegate = self
         present(controller, animated: true, completion: nil)
+    }
+}
+
+extension FilesTableViewController: UIPopoverPresentationControllerDelegate {
+    func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
+        self.animateActionButton(active: false)
+        return true
     }
 }
 
 extension FilesTableViewController: ActionsViewControllerDelegate {
     func didSelectOption(tag: Int) {
+        self.animateActionButton(active: false)
         dismiss(animated: true, completion: nil) // dismiss ActionsViewController
         switch tag {
         // rename action
@@ -248,10 +273,15 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
                         }
                     }
                 }
-                let view = tableView.cellForRow(at: currentIndex)!.contentView.subviews[0].subviews[0]
+                var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
+                for view in sourceView.subviews {
+                    if view.tag == 1 {
+                        sourceView = view.subviews[0]
+                    }
+                }
                 controller.modalPresentationStyle = .popover
-                controller.popoverPresentationController?.sourceView = view
-                controller.popoverPresentationController?.sourceRect = view.bounds
+                controller.popoverPresentationController?.sourceView = sourceView
+                controller.popoverPresentationController?.sourceRect = sourceView.bounds
                 present(controller, animated: true, completion: nil)
             default:
                 return
