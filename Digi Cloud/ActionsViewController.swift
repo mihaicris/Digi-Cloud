@@ -41,11 +41,11 @@ class ActionsViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        let folderActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), tag: 0),
+        let folderActions = [ActionCell(title: NSLocalizedString("Folder info", comment: ""), tag: 6),
+                             ActionCell(title: NSLocalizedString("Share", comment: ""), tag: 0),
                              ActionCell(title: NSLocalizedString("Rename", comment: ""), tag: 2),
                              ActionCell(title: NSLocalizedString("Copy", comment: ""), tag: 3),
-                             ActionCell(title: NSLocalizedString("Move", comment: ""), tag: 4),
-                             ActionCell(title: NSLocalizedString("Folder info", comment: ""), tag: 6)]
+                             ActionCell(title: NSLocalizedString("Move", comment: ""), tag: 4)]
 
         contextMenuFolderActions.append(contentsOf: folderActions)
 

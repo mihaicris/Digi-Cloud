@@ -12,10 +12,10 @@ struct File {
     var name: String
     let type: String
     let modified: TimeInterval
-    let size: Double
+    let size: Int64
     let contentType: String
 
-    init(name: String, type: String, modified: TimeInterval, size: Double, contentType: String) {
+    init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String) {
         self.name = name
         self.type = type
         self.modified = modified
@@ -31,7 +31,7 @@ extension File: JSONDecodable {
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
             let modified = JSON["modified"] as? TimeInterval,
-            let size = JSON["size"] as? Double,
+            let size = JSON["size"] as? Int64,
             let contentType = JSON["contentType"] as? String
             else {
                 print("Could not parce keys")

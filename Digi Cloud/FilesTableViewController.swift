@@ -147,7 +147,7 @@ class FilesTableViewController: UITableViewController {
             let modifiedDate = formatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
             cell.fileNameLabel.text = data.name
 
-            let fileSizeString = ByteCountFormatter.string(fromByteCount: Int64(data.size), countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
+            let fileSizeString = ByteCountFormatter.string(fromByteCount: data.size, countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
             cell.fileSizeLabel.text = fileSizeString
 
             return cell
@@ -256,8 +256,7 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
         // delete action
         case 5:
             let element = content[currentIndex.row]
-            switch element.type {
-            case "file":
+            if element.type == "file" {
                 let controller = DeleteFileViewController(element: content[currentIndex.row])
                 controller.onFinish = { [weak self] (success) in
                     if let vc = self {
@@ -283,10 +282,14 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
                 controller.popoverPresentationController?.sourceView = sourceView
                 controller.popoverPresentationController?.sourceRect = sourceView.bounds
                 present(controller, animated: true, completion: nil)
-            default:
-                return
             }
-            
+        case 6:
+
+            let element = content[currentIndex.row].name
+            DigiClient.shared.getFolderSize(path: element, completionHandler: { (size, error) in
+                print(size!)
+            })
+            //
         default:
             return
         }

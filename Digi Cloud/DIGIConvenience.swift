@@ -165,4 +165,49 @@ extension DigiClient {
             completionHandler(statusCode, error)
         }
     }
+
+    func getFolderSize(path: String, completionHandler: @escaping (_ size: Int64?, _ error: Error?) -> Void) {
+        // prepare the method string for create new folder
+        let method = Methods.Tree.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+
+        // prepare headers
+        var headers = DefaultHeaders.Headers
+        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+
+        // prepare parameters (element path to be renamed
+        let parameters = [ParametersKeys.Path: path]
+
+        func getChildSize(_ parent: [String: Any]) -> Int64 {
+            var size: Int64 = 0
+            if let childType = parent["type"] as? String, childType == "file" {
+                if let childSize = parent["size"] as? Int64 {
+                    return childSize
+                }
+            }
+            if let children = parent["children"] as? [[String: Any]], !children.isEmpty {
+                for child in children {
+                    size += getChildSize(child)
+                }
+            }
+            return size
+        }
+
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { (json, statusCode, error) in
+            if let error = error {
+                completionHandler(nil, error)
+                return
+            }
+            var size: Int64 = 0
+            guard let json = json as? [String: Any] else {
+                completionHandler(nil, nil)
+                return
+            }
+            if let children = json["children"] as? [[String: Any]] {
+                for child in children {
+                    size += getChildSize(child)
+                }
+            }
+            completionHandler(size, nil)
+        }
+    }
 }

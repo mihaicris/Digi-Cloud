@@ -79,9 +79,9 @@
 			isa = PBXGroup;
 			children = (
 				83562CAB1DB8C19B006FF04A /* ActionsViewController.swift */,
+				8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */,
 				839A22E21DC11BA400758730 /* DeleteFileViewController.swift */,
 				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
-				8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */,
 			);
 			name = "Actions Controllers";
 			sourceTree = "<group>";
