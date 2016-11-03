@@ -171,10 +171,11 @@ extension DigiClient {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
         // prepare headers
-        var headers = DefaultHeaders.Headers
+        var headers: [String: String] = ["Accept": "application/json"]
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (element path to be renamed
+        let path = DigiClient.shared.currentPath.last! + path
         let parameters = [ParametersKeys.Path: path]
 
         func getChildSize(_ parent: [String: Any]) -> Int64 {

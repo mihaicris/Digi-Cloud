@@ -287,7 +287,7 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
 
             let element = content[currentIndex.row].name
             DigiClient.shared.getFolderSize(path: element, completionHandler: { (size, error) in
-                print(size!)
+                print(size)
             })
             //
         default:
