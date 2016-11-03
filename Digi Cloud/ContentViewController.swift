@@ -146,9 +146,8 @@ extension ContentViewController: WKNavigationDelegate {
         })
     }
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-
         // TODO: Show UIView for Export recommendation
-        print(error)
+        print(error.localizedDescription)
         self.progressView.alpha = 0
         self.navigationItem.rightBarButtonItem?.isEnabled = true
     }

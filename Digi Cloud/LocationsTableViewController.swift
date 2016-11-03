@@ -28,9 +28,9 @@ class LocationsTableViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = false
 
         DigiClient.shared.getLocations() { (mounts, error) in
-
-            if error != nil {
-                print("Error: \(error)")
+            guard error == nil else {
+                print("Error: \(error?.localizedDescription)")
+                return
             }
             if let mounts = mounts  {
                 self.mounts = mounts

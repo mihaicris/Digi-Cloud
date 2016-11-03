@@ -146,9 +146,10 @@ class RenameViewController: UITableViewController {
         // network request for rename
         DigiClient.shared.rename(path: elementPath, newName: name) { (statusCode, error) in
             // TODO: Stop spinner
-            if error != nil {
+            guard error == nil else {
                 // TODO: Show message for error
-                print(error!)
+                print("Error: \(error?.localizedDescription)")
+                return
             }
             if let code = statusCode {
                 switch code {

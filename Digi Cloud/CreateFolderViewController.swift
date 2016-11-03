@@ -112,14 +112,14 @@ class CreateFolderViewController: UITableViewController {
         // network request for rename
         DigiClient.shared.createFolder(path: rootPath, name: folderName) { (statusCode, error) in
             // TODO: Stop spinner
-            if error != nil {
+            guard error == nil else {
                 // TODO: Show message for error
-                print(error!)
+                print(error!.localizedDescription)
                 return
             }
             if let code = statusCode {
                 switch code {
-                case 200...299:
+                case 200:
                     // Rename successfully completed
                     self.onFinish?(folderName)
                 case 400:

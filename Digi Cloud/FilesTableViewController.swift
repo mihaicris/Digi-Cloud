@@ -98,8 +98,9 @@ class FilesTableViewController: UITableViewController {
     fileprivate func getFolderContent() {
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
-            if error != nil {
-                print("Error: \(error)")
+            guard error == nil else {
+                print("Error: \(error?.localizedDescription)")
+                return
             }
             self.content = content ?? []
             self.sortContent()
@@ -285,11 +286,11 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
                 controller.popoverPresentationController?.sourceRect = sourceView.bounds
                 present(controller, animated: true, completion: nil)
             }
+        // folder info
         case 6:
-
             let element = content[currentIndex.row].name
             DigiClient.shared.getFolderSize(path: element, completionHandler: { (size, error) in
-                print(size)
+                print(size ?? "nil")
             })
             //
         default:

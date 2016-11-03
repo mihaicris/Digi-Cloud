@@ -68,7 +68,7 @@ final class DigiClient {
             }
 
             /* GUARD: Was there an error? */
-            guard (error == nil) else {
+            guard error == nil else {
                 completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error)"))
                 return
             }
@@ -81,7 +81,7 @@ final class DigiClient {
 
             // Did we get a succesfull status code?
             if statusCode < 200 || statusCode > 299 {
-                completionHandler(nil, statusCode, NetworkingError.wrongStatus("Your request returned a status code other than 2xx!"))
+                completionHandler(nil, statusCode, nil)
                 return
             }
 

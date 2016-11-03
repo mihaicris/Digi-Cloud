@@ -70,6 +70,7 @@ extension DigiClient {
             (data, responseCode, error) in
             if let error = error {
                 completionHandler(nil, error)
+                return
             } else {
                 if let dict = data as? [String: Any] {
                     guard let fileList = dict["files"] as? [[String: Any]] else {

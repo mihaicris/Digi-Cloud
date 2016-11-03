@@ -100,9 +100,10 @@ class DeleteFileViewController: UITableViewController {
 
             // TODO: Stop spinner
 
-            if error != nil {
+            guard error == nil else {
                 // TODO Show message for error
-                print(error!)
+                print(error!.localizedDescription)
+                return
             }
             if let code = statusCode {
                 switch code {
