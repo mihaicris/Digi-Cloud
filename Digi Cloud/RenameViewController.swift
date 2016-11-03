@@ -186,7 +186,7 @@ class RenameViewController: UITableViewController {
                 let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed in the name", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)
-            } else if element.name == newName {
+            } else if element.name.lowercased() == newName.lowercased() {
                 let message = NSLocalizedString("The name is the same", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)

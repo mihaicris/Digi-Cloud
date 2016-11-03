@@ -125,7 +125,7 @@ class CreateFolderViewController: UITableViewController {
                 case 400:
                     // Bad request ( Element already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
-                    let message = NSLocalizedString("This name already exists. Please choose a different one", comment: "Error message")
+                    let message = NSLocalizedString("Folder already exists. Please choose a different name", comment: "Error message")
                     self.setMessage(onScreen:true, message)
                 case 404:
                     // Not Found (Element do not exists anymore), folder will refresh
@@ -147,7 +147,7 @@ class CreateFolderViewController: UITableViewController {
             if name.isEmpty {
                 setCreateFolderButton(false)
             } else if hasInvalidCharacters(name: name) {
-                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed for the name", comment: "Information")
+                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed in the name", comment: "Information")
                 setMessage(onScreen: true, message)
                 setCreateFolderButton(false)
             } else {
