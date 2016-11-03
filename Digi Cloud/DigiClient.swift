@@ -80,7 +80,7 @@ final class DigiClient {
             }
 
             // Did we get a succesfull status code?
-            if statusCode < 200 && statusCode > 299 {
+            if statusCode < 200 || statusCode > 299 {
                 completionHandler(nil, statusCode, NetworkingError.wrongStatus("Your request returned a status code other than 2xx!"))
                 return
             }
