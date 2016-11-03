@@ -235,7 +235,7 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
         case 2:
             // TODO: Refactor sort, refresh
             let controller = RenameViewController(element: content[currentIndex.row])
-            controller.onFinish = { [weak self] (newName) in
+            controller.onFinish = { [weak self] (newName, needRefresh) in
                 if let vc = self {
                     DispatchQueue.main.async {
                         vc.dismiss(animated: true, completion: nil) // dismiss RenameViewController
@@ -244,7 +244,9 @@ extension FilesTableViewController: ActionsViewControllerDelegate {
                             vc.sortContent()
                             vc.tableView.reloadData()
                         } else {
-                            vc.getFolderContent()
+                            if needRefresh {
+                                vc.getFolderContent()
+                            }
                         }
                     }
                 }

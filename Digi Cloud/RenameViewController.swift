@@ -10,16 +10,18 @@ import UIKit
 
 class RenameViewController: UITableViewController {
 
-    var onFinish: ((_ newName: String?) -> Void)?
+    var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
 
     fileprivate var element: File
     fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var textField: UITextField!
     fileprivate var messageLabel: UILabel!
+    fileprivate var needRefresh: Bool
 
     init(element: File) {
         self.element = element
+        self.needRefresh = false
         super.init(style: .grouped)
     }
 
@@ -122,7 +124,7 @@ class RenameViewController: UITableViewController {
 
     @objc fileprivate func handleCancel() {
         textField.resignFirstResponder()
-        onFinish?(nil)
+        onFinish?(nil, needRefresh)
     }
 
     @objc fileprivate func handleRename() {
@@ -147,13 +149,12 @@ class RenameViewController: UITableViewController {
             if error != nil {
                 // TODO: Show message for error
                 print(error!)
-                return
             }
             if let code = statusCode {
                 switch code {
-                case 200...299:
+                case 200:
                     // Rename successfully completed
-                    self.onFinish?(name)
+                    self.onFinish?(name, true)
                 case 400:
                     // Bad request ( Element already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
@@ -162,12 +163,14 @@ class RenameViewController: UITableViewController {
                 case 404:
                     // Not Found (Element do not exists anymore), folder will refresh
                     let message = NSLocalizedString("File is no longer available. Folder will refresh", comment: "Error message")
+                    self.needRefresh = true
                     DispatchQueue.main.async {
                         self.leftBarButton.title = NSLocalizedString("Done", comment: "Title")
                     }
                     self.setMessage(onScreen:true, message)
                 default :
                     let message = NSLocalizedString("Error status code: ", comment: "Error message")
+                    self.needRefresh = true
                     self.setMessage(onScreen: true, message + String(code))
                 }
             }
@@ -179,11 +182,11 @@ class RenameViewController: UITableViewController {
             if newName.isEmpty {
                 setRenameButton(false)
             } else if hasInvalidCharacters(name: newName) {
-                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed for the name", comment: "Information")
+                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed in the name", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)
             } else if element.name == newName {
-                let message = NSLocalizedString("The new name is the same", comment: "Information")
+                let message = NSLocalizedString("The name is the same", comment: "Information")
                 setMessage(onScreen: true, message)
                 setRenameButton(false)
             } else {
