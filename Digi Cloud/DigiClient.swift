@@ -69,13 +69,13 @@ final class DigiClient {
 
             /* GUARD: Was there an error? */
             guard error == nil else {
-                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error)"))
+                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error?.localizedDescription)"))
                 return
             }
 
             /* GUARD: Did we get a statusCode? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
-                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error)"))
+                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error?.localizedDescription)"))
                 return
             }
 
