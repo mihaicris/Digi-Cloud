@@ -141,7 +141,7 @@ class RenameViewController: UITableViewController {
         let elementPath = DigiClient.shared.currentPath.last! + element.name
 
         // block a second Rename request
-        rightBarButton.isEnabled = false
+        setRenameButtonActive(false)
 
         // network request for rename
         DigiClient.shared.rename(path: elementPath, newName: name) { (statusCode, error) in
@@ -181,18 +181,18 @@ class RenameViewController: UITableViewController {
     @objc fileprivate func handleTextFieldChange() {
         if let newName = textField.text {
             if newName.isEmpty {
-                setRenameButton(false)
+                setRenameButtonActive(false)
             } else if hasInvalidCharacters(name: newName) {
                 let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed in the name", comment: "Information")
                 setMessage(onScreen: true, message)
-                setRenameButton(false)
+                setRenameButtonActive(false)
             } else if element.name.lowercased() == newName.lowercased() {
                 let message = NSLocalizedString("The name is the same", comment: "Information")
                 setMessage(onScreen: true, message)
-                setRenameButton(false)
+                setRenameButtonActive(false)
             } else {
                 setMessage(onScreen: false)
-                setRenameButton(true)
+                setRenameButtonActive(true)
             }
         }
     }
@@ -202,7 +202,7 @@ class RenameViewController: UITableViewController {
         return !charset.isDisjoint(with: name.characters)
     }
 
-    fileprivate func setRenameButton(_ value: Bool) {
+    fileprivate func setRenameButtonActive(_ value: Bool) {
         self.rightBarButton.isEnabled = value
 
     }
