@@ -91,8 +91,15 @@ class RenameViewController: UITableViewController {
 
         tableView.isScrollEnabled = false
 
-        leftBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        rightBarButton = UIBarButtonItem(title: "Rename", style: .plain, target: self, action: #selector(handleRename))
+        leftBarButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Title for button"),
+                                         style: .plain,
+                                        target: self,
+                                        action: #selector(handleCancel))
+
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename",
+                                       comment: "Title for button"),
+                                         style: .plain, target: self,
+                                        action: #selector(handleRename))
 
         self.navigationItem.setLeftBarButton(leftBarButton, animated: false)
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
@@ -100,7 +107,9 @@ class RenameViewController: UITableViewController {
         // disable Rename button
         rightBarButton.isEnabled = false
 
-        self.title = element.type == "dir" ? NSLocalizedString("Rename Folder", comment: "") : NSLocalizedString("Rename File", comment: "")
+        self.title = element.type == "dir" ?
+            NSLocalizedString("Rename Folder", comment: "Title for action") :
+            NSLocalizedString("Rename File", comment: "Title for action")
     }
 
     fileprivate func positionCursor() {
@@ -166,11 +175,11 @@ class RenameViewController: UITableViewController {
                     let message = NSLocalizedString("File is no longer available. Folder will refresh", comment: "Error message")
                     self.needRefresh = true
                     DispatchQueue.main.async {
-                        self.leftBarButton.title = NSLocalizedString("Done", comment: "Title")
+                        self.leftBarButton.title = NSLocalizedString("Done", comment: "Title for button")
                     }
                     self.setMessage(onScreen:true, message)
                 default :
-                    let message = NSLocalizedString("Error status code: ", comment: "Error message")
+                    let message = NSLocalizedString("Error wtih status code: ", comment: "Error message")
                     self.needRefresh = true
                     self.setMessage(onScreen: true, message + String(code))
                 }
@@ -187,7 +196,7 @@ class RenameViewController: UITableViewController {
                 setMessage(onScreen: true, message)
                 setRenameButtonActive(false)
             } else if element.name.lowercased() == newName.lowercased() {
-                let message = NSLocalizedString("The name is the same", comment: "Information")
+                let message = NSLocalizedString("Name is the same", comment: "Information message")
                 setMessage(onScreen: true, message)
                 setRenameButtonActive(false)
             } else {
