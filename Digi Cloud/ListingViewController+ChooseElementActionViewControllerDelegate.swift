@@ -69,10 +69,15 @@ extension ListingViewController: ChooseElementActionViewControllerDelegate {
             }
         // folder info
         case 6:
-            let element = content[currentIndex.row].name
-            DigiClient.shared.getFolderSize(path: element, completionHandler: { (size, error) in
-                print(size ?? "nil")
-            })
+            let controller = FolderInfoViewController(element: content[currentIndex.row])
+            controller.onFinish = { [weak self] in
+                if let vc = self {
+                    vc.dismiss(animated: true, completion: nil)
+                }
+            }
+            let navController = UINavigationController(rootViewController: controller)
+            navController.modalPresentationStyle = .formSheet
+            present(navController, animated: true, completion: nil)
         //
         default:
             return

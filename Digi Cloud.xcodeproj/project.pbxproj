@@ -25,6 +25,7 @@
 		839A22E31DC11BA400758730 /* DeleteElementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteElementViewController.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
 		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
+		83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
 		83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* CustomTextField.swift */; };
 		83EBD0791D994F9500C80397 /* DigiClient+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBD0781D994F9500C80397 /* DigiClient+Convenience.swift */; };
 		83EF1D481D8FBDDA00ACE008 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* File.swift */; };
@@ -59,6 +60,7 @@
 		839A22E21DC11BA400758730 /* DeleteElementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteElementViewController.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
 		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		83EBD0781D994F9500C80397 /* DigiClient+Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DigiClient+Convenience.swift"; sourceTree = "<group>"; };
 		83EF1D471D8FBDDA00ACE008 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = File.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -233,8 +235,9 @@
 			children = (
 				83562CAB1DB8C19B006FF04A /* ChooseElementActionViewController.swift */,
 				8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */,
-				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
+				83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */,
 				839A22E21DC11BA400758730 /* DeleteElementViewController.swift */,
+				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
 				83F994511DD09B340023FB5D /* SortFolderViewController.swift */,
 			);
 			name = Commands;
@@ -328,6 +331,7 @@
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
 				8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */,
 				83F994431DD08D650023FB5D /* ListingViewController+ChooseElementActionViewControllerDelegate.swift in Sources */,
+				83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */,
 				83F994451DD08E390023FB5D /* ListingViewController+BaseListCellDelegate.swift in Sources */,
 				83562CAC1DB8C19B006FF04A /* ChooseElementActionViewController.swift in Sources */,
 				83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */,
