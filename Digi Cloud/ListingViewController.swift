@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FilesTableViewController: UITableViewController {
+class ListingViewController: UITableViewController {
 
     enum Sorting {
         case ascending
@@ -18,7 +18,7 @@ class FilesTableViewController: UITableViewController {
 
     var content: [File] = []
 
-    fileprivate var currentIndex: IndexPath!
+    internal var currentIndex: IndexPath!
 
     // MARK: - View Life Cycle
 
@@ -34,9 +34,14 @@ class FilesTableViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(handleAddFolder))
+        let sortButton      = UIBarButtonItem(title: "Sort", style: UIBarButtonItemStyle.plain, target: self, action: #selector(handleSortSelect))
+        let addFolderButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(handleAddFolder))
+        navigationItem.rightBarButtonItems = [addFolderButton, sortButton]
     }
 
+    @objc fileprivate func handleSortSelect() {
+        print(123)
+    }
     @objc fileprivate func handleAddFolder() {
         let controller = CreateFolderViewController()
         controller.onFinish = { [weak self] (folderName) in
@@ -58,7 +63,7 @@ class FilesTableViewController: UITableViewController {
     }
 
     // TODO: Implement sorting filters in the interface
-    fileprivate func sortContent() {
+    internal func sortContent() {
 
         // check settings and choose appropriate sorting function name/size/date
         sortByName(directoryFirst: true, direction: .ascending)
@@ -95,7 +100,7 @@ class FilesTableViewController: UITableViewController {
         // TODO: Implement sort by size
     }
 
-    fileprivate func getFolderContent() {
+    func getFolderContent() {
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
             guard error == nil else {
@@ -166,7 +171,7 @@ class FilesTableViewController: UITableViewController {
 
         if content[indexPath.row].type == "dir" {
             // This is a Folder
-            let controller = FilesTableViewController()
+            let controller = ListingViewController()
             controller.title = itemName
 
             let folderPath = previousPath + itemName + "/"
@@ -194,108 +199,11 @@ class FilesTableViewController: UITableViewController {
     }
 }
 
-extension FilesTableViewController: BaseListCellDelegate {
-    func showActionController(for sourceView: UIView) {
-        let buttonPosition = sourceView.convert(CGPoint.zero, to: self.tableView)
-        guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
-
-        currentIndex = indexPath
-        animateActionButton(active: true)
-
-        let controller = ActionsViewController(style: .plain)
-        controller.element = self.content[indexPath.row]
-        controller.delegate = self
-
-        var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
-        for view in sourceView.subviews {
-            if view.tag == 1 {
-                sourceView = view.subviews[0]
-            }
-        }
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = sourceView
-        controller.popoverPresentationController?.sourceRect = sourceView.bounds
-        controller.popoverPresentationController?.delegate = self
-        present(controller, animated: true, completion: nil)
-    }
-}
-
-extension FilesTableViewController: UIPopoverPresentationControllerDelegate {
+extension ListingViewController: UIPopoverPresentationControllerDelegate {
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
         self.animateActionButton(active: false)
         return true
     }
 }
 
-extension FilesTableViewController: ActionsViewControllerDelegate {
-    func didSelectOption(tag: Int) {
-        self.animateActionButton(active: false)
-        dismiss(animated: true, completion: nil) // dismiss ActionsViewController
-        switch tag {
-        // rename action
-        case 2:
-            // TODO: Refactor sort, refresh
-            let controller = RenameViewController(element: content[currentIndex.row])
-            controller.onFinish = { [weak self] (newName, needRefresh) in
-                if let vc = self {
-                    DispatchQueue.main.async {
-                        vc.dismiss(animated: true, completion: nil) // dismiss RenameViewController
-                        if let name = newName{
-                            vc.content[vc.currentIndex.row].name = name
-                            vc.sortContent()
-                            vc.tableView.reloadData()
-                        } else {
-                            if needRefresh {
-                                vc.getFolderContent()
-                            }
-                        }
-                    }
-                }
-            }
-            let navController = UINavigationController(rootViewController: controller)
-            navController.modalPresentationStyle = .formSheet
-            present(navController, animated: true, completion: nil)
-
-        // delete action
-        case 5:
-            let element = content[currentIndex.row]
-            if element.type == "file" {
-                let controller = DeleteFileViewController(element: content[currentIndex.row])
-                controller.onFinish = { [weak self] (success) in
-                    if let vc = self {
-                        DispatchQueue.main.async {
-                            vc.dismiss(animated: true, completion: nil) // dismiss DeleteFileViewController
-                            if success {
-                                vc.content.remove(at: vc.currentIndex.row)
-                                vc.tableView.deleteRows(at: [vc.currentIndex], with: .left)
-                            }
-                            else {
-                                vc.getFolderContent()
-                            }
-                        }
-                    }
-                }
-                var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
-                for view in sourceView.subviews {
-                    if view.tag == 1 {
-                        sourceView = view.subviews[0]
-                    }
-                }
-                controller.modalPresentationStyle = .popover
-                controller.popoverPresentationController?.sourceView = sourceView
-                controller.popoverPresentationController?.sourceRect = sourceView.bounds
-                present(controller, animated: true, completion: nil)
-            }
-        // folder info
-        case 6:
-            let element = content[currentIndex.row].name
-            DigiClient.shared.getFolderSize(path: element, completionHandler: { (size, error) in
-                print(size ?? "nil")
-            })
-            //
-        default:
-            return
-        }
-    }
-}
 

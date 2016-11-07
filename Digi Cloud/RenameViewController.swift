@@ -10,7 +10,7 @@ import UIKit
 
 class RenameViewController: UITableViewController {
 
-    var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
+    var onFinish: ((String?, Bool) -> Void)?
 
     fileprivate var element: File
     fileprivate var leftBarButton: UIBarButtonItem!

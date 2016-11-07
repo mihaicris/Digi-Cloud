@@ -44,7 +44,7 @@ class LocationsTableViewController: UITableViewController {
     // MARK: - Navigation
 
     func openMount(index: Int) {
-        let controller = FilesTableViewController()
+        let controller = ListingViewController()
         DigiClient.shared.currentMount = mounts[index].id
         DigiClient.shared.currentPath.append("/")
         controller.title = mounts[index].name

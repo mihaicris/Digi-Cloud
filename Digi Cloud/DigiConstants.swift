@@ -9,26 +9,26 @@
 import Foundation
 
 struct API {
-    static let Scheme       = "https"
-    static let Host         = "storage.rcs-rds.ro"
+    static let Scheme           = "https"
+    static let Host             = "storage.rcs-rds.ro"
 }
 
 struct DefaultHeaders {
-    static let Headers = ["Content-Type": "application/json",
-                          "Accept": "application/json"]
+    static let Headers          = ["Content-Type": "application/json",
+                                   "Accept": "application/json"]
 }
 
 struct HeadersKeys {
-    static let Email        = "X-Koofr-Email"
-    static let Password     = "X-Koofr-Password"
+    static let Email            = "X-Koofr-Email"
+    static let Password         = "X-Koofr-Password"
 }
 
 struct HeaderResponses {
-    static let Token        = "X-koofr-token"
+    static let Token            = "X-koofr-token"
 }
 
 struct ParametersKeys {
-    static let Path         = "path"
+    static let Path             = "path"
 }
 
 struct Methods {

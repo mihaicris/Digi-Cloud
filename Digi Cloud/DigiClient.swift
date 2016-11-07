@@ -6,7 +6,6 @@
 //  Copyright © 2016 Mihai Cristescu. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 // Singleton class for DIGI Client

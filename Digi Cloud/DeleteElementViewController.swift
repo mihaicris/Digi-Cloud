@@ -8,9 +8,9 @@
 
 import UIKit
 
-class DeleteFileViewController: UITableViewController {
+class DeleteElementViewController: UITableViewController {
 
-    var onFinish: ((_ success: Bool) -> Void)?
+    var onFinish: ((Bool) -> Void)?
 
     fileprivate var element: File
 
@@ -38,7 +38,11 @@ class DeleteFileViewController: UITableViewController {
         let message: UILabel = {
             let label = UILabel()
             label.textAlignment = .center
-            label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "Message")
+            if element.type == "file" {
+                label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "Message")
+            } else {
+                label.text = NSLocalizedString("Are you sure you want to delete this folder?", comment: "Message")
+            }
             label.font = UIFont.systemFont(ofSize: 14)
             return label
         }()
@@ -126,6 +130,6 @@ class DeleteFileViewController: UITableViewController {
     }
     
     #if DEBUG
-    deinit { print("DeleteFileViewController deinit") }
+    deinit { print("DeleteElementViewController deinit") }
     #endif
 }
