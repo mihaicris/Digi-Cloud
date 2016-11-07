@@ -39,6 +39,15 @@ class ListingViewController: UITableViewController {
         navigationItem.rightBarButtonItems = [addFolderButton, sortButton]
     }
 
+    func toggleRightBarButtonsActive() {
+        guard let buttons = navigationItem.rightBarButtonItems else {
+            return
+        }
+        for button in buttons {
+            button.isEnabled = !button.isEnabled
+        }
+    }
+
     @objc fileprivate func handleSortSelect() {
         print(123)
     }
@@ -101,6 +110,7 @@ class ListingViewController: UITableViewController {
     }
 
     func getFolderContent() {
+        toggleRightBarButtonsActive()
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
             guard error == nil else {
@@ -109,7 +119,10 @@ class ListingViewController: UITableViewController {
             }
             self.content = content ?? []
             self.sortContent()
-            DispatchQueue.main.async { self.tableView.reloadData() }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.toggleRightBarButtonsActive()
+            }
         }
     }
 
