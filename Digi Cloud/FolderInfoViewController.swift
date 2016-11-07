@@ -18,6 +18,7 @@ class FolderInfoViewController: UITableViewController {
 
     init(element: File) {
         self.element = element
+        print(element.modified)
         super.init(style: .grouped)
     }
 
@@ -42,21 +43,26 @@ class FolderInfoViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? 200 : 80
+        switch indexPath.section {
+        case 0:     return 46
+        case 1:     return 100
+        case 2:     return 46
+        default:    return 46
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.selectionStyle = .none
-
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
             let folderIcon: UIImageView = {
                 let imageName = element.type == "dir" ? "FolderIcon" : "FileIcon"
                 let imageView = UIImageView(image: UIImage(named: imageName))
@@ -72,18 +78,20 @@ class FolderInfoViewController: UITableViewController {
 
             cell.contentView.addSubview(folderIcon)
             cell.contentView.addSubview(folderName)
-            cell.contentView.addConstraints(with: "H:|-20-[v0(26)]-12-[v1]-12-|", views: folderIcon, folderName)
-            cell.contentView.addConstraints(with: "V:|-20-[v0(26)]", views: folderIcon)
-            cell.contentView.addConstraints(with: "V:|-20-[v0]", views: folderName)
-
-        } else {
+            cell.contentView.addConstraints(with: "H:|-10-[v0(26)]-12-[v1]-12-|", views: folderIcon, folderName)
+            cell.contentView.addConstraints(with: "V:[v0(26)]", views: folderIcon)
+            folderIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            folderName.centerYAnchor.constraint(equalTo: folderIcon.centerYAnchor).isActive = true
+        case 1:
+            break
+        case 2:
             deleteButton = UIButton(type: UIButtonType.system)
             deleteButton.layer.borderColor = UIColor.red.cgColor
-            deleteButton.layer.cornerRadius = 5
-            deleteButton.layer.borderWidth = 1/UIScreen.main.scale
-            deleteButton.setTitle(NSLocalizedString("  Delete Folder  ", comment: "Title for Button"), for: .normal)
+            deleteButton.layer.cornerRadius = 15
+            deleteButton.layer.borderWidth = 1/UIScreen.main.scale * 1.2
+            deleteButton.setTitle(NSLocalizedString("    Delete Folder    ", comment: "Title for Button"), for: .normal)
+            deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             deleteButton.setTitleColor(.red, for: .normal)
-            deleteButton.setTitleColor(.gray, for: .disabled)
             deleteButton.addTarget(self, action: #selector(handleDelete), for: .touchUpInside)
 
             //constraints
@@ -91,19 +99,11 @@ class FolderInfoViewController: UITableViewController {
             cell.contentView.addSubview(deleteButton)
             deleteButton.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
             deleteButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+        default:
+            break
         }
         return cell
     }
-
-//    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        if section == 1 {
-//            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
-//            footerView.backgroundColor = .magenta
-//            return footerView
-//        } else {
-//            return nil
-//        }
-//    }
 
     fileprivate func setupViews() {
 
@@ -130,6 +130,7 @@ class FolderInfoViewController: UITableViewController {
     }
 
     @objc fileprivate func handleDelete() {
+        print("Delete")
         deleteButton.isEnabled = false
     }
 
