@@ -17,6 +17,19 @@ class ListingViewController: UITableViewController {
     // MARK: - Properties
 
     var content: [File] = []
+    let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        f.timeStyle = .none
+        f.locale = Locale.current
+        f.dateFormat = "dd.MM.YYY・HH:mm"
+        return f
+    }()
+    let byteFormatter: ByteCountFormatter = {
+        let f = ByteCountFormatter()
+        f.countStyle = .binary
+        return f
+    }()
 
     internal var currentIndex: IndexPath!
 
@@ -157,16 +170,10 @@ class ListingViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
             cell.delegate = self
 
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .none
-            formatter.locale = Locale.current
-            formatter.dateFormat = "dd.MM.YYY・HH:mm"
-
-            let modifiedDate = formatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
+            let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
             cell.fileNameLabel.text = data.name
 
-            let fileSizeString = ByteCountFormatter.string(fromByteCount: data.size, countStyle: ByteCountFormatter.CountStyle.file) + "・" + modifiedDate
+            let fileSizeString = byteFormatter.string(fromByteCount: data.size) + "・" + modifiedDate
             cell.fileSizeLabel.text = fileSizeString
 
             return cell
