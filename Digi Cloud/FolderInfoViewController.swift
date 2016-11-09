@@ -9,7 +9,7 @@
 import UIKit
 
 class FolderInfoViewController: UITableViewController {
-    var onFinish: (() -> Void)?
+    var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
 
     let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
@@ -204,14 +204,25 @@ class FolderInfoViewController: UITableViewController {
     }
 
     @objc fileprivate func handleDone() {
-        onFinish?()
+        onFinish?(false, false)
     }
 
     @objc fileprivate func handleDelete() {
-        print("Delete")
-        deleteButton.isEnabled = false
+        let controller = DeleteElementViewController(element: element)
+        controller.onFinish = { (success) in
+            if success {
+                self.onFinish?(true, true)
+            } else {
+                self.onFinish?(false, true)
+            }
+        }
+        controller.modalPresentationStyle = .popover
+        controller.popoverPresentationController?.permittedArrowDirections = .up
+        controller.popoverPresentationController?.sourceView = deleteButton
+        controller.popoverPresentationController?.sourceRect = deleteButton.bounds
+        present(controller, animated: true, completion: nil)
     }
-    
+
     #if DEBUG
     deinit {
         print("FolderInfoViewController deinit")

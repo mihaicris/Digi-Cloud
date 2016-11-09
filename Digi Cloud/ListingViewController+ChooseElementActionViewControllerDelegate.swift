@@ -70,9 +70,17 @@ extension ListingViewController: ChooseElementActionViewControllerDelegate {
         // folder info
         case 6:
             let controller = FolderInfoViewController(element: content[currentIndex.row])
-            controller.onFinish = { [weak self] in
-                if let vc = self {
-                    vc.dismiss(animated: true, completion: nil)
+            controller.onFinish = { (success, needRefresh) in
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil) // dismiss FolderViewController
+                    if success {
+                        self.content.remove(at: self.currentIndex.row)
+                        self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                    } else {
+                        if needRefresh {
+                            self.getFolderContent()
+                        }
+                    }
                 }
             }
             let navController = UINavigationController(rootViewController: controller)

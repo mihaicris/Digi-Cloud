@@ -184,7 +184,6 @@ extension DigiClient {
         let path = DigiClient.shared.currentPath.last! + path
         let parameters = [ParametersKeys.Path: path]
 
-
         /// Get information from Dictionary content (JSON folder tree)
         ///
         /// - Parameter parent: parent folder

@@ -225,5 +225,3 @@ extension ListingViewController: UIPopoverPresentationControllerDelegate {
         return true
     }
 }
-
-
