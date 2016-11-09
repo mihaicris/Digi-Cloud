@@ -18,7 +18,7 @@ class FolderInfoViewController: UITableViewController {
         return f
     }()
 
-    fileprivate var element: File
+    var element: File
 
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var deleteButton: UIButton!
@@ -208,14 +208,8 @@ class FolderInfoViewController: UITableViewController {
     }
 
     @objc fileprivate func handleDelete() {
-        let controller = DeleteElementViewController(element: element)
-        controller.onFinish = { (success) in
-            if success {
-                self.onFinish?(true, true)
-            } else {
-                self.onFinish?(false, true)
-            }
-        }
+        let controller = DeleteAlertViewController(element: element)
+        controller.delegate = self
         controller.modalPresentationStyle = .popover
         controller.popoverPresentationController?.permittedArrowDirections = .up
         controller.popoverPresentationController?.sourceView = deleteButton
@@ -229,3 +223,5 @@ class FolderInfoViewController: UITableViewController {
     }
     #endif
 }
+
+

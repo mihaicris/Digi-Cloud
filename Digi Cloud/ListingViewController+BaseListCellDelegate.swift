@@ -16,7 +16,7 @@ extension ListingViewController: BaseListCellDelegate {
         self.currentIndex = indexPath
         self.animateActionButton(active: true)
 
-        let controller = ChooseElementActionViewController(style: .plain)
+        let controller = ActionViewController(style: .plain)
         controller.element = self.content[indexPath.row]
         controller.delegate = self
 

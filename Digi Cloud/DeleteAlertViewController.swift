@@ -8,11 +8,11 @@
 
 import UIKit
 
-class DeleteElementViewController: UITableViewController {
-
-    var onFinish: ((_ success: Bool) -> Void)?
+class DeleteAlertViewController: UITableViewController {
 
     fileprivate var element: File
+
+    weak var delegate: DeleteAlertViewControllerDelegate?
 
     init(element: File) {
         self.element = element
@@ -93,40 +93,7 @@ class DeleteElementViewController: UITableViewController {
     }
 
     @objc fileprivate func handleDelete() {
-
-        // TODO Show on screen spinner for rename request
-
-        //build the path of element to be renamed
-        let elementPath = DigiClient.shared.currentPath.last! + element.name
-
-        // network request for rename
-        DigiClient.shared.delete(path: elementPath, name: element.name) { (statusCode, error) in
-
-            // TODO: Stop spinner
-
-            guard error == nil else {
-                // TODO Show message for error
-                print(error!.localizedDescription)
-                return
-            }
-            if let code = statusCode {
-                switch code {
-                case 200:
-                    // Delete successfully completed
-                    self.onFinish?(true)
-                case 400:
-                    // TODO: Alert Bad Request
-                    self.onFinish?(false)
-                case 404:
-                    // File not found, folder will be refreshed
-                    self.onFinish?(false)
-                default :
-                    // TODO: Alert Status Code server
-                    self.onFinish?(false)
-                    return
-                }
-            }
-        }
+        delegate?.onConfirmDeletion()
     }
     
     #if DEBUG

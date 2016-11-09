@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension ListingViewController: ChooseElementActionViewControllerDelegate {
+extension ListingViewController: ActionViewControllerDelegate {
     func didSelectOption(tag: Int) {
         self.animateActionButton(active: false)
         dismiss(animated: true, completion: nil) // dismiss ActionsViewController
@@ -41,21 +41,10 @@ extension ListingViewController: ChooseElementActionViewControllerDelegate {
         case 5:
             let element = content[currentIndex.row]
             if element.type == "file" {
-                let controller = DeleteElementViewController(element: content[currentIndex.row])
-                controller.onFinish = { [weak self] (success) in
-                    if let vc = self {
-                        DispatchQueue.main.async {
-                            vc.dismiss(animated: true, completion: nil) // dismiss DeleteFileViewController
-                            if success {
-                                vc.content.remove(at: vc.currentIndex.row)
-                                vc.tableView.deleteRows(at: [vc.currentIndex], with: .left)
-                            }
-                            else {
-                                vc.getFolderContent()
-                            }
-                        }
-                    }
-                }
+                let controller = DeleteAlertViewController(element: content[currentIndex.row])
+                controller.delegate = self
+
+                // position alert on the same row with the file
                 var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
                 for view in sourceView.subviews {
                     if view.tag == 1 {

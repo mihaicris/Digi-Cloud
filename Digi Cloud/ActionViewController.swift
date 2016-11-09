@@ -8,15 +8,11 @@
 
 import UIKit
 
-protocol ChooseElementActionViewControllerDelegate: class {
-    func didSelectOption(tag: Int)
-}
-
-class ChooseElementActionViewController: UITableViewController {
+class ActionViewController: UITableViewController {
 
     var element: File!
 
-    weak var delegate: ChooseElementActionViewControllerDelegate?
+    weak var delegate: ActionViewControllerDelegate?
 
     var contextMenuFileActions: [ActionCell] = []
     var contextMenuFolderActions: [ActionCell] = []
