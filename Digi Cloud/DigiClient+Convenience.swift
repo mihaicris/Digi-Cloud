@@ -167,7 +167,12 @@ extension DigiClient {
         }
     }
 
-    func getFolderSize(path: String, completionHandler: @escaping (_ size: Int64?, _ error: Error?) -> Void) {
+    /// Get information about a folder
+    ///
+    /// - Parameters:
+    ///   - path: path of the folder
+    ///   - completionHandler: completion handler with info about folder and error
+    func getFolderInfo(path: String, completionHandler: @escaping (_ size: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
@@ -179,37 +184,55 @@ extension DigiClient {
         let path = DigiClient.shared.currentPath.last! + path
         let parameters = [ParametersKeys.Path: path]
 
-        func getChildSize(_ parent: [String: Any]) -> Int64 {
+
+        /// Get information from Dictionary content (JSON folder tree)
+        ///
+        /// - Parameter parent: parent folder
+        /// - Returns: return tuple with (size of child, number of files, number of folders)
+        func getChildInfo(_ parent: [String: Any]) -> (Int64, Int, Int) {
             var size: Int64 = 0
+            var files: Int = 0
+            var folders: Int = 0
             if let childType = parent["type"] as? String, childType == "file" {
+                files += 1
                 if let childSize = parent["size"] as? Int64 {
-                    return childSize
+                    return (childSize, files, folders)
                 }
             }
+            folders += 1
             if let children = parent["children"] as? [[String: Any]], !children.isEmpty {
+                folders += 1
                 for child in children {
-                    size += getChildSize(child)
+                    let (childSize, childFiles, childFolders) = getChildInfo(child)
+                    size += childSize
+                    files += childFiles
+                    folders += childFolders
                 }
             }
-            return size
+            return (size, files, folders)
         }
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { (json, statusCode, error) in
             if let error = error {
-                completionHandler(nil, error)
+                completionHandler((nil, nil, nil), error)
                 return
             }
             var size: Int64 = 0
+            var files: Int = 0
+            var folders: Int = 0
             guard let json = json as? [String: Any] else {
-                completionHandler(nil, nil)
+                completionHandler((nil, nil, nil), nil)
                 return
             }
             if let children = json["children"] as? [[String: Any]] {
                 for child in children {
-                    size += getChildSize(child)
+                    size += getChildInfo(child).0
+                    files += getChildInfo(child).1
+                    folders += getChildInfo(child).2
+
                 }
             }
-            completionHandler(size, nil)
+            completionHandler((size, files, folders), nil)
         }
     }
 }
