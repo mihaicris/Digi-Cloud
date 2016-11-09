@@ -10,7 +10,7 @@ import UIKit
 
 class CreateFolderViewController: UITableViewController {
 
-    var onFinish: ((String?) -> Void)?
+    var onFinish: ((_ folderName: String?) -> Void)?
 
     fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!

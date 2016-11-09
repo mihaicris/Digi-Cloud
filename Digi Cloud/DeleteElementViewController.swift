@@ -10,7 +10,7 @@ import UIKit
 
 class DeleteElementViewController: UITableViewController {
 
-    var onFinish: ((Bool) -> Void)?
+    var onFinish: ((_ success: Bool) -> Void)?
 
     fileprivate var element: File
 

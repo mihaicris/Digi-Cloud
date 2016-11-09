@@ -18,7 +18,7 @@ import UIKit
 
 class SortFolderViewController: UITableViewController {
 
-    var onFinish: ((Int) -> Void)?
+    var onFinish: ((_ sortType: Int) -> Void)?
 
     var contextMenuSortActions: [ActionCell] = []
 
