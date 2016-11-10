@@ -34,17 +34,16 @@ class FolderInfoViewController: UITableViewController {
                 self.noElementsLabel = {
                     let label = UILabel()
                     let paragraph = NSMutableParagraphStyle()
-                    paragraph.lineHeightMultiple = 1.2
+                    paragraph.lineHeightMultiple = 1.3
                     label.numberOfLines = 2
 
                     let filesString = NSLocalizedString("%d files\n", comment: "Informatin")
                     let text1 = String.localizedStringWithFormat(filesString, files)
                     let folderString = NSLocalizedString("%d folders", comment: "Informatin")
                     let text2 = String.localizedStringWithFormat(folderString, folders)
-
-                    let attributedText = NSMutableAttributedString(string: text1, attributes: [NSParagraphStyleAttributeName : paragraph])
-                    attributedText.append(NSAttributedString(string: text2))
+                    let attributedText = NSMutableAttributedString(string: text1 + text2, attributes: [NSParagraphStyleAttributeName : paragraph])
                     label.attributedText = attributedText
+
                     return label
                 }()
                 self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2 )], with: .automatic)
@@ -77,6 +76,17 @@ class FolderInfoViewController: UITableViewController {
         super.viewDidLoad()
         setupViews()
         updateFolderInfo()
+    }
+
+    fileprivate func setupViews() {
+
+        tableView.isScrollEnabled = false
+
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"),
+                                         style: .plain,
+                                         target: self, action: #selector(handleDone))
+        self.navigationItem.setRightBarButton(rightBarButton, animated: false)
+        self.title = NSLocalizedString("Folder information", comment: "Window Title")
     }
 
     fileprivate func updateFolderInfo() {
@@ -119,7 +129,7 @@ class FolderInfoViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 2:     return 64
+        case 2:     return 70
         default:    return UITableViewAutomaticDimension
         }
     }
@@ -130,6 +140,7 @@ class FolderInfoViewController: UITableViewController {
             (view as? UITableViewHeaderFooterView)?.textLabel?.textAlignment = .center
         }
     }
+
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         switch section {
         case 0...1:
@@ -193,17 +204,6 @@ class FolderInfoViewController: UITableViewController {
             break
         }
         return cell
-    }
-
-    fileprivate func setupViews() {
-
-        tableView.isScrollEnabled = false
-
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"),
-                                         style: .plain,
-                                        target: self, action: #selector(handleDone))
-        self.navigationItem.setRightBarButton(rightBarButton, animated: false)
-        self.title = NSLocalizedString("Folder information", comment: "Window Title")
     }
 
     @objc fileprivate func handleDone() {
