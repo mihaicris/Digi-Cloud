@@ -13,36 +13,40 @@ extension ListingViewController: DeleteAlertViewControllerDelegate {
     func onConfirmDeletion() {
 
         // Dismiss DeleteAlertViewController
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            let elementPath = DigiClient.shared.currentPath.last! + self.content[self.currentIndex.row].name
 
-        let elementPath = DigiClient.shared.currentPath.last! + content[currentIndex.row].name
+            // network request for delete
+            DigiClient.shared.delete(path: elementPath, name: self.content[self.currentIndex.row].name) {
 
-        // network request for delete
-        DigiClient.shared.delete(path: elementPath, name: content[currentIndex.row].name) { (statusCode, error) in
+                (statusCode, error) in
 
-            // TODO: Stop spinner
-            guard error == nil else {
-                // TODO Show message for error
-                print(error!.localizedDescription)
-                return
-            }
-            if let code = statusCode {
-                DispatchQueue.main.async {
-                    switch code {
-                    case 200:
-                        self.content.remove(at: self.currentIndex.row)
-                        self.tableView.deleteRows(at: [self.currentIndex], with: .left)
-                    case 400:
-                        self.getFolderContent()
-                    case 404:
-                        self.getFolderContent()
-                    default :
-                        break
-                    }
+                // TODO: Stop spinner
+                guard error == nil else {
+                    // TODO Show message for error
+                    print(error!.localizedDescription)
+                    return
                 }
-            } else {
-                print("Error: could not obtain a statuscode")
+                if let code = statusCode {
+                    DispatchQueue.main.async {
+                        switch code {
+                        case 200:
+                            self.content.remove(at: self.currentIndex.row)
+                            self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                        case 400:
+                            self.getFolderContent()
+                        case 404:
+                            self.getFolderContent()
+                        default :
+                            break
+                        }
+                    }
+                } else {
+                    print("Error: could not obtain a statuscode")
+                }
             }
         }
+
+
     }
 }
