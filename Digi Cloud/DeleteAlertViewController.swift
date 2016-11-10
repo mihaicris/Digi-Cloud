@@ -81,7 +81,7 @@ class DeleteAlertViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        handleDelete()
+        delegate?.onConfirmDeletion()
     }
 
     private func createCell(title: String, color: UIColor) -> UITableViewCell {
@@ -93,10 +93,6 @@ class DeleteAlertViewController: UITableViewController {
         return cell
     }
 
-    @objc fileprivate func handleDelete() {
-        delegate?.onConfirmDeletion()
-    }
-    
     #if DEBUG
     deinit { print("DeleteElementViewController deinit") }
     #endif
