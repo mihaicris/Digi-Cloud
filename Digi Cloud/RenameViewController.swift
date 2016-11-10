@@ -91,13 +91,12 @@ class RenameViewController: UITableViewController {
 
         tableView.isScrollEnabled = false
 
-        leftBarButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Title for button"),
+        leftBarButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
                                          style: .plain,
                                         target: self,
                                         action: #selector(handleCancel))
 
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename",
-                                       comment: "Title for button"),
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename", comment: "Button Title"),
                                          style: .plain, target: self,
                                         action: #selector(handleRename))
 
@@ -108,8 +107,8 @@ class RenameViewController: UITableViewController {
         rightBarButton.isEnabled = false
 
         self.title = element.type == "dir" ?
-            NSLocalizedString("Rename Folder", comment: "Title for action") :
-            NSLocalizedString("Rename File", comment: "Title for action")
+            NSLocalizedString("Rename Folder", comment: "Window Title") :
+            NSLocalizedString("Rename File",   comment: "Window Title")
     }
 
     fileprivate func positionCursor() {
@@ -175,11 +174,11 @@ class RenameViewController: UITableViewController {
                     let message = NSLocalizedString("File is no longer available. Folder will refresh", comment: "Error message")
                     self.needRefresh = true
                     DispatchQueue.main.async {
-                        self.leftBarButton.title = NSLocalizedString("Done", comment: "Title for button")
+                        self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
                     }
                     self.setMessage(onScreen:true, message)
                 default :
-                    let message = NSLocalizedString("Error wtih status code: ", comment: "Error message")
+                    let message = NSLocalizedString("Server replied with Status Code: ", comment: "Error message")
                     self.needRefresh = true
                     self.setMessage(onScreen: true, message + String(code))
                 }
@@ -192,11 +191,11 @@ class RenameViewController: UITableViewController {
             if newName.isEmpty {
                 setRenameButtonActive(false)
             } else if hasInvalidCharacters(name: newName) {
-                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed in the name", comment: "Information")
+                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed.", comment: "Error Information")
                 setMessage(onScreen: true, message)
                 setRenameButtonActive(false)
             } else if element.name.lowercased() == newName.lowercased() {
-                let message = NSLocalizedString("Name is the same", comment: "Information message")
+                let message = NSLocalizedString("Name is the same", comment: "Error Information")
                 setMessage(onScreen: true, message)
                 setRenameButtonActive(false)
             } else {

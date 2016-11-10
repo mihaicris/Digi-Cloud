@@ -16,7 +16,7 @@ class LoginViewController: UIViewController {
 
     lazy var emailTextField: CustomTextField = {
         let field = CustomTextField()
-        field.textFieldName = "EMAIL ADDRESS"
+        field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "TextField Name").uppercased()
 
         #if DEBUG
             let dict = ProcessInfo.processInfo.environment
@@ -29,7 +29,7 @@ class LoginViewController: UIViewController {
 
     lazy var passwordTextField: CustomTextField = {
         let field = CustomTextField()
-        field.textFieldName = "PASSWORD"
+        field.textFieldName = NSLocalizedString("PASSWORD", comment: "TextField Name").uppercased()
 
         #if DEBUG
             let dict = ProcessInfo.processInfo.environment
@@ -43,7 +43,7 @@ class LoginViewController: UIViewController {
 
     lazy var loginButton: CustomLoginButton = {
         let button = CustomLoginButton()
-        button.setTitle("LOGIN", for: .normal)
+        button.setTitle(NSLocalizedString("LOGIN", comment: "Button Title") , for: .normal)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
@@ -113,9 +113,10 @@ class LoginViewController: UIViewController {
                 self.onFinish?()
             } else {
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Error",
-                                                  message: "Unauthorized access",
-                                                  preferredStyle: UIAlertControllerStyle.alert)
+                    let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
+                                                message: NSLocalizedString("Unauthorized access", comment: "Error Message"),
+                                         preferredStyle: UIAlertControllerStyle.alert)
+
                     let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                     alert.addAction(actionOK)
                     self.present(alert, animated: false, completion: nil)

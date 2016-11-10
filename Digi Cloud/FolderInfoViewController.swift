@@ -36,10 +36,14 @@ class FolderInfoViewController: UITableViewController {
                     let paragraph = NSMutableParagraphStyle()
                     paragraph.lineHeightMultiple = 1.2
                     label.numberOfLines = 2
-                    let filesString = files == 1 ? "File" : "Files"
-                    let foldersString = folders == 1 ? "Folder" : "Folders"
-                    let text = NSLocalizedString("\(files) " + filesString + "\n" + "\(folders) " + foldersString, comment: "Content information")
-                    let attributedText = NSAttributedString(string: text, attributes: [NSParagraphStyleAttributeName : paragraph])
+
+                    let filesString = NSLocalizedString("%d files\n", comment: "Informatin")
+                    let text1 = String.localizedStringWithFormat(filesString, files)
+                    let folderString = NSLocalizedString("%d folders", comment: "Informatin")
+                    let text2 = String.localizedStringWithFormat(folderString, folders)
+
+                    let attributedText = NSMutableAttributedString(string: text1, attributes: [NSParagraphStyleAttributeName : paragraph])
+                    attributedText.append(NSAttributedString(string: text2))
                     label.attributedText = attributedText
                     return label
                 }()
@@ -97,18 +101,18 @@ class FolderInfoViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0:     return NSLocalizedString("Name", comment: "Header title")
-        case 1:     return NSLocalizedString("Size", comment: "Header title")
-        case 2:     return NSLocalizedString("Elements", comment: "Header title")
+        case 0:     return NSLocalizedString("Name",               comment: "TableCell Header Title")
+        case 1:     return NSLocalizedString("Size",               comment: "TableCell Header Title")
+        case 2:     return NSLocalizedString("Elements in folder", comment: "TableCell Header Title")
         default:    return ""
         }
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {
-        case 0...1: return ""
-        case 2:     return NSLocalizedString("Note: Including subfolders", comment: "Information")
-        case 3:     return NSLocalizedString("Attention: This action is not reversible!", comment: "Information")
+        case 0, 1:  return ""
+        case 2:     return NSLocalizedString("Note: Including subfolders",     comment: "TableCell Footer Title")
+        case 3:     return NSLocalizedString("This action is not reversible!", comment: "TableCell Footer Title")
         default:    return ""
         }
     }
@@ -175,7 +179,7 @@ class FolderInfoViewController: UITableViewController {
             deleteButton.layer.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.05).cgColor
             deleteButton.layer.cornerRadius = 8
             deleteButton.layer.borderWidth = 1/UIScreen.main.scale * 1.2
-            deleteButton.setTitle(NSLocalizedString("     Delete Folder     ", comment: "Title for Button, please keep the leading/trailing spaces"), for: .normal)
+            deleteButton.setTitle(NSLocalizedString("     Delete Folder     ", comment: "Button Title, keep the leading/trailing spaces!"), for: .normal)
             deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             deleteButton.setTitleColor(.red, for: .normal)
             deleteButton.addTarget(self, action: #selector(handleDelete), for: .touchUpInside)
@@ -197,10 +201,9 @@ class FolderInfoViewController: UITableViewController {
 
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"),
                                          style: .plain,
-                                         target: self, action: #selector(handleDone))
+                                        target: self, action: #selector(handleDone))
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
-
-        self.title = NSLocalizedString("Folder information", comment: "Title")
+        self.title = NSLocalizedString("Folder information", comment: "Window Title")
     }
 
     @objc fileprivate func handleDone() {

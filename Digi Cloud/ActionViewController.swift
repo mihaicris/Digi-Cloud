@@ -37,20 +37,20 @@ class ActionViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        let folderActions = [ActionCell(title: NSLocalizedString("Folder info", comment: ""), tag: 6),
-                             ActionCell(title: NSLocalizedString("Share", comment: ""), tag: 0),
-                             ActionCell(title: NSLocalizedString("Rename", comment: ""), tag: 2),
-                             ActionCell(title: NSLocalizedString("Copy", comment: ""), tag: 3),
-                             ActionCell(title: NSLocalizedString("Move", comment: ""), tag: 4)]
+        let folderActions = [ActionCell(title: NSLocalizedString("Share",                   comment: "Selection Title"), tag: 0),
+                             ActionCell(title: NSLocalizedString("Rename",                  comment: "Selection Title"), tag: 2),
+                             ActionCell(title: NSLocalizedString("Copy",                    comment: "Selection Title"), tag: 3),
+                             ActionCell(title: NSLocalizedString("Move",                    comment: "Selection Title"), tag: 4),
+                             ActionCell(title: NSLocalizedString("Folder information",      comment: "Selection Title"), tag: 6)]
 
         contextMenuFolderActions.append(contentsOf: folderActions)
 
-        let fileActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), tag: 0),
-                           ActionCell(title: NSLocalizedString("Make available offline", comment: ""), tag: 1),
-                           ActionCell(title: NSLocalizedString("Rename", comment: ""), tag: 2),
-                           ActionCell(title: NSLocalizedString("Copy", comment: ""), tag: 3),
-                           ActionCell(title: NSLocalizedString("Move", comment: ""), tag: 4),
-                           ActionCell(title: NSLocalizedString("Delete", comment: ""), tag: 5)]
+        let fileActions = [ActionCell(title: NSLocalizedString("Share",                     comment: "Selection Title"), tag: 0),
+                           ActionCell(title: NSLocalizedString("Make available offline",    comment: "Selection Title"), tag: 1),
+                           ActionCell(title: NSLocalizedString("Rename",                    comment: "Selection Title"), tag: 2),
+                           ActionCell(title: NSLocalizedString("Copy",                      comment: "Selection Title"), tag: 3),
+                           ActionCell(title: NSLocalizedString("Move",                      comment: "Selection Title"), tag: 4),
+                           ActionCell(title: NSLocalizedString("Delete",                    comment: "Selection Title"), tag: 5)]
 
         contextMenuFileActions.append(contentsOf: fileActions)
 

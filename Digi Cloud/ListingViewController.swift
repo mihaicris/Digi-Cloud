@@ -47,8 +47,13 @@ class ListingViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        let sortButton      = UIBarButtonItem(title: "Sort", style: UIBarButtonItemStyle.plain, target: self, action: #selector(handleSortSelect))
-        let addFolderButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(handleAddFolder))
+        let sortButton      = UIBarButtonItem(title: NSLocalizedString("Sort", comment: "Button Title"),
+                                              style: UIBarButtonItemStyle.plain,
+                                             target: self,
+                                             action: #selector(handleSortSelect))
+        let addFolderButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add,
+                                                           target: self,
+                                                           action: #selector(handleAddFolder))
         navigationItem.rightBarButtonItems = [addFolderButton, sortButton]
     }
 

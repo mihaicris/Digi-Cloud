@@ -39,9 +39,9 @@ class DeleteAlertViewController: UITableViewController {
             let label = UILabel()
             label.textAlignment = .center
             if element.type == "file" {
-                label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "Message")
+                label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "Question for user")
             } else {
-                label.text = NSLocalizedString("Are you sure you want to delete this folder?", comment: "Message")
+                label.text = NSLocalizedString("Are you sure you want to delete this folder?", comment: "Question for user")
             }
             label.font = UIFont.systemFont(ofSize: 14)
             return label
@@ -76,7 +76,8 @@ class DeleteAlertViewController: UITableViewController {
         return 1
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return createCell(title: "Delete", color: .red)
+        return createCell(title: NSLocalizedString("Delete", comment: "Button title") ,
+                          color: .red)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

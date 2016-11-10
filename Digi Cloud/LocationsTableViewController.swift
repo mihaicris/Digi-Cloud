@@ -19,7 +19,7 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Locations"
+        navigationItem.title = NSLocalizedString("Locations", comment: "Window Title")
 
         tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
         tableView.rowHeight = 78

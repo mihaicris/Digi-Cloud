@@ -44,7 +44,7 @@ class CreateFolderViewController: UITableViewController {
         cell.selectionStyle = .none
 
         textField = UITextField()
-        textField.placeholder = NSLocalizedString("Folder Name", comment: "Instruction")
+        textField.placeholder = NSLocalizedString("Folder Name", comment: "Textfield placeholder")
         textField.clearButtonMode = .whileEditing
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
@@ -76,8 +76,15 @@ class CreateFolderViewController: UITableViewController {
 
         tableView.isScrollEnabled = false
 
-        leftBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        rightBarButton = UIBarButtonItem(title: "Create", style: .plain, target: self, action: #selector(handleCreateFolder))
+        leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
+                                        style: .plain,
+                                       target: self,
+                                       action: #selector(handleCancel))
+
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Create", comment: "Button Title"),
+                                         style: .plain,
+                                        target: self,
+                                        action: #selector(handleCreateFolder))
 
         self.navigationItem.setLeftBarButton(leftBarButton, animated: false)
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
@@ -85,7 +92,7 @@ class CreateFolderViewController: UITableViewController {
         // disable Create button
         rightBarButton.isEnabled = false
 
-        self.title = NSLocalizedString("Create Folder", comment: "Title")
+        self.title = NSLocalizedString("Create Folder", comment: "Window Title")
     }
 
     @objc fileprivate func handleCancel() {
@@ -131,11 +138,11 @@ class CreateFolderViewController: UITableViewController {
                     // Not Found (Element do not exists anymore), folder will refresh
                     let message = NSLocalizedString("File is no longer available. Folder will refresh", comment: "Error message")
                     DispatchQueue.main.async {
-                        self.leftBarButton.title = NSLocalizedString("Done", comment: "Title")
+                        self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
                     }
                     self.setMessage(onScreen:true, message)
                 default :
-                    let message = NSLocalizedString("Error status code: ", comment: "Error message")
+                    let message = NSLocalizedString("Server replied with Status Code: ", comment: "Error message")
                     self.setMessage(onScreen: true, message + String(code))
                 }
             }
@@ -147,7 +154,7 @@ class CreateFolderViewController: UITableViewController {
             if name.isEmpty {
                 setCreateFolderButton(false)
             } else if hasInvalidCharacters(name: name) {
-                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed in the name", comment: "Information")
+                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed.", comment: "Error message")
                 setMessage(onScreen: true, message)
                 setCreateFolderButton(false)
             } else {

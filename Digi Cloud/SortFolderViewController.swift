@@ -42,9 +42,9 @@ class SortFolderViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        let sortActions = [ActionCell(title: NSLocalizedString("Sort by name", comment: ""), tag: 1),
-                           ActionCell(title: NSLocalizedString("Sort by size", comment: ""), tag: 2),
-                           ActionCell(title: NSLocalizedString("Sort by type", comment: ""), tag: 3)]
+        let sortActions = [ActionCell(title: NSLocalizedString("Sort by name", comment: "Selection Title"), tag: 1),
+                           ActionCell(title: NSLocalizedString("Sort by size", comment: "Selection Title"), tag: 2),
+                           ActionCell(title: NSLocalizedString("Sort by type", comment: "Selection Title"), tag: 3)]
 
         contextMenuSortActions.append(contentsOf: sortActions)
 
@@ -62,7 +62,7 @@ class SortFolderViewController: UITableViewController {
 
         let elementName: UILabel = {
             let label = UILabel()
-            label.text = NSLocalizedString("Sort folder", comment: "Title")
+            label.text = NSLocalizedString("Sort folder", comment: "Window Title")
             label.font = UIFont.systemFont(ofSize: 14)
             return label
         }()
