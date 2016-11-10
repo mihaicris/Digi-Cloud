@@ -18,12 +18,12 @@ import UIKit
 
 class SortFolderViewController: UITableViewController {
 
-    var onFinish: ((_ sortType: Int) -> Void)?
+    var onFinish: ((_ selection: Int) -> Void)?
 
     var contextMenuSortActions: [ActionCell] = []
 
-    override init(style: UITableViewStyle) {
-        super.init(style: style)
+    init() {
+        super.init(style: .plain)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,7 +31,6 @@ class SortFolderViewController: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.preferredContentSize.width = 400
         self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
     }
@@ -42,9 +41,10 @@ class SortFolderViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        let sortActions = [ActionCell(title: NSLocalizedString("Sort by name", comment: "Selection Title"), tag: 1),
-                           ActionCell(title: NSLocalizedString("Sort by size", comment: "Selection Title"), tag: 2),
-                           ActionCell(title: NSLocalizedString("Sort by type", comment: "Selection Title"), tag: 3)]
+        let sortActions = [ActionCell(title: NSLocalizedString("Folders first", comment: "Switch Title"),    tag: 0, hasSwitch: true),
+                           ActionCell(title: NSLocalizedString("Sort by name",  comment: "Selection Title"), tag: 1                  ),
+                           ActionCell(title: NSLocalizedString("Sort by size",  comment: "Selection Title"), tag: 2                  ),
+                           ActionCell(title: NSLocalizedString("Sort by type",  comment: "Selection Title"), tag: 3                  )]
 
         contextMenuSortActions.append(contentsOf: sortActions)
 
@@ -54,16 +54,11 @@ class SortFolderViewController: UITableViewController {
             return view
         }()
 
-        let iconImage: UIImageView = {
-            let imageView = UIImageView(image: UIImage(named: "FolderIcon"))
-            imageView.contentMode = .scaleAspectFit
-            return imageView
-        }()
-
-        let elementName: UILabel = {
+        let titleName: UILabel = {
             let label = UILabel()
             label.text = NSLocalizedString("Sort folder", comment: "Window Title")
             label.font = UIFont.systemFont(ofSize: 14)
+            label.translatesAutoresizingMaskIntoConstraints = false
             return label
         }()
 
@@ -73,13 +68,9 @@ class SortFolderViewController: UITableViewController {
             return view
         }()
 
-        headerView.addSubview(iconImage)
-        headerView.addSubview(elementName)
-
-        headerView.addConstraints(with: "H:|-22-[v0(26)]-10-[v1]-10-|", views: iconImage, elementName)
-        headerView.addConstraints(with: "V:[v0(26)]", views: iconImage)
-        iconImage.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        elementName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        headerView.addSubview(titleName)
+        titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+        titleName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
 
         headerView.addSubview(separator)
         headerView.addConstraints(with: "H:|[v0]|", views: separator)
@@ -96,15 +87,21 @@ class SortFolderViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return contextMenuSortActions[indexPath.row]
+        let cell = contextMenuSortActions[indexPath.row]
+        if cell.tag == 0 {
+            cell.selectionStyle = .none
+        }
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let tag = tableView.cellForRow(at: indexPath)?.tag {
-            self.onFinish?(tag)
+            if tag != 0 {
+                self.onFinish?(tag)
+            }
         }
     }
-
+    
     #if DEBUG
     deinit { print("SortFolderViewController deinit") }
     #endif

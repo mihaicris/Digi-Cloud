@@ -67,7 +67,17 @@ class ListingViewController: UITableViewController {
     }
 
     @objc fileprivate func handleSortSelect() {
-        print(123)
+        let controller = SortFolderViewController()
+        controller.onFinish = { (selection) in
+            self.dismiss(animated: true, completion: nil)
+            print("Selected sort method: \(selection)")
+        }
+        controller.modalPresentationStyle = .popover
+
+        guard let button = navigationItem.rightBarButtonItems?[1] else { return }
+
+        controller.popoverPresentationController?.barButtonItem = button
+        present(controller, animated: true, completion: nil)
     }
     @objc fileprivate func handleAddFolder() {
         let controller = CreateFolderViewController()
