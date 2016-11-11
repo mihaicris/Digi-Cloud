@@ -1,5 +1,5 @@
 //
-//  LocationTableTableViewController.swift
+//  LocationsTableViewController.swift
 //  test
 //
 //  Created by Mihai Cristescu on 15/09/16.

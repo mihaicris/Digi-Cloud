@@ -6,14 +6,6 @@
 //  Copyright © 2016 Mihai Cristescu. All rights reserved.
 //
 
-//
-//  ActionsViewController.swift
-//  Digi Cloud
-//
-//  Created by Mihai Cristescu on 20/10/16.
-//  Copyright © 2016 Mihai Cristescu. All rights reserved.
-//
-
 import UIKit
 
 class SortFolderViewController: UITableViewController {

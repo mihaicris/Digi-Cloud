@@ -1,5 +1,5 @@
 //
-//  FolderInfoViewController+Delegate.swift
+//  FolderInfoViewController+DeleteAlertViewControllerDelegate.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 09/11/16.

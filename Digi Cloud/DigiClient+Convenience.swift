@@ -1,5 +1,5 @@
 //
-//  DIGIConvenience.swift
+//  DigiClient+Convenience.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 26/09/16.

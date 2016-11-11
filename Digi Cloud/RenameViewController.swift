@@ -1,5 +1,5 @@
 //
-//  renameViewController.swift
+//  RenameViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 21/10/16.

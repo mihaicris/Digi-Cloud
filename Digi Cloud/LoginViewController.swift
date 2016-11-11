@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LoginViewController.swift
 //  test
 //
 //  Created by Mihai Cristescu on 15/09/16.

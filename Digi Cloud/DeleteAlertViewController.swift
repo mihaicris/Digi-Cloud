@@ -1,5 +1,5 @@
 //
-//  DeleteViewController.swift
+//  DeleteAlertViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 26/10/16.

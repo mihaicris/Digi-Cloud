@@ -1,5 +1,5 @@
 //
-//  Constants.swift
+//  DigiConstants.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 16/09/16.

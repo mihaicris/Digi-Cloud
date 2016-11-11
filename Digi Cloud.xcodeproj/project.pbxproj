@@ -33,8 +33,8 @@
 		83EF1D481D8FBDDA00ACE008 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* File.swift */; };
 		83EF1D6A1D8FDB1900ACE008 /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D691D8FDB1900ACE008 /* ListingViewController.swift */; };
 		83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6B1D8FE26400ACE008 /* Mount.swift */; };
-		83EF1D701D900F9700ACE008 /* FileListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6F1D900F9700ACE008 /* FileListCell.swift */; };
-		83EF1D721D900FA700ACE008 /* DirectoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D711D900FA700ACE008 /* DirectoryListCell.swift */; };
+		83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6F1D900F9700ACE008 /* FileCell.swift */; };
+		83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D711D900FA700ACE008 /* DirectoryCell.swift */; };
 		83F994431DD08D650023FB5D /* ListingViewController+ActionViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994421DD08D650023FB5D /* ListingViewController+ActionViewControllerDelegate.swift */; };
 		83F994451DD08E390023FB5D /* ListingViewController+BaseListCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994441DD08E390023FB5D /* ListingViewController+BaseListCellDelegate.swift */; };
 		83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994511DD09B340023FB5D /* SortFolderViewController.swift */; };
@@ -70,8 +70,8 @@
 		83EF1D471D8FBDDA00ACE008 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = File.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83EF1D691D8FDB1900ACE008 /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingViewController.swift; sourceTree = "<group>"; };
 		83EF1D6B1D8FE26400ACE008 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mount.swift; sourceTree = "<group>"; };
-		83EF1D6F1D900F9700ACE008 /* FileListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileListCell.swift; sourceTree = "<group>"; };
-		83EF1D711D900FA700ACE008 /* DirectoryListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryListCell.swift; sourceTree = "<group>"; };
+		83EF1D6F1D900F9700ACE008 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		83EF1D711D900FA700ACE008 /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryCell.swift; sourceTree = "<group>"; };
 		83F994421DD08D650023FB5D /* ListingViewController+ActionViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListingViewController+ActionViewControllerDelegate.swift"; sourceTree = "<group>"; };
 		83F994441DD08E390023FB5D /* ListingViewController+BaseListCellDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListingViewController+BaseListCellDelegate.swift"; sourceTree = "<group>"; };
 		83F994511DD09B340023FB5D /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortFolderViewController.swift; sourceTree = "<group>"; };
@@ -200,8 +200,8 @@
 				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
 				8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */,
 				83D281001D9D747A00D74661 /* CustomTextField.swift */,
-				83EF1D711D900FA700ACE008 /* DirectoryListCell.swift */,
-				83EF1D6F1D900F9700ACE008 /* FileListCell.swift */,
+				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
+				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -334,9 +334,9 @@
 				83562CAC1DB8C19B006FF04A /* ActionViewController.swift in Sources */,
 				83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */,
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
-				83EF1D701D900F9700ACE008 /* FileListCell.swift in Sources */,
+				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,
 				83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */,
-				83EF1D721D900FA700ACE008 /* DirectoryListCell.swift in Sources */,
+				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
 				83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */,
 				83EF1D481D8FBDDA00ACE008 /* File.swift in Sources */,
 				835406051D952FFD00019D53 /* Extensions.swift in Sources */,

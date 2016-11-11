@@ -1,5 +1,5 @@
 //
-//  AddFolderViewController.swift
+//  CreateFolderViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 31/10/16.
