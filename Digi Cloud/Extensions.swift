@@ -34,41 +34,14 @@ extension UIView {
 
 extension UserDefaults {
 
+    // the raw value of the enum is the key for which the value is set
     enum UserDefaultsKeys: String {
         case isAppFirstTimeStarted
         case isLoggedIn
+        case loginToken
         case showFoldersFirst
         case sortMethodOption
     }
-
-    func setIsAppFirstTimeStarted(value: Bool) {
-        set(value, forKey: UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
-        synchronize()
-    }
-
-    func getIsAppFirstTimeStarted() -> Bool {
-        return bool(forKey: UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
-    }
-
-    func setLoginToken(value: String) {
-        set(value, forKey: UserDefaultsKeys.isLoggedIn.rawValue)
-        synchronize()
-    }
-
-    func getLoginToken() -> String? {
-        return string(forKey: UserDefaultsKeys.isLoggedIn.rawValue)
-    }
-
-    func setShowFoldersFirst(value: Bool) {
-        set(value, forKey: UserDefaultsKeys.showFoldersFirst.rawValue)
-        synchronize()
-    }
-
-    func getShowFoldersFirst() -> Bool {
-        return bool(forKey: UserDefaultsKeys.showFoldersFirst.rawValue)
-    }
-
-
 }
 
 extension UIColor {

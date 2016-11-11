@@ -15,17 +15,19 @@ class MainNavigationController: UINavigationController {
 
 
         // we check if app is launched for the first time, if yes, we initialize some settings
-        if !UserDefaults.standard.getIsAppFirstTimeStarted() {
+        if !AppSettings.isAppFirstTimeStarted {
 
             // Set that App has been started first time
-            UserDefaults.standard.setIsAppFirstTimeStarted(value: true)
+            AppSettings.isAppFirstTimeStarted = true
 
-            // Set that sorting the content of the folder will show folders first
-            UserDefaults.standard.setShowFoldersFirst(value: true)
+            // Set sorting defaults
+            AppSettings.showFoldersFirst = true
+            AppSettings.sortMethod = .byName
+            // TODO: set the sort direction
         }
 
         // if there is a token saved, we load the locations, otherwise present the login screen
-        if let token = UserDefaults.standard.getLoginToken() {
+        if let token = AppSettings.loginToken {
             DigiClient.shared.token = token
             let controller = LocationsTableViewController()
             viewControllers = [controller]

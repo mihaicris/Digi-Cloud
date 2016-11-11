@@ -17,6 +17,7 @@ class ListingViewController: UITableViewController {
     // MARK: - Properties
 
     var content: [File] = []
+
     let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
@@ -49,11 +50,11 @@ class ListingViewController: UITableViewController {
     fileprivate func setupViews() {
         let sortButton      = UIBarButtonItem(title: NSLocalizedString("Sort", comment: "Button Title"),
                                               style: UIBarButtonItemStyle.plain,
-                                             target: self,
-                                             action: #selector(handleSortSelect))
+                                              target: self,
+                                              action: #selector(handleSortSelect))
         let addFolderButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add,
-                                                           target: self,
-                                                           action: #selector(handleAddFolder))
+                                              target: self,
+                                              action: #selector(handleAddFolder))
         navigationItem.rightBarButtonItems = [addFolderButton, sortButton]
     }
 
@@ -70,28 +71,43 @@ class ListingViewController: UITableViewController {
         let controller = SortFolderViewController()
         controller.onFinish = { (selection) in
             self.dismiss(animated: true, completion: nil)
-            print("Selected sort method: \(selection)")
+
+            // save the sort method in the App settings
+            switch selection {
+            case 1:
+                AppSettings.sortMethod = .byName
+            case 2:
+                AppSettings.sortMethod = .byDate
+            case 3:
+                AppSettings.sortMethod = .bySize
+            case 4:
+                AppSettings.sortMethod = .byType
+            default:
+                break
+            }
+
+            self.sortContent()
+            self.tableView.reloadData()
         }
         controller.modalPresentationStyle = .popover
-
         guard let button = navigationItem.rightBarButtonItems?[1] else { return }
-
         controller.popoverPresentationController?.barButtonItem = button
         present(controller, animated: true, completion: nil)
     }
+
     @objc fileprivate func handleAddFolder() {
         let controller = CreateFolderViewController()
-        controller.onFinish = { [weak self] (folderName) in
-            if let vc = self {
-                DispatchQueue.main.async {
-                    vc.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
-                    if folderName != nil {
-                        vc.getFolderContent()
-                    } else {
-                        return // Cancel
-                    }
+        controller.onFinish = { (folderName) in
+
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
+                if folderName != nil {
+                    self.getFolderContent()
+                } else {
+                    return // Cancel
                 }
             }
+
         }
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
@@ -99,57 +115,75 @@ class ListingViewController: UITableViewController {
         present(navigationController, animated: true, completion: nil)
     }
 
-    // TODO: Implement sorting filters in the interface
-    internal func sortContent() {
+    func sortContent() {
 
-        // check settings and choose appropriate sorting function name/size/date
-        sortByName(directoryFirst: true, direction: .ascending)
+        print("Sort Started")
+
+        // TODO: - Get the sort direction from APP Settings
+        let direction: Sorting = .ascending
+
+        switch AppSettings.sortMethod {
+        case .byName:
+            sortByName(foldersFirst: AppSettings.showFoldersFirst, direction: direction)
+        case .byDate:
+            break
+        case .bySize:
+            break
+        case .byType:
+            break
+        }
+        print("Sort Finished")
     }
 
-    fileprivate func sortByName(directoryFirst: Bool, direction: Sorting) {
-        self.content.sort {
-            if directoryFirst {
-                if direction == .ascending {
-                    // Order items by name (ascending), directories are shown first
-                    return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
-                } else {
-                    return $0.type == $1.type ? ($0.name.lowercased() > $1.name.lowercased()) : ($0.type < $1.type)
-                }
-            } else {
-                //  Order items by name (ascending)
-                if direction == .ascending {
-                    return $0.name.lowercased() < $1.name.lowercased()
-                } else {
-                    return $0.name.lowercased() > $1.name.lowercased()
-                }
+    fileprivate func sortByName(foldersFirst: Bool, direction: Sorting) {
+        if foldersFirst {
+            if direction == .ascending {
+                self.content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+            }
+            else {
+                self.content.sort { return $0.type == $1.type ? ($0.name.lowercased() > $1.name.lowercased()) : ($0.type < $1.type) }
+            }
+        } else {
+            if direction == .ascending {
+                self.content.sort { return $0.name.lowercased() < $1.name.lowercased() }
+            }
+            else {
+                self.content.sort { return $0.name.lowercased() > $1.name.lowercased() }
             }
         }
     }
 
-    fileprivate func sortByDate(directoryFirst: Bool, direction: Sorting) {
+    fileprivate func sortByDate(foldersFirst: Bool, direction: Sorting) {
 
-        // TODO: Implement sort by date
-        /* Order items by Date (descending), directories are shown first */
-        // return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
+        //         TODO: Implement sort by date
+        //         Order items by Date (descending), directories are shown first
+
+        self.content.sort {
+            return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
+        }
+
     }
 
-    fileprivate func sortBySize(directoryFirst: Bool, direction: Sorting) {
+    fileprivate func sortBySize(foldersFirst: Bool, direction: Sorting) {
         // TODO: Implement sort by size
     }
 
+    fileprivate func sortByType(foldersFirst: Bool, direction: Sorting) {
+        // TODO: Implement sort by type
+    }
+
     func getFolderContent() {
-        toggleRightBarButtonsActive()
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
             guard error == nil else {
                 print("Error: \(error?.localizedDescription)")
                 return
             }
+
             self.content = content ?? []
             self.sortContent()
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-                self.toggleRightBarButtonsActive()
             }
         }
     }

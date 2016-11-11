@@ -17,21 +17,24 @@ extension ListingViewController: ActionViewControllerDelegate {
         case 2:
             // TODO: Refactor sort, refresh
             let controller = RenameViewController(element: content[currentIndex.row])
-            controller.onFinish = { [weak self] (newName, needRefresh) in
-                if let vc = self {
+            controller.onFinish = { (newName, needRefresh) in
+
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil) // dismiss RenameViewController
+                }
+                if let name = newName{
+                    self.content[self.currentIndex.row].name = name
+                    self.sortContent()
                     DispatchQueue.main.async {
-                        vc.dismiss(animated: true, completion: nil) // dismiss RenameViewController
-                        if let name = newName{
-                            vc.content[vc.currentIndex.row].name = name
-                            vc.sortContent()
-                            vc.tableView.reloadData()
-                        } else {
-                            if needRefresh {
-                                vc.getFolderContent()
-                            }
-                        }
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    if needRefresh {
+                        self.getFolderContent()
                     }
                 }
+
+
             }
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet

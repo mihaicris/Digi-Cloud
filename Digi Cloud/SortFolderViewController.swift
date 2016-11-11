@@ -35,12 +35,14 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
     fileprivate func setupViews() {
         let sortActions = [ActionCell(title: NSLocalizedString("Show folders first", comment: "Switch Title"),    tag: 0, switchDelegate: self),
                            ActionCell(title: NSLocalizedString("Sort by name",       comment: "Selection Title"), tag: 1                      ),
-                           ActionCell(title: NSLocalizedString("Sort by size",       comment: "Selection Title"), tag: 2                      ),
-                           ActionCell(title: NSLocalizedString("Sort by type",       comment: "Selection Title"), tag: 3                      )]
+                           ActionCell(title: NSLocalizedString("Sort by date",       comment: "Selection Title"), tag: 2                      ),
+                           ActionCell(title: NSLocalizedString("Sort by size",       comment: "Selection Title"), tag: 3                      ),
+                           ActionCell(title: NSLocalizedString("Sort by type",       comment: "Selection Title"), tag: 4                      )
+                           ]
 
         // get from settings if sorted list has folders first
         if let button = sortActions[0].switchButton {
-            button.isOn = UserDefaults.standard.getShowFoldersFirst()
+            button.isOn = AppSettings.showFoldersFirst
         }
 
         contextMenuSortActions.append(contentsOf: sortActions)
@@ -81,7 +83,7 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
 
     func onSwitchValueChanged(button: UISwitch, value: Bool) {
         if button.tag == 0 {
-            UserDefaults.standard.setShowFoldersFirst(value: value)
+            AppSettings.showFoldersFirst = value
         }
     }
 

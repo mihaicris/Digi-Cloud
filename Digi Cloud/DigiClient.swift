@@ -35,7 +35,7 @@ final class DigiClient {
         case login(String)
     }
 
-    // MAKR: - Shared instance
+    // MARK: - Shared instance
     static let shared: DigiClient = DigiClient()
 
     // MARK: - GET

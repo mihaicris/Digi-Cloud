@@ -109,7 +109,7 @@ class LoginViewController: UIViewController {
             }
             if success {
                 // save token for automatic login
-                UserDefaults.standard.setLoginToken(value: DigiClient.shared.token)
+                AppSettings.loginToken = DigiClient.shared.token
                 self.onFinish?()
             } else {
                 DispatchQueue.main.async {
