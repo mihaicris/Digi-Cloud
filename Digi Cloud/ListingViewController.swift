@@ -10,10 +10,6 @@ import UIKit
 
 class ListingViewController: UITableViewController {
 
-    enum Sorting {
-        case ascending
-        case descending
-    }
     // MARK: - Properties
 
     var content: [File] = []
@@ -29,6 +25,7 @@ class ListingViewController: UITableViewController {
     let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
+        f.allowsNonnumericFormatting = false
         return f
     }()
 
@@ -81,11 +78,12 @@ class ListingViewController: UITableViewController {
             case 3:
                 AppSettings.sortMethod = .bySize
             case 4:
-                AppSettings.sortMethod = .byType
+                AppSettings.sortMethod = .byContentType
             default:
                 break
             }
 
+            // sort content and reload table
             self.sortContent()
             self.tableView.reloadData()
         }
@@ -117,34 +115,27 @@ class ListingViewController: UITableViewController {
 
     func sortContent() {
 
-        print("Sort Started")
+        AppSettings.sortAscending = true
 
-        // TODO: - Get the sort direction from APP Settings
-        let direction: Sorting = .ascending
 
         switch AppSettings.sortMethod {
-        case .byName:
-            sortByName(foldersFirst: AppSettings.showFoldersFirst, direction: direction)
-        case .byDate:
-            break
-        case .bySize:
-            break
-        case .byType:
-            break
+        case .byName:        sortByName()
+        case .byDate:        sortByDate()
+        case .bySize:        sortBySize()
+        case .byContentType: sortByContentType()
         }
-        print("Sort Finished")
     }
 
-    fileprivate func sortByName(foldersFirst: Bool, direction: Sorting) {
-        if foldersFirst {
-            if direction == .ascending {
+    fileprivate func sortByName() {
+        if AppSettings.showFoldersFirst {
+            if AppSettings.sortAscending {
                 self.content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
             }
             else {
                 self.content.sort { return $0.type == $1.type ? ($0.name.lowercased() > $1.name.lowercased()) : ($0.type < $1.type) }
             }
         } else {
-            if direction == .ascending {
+            if AppSettings.sortAscending  {
                 self.content.sort { return $0.name.lowercased() < $1.name.lowercased() }
             }
             else {
@@ -153,23 +144,36 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func sortByDate(foldersFirst: Bool, direction: Sorting) {
-
-        //         TODO: Implement sort by date
-        //         Order items by Date (descending), directories are shown first
-
-        self.content.sort {
-            return $0.type == $1.type && $0.type != "dir" ? ($0.modified > $1.modified) : ($0.type < $1.type)
+    fileprivate func sortByDate() {
+        if AppSettings.showFoldersFirst {
+            if AppSettings.sortAscending {
+                self.content.sort { return $0.type == $1.type ? ($0.modified > $1.modified) : ($0.type < $1.type) }
+            } else {
+                self.content.sort { return $0.type == $1.type ? ($0.modified > $1.modified) : ($0.type < $1.type) }
+            }
+        } else {
+            if AppSettings.sortAscending {
+                self.content.sort { return $0.modified > $1.modified }
+            } else {
+                self.content.sort { return $0.modified < $1.modified }
+            }
         }
-
     }
 
-    fileprivate func sortBySize(foldersFirst: Bool, direction: Sorting) {
-        // TODO: Implement sort by size
+    fileprivate func sortBySize() {
+        if AppSettings.sortAscending {
+            self.content.sort { return $0.type == $1.type ? ($0.size > $1.size) : ($0.type < $1.type) }
+        } else {
+            self.content.sort { return $0.type == $1.type ? ($0.size < $1.size) : ($0.type < $1.type) }
+        }
     }
 
-    fileprivate func sortByType(foldersFirst: Bool, direction: Sorting) {
-        // TODO: Implement sort by type
+    fileprivate func sortByContentType() {
+        if AppSettings.sortAscending {
+            self.content.sort { return $0.type == $1.type ? ($0.contentType > $1.contentType && $0.name > $1.name) : ($0.type < $1.type) }
+        } else {
+            self.content.sort { return $0.type == $1.type ? ($0.contentType < $1.contentType && $0.name < $1.name) : ($0.type < $1.type) }
+        }
     }
 
     func getFolderContent() {
@@ -179,7 +183,6 @@ class ListingViewController: UITableViewController {
                 print("Error: \(error?.localizedDescription)")
                 return
             }
-
             self.content = content ?? []
             self.sortContent()
             DispatchQueue.main.async {

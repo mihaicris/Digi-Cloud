@@ -40,7 +40,8 @@ extension UserDefaults {
         case isLoggedIn
         case loginToken
         case showFoldersFirst
-        case sortMethodOption
+        case sortMethod
+        case sortAscending
     }
 }
 

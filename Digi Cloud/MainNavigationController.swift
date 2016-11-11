@@ -23,7 +23,8 @@ class MainNavigationController: UINavigationController {
             // Set sorting defaults
             AppSettings.showFoldersFirst = true
             AppSettings.sortMethod = .byName
-            // TODO: set the sort direction
+            AppSettings.sortAscending = true
+
         }
 
         // if there is a token saved, we load the locations, otherwise present the login screen

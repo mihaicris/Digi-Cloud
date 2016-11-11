@@ -12,7 +12,7 @@ enum SortMethodType: Int {
     case byName = 1
     case byDate
     case bySize
-    case byType
+    case byContentType
 }
 
 final class AppSettings {
@@ -46,10 +46,15 @@ final class AppSettings {
 
     static var sortMethod: SortMethodType {
         get {
-            let value = UserDefaults.standard.integer(forKey: UserDefaults.UserDefaultsKeys.sortMethodOption.rawValue)
+            let value = UserDefaults.standard.integer(forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue)
             return SortMethodType(rawValue: value)!
         }
-        set { UserDefaults.standard.set(newValue.rawValue, forKey: UserDefaults.UserDefaultsKeys.sortMethodOption.rawValue) }
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue) }
+    }
+
+    static var sortAscending: Bool {
+        get { return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
     }
 
 }
