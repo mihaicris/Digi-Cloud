@@ -35,7 +35,19 @@ extension UIView {
 extension UserDefaults {
 
     enum UserDefaultsKeys: String {
+        case isAppFirstTimeStarted
         case isLoggedIn
+        case showFoldersFirst
+        case sortMethodOption
+    }
+
+    func setIsAppFirstTimeStarted(value: Bool) {
+        set(value, forKey: UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
+        synchronize()
+    }
+
+    func getIsAppFirstTimeStarted() -> Bool {
+        return bool(forKey: UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
     }
 
     func setLoginToken(value: String) {
@@ -46,6 +58,16 @@ extension UserDefaults {
     func getLoginToken() -> String? {
         return string(forKey: UserDefaultsKeys.isLoggedIn.rawValue)
     }
+
+    func setShowFoldersFirst(value: Bool) {
+        set(value, forKey: UserDefaultsKeys.showFoldersFirst.rawValue)
+        synchronize()
+    }
+
+    func getShowFoldersFirst() -> Bool {
+        return bool(forKey: UserDefaultsKeys.showFoldersFirst.rawValue)
+    }
+
 
 }
 

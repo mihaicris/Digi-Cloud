@@ -13,14 +13,17 @@ import UIKit
 
 class ActionCell: UITableViewCell {
 
+    var switchButton: UISwitch!
+
+    weak var delegate: ActionCellDelegate?
+
     /// Init an ActionCell
     ///
     /// - Parameters:
     ///   - title: textLabel text
     ///   - tag: tag of the cells view
     ///   - hasSwitch: if true, the cell will contain a UISwitch on the right side
-
-    init(title: String, tag: Int, hasSwitch: Bool = false) {
+    init(title: String, tag: Int, switchDelegate: AnyObject? = nil) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: nil)
         self.textLabel?.text = title
         self.textLabel?.font = UIFont.systemFont(ofSize: 18)
@@ -35,21 +38,23 @@ class ActionCell: UITableViewCell {
             color = .defaultColor
         }
         self.textLabel?.textColor = color
-        if hasSwitch {
-            addSwitch()
+        if let switchDelegate = switchDelegate as? ActionCellDelegate {
+            addSwitch(delegate: switchDelegate)
         }
     }
 
     /// Helper function to add the UISwitch to the cell
-    private func addSwitch() {
-        let switchButton = UISwitch()
-
-        /// TODO: - Get this parameter from UserDefaults
-        switchButton.isOn = true
-
+    private func addSwitch(delegate: ActionCellDelegate) {
+        switchButton = UISwitch()
+        self.delegate = delegate
+        switchButton.addTarget(self, action: #selector(handleSwitchValueChanged), for: UIControlEvents.valueChanged)
         contentView.addSubview(switchButton)
         contentView.addConstraints(with: "H:[v0]-10-|", views: switchButton)
         switchButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+    }
+
+    @objc private func handleSwitchValueChanged() {
+        delegate?.onSwitchValueChanged(button: switchButton, value: switchButton.isOn)
     }
 
     required init?(coder aDecoder: NSCoder) {

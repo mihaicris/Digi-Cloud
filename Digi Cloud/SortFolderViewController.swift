@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SortFolderViewController: UITableViewController {
+class SortFolderViewController: UITableViewController, ActionCellDelegate {
 
     var onFinish: ((_ selection: Int) -> Void)?
 
@@ -33,10 +33,15 @@ class SortFolderViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        let sortActions = [ActionCell(title: NSLocalizedString("Folders first", comment: "Switch Title"),    tag: 0, hasSwitch: true),
-                           ActionCell(title: NSLocalizedString("Sort by name",  comment: "Selection Title"), tag: 1                  ),
-                           ActionCell(title: NSLocalizedString("Sort by size",  comment: "Selection Title"), tag: 2                  ),
-                           ActionCell(title: NSLocalizedString("Sort by type",  comment: "Selection Title"), tag: 3                  )]
+        let sortActions = [ActionCell(title: NSLocalizedString("Show folders first", comment: "Switch Title"),    tag: 0, switchDelegate: self),
+                           ActionCell(title: NSLocalizedString("Sort by name",       comment: "Selection Title"), tag: 1                      ),
+                           ActionCell(title: NSLocalizedString("Sort by size",       comment: "Selection Title"), tag: 2                      ),
+                           ActionCell(title: NSLocalizedString("Sort by type",       comment: "Selection Title"), tag: 3                      )]
+
+        // get from settings if sorted list has folders first
+        if let button = sortActions[0].switchButton {
+            button.isOn = UserDefaults.standard.getShowFoldersFirst()
+        }
 
         contextMenuSortActions.append(contentsOf: sortActions)
 
@@ -72,6 +77,12 @@ class SortFolderViewController: UITableViewController {
         tableView.rowHeight = 50
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+    }
+
+    func onSwitchValueChanged(button: UISwitch, value: Bool) {
+        if button.tag == 0 {
+            UserDefaults.standard.setShowFoldersFirst(value: value)
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

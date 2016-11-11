@@ -24,3 +24,7 @@ protocol BaseListCellDelegate: class {
 protocol DeleteAlertViewControllerDelegate: class {
     func onConfirmDeletion()
 }
+
+protocol ActionCellDelegate: class {
+    func onSwitchValueChanged(button: UISwitch, value: Bool)
+}
