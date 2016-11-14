@@ -79,7 +79,6 @@ extension DigiClient {
                     }
                     let content = fileList.flatMap { File(JSON: $0) }
                     completionHandler(content, nil)
-
                 } else {
                     completionHandler(nil, JSONError.parce("Could not parce data (getFiles)"))
                 }

@@ -14,6 +14,7 @@ struct File {
     let modified: TimeInterval
     let size: Int64
     let contentType: String
+    let ext: String
 
     init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String) {
         self.name = name
@@ -21,6 +22,8 @@ struct File {
         self.modified = modified
         self.size = size
         self.contentType = contentType
+        let components = self.name.components(separatedBy: ".")
+        self.ext = components.count > 1 ? components.last! : ""
     }
 }
 
@@ -41,5 +44,7 @@ extension File: JSONDecodable {
         self.modified = modified
         self.size = size
         self.contentType = contentType
+        let components = self.name.components(separatedBy: ".")
+        self.ext = components.count > 1 ? components.last! : ""
     }
 }

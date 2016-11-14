@@ -19,7 +19,6 @@ struct Mount {
 
 extension Mount: JSONDecodable {
     init?(JSON: Any) {
-
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let id = JSON["id"] as? String

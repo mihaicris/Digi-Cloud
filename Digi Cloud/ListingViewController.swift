@@ -29,7 +29,10 @@ class ListingViewController: UITableViewController {
         return f
     }()
 
-    internal var currentIndex: IndexPath!
+    var currentIndex: IndexPath!
+
+    var addFolderButton, sortButton: UIBarButtonItem!
+
 
     // MARK: - View Life Cycle
 
@@ -45,27 +48,45 @@ class ListingViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        let sortButton      = UIBarButtonItem(title: NSLocalizedString("Sort", comment: "Button Title"),
-                                              style: UIBarButtonItemStyle.plain,
-                                              target: self,
-                                              action: #selector(handleSortSelect))
-        let addFolderButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add,
-                                              target: self,
-                                              action: #selector(handleAddFolder))
-        navigationItem.rightBarButtonItems = [addFolderButton, sortButton]
+
+        var buttonTitle: String
+        let isAscending = AppSettings.sortAscending
+
+        switch AppSettings.sortMethod {
+        case .byName:        buttonTitle = NSLocalizedString("Name", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+        case .byDate:        buttonTitle = NSLocalizedString("Date", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+        case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+        case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+        }
+        sortButton      = UIBarButtonItem(title: buttonTitle, style: UIBarButtonItemStyle.plain, target: self, action: #selector(handleSortSelect))
+        addFolderButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(handleAddFolder))
+        navigationItem.setRightBarButtonItems([sortButton, addFolderButton], animated: false)
     }
 
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
-        controller.onFinish = { [unowned self] (dismiss) in
+        controller.onFinish = { [unowned self] (dismiss, sortMethod) in
             if dismiss {
-                self.dismiss(animated: true, completion: nil)
-            }
+                self.dismiss(animated: true, completion: nil)            }
             self.sortContent()
             self.tableView.reloadData()
+
+            var buttonTitle: String
+            let isAscending = AppSettings.sortAscending
+
+            switch sortMethod {
+            case .byName:        buttonTitle = NSLocalizedString("Name", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            case .byDate:        buttonTitle = NSLocalizedString("Date", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            }
+
+            self.sortButton = UIBarButtonItem(title: buttonTitle, style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.handleSortSelect))
+            self.navigationItem.setRightBarButtonItems([self.sortButton, self.addFolderButton], animated: false)
+
         }
         controller.modalPresentationStyle = .popover
-        guard let buttonView = navigationItem.rightBarButtonItems?[1].value(forKey: "view") as? UIView else { return }
+        guard let buttonView = navigationItem.rightBarButtonItems?[0].value(forKey: "view") as? UIView else { return }
         controller.popoverPresentationController?.sourceView = buttonView
         controller.popoverPresentationController?.sourceRect = buttonView.bounds
         present(controller, animated: true, completion: nil)
@@ -119,32 +140,32 @@ class ListingViewController: UITableViewController {
     fileprivate func sortByDate() {
         if AppSettings.showFoldersFirst {
             if AppSettings.sortAscending {
-                self.content.sort { return $0.type == $1.type ? ($0.modified > $1.modified) : ($0.type < $1.type) }
+                self.content.sort { return $0.type == $1.type ? ($0.modified < $1.modified) : ($0.type < $1.type) }
             } else {
                 self.content.sort { return $0.type == $1.type ? ($0.modified > $1.modified) : ($0.type < $1.type) }
             }
         } else {
             if AppSettings.sortAscending {
-                self.content.sort { return $0.modified > $1.modified }
-            } else {
                 self.content.sort { return $0.modified < $1.modified }
+            } else {
+                self.content.sort { return $0.modified > $1.modified }
             }
         }
     }
 
     fileprivate func sortBySize() {
         if AppSettings.sortAscending {
-            self.content.sort { return $0.type == $1.type ? ($0.size > $1.size) : ($0.type < $1.type) }
-        } else {
             self.content.sort { return $0.type == $1.type ? ($0.size < $1.size) : ($0.type < $1.type) }
+        } else {
+            self.content.sort { return $0.type == $1.type ? ($0.size > $1.size) : ($0.type < $1.type) }
         }
     }
 
     fileprivate func sortByContentType() {
         if AppSettings.sortAscending {
-            self.content.sort { return $0.type == $1.type ? ($0.contentType > $1.contentType && $0.name > $1.name) : ($0.type < $1.type) }
+            self.content.sort { return $0.type == $1.type ? ($0.ext < $1.ext) : ($0.type < $1.type) }
         } else {
-            self.content.sort { return $0.type == $1.type ? ($0.contentType < $1.contentType && $0.name < $1.name) : ($0.type < $1.type) }
+            self.content.sort { return $0.type == $1.type ? ($0.ext > $1.ext) : ($0.type < $1.type) }
         }
     }
 

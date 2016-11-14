@@ -15,7 +15,12 @@ class ActionCell: UITableViewCell {
 
     var switchButton: UISwitch!
 
-    weak var delegate: ActionCellDelegate?
+    weak var delegate: ActionCellDelegate? {
+        didSet {
+            guard let delegate = delegate else { return }
+            addSwitch(delegate: delegate)
+        }
+    }
 
     /// Init an ActionCell
     ///
@@ -23,7 +28,7 @@ class ActionCell: UITableViewCell {
     ///   - title: textLabel text
     ///   - tag: tag of the cells view
     ///   - hasSwitch: if true, the cell will contain a UISwitch on the right side
-    init(title: String, tag: Int, switchDelegate: AnyObject? = nil) {
+    init(title: String, tag: Int) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: nil)
         self.textLabel?.text = title
         self.textLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -38,15 +43,11 @@ class ActionCell: UITableViewCell {
             color = .defaultColor
         }
         self.textLabel?.textColor = color
-        if let switchDelegate = switchDelegate as? ActionCellDelegate {
-            addSwitch(delegate: switchDelegate)
-        }
     }
 
     /// Helper function to add the UISwitch to the cell
     private func addSwitch(delegate: ActionCellDelegate) {
         switchButton = UISwitch()
-        self.delegate = delegate
         switchButton.addTarget(self, action: #selector(handleSwitchValueChanged), for: UIControlEvents.valueChanged)
         contentView.addSubview(switchButton)
         contentView.addConstraints(with: "H:[v0]-10-|", views: switchButton)
