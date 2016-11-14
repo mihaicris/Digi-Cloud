@@ -26,7 +26,7 @@ class ActionCell: UITableViewCell {
     init(title: String, tag: Int, switchDelegate: AnyObject? = nil) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: nil)
         self.textLabel?.text = title
-        self.textLabel?.font = UIFont.systemFont(ofSize: 18)
+        self.textLabel?.font = UIFont.systemFont(ofSize: 16)
         self.tag = tag
         let color: UIColor
         switch tag {

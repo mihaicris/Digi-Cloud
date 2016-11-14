@@ -23,7 +23,7 @@ class BaseListCell: UITableViewCell {
 
     lazy var actionButton: UIButton = {
         let button = UIButton(type: UIButtonType.system)
-        button.setTitle("⋮", for: .normal)
+        button.setTitle("⋯", for: .normal)
         button.tag = 1
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         button.contentHorizontalAlignment = .center

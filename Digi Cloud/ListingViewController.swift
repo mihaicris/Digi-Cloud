@@ -190,7 +190,7 @@ class ListingViewController: UITableViewController {
 
     func animateActionButton(active: Bool) {
         let actionButton = (tableView.cellForRow(at: currentIndex) as! BaseListCell).actionButton
-        let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(M_PI)) : CGAffineTransform.identity
+        let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(M_PI_2)) : CGAffineTransform.identity
         let color: UIColor = active ? .black : .darkGray
         actionButton.setTitleColor(color, for: .normal)
         UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {

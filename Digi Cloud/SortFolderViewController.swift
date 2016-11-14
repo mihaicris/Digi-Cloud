@@ -24,6 +24,7 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         self.preferredContentSize.height = tableView.contentSize.height - 1
+        self.preferredContentSize.width = 250
         super.viewWillAppear(animated)
     }
 
@@ -33,7 +34,7 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
     }
 
     fileprivate func setupViews() {
-        let sortActions = [ActionCell(title: NSLocalizedString("Show folders first", comment: "Switch Title"),    tag: 0, switchDelegate: self),
+        let sortActions = [ActionCell(title: NSLocalizedString("Folders first", comment: "Switch Title"),    tag: 0, switchDelegate: self),
                            ActionCell(title: NSLocalizedString("Sort by name",       comment: "Selection Title"), tag: 1                      ),
                            ActionCell(title: NSLocalizedString("Sort by date",       comment: "Selection Title"), tag: 2                      ),
                            ActionCell(title: NSLocalizedString("Sort by size",       comment: "Selection Title"), tag: 3                      ),

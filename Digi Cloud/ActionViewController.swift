@@ -26,7 +26,7 @@ class ActionViewController: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.preferredContentSize.width = 400
+        self.preferredContentSize.width = 250
         self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
     }
