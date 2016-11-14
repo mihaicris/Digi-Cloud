@@ -55,15 +55,6 @@ class ListingViewController: UITableViewController {
         navigationItem.rightBarButtonItems = [addFolderButton, sortButton]
     }
 
-    func toggleRightBarButtonsActive() {
-        guard let buttons = navigationItem.rightBarButtonItems else {
-            return
-        }
-        for button in buttons {
-            button.isEnabled = !button.isEnabled
-        }
-    }
-
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self] (selection) in
@@ -88,8 +79,9 @@ class ListingViewController: UITableViewController {
             self.tableView.reloadData()
         }
         controller.modalPresentationStyle = .popover
-        guard let button = navigationItem.rightBarButtonItems?[1] else { return }
-        controller.popoverPresentationController?.barButtonItem = button
+        guard let buttonView = navigationItem.rightBarButtonItems?[1].value(forKey: "view") as? UIView else { return }
+        controller.popoverPresentationController?.sourceView = buttonView
+        controller.popoverPresentationController?.sourceRect = buttonView.bounds
         present(controller, animated: true, completion: nil)
     }
 
