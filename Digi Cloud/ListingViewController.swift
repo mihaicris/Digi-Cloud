@@ -57,24 +57,10 @@ class ListingViewController: UITableViewController {
 
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
-        controller.onFinish = { [unowned self] (selection) in
-            self.dismiss(animated: true, completion: nil)
-
-            // save the sort method in the App settings
-            switch selection {
-            case 1:
-                AppSettings.sortMethod = .byName
-            case 2:
-                AppSettings.sortMethod = .byDate
-            case 3:
-                AppSettings.sortMethod = .bySize
-            case 4:
-                AppSettings.sortMethod = .byContentType
-            default:
-                break
+        controller.onFinish = { [unowned self] (dismiss) in
+            if dismiss {
+                self.dismiss(animated: true, completion: nil)
             }
-
-            // sort content and reload table
             self.sortContent()
             self.tableView.reloadData()
         }
@@ -104,9 +90,6 @@ class ListingViewController: UITableViewController {
     }
 
     func sortContent() {
-
-        AppSettings.sortAscending = true
-
         switch AppSettings.sortMethod {
         case .byName:        sortByName()
         case .byDate:        sortByDate()

@@ -10,7 +10,7 @@ import UIKit
 
 class SortFolderViewController: UITableViewController, ActionCellDelegate {
 
-    var onFinish: ((_ selection: Int) -> Void)?
+    var onFinish: ((_ dismiss: Bool) -> Void)?
 
     var contextMenuSortActions: [ActionCell] = []
 
@@ -34,19 +34,20 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
     }
 
     fileprivate func setupViews() {
-        let sortActions = [ActionCell(title: NSLocalizedString("Folders first", comment: "Switch Title"),    tag: 0, switchDelegate: self),
-                           ActionCell(title: NSLocalizedString("Sort by name",       comment: "Selection Title"), tag: 1                      ),
-                           ActionCell(title: NSLocalizedString("Sort by date",       comment: "Selection Title"), tag: 2                      ),
-                           ActionCell(title: NSLocalizedString("Sort by size",       comment: "Selection Title"), tag: 3                      ),
-                           ActionCell(title: NSLocalizedString("Sort by type",       comment: "Selection Title"), tag: 4                      )
+        contextMenuSortActions = [ActionCell(title: NSLocalizedString("Folders first", comment: "Switch Title"),    tag: 0, switchDelegate: self),
+                           ActionCell(title: NSLocalizedString("Sort by name",  comment: "Selection Title"), tag: 1                      ),
+                           ActionCell(title: NSLocalizedString("Sort by date",  comment: "Selection Title"), tag: 2                      ),
+                           ActionCell(title: NSLocalizedString("Sort by size",  comment: "Selection Title"), tag: 3                      ),
+                           ActionCell(title: NSLocalizedString("Sort by type",  comment: "Selection Title"), tag: 4                      )
                            ]
 
         // get from settings if sorted list has folders first
-        if let button = sortActions[0].switchButton {
+        if let button = contextMenuSortActions[0].switchButton {
             button.isOn = AppSettings.showFoldersFirst
         }
 
-        contextMenuSortActions.append(contentsOf: sortActions)
+        let selectedCell = contextMenuSortActions[AppSettings.sortMethod.rawValue]
+        selectedCell.textLabel!.text! += AppSettings.sortAscending ? "  ↑" : "  ↓"
 
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
@@ -85,6 +86,7 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
     func onSwitchValueChanged(button: UISwitch, value: Bool) {
         if button.tag == 0 {
             AppSettings.showFoldersFirst = value
+            self.onFinish?(false)
         }
     }
 
@@ -103,7 +105,28 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let tag = tableView.cellForRow(at: indexPath)?.tag {
             if tag != 0 {
-                self.onFinish?(tag)
+                if tag == AppSettings.sortMethod.rawValue {
+                    // user selected the same sort method, thus it changed sorting direction
+                    AppSettings.sortAscending = !AppSettings.sortAscending
+                    let selectedCell = contextMenuSortActions[tag]
+                    let title = String(selectedCell.textLabel!.text!.characters.dropLast(2))
+                    selectedCell.textLabel!.text! = AppSettings.sortAscending ? "\(title) ↑" : "\(title) ↓"
+                }
+                // user changed the sort method
+                switch tag {
+                case 1:
+                    AppSettings.sortMethod = .byName
+                case 2:
+                    AppSettings.sortMethod = .byDate
+                case 3:
+                    AppSettings.sortMethod = .bySize
+                case 4:
+                    AppSettings.sortMethod = .byContentType
+                default:
+                    break
+                }
+                self.onFinish?(true)
+
             }
         }
     }
