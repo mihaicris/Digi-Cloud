@@ -66,7 +66,7 @@ class ListingViewController: UITableViewController {
 
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
-        controller.onFinish = { (selection) in
+        controller.onFinish = { [unowned self] (selection) in
             self.dismiss(animated: true, completion: nil)
 
             // save the sort method in the App settings
@@ -94,9 +94,9 @@ class ListingViewController: UITableViewController {
     }
 
     @objc fileprivate func handleAddFolder() {
+        self.dismiss(animated: false, completion: nil) // dismiss any other presented controller
         let controller = CreateFolderViewController()
-        controller.onFinish = { (folderName) in
-
+        controller.onFinish = { [unowned self] (folderName) in
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
                 if folderName != nil {
@@ -105,18 +105,15 @@ class ListingViewController: UITableViewController {
                     return // Cancel
                 }
             }
-
         }
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
-        navigationController.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(navigationController, animated: true, completion: nil)
     }
 
     func sortContent() {
 
         AppSettings.sortAscending = true
-
 
         switch AppSettings.sortMethod {
         case .byName:        sortByName()
