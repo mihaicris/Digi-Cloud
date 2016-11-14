@@ -25,23 +25,43 @@ final class AppSettings {
     static var tableViewRowHeight: CGFloat = 50
 
     static var isAppFirstTimeStarted: Bool {
-        get { return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue) }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue) }
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
+            UserDefaults.standard.synchronize()
+        }
     }
 
     static var isLoggedIn: Bool {
-        get { return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue) }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue) }
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue)
+            UserDefaults.standard.synchronize()
+        }
     }
 
     static var loginToken: String? {
-        get { return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue) }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue) }
+        get {
+            return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue)
+            UserDefaults.standard.synchronize()
+        }
     }
 
     static var showFoldersFirst: Bool {
-        get { return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue) }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue) }
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue)
+            UserDefaults.standard.synchronize()
+        }
     }
 
     static var sortMethod: SortMethodType {
@@ -49,7 +69,10 @@ final class AppSettings {
             let value = UserDefaults.standard.integer(forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue)
             return SortMethodType(rawValue: value)!
         }
-        set { UserDefaults.standard.set(newValue.rawValue, forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue) }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue)
+            UserDefaults.standard.synchronize()
+        }
     }
 
     static var sortAscending: Bool {

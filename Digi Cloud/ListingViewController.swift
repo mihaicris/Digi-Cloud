@@ -43,11 +43,15 @@ class ListingViewController: UITableViewController {
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: "DirectoryCell")
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
-        setupViews()
         getFolderContent()
     }
 
-    fileprivate func setupViews() {
+    override func viewWillAppear(_ animated: Bool) {
+        updateSortType()
+        super.viewWillAppear(animated)
+    }
+
+    fileprivate func updateSortType() {
 
         var buttonTitle: String
         let isAscending = AppSettings.sortAscending
@@ -65,7 +69,7 @@ class ListingViewController: UITableViewController {
 
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
-        controller.onFinish = { [unowned self] (dismiss, sortMethod) in
+        controller.onFinish = { [unowned self] (dismiss) in
             if dismiss {
                 self.dismiss(animated: true, completion: nil)            }
             self.sortContent()
@@ -74,7 +78,7 @@ class ListingViewController: UITableViewController {
             var buttonTitle: String
             let isAscending = AppSettings.sortAscending
 
-            switch sortMethod {
+            switch AppSettings.sortMethod {
             case .byName:        buttonTitle = NSLocalizedString("Name", comment: "Button title") + (isAscending ? " ↑" : " ↓")
             case .byDate:        buttonTitle = NSLocalizedString("Date", comment: "Button title") + (isAscending ? " ↑" : " ↓")
             case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "Button title") + (isAscending ? " ↑" : " ↓")

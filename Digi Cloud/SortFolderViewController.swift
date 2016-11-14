@@ -10,7 +10,7 @@ import UIKit
 
 class SortFolderViewController: UITableViewController, ActionCellDelegate {
 
-    var onFinish: ((_ dismiss: Bool, _ sort: SortMethodType) -> Void)?
+    var onFinish: ((_ dismiss: Bool) -> Void)?
 
     var contextMenuSortActions: [String] = []
 
@@ -82,7 +82,7 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
     func onSwitchValueChanged(button: UISwitch, value: Bool) {
         if button.tag == 0 {
             AppSettings.showFoldersFirst = value
-            self.onFinish?(false, AppSettings.sortMethod)
+            self.onFinish?(false)
         }
     }
 
@@ -122,7 +122,7 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
                     AppSettings.sortMethod = SortMethodType(rawValue: tag)!
                 }
                 tableView.reloadData()
-                self.onFinish?(true, AppSettings.sortMethod)
+                self.onFinish?(true)
             }
         }
     }
