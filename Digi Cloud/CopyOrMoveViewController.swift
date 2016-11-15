@@ -12,15 +12,15 @@ class CopyOrMoveViewController: UIViewController {
 
     var onFinish: ((Void) -> Void)?
 
-    fileprivate var element: File
-    fileprivate var operation: Int
+    var element: File
+    var action: ActionType
 
-    init(element: File, operation: Int) {
+    init(element: File, action: ActionType) {
         self.element = element
-        self.operation = operation
+        self.action = action
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -33,10 +33,13 @@ class CopyOrMoveViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = UIColor.white
 
-        if operation == 3 {
+        switch action {
+        case .copy:
             self.title = element.type == "file" ? NSLocalizedString("Copy File", comment: "Window title") : NSLocalizedString("Copy Folder", comment: "Window title")
-        } else if operation == 4 {
+        case .move:
             self.title = element.type == "file" ? NSLocalizedString("Move File", comment: "Window title") : NSLocalizedString("Move Folder", comment: "Window title")
+        default:
+            return
         }
 
         let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: UIBarButtonItemStyle.done, target: self, action: #selector(handleDone))

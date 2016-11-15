@@ -9,15 +9,15 @@
 import UIKit
 
 extension ListingViewController: ActionViewControllerDelegate {
-    func didSelectOption(tag: Int) {
+    func didSelectOption(action: ActionType) {
 
         self.animateActionButton(active: false)
         dismiss(animated: true, completion: nil) // dismiss ActionsViewController
 
-        switch tag {
+        switch action {
 
         // rename action
-        case 2:
+        case .rename:
             // TODO: Refactor sort, refresh
             let controller = RenameViewController(element: content[currentIndex.row])
             controller.onFinish = { (newName, needRefresh) in
@@ -42,9 +42,9 @@ extension ListingViewController: ActionViewControllerDelegate {
             present(navController, animated: true, completion: nil)
 
         // copy or move action
-        case 3, 4:
+        case .copy, .move:
             let element = content[currentIndex.row]
-            let controller = CopyOrMoveViewController(element: element, operation: tag)
+            let controller = CopyOrMoveViewController(element: element, action: action)
             controller.onFinish = { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
             }
@@ -53,7 +53,7 @@ extension ListingViewController: ActionViewControllerDelegate {
             present(navController, animated: true, completion: nil)
 
         // delete action
-        case 5:
+        case .delete:
             let element = content[currentIndex.row]
             if element.type == "file" {
                 let controller = DeleteViewController(element: element)
@@ -73,7 +73,7 @@ extension ListingViewController: ActionViewControllerDelegate {
             }
 
         // folder info action
-        case 6:
+        case .folderInfo:
             let controller = FolderInfoViewController(element: content[currentIndex.row])
             controller.onFinish = { (success, needRefresh) in
                 DispatchQueue.main.async {

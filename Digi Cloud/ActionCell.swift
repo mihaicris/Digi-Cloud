@@ -28,16 +28,16 @@ class ActionCell: UITableViewCell {
     ///   - title: textLabel text
     ///   - tag: tag of the cells view
     ///   - hasSwitch: if true, the cell will contain a UISwitch on the right side
-    init(title: String, tag: Int) {
+    init(title: String, action: ActionType) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: nil)
         self.textLabel?.text = title
         self.textLabel?.font = UIFont.systemFont(ofSize: 16)
-        self.tag = tag
+        self.tag = action.rawValue
         let color: UIColor
-        switch tag {
-        case 0:
+        switch action {
+        case .noAction:
             color = .darkGray
-        case 5:
+        case .delete:
             color = .red
         default:
             color = .defaultColor

@@ -14,7 +14,7 @@ protocol JSONDecodable {
 }
 
 protocol ActionViewControllerDelegate: class {
-    func didSelectOption(tag: Int)
+    func didSelectOption(action: ActionType)
 }
 
 protocol BaseListCellDelegate: class {

@@ -8,6 +8,17 @@
 
 import UIKit
 
+enum ActionType: Int {
+    case noAction = 0
+    case makeOffline
+    case rename
+    case copy
+    case move
+    case delete
+    case folderInfo
+    case share
+}
+
 class ActionViewController: UITableViewController {
 
     var element: File!
@@ -37,20 +48,20 @@ class ActionViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-        let folderActions = [ActionCell(title: NSLocalizedString("Share",                comment: "Selection Title"), tag: 7),
-                             ActionCell(title: NSLocalizedString("Rename",               comment: "Selection Title"), tag: 2),
-                             ActionCell(title: NSLocalizedString("Copy",                 comment: "Selection Title"), tag: 3),
-                             ActionCell(title: NSLocalizedString("Move",                 comment: "Selection Title"), tag: 4),
-                             ActionCell(title: NSLocalizedString("Folder information",   comment: "Selection Title"), tag: 6)]
+        let folderActions = [ActionCell(title: NSLocalizedString("Share",                comment: "Selection Title"), action: .share),
+                             ActionCell(title: NSLocalizedString("Rename",               comment: "Selection Title"), action: .rename),
+                             ActionCell(title: NSLocalizedString("Copy",                 comment: "Selection Title"), action: .copy),
+                             ActionCell(title: NSLocalizedString("Move",                 comment: "Selection Title"), action: .move),
+                             ActionCell(title: NSLocalizedString("Folder information",   comment: "Selection Title"), action: .folderInfo)]
 
         contextMenuFolderActions.append(contentsOf: folderActions)
 
-        let fileActions = [ActionCell(title: NSLocalizedString("Share",                  comment: "Selection Title"), tag: 7),
-                           ActionCell(title: NSLocalizedString("Make available offline", comment: "Selection Title"), tag: 1),
-                           ActionCell(title: NSLocalizedString("Rename",                 comment: "Selection Title"), tag: 2),
-                           ActionCell(title: NSLocalizedString("Copy",                   comment: "Selection Title"), tag: 3),
-                           ActionCell(title: NSLocalizedString("Move",                   comment: "Selection Title"), tag: 4),
-                           ActionCell(title: NSLocalizedString("Delete",                 comment: "Selection Title"), tag: 5)]
+        let fileActions = [ActionCell(title: NSLocalizedString("Share",                  comment: "Selection Title"), action: .share),
+                           ActionCell(title: NSLocalizedString("Make available offline", comment: "Selection Title"), action: .makeOffline),
+                           ActionCell(title: NSLocalizedString("Rename",                 comment: "Selection Title"), action: .rename),
+                           ActionCell(title: NSLocalizedString("Copy",                   comment: "Selection Title"), action: .copy),
+                           ActionCell(title: NSLocalizedString("Move",                   comment: "Selection Title"), action: .move),
+                           ActionCell(title: NSLocalizedString("Delete",                 comment: "Selection Title"), action: .delete)]
 
         contextMenuFileActions.append(contentsOf: fileActions)
 
@@ -108,8 +119,9 @@ class ActionViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let tag = tableView.cellForRow(at: indexPath)?.tag {
-            self.delegate?.didSelectOption(tag: tag)
+        if let tag = tableView.cellForRow(at: indexPath)?.tag,
+            let action = ActionType(rawValue: tag) {
+            self.delegate?.didSelectOption(action: action)
         }
     }
 

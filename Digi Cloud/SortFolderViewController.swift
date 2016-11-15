@@ -91,12 +91,17 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let tag = indexPath.row
-        if tag == AppSettings.sortMethod.rawValue {
-            contextMenuSortActions[tag] += AppSettings.sortAscending ? "   ↑" : "   ↓"
+        let sortMethodRow = indexPath.row
+
+        // check if user selected the same sort method
+        if  sortMethodRow == AppSettings.sortMethod.rawValue {
+            contextMenuSortActions[sortMethodRow] += AppSettings.sortAscending ? "   ↑" : "   ↓"
         }
-        let cell = ActionCell(title: contextMenuSortActions[tag], tag: tag)
-        if tag == 0 {
+
+        guard let action = ActionType(rawValue: sortMethodRow) else { return UITableViewCell() }
+
+        let cell = ActionCell(title: contextMenuSortActions[sortMethodRow], action: action )
+        if sortMethodRow == 0 {
             cell.delegate = self
             cell.selectionStyle = .none
             if AppSettings.sortMethod == .bySize || AppSettings.sortMethod == .byContentType {
