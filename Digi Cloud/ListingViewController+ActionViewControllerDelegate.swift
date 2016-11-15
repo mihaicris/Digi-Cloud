@@ -44,7 +44,7 @@ extension ListingViewController: ActionViewControllerDelegate {
         case 5:
             let element = content[currentIndex.row]
             if element.type == "file" {
-                let controller = DeleteAlertViewController(element: content[currentIndex.row])
+                let controller = DeleteViewController(element: content[currentIndex.row])
                 controller.delegate = self
 
                 // position alert on the same row with the file

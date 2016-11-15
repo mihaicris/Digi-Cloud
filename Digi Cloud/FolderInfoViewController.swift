@@ -211,7 +211,7 @@ class FolderInfoViewController: UITableViewController {
     }
 
     @objc fileprivate func handleDelete() {
-        let controller = DeleteAlertViewController(element: element)
+        let controller = DeleteViewController(element: element)
         controller.delegate = self
         controller.modalPresentationStyle = .popover
         controller.popoverPresentationController?.permittedArrowDirections = .up

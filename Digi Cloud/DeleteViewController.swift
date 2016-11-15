@@ -8,11 +8,11 @@
 
 import UIKit
 
-class DeleteAlertViewController: UITableViewController {
+class DeleteViewController: UITableViewController {
 
     fileprivate var element: File
 
-    weak var delegate: DeleteAlertViewControllerDelegate?
+    weak var delegate: DeleteViewControllerDelegate?
 
     init(element: File) {
         self.element = element

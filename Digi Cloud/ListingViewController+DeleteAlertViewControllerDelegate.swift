@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ListingViewController: DeleteAlertViewControllerDelegate {
+extension ListingViewController: DeleteViewControllerDelegate {
 
     func onConfirmDeletion() {
 

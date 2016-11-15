@@ -21,7 +21,7 @@ protocol BaseListCellDelegate: class {
     func showActionController(for sourceView: UIView)
 }
 
-protocol DeleteAlertViewControllerDelegate: class {
+protocol DeleteViewControllerDelegate: class {
     func onConfirmDeletion()
 }
 

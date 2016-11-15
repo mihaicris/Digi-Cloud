@@ -24,7 +24,7 @@
 		8373C1E31DA2F25E00A1BC45 /* CustomLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */; };
 		837A0CD71DD38EE4009A3C2F /* ListingViewController+DeleteAlertViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A0CD61DD38EE4009A3C2F /* ListingViewController+DeleteAlertViewControllerDelegate.swift */; };
 		837A0CD91DD39AF0009A3C2F /* FolderInfoViewController+DeleteAlertViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A0CD81DD39AF0009A3C2F /* FolderInfoViewController+DeleteAlertViewControllerDelegate.swift */; };
-		839A22E31DC11BA400758730 /* DeleteAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteAlertViewController.swift */; };
+		839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
 		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
 		83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
@@ -61,7 +61,7 @@
 		8373C1E21DA2F25E00A1BC45 /* CustomLoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLoginButton.swift; sourceTree = "<group>"; };
 		837A0CD61DD38EE4009A3C2F /* ListingViewController+DeleteAlertViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListingViewController+DeleteAlertViewControllerDelegate.swift"; sourceTree = "<group>"; };
 		837A0CD81DD39AF0009A3C2F /* FolderInfoViewController+DeleteAlertViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FolderInfoViewController+DeleteAlertViewControllerDelegate.swift"; sourceTree = "<group>"; };
-		839A22E21DC11BA400758730 /* DeleteAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteAlertViewController.swift; sourceTree = "<group>"; };
+		839A22E21DC11BA400758730 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
 		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
@@ -227,7 +227,7 @@
 			children = (
 				83562CAB1DB8C19B006FF04A /* ActionViewController.swift */,
 				8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */,
-				839A22E21DC11BA400758730 /* DeleteAlertViewController.swift */,
+				839A22E21DC11BA400758730 /* DeleteViewController.swift */,
 				83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */,
 				837A0CD81DD39AF0009A3C2F /* FolderInfoViewController+DeleteAlertViewControllerDelegate.swift */,
 				83EF1D691D8FDB1900ACE008 /* ListingViewController.swift */,
@@ -343,7 +343,7 @@
 				83EF1D6A1D8FDB1900ACE008 /* ListingViewController.swift in Sources */,
 				837A0CD71DD38EE4009A3C2F /* ListingViewController+DeleteAlertViewControllerDelegate.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
-				839A22E31DC11BA400758730 /* DeleteAlertViewController.swift in Sources */,
+				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
 				832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
 				83EBD0791D994F9500C80397 /* DigiClient+Convenience.swift in Sources */,

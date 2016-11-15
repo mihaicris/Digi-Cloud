@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension FolderInfoViewController: DeleteAlertViewControllerDelegate {
+extension FolderInfoViewController: DeleteViewControllerDelegate {
 
     func onConfirmDeletion() {
 
