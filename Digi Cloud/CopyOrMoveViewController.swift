@@ -10,6 +10,8 @@ import UIKit
 
 class CopyOrMoveViewController: UIViewController {
 
+    var onFinish: ((Void) -> Void)?
+
     fileprivate var element: File
     fileprivate var operation: Int
 
@@ -36,6 +38,14 @@ class CopyOrMoveViewController: UIViewController {
         } else if operation == 4 {
             self.title = element.type == "file" ? NSLocalizedString("Move File", comment: "Window title") : NSLocalizedString("Move Folder", comment: "Window title")
         }
+
+        let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: UIBarButtonItemStyle.done, target: self, action: #selector(handleDone))
+
+        navigationItem.setRightBarButton(rightButton, animated: false)
+
     }
 
+    @objc private func handleDone() {
+        self.onFinish?()
+    }
 }

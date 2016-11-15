@@ -45,6 +45,9 @@ extension ListingViewController: ActionViewControllerDelegate {
         case 3, 4:
             let element = content[currentIndex.row]
             let controller = CopyOrMoveViewController(element: element, operation: tag)
+            controller.onFinish = { [unowned self] in
+                self.dismiss(animated: true, completion: nil)
+            }
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
