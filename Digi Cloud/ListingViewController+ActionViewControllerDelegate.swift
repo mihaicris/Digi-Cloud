@@ -10,9 +10,12 @@ import UIKit
 
 extension ListingViewController: ActionViewControllerDelegate {
     func didSelectOption(tag: Int) {
+
         self.animateActionButton(active: false)
         dismiss(animated: true, completion: nil) // dismiss ActionsViewController
+
         switch tag {
+
         // rename action
         case 2:
             // TODO: Refactor sort, refresh
@@ -33,9 +36,15 @@ extension ListingViewController: ActionViewControllerDelegate {
                         self.getFolderContent()
                     }
                 }
-
-
             }
+            let navController = UINavigationController(rootViewController: controller)
+            navController.modalPresentationStyle = .formSheet
+            present(navController, animated: true, completion: nil)
+
+        // copy or move action
+        case 3, 4:
+            let element = content[currentIndex.row]
+            let controller = CopyOrMoveViewController(element: element, operation: tag)
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
@@ -44,7 +53,7 @@ extension ListingViewController: ActionViewControllerDelegate {
         case 5:
             let element = content[currentIndex.row]
             if element.type == "file" {
-                let controller = DeleteViewController(element: content[currentIndex.row])
+                let controller = DeleteViewController(element: element)
                 controller.delegate = self
 
                 // position alert on the same row with the file
@@ -59,7 +68,8 @@ extension ListingViewController: ActionViewControllerDelegate {
                 controller.popoverPresentationController?.sourceRect = sourceView.bounds
                 present(controller, animated: true, completion: nil)
             }
-        // folder info
+
+        // folder info action
         case 6:
             let controller = FolderInfoViewController(element: content[currentIndex.row])
             controller.onFinish = { (success, needRefresh) in
@@ -78,7 +88,6 @@ extension ListingViewController: ActionViewControllerDelegate {
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
-        //
         default:
             return
         }

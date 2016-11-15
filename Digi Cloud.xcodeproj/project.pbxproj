@@ -29,6 +29,7 @@
 		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
 		83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
 		83D281011D9D747A00D74661 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* CustomTextField.swift */; };
+		83D5D8A41DDB1EC6001BB3AF /* CopyOrMoveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5D8A31DDB1EC6001BB3AF /* CopyOrMoveViewController.swift */; };
 		83EBD0791D994F9500C80397 /* DigiClient+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBD0781D994F9500C80397 /* DigiClient+Convenience.swift */; };
 		83EF1D481D8FBDDA00ACE008 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* File.swift */; };
 		83EF1D6A1D8FDB1900ACE008 /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D691D8FDB1900ACE008 /* ListingViewController.swift */; };
@@ -66,6 +67,7 @@
 		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		83D5D8A31DDB1EC6001BB3AF /* CopyOrMoveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyOrMoveViewController.swift; sourceTree = "<group>"; };
 		83EBD0781D994F9500C80397 /* DigiClient+Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DigiClient+Convenience.swift"; sourceTree = "<group>"; };
 		83EF1D471D8FBDDA00ACE008 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = File.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83EF1D691D8FDB1900ACE008 /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingViewController.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				837A0CD61DD38EE4009A3C2F /* ListingViewController+DeleteAlertViewControllerDelegate.swift */,
 				8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */,
 				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
+				83D5D8A31DDB1EC6001BB3AF /* CopyOrMoveViewController.swift */,
 				83F994511DD09B340023FB5D /* SortFolderViewController.swift */,
 			);
 			name = Listing;
@@ -343,6 +346,7 @@
 				83EF1D6A1D8FDB1900ACE008 /* ListingViewController.swift in Sources */,
 				837A0CD71DD38EE4009A3C2F /* ListingViewController+DeleteAlertViewControllerDelegate.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
+				83D5D8A41DDB1EC6001BB3AF /* CopyOrMoveViewController.swift in Sources */,
 				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
 				832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
