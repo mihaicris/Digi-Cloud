@@ -15,7 +15,7 @@ struct API {
 
 struct DefaultHeaders {
     static let Headers          = ["Content-Type": "application/json",
-                                   "Accept": "application/json"]
+                                   "Accept"      : "application/json"]
 }
 
 struct HeadersKeys {
@@ -43,5 +43,7 @@ struct Methods {
     static let Remove           = "/api/v2/mounts/{id}/files/remove"
     static let CreateFolder     = "/api/v2/mounts/{id}/files/folder"
     static let Tree             = "/api/v2/mounts/{id}/files/tree"
+    static let Copy             = "/api/v2/mounts/{id}/files/copy"
+    static let Move             = "/api/v2/mounts/{id}/files/move"
 }
 

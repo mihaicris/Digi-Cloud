@@ -233,4 +233,44 @@ extension DigiClient {
             completionHandler((size, files, folders), nil)
         }
     }
+
+
+    /// This function make a network request to DIGI Server to either copy or move
+    /// a file or a folder to another location
+    ///
+    /// - Parameters:
+    ///   - action: Type of action: "copy" or "move"
+    ///   - path:   Source path of the file or folder to be copied or moved
+    ///   - toMountId: the mount Id where the destination path is located
+    ///   - toPath: Destination path
+    ///   - completionHandler: function to be caled when the server responds
+    func copyOrMove(action:                      String,
+                    path:                        String,
+                    toMountId:                   String,
+                    toPath:                      String,
+                    completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+
+        var method = ""
+        if action == "copy" {
+            method = Methods.Copy.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+        } else if action == "move" {
+            method = Methods.Move.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+        } else {
+            return // Wrong action type.
+        }
+
+        var headers = DefaultHeaders.Headers
+        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+
+        let json: [String: String] = ["toMountId": toMountId, "toPath": toPath]
+
+        let parameters = [ParametersKeys.Path: path]
+
+        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: parameters) { (dataResponse, statusCode, error) in
+
+            // TODO: Handle response
+        }
+    }
+
+
 }
