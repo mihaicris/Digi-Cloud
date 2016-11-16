@@ -17,7 +17,7 @@ extension FolderInfoViewController: DeleteViewControllerDelegate {
             let elementPath = DigiClient.shared.currentPath.last! + self.element.name
 
             // network request for delete
-            DigiClient.shared.delete(path: elementPath, name: self.element.name) { (statusCode, error) in
+            DigiClient.shared.deleteElement(path: elementPath, name: self.element.name) { (statusCode, error) in
 
                 // TODO: Stop spinner
                 guard error == nil else {

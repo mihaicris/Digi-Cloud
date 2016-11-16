@@ -112,7 +112,7 @@ extension DigiClient {
         return session
     }
 
-    func rename(path: String, newName: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func renameElement(path: String, newName: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the element by inserting the current mount
         let method = Methods.Rename.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
@@ -131,7 +131,7 @@ extension DigiClient {
         }
     }
 
-    func delete(path: String, name: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func deleteElement(path: String, name: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the element by inserting the current mount
         let method = Methods.Remove.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
