@@ -227,50 +227,53 @@ extension DigiClient {
                     size += getChildInfo(child).0
                     files += getChildInfo(child).1
                     folders += getChildInfo(child).2
-
                 }
             }
             completionHandler((size, files, folders), nil)
         }
     }
 
-
-    /// This function make a network request to DIGI Server to either copy or move
-    /// a file or a folder to another location
+    /// Send a request to DIGI API to copy or move an element
     ///
     /// - Parameters:
-    ///   - action: Type of action: "copy" or "move"
-    ///   - path:   Source path of the file or folder to be copied or moved
-    ///   - toMountId: the mount Id where the destination path is located
-    ///   - toPath: Destination path
-    ///   - completionHandler: function to be caled when the server responds
-    func copyOrMove(action:                      String,
-                    path:                        String,
-                    toMountId:                   String,
-                    toPath:                      String,
-                    completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    ///   - action:            Action Type, expected ActionType.move or ActionType.copy
+    ///   - path:              Element path (including element name)
+    ///   - toMountId:         Destination mount Id
+    ///   - toPath:            Destination path (including element name)
+    ///   - completionHandler: Function to handle the status code and error response
+    ///   - statusCode:        Returned HTTP request Status Code
+    ///   - error:             Networking error (nil if no error)
+
+    func copyOrMoveElement(action:            ActionType,
+                           path:              String,
+                           toMountId:         String,
+                           toPath:            String,
+                           completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
 
         var method = ""
-        if action == "copy" {
+
+        switch action {
+        case .copy:
             method = Methods.Copy.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
-        } else if action == "move" {
-            method = Methods.Move.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
-        } else {
-            return // Wrong action type.
+        case .move:
+           method = Methods.Move.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+        default:
+            return
         }
 
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        let json: [String: String] = ["toMountId": toMountId, "toPath": toPath]
-
         let parameters = [ParametersKeys.Path: path]
+
+        let json: [String: String] = ["toMountId": toMountId, "toPath": toPath]
 
         networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: parameters) { (dataResponse, statusCode, error) in
 
+            print(" Status Code: \(statusCode)")
             // TODO: Handle response
+            // 200 OK
+            // 400 Folder destination exists, or Folder source doesnt exist
         }
     }
-
-
 }

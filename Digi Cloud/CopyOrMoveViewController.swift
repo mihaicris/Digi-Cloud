@@ -51,4 +51,18 @@ class CopyOrMoveViewController: UIViewController {
     @objc private func handleDone() {
         self.onFinish?()
     }
+
+    @objc private func handleCopyOrMove() {
+        guard let mountId = DigiClient.shared.currentMount else { return }
+        guard let currentPath = DigiClient.shared.currentPath.last else { return }
+
+        let sourcePath = currentPath + element.name
+        let destinationPath = currentPath + element.name  // TODO: Update with selected destination path (without element name inside)
+
+        DigiClient.shared.copyOrMoveElement(action:             action,
+                                            path:               sourcePath,
+                                            toMountId:          mountId,
+                                            toPath:             destinationPath,
+                                            completionHandler:  {(statusCode, error) in return })
+    }
 }
