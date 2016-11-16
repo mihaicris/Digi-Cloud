@@ -10,11 +10,11 @@ import UIKit
 
 class DeleteViewController: UITableViewController {
 
-    fileprivate var element: File
+    fileprivate var element: Element
 
     weak var delegate: DeleteViewControllerDelegate?
 
-    init(element: File) {
+    init(element: Element) {
         self.element = element
         super.init(nibName: nil, bundle: nil)
     }

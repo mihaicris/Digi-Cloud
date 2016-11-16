@@ -12,14 +12,14 @@ class RenameViewController: UITableViewController {
 
     var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
 
-    fileprivate var element: File
+    fileprivate var element: Element
     fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var textField: UITextField!
     fileprivate var messageLabel: UILabel!
     fileprivate var needRefresh: Bool
 
-    init(element: File) {
+    init(element: Element) {
         self.element = element
         self.needRefresh = false
         super.init(style: .grouped)

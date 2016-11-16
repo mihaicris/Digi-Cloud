@@ -12,10 +12,10 @@ class CopyOrMoveViewController: UIViewController {
 
     var onFinish: ((Void) -> Void)?
 
-    var element: File
+    var element: Element
     var action: ActionType
 
-    init(element: File, action: ActionType) {
+    init(element: Element, action: ActionType) {
         self.element = element
         self.action = action
         super.init(nibName: nil, bundle: nil)

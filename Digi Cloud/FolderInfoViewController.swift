@@ -18,7 +18,7 @@ class FolderInfoViewController: UITableViewController {
         return f
     }()
 
-    var element: File
+    var element: Element
 
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var deleteButton: UIButton!
@@ -63,7 +63,7 @@ class FolderInfoViewController: UITableViewController {
         }
     }
 
-    init(element: File) {
+    init(element: Element) {
         self.element = element
         super.init(style: .grouped)
     }

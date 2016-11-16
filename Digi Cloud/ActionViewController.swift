@@ -21,7 +21,7 @@ enum ActionType: Int {
 
 class ActionViewController: UITableViewController {
 
-    var element: File!
+    var element: Element!
 
     weak var delegate: ActionViewControllerDelegate?
 

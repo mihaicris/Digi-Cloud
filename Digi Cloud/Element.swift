@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct File {
+struct Element {
     var name: String
     let type: String
     let modified: TimeInterval
@@ -27,7 +27,7 @@ struct File {
     }
 }
 
-extension File: JSONDecodable {
+extension Element: JSONDecodable {
     init?(JSON: Any) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,

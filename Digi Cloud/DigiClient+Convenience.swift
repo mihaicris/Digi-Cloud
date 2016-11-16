@@ -59,7 +59,7 @@ extension DigiClient {
         }
     }
 
-    func getLocationContent(mount: String, queryPath: String, completionHandler: @escaping (_ result: [File]?, _ error: Error?) -> Void)
+    func getLocationContent(mount: String, queryPath: String, completionHandler: @escaping (_ result: [Element]?, _ error: Error?) -> Void)
     {
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: mount)
         var headers = DefaultHeaders.Headers
@@ -77,7 +77,7 @@ extension DigiClient {
                         completionHandler(nil, JSONError.parce("Could not parce filelist"))
                         return
                     }
-                    let content = fileList.flatMap { File(JSON: $0) }
+                    let content = fileList.flatMap { Element(JSON: $0) }
                     completionHandler(content, nil)
                 } else {
                     completionHandler(nil, JSONError.parce("Could not parce data (getFiles)"))

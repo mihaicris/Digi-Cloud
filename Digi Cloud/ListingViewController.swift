@@ -12,7 +12,7 @@ class ListingViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var content: [File] = []
+    var content: [Element] = []
 
     let dateFormatter: DateFormatter = {
         let f = DateFormatter()
