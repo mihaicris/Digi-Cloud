@@ -10,12 +10,18 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    // MARK: - Properties
+
     var onFinish: (() -> Void)?
+    let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
 
-    // MARK: - Create UI Elements
-
-    lazy var emailTextField: CustomTextField = {
-        let field = CustomTextField()
+    lazy var emailTextField: LoginField = {
+        let field = LoginField()
         field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "TextField Name").uppercased()
 
         #if DEBUG
@@ -27,8 +33,8 @@ class LoginViewController: UIViewController {
         return field
     }()
 
-    lazy var passwordTextField: CustomTextField = {
-        let field = CustomTextField()
+    lazy var passwordTextField: LoginField = {
+        let field = LoginField()
         field.textFieldName = NSLocalizedString("PASSWORD", comment: "TextField Name").uppercased()
 
         #if DEBUG
@@ -41,21 +47,30 @@ class LoginViewController: UIViewController {
         return field
     }()
 
-    lazy var loginButton: CustomLoginButton = {
-        let button = CustomLoginButton()
-        button.setTitle(NSLocalizedString("LOGIN", comment: "Button Title") , for: .normal)
+    lazy var loginButton: LoginButton = {
+        let button = LoginButton()
+        button.setTitle(NSLocalizedString("LOGIN", comment: "Button Title"), for: .normal)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
 
-    let spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.hidesWhenStopped = true
-        return spinner
-    }()
+    // MARK: - Initializers and Deinitializers
 
-    // MARK: - View Life Cycle
+    #if DEBUG
+    deinit {
+        print("[DEINIT]: " + String(describing: type(of: self)))
+    }
+    #endif
+
+    // MARK: - Overrided Methods and Properties
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,8 +82,10 @@ class LoginViewController: UIViewController {
         emailTextField.becomeFirstResponder()
     }
 
+    // MARK: - Helper Functions
+
     private func setupViews() {
-        view.backgroundColor = UIColor(colorLiteralRed: 96/255, green: 95/255, blue: 199/255, alpha: 1.0)
+        view.backgroundColor = UIColor(colorLiteralRed: 96 / 255, green: 95 / 255, blue: 199 / 255, alpha: 1.0)
 
         view.addSubview(emailTextField)
         view.addSubview(passwordTextField)
@@ -94,7 +111,7 @@ class LoginViewController: UIViewController {
         spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20).isActive = true
     }
 
-    func handleLogin() {
+    @objc func handleLogin() {
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         guard let email = emailTextField.text else { return }
@@ -124,22 +141,6 @@ class LoginViewController: UIViewController {
             }
         }
     }
-
-    // MARK: - View Methods
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
-    }
-
-    #if DEBUG
-    deinit {
-        print("LoginViewController deinit")
-    }
-    #endif
 }
 
 extension LoginViewController: UITextFieldDelegate {

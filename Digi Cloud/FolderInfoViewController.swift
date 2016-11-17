@@ -9,8 +9,11 @@
 import UIKit
 
 class FolderInfoViewController: UITableViewController {
-    var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
 
+    // MARK: - Properties
+
+    var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
+    var element: Element
     let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.allowsNonnumericFormatting = false
@@ -18,12 +21,11 @@ class FolderInfoViewController: UITableViewController {
         return f
     }()
 
-    var element: Element
-
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var deleteButton: UIButton!
-
     fileprivate var noElementsLabel = UILabel()
+    fileprivate var folderSizeLabel = UILabel()
+
     fileprivate var noElements: (Int?, Int?) = (nil, nil) {
         didSet {
             guard let files = noElements.0,
@@ -41,62 +43,50 @@ class FolderInfoViewController: UITableViewController {
                     let text1 = String.localizedStringWithFormat(filesString, files)
                     let folderString = NSLocalizedString("%d folders", comment: "Informatin")
                     let text2 = String.localizedStringWithFormat(folderString, folders)
-                    let attributedText = NSMutableAttributedString(string: text1 + text2, attributes: [NSParagraphStyleAttributeName : paragraph])
+                    let attributedText = NSMutableAttributedString(string: text1 + text2, attributes: [NSParagraphStyleAttributeName: paragraph])
                     label.attributedText = attributedText
 
                     return label
                 }()
-                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2 )], with: .automatic)
+                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
             }
         }
     }
 
-    fileprivate var folderSizeLabel = UILabel()
     fileprivate var folderSize: Int64? {
         didSet {
             DispatchQueue.main.async {
                 if let size = self.folderSize {
                     self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: size)
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1 )], with: .automatic)
+                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
                 }
             }
         }
     }
+
+    // MARK: - Initializers and Deinitializers
 
     init(element: Element) {
         self.element = element
         super.init(style: .grouped)
     }
 
+    #if DEBUG
+    deinit {
+        print("[DEINIT]: " + String(describing: type(of: self)))
+    }
+    #endif
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         updateFolderInfo()
-    }
-
-    fileprivate func setupViews() {
-        tableView.isScrollEnabled = false
-
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"), style: .plain, target: self, action: #selector(handleDone))
-        self.navigationItem.setRightBarButton(rightBarButton, animated: false)
-
-        self.title = NSLocalizedString("Folder information", comment: "Window Title")
-    }
-
-    fileprivate func updateFolderInfo() {
-        DigiClient.shared.getFolderInfo(path: element.name, completionHandler: { (info, error) in
-            guard error == nil else {
-                print(error!.localizedDescription)
-                return
-            }
-            self.folderSize = info.0
-            self.noElements.0 = info.1
-            self.noElements.1 = info.2
-        })
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -118,7 +108,6 @@ class FolderInfoViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {
-        case 0, 1:  return ""
         case 2:     return NSLocalizedString("Note: Including subfolders",     comment: "TableCell Footer Title")
         case 3:     return NSLocalizedString("This action is not reversible!", comment: "TableCell Footer Title")
         default:    return ""
@@ -136,15 +125,6 @@ class FolderInfoViewController: UITableViewController {
         // for last section with the Button Delete
         if section == 3 {
             (view as? UITableViewHeaderFooterView)?.textLabel?.textAlignment = .center
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        switch section {
-        case 0...1:
-            return UITableViewAutomaticDimension
-        default:
-            return UITableViewAutomaticDimension // default
         }
     }
 
@@ -187,7 +167,7 @@ class FolderInfoViewController: UITableViewController {
             deleteButton.layer.borderColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5).cgColor
             deleteButton.layer.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.05).cgColor
             deleteButton.layer.cornerRadius = 8
-            deleteButton.layer.borderWidth = 1/UIScreen.main.scale * 1.2
+            deleteButton.layer.borderWidth = 1 / UIScreen.main.scale * 1.2
             deleteButton.setTitle(NSLocalizedString("     Delete Folder     ", comment: "Button Title, keep the leading/trailing spaces!"), for: .normal)
             deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             deleteButton.setTitleColor(.red, for: .normal)
@@ -204,6 +184,26 @@ class FolderInfoViewController: UITableViewController {
         return cell
     }
 
+    // MARK: - Helper Functions
+
+    fileprivate func setupViews() {
+        tableView.isScrollEnabled = false
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"), style: .plain, target: self, action: #selector(handleDone))
+        self.navigationItem.setRightBarButton(rightBarButton, animated: false)
+        self.title = NSLocalizedString("Folder information", comment: "Window Title")
+    }
+
+    fileprivate func updateFolderInfo() {
+        DigiClient.shared.getFolderInfo(path: element.name, completionHandler: { (info, error) in
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+            self.folderSize = info.0
+            self.noElements = (info.1, info.2)
+        })
+    }
+
     @objc fileprivate func handleDone() {
         onFinish?(false, false)
     }
@@ -217,12 +217,5 @@ class FolderInfoViewController: UITableViewController {
         controller.popoverPresentationController?.sourceRect = deleteButton.bounds
         present(controller, animated: true, completion: nil)
     }
-    
-    #if DEBUG
-    deinit {
-        print("FolderInfoViewController deinit")
-    }
-    #endif
 }
-
 

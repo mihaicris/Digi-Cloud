@@ -11,13 +11,33 @@ import WebKit
 
 class ContentViewController: UIViewController {
 
+    // MARK: - Properties
+
     let fileManager = FileManager.default
-
     var fileUrl: URL!
-
     var session: URLSession!
 
-    // View Life Cycle
+    fileprivate lazy var webView: WKWebView = {
+        let view = WKWebView()
+        view.navigationDelegate = self
+        return view
+    }()
+
+    fileprivate let progressView: UIProgressView = {
+        let view = UIProgressView(progressViewStyle: .default)
+        view.progress = 0
+        return view
+    }()
+
+    // MARK: - Initializers and Deinitializers
+
+    #if DEBUG
+    deinit {
+        print("[DEINIT]: " + String(describing: type(of: self)))
+    }
+    #endif
+
+    // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +70,8 @@ class ContentViewController: UIViewController {
         DigiClient.shared.currentPath.removeLast()
     }
 
+    // MARK: - Helper Functions
+
     func handleAction() {
         let controller = UIActivityViewController(activityItems: [fileUrl], applicationActivities: nil)
         controller.excludedActivityTypes = nil
@@ -57,18 +79,6 @@ class ContentViewController: UIViewController {
         controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(controller, animated: true, completion: nil)
     }
-
-    fileprivate lazy var webView: WKWebView = {
-        let view = WKWebView()
-        view.navigationDelegate = self
-        return view
-    }()
-
-    fileprivate let progressView: UIProgressView = {
-        let view = UIProgressView(progressViewStyle: .default)
-        view.progress = 0
-        return view
-    }()
 
     private func setupViews() {
         view.addSubview(webView)

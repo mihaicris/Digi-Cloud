@@ -10,8 +10,7 @@ import Foundation
 
 extension DigiClient {
 
-    func authenticate(email: String, password: String, completionHandlerforAuth: @escaping (_ success: Bool, _ error: Error?) -> Void)
-    {
+    func authenticate(email: String, password: String, completionHandlerforAuth: @escaping(_ success: Bool, _ error: Error?) -> Void) {
         let method = Methods.Token
         let headers = DefaultHeaders.Headers
         let jsonBody = ["password": password, "email": email]
@@ -33,8 +32,7 @@ extension DigiClient {
         }
     }
 
-    func getLocations(completionHandler: @escaping (_ result: [Mount]?, _ error: Error?) -> Void)
-    {
+    func getLocations(completionHandler: @escaping(_ result: [Mount]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
@@ -59,8 +57,7 @@ extension DigiClient {
         }
     }
 
-    func getLocationContent(mount: String, queryPath: String, completionHandler: @escaping (_ result: [Element]?, _ error: Error?) -> Void)
-    {
+    func getLocationContent(mount: String, queryPath: String, completionHandler: @escaping(_ result: [Element]?, _ error: Error?) -> Void) {
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: mount)
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
@@ -112,7 +109,7 @@ extension DigiClient {
         return session
     }
 
-    func renameElement(path: String, newName: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func renameElement(path: String, newName: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the element by inserting the current mount
         let method = Methods.Rename.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
@@ -131,12 +128,12 @@ extension DigiClient {
         }
     }
 
-    func deleteElement(path: String, name: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func deleteElement(path: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the element by inserting the current mount
         let method = Methods.Remove.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
         // prepare headers
-        var headers: [String: String] = [ : ]
+        var headers: [String: String] = [:]
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (element path to be renamed
@@ -147,7 +144,7 @@ extension DigiClient {
         }
     }
 
-    func createFolder(path: String , name: String, completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func createFolder(path: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
@@ -171,7 +168,8 @@ extension DigiClient {
     /// - Parameters:
     ///   - path: path of the folder
     ///   - completionHandler: completion handler with info about folder and error
-    func getFolderInfo(path: String, completionHandler: @escaping (_ size: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
+
+    func getFolderInfo(path: String, completionHandler: @escaping(_ size: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
 
@@ -201,7 +199,7 @@ extension DigiClient {
             if let children = parent["children"] as? [[String: Any]], !children.isEmpty {
                 folders += 1
                 for child in children {
-                    let (childSize, childFiles, childFolders) = getChildInfo(child)
+                    let(childSize, childFiles, childFolders) = getChildInfo(child)
                     size += childSize
                     files += childFiles
                     folders += childFolders
@@ -256,7 +254,7 @@ extension DigiClient {
         case .copy:
             method = Methods.Copy.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
         case .move:
-           method = Methods.Move.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+            method = Methods.Move.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
         default:
             return
         }

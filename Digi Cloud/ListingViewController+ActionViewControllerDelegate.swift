@@ -15,8 +15,6 @@ extension ListingViewController: ActionViewControllerDelegate {
         dismiss(animated: true, completion: nil) // dismiss ActionsViewController
 
         switch action {
-
-        // rename action
         case .rename:
             // TODO: Refactor sort, refresh
             let controller = RenameViewController(element: content[currentIndex.row])
@@ -41,7 +39,6 @@ extension ListingViewController: ActionViewControllerDelegate {
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
 
-        // copy or move action
         case .copy, .move:
             let element = content[currentIndex.row]
             let controller = CopyOrMoveViewController(element: element, action: action)
@@ -55,7 +52,6 @@ extension ListingViewController: ActionViewControllerDelegate {
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
 
-        // delete action
         case .delete:
             let element = content[currentIndex.row]
             if element.type == "file" {
@@ -75,7 +71,6 @@ extension ListingViewController: ActionViewControllerDelegate {
                 present(controller, animated: true, completion: nil)
             }
 
-        // folder info action
         case .folderInfo:
             let controller = FolderInfoViewController(element: content[currentIndex.row])
             controller.onFinish = { (success, needRefresh) in
@@ -94,6 +89,7 @@ extension ListingViewController: ActionViewControllerDelegate {
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
+            
         default:
             return
         }

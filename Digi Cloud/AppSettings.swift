@@ -17,13 +17,10 @@ enum SortMethodType: Int {
 
 final class AppSettings {
 
-    // MARK: - Shared instance
+    // MARK: - Properties
     static let shared: AppSettings = AppSettings()
-
-    private init() {}
-
     static var tableViewRowHeight: CGFloat = 50
-
+    private init() {}
     static var isAppFirstTimeStarted: Bool {
         get {
             return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
@@ -33,7 +30,6 @@ final class AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
-
     static var isLoggedIn: Bool {
         get {
             return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue)
@@ -43,7 +39,6 @@ final class AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
-
     static var loginToken: String? {
         get {
             return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue)
@@ -53,7 +48,6 @@ final class AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
-
     static var showFoldersFirst: Bool {
         get {
             return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue)
@@ -63,7 +57,6 @@ final class AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
-
     static var sortMethod: SortMethodType {
         get {
             let value = UserDefaults.standard.integer(forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue)
@@ -74,10 +67,8 @@ final class AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
-
     static var sortAscending: Bool {
         get { return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
     }
-
 }

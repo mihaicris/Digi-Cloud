@@ -10,19 +10,9 @@ import UIKit
 
 class BaseListCell: UITableViewCell {
 
+    // MARK: - Properties
+
     private var hasButton: Bool = false
-
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        if let identifier = reuseIdentifier, identifier.hasSuffix("WithButton") {
-            self.hasButton = true
-        }
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.setupViews()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     weak var delegate: BaseListCellDelegate?
 
@@ -37,10 +27,23 @@ class BaseListCell: UITableViewCell {
         return button
     }()
 
-    @objc fileprivate func handleAction(){
+    // MARK: - Initializers and Deinitializers
 
-        delegate?.showActionController(for: actionButton)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Overridden Methods and Properties
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        if let identifier = reuseIdentifier, identifier.hasSuffix("WithButton") {
+            self.hasButton = true
+        }
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.setupViews()
+    }
+
+    // MARK: - Helper Functions
 
     func setupViews() {
         if hasButton {
@@ -49,5 +52,10 @@ class BaseListCell: UITableViewCell {
             actionButton.heightAnchor.constraint(equalToConstant: AppSettings.tableViewRowHeight * 0.95).isActive = true
             actionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         }
+    }
+
+    @objc fileprivate func handleAction() {
+
+        delegate?.showActionController(for: actionButton)
     }
 }

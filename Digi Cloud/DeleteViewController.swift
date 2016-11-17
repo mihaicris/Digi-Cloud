@@ -10,9 +10,12 @@ import UIKit
 
 class DeleteViewController: UITableViewController {
 
-    fileprivate var element: Element
+    // MARK: - Properties
 
+    private var element: Element
     weak var delegate: DeleteViewControllerDelegate?
+
+    // MARK: - Initializers and Deinitializers
 
     init(element: Element) {
         self.element = element
@@ -23,12 +26,41 @@ class DeleteViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    #if DEBUG
+    deinit {
+        print("[DEINIT]: " + String(describing: type(of: self)))
+    }
+    #endif
+    
+    // MARK: - Overridden Methods and Properties
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
     }
 
-    fileprivate func setupViews() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.preferredContentSize.height = tableView.contentSize.height - 1
+
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return createCell(title: NSLocalizedString("Delete", comment: "Button title") ,
+                          color: .red)
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.onConfirmDeletion()
+    }
+
+    // MARK: - Helper Functions
+
+    private func setupViews() {
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
             view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
@@ -59,29 +91,12 @@ class DeleteViewController: UITableViewController {
 
         headerView.addSubview(separator)
         headerView.addConstraints(with: "H:|[v0]|", views: separator)
-        headerView.addConstraints(with: "V:[v0(\(1/UIScreen.main.scale))]|", views: separator)
+        headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
 
         tableView.isScrollEnabled = false
         tableView.rowHeight = 50
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.preferredContentSize.height = tableView.contentSize.height - 1
-
-    }
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return createCell(title: NSLocalizedString("Delete", comment: "Button title") ,
-                          color: .red)
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.onConfirmDeletion()
     }
 
     private func createCell(title: String, color: UIColor) -> UITableViewCell {
@@ -92,8 +107,4 @@ class DeleteViewController: UITableViewController {
         cell.textLabel?.font = UIFont.systemFont(ofSize: 18)
         return cell
     }
-
-    #if DEBUG
-    deinit { print("DeleteElementViewController deinit") }
-    #endif
 }

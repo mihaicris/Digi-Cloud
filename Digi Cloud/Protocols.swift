@@ -28,3 +28,4 @@ protocol DeleteViewControllerDelegate: class {
 protocol ActionCellDelegate: class {
     func onSwitchValueChanged(button: UISwitch, value: Bool)
 }
+	

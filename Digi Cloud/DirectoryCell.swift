@@ -10,6 +10,8 @@ import UIKit
 
 class DirectoryCell: BaseListCell {
 
+    // MARK: - Properties
+
     var folderIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "FolderIcon"))
         imageView.contentMode = .scaleAspectFit
@@ -22,6 +24,23 @@ class DirectoryCell: BaseListCell {
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
+
+    // MARK: - Overridden Methods and Properties
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        if highlighted {
+            contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
+            folderNameLabel.textColor = UIColor.white
+            actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+        } else {
+            contentView.backgroundColor = nil
+            folderNameLabel.textColor = UIColor.black
+            actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
+        }
+    }
+
+    // MARK: - Helper Functions
 
     override func setupViews() {
 
@@ -39,20 +58,7 @@ class DirectoryCell: BaseListCell {
 
         folderIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
         folderNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 1).isActive = true
-
+        
         super.setupViews()
-    }
-
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        if highlighted {
-            contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
-            folderNameLabel.textColor = UIColor.white
-            actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
-        } else {
-            contentView.backgroundColor = nil
-            folderNameLabel.textColor = UIColor.black
-            actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
-        }
     }
 }

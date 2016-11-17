@@ -10,9 +10,25 @@ import UIKit
 
 // Singleton class for DIGI Client
 
+enum NetworkingError: Error {
+    case get(String)
+    case post(String)
+    case del(String)
+    case wrongStatus(String)
+    case data(String)
+}
+enum JSONError: Error {
+    case parce(String)
+}
+enum Authentication: Error {
+    case login(String)
+}
+
 final class DigiClient {
 
     // MARK: - Properties
+
+    static let shared: DigiClient = DigiClient()
     var token: String!
     var currentMount: String!
     var currentPath: [String] = []
@@ -22,26 +38,10 @@ final class DigiClient {
         return currentMount == destinationMount && currentPath.last! == destinationPath.last!
     }
 
-    // MARK: - Initializers
+    // MARK: - Initializers and Deinitializers
     private init() {}
 
-    // MARK: - Errors
-    enum NetworkingError: Error {
-        case get(String)
-        case post(String)
-        case del(String)
-        case wrongStatus(String)
-        case data(String)
-    }
-    enum JSONError: Error {
-        case parce(String)
-    }
-    enum Authentication: Error {
-        case login(String)
-    }
-
-    // MARK: - Shared instance
-    static let shared: DigiClient = DigiClient()
+    // MARK: - Helper Functions
 
     func equalizePaths() {
         destinationMount = currentMount
@@ -50,7 +50,7 @@ final class DigiClient {
 
     func networkTask(requestType: String, method: String, headers: [String: String]?,
                      json: [String: String]?, parameters: [String: Any]?,
-                     completionHandler: @escaping (_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
+                     completionHandler: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
         /* 1. Build the URL, Configure the request */
@@ -112,12 +112,10 @@ final class DigiClient {
                 completionHandler(nil, statusCode, JSONError.parce("Could not parse the data as JSON"))
             }
         }
-
+        
         /* 4. Start the request */
         task.resume()
     }
-
-    // MARK: - Helper Functions
 
     func getURL(method: String, parameters: [String: Any]?) -> URL {
         var components = URLComponents()

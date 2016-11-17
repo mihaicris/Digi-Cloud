@@ -14,7 +14,15 @@ class LocationsTableViewController: UITableViewController {
 
     var mounts: [Mount] = []
 
-    // MARK: - View Life Cycle
+    // MARK: - Initializers and Deinitializers
+
+    #if DEBUG
+    deinit {
+        print("[DEINIT]: " + String(describing: type(of: self)))
+    }
+    #endif
+
+    // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +40,7 @@ class LocationsTableViewController: UITableViewController {
                 print("Error: \(error?.localizedDescription)")
                 return
             }
-            if let mounts = mounts  {
+            if let mounts = mounts {
                 self.mounts = mounts
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -40,18 +48,6 @@ class LocationsTableViewController: UITableViewController {
             }
         }
     }
-
-    // MARK: - Navigation
-
-    func openMount(index: Int) {
-        let controller = ListingViewController()
-        DigiClient.shared.currentMount = mounts[index].id
-        DigiClient.shared.currentPath.append("/")
-        controller.title = mounts[index].name
-        navigationController?.pushViewController(controller, animated: true)
-    }
-
-    // MARK: - Table View Data Source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -71,40 +67,15 @@ class LocationsTableViewController: UITableViewController {
         openMount(index: indexPath.row)
     }
 
-    #if DEBUG
-    deinit { print("LocationsTableViewController deinit") }
-    #endif
+    // MARK: - Helper Functions
+
+    func openMount(index: Int) {
+        let controller = ListingViewController()
+        DigiClient.shared.currentMount = mounts[index].id
+        DigiClient.shared.currentPath.append("/")
+        controller.title = mounts[index].name
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }
 
-class LocationCell: UITableViewCell {
-
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        selectionStyle = .blue
-        accessoryType = .disclosureIndicator
-
-        setupViews()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    let locationLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 30)
-        return label
-    }()
-
-    func setupViews() {
-
-        contentView.addSubview(locationLabel)
-
-        contentView.addConstraints(with: "H:|-15-[v0]|", views: locationLabel)
-        contentView.addConstraints(with: "V:|[v0]|", views: locationLabel)
-        
-    }
-    
-}
 

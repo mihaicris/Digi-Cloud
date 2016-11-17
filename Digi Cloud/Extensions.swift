@@ -6,7 +6,6 @@
 //  Copyright © 2016 Mihai Cristescu. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 extension UIViewController {
@@ -35,6 +34,7 @@ extension UIView {
 extension UserDefaults {
 
     // the raw value of the enum is the key for which the value is set
+
     enum UserDefaultsKeys: String {
         case isAppFirstTimeStarted
         case isLoggedIn
@@ -47,6 +47,6 @@ extension UserDefaults {
 
 extension UIColor {
     static var defaultColor: UIColor {
-        return UIColor(colorLiteralRed: 6/255, green: 96/255, blue: 254/255, alpha: 1.0)
+        return UIColor(colorLiteralRed: 6 / 255, green: 96 / 255, blue: 254 / 255, alpha: 1.0)
     }
 }

@@ -9,7 +9,6 @@
 import Foundation
 
 extension FolderInfoViewController: DeleteViewControllerDelegate {
-
     func onConfirmDeletion() {
 
         // Dismiss DeleteAlertViewController
@@ -21,7 +20,7 @@ extension FolderInfoViewController: DeleteViewControllerDelegate {
 
                 // TODO: Stop spinner
                 guard error == nil else {
-                    // TODO Show message for error
+                    // TODO: Show message for error
                     print(error!.localizedDescription)
                     return
                 }

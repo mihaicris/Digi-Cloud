@@ -9,12 +9,17 @@
 import Foundation
 
 struct Element {
+
+    // MARK: - Properties
+
     var name: String
     let type: String
     let modified: TimeInterval
     let size: Int64
     let contentType: String
     let ext: String
+
+    // MARK: - Initializers and Deinitializers
 
     init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String) {
         self.name = name
@@ -36,8 +41,8 @@ extension Element: JSONDecodable {
             let size = JSON["size"] as? Int64,
             let contentType = JSON["contentType"] as? String
             else {
-                print("Could not parce keys")
-                return nil
+            print("Could not parce keys")
+            return nil
         }
         self.name = name
         self.type = type

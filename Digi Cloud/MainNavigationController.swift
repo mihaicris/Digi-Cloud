@@ -9,10 +9,12 @@
 import UIKit
 
 class MainNavigationController: UINavigationController {
+
+    // MARK: - Overridden Methods and Properties
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
 
         // we check if app is launched for the first time, if yes, we initialize some settings
         if !AppSettings.isAppFirstTimeStarted {

@@ -8,13 +8,11 @@
 
 import UIKit
 
-
-/// Custom UITableViewCell. Initialization with title name and has optionally a UISwitch
-
 class ActionCell: UITableViewCell {
 
-    var switchButton: UISwitch!
+    // MARK: - Properties
 
+    var switchButton: UISwitch!
     weak var delegate: ActionCellDelegate? {
         didSet {
             guard let delegate = delegate else { return }
@@ -22,12 +20,15 @@ class ActionCell: UITableViewCell {
         }
     }
 
+    // MARK: - Initializers and Deinitializers
+
     /// Init an ActionCell
     ///
     /// - Parameters:
     ///   - title: textLabel text
     ///   - tag: tag of the cells view
     ///   - hasSwitch: if true, the cell will contain a UISwitch on the right side
+
     init(title: String, action: ActionType) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: nil)
         self.textLabel?.text = title
@@ -45,7 +46,12 @@ class ActionCell: UITableViewCell {
         self.textLabel?.textColor = color
     }
 
-    /// Helper function to add the UISwitch to the cell
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Helper Functions
+
     private func addSwitch(delegate: ActionCellDelegate) {
         switchButton = UISwitch()
         switchButton.addTarget(self, action: #selector(handleSwitchValueChanged), for: UIControlEvents.valueChanged)
@@ -56,9 +62,5 @@ class ActionCell: UITableViewCell {
 
     @objc private func handleSwitchValueChanged() {
         delegate?.onSwitchValueChanged(button: switchButton, value: switchButton.isOn)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

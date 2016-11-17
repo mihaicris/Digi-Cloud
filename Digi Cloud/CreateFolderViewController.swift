@@ -10,12 +10,15 @@ import UIKit
 
 class CreateFolderViewController: UITableViewController {
 
-    var onFinish: ((_ folderName: String?) -> Void)?
+    // MARK: - Properties
 
+    var onFinish: ((_ folderName: String?) -> Void)?
     fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var textField: UITextField!
     fileprivate var messageLabel: UILabel!
+
+    // MARK: - Initializers and Deinitializers
 
     init() {
         super.init(style: .grouped)
@@ -24,6 +27,14 @@ class CreateFolderViewController: UITableViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    #if DEBUG
+    deinit {
+        print("[DEINIT]: " + String(describing: type(of: self)))
+    }
+    #endif
+
+    // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +70,8 @@ class CreateFolderViewController: UITableViewController {
         return cell
     }
 
+    // MARK: - Helper Functions
+
     fileprivate func setupViews() {
 
         messageLabel = {
@@ -78,13 +91,13 @@ class CreateFolderViewController: UITableViewController {
 
         leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
                                         style: .plain,
-                                       target: self,
-                                       action: #selector(handleCancel))
+                                        target: self,
+                                        action: #selector(handleCancel))
 
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Create", comment: "Button Title"),
                                          style: .plain,
-                                        target: self,
-                                        action: #selector(handleCreateFolder))
+                                         target: self,
+                                         action: #selector(handleCreateFolder))
 
         self.navigationItem.setLeftBarButton(leftBarButton, animated: false)
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
@@ -93,6 +106,27 @@ class CreateFolderViewController: UITableViewController {
         rightBarButton.isEnabled = false
 
         self.title = NSLocalizedString("Create Folder", comment: "Window Title")
+    }
+
+    fileprivate func hasInvalidCharacters(name: String) -> Bool {
+        let charset: Set<Character> = ["\\", "/", ":", "?", "<", ">", "\"", "|"]
+        return !charset.isDisjoint(with: name.characters)
+    }
+
+    fileprivate func setCreateFolderButton(_ value: Bool) {
+        self.rightBarButton.isEnabled = value
+
+    }
+
+    fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
+        DispatchQueue.main.async {
+            if onScreen {
+                self.messageLabel.text = message
+            }
+            UIView.animate(withDuration: onScreen ? 0.0 : 0.5, animations: {
+                self.messageLabel.alpha = onScreen ? 1.0 : 0.0
+            })
+        }
     }
 
     @objc fileprivate func handleCancel() {
@@ -133,14 +167,14 @@ class CreateFolderViewController: UITableViewController {
                     // Bad request ( Element already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
                     let message = NSLocalizedString("Folder already exists. Please choose a different name", comment: "Error message")
-                    self.setMessage(onScreen:true, message)
+                    self.setMessage(onScreen: true, message)
                 case 404:
                     // Not Found (Element do not exists anymore), folder will refresh
                     let message = NSLocalizedString("File is no longer available. Folder will refresh", comment: "Error message")
                     DispatchQueue.main.async {
                         self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
                     }
-                    self.setMessage(onScreen:true, message)
+                    self.setMessage(onScreen: true, message)
                 default :
                     let message = NSLocalizedString("Server replied with Status Code: ", comment: "Error message")
                     self.setMessage(onScreen: true, message + String(code))
@@ -163,33 +197,6 @@ class CreateFolderViewController: UITableViewController {
             }
         }
     }
-
-    fileprivate func hasInvalidCharacters(name: String) -> Bool {
-        let charset: Set<Character> = ["\\", "/", ":", "?", "<", ">", "\"", "|"]
-        return !charset.isDisjoint(with: name.characters)
-    }
-
-    fileprivate func setCreateFolderButton(_ value: Bool) {
-        self.rightBarButton.isEnabled = value
-
-    }
-
-    fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
-        DispatchQueue.main.async {
-            if onScreen {
-                self.messageLabel.text = message
-            }
-            UIView.animate(withDuration: onScreen ? 0.0 : 0.5, animations: {
-                self.messageLabel.alpha = onScreen ? 1.0 : 0.0
-            })
-        }
-    }
-
-    #if DEBUG
-    deinit {
-        print("CreateFolderViewController deinit")
-    }
-    #endif
 }
 
 extension CreateFolderViewController: UITextFieldDelegate {

@@ -47,7 +47,7 @@ class DirectoryCell: BaseListCell {
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         if highlighted {
-            contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
+            contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
             folderNameLabel.textColor = UIColor.white
             actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
         } else {

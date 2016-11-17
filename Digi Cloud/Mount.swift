@@ -9,8 +9,14 @@
 import Foundation
 
 struct Mount {
+
+    // MARK: - Properties
+
     let id: String
     let name: String
+
+    // MARK: - Initializers and Deinitializers
+
     init(id: String, name: String) {
         self.id = id
         self.name = name
@@ -23,8 +29,8 @@ extension Mount: JSONDecodable {
             let name = JSON["name"] as? String,
             let id = JSON["id"] as? String
             else {
-                print("Could not parce keys")
-                return nil
+            print("Could not parce keys")
+            return nil
         }
         self.name = name
         self.id = id

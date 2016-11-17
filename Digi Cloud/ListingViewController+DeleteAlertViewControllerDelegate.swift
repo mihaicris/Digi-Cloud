@@ -9,7 +9,6 @@
 import Foundation
 
 extension ListingViewController: DeleteViewControllerDelegate {
-
     func onConfirmDeletion() {
 
         // Dismiss DeleteAlertViewController
@@ -23,7 +22,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
 
                 // TODO: Stop spinner
                 guard error == nil else {
-                    // TODO Show message for error
+                    // TODO: Show message for error
                     print(error!.localizedDescription)
                     return
                 }
@@ -46,7 +45,6 @@ extension ListingViewController: DeleteViewControllerDelegate {
                 }
             }
         }
-
 
     }
 }

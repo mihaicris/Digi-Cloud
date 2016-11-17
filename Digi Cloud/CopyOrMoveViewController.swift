@@ -10,15 +10,14 @@ import UIKit
 
 final class CopyOrMoveViewController: UITableViewController {
 
+    // MARK: - Properties
+
+    var onFinish: ((Void) -> Void)?
     private let FileCellID = "FileCell"
     private let FolderCellID = "DirectoryCell"
-
     private var element: Element
     private var action: ActionType
     private var content: [Element] = []
-
-    var onFinish: ((Void) -> Void)?
-
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
@@ -27,13 +26,14 @@ final class CopyOrMoveViewController: UITableViewController {
         f.dateFormat = "dd.MM.YYY・HH:mm"
         return f
     }()
-
     private let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
         f.allowsNonnumericFormatting = false
         return f
     }()
+
+    // MARK: - Initializers and Deinitializers
 
     init(element: Element, action: ActionType) {
         self.element = element
@@ -44,6 +44,15 @@ final class CopyOrMoveViewController: UITableViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    #if DEBUG
+    deinit {
+        print("[DEINIT]: " + String(describing: type(of: self)))
+    }
+    #endif
+
+
+    // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +67,35 @@ final class CopyOrMoveViewController: UITableViewController {
         getFolderContent()
     }
 
-    func getFolderContent() {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return content.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let data = content[indexPath.row]
+
+        if data.type == "dir" {
+            let cell = tableView.dequeueReusableCell(withIdentifier: FolderCellID, for: indexPath) as! DirectoryCell
+            cell.folderNameLabel.text = data.name
+            return cell
+
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: FileCellID, for: indexPath) as! FileCell
+
+            let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: data.modified / 1000))
+            cell.fileNameLabel.text = data.name
+
+            let fileSizeString = byteFormatter.string(fromByteCount: data.size) + "・" + modifiedDate
+            cell.fileSizeLabel.text = fileSizeString
+
+            return cell
+        }
+    }
+
+    // MARK: - Helper Functions
+
+    private func getFolderContent() {
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.destinationMount, queryPath: DigiClient.shared.destinationPath.last!) {
             (content, error) in
             guard error == nil else {
@@ -103,34 +140,6 @@ final class CopyOrMoveViewController: UITableViewController {
         self.setToolbarItems(toolBarItems, animated: false)
     }
 
-    // MARK: - Table View Data Source
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return content.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let data = content[indexPath.row]
-
-        if data.type == "dir" {
-            let cell = tableView.dequeueReusableCell(withIdentifier: FolderCellID, for: indexPath) as! DirectoryCell
-            cell.folderNameLabel.text = data.name
-            return cell
-
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: FileCellID, for: indexPath) as! FileCell
-
-            let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
-            cell.fileNameLabel.text = data.name
-
-            let fileSizeString = byteFormatter.string(fromByteCount: data.size) + "・" + modifiedDate
-            cell.fileSizeLabel.text = fileSizeString
-
-            return cell
-        }
-    }
-
     @objc private func handleDone() {
 
         self.onFinish?()
@@ -138,7 +147,7 @@ final class CopyOrMoveViewController: UITableViewController {
 
     @objc private func handleNewFolder() {
         let controller = CreateFolderViewController()
-        controller.onFinish = { [unowned self] (folderName) in
+        controller.onFinish = { [unowned self](folderName) in
             DispatchQueue.main.async {
                 _ = self.navigationController?.popViewController(animated: true)
                 if folderName != nil {
@@ -158,7 +167,7 @@ final class CopyOrMoveViewController: UITableViewController {
         guard let currentPath = DigiClient.shared.currentPath.last else { return }
 
         let elementSourcePath = currentPath + element.name
-        let destinationMount = currentMount  // TODO: Update with destination mount
+        let destinationMount = currentMount // TODO: Update with destination mount
         let elementDestinationPath = currentPath + element.name  // TODO: Update with selected destination path (without element name inside)
 
         if true { return }
@@ -168,11 +177,5 @@ final class CopyOrMoveViewController: UITableViewController {
                                             toMountId:          destinationMount,
                                             toPath:             elementDestinationPath,
                                             completionHandler:  {(statusCode, error) in return })
-    }
-
-    deinit {
-        #if DEBUG
-            print("CopyOrMoveViewController deinit")
-        #endif
     }
 }

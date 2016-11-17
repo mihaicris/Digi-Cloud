@@ -10,6 +10,8 @@ import UIKit
 
 class FileCell: BaseListCell {
 
+    // MARK: - Properties
+
     var fileIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "FileIcon"))
         imageView.contentMode = .scaleAspectFit
@@ -33,6 +35,25 @@ class FileCell: BaseListCell {
         return label
     }()
 
+    // MARK: - Overridden Methods and Properties
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        if highlighted {
+            contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
+            fileNameLabel.textColor = UIColor.white
+            fileSizeLabel.textColor = UIColor(colorLiteralRed: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1.0)
+            actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+        } else {
+            contentView.backgroundColor = nil
+            fileNameLabel.textColor = UIColor.black
+            fileSizeLabel.textColor = UIColor.darkGray
+            actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
+        }
+    }
+
+    // MARK: - Helper Functions
+
     override func setupViews() {
 
         super.setupViews()
@@ -50,20 +71,5 @@ class FileCell: BaseListCell {
 
         fileIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
         fileNameLabel.topAnchor.constraint(equalTo: fileIcon.topAnchor, constant: -3).isActive = true
-    }
-
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        if highlighted {
-            contentView.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 116/255, blue: 255/255, alpha: 1.0)
-            fileNameLabel.textColor = UIColor.white
-            fileSizeLabel.textColor = UIColor(colorLiteralRed: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
-            actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
-        } else {
-            contentView.backgroundColor = nil
-            fileNameLabel.textColor = UIColor.black
-            fileSizeLabel.textColor = UIColor.darkGray
-            actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
-        }
     }
 }

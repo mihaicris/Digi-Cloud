@@ -10,9 +10,12 @@ import UIKit
 
 class SortFolderViewController: UITableViewController, ActionCellDelegate {
 
-    var onFinish: ((_ dismiss: Bool) -> Void)?
+    // MARK: - Properties
 
+    var onFinish: ((_ dismiss: Bool) -> Void)?
     var contextMenuSortActions: [String] = []
+
+    // MARK: - Initializers and Deinitializers
 
     init() {
         super.init(style: .plain)
@@ -22,16 +25,79 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
+    #if DEBUG
+    deinit {
+        print("[DEINIT]: " + String(describing: type(of: self)))
+    }
+    #endif
+
+    // MARK: - Overridden Methods and Properties
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setInitialActionNames()
+        setupViews()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         self.preferredContentSize.height = tableView.contentSize.height - 1
         self.preferredContentSize.width = 250
         super.viewWillAppear(animated)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setInitialActionNames()
-        setupViews()
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return contextMenuSortActions.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let sortMethodRow = indexPath.row
+
+        // check if user selected the same sort method
+        if  sortMethodRow == AppSettings.sortMethod.rawValue {
+            contextMenuSortActions[sortMethodRow] += AppSettings.sortAscending ? "   ↑" : "   ↓"
+        }
+
+        guard let action = ActionType(rawValue: sortMethodRow) else { return UITableViewCell() }
+
+        let cell = ActionCell(title: contextMenuSortActions[sortMethodRow], action: action)
+        if sortMethodRow == 0 {
+            cell.delegate = self
+            cell.selectionStyle = .none
+            if AppSettings.sortMethod == .bySize || AppSettings.sortMethod == .byContentType {
+                cell.switchButton.isOn = true
+                cell.switchButton.isEnabled = false
+            } else {
+                cell.switchButton!.isOn = AppSettings.showFoldersFirst
+            }
+        }
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? ActionCell {
+            let tag = cell.tag
+            if tag != 0 {
+                setInitialActionNames()
+                if tag == AppSettings.sortMethod.rawValue {
+                    // user changed the sort direction for the same method
+                    AppSettings.sortAscending = !AppSettings.sortAscending
+                } else {
+                    // user changed the sort method
+                    AppSettings.sortMethod = SortMethodType(rawValue: tag)!
+                }
+                tableView.reloadData()
+                self.onFinish?(true)
+            }
+        }
+    }
+
+    // MARK: - Helper Functions
+
+    func onSwitchValueChanged(button: UISwitch, value: Bool) {
+        if button.tag == 0 {
+            AppSettings.showFoldersFirst = value
+            self.onFinish?(false)
+        }
     }
 
     fileprivate func setInitialActionNames() {
@@ -71,68 +137,11 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
 
         headerView.addSubview(separator)
         headerView.addConstraints(with: "H:|[v0]|", views: separator)
-        headerView.addConstraints(with: "V:[v0(\(1/UIScreen.main.scale))]|", views: separator)
+        headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
 
         tableView.isScrollEnabled = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
-
-    func onSwitchValueChanged(button: UISwitch, value: Bool) {
-        if button.tag == 0 {
-            AppSettings.showFoldersFirst = value
-            self.onFinish?(false)
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contextMenuSortActions.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let sortMethodRow = indexPath.row
-
-        // check if user selected the same sort method
-        if  sortMethodRow == AppSettings.sortMethod.rawValue {
-            contextMenuSortActions[sortMethodRow] += AppSettings.sortAscending ? "   ↑" : "   ↓"
-        }
-
-        guard let action = ActionType(rawValue: sortMethodRow) else { return UITableViewCell() }
-
-        let cell = ActionCell(title: contextMenuSortActions[sortMethodRow], action: action )
-        if sortMethodRow == 0 {
-            cell.delegate = self
-            cell.selectionStyle = .none
-            if AppSettings.sortMethod == .bySize || AppSettings.sortMethod == .byContentType {
-                cell.switchButton.isOn = true
-                cell.switchButton.isEnabled = false
-            } else {
-                cell.switchButton!.isOn = AppSettings.showFoldersFirst
-            }
-        }
-        return cell
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? ActionCell {
-            let tag = cell.tag
-            if tag != 0 {
-                setInitialActionNames()
-                if tag == AppSettings.sortMethod.rawValue {
-                    // user changed the sort direction for the same method
-                    AppSettings.sortAscending = !AppSettings.sortAscending
-                } else {
-                    // user changed the sort method
-                    AppSettings.sortMethod = SortMethodType(rawValue: tag)!
-                }
-                tableView.reloadData()
-                self.onFinish?(true)
-            }
-        }
-    }
-    
-    #if DEBUG
-    deinit { print("SortFolderViewController deinit") }
-    #endif
 }
