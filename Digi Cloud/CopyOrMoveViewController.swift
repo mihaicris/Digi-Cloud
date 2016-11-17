@@ -137,7 +137,19 @@ final class CopyOrMoveViewController: UITableViewController {
     }
 
     @objc private func handleNewFolder() {
-        self.onFinish?()
+        let controller = CreateFolderViewController()
+        controller.onFinish = { [unowned self] (folderName) in
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+                if folderName != nil {
+                    // TODO: This is the new folder, navigate inside it
+                } else {
+                    return // Cancel
+                }
+            }
+        }
+
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     @objc private func handleCopyOrMove() {

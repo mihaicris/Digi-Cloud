@@ -107,7 +107,7 @@ class CreateFolderViewController: UITableViewController {
         // TODO: Show on screen spinner for create folder request
 
         // get the new name, space trimmed
-        let charSet = CharacterSet(charactersIn: " ")
+        let charSet = CharacterSet.whitespaces
         guard let folderName = textField.text?.trimmingCharacters(in: charSet) else { return }
 
         //build the path of element to be renamed
