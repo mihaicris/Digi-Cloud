@@ -28,14 +28,6 @@ class ActionViewController: UITableViewController {
     var contextMenuFileActions: [ActionCell] = []
     var contextMenuFolderActions: [ActionCell] = []
 
-    override init(style: UITableViewStyle) {
-        super.init(style: style)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         self.preferredContentSize.width = 250
         self.preferredContentSize.height = tableView.contentSize.height - 1
