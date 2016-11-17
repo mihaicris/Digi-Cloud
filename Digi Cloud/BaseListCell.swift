@@ -10,9 +10,14 @@ import UIKit
 
 class BaseListCell: UITableViewCell {
 
+    private var hasButton: Bool = false
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        if let identifier = reuseIdentifier, identifier.hasSuffix("WithButton") {
+            self.hasButton = true
+        }
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
+        self.setupViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -33,13 +38,16 @@ class BaseListCell: UITableViewCell {
     }()
 
     @objc fileprivate func handleAction(){
-        delegate?.showActionController(for: self.actionButton)
+
+        delegate?.showActionController(for: actionButton)
     }
 
     func setupViews() {
-        contentView.addSubview(actionButton)
-        contentView.addConstraints(with: "H:[v0(64)]-(-4)-|", views: actionButton)
-        actionButton.heightAnchor.constraint(equalToConstant: AppSettings.tableViewRowHeight * 0.95).isActive = true
-        actionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        if hasButton {
+            contentView.addSubview(actionButton)
+            contentView.addConstraints(with: "H:[v0(64)]-(-4)-|", views: actionButton)
+            actionButton.heightAnchor.constraint(equalToConstant: AppSettings.tableViewRowHeight * 0.95).isActive = true
+            actionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        }
     }
 }

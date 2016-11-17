@@ -12,9 +12,12 @@ class ListingViewController: UITableViewController {
 
     // MARK: - Properties
 
+    private let FileCellID = "FileCellWithButton"
+    private let FolderCellID = "DirectoryCellWithButton"
+
     var content: [Element] = []
 
-    let dateFormatter: DateFormatter = {
+    private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
         f.timeStyle = .none
@@ -22,7 +25,7 @@ class ListingViewController: UITableViewController {
         f.dateFormat = "dd.MM.YYY・HH:mm"
         return f
     }()
-    let byteFormatter: ByteCountFormatter = {
+    private let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
         f.allowsNonnumericFormatting = false
@@ -31,27 +34,26 @@ class ListingViewController: UITableViewController {
 
     var currentIndex: IndexPath!
 
-    var addFolderButton, sortButton: UIBarButtonItem!
-
+    private var addFolderButton, sortButton: UIBarButtonItem!
 
     // MARK: - View Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(FileCell.self, forCellReuseIdentifier: "FileCell")
-        tableView.register(DirectoryCell.self, forCellReuseIdentifier: "DirectoryCell")
+        tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
+        tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
         getFolderContent()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        updateSortType()
+        updateSortTypeButton()
         super.viewWillAppear(animated)
     }
 
-    fileprivate func updateSortType() {
+    fileprivate func updateSortTypeButton() {
 
         var buttonTitle: String
         let isAscending = AppSettings.sortAscending
@@ -209,14 +211,14 @@ class ListingViewController: UITableViewController {
         let data = content[indexPath.row]
 
         if data.type == "dir" {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath) as! DirectoryCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: FolderCellID, for: indexPath) as! DirectoryCell
             cell.delegate = self
 
             cell.folderNameLabel.text = data.name
 
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath) as! FileCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: FileCellID, for: indexPath) as! FileCell
             cell.delegate = self
 
             let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: data.modified/1000))
