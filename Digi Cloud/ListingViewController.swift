@@ -53,6 +53,8 @@ class ListingViewController: UITableViewController {
         super.viewWillAppear(animated)
     }
 
+    // MARK: - Helper Methods
+
     fileprivate func updateSortTypeButton() {
 
         var buttonTitle: String

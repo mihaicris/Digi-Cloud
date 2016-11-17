@@ -15,7 +15,6 @@ final class CopyOrMoveViewController: UITableViewController {
 
     private var element: Element
     private var action: ActionType
-
     private var content: [Element] = []
 
     var onFinish: ((Void) -> Void)?
@@ -54,13 +53,13 @@ final class CopyOrMoveViewController: UITableViewController {
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
         tableView.rowHeight = AppSettings.tableViewRowHeight
-        getFolderContent()
-
         setupViews()
+
+        getFolderContent()
     }
 
     func getFolderContent() {
-        DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
+        DigiClient.shared.getLocationContent(mount: DigiClient.shared.destinationMount, queryPath: DigiClient.shared.destinationPath.last!) {
             (content, error) in
             guard error == nil else {
                 print("Error: \(error?.localizedDescription)")
@@ -90,17 +89,19 @@ final class CopyOrMoveViewController: UITableViewController {
         }
 
         let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
-        navigationItem.setRightBarButton(rightButton, animated: false)
 
+        navigationItem.setRightBarButton(rightButton, animated: false)
         navigationController?.isToolbarHidden = false
+
+        let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
+        copyMoveButton.isEnabled = !DigiClient.shared.arePathsTheSame
 
         let toolBarItems = [UIBarButtonItem(title: NSLocalizedString("New Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleNewFolder)),
                             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-                            UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))]
+                            copyMoveButton]
 
         self.setToolbarItems(toolBarItems, animated: false)
     }
-
 
     // MARK: - Table View Data Source
 
@@ -155,5 +156,11 @@ final class CopyOrMoveViewController: UITableViewController {
                                             toMountId:          destinationMount,
                                             toPath:             elementDestinationPath,
                                             completionHandler:  {(statusCode, error) in return })
+    }
+
+    deinit {
+        #if DEBUG
+            print("CopyOrMoveViewController deinit")
+        #endif
     }
 }

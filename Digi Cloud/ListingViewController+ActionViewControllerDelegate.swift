@@ -48,6 +48,9 @@ extension ListingViewController: ActionViewControllerDelegate {
             controller.onFinish = { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
             }
+
+            DigiClient.shared.equalizePaths()
+
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)

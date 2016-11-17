@@ -16,6 +16,11 @@ final class DigiClient {
     var token: String!
     var currentMount: String!
     var currentPath: [String] = []
+    var destinationMount: String!
+    var destinationPath: [String] = []
+    var arePathsTheSame: Bool {
+        return currentMount == destinationMount && currentPath.last! == destinationPath.last!
+    }
 
     // MARK: - Initializers
     private init() {}
@@ -38,7 +43,11 @@ final class DigiClient {
     // MARK: - Shared instance
     static let shared: DigiClient = DigiClient()
 
-    // MARK: - GET
+    func equalizePaths() {
+        destinationMount = currentMount
+        destinationPath = currentPath
+    }
+
     func networkTask(requestType: String, method: String, headers: [String: String]?,
                      json: [String: String]?, parameters: [String: Any]?,
                      completionHandler: @escaping (_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
