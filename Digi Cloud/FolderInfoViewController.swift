@@ -79,13 +79,11 @@ class FolderInfoViewController: UITableViewController {
     }
 
     fileprivate func setupViews() {
-
         tableView.isScrollEnabled = false
 
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"),
-                                         style: .plain,
-                                         target: self, action: #selector(handleDone))
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"), style: .plain, target: self, action: #selector(handleDone))
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
+
         self.title = NSLocalizedString("Folder information", comment: "Window Title")
     }
 
@@ -219,7 +217,7 @@ class FolderInfoViewController: UITableViewController {
         controller.popoverPresentationController?.sourceRect = deleteButton.bounds
         present(controller, animated: true, completion: nil)
     }
-
+    
     #if DEBUG
     deinit {
         print("FolderInfoViewController deinit")

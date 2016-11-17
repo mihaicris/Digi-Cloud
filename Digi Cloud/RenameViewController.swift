@@ -88,17 +88,10 @@ class RenameViewController: UITableViewController {
         tableView.addSubview(messageLabel)
         tableView.addConstraints(with: "V:|-100-[v0]|", views: messageLabel)
         tableView.centerXAnchor.constraint(equalTo: messageLabel.centerXAnchor).isActive = true
-
         tableView.isScrollEnabled = false
 
-        leftBarButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
-                                         style: .plain,
-                                        target: self,
-                                        action: #selector(handleCancel))
-
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename", comment: "Button Title"),
-                                         style: .plain, target: self,
-                                        action: #selector(handleRename))
+        leftBarButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCancel))
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename", comment: "Button Title"), style: .plain, target: self, action: #selector(handleRename))
 
         self.navigationItem.setLeftBarButton(leftBarButton, animated: false)
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
@@ -238,7 +231,7 @@ extension RenameViewController: UITextFieldDelegate {
         setMessage(onScreen: false)
         positionCursor()
     }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if rightBarButton.isEnabled {
             textField.resignFirstResponder()
