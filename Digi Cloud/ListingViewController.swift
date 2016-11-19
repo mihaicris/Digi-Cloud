@@ -8,10 +8,17 @@
 
 import UIKit
 
-class ListingViewController: UITableViewController {
+final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
 
+    var needRefresh: Bool = false {
+        didSet {
+            print("List Controller: " + needRefresh.description)
+        }
+    }
+    var parentTitle: String
+    var backButtonTitle: String
     var content: [Element] = []
     var currentIndex: IndexPath!
     private let FileCellID = "FileCellWithButton"
@@ -30,9 +37,37 @@ class ListingViewController: UITableViewController {
         f.allowsNonnumericFormatting = false
         return f
     }()
+    private let busyIndicator: UIActivityIndicatorView = {
+        let i = UIActivityIndicatorView()
+        i.hidesWhenStopped = true
+        i.startAnimating()
+        i.activityIndicatorViewStyle = .gray
+        i.translatesAutoresizingMaskIntoConstraints = false
+        return i
+    }()
+
+    private let emptyFolderLabel: UILabel = {
+        let l = UILabel()
+        l.text = NSLocalizedString("Loading ...", comment: "Information")
+        l.textColor = UIColor.lightGray
+        l.sizeToFit()
+        l.textAlignment = .center
+        return l
+    }()
+
     private var addFolderButton, sortButton: UIBarButtonItem!
 
     // MARK: - Initializers and Deinitializers
+
+    init(parentTitle: String, backButtonTitle: String) {
+        self.parentTitle = parentTitle
+        self.backButtonTitle = backButtonTitle
+        super.init(style: .plain)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     deinit {
         DigiClient.shared.task?.cancel()
@@ -47,23 +82,55 @@ class ListingViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
-        tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
-        tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.rowHeight = AppSettings.tableViewRowHeight
+        setupTableView()
         getFolderContent()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         updateRightBarButtonItems()
+        if needRefresh {
+            content.removeAll()
+            self.busyIndicator.startAnimating()
+            self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
+            tableView.reloadData()
+        }
         super.viewWillAppear(animated)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if needRefresh {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+                self.getFolderContent()
+            }
+        }
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return content.count
+        return content.isEmpty ? 2 : content.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        if content.isEmpty {
+            let cell = UITableViewCell()
+            cell.isUserInteractionEnabled = false
+            if indexPath.row == 1 {
+
+                let v = UIView()
+                v.translatesAutoresizingMaskIntoConstraints = false
+                v.addSubview(busyIndicator)
+                v.addSubview(emptyFolderLabel)
+                v.addConstraints(with: "H:|[v0]-5-[v1]|", views: busyIndicator, emptyFolderLabel)
+                busyIndicator.centerYAnchor.constraint(equalTo: v.centerYAnchor).isActive = true
+                emptyFolderLabel.centerYAnchor.constraint(equalTo: v.centerYAnchor).isActive = true
+
+                cell.contentView.addSubview(v)
+                v.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
+                v.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            }
+            return cell
+        }
 
         let data = content[indexPath.row]
 
@@ -92,15 +159,15 @@ class ListingViewController: UITableViewController {
 
         tableView.deselectRow(at: indexPath, animated: false)
 
-        let itemName = content[indexPath.row].name
+        let item = content[indexPath.row]
         let previousPath = DigiClient.shared.currentPath.last!
 
-        if content[indexPath.row].type == "dir" {
+        if item.type == "dir" {
             // This is a Folder
-            let controller = ListingViewController()
-            controller.title = itemName
+            let controller = ListingViewController(parentTitle: item.name, backButtonTitle: navigationItem.title!)
+            controller.title = item.name
 
-            let folderPath = previousPath + itemName + "/"
+            let folderPath = previousPath + item.name + "/"
             DigiClient.shared.currentPath.append(folderPath)
 
             navigationController?.pushViewController(controller, animated: true)
@@ -108,9 +175,9 @@ class ListingViewController: UITableViewController {
         } else {
             // This is a file
             let controller = ContentViewController()
-            controller.title = itemName
+            controller.title = item.name
 
-            let filePath = previousPath + itemName
+            let filePath = previousPath + item.name
             DigiClient.shared.currentPath.append(filePath)
 
             navigationController?.pushViewController(controller, animated: true)
@@ -119,27 +186,46 @@ class ListingViewController: UITableViewController {
 
     // MARK: - Helper Methods
 
-    func sortContent() {
-        switch AppSettings.sortMethod {
-        case .byName:        sortByName()
-        case .byDate:        sortByDate()
-        case .bySize:        sortBySize()
-        case .byContentType: sortByContentType()
-        }
+    private func setupTableView() {
+        tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
+        tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.rowHeight = AppSettings.tableViewRowHeight
     }
 
     func getFolderContent() {
+        self.needRefresh = false
+
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
             (content, error) in
             guard error == nil else {
                 print("Error: \(error?.localizedDescription)")
                 return
             }
-            self.content = content ?? []
-            self.sortContent()
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+            if let content = content {
+                if !content.isEmpty {
+                    self.content = content
+                    self.sortContent()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        self.busyIndicator.stopAnimating()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                        self.busyIndicator.stopAnimating()
+                    }
+                }
             }
+        }
+    }
+
+    func sortContent() {
+        switch AppSettings.sortMethod {
+        case .byName:        sortByName()
+        case .byDate:        sortByDate()
+        case .bySize:        sortBySize()
+        case .byContentType: sortByContentType()
         }
     }
 
@@ -236,11 +322,16 @@ class ListingViewController: UITableViewController {
     @objc fileprivate func handleAddFolder() {
         self.dismiss(animated: false, completion: nil) // dismiss any other presented controller
         let controller = CreateFolderViewController()
+        controller.path = DigiClient.shared.currentPath.last!
         controller.onFinish = { [unowned self](folderName) in
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
-                if folderName != nil {
-                    self.getFolderContent()
+                if let folderName = folderName {
+                    self.needRefresh = true
+                    DigiClient.shared.currentPath.append(controller.path + folderName + "/")
+                    let controller = ListingViewController(parentTitle: folderName, backButtonTitle: self.backButtonTitle)
+                    controller.title = folderName
+                    self.navigationController?.pushViewController(controller, animated: true)
                 } else {
                     return // Cancel
                 }

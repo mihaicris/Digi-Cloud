@@ -15,8 +15,11 @@ final class CopyOrMoveViewController: UITableViewController {
     var onFinish: ((Void) -> Void)?
     private let FileCellID = "FileCell"
     private let FolderCellID = "DirectoryCell"
+    private var needRefresh: Bool = false
     private var element: Element
     private var action: ActionType
+    private var parentTitle: String
+    private var backButtonTitle: String
     private var content: [Element] = []
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -32,12 +35,30 @@ final class CopyOrMoveViewController: UITableViewController {
         f.allowsNonnumericFormatting = false
         return f
     }()
+    private let busyIndicator: UIActivityIndicatorView = {
+        let i = UIActivityIndicatorView()
+        i.hidesWhenStopped = true
+        i.startAnimating()
+        i.activityIndicatorViewStyle = .gray
+        i.translatesAutoresizingMaskIntoConstraints = false
+        return i
+    }()
+    private let emptyFolderLabel: UILabel = {
+        let l = UILabel()
+        l.text = NSLocalizedString("Loading ...", comment: "Information")
+        l.textColor = UIColor.lightGray
+        l.sizeToFit()
+        l.textAlignment = .center
+        return l
+    }()
 
     // MARK: - Initializers and Deinitializers
 
-    init(element: Element, action: ActionType) {
+    init(element: Element, action: ActionType, parentTitle: String, backButtonTitle: String) {
         self.element = element
         self.action = action
+        self.parentTitle = parentTitle
+        self.backButtonTitle = backButtonTitle
         super.init(style: .grouped)
     }
 
@@ -51,7 +72,6 @@ final class CopyOrMoveViewController: UITableViewController {
     }
     #endif
 
-
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
@@ -62,16 +82,55 @@ final class CopyOrMoveViewController: UITableViewController {
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
         tableView.rowHeight = AppSettings.tableViewRowHeight
-        setupViews()
 
+        setupViews()
         getFolderContent()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        if needRefresh {
+            content.removeAll()
+            self.busyIndicator.startAnimating()
+            self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
+            tableView.reloadData()
+        }
+        super.viewWillAppear(animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if needRefresh {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+                self.getFolderContent()
+            }
+        }
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return content.count
+        return content.isEmpty ? 2 : content.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if content.isEmpty {
+            tableView.separatorStyle = .none
+            let cell = UITableViewCell()
+            cell.isUserInteractionEnabled = false
+            if indexPath.row == 1 {
+
+                let v = UIView()
+                v.translatesAutoresizingMaskIntoConstraints = false
+                v.addSubview(busyIndicator)
+                v.addSubview(emptyFolderLabel)
+                v.addConstraints(with: "H:|[v0]-5-[v1]|", views: busyIndicator, emptyFolderLabel)
+                busyIndicator.centerYAnchor.constraint(equalTo: v.centerYAnchor).isActive = true
+                emptyFolderLabel.centerYAnchor.constraint(equalTo: v.centerYAnchor).isActive = true
+
+                cell.contentView.addSubview(v)
+                v.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
+                v.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            }
+            return cell
+        }
 
         let data = content[indexPath.row]
 
@@ -96,31 +155,62 @@ final class CopyOrMoveViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func getFolderContent() {
+
+        self.needRefresh = false
+
         DigiClient.shared.getLocationContent(mount: DigiClient.shared.destinationMount, queryPath: DigiClient.shared.destinationPath.last!) {
             (content, error) in
             guard error == nil else {
                 print("Error: \(error?.localizedDescription)")
                 return
             }
-            self.content = content ?? []
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+
+            if var content = content {
+                if !content.isEmpty {
+
+
+                    // Remove from the list the element which is copied or moved
+                    for (index, elem) in content.enumerated() {
+                        if elem.name == self.element.name {
+                            content.remove(at: index)
+                        }
+                    }
+
+                    // Sort the content by name ascending with folders shown first
+                    content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+
+                    self.content = content
+
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        self.busyIndicator.stopAnimating()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                        self.busyIndicator.stopAnimating()
+                    }
+                }
             }
         }
     }
 
     private func setupViews() {
-        view.backgroundColor = UIColor.white
 
-        self.title = NSLocalizedString("Select destination", comment: "Window title")
+        view.backgroundColor = UIColor.white
+        self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
+
+        self.title = parentTitle
+        let backButton = UIBarButtonItem(title: backButtonTitle, style: .plain, target: self, action: #selector(handleNavigateBack))
+        navigationItem.setLeftBarButton(backButton, animated: true)
 
         var buttonTitle: String
 
         switch action {
         case .copy:
-            buttonTitle = NSLocalizedString("Copy here", comment: "Button Title")
+            buttonTitle = NSLocalizedString("Save copy", comment: "Button Title")
         case .move:
-            buttonTitle = NSLocalizedString("Move here", comment: "Button Title")
+            buttonTitle = NSLocalizedString("Move", comment: "Button Title")
         default:
             return
         }
@@ -147,18 +237,41 @@ final class CopyOrMoveViewController: UITableViewController {
 
     @objc private func handleNewFolder() {
         let controller = CreateFolderViewController()
+        controller.path = DigiClient.shared.destinationPath.last!
         controller.onFinish = { [unowned self](folderName) in
             DispatchQueue.main.async {
-                _ = self.navigationController?.popViewController(animated: true)
-                if folderName != nil {
-                    // TODO: This is the new folder, navigate inside it
-                } else {
-                    return // Cancel
+                self.dismiss(animated: true, completion: nil)
+                if let folderName = folderName {
+                    // Set needRefresh in this list
+                    self.needRefresh = true
+
+                    // Set needRefresh in the main List
+                    if let nav = self.presentingViewController as? UINavigationController {
+                        if let cont = nav.topViewController as? ListingViewController {
+                            cont.needRefresh = true
+                        }
+                    }
+                    DigiClient.shared.destinationPath.append(controller.path + folderName + "/")
+                    print(DigiClient.shared.destinationPath.last!)
+
+                    let newController = CopyOrMoveViewController(element: self.element,
+                                                                 action: self.action,
+                                                                 parentTitle: folderName,
+                                                                 backButtonTitle: self.backButtonTitle)
+                    newController.onFinish = { [unowned self] in
+                        self.onFinish?()
+                    }
+                    self.navigationController?.pushViewController(newController, animated: true)
                 }
             }
         }
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .formSheet
+        present(navController, animated: true, completion: nil)
+    }
 
-        navigationController?.pushViewController(controller, animated: true)
+    @objc private func handleNavigateBack() {
+        print("go back")
     }
 
     @objc private func handleCopyOrMove() {
@@ -171,7 +284,7 @@ final class CopyOrMoveViewController: UITableViewController {
         let elementDestinationPath = currentPath + element.name  // TODO: Update with selected destination path (without element name inside)
 
         if true { return }
-
+        
         DigiClient.shared.copyOrMoveElement(action:             action,
                                             path:               elementSourcePath,
                                             toMountId:          destinationMount,

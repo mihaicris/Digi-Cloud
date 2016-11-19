@@ -70,7 +70,7 @@ class LocationsTableViewController: UITableViewController {
     // MARK: - Helper Functions
 
     func openMount(index: Int) {
-        let controller = ListingViewController()
+        let controller = ListingViewController(parentTitle: mounts[index].name, backButtonTitle: navigationItem.title!)
         DigiClient.shared.currentMount = mounts[index].id
         DigiClient.shared.currentPath.append("/")
         controller.title = mounts[index].name

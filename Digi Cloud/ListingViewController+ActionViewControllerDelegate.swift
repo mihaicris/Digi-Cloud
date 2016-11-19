@@ -41,9 +41,15 @@ extension ListingViewController: ActionViewControllerDelegate {
 
         case .copy, .move:
             let element = content[currentIndex.row]
-            let controller = CopyOrMoveViewController(element: element, action: action)
+            let controller = CopyOrMoveViewController(element: element,
+                                                      action: action,
+                                                      parentTitle: parentTitle,
+                                                      backButtonTitle: backButtonTitle)
             controller.onFinish = { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
+                if self.needRefresh {
+                    self.getFolderContent()
+                }
             }
 
             DigiClient.shared.equalizePaths()
