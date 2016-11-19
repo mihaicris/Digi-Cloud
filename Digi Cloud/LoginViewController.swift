@@ -25,8 +25,8 @@ class LoginViewController: UIViewController {
         field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "TextField Name").uppercased()
 
         #if DEBUG
-            let dict = ProcessInfo.processInfo.environment
-            field.text = dict["USERNAME"] ?? ""
+        let dict = ProcessInfo.processInfo.environment
+        field.text = dict["USERNAME"] ?? ""
         #endif
 
         field.delegate = self
@@ -38,8 +38,8 @@ class LoginViewController: UIViewController {
         field.textFieldName = NSLocalizedString("PASSWORD", comment: "TextField Name").uppercased()
 
         #if DEBUG
-            let dict = ProcessInfo.processInfo.environment
-            field.text = dict["PASSWORD"] ?? ""
+        let dict = ProcessInfo.processInfo.environment
+        field.text = dict["PASSWORD"] ?? ""
         #endif
 
         field.isSecureTextEntry = true
