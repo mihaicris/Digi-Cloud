@@ -22,13 +22,11 @@ class ActionCell: UITableViewCell {
 
     // MARK: - Initializers and Deinitializers
 
-    /// Init an ActionCell
+    /// Test
     ///
     /// - Parameters:
-    ///   - title: textLabel text
-    ///   - tag: tag of the cells view
-    ///   - hasSwitch: if true, the cell will contain a UISwitch on the right side
-
+    ///   - title: test
+    ///   - action: test
     init(title: String, action: ActionType) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: nil)
         self.textLabel?.text = title
