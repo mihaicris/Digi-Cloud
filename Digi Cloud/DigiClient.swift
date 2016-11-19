@@ -29,6 +29,7 @@ final class DigiClient {
     // MARK: - Properties
 
     static let shared: DigiClient = DigiClient()
+    var task: URLSessionDataTask?
     var token: String!
     var currentMount: String!
     var currentPath: [String] = []
@@ -68,7 +69,7 @@ final class DigiClient {
         }
 
         /* 2. Make the request */
-        let task = URLSession.shared.dataTask(with: request) {
+        task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             // stop network indication
             DispatchQueue.main.async {
@@ -114,7 +115,7 @@ final class DigiClient {
         }
         
         /* 4. Start the request */
-        task.resume()
+        task?.resume()
     }
 
     func getURL(method: String, parameters: [String: Any]?) -> URL {

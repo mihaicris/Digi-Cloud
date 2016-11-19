@@ -35,6 +35,7 @@ class ListingViewController: UITableViewController {
     // MARK: - Initializers and Deinitializers
 
     deinit {
+        DigiClient.shared.task?.cancel()
         DigiClient.shared.currentPath.removeLast()
         #if DEBUG
             print("[DEINIT]: " + String(describing: type(of: self)))
