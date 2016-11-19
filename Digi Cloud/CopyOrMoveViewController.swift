@@ -132,6 +132,7 @@ final class CopyOrMoveViewController: UITableViewController {
             return cell
         }
 
+        tableView.separatorStyle = .singleLine
         let data = content[indexPath.row]
 
         if data.type == "dir" {
