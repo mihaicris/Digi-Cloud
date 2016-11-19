@@ -113,11 +113,6 @@ class CreateFolderViewController: UITableViewController {
         return !charset.isDisjoint(with: name.characters)
     }
 
-    fileprivate func setCreateFolderButton(_ value: Bool) {
-        self.rightBarButton.isEnabled = value
-
-    }
-
     fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
         DispatchQueue.main.async {
             if onScreen {
@@ -186,14 +181,14 @@ class CreateFolderViewController: UITableViewController {
     @objc fileprivate func handleTextFieldChange() {
         if let name = textField.text {
             if name.isEmpty {
-                setCreateFolderButton(false)
+                self.rightBarButton.isEnabled = false
             } else if hasInvalidCharacters(name: name) {
                 let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed.", comment: "Error message")
                 setMessage(onScreen: true, message)
-                setCreateFolderButton(false)
+                self.rightBarButton.isEnabled = false
             } else {
                 setMessage(onScreen: false)
-                setCreateFolderButton(true)
+                self.rightBarButton.isEnabled = true
             }
         }
     }
