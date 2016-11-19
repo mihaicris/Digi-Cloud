@@ -161,11 +161,11 @@ class CreateFolderViewController: UITableViewController {
                 case 400:
                     // Bad request ( Element already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
-                    let message = NSLocalizedString("Folder already exists. Please choose a different name", comment: "Error message")
+                    let message = NSLocalizedString("Folder already exists. Please choose a different name.", comment: "Error message")
                     self.setMessage(onScreen: true, message)
                 case 404:
                     // Not Found (Element do not exists anymore), folder will refresh
-                    let message = NSLocalizedString("File is no longer available. Folder will refresh", comment: "Error message")
+                    let message = NSLocalizedString("File is no longer available. Folder will refresh.", comment: "Error message")
                     DispatchQueue.main.async {
                         self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
                     }

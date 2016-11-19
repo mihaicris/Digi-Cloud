@@ -194,11 +194,11 @@ class RenameViewController: UITableViewController {
                 case 400:
                     // Bad request ( Element already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
-                    let message = NSLocalizedString("This name already exists. Please choose a different one", comment: "Error message")
+                    let message = NSLocalizedString("This name already exists. Please choose a different one.", comment: "Error message")
                     self.setMessage(onScreen: true, message)
                 case 404:
                     // Not Found (Element do not exists anymore), folder will refresh
-                    let message = NSLocalizedString("File is no longer available. Folder will refresh", comment: "Error message")
+                    let message = NSLocalizedString("File is no longer available. Folder will refresh.", comment: "Error message")
                     self.needRefresh = true
                     DispatchQueue.main.async {
                         self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
@@ -222,7 +222,7 @@ class RenameViewController: UITableViewController {
                 setMessage(onScreen: true, message)
                 setRenameButtonActive(false)
             } else if element.name.lowercased() == newName.lowercased() {
-                let message = NSLocalizedString("Name is the same", comment: "Error Information")
+                let message = NSLocalizedString("Name is the same.", comment: "Error Information")
                 setMessage(onScreen: true, message)
                 setRenameButtonActive(false)
             } else {
