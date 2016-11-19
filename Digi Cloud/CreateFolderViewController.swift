@@ -13,10 +13,11 @@ class CreateFolderViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ folderName: String?) -> Void)?
-    fileprivate var leftBarButton: UIBarButtonItem!
+    var path: String!
+    private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
-    fileprivate var textField: UITextField!
-    fileprivate var messageLabel: UILabel!
+    private var textField: UITextField!
+    private var messageLabel: UILabel!
 
     // MARK: - Initializers and Deinitializers
 
@@ -135,18 +136,17 @@ class CreateFolderViewController: UITableViewController {
 
         // TODO: Show on screen spinner for create folder request
 
+        if path == nil { return }
+
         // get the new name, space trimmed
         let charSet = CharacterSet.whitespaces
         guard let folderName = textField.text?.trimmingCharacters(in: charSet) else { return }
-
-        //build the path of element to be renamed
-        let rootPath = DigiClient.shared.currentPath.last!
 
         // block a second Create request
         rightBarButton.isEnabled = false
 
         // network request for rename
-        DigiClient.shared.createFolder(path: rootPath, name: folderName) { (statusCode, error) in
+        DigiClient.shared.createFolder(path: path, name: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error
