@@ -168,7 +168,8 @@ class FolderInfoViewController: UITableViewController {
             deleteButton.layer.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.05).cgColor
             deleteButton.layer.cornerRadius = 8
             deleteButton.layer.borderWidth = 1 / UIScreen.main.scale * 1.2
-            deleteButton.setTitle(NSLocalizedString("     Delete Folder     ", comment: "Button Title, keep the leading/trailing spaces!"), for: .normal)
+            deleteButton.setTitle(NSLocalizedString("Delete Folder", comment: "Button Title, keep the leading/trailing spaces!"), for: .normal)
+            deleteButton.sizeToFit()
             deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             deleteButton.setTitleColor(.red, for: .normal)
             deleteButton.addTarget(self, action: #selector(handleDelete), for: .touchUpInside)
@@ -178,6 +179,7 @@ class FolderInfoViewController: UITableViewController {
             cell.contentView.addSubview(deleteButton)
             deleteButton.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
             deleteButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            deleteButton.widthAnchor.constraint(equalToConstant: deleteButton.bounds.width + 40).isActive = true
         default:
             break
         }
