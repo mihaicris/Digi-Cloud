@@ -27,6 +27,7 @@
 		839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
 		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
+		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
 		83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
 		83D281011D9D747A00D74661 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* LoginField.swift */; };
 		83D5D8A41DDB1EC6001BB3AF /* CopyOrMoveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5D8A31DDB1EC6001BB3AF /* CopyOrMoveViewController.swift */; };
@@ -66,6 +67,7 @@
 		839A22E21DC11BA400758730 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
 		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
 		83D5D8A31DDB1EC6001BB3AF /* CopyOrMoveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyOrMoveViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				835406041D952FFD00019D53 /* Extensions.swift */,
+				83CD0C651DE34C730078E5FC /* Logging.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
 				83D5D8A41DDB1EC6001BB3AF /* CopyOrMoveViewController.swift in Sources */,
 				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
+				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
 				832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
 				83EBD0791D994F9500C80397 /* DigiClient+Convenience.swift in Sources */,
