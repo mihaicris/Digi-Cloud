@@ -32,20 +32,42 @@ class MainNavigationController: UINavigationController {
         // if there is a token saved, we load the locations, otherwise present the login screen
         if let token = AppSettings.loginToken {
             DigiClient.shared.token = token
-            let controller = LocationsTableViewController()
-            viewControllers = [controller]
-        } else {
-            // present modally the login view, after a very small delay
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(50), execute: {
-                let controller = LoginViewController()
-                controller.onFinish = {
-                    DispatchQueue.main.async {
-                        self.viewControllers = [LocationsTableViewController()]
-                        self.dismiss(animated: true, completion: nil) // dismiss LoginViewController
-                    }
+
+            // TODO: Show activity indicator
+
+            DigiClient.shared.getUserInfo {
+                json, statusCode, error in
+
+                guard error == nil || statusCode == 200 else {
+                    print(error!.localizedDescription)
+                    print("StatusCode: \(statusCode)")
+                    DigiClient.shared.token = nil
+                    self.showLoginScreen()
+                    return
                 }
-                self.present(controller, animated: true, completion: nil)
-            })
+                DispatchQueue.main.async {
+                    let controller = LocationsTableViewController()
+                    self.viewControllers = [controller]
+                }
+            }
+        } else {
+            showLoginScreen()
         }
+
     }
+
+    func showLoginScreen() {
+        // present modally the login view, after a very small delay
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(50), execute: {
+            let controller = LoginViewController()
+            controller.onFinish = {
+                DispatchQueue.main.async {
+                    self.viewControllers = [LocationsTableViewController()]
+                    self.dismiss(animated: true, completion: nil) // dismiss LoginViewController
+                }
+            }
+            self.present(controller, animated: true, completion: nil)
+        })
+    }
+
 }
