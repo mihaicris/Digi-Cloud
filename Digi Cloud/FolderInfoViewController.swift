@@ -105,7 +105,7 @@ class FolderInfoViewController: UITableViewController {
         switch section {
         case 0:     return NSLocalizedString("Name",               comment: "TableCell Header Title")
         case 1:     return NSLocalizedString("Size",               comment: "TableCell Header Title")
-        case 2:     return NSLocalizedString("Elements in folder", comment: "TableCell Header Title")
+        case 2:     return NSLocalizedString("Folder content", comment: "TableCell Header Title")
         default:    return ""
         }
     }

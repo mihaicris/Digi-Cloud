@@ -190,7 +190,7 @@ final class ListingViewController: UITableViewController {
 
     func getFolderContent() {
 
-        DLog(object: self.path)
+        DLog(name: "path", object: self.path)
 
         self.needRefresh = false
 

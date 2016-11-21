@@ -134,7 +134,7 @@ extension DigiClient {
         return session
     }
 
-    func renameElement(mountID: String, path: String, newName: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func renameNode(mountID: String, nodePath: String, newName: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
         let method = Methods.Rename.replacingOccurrences(of: "{id}", with: mountID)
 
@@ -142,8 +142,8 @@ extension DigiClient {
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        // prepare parameters (node path to be renamed
-        let parameters = [ParametersKeys.Path: path]
+        // prepare parameters (path of the node to be renamed
+        let parameters = [ParametersKeys.Path: nodePath]
 
         // prepare new name in request body
         let jsonBody = ["name": newName]
@@ -153,7 +153,7 @@ extension DigiClient {
         }
     }
 
-    func deleteElement(mountID: String, path: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func deleteNode(mountID: String, nodePath: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
         let method = Methods.Remove.replacingOccurrences(of: "{id}", with: mountID)
 
@@ -162,7 +162,7 @@ extension DigiClient {
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (node path to be renamed
-        let parameters = [ParametersKeys.Path: path]
+        let parameters = [ParametersKeys.Path: nodePath]
 
         networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
             completionHandler(statusCode, error)
@@ -266,7 +266,7 @@ extension DigiClient {
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
 
-    func copyOrMoveElement(mountID: String,
+    func copyOrMoveNode(mountID: String,
                            action:            ActionType,
                            path:              String,
                            toMountId:         String,

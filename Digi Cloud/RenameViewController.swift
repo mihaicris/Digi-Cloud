@@ -186,7 +186,7 @@ class RenameViewController: UITableViewController {
         setRenameButtonActive(false)
 
         // network request for rename
-        DigiClient.shared.renameElement(mountID: mountID, path: nodePath, newName: name) { (statusCode, error) in
+        DigiClient.shared.renameNode(mountID: mountID, nodePath: nodePath, newName: name) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error

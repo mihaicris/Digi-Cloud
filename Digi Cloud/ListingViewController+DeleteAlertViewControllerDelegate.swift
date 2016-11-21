@@ -16,7 +16,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
             let nodePath = self.path + self.content[self.currentIndex.row].name
 
             // network request for delete
-            DigiClient.shared.deleteElement(mountID: self.mountID, path: nodePath, name: self.content[self.currentIndex.row].name) {
+            DigiClient.shared.deleteNode(mountID: self.mountID, nodePath: nodePath, name: self.content[self.currentIndex.row].name) {
 
                 (statusCode, error) in
 
