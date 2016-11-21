@@ -26,27 +26,8 @@ class LocationsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationItem.title = NSLocalizedString("Locations", comment: "Window Title")
-
-        tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
-        tableView.rowHeight = 78
-        tableView.tableFooterView = UIView()
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        tableView.cellLayoutMarginsFollowReadableWidth = false
-
-        DigiClient.shared.getLocations() { (mounts, error) in
-            guard error == nil else {
-                print("Error: \(error!.localizedDescription)")
-                return
-            }
-            if let mounts = mounts {
-                self.mounts = mounts
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-        }
+        setupTableView()
+        getLocations()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -68,6 +49,30 @@ class LocationsTableViewController: UITableViewController {
     }
 
     // MARK: - Helper Functions
+
+    private func setupTableView() {
+        self.title = NSLocalizedString("Locations", comment: "Window Title")
+        tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
+        tableView.rowHeight = 78
+        tableView.tableFooterView = UIView()
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+    }
+
+    private func getLocations() {
+        DigiClient.shared.getLocations() { (mounts, error) in
+            guard error == nil else {
+                print("Error: \(error!.localizedDescription)")
+                return
+            }
+            if let mounts = mounts {
+                self.mounts = mounts
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
 
     func openMount(index: Int) {
         let controller = ListingViewController(mountID: mounts[index].id, path: "/", backButtonTitle: navigationItem.title!)
