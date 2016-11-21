@@ -38,8 +38,11 @@ final class DigiClient {
 
     // MARK: - Helper Functions
 
-    func networkTask(requestType: String, method: String, headers: [String: String]?,
-                     json: [String: String]?, parameters: [String: Any]?,
+    func networkTask(requestType:       String,
+                     method:            String,
+                     headers:           [String: String]?,
+                     json:              [String: String]?,
+                     parameters:        [String: Any]?,
                      completionHandler: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 

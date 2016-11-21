@@ -114,6 +114,7 @@
 		835406001D9517AB00019D53 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83CD0C651DE34C730078E5FC /* Logging.swift */,
 				837041211D8B1DEE000EDBAE /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -143,7 +144,6 @@
 			isa = PBXGroup;
 			children = (
 				835406041D952FFD00019D53 /* Extensions.swift */,
-				83CD0C651DE34C730078E5FC /* Logging.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";

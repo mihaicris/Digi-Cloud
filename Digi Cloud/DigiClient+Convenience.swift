@@ -32,13 +32,38 @@ extension DigiClient {
         }
     }
 
+    func getUserInfo(completion: @escaping(_ json: Any? , _ statusCode: Int?, _ error: Error?) -> Void) {
+        let method = Methods.User
+
+        let headers: [String: String] = ["Accept": "application/json",
+                                         "Authorization": "Token \(DigiClient.shared.token!)"]
+
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) {
+            (data, statusCode, error) in
+
+            guard error == nil else {
+                completion(nil, nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, statusCode, nil)
+                return
+            }
+
+            completion(data, statusCode, nil)
+
+        }
+
+    }
+
     func getLocations(completionHandler: @escaping(_ result: [Mount]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) {
-            (data, responseCode, error) in
+            (data, statusCode, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else {
