@@ -57,11 +57,11 @@ extension DigiClient {
         }
     }
 
-    func getLocationContent(mount: String, queryPath: String, completionHandler: @escaping(_ result: [Element]?, _ error: Error?) -> Void) {
-        let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: mount)
+    func getLocationContent(mountID: String, path: String, completionHandler: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+        let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: mountID)
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
-        let parameters = [ParametersKeys.Path: queryPath]
+        let parameters = [ParametersKeys.Path: path]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) {
             (data, responseCode, error) in
@@ -74,7 +74,7 @@ extension DigiClient {
                         completionHandler(nil, JSONError.parce("Could not parce filelist"))
                         return
                     }
-                    let content = fileList.flatMap { Element(JSON: $0) }
+                    let content = fileList.flatMap { Node(JSON: $0) }
                     completionHandler(content, nil)
                 } else {
                     completionHandler(nil, JSONError.parce("Could not parce data (getFiles)"))
@@ -83,17 +83,17 @@ extension DigiClient {
         }
     }
 
-    func startFileDownload(delegate: AnyObject) -> URLSession {
+    func startFileDownload(mountID: String, path: String, delegate: AnyObject) -> URLSession {
 
         // create the special session with custom delegate for download task
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration, delegate: delegate as? ContentViewController, delegateQueue: nil)
 
         // prepare the method string for download file by inserting the current mount
-        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: mountID)
 
         // prepare the query paramenter path with the current File path
-        let parameters = [ParametersKeys.Path: DigiClient.shared.currentPath.last!]
+        let parameters = [ParametersKeys.Path: path]
 
         // create url from method and paramenters
         let url = DigiClient.shared.getURL(method: method, parameters: parameters)
@@ -109,15 +109,15 @@ extension DigiClient {
         return session
     }
 
-    func renameElement(path: String, newName: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
-        // prepare the method string for rename the element by inserting the current mount
-        let method = Methods.Rename.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+    func renameElement(mountID: String, path: String, newName: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+        // prepare the method string for rename the node by inserting the current mount
+        let method = Methods.Rename.replacingOccurrences(of: "{id}", with: mountID)
 
         // prepare headers
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        // prepare parameters (element path to be renamed
+        // prepare parameters (node path to be renamed
         let parameters = [ParametersKeys.Path: path]
 
         // prepare new name in request body
@@ -128,15 +128,15 @@ extension DigiClient {
         }
     }
 
-    func deleteElement(path: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
-        // prepare the method string for rename the element by inserting the current mount
-        let method = Methods.Remove.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+    func deleteElement(mountID: String, path: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+        // prepare the method string for rename the node by inserting the current mount
+        let method = Methods.Remove.replacingOccurrences(of: "{id}", with: mountID)
 
         // prepare headers
         var headers: [String: String] = [:]
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        // prepare parameters (element path to be renamed
+        // prepare parameters (node path to be renamed
         let parameters = [ParametersKeys.Path: path]
 
         networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
@@ -144,15 +144,15 @@ extension DigiClient {
         }
     }
 
-    func createFolder(path: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func createFolder(mountID: String, path: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
-        let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+        let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: mountID)
 
         // prepare headers
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        // prepare parameters (element path to be renamed
+        // prepare parameters 
         let parameters = [ParametersKeys.Path: path]
 
         // prepare new folder name in request body
@@ -169,16 +169,15 @@ extension DigiClient {
     ///   - path: path of the folder
     ///   - completionHandler: completion handler with info about folder and error
 
-    func getFolderInfo(path: String, completionHandler: @escaping(_ size: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
+    func getFolderInfo(mountID: String, path: String, completionHandler: @escaping(_ size: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
         // prepare the method string for create new folder
-        let method = Methods.Tree.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+        let method = Methods.Tree.replacingOccurrences(of: "{id}", with: mountID)
 
         // prepare headers
         var headers: [String: String] = ["Accept": "application/json"]
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        // prepare parameters (element path to be renamed
-        let path = DigiClient.shared.currentPath.last! + path
+        // prepare parameters (node path to be renamed
         let parameters = [ParametersKeys.Path: path]
 
         /// Get information from Dictionary content (JSON folder tree)
@@ -231,18 +230,19 @@ extension DigiClient {
         }
     }
 
-    /// Send a request to DIGI API to copy or move an element
+    /// Send a request to DIGI API to copy or move a node
     ///
     /// - Parameters:
     ///   - action:            Action Type, expected ActionType.move or ActionType.copy
-    ///   - path:              Element path (including element name)
+    ///   - path:              Node path (including node name)
     ///   - toMountId:         Destination mount Id
-    ///   - toPath:            Destination path (including element name)
+    ///   - toPath:            Destination path (including node name)
     ///   - completionHandler: Function to handle the status code and error response
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
 
-    func copyOrMoveElement(action:            ActionType,
+    func copyOrMoveElement(mountID: String,
+                           action:            ActionType,
                            path:              String,
                            toMountId:         String,
                            toPath:            String,
@@ -252,9 +252,9 @@ extension DigiClient {
 
         switch action {
         case .copy:
-            method = Methods.Copy.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+            method = Methods.Copy.replacingOccurrences(of: "{id}", with: mountID)
         case .move:
-            method = Methods.Move.replacingOccurrences(of: "{id}", with: DigiClient.shared.currentMount)
+            method = Methods.Move.replacingOccurrences(of: "{id}", with: mountID)
         default:
             return
         }

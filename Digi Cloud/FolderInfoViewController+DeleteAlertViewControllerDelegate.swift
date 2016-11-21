@@ -13,10 +13,10 @@ extension FolderInfoViewController: DeleteViewControllerDelegate {
 
         // Dismiss DeleteAlertViewController
         dismiss(animated: true) {
-            let elementPath = DigiClient.shared.currentPath.last! + self.element.name
+            let nodePath = self.path + self.node.name
 
             // network request for delete
-            DigiClient.shared.deleteElement(path: elementPath, name: self.element.name) { (statusCode, error) in
+            DigiClient.shared.deleteElement(mountID: self.mountID, path: nodePath, name: self.node.name) { (statusCode, error) in
 
                 // TODO: Stop spinner
                 guard error == nil else {

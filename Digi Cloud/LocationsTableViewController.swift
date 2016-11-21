@@ -37,7 +37,7 @@ class LocationsTableViewController: UITableViewController {
 
         DigiClient.shared.getLocations() { (mounts, error) in
             guard error == nil else {
-                print("Error: \(error?.localizedDescription)")
+                print("Error: \(error!.localizedDescription)")
                 return
             }
             if let mounts = mounts {
@@ -70,9 +70,7 @@ class LocationsTableViewController: UITableViewController {
     // MARK: - Helper Functions
 
     func openMount(index: Int) {
-        let controller = ListingViewController(parentTitle: mounts[index].name, backButtonTitle: navigationItem.title!)
-        DigiClient.shared.currentMount = mounts[index].id
-        DigiClient.shared.currentPath.append("/")
+        let controller = ListingViewController(mountID: mounts[index].id, path: "/", backButtonTitle: navigationItem.title!)
         controller.title = mounts[index].name
         navigationController?.pushViewController(controller, animated: true)
     }

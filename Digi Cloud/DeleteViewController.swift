@@ -12,13 +12,13 @@ class DeleteViewController: UITableViewController {
 
     // MARK: - Properties
 
-    private var element: Element
+    private var node: Node
     weak var delegate: DeleteViewControllerDelegate?
 
     // MARK: - Initializers and Deinitializers
 
-    init(element: Element) {
-        self.element = element
+    init(node: Node) {
+        self.node = node
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -70,7 +70,7 @@ class DeleteViewController: UITableViewController {
         let message: UILabel = {
             let label = UILabel()
             label.textAlignment = .center
-            if element.type == "file" {
+            if node.type == "file" {
                 label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "Question for user")
             } else {
                 label.text = NSLocalizedString("Are you sure you want to delete this folder?", comment: "Question for user")

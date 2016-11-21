@@ -23,12 +23,21 @@ class ActionViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var element: Element!
+    var node: Node
     weak var delegate: ActionViewControllerDelegate?
     var contextMenuFileActions: [ActionCell] = []
     var contextMenuFolderActions: [ActionCell] = []
 
     // MARK: - Initializers and Deinitializers
+
+    init(node: Node) {
+        self.node = node
+        super.init(style: .plain)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     #if DEBUG
     deinit {
@@ -50,11 +59,11 @@ class ActionViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return element.type == "dir" ? contextMenuFolderActions.count : contextMenuFileActions.count
+        return node.type == "dir" ? contextMenuFolderActions.count : contextMenuFileActions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return element.type == "dir" ? contextMenuFolderActions[indexPath.row] : contextMenuFileActions[indexPath.row]
+        return node.type == "dir" ? contextMenuFolderActions[indexPath.row] : contextMenuFileActions[indexPath.row]
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -91,7 +100,7 @@ class ActionViewController: UITableViewController {
         }()
 
         let iconImage: UIImageView = {
-            let imageName = element.type == "dir" ? "FolderIcon" : "FileIcon"
+            let imageName = node.type == "dir" ? "FolderIcon" : "FileIcon"
             let imageView = UIImageView(image: UIImage(named: imageName))
             imageView.contentMode = .scaleAspectFit
             return imageView
@@ -99,7 +108,7 @@ class ActionViewController: UITableViewController {
 
         let elementName: UILabel = {
             let label = UILabel()
-            label.text = element.name
+            label.text = node.name
             label.font = UIFont.systemFont(ofSize: 14)
             return label
         }()
@@ -113,7 +122,7 @@ class ActionViewController: UITableViewController {
         headerView.addSubview(iconImage)
         headerView.addSubview(elementName)
 
-        let offset = element.type == "dir" ? 22 : 20
+        let offset = node.type == "dir" ? 22 : 20
         headerView.addConstraints(with: "H:|-\(offset)-[v0(26)]-10-[v1]-10-|", views: iconImage, elementName)
         headerView.addConstraints(with: "V:[v0(26)]", views: iconImage)
         iconImage.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true

@@ -8,11 +8,11 @@
 
 import Foundation
 
-struct Element {
+struct Node {
 
     // MARK: - Properties
 
-    var name: String
+    let name: String
     let type: String
     let modified: TimeInterval
     let size: Int64
@@ -32,7 +32,7 @@ struct Element {
     }
 }
 
-extension Element: JSONDecodable {
+extension Node: JSONDecodable {
     init?(JSON: Any) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
@@ -41,7 +41,7 @@ extension Element: JSONDecodable {
             let size = JSON["size"] as? Int64,
             let contentType = JSON["contentType"] as? String
             else {
-            print("Could not parce keys")
+                print("Could not parce keys")
             return nil
         }
         self.name = name

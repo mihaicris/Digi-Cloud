@@ -31,23 +31,12 @@ final class DigiClient {
     static let shared: DigiClient = DigiClient()
     var task: URLSessionDataTask?
     var token: String!
-    var currentMount: String!
-    var currentPath: [String] = []
-    var destinationMount: String!
-    var destinationPath: [String] = []
-    var arePathsTheSame: Bool {
-        return currentMount == destinationMount && currentPath.last! == destinationPath.last!
-    }
 
     // MARK: - Initializers and Deinitializers
+
     private init() {}
 
     // MARK: - Helper Functions
-
-    func equalizePaths() {
-        destinationMount = currentMount
-        destinationPath = currentPath
-    }
 
     func networkTask(requestType: String, method: String, headers: [String: String]?,
                      json: [String: String]?, parameters: [String: Any]?,
@@ -78,13 +67,13 @@ final class DigiClient {
 
             /* GUARD: Was there an error? */
             guard error == nil else {
-                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error?.localizedDescription)"))
+                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error!.localizedDescription)"))
                 return
             }
 
             /* GUARD: Did we get a statusCode? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
-                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error?.localizedDescription)"))
+                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error!.localizedDescription)"))
                 return
             }
 

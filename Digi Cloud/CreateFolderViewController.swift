@@ -13,7 +13,8 @@ class CreateFolderViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ folderName: String?) -> Void)?
-    var path: String!
+    let mountID: String
+    var path: String
     private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     private var textField: UITextField!
@@ -21,7 +22,9 @@ class CreateFolderViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init() {
+    init(mountID: String, path: String) {
+        self.mountID = mountID
+        self.path = path
         super.init(style: .grouped)
     }
 
@@ -136,8 +139,6 @@ class CreateFolderViewController: UITableViewController {
 
         // TODO: Show on screen spinner for create folder request
 
-        if path == nil { return }
-
         // get the new name, space trimmed
         let charSet = CharacterSet.whitespaces
         guard let folderName = textField.text?.trimmingCharacters(in: charSet) else { return }
@@ -146,7 +147,7 @@ class CreateFolderViewController: UITableViewController {
         rightBarButton.isEnabled = false
 
         // network request for rename
-        DigiClient.shared.createFolder(path: path, name: folderName) { (statusCode, error) in
+        DigiClient.shared.createFolder(mountID: self.mountID, path: path, name: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error
@@ -159,12 +160,12 @@ class CreateFolderViewController: UITableViewController {
                     // Rename successfully completed
                     self.onFinish?(folderName)
                 case 400:
-                    // Bad request ( Element already exists, invalid file name?)
+                    // Bad request ( Folder already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
                     let message = NSLocalizedString("Folder already exists. Please choose a different name.", comment: "Error message")
                     self.setMessage(onScreen: true, message)
                 case 404:
-                    // Not Found (Element do not exists anymore), folder will refresh
+                    // Not Found (Folder do not exists anymore), folder will refresh
                     let message = NSLocalizedString("File is no longer available. Folder will refresh.", comment: "Error message")
                     DispatchQueue.main.async {
                         self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")

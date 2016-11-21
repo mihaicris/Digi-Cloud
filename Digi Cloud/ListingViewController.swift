@@ -12,14 +12,11 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var needRefresh: Bool = false {
-        didSet {
-            print("List Controller: " + needRefresh.description)
-        }
-    }
-    var parentTitle: String
+    var path: String
+    var mountID: String
+    var needRefresh: Bool = false
     var backButtonTitle: String
-    var content: [Element] = []
+    var content: [Node] = []
     var currentIndex: IndexPath!
     private let FileCellID = "FileCellWithButton"
     private let FolderCellID = "DirectoryCellWithButton"
@@ -45,7 +42,6 @@ final class ListingViewController: UITableViewController {
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
     }()
-
     private let emptyFolderLabel: UILabel = {
         let l = UILabel()
         l.text = NSLocalizedString("Loading ...", comment: "Information")
@@ -54,13 +50,13 @@ final class ListingViewController: UITableViewController {
         l.textAlignment = .center
         return l
     }()
-
     private var addFolderButton, sortButton: UIBarButtonItem!
 
     // MARK: - Initializers and Deinitializers
 
-    init(parentTitle: String, backButtonTitle: String) {
-        self.parentTitle = parentTitle
+    init(mountID: String, path: String, backButtonTitle: String) {
+        self.mountID = mountID
+        self.path = path
         self.backButtonTitle = backButtonTitle
         super.init(style: .plain)
     }
@@ -71,7 +67,6 @@ final class ListingViewController: UITableViewController {
 
     deinit {
         DigiClient.shared.task?.cancel()
-        DigiClient.shared.currentPath.removeLast()
         #if DEBUG
             print("[DEINIT]: " + String(describing: type(of: self)))
         #endif
@@ -81,7 +76,6 @@ final class ListingViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupTableView()
         getFolderContent()
     }
@@ -160,26 +154,27 @@ final class ListingViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
 
         let item = content[indexPath.row]
-        let previousPath = DigiClient.shared.currentPath.last!
+        let previousPath = self.path
 
         if item.type == "dir" {
             // This is a Folder
-            let controller = ListingViewController(parentTitle: item.name, backButtonTitle: navigationItem.title!)
+            guard let nextPath = String("\(path)\(item.name)/") else {
+                print ("Cannot build next path")
+                return
+            }
+            let controller = ListingViewController(mountID: self.mountID,
+                                                   path: nextPath,
+                                                   backButtonTitle: navigationItem.title!)
             controller.title = item.name
-
-            let folderPath = previousPath + item.name + "/"
-            DigiClient.shared.currentPath.append(folderPath)
-
             navigationController?.pushViewController(controller, animated: true)
 
         } else {
             // This is a file
-            let controller = ContentViewController()
-            controller.title = item.name
 
             let filePath = previousPath + item.name
-            DigiClient.shared.currentPath.append(filePath)
 
+            let controller = ContentViewController(mountID: self.mountID, path: filePath)
+            controller.title = item.name
             navigationController?.pushViewController(controller, animated: true)
         }
     }
@@ -194,12 +189,15 @@ final class ListingViewController: UITableViewController {
     }
 
     func getFolderContent() {
+
+        DLog(object: self.path)
+
         self.needRefresh = false
 
-        DigiClient.shared.getLocationContent(mount: DigiClient.shared.currentMount, queryPath: DigiClient.shared.currentPath.last!) {
+        DigiClient.shared.getLocationContent(mountID: self.mountID, path: self.path) {
             (content, error) in
             guard error == nil else {
-                print("Error: \(error?.localizedDescription)")
+                print("Error: \(error!.localizedDescription)")
                 return
             }
             if let content = content {
@@ -321,15 +319,20 @@ final class ListingViewController: UITableViewController {
 
     @objc fileprivate func handleAddFolder() {
         self.dismiss(animated: false, completion: nil) // dismiss any other presented controller
-        let controller = CreateFolderViewController()
-        controller.path = DigiClient.shared.currentPath.last!
+        let controller = CreateFolderViewController(mountID: self.mountID, path: self.path)
+        controller.path = self.path
         controller.onFinish = { [unowned self](folderName) in
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
                 if let folderName = folderName {
                     self.needRefresh = true
-                    DigiClient.shared.currentPath.append(controller.path + folderName + "/")
-                    let controller = ListingViewController(parentTitle: folderName, backButtonTitle: self.backButtonTitle)
+                    guard let nextPath = String("\(self.path)\(folderName)/") else {
+                        print("Cannot build next path")
+                        return
+                    }
+                    let controller = ListingViewController(mountID: self.mountID,
+                                                           path: nextPath,
+                                                           backButtonTitle: self.backButtonTitle)
                     controller.title = folderName
                     self.navigationController?.pushViewController(controller, animated: true)
                 } else {

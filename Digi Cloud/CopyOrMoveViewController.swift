@@ -13,14 +13,17 @@ final class CopyOrMoveViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((Void) -> Void)?
+
+    private let mountID: String
+    private let path: String
     private let FileCellID = "FileCell"
     private let FolderCellID = "DirectoryCell"
     private var needRefresh: Bool = false
-    private var element: Element
+    private var node: Node
     private var action: ActionType
     private var parentTitle: String
     private var backButtonTitle: String
-    private var content: [Element] = []
+    private var content: [Node] = []
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
@@ -54,12 +57,14 @@ final class CopyOrMoveViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(element: Element, action: ActionType, parentTitle: String, backButtonTitle: String) {
-        self.element = element
+    init(mountID: String, path: String, node: Node, action: ActionType, parentTitle: String, backButtonTitle: String) {
+        self.mountID = mountID
+        self.path = path
+        self.node = node
         self.action = action
         self.parentTitle = parentTitle
         self.backButtonTitle = backButtonTitle
-        super.init(style: .grouped)
+        super.init(style: .plain)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -78,7 +83,6 @@ final class CopyOrMoveViewController: UITableViewController {
         super.viewDidLoad()
 
         self.automaticallyAdjustsScrollViewInsets = true
-        tableView.contentInset = UIEdgeInsets(top: -35, left: 0, bottom: 100, right: 0)
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
         tableView.rowHeight = AppSettings.tableViewRowHeight
@@ -159,20 +163,19 @@ final class CopyOrMoveViewController: UITableViewController {
 
         self.needRefresh = false
 
-        DigiClient.shared.getLocationContent(mount: DigiClient.shared.destinationMount, queryPath: DigiClient.shared.destinationPath.last!) {
+        DigiClient.shared.getLocationContent(mountID: self.mountID, path: self.path) {
             (content, error) in
             guard error == nil else {
-                print("Error: \(error?.localizedDescription)")
+                print("Error: \(error!.localizedDescription)")
                 return
             }
 
             if var content = content {
                 if !content.isEmpty {
 
-
-                    // Remove from the list the element which is copied or moved
+                    // Remove from the list the node which is copied or moved
                     for (index, elem) in content.enumerated() {
-                        if elem.name == self.element.name {
+                        if elem.name == self.node.name {
                             content.remove(at: index)
                         }
                     }
@@ -222,7 +225,9 @@ final class CopyOrMoveViewController: UITableViewController {
         navigationController?.isToolbarHidden = false
 
         let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
-        copyMoveButton.isEnabled = !DigiClient.shared.arePathsTheSame
+
+        // TODO: Activate when source and destination paths are not the same
+        copyMoveButton.isEnabled = false
 
         let toolBarItems = [UIBarButtonItem(title: NSLocalizedString("New Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleNewFolder)),
                             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
@@ -237,12 +242,17 @@ final class CopyOrMoveViewController: UITableViewController {
     }
 
     @objc private func handleNewFolder() {
-        let controller = CreateFolderViewController()
-        controller.path = DigiClient.shared.destinationPath.last!
+        let controller = CreateFolderViewController(mountID: self.mountID, path: self.path)
+        controller.path = self.path
         controller.onFinish = { [unowned self](folderName) in
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil)
-                if let folderName = folderName {
+                guard let folderName = folderName,
+                    let nextPath = String("\(self.path)\(folderName)")
+                    else {
+                        print("Cannot create next Path")
+                        return
+                    }
                     // Set needRefresh in this list
                     self.needRefresh = true
 
@@ -252,10 +262,10 @@ final class CopyOrMoveViewController: UITableViewController {
                             cont.needRefresh = true
                         }
                     }
-                    DigiClient.shared.destinationPath.append(controller.path + folderName + "/")
-                    print(DigiClient.shared.destinationPath.last!)
 
-                    let newController = CopyOrMoveViewController(element: self.element,
+                    let newController = CopyOrMoveViewController(mountID: self.mountID,
+                                                                 path: nextPath,
+                                                                 node: self.node,
                                                                  action: self.action,
                                                                  parentTitle: folderName,
                                                                  backButtonTitle: self.backButtonTitle)
@@ -263,7 +273,7 @@ final class CopyOrMoveViewController: UITableViewController {
                         self.onFinish?()
                     }
                     self.navigationController?.pushViewController(newController, animated: true)
-                }
+
             }
         }
         let navController = UINavigationController(rootViewController: controller)
@@ -276,20 +286,5 @@ final class CopyOrMoveViewController: UITableViewController {
     }
 
     @objc private func handleCopyOrMove() {
-
-        guard let currentMount = DigiClient.shared.currentMount else { return }
-        guard let currentPath = DigiClient.shared.currentPath.last else { return }
-
-        let elementSourcePath = currentPath + element.name
-        let destinationMount = currentMount // TODO: Update with destination mount
-        let elementDestinationPath = currentPath + element.name  // TODO: Update with selected destination path (without element name inside)
-
-        if true { return }
-        
-        DigiClient.shared.copyOrMoveElement(action:             action,
-                                            path:               elementSourcePath,
-                                            toMountId:          destinationMount,
-                                            toPath:             elementDestinationPath,
-                                            completionHandler:  {(statusCode, error) in return })
     }
 }

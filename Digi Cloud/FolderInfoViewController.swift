@@ -13,7 +13,9 @@ class FolderInfoViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
-    var element: Element
+    var mountID: String
+    var path: String
+    var node: Node
     let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.allowsNonnumericFormatting = false
@@ -66,8 +68,10 @@ class FolderInfoViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(element: Element) {
-        self.element = element
+    init(mountID: String, path: String, node: Node) {
+        self.mountID = mountID
+        self.path = path
+        self.node = node
         super.init(style: .grouped)
     }
 
@@ -135,15 +139,14 @@ class FolderInfoViewController: UITableViewController {
         // Folder name
         case 0:
             let folderIcon: UIImageView = {
-                let imageName = element.type == "dir" ? "FolderIcon" : "FileIcon"
-                let imageView = UIImageView(image: UIImage(named: imageName))
+                let imageView = UIImageView(image: UIImage(named: "FolderIcon"))
                 imageView.contentMode = .scaleAspectFit
                 return imageView
             }()
 
             let folderName: UILabel = {
                 let label = UILabel()
-                label.text = element.name
+                label.text = node.name
                 return label
             }()
 
@@ -196,7 +199,11 @@ class FolderInfoViewController: UITableViewController {
     }
 
     fileprivate func updateFolderInfo() {
-        DigiClient.shared.getFolderInfo(path: element.name, completionHandler: { (info, error) in
+        guard let folderPath = String("\(self.path)\(node.name)") else {
+            print("Cannot build path")
+            return
+        }
+        DigiClient.shared.getFolderInfo(mountID: self.mountID, path: folderPath, completionHandler: { (info, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
                 return
@@ -211,7 +218,7 @@ class FolderInfoViewController: UITableViewController {
     }
 
     @objc fileprivate func handleDelete() {
-        let controller = DeleteViewController(element: element)
+        let controller = DeleteViewController(node: node)
         controller.delegate = self
         controller.modalPresentationStyle = .popover
         controller.popoverPresentationController?.permittedArrowDirections = .up

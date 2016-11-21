@@ -13,10 +13,10 @@ extension ListingViewController: DeleteViewControllerDelegate {
 
         // Dismiss DeleteAlertViewController
         dismiss(animated: true) {
-            let elementPath = DigiClient.shared.currentPath.last! + self.content[self.currentIndex.row].name
+            let nodePath = self.path + self.content[self.currentIndex.row].name
 
             // network request for delete
-            DigiClient.shared.deleteElement(path: elementPath, name: self.content[self.currentIndex.row].name) {
+            DigiClient.shared.deleteElement(mountID: self.mountID, path: nodePath, name: self.content[self.currentIndex.row].name) {
 
                 (statusCode, error) in
 
