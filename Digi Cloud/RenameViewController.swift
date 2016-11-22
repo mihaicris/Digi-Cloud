@@ -13,8 +13,7 @@ class RenameViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
-    let mountID: String
-    let path: String
+    let location: Location
     fileprivate var node: Node
     fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
@@ -24,9 +23,8 @@ class RenameViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(mountID: String, path: String, node: Node) {
-        self.mountID = mountID
-        self.path = path
+    init(location: Location, node: Node) {
+        self.location = location
         self.node = node
         self.needRefresh = false
         super.init(style: .grouped)
@@ -168,6 +166,9 @@ class RenameViewController: UITableViewController {
 
     @objc fileprivate func handleRename() {
 
+        // block a second Rename request
+        setRenameButtonActive(false)
+
         textField.resignFirstResponder()
 
         // TODO: Show on screen spinner for rename request
@@ -177,16 +178,11 @@ class RenameViewController: UITableViewController {
         guard let name = textField.text?.trimmingCharacters(in: charSet) else { return }
 
         //build the path of node to be renamed
-        guard let nodePath = String("\(self.path)\(node.name)") else {
-            print("Cannot create node path")
-            return
-        }
-
-        // block a second Rename request
-        setRenameButtonActive(false)
+        let nodePath = self.location.path + node.name
+        let renameLocation = Location(mount: self.location.mount, path: nodePath)
 
         // network request for rename
-        DigiClient.shared.renameNode(mountID: mountID, nodePath: nodePath, newName: name) { (statusCode, error) in
+        DigiClient.shared.renameNode(location: renameLocation, newName: name) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error
@@ -245,7 +241,7 @@ extension RenameViewController: UITextFieldDelegate {
         setMessage(onScreen: false)
         positionCursor()
     }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if rightBarButton.isEnabled {
             textField.resignFirstResponder()

@@ -13,8 +13,7 @@ class CreateFolderViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ folderName: String?) -> Void)?
-    let mountID: String
-    var path: String
+    var location: Location
     private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     private var textField: UITextField!
@@ -22,9 +21,8 @@ class CreateFolderViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(mountID: String, path: String) {
-        self.mountID = mountID
-        self.path = path
+    init(location: Location) {
+        self.location = location
         super.init(style: .grouped)
     }
 
@@ -147,7 +145,7 @@ class CreateFolderViewController: UITableViewController {
         rightBarButton.isEnabled = false
 
         // network request for rename
-        DigiClient.shared.createFolder(mountID: self.mountID, path: path, name: folderName) { (statusCode, error) in
+        DigiClient.shared.createFolder(location: location, name: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error

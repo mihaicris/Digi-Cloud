@@ -12,10 +12,8 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var path: String
-    var mountID: String
+    var location: Location
     var needRefresh: Bool = false
-    var backButtonTitle: String
     var content: [Node] = []
     var currentIndex: IndexPath!
     private let FileCellID = "FileCellWithButton"
@@ -54,13 +52,11 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(mountID: String, path: String, backButtonTitle: String) {
-        self.mountID = mountID
-        self.path = path
-        self.backButtonTitle = backButtonTitle
+    init(location: Location) {
+        self.location = location
         super.init(style: .plain)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -154,26 +150,24 @@ final class ListingViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
 
         let item = content[indexPath.row]
-        let previousPath = self.path
 
         if item.type == "dir" {
             // This is a Folder
-            guard let nextPath = String("\(path)\(item.name)/") else {
-                print ("Cannot build next path")
-                return
-            }
-            let controller = ListingViewController(mountID: self.mountID,
-                                                   path: nextPath,
-                                                   backButtonTitle: navigationItem.title!)
+
+            let nextPath = self.location.path + item.name + "/"
+            let nextLocation = Location(mount: self.location.mount, path: nextPath)
+
+            let controller = ListingViewController(location: nextLocation)
             controller.title = item.name
             navigationController?.pushViewController(controller, animated: true)
 
         } else {
             // This is a file
 
-            let filePath = previousPath + item.name
+            let nextPath = self.location.path + item.name
+            let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
-            let controller = ContentViewController(mountID: self.mountID, path: filePath)
+            let controller = ContentViewController(location: nextLocation)
             controller.title = item.name
             navigationController?.pushViewController(controller, animated: true)
         }
@@ -190,11 +184,9 @@ final class ListingViewController: UITableViewController {
 
     func getFolderContent() {
 
-        DLog(name: "path", object: self.path)
-
         self.needRefresh = false
 
-        DigiClient.shared.getLocationContent(mountID: self.mountID, path: self.path) {
+        DigiClient.shared.getLocationContent(location: location) {
             (content, error) in
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
@@ -319,20 +311,16 @@ final class ListingViewController: UITableViewController {
 
     @objc fileprivate func handleAddFolder() {
         self.dismiss(animated: false, completion: nil) // dismiss any other presented controller
-        let controller = CreateFolderViewController(mountID: self.mountID, path: self.path)
-        controller.path = self.path
+        let controller = CreateFolderViewController(location: location)
+        controller.location = self.location
         controller.onFinish = { [unowned self](folderName) in
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
                 if let folderName = folderName {
                     self.needRefresh = true
-                    guard let nextPath = String("\(self.path)\(folderName)/") else {
-                        print("Cannot build next path")
-                        return
-                    }
-                    let controller = ListingViewController(mountID: self.mountID,
-                                                           path: nextPath,
-                                                           backButtonTitle: self.backButtonTitle)
+                    let nextPath = self.location.path + folderName
+                    let newLocation = Location(mount: self.location.mount, path: nextPath)
+                    let controller = ListingViewController(location: newLocation)
                     controller.title = folderName
                     self.navigationController?.pushViewController(controller, animated: true)
                 } else {

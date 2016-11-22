@@ -20,7 +20,7 @@ extension ListingViewController: ActionViewControllerDelegate {
         case .rename:
             // TODO: Refactor sort, refresh
 
-            let controller = RenameViewController(mountID: self.mountID, path: self.path, node: node)
+            let controller = RenameViewController(location: location, node: node)
             controller.onFinish = { (newName, needRefresh) in
 
                 DispatchQueue.main.async {
@@ -56,20 +56,18 @@ extension ListingViewController: ActionViewControllerDelegate {
 
             var controllers: [UIViewController] = []
 
-            let onFinish = { [unowned self] in
-                self.dismiss(animated: true, completion: nil)
-                if self.needRefresh {
-                    self.getFolderContent()
-                }
-            }
-
             for (index, p) in previousControllers.enumerated() {
 
                 // If index is 0 than this is a location controller
                 if index == 0 {
                     let c = LocationsTableViewController(action: action)
                     c.title = NSLocalizedString("Locations", comment: "Window Title")
-                    c.onFinish = onFinish
+                    c.onFinish = { [unowned self] in
+                        self.dismiss(animated: true, completion: nil)
+                        if self.needRefresh {
+                            self.getFolderContent()
+                        }
+                    }
                     controllers.append(c)
                 }
 
@@ -82,9 +80,19 @@ extension ListingViewController: ActionViewControllerDelegate {
                     if index == previousControllers.count - 1 {
                         node = content[currentIndex.row]
                     }
-                    let c = CopyOrMoveViewController(mountID: p.mountID, path: p.path, node: node, action: action)
+
+                    let c = CopyOrMoveViewController(location: p.location, node: node, action: action)
                     c.title = p.title
-                    c.onFinish = onFinish
+                    c.onFinish = { [unowned self](destinationPath) in
+                        self.dismiss(animated: true, completion: nil)
+                        // TODO Handle returned destination path
+
+                        if let destinationPath = destinationPath {
+                            DLog(name: "Destination Path", object: destinationPath)
+                        }
+                        // TODO Handle returned destination path
+
+                    }
                     controllers.append(c)
                 }
             }
@@ -114,7 +122,7 @@ extension ListingViewController: ActionViewControllerDelegate {
             }
 
         case .folderInfo:
-            let controller = FolderInfoViewController(mountID: self.mountID, path: self.path, node: node)
+            let controller = FolderInfoViewController(location: self.location, node: node)
             controller.onFinish = { (success, needRefresh) in
                 DispatchQueue.main.async {
                     self.dismiss(animated: true, completion: nil) // dismiss FolderViewController
@@ -131,7 +139,7 @@ extension ListingViewController: ActionViewControllerDelegate {
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
-            
+
         default:
             return
         }
@@ -139,7 +147,7 @@ extension ListingViewController: ActionViewControllerDelegate {
 }
 
 class CustomNavBar: UINavigationBar {
-
+    
     // I don't like the animation of the nav title when presented on a formsheet modal presentation style
     override func popItem(animated: Bool) -> UINavigationItem? {
         return super.popItem(animated: false)

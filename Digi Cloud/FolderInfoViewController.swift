@@ -13,8 +13,7 @@ class FolderInfoViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
-    var mountID: String
-    var path: String
+    var location: Location
     var node: Node
     let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
@@ -68,9 +67,8 @@ class FolderInfoViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(mountID: String, path: String, node: Node) {
-        self.mountID = mountID
-        self.path = path
+    init(location: Location, node: Node) {
+        self.location = location
         self.node = node
         super.init(style: .grouped)
     }
@@ -199,11 +197,12 @@ class FolderInfoViewController: UITableViewController {
     }
 
     fileprivate func updateFolderInfo() {
-        guard let folderPath = String("\(self.path)\(node.name)") else {
-            print("Cannot build path")
-            return
-        }
-        DigiClient.shared.getFolderInfo(mountID: self.mountID, path: folderPath, completionHandler: { (info, error) in
+
+        let folderPath = self.location.path + node.name
+
+        let folderLocation = Location(mount: self.location.mount, path: folderPath)
+
+        DigiClient.shared.getFolderInfo(location: folderLocation, completionHandler: { (info, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
                 return

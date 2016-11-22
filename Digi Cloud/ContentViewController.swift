@@ -14,8 +14,7 @@ class ContentViewController: UIViewController {
     // MARK: - Properties
 
     let fileManager = FileManager.default
-    let mountID: String
-    let path: String
+    let location: Location
     var fileUrl: URL!
     var session: URLSession!
 
@@ -33,16 +32,18 @@ class ContentViewController: UIViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(mountID: String, path: String) {
-        self.mountID = mountID
-        self.path = path
+    init(location: Location) {
+        self.location = location
+
+        DLog(name: "location", object: location)
+
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     #if DEBUG
     deinit {
         print("[DEINIT]: " + String(describing: type(of: self)))
@@ -70,7 +71,7 @@ class ContentViewController: UIViewController {
         deleteDocumentsFolder()
 
         // Start downloading File
-        session = DigiClient.shared.startFileDownload(mountID: self.mountID, path: self.path, delegate: self)
+        session = DigiClient.shared.startFileDownload(location: location, delegate: self)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -125,7 +126,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
         let documentsUrl =  fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
 
         // get the file name from current path
-        let fileName: String = self.path.components(separatedBy: "/").last!
+        let fileName: String = self.location.path.components(separatedBy: "/").last!
 
         // create destination file url
         self.fileUrl = documentsUrl.appendingPathComponent(fileName)

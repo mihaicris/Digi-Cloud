@@ -56,6 +56,8 @@ class MainNavigationController: UINavigationController {
 
     }
 
+    // MARK: - Helper Functions
+
     func showLoginScreen() {
         // present modally the login view, after a very small delay
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(50), execute: {
@@ -69,5 +71,5 @@ class MainNavigationController: UINavigationController {
             self.present(controller, animated: true, completion: nil)
         })
     }
-
+    
 }

@@ -98,20 +98,31 @@ class LocationsTableViewController: UITableViewController {
 
     func openMount(index: Int) {
         var controller: UIViewController
+
+        let location = Location(mount: mounts[index] , path: "/")
+
         switch action {
         case .copy, .move:
-            controller = CopyOrMoveViewController(mountID: mounts[index].id, path: "/", node: nil, action: action)
+            controller = CopyOrMoveViewController(location: location, node: nil, action: action)
+            (controller as? CopyOrMoveViewController)?.onFinish = { [unowned self](destinationPath) in
+                self.dismiss(animated: true, completion: nil)
+
+                if let destinationPath = destinationPath {
+                    DLog(name: "Destination Path", object: destinationPath)
+                }
+                // TODO Handle returned destination path
+            }
         default:
-            controller = ListingViewController(mountID: mounts[index].id, path: "/", backButtonTitle: navigationItem.title!)
+            controller = ListingViewController(location: location)
         }
         controller.title = mounts[index].name
         navigationController?.pushViewController(controller, animated: true)
     }
-
+    
     @objc private func handleDone() {
         self.onFinish?()
     }
-
+    
 }
 
 

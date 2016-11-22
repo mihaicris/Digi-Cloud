@@ -12,10 +12,9 @@ final class CopyOrMoveViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var onFinish: (() -> Void)?
+    var onFinish: ((_ location: Location?) -> Void)?
 
-    private let mountID: String
-    private let path: String
+    private let location: Location
     private let FileCellID = "FileCell"
     private let FolderCellID = "DirectoryCell"
     private var needRefresh: Bool = true
@@ -55,9 +54,8 @@ final class CopyOrMoveViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(mountID: String, path: String, node: Node?, action: ActionType) {
-        self.mountID = mountID
-        self.path = path
+    init(location: Location, node: Node?, action: ActionType) {
+        self.location = location
         self.node = node
         self.action = action
         super.init(style: .plain)
@@ -158,7 +156,7 @@ final class CopyOrMoveViewController: UITableViewController {
 
         self.needRefresh = false
 
-        DigiClient.shared.getLocationContent(mountID: self.mountID, path: self.path) {
+        DigiClient.shared.getLocationContent(location: location) {
             (content, error) in
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
@@ -201,7 +199,6 @@ final class CopyOrMoveViewController: UITableViewController {
         view.backgroundColor = UIColor.white
         self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
 
-
         var buttonTitle: String
 
         switch action {
@@ -221,7 +218,7 @@ final class CopyOrMoveViewController: UITableViewController {
         let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
 
         // TODO: Activate when source and destination paths are not the same
-        copyMoveButton.isEnabled = false
+        copyMoveButton.isEnabled = true
 
         let toolBarItems = [UIBarButtonItem(title: NSLocalizedString("New Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleNewFolder)),
                             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
@@ -231,48 +228,50 @@ final class CopyOrMoveViewController: UITableViewController {
     }
 
     @objc private func handleDone() {
-        self.onFinish?()
+        self.onFinish?(nil)
     }
 
     @objc private func handleNewFolder() {
-        let controller = CreateFolderViewController(mountID: self.mountID, path: self.path)
-        controller.path = self.path
+        let controller = CreateFolderViewController(location: location)
+        controller.location = self.location
         controller.onFinish = { [unowned self](folderName) in
+
             DispatchQueue.main.async {
+
                 self.dismiss(animated: true, completion: nil)
-                guard let folderName = folderName,
-                    let nextPath = String("\(self.path)\(folderName)")
-                    else {
-                        print("Cannot create next Path")
-                        return
-                    }
-                    // Set needRefresh in this list
-                    self.needRefresh = true
 
-                    // Set needRefresh in the main List
-                    if let nav = self.presentingViewController as? UINavigationController {
-                        if let cont = nav.topViewController as? ListingViewController {
-                            cont.needRefresh = true
-                        }
-                    }
+                guard let folderName = folderName else { return }
 
-                    let newController = CopyOrMoveViewController(mountID: self.mountID,
-                                                                 path: nextPath,
-                                                                 node: nil,
-                                                                 action: self.action)
-                    newController.onFinish = { [unowned self] in
-                        self.onFinish?()
-                    }
-                    self.navigationController?.pushViewController(newController, animated: true)
+                let nextPath = self.location.path + folderName
 
+                // Set needRefresh in this list
+                self.needRefresh = true
+
+                // Set needRefresh in the main List
+                if let nav = self.presentingViewController as? UINavigationController {
+                    if let cont = nav.topViewController as? ListingViewController {
+                        cont.needRefresh = true
+                    }
+                }
+                let folderLocation = Location(mount: self.location.mount, path: nextPath)
+
+                let newController = CopyOrMoveViewController(location: folderLocation,
+                                                             node: nil,
+                                                             action: self.action)
+                newController.onFinish = { [unowned self](destinationPath) in
+                    self.onFinish?(destinationPath)
+                }
+                self.navigationController?.pushViewController(newController, animated: true)
+                
             }
         }
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .formSheet
         present(navController, animated: true, completion: nil)
     }
-
+    
     @objc private func handleCopyOrMove() {
+        print(action.rawValue)
     }
 }
 

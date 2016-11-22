@@ -82,11 +82,11 @@ extension DigiClient {
         }
     }
 
-    func getLocationContent(mountID: String, path: String, completionHandler: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
-        let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: mountID)
+    func getLocationContent(location: Location, completionHandler: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+        let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
-        let parameters = [ParametersKeys.Path: path]
+        let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) {
             (data, responseCode, error) in
@@ -108,17 +108,17 @@ extension DigiClient {
         }
     }
 
-    func startFileDownload(mountID: String, path: String, delegate: AnyObject) -> URLSession {
+    func startFileDownload(location: Location, delegate: AnyObject) -> URLSession {
 
         // create the special session with custom delegate for download task
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration, delegate: delegate as? ContentViewController, delegateQueue: nil)
 
         // prepare the method string for download file by inserting the current mount
-        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: mountID)
+        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare the query paramenter path with the current File path
-        let parameters = [ParametersKeys.Path: path]
+        let parameters = [ParametersKeys.Path: location.path]
 
         // create url from method and paramenters
         let url = DigiClient.shared.getURL(method: method, parameters: parameters)
@@ -134,16 +134,16 @@ extension DigiClient {
         return session
     }
 
-    func renameNode(mountID: String, nodePath: String, newName: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func renameNode(location: Location, newName: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.Rename.replacingOccurrences(of: "{id}", with: mountID)
+        let method = Methods.Rename.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (path of the node to be renamed
-        let parameters = [ParametersKeys.Path: nodePath]
+        let parameters = [ParametersKeys.Path: location.path]
 
         // prepare new name in request body
         let jsonBody = ["name": newName]
@@ -153,32 +153,32 @@ extension DigiClient {
         }
     }
 
-    func deleteNode(mountID: String, nodePath: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func deleteNode(location: Location, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.Remove.replacingOccurrences(of: "{id}", with: mountID)
+        let method = Methods.Remove.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers: [String: String] = [:]
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (node path to be renamed
-        let parameters = [ParametersKeys.Path: nodePath]
+        let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
             completionHandler(statusCode, error)
         }
     }
 
-    func createFolder(mountID: String, path: String, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func createFolder(location: Location, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
-        let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: mountID)
+        let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        // prepare parameters 
-        let parameters = [ParametersKeys.Path: path]
+        // prepare parameters
+        let parameters = [ParametersKeys.Path: location.path]
 
         // prepare new folder name in request body
         let jsonBody = ["name": name]
@@ -194,16 +194,16 @@ extension DigiClient {
     ///   - path: path of the folder
     ///   - completionHandler: completion handler with info about folder and error
 
-    func getFolderInfo(mountID: String, path: String, completionHandler: @escaping(_ size: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
+    func getFolderInfo(location: Location, completionHandler: @escaping(_ size: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
         // prepare the method string for create new folder
-        let method = Methods.Tree.replacingOccurrences(of: "{id}", with: mountID)
+        let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers: [String: String] = ["Accept": "application/json"]
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (node path to be renamed
-        let parameters = [ParametersKeys.Path: path]
+        let parameters = [ParametersKeys.Path: location.path]
 
         /// Get information from Dictionary content (JSON folder tree)
         ///
@@ -266,20 +266,18 @@ extension DigiClient {
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
 
-    func copyOrMoveNode(mountID: String,
-                           action:            ActionType,
-                           path:              String,
-                           toMountId:         String,
-                           toPath:            String,
-                           completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func copyOrMoveNode(action:            ActionType,
+                        fromLocation:      Location,
+                        toLocation:        Location,
+                        completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
 
         var method = ""
 
         switch action {
         case .copy:
-            method = Methods.Copy.replacingOccurrences(of: "{id}", with: mountID)
+            method = Methods.Copy.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
         case .move:
-            method = Methods.Move.replacingOccurrences(of: "{id}", with: mountID)
+            method = Methods.Move.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
         default:
             return
         }
@@ -287,12 +285,12 @@ extension DigiClient {
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        let parameters = [ParametersKeys.Path: path]
+        let parameters = [ParametersKeys.Path: fromLocation.path]
 
-        let json: [String: String] = ["toMountId": toMountId, "toPath": toPath]
-
+        let json: [String: String] = ["toMountId": toLocation.mount.id, "toPath": toLocation.path]
+        
         networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: parameters) { (dataResponse, statusCode, error) in
-
+            
             print(" Status Code: \(statusCode)")
             // TODO: Handle response
             // 200 OK
