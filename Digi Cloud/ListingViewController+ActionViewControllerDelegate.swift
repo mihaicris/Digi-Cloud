@@ -83,6 +83,11 @@ extension ListingViewController: ActionViewControllerDelegate {
                     c.title = p.title
                     c.onFinish = { [unowned self] in
                         self.dismiss(animated: true, completion: nil)
+                        if self.needRefresh {
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+                                self.getFolderContent()
+                            }
+                        }
                     }
                     controllers.append(c)
                 }
