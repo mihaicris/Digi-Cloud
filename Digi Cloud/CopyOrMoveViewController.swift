@@ -165,6 +165,10 @@ final class CopyOrMoveViewController: UITableViewController {
             let controller = CopyOrMoveViewController(location: nextLocation, node: nil, action: action)
 
             controller.title = item.name
+
+            controller.onFinish = { [unowned self]() in
+                self.onFinish?()
+            }
             navigationController?.pushViewController(controller, animated: true)
         }
     }
@@ -284,7 +288,7 @@ final class CopyOrMoveViewController: UITableViewController {
                                                              action: self.action)
                 newController.title = folderName
 
-                newController.onFinish = { [unowned self](destinationPath) in
+                newController.onFinish = { [unowned self]() in
                     self.onFinish?()
                 }
                 self.navigationController?.pushViewController(newController, animated: true)
