@@ -104,13 +104,8 @@ class LocationsTableViewController: UITableViewController {
         switch action {
         case .copy, .move:
             controller = CopyOrMoveViewController(location: location, node: nil, action: action)
-            (controller as? CopyOrMoveViewController)?.onFinish = { [unowned self](destinationPath) in
+            (controller as? CopyOrMoveViewController)?.onFinish = { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
-
-                if let destinationPath = destinationPath {
-                    DLog(name: "Destination Path", object: destinationPath)
-                }
-                // TODO Handle returned destination path
             }
         default:
             controller = ListingViewController(location: location)

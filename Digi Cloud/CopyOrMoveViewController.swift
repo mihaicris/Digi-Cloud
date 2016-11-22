@@ -12,7 +12,7 @@ final class CopyOrMoveViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var onFinish: ((_ location: Location?) -> Void)?
+    var onFinish: (() -> Void)?
 
     private let location: Location
     private let FileCellID = "FileCell"
@@ -228,7 +228,7 @@ final class CopyOrMoveViewController: UITableViewController {
     }
 
     @objc private func handleDone() {
-        self.onFinish?(nil)
+        self.onFinish?()
     }
 
     @objc private func handleNewFolder() {
@@ -259,7 +259,7 @@ final class CopyOrMoveViewController: UITableViewController {
                                                              node: nil,
                                                              action: self.action)
                 newController.onFinish = { [unowned self](destinationPath) in
-                    self.onFinish?(destinationPath)
+                    self.onFinish?()
                 }
                 self.navigationController?.pushViewController(newController, animated: true)
                 

@@ -18,8 +18,6 @@ extension ListingViewController: ActionViewControllerDelegate {
 
         switch action {
         case .rename:
-            // TODO: Refactor sort, refresh
-
             let controller = RenameViewController(location: location, node: node)
             controller.onFinish = { (newName, needRefresh) in
 
@@ -83,15 +81,8 @@ extension ListingViewController: ActionViewControllerDelegate {
 
                     let c = CopyOrMoveViewController(location: p.location, node: node, action: action)
                     c.title = p.title
-                    c.onFinish = { [unowned self](destinationPath) in
+                    c.onFinish = { [unowned self] in
                         self.dismiss(animated: true, completion: nil)
-                        // TODO Handle returned destination path
-
-                        if let destinationPath = destinationPath {
-                            DLog(name: "Destination Path", object: destinationPath)
-                        }
-                        // TODO Handle returned destination path
-
                     }
                     controllers.append(c)
                 }
