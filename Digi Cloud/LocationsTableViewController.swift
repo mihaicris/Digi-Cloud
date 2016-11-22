@@ -12,20 +12,31 @@ class LocationsTableViewController: UITableViewController {
 
     // MARK: - Properties
 
+    var onFinish: (() -> Void)?
     var mounts: [Mount] = []
+    private let action: ActionType
 
     // MARK: - Initializers and Deinitializers
+
+    init(action: ActionType) {
+        self.action = action
+        super.init(style: .grouped)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     #if DEBUG
     deinit {
         print("[DEINIT]: " + String(describing: type(of: self)))
     }
     #endif
-
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         setupTableView()
         getLocations()
     }
@@ -50,8 +61,19 @@ class LocationsTableViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    private func setupTableView() {
+    private func setupNavigationBar() {
+        // Create navigation elements when coping or moving
+
+        if action == .copy || action == .move {
+            self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
+            let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
+
+            navigationItem.setRightBarButton(rightButton, animated: false)
+        }
         self.title = NSLocalizedString("Locations", comment: "Window Title")
+    }
+
+    private func setupTableView() {
         tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
         tableView.rowHeight = 78
         tableView.tableFooterView = UIView()
@@ -75,10 +97,21 @@ class LocationsTableViewController: UITableViewController {
     }
 
     func openMount(index: Int) {
-        let controller = ListingViewController(mountID: mounts[index].id, path: "/", backButtonTitle: navigationItem.title!)
+        var controller: UIViewController
+        switch action {
+        case .copy, .move:
+            controller = CopyOrMoveViewController(mountID: mounts[index].id, path: "/", node: nil, action: action)
+        default:
+            controller = ListingViewController(mountID: mounts[index].id, path: "/", backButtonTitle: navigationItem.title!)
+        }
         controller.title = mounts[index].name
         navigationController?.pushViewController(controller, animated: true)
     }
+
+    @objc private func handleDone() {
+        self.onFinish?()
+    }
+
 }
 
 

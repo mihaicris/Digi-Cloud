@@ -12,17 +12,15 @@ final class CopyOrMoveViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var onFinish: ((Void) -> Void)?
+    var onFinish: (() -> Void)?
 
     private let mountID: String
     private let path: String
     private let FileCellID = "FileCell"
     private let FolderCellID = "DirectoryCell"
-    private var needRefresh: Bool = false
-    private var node: Node
+    private var needRefresh: Bool = true
+    private var node: Node?
     private var action: ActionType
-    private var parentTitle: String
-    private var backButtonTitle: String
     private var content: [Node] = []
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -57,13 +55,11 @@ final class CopyOrMoveViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(mountID: String, path: String, node: Node, action: ActionType, parentTitle: String, backButtonTitle: String) {
+    init(mountID: String, path: String, node: Node?, action: ActionType) {
         self.mountID = mountID
         self.path = path
         self.node = node
         self.action = action
-        self.parentTitle = parentTitle
-        self.backButtonTitle = backButtonTitle
         super.init(style: .plain)
     }
 
@@ -88,7 +84,6 @@ final class CopyOrMoveViewController: UITableViewController {
         tableView.rowHeight = AppSettings.tableViewRowHeight
 
         setupViews()
-        getFolderContent()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -174,26 +169,28 @@ final class CopyOrMoveViewController: UITableViewController {
                 if !content.isEmpty {
 
                     // Remove from the list the node which is copied or moved
-                    for (index, elem) in content.enumerated() {
-                        if elem.name == self.node.name {
-                            content.remove(at: index)
+                    if let node = self.node {
+                        for (index, elem) in content.enumerated() {
+                            if elem.name == node.name {
+                                content.remove(at: index)
+                            }
                         }
                     }
 
-                    // Sort the content by name ascending with folders shown first
-                    content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+                    if !content.isEmpty {
+                        // Sort the content by name ascending with folders shown first
+                        content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
 
-                    self.content = content
+                        self.content = content
 
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        self.busyIndicator.stopAnimating()
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
                     }
-                } else {
-                    DispatchQueue.main.async {
-                        self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                        self.busyIndicator.stopAnimating()
-                    }
+                }
+                DispatchQueue.main.async {
+                    self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                    self.busyIndicator.stopAnimating()
                 }
             }
         }
@@ -204,9 +201,6 @@ final class CopyOrMoveViewController: UITableViewController {
         view.backgroundColor = UIColor.white
         self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
 
-        self.title = parentTitle
-        let backButton = UIBarButtonItem(title: backButtonTitle, style: .plain, target: self, action: #selector(handleNavigateBack))
-        navigationItem.setLeftBarButton(backButton, animated: true)
 
         var buttonTitle: String
 
@@ -237,7 +231,6 @@ final class CopyOrMoveViewController: UITableViewController {
     }
 
     @objc private func handleDone() {
-
         self.onFinish?()
     }
 
@@ -265,10 +258,8 @@ final class CopyOrMoveViewController: UITableViewController {
 
                     let newController = CopyOrMoveViewController(mountID: self.mountID,
                                                                  path: nextPath,
-                                                                 node: self.node,
-                                                                 action: self.action,
-                                                                 parentTitle: folderName,
-                                                                 backButtonTitle: self.backButtonTitle)
+                                                                 node: nil,
+                                                                 action: self.action)
                     newController.onFinish = { [unowned self] in
                         self.onFinish?()
                     }
@@ -281,10 +272,7 @@ final class CopyOrMoveViewController: UITableViewController {
         present(navController, animated: true, completion: nil)
     }
 
-    @objc private func handleNavigateBack() {
-        print("go back")
-    }
-
     @objc private func handleCopyOrMove() {
     }
 }
+

@@ -49,26 +49,48 @@ extension ListingViewController: ActionViewControllerDelegate {
 
         case .copy, .move:
 
-            // TODO: Prepare the stack of CopyOrMoveViewControllers
-            guard let parentTitle = self.title else {
-                print("Could not get root folder title")
+            guard let previousControllers = navigationController?.viewControllers else {
+                print("Couldn't get the previous navigation controllers!")
                 return
             }
 
-            let controller = CopyOrMoveViewController(mountID: self.mountID,
-                                                      path: self.path,
-                                                      node: node,
-                                                      action: action,
-                                                      parentTitle: parentTitle,
-                                                      backButtonTitle: backButtonTitle)
-            controller.onFinish = { [unowned self] in
+            var controllers: [UIViewController] = []
+
+            let onFinish = { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
                 if self.needRefresh {
                     self.getFolderContent()
                 }
             }
 
-            let navController = UINavigationController(rootViewController: controller)
+            for (index, p) in previousControllers.enumerated() {
+
+                // If index is 0 than this is a location controller
+                if index == 0 {
+                    let c = LocationsTableViewController(action: action)
+                    c.title = NSLocalizedString("Locations", comment: "Window Title")
+                    c.onFinish = onFinish
+                    controllers.append(c)
+                }
+
+                // we need to cast in order to tet the mountID and path from it
+                if let p = p as? ListingViewController {
+                    var node: Node?
+
+                    // If index is the last one, we need to inject the current node which is
+                    // moved or copied, such that it won't be shown in the list.
+                    if index == previousControllers.count - 1 {
+                        node = content[currentIndex.row]
+                    }
+                    let c = CopyOrMoveViewController(mountID: p.mountID, path: p.path, node: node, action: action)
+                    c.title = p.title
+                    c.onFinish = onFinish
+                    controllers.append(c)
+                }
+            }
+
+            let navController = UINavigationController(navigationBarClass: CustomNavBar.self, toolbarClass: nil)
+            navController.setViewControllers(controllers, animated: false)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
 
@@ -113,5 +135,13 @@ extension ListingViewController: ActionViewControllerDelegate {
         default:
             return
         }
+    }
+}
+
+class CustomNavBar: UINavigationBar {
+
+    // I don't like the animation of the nav title when presented on a formsheet modal presentation style
+    override func popItem(animated: Bool) -> UINavigationItem? {
+        return super.popItem(animated: false)
     }
 }

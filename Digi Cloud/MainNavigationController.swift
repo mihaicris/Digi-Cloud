@@ -46,7 +46,7 @@ class MainNavigationController: UINavigationController {
                     return
                 }
                 DispatchQueue.main.async {
-                    let controller = LocationsTableViewController()
+                    let controller = LocationsTableViewController(action: .noAction)
                     self.viewControllers = [controller]
                 }
             }
@@ -62,7 +62,7 @@ class MainNavigationController: UINavigationController {
             let controller = LoginViewController()
             controller.onFinish = {
                 DispatchQueue.main.async {
-                    self.viewControllers = [LocationsTableViewController()]
+                    self.viewControllers = [LocationsTableViewController(action: .noAction)]
                     self.dismiss(animated: true, completion: nil) // dismiss LoginViewController
                 }
             }
