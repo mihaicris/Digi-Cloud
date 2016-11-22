@@ -150,6 +150,25 @@ final class CopyOrMoveViewController: UITableViewController {
         }
     }
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+
+        let item = content[indexPath.row]
+
+        if item.type == "dir" {
+
+            // We only responde to folder selection
+
+            let nextPath = self.location.path + item.name + "/"
+            let nextLocation = Location(mount: self.location.mount, path: nextPath)
+
+            let controller = CopyOrMoveViewController(location: nextLocation, node: nil, action: action)
+
+            controller.title = item.name
+            navigationController?.pushViewController(controller, animated: true)
+        }
+    }
+
     // MARK: - Helper Functions
 
     private func getFolderContent() {
@@ -220,7 +239,7 @@ final class CopyOrMoveViewController: UITableViewController {
         // TODO: Activate when source and destination paths are not the same
         copyMoveButton.isEnabled = true
 
-        let toolBarItems = [UIBarButtonItem(title: NSLocalizedString("New Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleNewFolder)),
+        let toolBarItems = [UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleNewFolder)),
                             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
                             copyMoveButton]
 
@@ -238,11 +257,16 @@ final class CopyOrMoveViewController: UITableViewController {
 
             DispatchQueue.main.async {
 
+                // Dismiss Create Folder
                 self.dismiss(animated: true, completion: nil)
 
-                guard let folderName = folderName else { return }
+                guard let folderName = folderName else {
+                    // User cancelled the folder creation
+                    return
 
-                let nextPath = self.location.path + folderName
+                }
+
+                let nextPath = self.location.path + folderName + "/"
 
                 // Set needRefresh in this list
                 self.needRefresh = true
@@ -258,6 +282,8 @@ final class CopyOrMoveViewController: UITableViewController {
                 let newController = CopyOrMoveViewController(location: folderLocation,
                                                              node: nil,
                                                              action: self.action)
+                newController.title = folderName
+
                 newController.onFinish = { [unowned self](destinationPath) in
                     self.onFinish?()
                 }
@@ -271,7 +297,8 @@ final class CopyOrMoveViewController: UITableViewController {
     }
     
     @objc private func handleCopyOrMove() {
-        print(action.rawValue)
+        // TODO: Calculate the path
+        print("User selected a path")
     }
 }
 
