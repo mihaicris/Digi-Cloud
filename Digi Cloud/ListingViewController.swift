@@ -112,6 +112,7 @@ final class ListingViewController: UITableViewController {
         if content.isEmpty {
             let cell = UITableViewCell()
             cell.isUserInteractionEnabled = false
+            tableView.separatorColor = .white
             if indexPath.row == 1 {
 
                 let v = UIView()
@@ -128,6 +129,8 @@ final class ListingViewController: UITableViewController {
             }
             return cell
         }
+
+        tableView.separatorColor = nil
 
         let data = content[indexPath.row]
 
