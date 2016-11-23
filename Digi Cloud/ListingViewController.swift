@@ -11,13 +11,15 @@ import UIKit
 final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
-
+    var onFinish: (() -> Void)?
+    let action: ActionType
     var location: Location
-    var needRefresh: Bool = false
+    var node: Node?
+    var needRefresh: Bool = true
     var content: [Node] = []
     var currentIndex: IndexPath!
-    private let FileCellID = "FileCellWithButton"
-    private let FolderCellID = "DirectoryCellWithButton"
+    private var FileCellID: String = ""
+    private var FolderCellID: String = ""
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
@@ -52,8 +54,10 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location) {
+    init(action: ActionType, for location: Location, node: Node?) {
+        self.action = action
         self.location = location
+        self.node = node
         super.init(style: .plain)
     }
 
@@ -73,11 +77,14 @@ final class ListingViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        getFolderContent()
+        setupViews()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        updateRightBarButtonItems()
+        if self.action == .noAction {
+            updateRightBarButtonItems()
+        }
+
         if needRefresh {
             content.removeAll()
             self.busyIndicator.startAnimating()
@@ -157,12 +164,21 @@ final class ListingViewController: UITableViewController {
             let nextPath = self.location.path + item.name + "/"
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
-            let controller = ListingViewController(location: nextLocation)
+            let controller = ListingViewController(action: self.action, for: nextLocation, node: self.node)
             controller.title = item.name
+            controller.onFinish = { [unowned self] in
+                self.onFinish?()
+            }
+
             navigationController?.pushViewController(controller, animated: true)
 
         } else {
+
             // This is a file
+
+            if self.action != .noAction {
+                return
+            }
 
             let nextPath = self.location.path + item.name
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
@@ -176,13 +192,46 @@ final class ListingViewController: UITableViewController {
     // MARK: - Helper Methods
 
     private func setupTableView() {
+
+        switch self.action {
+        case .copy, .move:
+            self.FileCellID = "FileCell"
+            self.FolderCellID = "DirectoryCell"
+        default:
+            self.FileCellID = "FileCellWithButton"
+            self.FolderCellID = "DirectoryCellWithButton"
+        }
+
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
 
-    func getFolderContent() {
+    private func setupViews() {
+        self.automaticallyAdjustsScrollViewInsets = true
+        switch self.action {
+        case .copy, .move:
+            self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
+
+            let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
+            navigationItem.setRightBarButton(rightButton, animated: false)
+            navigationController?.isToolbarHidden = false
+
+            let buttonTitle = self.action == .copy ? NSLocalizedString("Save copy", comment: "Button Title") : NSLocalizedString("Move", comment: "Button Title")
+            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
+            // TODO: Activate when source and destination paths are not the same
+            copyMoveButton.isEnabled = true
+            let toolBarItems = [UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateFolder)),
+                                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+                                copyMoveButton]
+            setToolbarItems(toolBarItems, animated: false)
+        default:
+            break
+        }
+    }
+
+    fileprivate func getFolderContent() {
 
         self.needRefresh = false
 
@@ -192,13 +241,37 @@ final class ListingViewController: UITableViewController {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-            if let content = content {
+            if var content = content {
                 if !content.isEmpty {
-                    self.content = content
-                    self.sortContent()
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        self.busyIndicator.stopAnimating()
+                    if self.action == .noAction {
+                        // No copy or move, no node to be removed, usual sort and display
+                        self.content = content
+                        self.sortContent()
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                            self.busyIndicator.stopAnimating()
+                        }
+                    } else {
+
+                        // Copy or remove action! The indicated node will be removed, sort by name and display
+                        // Remove from the list the node which is copied or moved
+                        if let node = self.node {
+                            for (index, elem) in content.enumerated() {
+                                if elem.name == node.name {
+                                    content.remove(at: index)
+                                }
+                            }
+                        }
+                        if !content.isEmpty {
+                            // Sort the content by name ascending with folders shown first
+                            content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+
+                            self.content = content
+
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                            }
+                        }
                     }
                 } else {
                     DispatchQueue.main.async {
@@ -210,7 +283,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    func sortContent() {
+    fileprivate func sortContent() {
         switch AppSettings.sortMethod {
         case .byName:        sortByName()
         case .byDate:        sortByDate()
@@ -219,7 +292,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    func animateActionButton(active: Bool) {
+    fileprivate func animateActionButton(active: Bool) {
         let actionButton = (tableView.cellForRow(at: currentIndex) as! BaseListCell).actionButton
         let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(M_PI_2)) : CGAffineTransform.identity
         let color: UIColor = active ? .black : .darkGray
@@ -241,7 +314,7 @@ final class ListingViewController: UITableViewController {
         case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
         }
         sortButton      = UIBarButtonItem(title: buttonTitle, style: UIBarButtonItemStyle.plain, target: self, action: #selector(handleSortSelect))
-        addFolderButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(handleAddFolder))
+        addFolderButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(handleCreateFolder))
         navigationItem.setRightBarButtonItems([sortButton, addFolderButton], animated: false)
     }
 
@@ -293,11 +366,12 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc fileprivate func handleSortSelect() {
+    @objc private func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
             if dismiss {
-                self.dismiss(animated: true, completion: nil) }
+                self.dismiss(animated: true, completion: nil)
+            }
             self.sortContent()
             self.tableView.reloadData()
             self.updateRightBarButtonItems()
@@ -309,28 +383,52 @@ final class ListingViewController: UITableViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc fileprivate func handleAddFolder() {
-        self.dismiss(animated: false, completion: nil) // dismiss any other presented controller
+    @objc private func handleCreateFolder() {
         let controller = CreateFolderViewController(location: location)
         controller.location = self.location
         controller.onFinish = { [unowned self](folderName) in
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
-                if let folderName = folderName {
-                    self.needRefresh = true
-                    let nextPath = self.location.path + folderName
-                    let newLocation = Location(mount: self.location.mount, path: nextPath)
-                    let controller = ListingViewController(location: newLocation)
-                    controller.title = folderName
-                    self.navigationController?.pushViewController(controller, animated: true)
-                } else {
-                    return // Cancel
+
+                guard let folderName = folderName else {
+                    // User cancelled the folder creation
+                    return
                 }
+                let nextPath = self.location.path + folderName + "/"
+
+                // Set needRefresh in this list
+                self.needRefresh = true
+
+                // Set needRefresh in the main List
+                if let nav = self.presentingViewController as? UINavigationController {
+                    if let cont = nav.topViewController as? ListingViewController {
+                        cont.needRefresh = true
+                    }
+                }
+                let folderLocation = Location(mount: self.location.mount, path: nextPath)
+
+                let controller = ListingViewController(action: self.action, for: folderLocation, node: self.node)
+                controller.title = folderName
+                controller.onFinish = {[unowned self] in
+                    self.onFinish?()
+                }
+
+                self.navigationController?.pushViewController(controller, animated: true)
             }
         }
+
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true, completion: nil)
+    }
+
+    @objc private func handleDone() {
+        self.onFinish?()
+    }
+
+    @objc private func handleCopyOrMove() {
+        // TODO: Calculate the path
+        print("User selected a path")
     }
 }
 
@@ -338,5 +436,203 @@ extension ListingViewController: UIPopoverPresentationControllerDelegate {
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
         self.animateActionButton(active: false)
         return true
+    }
+}
+
+extension ListingViewController: ActionViewControllerDelegate {
+    func didSelectOption(action: ActionType) {
+
+        self.animateActionButton(active: false)
+        dismiss(animated: true, completion: nil) // dismiss ActionsViewController
+
+        let node: Node = content[currentIndex.row]
+
+        switch action {
+        case .rename:
+            let controller = RenameViewController(location: location, node: node)
+            controller.onFinish = { (newName, needRefresh) in
+
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil) // dismiss RenameViewController
+                }
+                if let name = newName {
+
+                    self.content[self.currentIndex.row] = Node(name:        name,
+                                                               type:        node.type,
+                                                               modified:    node.modified,
+                                                               size:        node.size,
+                                                               contentType: node.contentType)
+                    self.sortContent()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    if needRefresh {
+                        self.getFolderContent()
+                    }
+                }
+            }
+            let navController = UINavigationController(rootViewController: controller)
+            navController.modalPresentationStyle = .formSheet
+            present(navController, animated: true, completion: nil)
+
+        case .copy, .move:
+
+            guard let previousControllers = navigationController?.viewControllers else {
+                print("Couldn't get the previous navigation controllers!")
+                return
+            }
+
+            var controllers: [UIViewController] = []
+
+            for (index, p) in previousControllers.enumerated() {
+
+                // If index is 0 than this is a location controller
+                if index == 0 {
+                    let c = LocationsTableViewController(action: action)
+                    c.title = NSLocalizedString("Locations", comment: "Window Title")
+                    c.onFinish = { [unowned self] in
+                        self.dismiss(animated: true, completion: nil)
+                        if self.needRefresh {
+                            self.getFolderContent()
+                        }
+                    }
+                    controllers.append(c)
+                    continue
+                }
+
+                // we need to cast in order to tet the mountID and path from it
+                if let p = p as? ListingViewController {
+
+                    // If index is the last one, we need to inject the current node which is
+                    // moved or copied, such that it won't be shown in the list.
+                    let specificNode = index == previousControllers.count - 1 ? node : nil
+
+                    let c = ListingViewController(action: action, for: p.location, node: specificNode)
+                    c.title = p.title
+                    c.onFinish = { [unowned self] in
+                        self.dismiss(animated: true, completion: nil)
+                        if self.needRefresh {
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+                                self.getFolderContent()
+                            }
+                        }
+                    }
+                    controllers.append(c)
+                }
+            }
+
+            let navController = UINavigationController(navigationBarClass: CustomNavBar.self, toolbarClass: nil)
+            navController.setViewControllers(controllers, animated: false)
+            navController.modalPresentationStyle = .formSheet
+            present(navController, animated: true, completion: nil)
+
+        case .delete:
+
+            if node.type == "file" {
+                let controller = DeleteViewController(node: node)
+                controller.delegate = self
+
+                // position alert on the same row with the file
+                var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
+                for view in sourceView.subviews {
+                    if view.tag == 1 {
+                        sourceView = view.subviews[0]
+                    }
+                }
+                controller.modalPresentationStyle = .popover
+                controller.popoverPresentationController?.sourceView = sourceView
+                controller.popoverPresentationController?.sourceRect = sourceView.bounds
+                present(controller, animated: true, completion: nil)
+            }
+
+        case .folderInfo:
+            let controller = FolderInfoViewController(location: self.location, node: node)
+            controller.onFinish = { (success, needRefresh) in
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil) // dismiss FolderViewController
+                    if success {
+                        self.content.remove(at: self.currentIndex.row)
+                        self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                    } else {
+                        if needRefresh {
+                            self.getFolderContent()
+                        }
+                    }
+                }
+            }
+            let navController = UINavigationController(rootViewController: controller)
+            navController.modalPresentationStyle = .formSheet
+            present(navController, animated: true, completion: nil)
+            
+        default:
+            return
+        }
+    }
+}
+
+extension ListingViewController: BaseListCellDelegate {
+    func showActionController(for sourceView: UIView) {
+        let buttonPosition = sourceView.convert(CGPoint.zero, to: self.tableView)
+        guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
+
+        self.currentIndex = indexPath
+        self.animateActionButton(active: true)
+
+        let controller = ActionViewController(node: self.content[indexPath.row])
+        controller.delegate = self
+
+        var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
+        for view in sourceView.subviews {
+            if view.tag == 1 {
+                sourceView = view.subviews[0]
+            }
+        }
+        controller.modalPresentationStyle = .popover
+        controller.popoverPresentationController?.sourceView = sourceView
+        controller.popoverPresentationController?.sourceRect = sourceView.bounds
+        controller.popoverPresentationController?.delegate = self
+        present(controller, animated: true, completion: nil)
+    }
+}
+
+extension ListingViewController: DeleteViewControllerDelegate {
+    func onConfirmDeletion() {
+
+        // Dismiss DeleteAlertViewController
+        dismiss(animated: true) {
+            let nodePath = self.location.path + self.content[self.currentIndex.row].name
+
+            // network request for delete
+            let deleteLocation = Location(mount: self.location.mount, path: nodePath)
+            DigiClient.shared.deleteNode(location: deleteLocation) {
+
+                (statusCode, error) in
+
+                // TODO: Stop spinner
+                guard error == nil else {
+                    // TODO: Show message for error
+                    print(error!.localizedDescription)
+                    return
+                }
+                if let code = statusCode {
+                    DispatchQueue.main.async {
+                        switch code {
+                        case 200:
+                            self.content.remove(at: self.currentIndex.row)
+                            self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                        case 400:
+                            self.getFolderContent()
+                        case 404:
+                            self.getFolderContent()
+                        default :
+                            break
+                        }
+                    }
+                } else {
+                    print("Error: could not obtain a statuscode")
+                }
+            }
+        }
     }
 }

@@ -21,12 +21,10 @@ class FolderInfoViewController: UITableViewController {
         f.countStyle = .binary
         return f
     }()
-
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var deleteButton: UIButton!
     fileprivate var noElementsLabel = UILabel()
     fileprivate var folderSizeLabel = UILabel()
-
     fileprivate var noElements: (Int?, Int?) = (nil, nil) {
         didSet {
             guard let files = noElements.0,
@@ -53,7 +51,6 @@ class FolderInfoViewController: UITableViewController {
             }
         }
     }
-
     fileprivate var folderSize: Int64? {
         didSet {
             DispatchQueue.main.async {
@@ -175,7 +172,7 @@ class FolderInfoViewController: UITableViewController {
             deleteButton.setTitleColor(.red, for: .normal)
             deleteButton.addTarget(self, action: #selector(handleDelete), for: .touchUpInside)
 
-            //constraints
+            //  constraints
             deleteButton.translatesAutoresizingMaskIntoConstraints = false
             cell.contentView.addSubview(deleteButton)
             deleteButton.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
@@ -224,6 +221,47 @@ class FolderInfoViewController: UITableViewController {
         controller.popoverPresentationController?.sourceView = deleteButton
         controller.popoverPresentationController?.sourceRect = deleteButton.bounds
         present(controller, animated: true, completion: nil)
+    }
+}
+
+extension FolderInfoViewController: DeleteViewControllerDelegate {
+    func onConfirmDeletion() {
+
+        // Dismiss DeleteAlertViewController
+        dismiss(animated: true) {
+
+            let nodePath = self.location.path + self.node.name
+
+            // network request for delete
+
+            let deleteLocation = Location(mount: self.location.mount, path: nodePath)
+            DigiClient.shared.deleteNode(location: deleteLocation) { (statusCode, error) in
+
+                // TODO: Stop spinner
+                guard error == nil else {
+                    // TODO: Show message for error
+                    print(error!.localizedDescription)
+                    return
+                }
+                if let code = statusCode {
+                    switch code {
+                    case 200:
+                        // Delete successfully completed
+                        self.onFinish?(true, true)
+                    case 400:
+                        // TODO: Alert Bad Request
+                        self.onFinish?(false, true)
+                    case 404:
+                        // File not found, folder will be refreshed
+                        self.onFinish?(false, true)
+                    default :
+                        // TODO: Alert Status Code server
+                        self.onFinish?(false, false)
+                        return
+                    }
+                }
+            }
+        }
     }
 }
 

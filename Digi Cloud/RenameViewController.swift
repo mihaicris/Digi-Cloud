@@ -89,7 +89,7 @@ class RenameViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
 
         messageLabel = {
             let label = UILabel()
@@ -138,12 +138,12 @@ class RenameViewController: UITableViewController {
         }
     }
 
-    fileprivate func hasInvalidCharacters(name: String) -> Bool {
+    private func hasInvalidCharacters(name: String) -> Bool {
         let charset: Set<Character> = ["\\", "/", ":", "?", "<", ">", "\"", "|"]
         return !charset.isDisjoint(with: name.characters)
     }
 
-    fileprivate func setRenameButtonActive(_ value: Bool) {
+    private func setRenameButtonActive(_ value: Bool) {
         self.rightBarButton.isEnabled = value
 
     }

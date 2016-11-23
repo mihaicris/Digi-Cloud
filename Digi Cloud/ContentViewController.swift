@@ -67,7 +67,7 @@ class ContentViewController: UIViewController {
         // Show progress view
         progressView.isHidden = false
 
-        //  Delete downloaded file if exists
+        // Delete downloaded file if exists
         deleteDocumentsFolder()
 
         // Start downloading File
@@ -76,7 +76,7 @@ class ContentViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
 
-        // close session and delegate
+        // Close session and delegate
         session.invalidateAndCancel()
     }
 
@@ -101,10 +101,10 @@ class ContentViewController: UIViewController {
 
     fileprivate func deleteDocumentsFolder() {
 
-        // get the Documents Folder in the user space
+        // Get the Documents Folder in the user space
         let documentsUrl =  fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
 
-        // delete all content of the Documents directory
+        // Delete all content of the Documents directory
         do {
             let directoryContents = try fileManager.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
             for url in directoryContents {
@@ -119,7 +119,7 @@ class ContentViewController: UIViewController {
 extension ContentViewController: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
 
-        // avoid memory leak (self cannot be deinitialize because it is a delegate of the session
+        // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
         session.invalidateAndCancel()
 
         // get the Documents Folder in the user space

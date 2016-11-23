@@ -71,5 +71,4 @@ class MainNavigationController: UINavigationController {
             self.present(controller, animated: true, completion: nil)
         })
     }
-    
 }

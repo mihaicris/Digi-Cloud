@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SortFolderViewController: UITableViewController, ActionCellDelegate {
+class SortFolderViewController: UITableViewController {
 
     // MARK: - Properties
 
@@ -93,14 +93,7 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
 
     // MARK: - Helper Functions
 
-    func onSwitchValueChanged(button: UISwitch, value: Bool) {
-        if button.tag == 0 {
-            AppSettings.showFoldersFirst = value
-            self.onFinish?(false)
-        }
-    }
-
-    fileprivate func setInitialActionNames() {
+    private func setInitialActionNames() {
         contextMenuSortActions = [
             NSLocalizedString("Folders first", comment: "Switch Title"),
             NSLocalizedString("Sort by Name",  comment: "Selection Title"),
@@ -109,7 +102,7 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
             NSLocalizedString("Sort by Type",  comment: "Selection Title") ]
     }
 
-    fileprivate func setupViews() {
+    private func setupViews() {
 
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
@@ -143,5 +136,14 @@ class SortFolderViewController: UITableViewController, ActionCellDelegate {
         tableView.rowHeight = AppSettings.tableViewRowHeight
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+    }
+}
+
+extension SortFolderViewController: ActionCellDelegate {
+    func onSwitchValueChanged(button: UISwitch, value: Bool) {
+        if button.tag == 0 {
+            AppSettings.showFoldersFirst = value
+            self.onFinish?(false)
+        }
     }
 }
