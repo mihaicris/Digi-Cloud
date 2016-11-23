@@ -65,12 +65,11 @@ final class ListingViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    #if DEBUG
     deinit {
-        DigiClient.shared.task?.cancel()
-        #if DEBUG
-            print("[DEINIT]: " + String(describing: type(of: self)))
-        #endif
+        print("[DEINIT]: " + String(describing: type(of: self)))
     }
+    #endif
 
     // MARK: - Overridden Methods and Properties
 
@@ -92,6 +91,11 @@ final class ListingViewController: UITableViewController {
             tableView.reloadData()
         }
         super.viewWillAppear(animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
