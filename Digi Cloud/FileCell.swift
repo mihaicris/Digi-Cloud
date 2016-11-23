@@ -41,14 +41,14 @@ class FileCell: BaseListCell {
         if self.hasButton {
             if highlighted {
                 contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
-                fileNameLabel.textColor = UIColor.white
-                fileSizeLabel.textColor = UIColor(colorLiteralRed: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1.0)
-                actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+                fileNameLabel.textColor = .white
+                fileSizeLabel.textColor = UIColor.init(white: 0.8, alpha: 1)
+                actionButton.setTitleColor(.white, for: .normal)
             } else {
                 contentView.backgroundColor = nil
-                fileNameLabel.textColor = self.hasButton ? .black    : .lightGray
-                fileSizeLabel.textColor = self.hasButton ? .darkGray : .lightGray
-                actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
+                fileNameLabel.textColor = .black
+                fileSizeLabel.textColor = .darkGray
+                actionButton.setTitleColor(.darkGray, for: .normal)
             }
         }
     }
