@@ -54,7 +54,7 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(action: ActionType, for location: Location, node: Node?) {
+    init(action: ActionType, for location: Location, remove node: Node?) {
         self.action = action
         self.location = location
         self.node = node
@@ -167,7 +167,7 @@ final class ListingViewController: UITableViewController {
             let nextPath = self.location.path + item.name + "/"
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
-            let controller = ListingViewController(action: self.action, for: nextLocation, node: self.node)
+            let controller = ListingViewController(action: self.action, for: nextLocation, remove: nil)
             controller.title = item.name
             controller.onFinish = { [unowned self] in
                 self.onFinish?()
@@ -262,6 +262,7 @@ final class ListingViewController: UITableViewController {
                             for (index, elem) in content.enumerated() {
                                 if elem.name == node.name {
                                     content.remove(at: index)
+                                    break
                                 }
                             }
                         }
@@ -410,7 +411,7 @@ final class ListingViewController: UITableViewController {
                 }
                 let folderLocation = Location(mount: self.location.mount, path: nextPath)
 
-                let controller = ListingViewController(action: self.action, for: folderLocation, node: self.node)
+                let controller = ListingViewController(action: self.action, for: folderLocation, remove: nil)
                 controller.title = folderName
                 controller.onFinish = {[unowned self] in
                     self.onFinish?()
@@ -511,7 +512,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                     // moved or copied, such that it won't be shown in the list.
                     let specificNode = index == previousControllers.count - 1 ? node : nil
 
-                    let c = ListingViewController(action: action, for: p.location, node: specificNode)
+                    let c = ListingViewController(action: action, for: p.location, remove: specificNode)
                     c.title = p.title
                     c.onFinish = { [unowned self] in
                         self.dismiss(animated: true, completion: nil)

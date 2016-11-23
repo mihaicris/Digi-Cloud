@@ -99,7 +99,7 @@ class LocationsTableViewController: UITableViewController {
     private func openMount(index: Int) {
         let location = Location(mount: mounts[index] , path: "/")
 
-        let controller = ListingViewController(action: self.action, for: location, node: nil)
+        let controller = ListingViewController(action: self.action, for: location, remove: nil)
         controller.title = mounts[index].name
         controller.onFinish = { [unowned self] in
             self.dismiss(animated: true, completion: nil)
