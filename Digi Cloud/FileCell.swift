@@ -31,7 +31,6 @@ class FileCell: BaseListCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "HelveticaNeue", size: 11)
-        label.textColor = UIColor.darkGray
         return label
     }()
 
@@ -39,16 +38,18 @@ class FileCell: BaseListCell {
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        if highlighted {
-            contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
-            fileNameLabel.textColor = UIColor.white
-            fileSizeLabel.textColor = UIColor(colorLiteralRed: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1.0)
-            actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
-        } else {
-            contentView.backgroundColor = nil
-            fileNameLabel.textColor = UIColor.black
-            fileSizeLabel.textColor = UIColor.darkGray
-            actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
+        if self.hasButton {
+            if highlighted {
+                contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
+                fileNameLabel.textColor = UIColor.white
+                fileSizeLabel.textColor = UIColor(colorLiteralRed: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1.0)
+                actionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+            } else {
+                contentView.backgroundColor = nil
+                fileNameLabel.textColor = self.hasButton ? .black    : .lightGray
+                fileSizeLabel.textColor = self.hasButton ? .darkGray : .lightGray
+                actionButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
+            }
         }
     }
 
@@ -57,6 +58,14 @@ class FileCell: BaseListCell {
     override func setupViews() {
 
         super.setupViews()
+
+        // copy or move screen
+
+        if !self.hasButton {
+            isUserInteractionEnabled = false
+            fileNameLabel.isEnabled = false
+            fileSizeLabel.isEnabled = false
+        }
 
         separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
 

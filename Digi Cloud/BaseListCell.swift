@@ -12,7 +12,7 @@ class BaseListCell: UITableViewCell {
 
     // MARK: - Properties
 
-    private var hasButton: Bool = false
+    var hasButton: Bool = false
 
     weak var delegate: BaseListCellDelegate?
 
@@ -36,17 +36,17 @@ class BaseListCell: UITableViewCell {
     // MARK: - Overridden Methods and Properties
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         if let identifier = reuseIdentifier, identifier.hasSuffix("WithButton") {
             self.hasButton = true
         }
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupViews()
     }
 
     // MARK: - Helper Functions
 
     func setupViews() {
-        if hasButton {
+        if self.hasButton {
             contentView.addSubview(actionButton)
             contentView.addConstraints(with: "H:[v0(64)]-(-4)-|", views: actionButton)
             actionButton.heightAnchor.constraint(equalToConstant: AppSettings.tableViewRowHeight * 0.95).isActive = true
