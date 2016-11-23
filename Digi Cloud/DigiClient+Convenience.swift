@@ -219,14 +219,13 @@ extension DigiClient {
                     return (childSize, files, folders)
                 }
             }
-            folders += 1
-            if let children = parent["children"] as? [[String: Any]], !children.isEmpty {
+            if let children = parent["children"] as? [[String: Any]] {
                 folders += 1
                 for child in children {
-                    let(childSize, childFiles, childFolders) = getChildInfo(child)
-                    size += childSize
-                    files += childFiles
-                    folders += childFolders
+                    let info = getChildInfo(child)
+                    size += info.0
+                    files += info.1
+                    folders += info.2
                 }
             }
             return (size, files, folders)
@@ -246,9 +245,10 @@ extension DigiClient {
             }
             if let children = json["children"] as? [[String: Any]] {
                 for child in children {
-                    size += getChildInfo(child).0
-                    files += getChildInfo(child).1
-                    folders += getChildInfo(child).2
+                    let info = getChildInfo(child)
+                    size += info.0
+                    files += info.1
+                    folders += info.2
                 }
             }
             completionHandler((size, files, folders), nil)
