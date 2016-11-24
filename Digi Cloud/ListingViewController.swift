@@ -393,7 +393,6 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleCreateFolder() {
         let controller = CreateFolderViewController(location: location)
-        controller.location = self.location
         controller.onFinish = { [unowned self](folderName) in
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
