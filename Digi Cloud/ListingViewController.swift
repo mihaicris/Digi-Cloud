@@ -43,7 +43,7 @@ final class ListingViewController: UITableViewController {
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
     }()
-    private let emptyFolderLabel: UILabel = {
+    fileprivate let emptyFolderLabel: UILabel = {
         let l = UILabel()
         l.text = NSLocalizedString("Loading ...", comment: "Information")
         l.textColor = UIColor.lightGray
@@ -592,7 +592,12 @@ extension ListingViewController: ActionViewControllerDelegate {
                     self.dismiss(animated: true, completion: nil) // dismiss FolderViewController
                     if success {
                         self.content.remove(at: self.currentIndex.row)
-                        self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                        if self.content.count == 0 {
+                            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                            self.tableView.reloadData()
+                        } else {
+                            self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                        }
                     } else {
                         if needRefresh {
                             self.getFolderContent()
@@ -659,7 +664,12 @@ extension ListingViewController: DeleteViewControllerDelegate {
                         switch code {
                         case 200:
                             self.content.remove(at: self.currentIndex.row)
-                            self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                            if self.content.count == 0 {
+                                self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                                self.tableView.reloadData()
+                            } else {
+                                self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                            }
                         case 400:
                             self.getFolderContent()
                         case 404:
