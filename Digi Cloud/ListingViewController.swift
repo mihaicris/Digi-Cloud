@@ -22,8 +22,12 @@ final class ListingViewController: UITableViewController {
     let action: ActionType
     var location: Location
     var node: Node?
-    var needRefresh: Bool = true
     let tag: Int
+    var needRefresh: Bool = true {
+        didSet {
+//            print(needRefresh, "for", self.tag)
+        }
+    }
     var content: [Node] = []
     var currentIndex: IndexPath!
     var sourceNodeLocation: Location?
@@ -46,7 +50,6 @@ final class ListingViewController: UITableViewController {
     private let busyIndicator: UIActivityIndicatorView = {
         let i = UIActivityIndicatorView()
         i.hidesWhenStopped = true
-        i.startAnimating()
         i.activityIndicatorViewStyle = .gray
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
@@ -118,7 +121,7 @@ final class ListingViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if needRefresh {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+            DispatchQueue.main.async {
                 self.getFolderContent()
             }
         }
@@ -133,7 +136,6 @@ final class ListingViewController: UITableViewController {
         if content.isEmpty {
             let cell = UITableViewCell()
             cell.isUserInteractionEnabled = false
-            tableView.separatorColor = .white
             if indexPath.row == 1 {
 
                 let v = UIView()
@@ -150,8 +152,6 @@ final class ListingViewController: UITableViewController {
             }
             return cell
         }
-
-        tableView.separatorColor = nil
 
         let data = content[indexPath.row]
 
@@ -195,7 +195,13 @@ final class ListingViewController: UITableViewController {
 
             controller.title = item.name
             controller.onFinish = { [unowned self] in
-                self.onFinish?()
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: {
+                        if self.needRefresh {
+                            self.getFolderContent()
+                        }
+                    })
+                }
             }
 
             navigationController?.pushViewController(controller, animated: true)
@@ -262,6 +268,7 @@ final class ListingViewController: UITableViewController {
     fileprivate func getFolderContent() {
 
         self.needRefresh = false
+        self.busyIndicator.startAnimating()
 
         DigiClient.shared.getLocationContent(location: location) {
             (content, error) in
@@ -270,42 +277,52 @@ final class ListingViewController: UITableViewController {
                 return
             }
             if var content = content {
-                if !content.isEmpty {
-                    if self.action == .noAction {
-                        // No copy or move, no node to be removed, usual sort and display
-                        self.content = content
-                        self.sortContent()
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                            self.busyIndicator.stopAnimating()
-                        }
-                    } else {
 
-                        // Copy or remove action! The indicated node will be removed, sort by name and display
-                        // Remove from the list the node which is copied or moved
-                        if let node = self.node {
-                            for (index, elem) in content.enumerated() {
-                                if elem.name == node.name {
-                                    content.remove(at: index)
-                                    break
-                                }
-                            }
-                        }
-                        if !content.isEmpty {
-                            // Sort the content by name ascending with folders shown first
-                            content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
-
-                            self.content = content
-
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            }
-                        }
-                    }
-                } else {
+                if content.isEmpty {
+                    self.content.removeAll()
                     DispatchQueue.main.async {
                         self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                         self.busyIndicator.stopAnimating()
+                        self.tableView.reloadData()
+                    }
+                    return
+                }
+
+                // Content is not empty
+                if self.action == .noAction {
+                    self.content = content
+                    self.sortContent()
+                    DispatchQueue.main.async {
+                        self.busyIndicator.stopAnimating()
+                        self.tableView.reloadData()
+                    }
+                }
+                else {
+                    // Copy or remove action! The indicated node will be removed, sort by name and display
+                    // Remove from the list the node which is copied or moved
+                    if let node = self.node {
+                        for (index, elem) in content.enumerated() {
+                            if elem.name == node.name {
+                                content.remove(at: index)
+                                break
+                            }
+                        }
+                    }
+                    if content.isEmpty {
+                        self.content.removeAll()
+                        DispatchQueue.main.async {
+                            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                            self.busyIndicator.stopAnimating()
+                            self.tableView.reloadData()
+                        }
+                    } else {
+                        // Sort the content by name ascending with folders shown first
+                        content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+                        self.content = content
+                        DispatchQueue.main.async {
+                            self.busyIndicator.stopAnimating()
+                            self.tableView.reloadData()
+                        }
                     }
                 }
             }
@@ -322,7 +339,9 @@ final class ListingViewController: UITableViewController {
     }
 
     fileprivate func animateActionButton(active: Bool) {
-        let actionButton = (tableView.cellForRow(at: currentIndex) as! BaseListCell).actionButton
+        guard let actionButton = (tableView.cellForRow(at: currentIndex) as? BaseListCell)?.actionButton else {
+            return
+        }
         let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(M_PI_2)) : CGAffineTransform.identity
         let color: UIColor = active ? .black : .darkGray
         actionButton.setTitleColor(color, for: .normal)
@@ -458,7 +477,7 @@ final class ListingViewController: UITableViewController {
     @objc private func handleCopyOrMove() {
         // TODO: Calculate the path
 
-        guard let sourceNodeLocation = self.sourceNodeLocation else {
+        guard let sourceLocation = self.sourceNodeLocation else {
             print("Couldn't get the sourceNodeLocation")
             return
         }
@@ -468,20 +487,54 @@ final class ListingViewController: UITableViewController {
             return
         }
 
-        let destinationNodeMount = self.location.mount
-        let destinationNodePath = self.location.path + destinationName
+        let destinationLocation = Location(mount: self.location.mount, path: self.location.path + destinationName)
 
-        let destinationNodeLocation = Location(mount: destinationNodeMount, path: destinationNodePath)
 
-        DLog(name: "sourceNodeLocation", object: sourceNodeLocation)
-        DLog(name: "destinationNodeLocation", object: destinationNodeLocation)
-
-        // TODO: Call the copy move common API request
         // TODO: Show activity indicator
-        // TODO: If success, dismiss the formSheet
-        // TODO: If failed because there is node with the same name in the destination folder and action is .copy, make a new name and try again
-        // TODO: If failed and action is .move show the error message, stop the indication, wait for new command
 
+        DigiClient.shared.copyOrMoveNode(action: self.action, fromLocation: sourceLocation, toLocation: destinationLocation) {
+            statusCode, error in
+
+            // TODO: Stop activity indicator
+
+            guard error == nil else {
+                print(error!.localizedDescription)
+                // TODO: Show error message
+                return
+            }
+
+            if let code = statusCode {
+                switch code {
+                case 200:
+                    // Operation successfully completed
+
+                    // Set needRefresh true in the main Listing controller
+                    if let nav = self.presentingViewController as? UINavigationController {
+                        for controller in nav.viewControllers {
+                            (controller as? ListingViewController)?.needRefresh = true
+                        }
+                    }
+
+                    self.onFinish?()
+
+                case 400:
+                    // Bad request ( Folder already exists, invalid file name?)
+                    print("Status Code 400 : Bad request")
+
+                    // TODO: show message and wait for a new name or cancel action
+                    // TODO: If failed because there is node with the same name in the destination folder and action is .copy, make a new name and try again
+                    // TODO: If failed and action is .move show the error message, stop the indication, wait for new command
+
+                case 404:
+
+                    // Not Found (Folder do not exists anymore), folder will refresh
+                    print("Status Code 404 : Not found")
+
+                default :
+                    print("Server replied with Status Code: ", code)
+                }
+            }
+        }
     }
 }
 
@@ -546,9 +599,11 @@ extension ListingViewController: ActionViewControllerDelegate {
                     c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.title = NSLocalizedString("Locations", comment: "Window Title")
                     c.onFinish = { [unowned self] in
-                        self.dismiss(animated: true, completion: nil)
-                        if self.needRefresh {
-                            self.getFolderContent()
+                        DispatchQueue.main.async {
+                            self.dismiss(animated: true, completion: nil)
+                            if self.needRefresh {
+                                self.getFolderContent()
+                            }
                         }
                     }
                     controllers.append(c)
@@ -558,19 +613,20 @@ extension ListingViewController: ActionViewControllerDelegate {
                 // we need to cast in order to tet the mountID and path from it
                 if let p = p as? ListingViewController {
 
-                    // If index is the last one, we need to inject the current node which is
-                    // moved or copied, such that it won't be shown in the list.
-                    let specificNode = index == previousControllers.count - 1 ? node : nil
+                    // If the selected node for copy/move is a directory, we need to inject in
+                    // the top (current) ListingController, such that it won't be shown in the list
+                    let specificNode = index == previousControllers.count - 1 ? (node.type == "dir" ? node : nil) : nil
 
                     let c = ListingViewController(action: action, for: p.location, remove: specificNode)
                     c.title = p.title
                     c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.onFinish = { [unowned self] in
-                        self.dismiss(animated: true, completion: nil)
-                        if self.needRefresh {
-                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-                                self.getFolderContent()
-                            }
+                        DispatchQueue.main.async {
+                            self.dismiss(animated: true, completion: {
+                                if self.needRefresh {
+                                    self.getFolderContent()
+                                }
+                            })
                         }
                     }
                     controllers.append(c)
