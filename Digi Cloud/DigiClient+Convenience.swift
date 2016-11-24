@@ -271,7 +271,7 @@ extension DigiClient {
                         toLocation:        Location,
                         completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
 
-        var method = ""
+        var method : String
 
         switch action {
         case .copy:
@@ -290,11 +290,7 @@ extension DigiClient {
         let json: [String: String] = ["toMountId": toLocation.mount.id, "toPath": toLocation.path]
         
         networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: parameters) { (dataResponse, statusCode, error) in
-            
-            print(" Status Code: \(statusCode)")
-            // TODO: Handle response
-            // 200 OK
-            // 400 Folder destination exists, or Folder source doesnt exist
+            completionHandler(statusCode, error)
         }
     }
 }
