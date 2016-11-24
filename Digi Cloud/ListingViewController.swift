@@ -8,6 +8,13 @@
 
 import UIKit
 
+#if DEBUG
+
+var count: Int = 0
+
+#endif
+
+
 final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
@@ -16,6 +23,7 @@ final class ListingViewController: UITableViewController {
     var location: Location
     var node: Node?
     var needRefresh: Bool = true
+    let tag: Int
     var content: [Node] = []
     var currentIndex: IndexPath!
     var sourceNodeLocation: Location?
@@ -59,6 +67,13 @@ final class ListingViewController: UITableViewController {
         self.action = action
         self.location = location
         self.node = node
+
+        #if DEBUG
+            count += 1
+            self.tag = count
+            print(self.tag, "✅", String(describing: type(of: self)), action)
+        #endif
+
         super.init(style: .plain)
     }
 
@@ -67,9 +82,10 @@ final class ListingViewController: UITableViewController {
     }
 
     #if DEBUG
-    deinit {
-        print("[DEINIT]: " + String(describing: type(of: self)))
-    }
+        deinit {
+            print(self.tag, "❌", String(describing: type(of: self)), action)
+            count -= 1
+        }
     #endif
 
     // MARK: - Overridden Methods and Properties
@@ -608,7 +624,7 @@ extension ListingViewController: ActionViewControllerDelegate {
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
-            
+
         default:
             return
         }
@@ -652,7 +668,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
             DigiClient.shared.deleteNode(location: deleteLocation) {
 
                 (statusCode, error) in
-
+                
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error

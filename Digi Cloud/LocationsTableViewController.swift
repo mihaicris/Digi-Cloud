@@ -16,12 +16,21 @@ class LocationsTableViewController: UITableViewController {
     var mounts: [Mount] = []
     private let action: ActionType
     var sourceNodeLocation: Location?
+    let tag: Int
 
     // MARK: - Initializers and Deinitializers
 
     init(action: ActionType) {
         self.action = action
+
+        #if DEBUG
+            count += 1
+            self.tag = count
+            print(self.tag, "✅", String(describing: type(of: self)), action)
+        #endif
+
         super.init(style: .grouped)
+
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,7 +39,8 @@ class LocationsTableViewController: UITableViewController {
 
     #if DEBUG
     deinit {
-        print("[DEINIT]: " + String(describing: type(of: self)))
+        print(self.tag, "❌", String(describing: type(of: self)), action)
+        count -= 1
     }
     #endif
     // MARK: - Overridden Methods and Properties
