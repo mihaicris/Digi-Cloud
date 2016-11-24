@@ -36,3 +36,9 @@ extension Mount: JSONDecodable {
         self.id = id
     }
 }
+
+extension Mount: Equatable {
+    static func ==(lhs: Mount, rhs: Mount) -> Bool {
+        return lhs.id == rhs.id && lhs.name == rhs.name
+    }
+}

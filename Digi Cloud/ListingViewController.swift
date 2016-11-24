@@ -18,6 +18,7 @@ final class ListingViewController: UITableViewController {
     var needRefresh: Bool = true
     var content: [Node] = []
     var currentIndex: IndexPath!
+    var sourceNodeLocation: Location?
     private var FileCellID: String = ""
     private var FolderCellID: String = ""
     private let dateFormatter: DateFormatter = {
@@ -172,6 +173,10 @@ final class ListingViewController: UITableViewController {
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
             let controller = ListingViewController(action: self.action, for: nextLocation, remove: nil)
+            if self.action != .noAction {
+                controller.sourceNodeLocation = self.sourceNodeLocation
+            }
+
             controller.title = item.name
             controller.onFinish = { [unowned self] in
                 self.onFinish?()
@@ -416,6 +421,7 @@ final class ListingViewController: UITableViewController {
 
                 let controller = ListingViewController(action: self.action, for: folderLocation, remove: nil)
                 controller.title = folderName
+                controller.sourceNodeLocation = self.sourceNodeLocation
                 controller.onFinish = {[unowned self] in
                     self.onFinish?()
                 }
@@ -435,7 +441,31 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleCopyOrMove() {
         // TODO: Calculate the path
-        print("User selected a path")
+
+        guard let sourceNodeLocation = self.sourceNodeLocation else {
+            print("Couldn't get the sourceNodeLocation")
+            return
+        }
+
+        guard let destinationName = self.sourceNodeLocation?.name else {
+            print("Couldn't get the destionation name")
+            return
+        }
+
+        let destinationNodeMount = self.location.mount
+        let destinationNodePath = self.location.path + destinationName
+
+        let destinationNodeLocation = Location(mount: destinationNodeMount, path: destinationNodePath)
+
+        DLog(name: "sourceNodeLocation", object: sourceNodeLocation)
+        DLog(name: "destinationNodeLocation", object: destinationNodeLocation)
+
+        // TODO: Call the copy move common API request
+        // TODO: Show activity indicator
+        // TODO: If success, dismiss the formSheet
+        // TODO: If failed because there is node with the same name in the destination folder and action is .copy, make a new name and try again
+        // TODO: If failed and action is .move show the error message, stop the indication, wait for new command
+
     }
 }
 
@@ -497,6 +527,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                 // If index is 0 than this is a location controller
                 if index == 0 {
                     let c = LocationsTableViewController(action: action)
+                    c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.title = NSLocalizedString("Locations", comment: "Window Title")
                     c.onFinish = { [unowned self] in
                         self.dismiss(animated: true, completion: nil)
@@ -517,6 +548,7 @@ extension ListingViewController: ActionViewControllerDelegate {
 
                     let c = ListingViewController(action: action, for: p.location, remove: specificNode)
                     c.title = p.title
+                    c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.onFinish = { [unowned self] in
                         self.dismiss(animated: true, completion: nil)
                         if self.needRefresh {

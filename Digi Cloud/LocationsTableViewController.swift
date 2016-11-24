@@ -15,6 +15,7 @@ class LocationsTableViewController: UITableViewController {
     var onFinish: (() -> Void)?
     var mounts: [Mount] = []
     private let action: ActionType
+    var sourceNodeLocation: Location?
 
     // MARK: - Initializers and Deinitializers
 
@@ -101,6 +102,7 @@ class LocationsTableViewController: UITableViewController {
 
         let controller = ListingViewController(action: self.action, for: location, remove: nil)
         controller.title = mounts[index].name
+        controller.sourceNodeLocation = sourceNodeLocation
         controller.onFinish = { [unowned self] in
             self.dismiss(animated: true, completion: nil)
         }
