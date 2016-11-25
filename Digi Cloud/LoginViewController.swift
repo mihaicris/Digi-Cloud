@@ -121,15 +121,12 @@ class LoginViewController: UIViewController {
 
         DigiClient.shared.authenticate(email: email, password: password) {
             (success, error) in
-            DispatchQueue.main.async {
-                self.spinner.stopAnimating()
-            }
+            self.spinner.stopAnimating()
             if success {
                 // save token for automatic login
                 AppSettings.loginToken = DigiClient.shared.token
                 self.onFinish?()
             } else {
-                DispatchQueue.main.async {
                     let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
                                                 message: NSLocalizedString("Unauthorized access", comment: "Error Message"),
                                          preferredStyle: UIAlertControllerStyle.alert)
@@ -137,7 +134,6 @@ class LoginViewController: UIViewController {
                     let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                     alert.addAction(actionOK)
                     self.present(alert, animated: false, completion: nil)
-                }
             }
         }
     }

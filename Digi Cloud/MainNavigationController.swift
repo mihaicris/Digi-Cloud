@@ -45,10 +45,8 @@ class MainNavigationController: UINavigationController {
                     self.showLoginScreen()
                     return
                 }
-                DispatchQueue.main.async {
-                    let controller = LocationsTableViewController(action: .noAction)
-                    self.viewControllers = [controller]
-                }
+                let controller = LocationsTableViewController(action: .noAction)
+                self.viewControllers = [controller]
             }
         } else {
             showLoginScreen()
@@ -63,10 +61,8 @@ class MainNavigationController: UINavigationController {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(50), execute: {
             let controller = LoginViewController()
             controller.onFinish = {
-                DispatchQueue.main.async {
-                    self.viewControllers = [LocationsTableViewController(action: .noAction)]
-                    self.dismiss(animated: true, completion: nil) // dismiss LoginViewController
-                }
+                self.viewControllers = [LocationsTableViewController(action: .noAction)]
+                self.dismiss(animated: true, completion: nil) // dismiss LoginViewController
             }
             self.present(controller, animated: true, completion: nil)
         })

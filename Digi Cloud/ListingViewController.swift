@@ -267,11 +267,9 @@ final class ListingViewController: UITableViewController {
 
                 if content.isEmpty {
                     self.content.removeAll()
-                    DispatchQueue.main.async {
-                        self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                        self.busyIndicator.stopAnimating()
-                        self.tableView.reloadData()
-                    }
+                    self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                    self.busyIndicator.stopAnimating()
+                    self.tableView.reloadData()
                     return
                 }
 
@@ -279,10 +277,8 @@ final class ListingViewController: UITableViewController {
                 if self.action == .noAction {
                     self.content = content
                     self.sortContent()
-                    DispatchQueue.main.async {
-                        self.busyIndicator.stopAnimating()
-                        self.tableView.reloadData()
-                    }
+                    self.busyIndicator.stopAnimating()
+                    self.tableView.reloadData()
                 }
                 else {
                     // Copy or remove action! The indicated node will be removed, sort by name and display
@@ -297,19 +293,15 @@ final class ListingViewController: UITableViewController {
                     }
                     if content.isEmpty {
                         self.content.removeAll()
-                        DispatchQueue.main.async {
-                            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                            self.busyIndicator.stopAnimating()
-                            self.tableView.reloadData()
-                        }
+                        self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                        self.busyIndicator.stopAnimating()
+                        self.tableView.reloadData()
                     } else {
                         // Sort the content by name ascending with folders shown first
-                        content.sort { return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type) }
+                        content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
                         self.content = content
-                        DispatchQueue.main.async {
-                            self.busyIndicator.stopAnimating()
-                            self.tableView.reloadData()
-                        }
+                        self.busyIndicator.stopAnimating()
+                        self.tableView.reloadData()
                     }
                 }
             }
@@ -442,35 +434,32 @@ final class ListingViewController: UITableViewController {
     @objc private func handleCreateFolder() {
         let controller = CreateFolderViewController(location: location)
         controller.onFinish = { [unowned self](folderName) in
-            DispatchQueue.main.async {
-                self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
+            self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
 
-                guard let folderName = folderName else {
-                    // User cancelled the folder creation
-                    return
-                }
-                let nextPath = self.location.path + folderName + "/"
-
-                // Set needRefresh in this list
-                self.needRefresh = true
-
-                // Set needRefresh in the main List
-                if let nav = self.presentingViewController as? UINavigationController {
-                    if let cont = nav.topViewController as? ListingViewController {
-                        cont.needRefresh = true
-                    }
-                }
-                let folderLocation = Location(mount: self.location.mount, path: nextPath)
-
-                let controller = ListingViewController(action: self.action, for: folderLocation, remove: nil)
-                controller.title = folderName
-                controller.sourceNodeLocation = self.sourceNodeLocation
-                controller.onFinish = {[unowned self] in
-                    self.onFinish?()
-                }
-
-                self.navigationController?.pushViewController(controller, animated: true)
+            guard let folderName = folderName else {
+                // User cancelled the folder creation
+                return
             }
+            let nextPath = self.location.path + folderName + "/"
+
+            // Set needRefresh in this list
+            self.needRefresh = true
+
+            // Set needRefresh in the main List
+            if let nav = self.presentingViewController as? UINavigationController {
+                if let cont = nav.topViewController as? ListingViewController {
+                    cont.needRefresh = true
+                }
+            }
+            let folderLocation = Location(mount: self.location.mount, path: nextPath)
+
+            let controller = ListingViewController(action: self.action, for: folderLocation, remove: nil)
+            controller.title = folderName
+            controller.sourceNodeLocation = self.sourceNodeLocation
+            controller.onFinish = {[unowned self] in
+                self.onFinish?()
+            }
+            self.navigationController?.pushViewController(controller, animated: true)
         }
 
         let navigationController = UINavigationController(rootViewController: controller)
@@ -608,10 +597,7 @@ extension ListingViewController: ActionViewControllerDelegate {
         case .rename:
             let controller = RenameViewController(location: location, node: node)
             controller.onFinish = { (newName, needRefresh) in
-
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil) // dismiss RenameViewController
-                }
+                self.dismiss(animated: true, completion: nil) // dismiss RenameViewController
                 if let name = newName {
 
                     self.content[self.currentIndex.row] = Node(name:        name,
@@ -620,9 +606,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                                                                size:        node.size,
                                                                contentType: node.contentType)
                     self.sortContent()
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
+                    self.tableView.reloadData()
                 } else {
                     if needRefresh {
                         self.getFolderContent()
@@ -650,11 +634,9 @@ extension ListingViewController: ActionViewControllerDelegate {
                     c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.title = NSLocalizedString("Locations", comment: "Window Title")
                     c.onFinish = { [unowned self] in
-                        DispatchQueue.main.async {
-                            self.dismiss(animated: true, completion: nil)
-                            if self.needRefresh {
-                                self.getFolderContent()
-                            }
+                        self.dismiss(animated: true, completion: nil)
+                        if self.needRefresh {
+                            self.getFolderContent()
                         }
                     }
                     controllers.append(c)
@@ -672,12 +654,10 @@ extension ListingViewController: ActionViewControllerDelegate {
                     c.title = p.title
                     c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.onFinish = { [unowned self] in
-                        DispatchQueue.main.async {
-                            self.dismiss(animated: true, completion: {
-                                if self.needRefresh {
-                                    self.getFolderContent()
-                                }
-                            })
+                        self.dismiss(animated: true) {
+                            if self.needRefresh {
+                                self.getFolderContent()
+                            }
                         }
                     }
                     controllers.append(c)
@@ -711,8 +691,9 @@ extension ListingViewController: ActionViewControllerDelegate {
         case .folderInfo:
             let controller = FolderInfoViewController(location: self.location, node: node)
             controller.onFinish = { (success, needRefresh) in
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil) // dismiss FolderViewController
+
+                // dismiss FolderViewController
+                self.dismiss(animated: true) {
                     if success {
                         self.content.remove(at: self.currentIndex.row)
                         if self.content.count == 0 {
@@ -773,9 +754,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
             // network request for delete
             let deleteLocation = Location(mount: self.location.mount, path: nodePath)
             DigiClient.shared.deleteNode(location: deleteLocation) {
-
                 (statusCode, error) in
-
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error
@@ -783,23 +762,21 @@ extension ListingViewController: DeleteViewControllerDelegate {
                     return
                 }
                 if let code = statusCode {
-                    DispatchQueue.main.async {
-                        switch code {
-                        case 200:
-                            self.content.remove(at: self.currentIndex.row)
-                            if self.content.count == 0 {
-                                self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                                self.tableView.reloadData()
-                            } else {
-                                self.tableView.deleteRows(at: [self.currentIndex], with: .left)
-                            }
-                        case 400:
-                            self.getFolderContent()
-                        case 404:
-                            self.getFolderContent()
-                        default :
-                            break
+                    switch code {
+                    case 200:
+                        self.content.remove(at: self.currentIndex.row)
+                        if self.content.count == 0 {
+                            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                            self.tableView.reloadData()
+                        } else {
+                            self.tableView.deleteRows(at: [self.currentIndex], with: .left)
                         }
+                    case 400:
+                        self.getFolderContent()
+                    case 404:
+                        self.getFolderContent()
+                    default :
+                        break
                     }
                 } else {
                     print("Error: could not obtain a statuscode")

@@ -66,46 +66,46 @@ final class DigiClient {
             // stop network indication
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
 
-            /* GUARD: Was there an error? */
-            guard error == nil else {
-                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error!.localizedDescription)"))
-                return
-            }
 
-            /* GUARD: Did we get a statusCode? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
-                completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error!.localizedDescription)"))
-                return
-            }
+                /* GUARD: Was there an error? */
+                guard error == nil else {
+                    completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error!.localizedDescription)"))
+                    return
+                }
 
-            // Did we get a succesfull status code?
-            if statusCode < 200 || statusCode > 299 {
-                completionHandler(nil, statusCode, nil)
-                return
-            }
+                /* GUARD: Did we get a statusCode? */
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+                    completionHandler(nil, nil, NetworkingError.get("There was an error with your request: \(error!.localizedDescription)"))
+                    return
+                }
 
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                completionHandler(nil, statusCode, NetworkingError.data("No data was returned by the request!"))
-                return
-            }
+                // Did we get a succesfull status code?
+                if statusCode < 200 || statusCode > 299 {
+                    completionHandler(nil, statusCode, nil)
+                    return
+                }
 
-            guard data.count > 0 else {
-                completionHandler(data, statusCode, nil)
-                return
-            }
+                /* GUARD: Was there any data returned? */
+                guard let data = data else {
+                    completionHandler(nil, statusCode, NetworkingError.data("No data was returned by the request!"))
+                    return
+                }
 
-            /* 3. Parse the data and use the data (happens in completion handler) */
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                completionHandler(json, statusCode, nil)
-            } catch {
-                completionHandler(nil, statusCode, JSONError.parce("Could not parse the data as JSON"))
+                guard data.count > 0 else {
+                    completionHandler(data, statusCode, nil)
+                    return
+                }
+
+                /* 3. Parse the data and use the data (happens in completion handler) */
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    completionHandler(json, statusCode, nil)
+                } catch {
+                    completionHandler(nil, statusCode, JSONError.parce("Could not parse the data as JSON"))
+                }
             }
         }
-        
         /* 4. Start the request */
         task?.resume()
     }
@@ -128,7 +128,6 @@ final class DigiClient {
         }
         return components.url!
     }
-
     private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = requestType

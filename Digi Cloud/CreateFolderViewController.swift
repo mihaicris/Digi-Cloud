@@ -116,14 +116,12 @@ class CreateFolderViewController: UITableViewController {
     }
 
     fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
-        DispatchQueue.main.async {
-            if onScreen {
-                self.messageLabel.text = message
-            }
-            UIView.animate(withDuration: onScreen ? 0.0 : 0.5, animations: {
-                self.messageLabel.alpha = onScreen ? 1.0 : 0.0
-            })
+        if onScreen {
+            self.messageLabel.text = message
         }
+        UIView.animate(withDuration: onScreen ? 0.0 : 0.5, animations: {
+            self.messageLabel.alpha = onScreen ? 1.0 : 0.0
+        })
     }
 
     @objc fileprivate func handleCancel() {
@@ -165,9 +163,7 @@ class CreateFolderViewController: UITableViewController {
                 case 404:
                     // Not Found (Folder do not exists anymore), folder will refresh
                     let message = NSLocalizedString("File is no longer available. Folder will refresh.", comment: "Error message")
-                    DispatchQueue.main.async {
-                        self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
-                    }
+                    self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
                     self.setMessage(onScreen: true, message)
                 default :
                     let message = NSLocalizedString("Server replied with Status Code: ", comment: "Error message")

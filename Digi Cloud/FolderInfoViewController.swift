@@ -31,33 +31,29 @@ class FolderInfoViewController: UITableViewController {
                 let folders = noElements.1 else {
                     return
             }
-            DispatchQueue.main.async {
-                self.noElementsLabel = {
-                    let label = UILabel()
-                    let paragraph = NSMutableParagraphStyle()
-                    paragraph.lineHeightMultiple = 1.3
-                    label.numberOfLines = 2
+            self.noElementsLabel = {
+                let label = UILabel()
+                let paragraph = NSMutableParagraphStyle()
+                paragraph.lineHeightMultiple = 1.3
+                label.numberOfLines = 2
 
-                    let filesString = NSLocalizedString("%d files\n", comment: "Informatin")
-                    let text1 = String.localizedStringWithFormat(filesString, files)
-                    let folderString = NSLocalizedString("%d folders", comment: "Informatin")
-                    let text2 = String.localizedStringWithFormat(folderString, folders)
-                    let attributedText = NSMutableAttributedString(string: text1 + text2, attributes: [NSParagraphStyleAttributeName: paragraph])
-                    label.attributedText = attributedText
+                let filesString = NSLocalizedString("%d files\n", comment: "Informatin")
+                let text1 = String.localizedStringWithFormat(filesString, files)
+                let folderString = NSLocalizedString("%d folders", comment: "Informatin")
+                let text2 = String.localizedStringWithFormat(folderString, folders)
+                let attributedText = NSMutableAttributedString(string: text1 + text2, attributes: [NSParagraphStyleAttributeName: paragraph])
+                label.attributedText = attributedText
 
-                    return label
-                }()
-                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
-            }
+                return label
+            }()
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
         }
     }
     fileprivate var folderSize: Int64? {
         didSet {
-            DispatchQueue.main.async {
-                if let size = self.folderSize {
-                    self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: size)
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
-                }
+            if let size = self.folderSize {
+                self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: size)
+                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
             }
         }
     }

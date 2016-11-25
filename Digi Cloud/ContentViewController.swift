@@ -134,13 +134,12 @@ extension ContentViewController: URLSessionDownloadDelegate {
         // get the downloaded file from temp folder
         do {
             try fileManager.moveItem(at: location, to: self.fileUrl)
-            DispatchQueue.main.async {
-                // load downloded file in the view
-                self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
 
-                // enable rightbarbutton for exporting
-                self.navigationItem.rightBarButtonItem?.isEnabled = true
-            }
+            // load downloded file in the view
+            self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
+
+            // enable rightbarbutton for exporting
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
         } catch let error {
             print("Could not move file to disk: \(error.localizedDescription)")
         }
@@ -152,9 +151,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
 
         // Update the progress on screen
-        DispatchQueue.main.async {
-            self.progressView.setProgress(progress, animated: true)
-        }
+        self.progressView.setProgress(progress, animated: true)
     }
 }
 

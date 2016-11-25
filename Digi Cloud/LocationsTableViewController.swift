@@ -100,9 +100,7 @@ class LocationsTableViewController: UITableViewController {
             }
             if let mounts = mounts {
                 self.mounts = mounts
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+                self.tableView.reloadData()
             }
         }
     }
