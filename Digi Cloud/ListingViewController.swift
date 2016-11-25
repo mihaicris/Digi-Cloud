@@ -23,11 +23,7 @@ final class ListingViewController: UITableViewController {
     var location: Location
     var node: Node?
     let tag: Int
-    var needRefresh: Bool = true {
-        didSet {
-//            print(needRefresh, "for", self.tag)
-        }
-    }
+    var needRefresh: Bool = true
     var content: [Node] = []
     var currentIndex: IndexPath!
     var sourceNodeLocation: Location?
@@ -85,10 +81,10 @@ final class ListingViewController: UITableViewController {
     }
 
     #if DEBUG
-        deinit {
-            print(self.tag, "❌", String(describing: type(of: self)), action)
-            count -= 1
-        }
+    deinit {
+        print(self.tag, "❌", String(describing: type(of: self)), action)
+        count -= 1
+    }
     #endif
 
     // MARK: - Overridden Methods and Properties
@@ -121,9 +117,7 @@ final class ListingViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if needRefresh {
-            DispatchQueue.main.async {
-                self.getFolderContent()
-            }
+            self.getFolderContent()
         }
     }
 
@@ -195,15 +189,8 @@ final class ListingViewController: UITableViewController {
 
             controller.title = item.name
             controller.onFinish = { [unowned self] in
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: {
-                        if self.needRefresh {
-                            self.getFolderContent()
-                        }
-                    })
-                }
+                self.onFinish?()
             }
-
             navigationController?.pushViewController(controller, animated: true)
 
         } else {
