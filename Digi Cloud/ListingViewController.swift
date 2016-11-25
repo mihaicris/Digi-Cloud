@@ -304,7 +304,7 @@ final class ListingViewController: UITableViewController {
                         }
                     } else {
                         // Sort the content by name ascending with folders shown first
-                        content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+                        content.sort { return $0.type == $1.type ? ($0.name < $1.name) : ($0.type < $1.type) }
                         self.content = content
                         DispatchQueue.main.async {
                             self.busyIndicator.stopAnimating()
@@ -401,6 +401,27 @@ final class ListingViewController: UITableViewController {
         }
     }
 
+    fileprivate func getIndexBeforeExtension(fileName: String) -> String.Index? {
+
+        // file has an extension?
+        let components = fileName.components(separatedBy: ".")
+
+        guard components.count > 1 else {
+            return nil
+        }
+
+        // yes, it has
+        let fileExtension = components.last!
+
+        // setting the cursor in the textField before the extension including the "."
+        if let range = fileName.range(of: fileExtension) {
+            return fileName.index(before: range.lowerBound)
+        } else {
+            return nil
+        }
+
+    }
+
     @objc private func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
@@ -475,6 +496,8 @@ final class ListingViewController: UITableViewController {
             return
         }
 
+        let index = getIndexBeforeExtension(fileName: originalDestionationName)
+
         var destinationLocation = Location(mount: self.location.mount, path: self.location.path + originalDestionationName)
 
         if self.action == .copy {
@@ -483,82 +506,84 @@ final class ListingViewController: UITableViewController {
             var destinationName = originalDestionationName
 
             var copyCount: Int = 0
-            var found: Bool = false
+            var renamed = false
+            var found: Bool
+            repeat {
+                // reset before ncheck of all nodes
+                found = false
 
-            for node in self.content {
-                repeat {
-                    if node.name == destinationName {
-                        found = true
-                        copyCount += 1
-                        guard let newDestinationName = String("\(originalDestionationName) (\(copyCount))") else {
-                            return
-                        }
-                        destinationName = newDestinationName
-                    } else {
-                        found = false
-                    }
-                } while (found)
-            }
-            destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
-
-
-
-            /* repeat {
+                // check all nodes for the initial name or new name incremented
                 for node in self.content {
                     if node.name == destinationName {
+                        // set the flags
                         found = true
+                        renamed = true
+
+                        // increment counter in the new file name
                         copyCount += 1
-                        guard let newDestinationName = String("\(destinationName) \(suffix) \(copyCount)") else {
-                            return
+
+                        // reset name to original
+                        destinationName = originalDestionationName
+
+                        // Pad number (using Foundation Method)
+                        let countString = String(format: " (%d)", copyCount)
+
+                        // If name has an extension, we intercalete the count number
+                        if index != nil {
+                            destinationName.insert(contentsOf: countString.characters, at: index!)
+                        } else {
+                            destinationName = originalDestionationName + countString
                         }
-                        destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
                     }
                 }
-            } while (!found) */
+            } while (renamed == true && found == true)
+
+            // change the file/folder name with incremented one
+            destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
         }
 
         DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceLocation, to: destinationLocation) {
-                statusCode, error in
+            statusCode, error in
 
-                // TODO: Stop activity indicator
+            // TODO: Stop activity indicator
 
-                // Set needRefresh true in the main Listing controller
-                if let nav = self.presentingViewController as? UINavigationController {
-                    for controller in nav.viewControllers {
-                        (controller as? ListingViewController)?.needRefresh = true
-                    }
-                }
-
-                guard error == nil else {
-                    print(error!.localizedDescription)
-                    // TODO: Show error message and wait for dismiss
-                    return
-                }
-
-                if let code = statusCode {
-                    switch code {
-                    case 200:
-                        // Operation successfully completed
-                        self.onFinish?()
-
-                    case 400:
-                        // Bad request ( Folder already exists, invalid file name?)
-                        // TODO: Show error message and wait for dismiss
-
-                        print("Status Code 400 : Bad request")
-
-                    case 404:
-
-                        // Not Found (Folder do not exists anymore), folder will refresh
-                        print("Status Code 404 : Not found")
-                        self.onFinish?()
-                        
-                    default :
-                        print("Server replied with Status Code: ", code)
-                        // TODO: Show message and wait for dismiss
-                    }
+            // Set needRefresh true in the main Listing controller
+            if let nav = self.presentingViewController as? UINavigationController {
+                for controller in nav.viewControllers {
+                    (controller as? ListingViewController)?.needRefresh = true
                 }
             }
+
+            guard error == nil else {
+                print(error!.localizedDescription)
+                // TODO: Show error message and wait for dismiss
+                return
+            }
+
+            if let code = statusCode {
+                switch code {
+                case 200:
+                    // Operation successfully completed
+                    self.onFinish?()
+
+                case 400:
+                    // Bad request ( Folder already exists, invalid file name?)
+                    // TODO: Show error message and wait for dismiss
+
+                    print("Status Code 400 : Bad request")
+
+                case 404:
+
+                    // Not Found (Folder do not exists anymore), folder will refresh
+                    print("Status Code 404 : Not found")
+                    self.onFinish?()
+
+                default :
+                    print("Server replied with Status Code: ", code)
+                    // TODO: Show message and wait for dismiss
+                }
+            }
+        }
 
 
     }
@@ -750,7 +775,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
             DigiClient.shared.deleteNode(location: deleteLocation) {
 
                 (statusCode, error) in
-                
+
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error
