@@ -462,66 +462,105 @@ final class ListingViewController: UITableViewController {
     }
 
     @objc private func handleCopyOrMove() {
-        // TODO: Calculate the path
+
+        // TODO: Show activity indicator
 
         guard let sourceLocation = self.sourceNodeLocation else {
             print("Couldn't get the sourceNodeLocation")
             return
         }
 
-        guard let destinationName = self.sourceNodeLocation?.name else {
+        guard let originalDestionationName = self.sourceNodeLocation?.name else {
             print("Couldn't get the destionation name")
             return
         }
 
-        let destinationLocation = Location(mount: self.location.mount, path: self.location.path + destinationName)
+        var destinationLocation = Location(mount: self.location.mount, path: self.location.path + originalDestionationName)
 
+        if self.action == .copy {
+            // TODO: Check if the content has already this name
 
-        // TODO: Show activity indicator
+            var destinationName = originalDestionationName
 
-        DigiClient.shared.copyOrMoveNode(action: self.action, fromLocation: sourceLocation, toLocation: destinationLocation) {
-            statusCode, error in
+            var copyCount: Int = 0
+            var found: Bool = false
 
-            // TODO: Stop activity indicator
-
-            guard error == nil else {
-                print(error!.localizedDescription)
-                // TODO: Show error message
-                return
-            }
-
-            if let code = statusCode {
-                switch code {
-                case 200:
-                    // Operation successfully completed
-
-                    // Set needRefresh true in the main Listing controller
-                    if let nav = self.presentingViewController as? UINavigationController {
-                        for controller in nav.viewControllers {
-                            (controller as? ListingViewController)?.needRefresh = true
+            for node in self.content {
+                repeat {
+                    if node.name == destinationName {
+                        found = true
+                        copyCount += 1
+                        guard let newDestinationName = String("\(originalDestionationName) (\(copyCount))") else {
+                            return
                         }
+                        destinationName = newDestinationName
+                    } else {
+                        found = false
                     }
+                } while (found)
+            }
+            destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
 
-                    self.onFinish?()
 
-                case 400:
-                    // Bad request ( Folder already exists, invalid file name?)
-                    print("Status Code 400 : Bad request")
 
-                    // TODO: show message and wait for a new name or cancel action
-                    // TODO: If failed because there is node with the same name in the destination folder and action is .copy, make a new name and try again
-                    // TODO: If failed and action is .move show the error message, stop the indication, wait for new command
+            /* repeat {
+                for node in self.content {
+                    if node.name == destinationName {
+                        found = true
+                        copyCount += 1
+                        guard let newDestinationName = String("\(destinationName) \(suffix) \(copyCount)") else {
+                            return
+                        }
+                        destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
+                    }
+                }
+            } while (!found) */
+        }
 
-                case 404:
+        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceLocation, to: destinationLocation) {
+                statusCode, error in
 
-                    // Not Found (Folder do not exists anymore), folder will refresh
-                    print("Status Code 404 : Not found")
+                // TODO: Stop activity indicator
 
-                default :
-                    print("Server replied with Status Code: ", code)
+                // Set needRefresh true in the main Listing controller
+                if let nav = self.presentingViewController as? UINavigationController {
+                    for controller in nav.viewControllers {
+                        (controller as? ListingViewController)?.needRefresh = true
+                    }
+                }
+
+                guard error == nil else {
+                    print(error!.localizedDescription)
+                    // TODO: Show error message and wait for dismiss
+                    return
+                }
+
+                if let code = statusCode {
+                    switch code {
+                    case 200:
+                        // Operation successfully completed
+                        self.onFinish?()
+
+                    case 400:
+                        // Bad request ( Folder already exists, invalid file name?)
+                        // TODO: Show error message and wait for dismiss
+
+                        print("Status Code 400 : Bad request")
+
+                    case 404:
+
+                        // Not Found (Folder do not exists anymore), folder will refresh
+                        print("Status Code 404 : Not found")
+                        self.onFinish?()
+                        
+                    default :
+                        print("Server replied with Status Code: ", code)
+                        // TODO: Show message and wait for dismiss
+                    }
                 }
             }
-        }
+
+
     }
 }
 

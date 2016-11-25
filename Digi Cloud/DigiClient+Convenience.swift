@@ -266,18 +266,16 @@ extension DigiClient {
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
 
-    func copyOrMoveNode(action:            ActionType,
-                        fromLocation:      Location,
-                        toLocation:        Location,
-                        completionHandler: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func copyOrMoveNode(action:     ActionType, from: Location, to: Location,
+                        completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
 
         var method : String
 
         switch action {
         case .copy:
-            method = Methods.Copy.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
+            method = Methods.Copy.replacingOccurrences(of: "{id}", with: from.mount.id)
         case .move:
-            method = Methods.Move.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
+            method = Methods.Move.replacingOccurrences(of: "{id}", with: to.mount.id)
         default:
             return
         }
@@ -285,12 +283,12 @@ extension DigiClient {
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
 
-        let parameters = [ParametersKeys.Path: fromLocation.path]
+        let parameters = [ParametersKeys.Path: from.path]
 
-        let json: [String: String] = ["toMountId": toLocation.mount.id, "toPath": toLocation.path]
+        let json: [String: String] = ["toMountId": to.mount.id, "toPath": to.path]
         
         networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: parameters) { (dataResponse, statusCode, error) in
-            completionHandler(statusCode, error)
+            completion(statusCode, error)
         }
     }
 }
