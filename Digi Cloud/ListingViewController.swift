@@ -274,14 +274,10 @@ final class ListingViewController: UITableViewController {
                 }
 
                 // Content is not empty
-                if self.action == .noAction {
-                    self.content = content
-                    self.sortContent()
-                    self.busyIndicator.stopAnimating()
-                    self.tableView.reloadData()
-                }
-                else {
-                    // Copy or remove action! The indicated node will be removed, sort by name and display
+
+                switch self.action {
+                case .move:
+                    // Move action! The indicated node will be removed, sort by name and display
                     // Remove from the list the node which is copied or moved
                     if let node = self.node {
                         for (index, elem) in content.enumerated() {
@@ -303,6 +299,11 @@ final class ListingViewController: UITableViewController {
                         self.busyIndicator.stopAnimating()
                         self.tableView.reloadData()
                     }
+                default:
+                    self.content = content
+                    self.sortContent()
+                    self.busyIndicator.stopAnimating()
+                    self.tableView.reloadData()
                 }
             }
         }
