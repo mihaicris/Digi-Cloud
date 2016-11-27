@@ -188,8 +188,12 @@ final class ListingViewController: UITableViewController {
             }
 
             controller.title = item.name
-            controller.onFinish = { [unowned self] in
-                self.onFinish?()
+            if self.action != .noAction {
+
+                // Make sens only if this is a copy or move controller
+                controller.onFinish = { [unowned self] in
+                   self.onFinish?()
+                }
             }
             navigationController?.pushViewController(controller, animated: true)
 
@@ -539,7 +543,9 @@ final class ListingViewController: UITableViewController {
                 // Set needRefresh true in the main Listing controller
                 if let nav = self.presentingViewController as? UINavigationController {
                     for controller in nav.viewControllers {
-                        (controller as? ListingViewController)?.needRefresh = true
+                        if let controller = controller as? ListingViewController {
+                            controller.needRefresh = true
+                        }
                     }
                 }
             }
@@ -634,9 +640,10 @@ extension ListingViewController: ActionViewControllerDelegate {
                     c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.title = NSLocalizedString("Locations", comment: "Window Title")
                     c.onFinish = { [unowned self] in
-                        self.dismiss(animated: true, completion: nil)
-                        if self.needRefresh {
-                            self.getFolderContent()
+                        self.dismiss(animated: true) {
+                            if self.needRefresh {
+                                self.getFolderContent()
+                            }
                         }
                     }
                     controllers.append(c)
@@ -654,9 +661,13 @@ extension ListingViewController: ActionViewControllerDelegate {
                     c.title = p.title
                     c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.onFinish = { [unowned self] in
-                        self.dismiss(animated: true) {
-                            if self.needRefresh {
-                                self.getFolderContent()
+                        if self.action != .noAction {
+                            self.onFinish?()
+                        } else {
+                            self.dismiss(animated: true) {
+                                if self.needRefresh {
+                                    self.getFolderContent()
+                                }
                             }
                         }
                     }

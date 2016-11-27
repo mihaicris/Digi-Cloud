@@ -111,8 +111,10 @@ class LocationsTableViewController: UITableViewController {
         let controller = ListingViewController(action: self.action, for: location, remove: nil)
         controller.title = mounts[index].name
         controller.sourceNodeLocation = sourceNodeLocation
-        controller.onFinish = { [unowned self] in
-            self.dismiss(animated: true, completion: nil)
+        if self.action != .noAction {
+            controller.onFinish = { [unowned self] in
+                self.onFinish?()
+            }
         }
 
         navigationController?.pushViewController(controller, animated: true)
