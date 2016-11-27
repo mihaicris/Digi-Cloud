@@ -34,9 +34,6 @@ class ContentViewController: UIViewController {
 
     init(location: Location) {
         self.location = location
-
-        DLog(name: "location", object: location)
-
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -151,7 +148,9 @@ extension ContentViewController: URLSessionDownloadDelegate {
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
 
         // Update the progress on screen
-        self.progressView.setProgress(progress, animated: true)
+        DispatchQueue.main.async {
+            self.progressView.setProgress(progress, animated: true)
+        }
     }
 }
 
