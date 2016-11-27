@@ -281,8 +281,7 @@ final class ListingViewController: UITableViewController {
 
                 switch self.action {
                 case .move:
-                    // Move action! The indicated node will be removed, sort by name and display
-                    // Remove from the list the node which is copied or moved
+                    // Move action! The indicated node will be removed from the list
                     if let node = self.node {
                         for (index, elem) in content.enumerated() {
                             if elem.name == node.name {
