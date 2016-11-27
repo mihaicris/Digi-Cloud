@@ -259,10 +259,9 @@ extension DigiClient {
     ///
     /// - Parameters:
     ///   - action:            Action Type, expected ActionType.move or ActionType.copy
-    ///   - path:              Node path (including node name)
-    ///   - toMountId:         Destination mount Id
-    ///   - toPath:            Destination path (including node name)
-    ///   - completionHandler: Function to handle the status code and error response
+    ///   - from:              Source location
+    ///   - to:                Destination location
+    ///   - completion:        Function to handle the status code and error response
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
 
@@ -275,7 +274,7 @@ extension DigiClient {
         case .copy:
             method = Methods.Copy.replacingOccurrences(of: "{id}", with: from.mount.id)
         case .move:
-            method = Methods.Move.replacingOccurrences(of: "{id}", with: to.mount.id)
+            method = Methods.Move.replacingOccurrences(of: "{id}", with: from.mount.id)
         default:
             return
         }

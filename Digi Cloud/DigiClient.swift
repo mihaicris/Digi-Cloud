@@ -104,7 +104,7 @@ final class DigiClient {
                 } catch {
                     completionHandler(nil, statusCode, JSONError.parce("Could not parse the data as JSON"))
                 }
-            }
+            } // End of dispached block
         }
         /* 4. Start the request */
         task?.resume()

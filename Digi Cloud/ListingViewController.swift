@@ -535,14 +535,16 @@ final class ListingViewController: UITableViewController {
         DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceLocation, to: destinationLocation) {
             statusCode, error in
 
-            // TODO: Stop activity indicator
-
-            // Set needRefresh true in the main Listing controller
-            if let nav = self.presentingViewController as? UINavigationController {
-                for controller in nav.viewControllers {
-                    (controller as? ListingViewController)?.needRefresh = true
+            func setNeededRefreshInMain() {
+                // Set needRefresh true in the main Listing controller
+                if let nav = self.presentingViewController as? UINavigationController {
+                    for controller in nav.viewControllers {
+                        (controller as? ListingViewController)?.needRefresh = true
+                    }
                 }
             }
+
+            // TODO: Stop activity indicator
 
             guard error == nil else {
                 print(error!.localizedDescription)
@@ -554,20 +556,17 @@ final class ListingViewController: UITableViewController {
                 switch code {
                 case 200:
                     // Operation successfully completed
+                    setNeededRefreshInMain()
                     self.onFinish?()
-
                 case 400:
                     // Bad request ( Folder already exists, invalid file name?)
                     // TODO: Show error message and wait for dismiss
-
                     print("Status Code 400 : Bad request")
-
                 case 404:
-
                     // Not Found (Folder do not exists anymore), folder will refresh
                     print("Status Code 404 : Not found")
+                    setNeededRefreshInMain()
                     self.onFinish?()
-
                 default :
                     print("Server replied with Status Code: ", code)
                     // TODO: Show message and wait for dismiss
