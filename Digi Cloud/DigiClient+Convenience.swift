@@ -236,22 +236,14 @@ extension DigiClient {
                 completionHandler((nil, nil, nil), error)
                 return
             }
-            var size: Int64 = 0
-            var files: Int = 0
-            var folders: Int = 0
             guard let json = json as? [String: Any] else {
                 completionHandler((nil, nil, nil), nil)
                 return
             }
-            if let children = json["children"] as? [[String: Any]] {
-                for child in children {
-                    let info = getChildInfo(child)
-                    size += info.0
-                    files += info.1
-                    folders += info.2
-                }
-            }
-            completionHandler((size, files, folders), nil)
+            let info = getChildInfo(json)
+
+            // Subtracting 1 because the root folder is also counted
+            completionHandler((info.0, info.1, info.2 - 1), nil)
         }
     }
 
