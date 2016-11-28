@@ -132,11 +132,13 @@ extension ContentViewController: URLSessionDownloadDelegate {
         do {
             try fileManager.moveItem(at: location, to: self.fileUrl)
 
-            // load downloded file in the view
-            self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
+            DispatchQueue.main.async {
+                // load downloded file in the view
+                self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
 
-            // enable rightbarbutton for exporting
-            self.navigationItem.rightBarButtonItem?.isEnabled = true
+                // enable rightbarbutton for exporting
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
+            }
         } catch let error {
             print("Could not move file to disk: \(error.localizedDescription)")
         }
@@ -161,6 +163,7 @@ extension ContentViewController: WKNavigationDelegate {
             self.progressView.alpha = 0
         })
     }
+    
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         // TODO: Show UIView for Export recommendation
         print(error.localizedDescription)
