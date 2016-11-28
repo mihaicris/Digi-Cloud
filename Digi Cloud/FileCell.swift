@@ -61,10 +61,13 @@ class FileCell: BaseListCell {
 
         // copy or move screen
 
+        var buttonRightSpace = 80
+
         if !self.hasButton {
             isUserInteractionEnabled = false
             fileNameLabel.isEnabled = false
             fileSizeLabel.isEnabled = false
+            buttonRightSpace = 30
         }
 
         separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
@@ -73,7 +76,7 @@ class FileCell: BaseListCell {
         contentView.addSubview(fileNameLabel)
         contentView.addSubview(fileSizeLabel)
 
-        contentView.addConstraints(with: "H:|-15-[v0(26)]-10-[v1]-80-|", views: fileIcon, fileNameLabel)
+        contentView.addConstraints(with: "H:|-15-[v0(26)]-10-[v1]-\(buttonRightSpace)-|", views: fileIcon, fileNameLabel)
         contentView.addConstraints(with: "H:[v0]-10-[v1]", views: fileIcon, fileSizeLabel)
         contentView.addConstraints(with: "V:[v0(26)]", views: fileIcon)
         contentView.addConstraints(with: "V:[v0]-2-[v1]", views: fileNameLabel, fileSizeLabel)
