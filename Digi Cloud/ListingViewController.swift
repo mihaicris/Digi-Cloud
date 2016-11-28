@@ -239,17 +239,20 @@ final class ListingViewController: UITableViewController {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
 
-            let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
-            navigationItem.setRightBarButton(rightButton, animated: false)
-            navigationController?.isToolbarHidden = false
-
             let buttonTitle = self.action == .copy ? NSLocalizedString("Save copy", comment: "Button Title") : NSLocalizedString("Move", comment: "Button Title")
             let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
             // TODO: Activate when source and destination paths are not the same
             copyMoveButton.isEnabled = true
+
+            navigationItem.setRightBarButton(copyMoveButton, animated: false)
+            navigationController?.isToolbarHidden = false
+
+            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
+
+
             let toolBarItems = [UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateFolder)),
                                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-                                copyMoveButton]
+                                cancelButton]
             setToolbarItems(toolBarItems, animated: false)
         default:
             break
