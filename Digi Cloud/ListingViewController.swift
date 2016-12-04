@@ -214,6 +214,16 @@ final class ListingViewController: UITableViewController {
         }
     }
 
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+
+        // Refresh control made without add target
+        if refreshControl?.isRefreshing == true {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                self.getFolderContent()
+            }
+        }
+    }
+
     // MARK: - Helper Methods
 
     private func setupTableView() {
@@ -226,6 +236,8 @@ final class ListingViewController: UITableViewController {
             self.FileCellID = "FileCellWithButton"
             self.FolderCellID = "DirectoryCellWithButton"
         }
+
+        refreshControl = UIRefreshControl()
 
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
@@ -264,8 +276,10 @@ final class ListingViewController: UITableViewController {
         self.needRefresh = false
         self.busyIndicator.startAnimating()
 
-        DigiClient.shared.getLocationContent(location: location) {
-            (content, error) in
+        DigiClient.shared.getLocationContent(location: location) { content, error in
+
+            self.refreshControl?.endRefreshing()
+
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return

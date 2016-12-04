@@ -19,6 +19,5 @@ public func DLog<T>( name: String, object: @autoclosure () -> T, _ file: String 
         print("\(name):")
         print("\(object())")
         print("_____________________________________________________\n")
-
     #endif
 }

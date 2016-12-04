@@ -229,14 +229,14 @@
 		83F9944B1DD093C90023FB5D /* Listing */ = {
 			isa = PBXGroup;
 			children = (
+				8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */,
+				83DADF221DE59ED300987E1A /* ListingViewController.swift */,
 				83562CAB1DB8C19B006FF04A /* ActionViewController.swift */,
 				8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */,
 				839A22E21DC11BA400758730 /* DeleteViewController.swift */,
 				83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */,
-				8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */,
 				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
 				83F994511DD09B340023FB5D /* SortFolderViewController.swift */,
-				83DADF221DE59ED300987E1A /* ListingViewController.swift */,
 			);
 			name = Listing;
 			sourceTree = "<group>";
