@@ -274,9 +274,12 @@ final class ListingViewController: UITableViewController {
     fileprivate func getFolderContent() {
 
         self.needRefresh = false
-        self.busyIndicator.startAnimating()
 
-        DigiClient.shared.getLocationContent(location: location) { content, error in
+        if content.isEmpty {
+            self.busyIndicator.startAnimating()
+        }
+
+        DigiClient.shared.getLocationContent(location: location) { receivedContent, error in
 
             self.refreshControl?.endRefreshing()
 
@@ -284,9 +287,9 @@ final class ListingViewController: UITableViewController {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-            if var content = content {
 
-                if content.isEmpty {
+            if var newContent = receivedContent {
+                if newContent.isEmpty {
                     self.content.removeAll()
                     self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                     self.busyIndicator.stopAnimating()
@@ -295,32 +298,33 @@ final class ListingViewController: UITableViewController {
                 }
 
                 // Content is not empty
-
                 switch self.action {
                 case .move:
                     // Move action! The indicated node will be removed from the list
                     if let node = self.node {
-                        for (index, elem) in content.enumerated() {
+                        for (index, elem) in newContent.enumerated() {
                             if elem.name == node.name {
-                                content.remove(at: index)
+                                newContent.remove(at: index)
                                 break
                             }
                         }
                     }
-                    if content.isEmpty {
+                    if newContent.isEmpty {
                         self.content.removeAll()
                         self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                         self.busyIndicator.stopAnimating()
                         self.tableView.reloadData()
                     } else {
                         // Sort the content by name ascending with folders shown first
-                        content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
-                        self.content = content
+                        newContent.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+                        self.content = newContent
                         self.busyIndicator.stopAnimating()
                         self.tableView.reloadData()
                     }
+
+                // For cases .noAction and .copy
                 default:
-                    self.content = content
+                    self.content = newContent
                     self.sortContent()
                     self.busyIndicator.stopAnimating()
                     self.tableView.reloadData()
