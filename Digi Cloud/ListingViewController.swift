@@ -263,12 +263,11 @@ final class ListingViewController: UITableViewController {
             navigationItem.setRightBarButton(copyMoveButton, animated: false)
             navigationController?.isToolbarHidden = false
 
-            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
-
-
-            let toolBarItems = [UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateFolder)),
-                                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-                                cancelButton]
+            let toolBarItems = [
+                UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateFolder)),
+                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+                UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
+            ]
             setToolbarItems(toolBarItems, animated: false)
         default:
             break
