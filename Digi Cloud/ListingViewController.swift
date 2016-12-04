@@ -27,6 +27,8 @@ final class ListingViewController: UITableViewController {
     var content: [Node] = []
     var currentIndex: IndexPath!
     var sourceNodeLocation: Location?
+    private let searchController = UISearchController(searchResultsController: nil)
+
     private var FileCellID: String = ""
     private var FolderCellID: String = ""
     private let dateFormatter: DateFormatter = {
@@ -235,6 +237,8 @@ final class ListingViewController: UITableViewController {
         default:
             self.FileCellID = "FileCellWithButton"
             self.FolderCellID = "DirectoryCellWithButton"
+            tableView.tableHeaderView = searchController.searchBar
+            searchController.searchResultsUpdater = self
         }
 
         refreshControl = UIRefreshControl()
@@ -601,6 +605,15 @@ final class ListingViewController: UITableViewController {
         }
 
 
+    }
+}
+
+extension ListingViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        if searchController.searchBar.text!.characters.count < 3 {
+            return
+        }
+        print("reached updateSearchResults")
     }
 }
 
