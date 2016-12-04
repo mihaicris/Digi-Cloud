@@ -27,8 +27,7 @@ final class ListingViewController: UITableViewController {
     var content: [Node] = []
     var currentIndex: IndexPath!
     var sourceNodeLocation: Location?
-    private let searchController = UISearchController(searchResultsController: nil)
-
+    private var searchController: UISearchController!
     private var FileCellID: String = ""
     private var FolderCellID: String = ""
     private let dateFormatter: DateFormatter = {
@@ -101,7 +100,6 @@ final class ListingViewController: UITableViewController {
         if self.action == .noAction {
             updateRightBarButtonItems()
         }
-
         if needRefresh {
             content.removeAll()
             self.busyIndicator.startAnimating()
@@ -217,8 +215,6 @@ final class ListingViewController: UITableViewController {
     }
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-
-        // Refresh control made without add target
         if refreshControl?.isRefreshing == true {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
                 self.getFolderContent()
@@ -237,12 +233,13 @@ final class ListingViewController: UITableViewController {
         default:
             self.FileCellID = "FileCellWithButton"
             self.FolderCellID = "DirectoryCellWithButton"
-            tableView.tableHeaderView = searchController.searchBar
+            searchController = UISearchController(searchResultsController: nil)
+            searchController.loadViewIfNeeded()
             searchController.searchResultsUpdater = self
+            searchController.searchBar.sizeToFit()
         }
 
         refreshControl = UIRefreshControl()
-
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -250,7 +247,6 @@ final class ListingViewController: UITableViewController {
     }
 
     private func setupViews() {
-        self.automaticallyAdjustsScrollViewInsets = true
         switch self.action {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
@@ -286,6 +282,11 @@ final class ListingViewController: UITableViewController {
 
             self.refreshControl?.endRefreshing()
 
+            // Add search bar only in the main list (not in copy / move list)
+            if self.tableView.tableHeaderView == nil && self.action == .noAction {
+                self.tableView.tableHeaderView = self.searchController.searchBar
+            }
+
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
@@ -297,6 +298,7 @@ final class ListingViewController: UITableViewController {
                     self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                     self.busyIndicator.stopAnimating()
                     self.tableView.reloadData()
+                    
                     return
                 }
 
@@ -333,6 +335,8 @@ final class ListingViewController: UITableViewController {
                     self.tableView.reloadData()
                 }
             }
+            // Hide the search bar
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
         }
     }
 
