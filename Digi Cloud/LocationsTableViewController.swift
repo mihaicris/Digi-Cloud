@@ -70,6 +70,14 @@ class LocationsTableViewController: UITableViewController {
         openMount(index: indexPath.row)
     }
 
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if refreshControl?.isRefreshing == true {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.getLocations()
+            }
+        }
+    }
+
     // MARK: - Helper Functions
 
     private func setupNavigationBar() {
@@ -90,10 +98,14 @@ class LocationsTableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         tableView.cellLayoutMarginsFollowReadableWidth = false
+        refreshControl = UIRefreshControl()
     }
 
     private func getLocations() {
         DigiClient.shared.getLocations() { (mounts, error) in
+
+            self.refreshControl?.endRefreshing()
+
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
