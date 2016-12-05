@@ -54,7 +54,7 @@ extension DigiClient {
         }
     }
 
-    func getStorageLocations(completionHandler: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
+    func getDIGIStorageLocations(completionHandler: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"

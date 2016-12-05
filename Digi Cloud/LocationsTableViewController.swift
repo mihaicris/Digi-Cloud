@@ -102,7 +102,7 @@ class LocationsTableViewController: UITableViewController {
     }
 
     fileprivate func getLocations() {
-        DigiClient.shared.getStorageLocations() { locations, error in
+        DigiClient.shared.getDIGIStorageLocations() { locations, error in
 
             self.refreshControl?.endRefreshing()
 
