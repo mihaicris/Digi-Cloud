@@ -117,7 +117,7 @@ final class ListingViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if needRefresh {
-            self.getFolderContent()
+            self.updateContent()
         }
     }
 
@@ -217,7 +217,7 @@ final class ListingViewController: UITableViewController {
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if refreshControl?.isRefreshing == true {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-                self.getFolderContent()
+                self.updateContent()
             }
         }
     }
@@ -277,7 +277,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func getFolderContent() {
+    fileprivate func updateContent() {
 
         self.needRefresh = false
 
@@ -675,7 +675,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                     self.tableView.reloadData()
                 } else {
                     if needRefresh {
-                        self.getFolderContent()
+                        self.updateContent()
                     }
                 }
             }
@@ -702,7 +702,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                     c.onFinish = { [unowned self] in
                         self.dismiss(animated: true) {
                             if self.needRefresh {
-                                self.getFolderContent()
+                                self.updateContent()
                             }
                         }
                     }
@@ -726,7 +726,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                         } else {
                             self.dismiss(animated: true) {
                                 if self.needRefresh {
-                                    self.getFolderContent()
+                                    self.updateContent()
                                 }
                             }
                         }
@@ -775,7 +775,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                         }
                     } else {
                         if needRefresh {
-                            self.getFolderContent()
+                            self.updateContent()
                         }
                     }
                 }
@@ -843,9 +843,9 @@ extension ListingViewController: DeleteViewControllerDelegate {
                             self.tableView.deleteRows(at: [self.currentIndex], with: .left)
                         }
                     case 400:
-                        self.getFolderContent()
+                        self.updateContent()
                     case 404:
-                        self.getFolderContent()
+                        self.updateContent()
                     default :
                         break
                     }
