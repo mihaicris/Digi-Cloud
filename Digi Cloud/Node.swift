@@ -18,7 +18,12 @@ struct Node {
     let size: Int64
     let contentType: String
     let ext: String
-    let location: Location
+    let parentLocation: Location
+    var location: Location {
+        get {
+            return Location(mount: parentLocation.mount, path: parentLocation.path + name)
+        }
+    }
 
     // MARK: - Initializers and Deinitializers
 
@@ -28,7 +33,7 @@ struct Node {
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        self.location = location
+        self.parentLocation = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }
@@ -51,7 +56,7 @@ extension Node {
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        self.location = location
+        self.parentLocation = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }

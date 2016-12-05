@@ -9,9 +9,7 @@
 import UIKit
 
 #if DEBUG
-
-var count: Int = 0
-
+    var count: Int = 0
 #endif
 
 
@@ -21,12 +19,12 @@ final class ListingViewController: UITableViewController {
     var onFinish: (() -> Void)?
     let action: ActionType
     var location: Location
-    var node: Node?
+    var node: Node?  // Still needed?
     let tag: Int
     var needRefresh: Bool = true
     var content: [Node] = []
     var currentIndex: IndexPath!
-    var sourceNodeLocation: Location?
+    var sourceNodeLocation: Location?   // Still needed?
     fileprivate var searchController: UISearchController!
     fileprivate var FileCellID: String = ""
     fileprivate var FolderCellID: String = ""
@@ -516,24 +514,28 @@ final class ListingViewController: UITableViewController {
 
         // TODO: Show activity indicator
 
-        guard let sourceLocation = self.sourceNodeLocation else {
-            print("Couldn't get the sourceNodeLocation")
+//        guard let sourceLocation = self.sourceNodeLocation else {
+//            print("Couldn't get the sourceNodeLocation")
+//            return
+//        }
+//
+//        guard let originalDestionationName = self.sourceNodeLocation?.nodeName else {
+//            print("Couldn't get the destionation name")
+//            return
+//        }
+        guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
+            print("Couldn't get the source node name.")
             return
         }
 
-        guard let originalDestionationName = self.sourceNodeLocation?.nodeName else {
-            print("Couldn't get the destionation name")
-            return
-        }
+        var destinationLocation = Location(mount: self.location.mount, path: self.location.path + sourceNode.name)
 
-        let index = getIndexBeforeExtension(fileName: originalDestionationName)
-
-        var destinationLocation = Location(mount: self.location.mount, path: self.location.path + originalDestionationName)
+        let index = getIndexBeforeExtension(fileName: sourceNode.name)
 
         if self.action == .copy {
             // TODO: Check if the content has already this name
 
-            var destinationName = originalDestionationName
+            var destinationName = sourceNode.name
 
             var copyCount: Int = 0
             var renamed = false
@@ -553,7 +555,7 @@ final class ListingViewController: UITableViewController {
                         copyCount += 1
 
                         // reset name to original
-                        destinationName = originalDestionationName
+                        destinationName = sourceNode.name
 
                         // Pad number (using Foundation Method)
                         let countString = String(format: " (%d)", copyCount)
@@ -562,7 +564,7 @@ final class ListingViewController: UITableViewController {
                         if index != nil {
                             destinationName.insert(contentsOf: countString.characters, at: index!)
                         } else {
-                            destinationName = originalDestionationName + countString
+                            destinationName = sourceNode.name + countString
                         }
                     }
                 }
@@ -572,7 +574,7 @@ final class ListingViewController: UITableViewController {
             destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
         }
 
-        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceLocation, to: destinationLocation) {
+        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.location, to: destinationLocation) {
             statusCode, error in
 
             func setNeededRefreshInMain() {
@@ -685,6 +687,9 @@ extension ListingViewController: ActionViewControllerDelegate {
 
         case .copy, .move:
 
+            // Save the source node in the MainNavigationController
+            (self.navigationController as? MainNavigationController)?.source = node
+
             guard let previousControllers = navigationController?.viewControllers else {
                 print("Couldn't get the previous navigation controllers!")
                 return
@@ -697,9 +702,14 @@ extension ListingViewController: ActionViewControllerDelegate {
                 // If index is 0 than this is a location controller
                 if index == 0 {
                     let c = LocationsTableViewController(action: action)
+
                     c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.title = NSLocalizedString("Locations", comment: "Window Title")
                     c.onFinish = { [unowned self] in
+
+                        // Clear source node
+//                        (self.navigationController as? MainNavigationController)?.source = nil
+
                         self.dismiss(animated: true) {
                             if self.needRefresh {
                                 self.updateContent()
@@ -725,6 +735,10 @@ extension ListingViewController: ActionViewControllerDelegate {
                             self.onFinish?()
                         } else {
                             self.dismiss(animated: true) {
+
+                                // Clear source node
+//                                (self.navigationController as? MainNavigationController)?.source = nil
+
                                 if self.needRefresh {
                                     self.updateContent()
                                 }

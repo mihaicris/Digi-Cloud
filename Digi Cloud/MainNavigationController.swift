@@ -10,6 +10,10 @@ import UIKit
 
 class MainNavigationController: UINavigationController {
 
+    // This property will hold the source node when copying or moving action
+    // It can be accessed by any view controller on the stack of controllers
+    var source: Node?
+
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
@@ -51,7 +55,6 @@ class MainNavigationController: UINavigationController {
         } else {
             showLoginScreen()
         }
-
     }
 
     // MARK: - Helper Functions
