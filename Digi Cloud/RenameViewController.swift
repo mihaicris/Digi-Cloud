@@ -180,7 +180,7 @@ class RenameViewController: UITableViewController {
         let renameLocation = Location(mount: self.location.mount, path: nodePath)
 
         // network request for rename
-        DigiClient.shared.renameNode(location: renameLocation, newName: name) { (statusCode, error) in
+        DigiClient.shared.renameNode(at: renameLocation, with: name) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error

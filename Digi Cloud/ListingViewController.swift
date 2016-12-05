@@ -285,7 +285,7 @@ final class ListingViewController: UITableViewController {
             self.busyIndicator.startAnimating()
         }
 
-        DigiClient.shared.getLocationContent(location: location) { receivedContent, error in
+        DigiClient.shared.getContent(at: location) { receivedContent, error in
 
             self.refreshControl?.endRefreshing()
 
@@ -823,7 +823,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
 
             // network request for delete
             let deleteLocation = Location(mount: self.location.mount, path: nodePath)
-            DigiClient.shared.deleteNode(location: deleteLocation) {
+            DigiClient.shared.deleteNode(at: deleteLocation) {
                 (statusCode, error) in
                 // TODO: Stop spinner
                 guard error == nil else {

@@ -54,7 +54,7 @@ extension DigiClient {
         }
     }
 
-    func getLocations(completionHandler: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
+    func getStorageLocations(completionHandler: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
@@ -84,7 +84,7 @@ extension DigiClient {
         }
     }
 
-    func getLocationContent(location: Location, completionHandler: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+    func getContent(at location: Location, completionHandler: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
@@ -110,7 +110,7 @@ extension DigiClient {
         }
     }
 
-    func startFileDownload(location: Location, delegate: AnyObject) -> URLSession {
+    func startFileDownload(at location: Location, delegate: AnyObject) -> URLSession {
 
         // create the special session with custom delegate for download task
         let configuration = URLSessionConfiguration.default
@@ -136,7 +136,7 @@ extension DigiClient {
         return session
     }
 
-    func renameNode(location: Location, newName: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func renameNode(at location: Location, with name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
         let method = Methods.Rename.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -148,14 +148,14 @@ extension DigiClient {
         let parameters = [ParametersKeys.Path: location.path]
 
         // prepare new name in request body
-        let jsonBody = ["name": newName]
+        let jsonBody = ["name": name]
 
         networkTask(requestType: "PUT", method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
             completionHandler(statusCode, error)
         }
     }
 
-    func deleteNode(location: Location, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func deleteNode(at location: Location, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
         let method = Methods.Remove.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -171,7 +171,7 @@ extension DigiClient {
         }
     }
 
-    func createFolder(location: Location, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func createFolder(in location: Location, name: String, completionHandler: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -190,7 +190,7 @@ extension DigiClient {
         }
     }
 
-    func getTree(for location: Location, completionHandler: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
+    func getTree(at location: Location, completionHandler: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         var headers: [String: String] = ["Accept": "application/json"]
@@ -254,7 +254,7 @@ extension DigiClient {
             return (size, files, folders)
         }
 
-        getTree(for: location) { json, error in
+        getTree(at: location) { json, error in
             if let error = error {
                 completionHandler((nil, nil, nil), error)
                 return

@@ -68,7 +68,7 @@ class ContentViewController: UIViewController {
         deleteDocumentsFolder()
 
         // Start downloading File
-        session = DigiClient.shared.startFileDownload(location: location, delegate: self)
+        session = DigiClient.shared.startFileDownload(at: location, delegate: self)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

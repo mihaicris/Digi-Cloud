@@ -231,7 +231,7 @@ extension FolderInfoViewController: DeleteViewControllerDelegate {
             // network request for delete
 
             let deleteLocation = Location(mount: self.location.mount, path: nodePath)
-            DigiClient.shared.deleteNode(location: deleteLocation) { (statusCode, error) in
+            DigiClient.shared.deleteNode(at: deleteLocation) { (statusCode, error) in
 
                 // TODO: Stop spinner
                 guard error == nil else {
