@@ -629,6 +629,9 @@ extension ListingViewController: UISearchResultsUpdating {
             // TODO: Get the array with nodes from everywhere
         } else {
             // TODO: Get the array with nodes in this folder only
+
+            print(self.location)
+
         }
     }
 }
