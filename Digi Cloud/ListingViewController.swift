@@ -24,7 +24,6 @@ final class ListingViewController: UITableViewController {
     var needRefresh: Bool = true
     var content: [Node] = []
     var currentIndex: IndexPath!
-    var sourceNodeLocation: Location?   // Still needed?
     fileprivate var searchController: UISearchController!
     fileprivate var FileCellID: String = ""
     fileprivate var FolderCellID: String = ""
@@ -181,9 +180,6 @@ final class ListingViewController: UITableViewController {
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
             let controller = ListingViewController(action: self.action, for: nextLocation, remove: nil)
-            if self.action != .noAction {
-                controller.sourceNodeLocation = self.sourceNodeLocation
-            }
 
             controller.title = item.name
             if self.action != .noAction {
@@ -494,7 +490,6 @@ final class ListingViewController: UITableViewController {
 
             let controller = ListingViewController(action: self.action, for: folderLocation, remove: nil)
             controller.title = folderName
-            controller.sourceNodeLocation = self.sourceNodeLocation
             controller.onFinish = {[unowned self] in
                 self.onFinish?()
             }
@@ -514,15 +509,6 @@ final class ListingViewController: UITableViewController {
 
         // TODO: Show activity indicator
 
-//        guard let sourceLocation = self.sourceNodeLocation else {
-//            print("Couldn't get the sourceNodeLocation")
-//            return
-//        }
-//
-//        guard let originalDestionationName = self.sourceNodeLocation?.nodeName else {
-//            print("Couldn't get the destionation name")
-//            return
-//        }
         guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
             print("Couldn't get the source node name.")
             return
@@ -702,8 +688,6 @@ extension ListingViewController: ActionViewControllerDelegate {
                 // If index is 0 than this is a location controller
                 if index == 0 {
                     let c = LocationsTableViewController(action: action)
-
-                    c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.title = NSLocalizedString("Locations", comment: "Window Title")
                     c.onFinish = { [unowned self] in
 
@@ -729,7 +713,6 @@ extension ListingViewController: ActionViewControllerDelegate {
 
                     let c = ListingViewController(action: action, for: p.location, remove: specificNode)
                     c.title = p.title
-                    c.sourceNodeLocation = Location(mount: self.location.mount, path: self.location.path + node.name)
                     c.onFinish = { [unowned self] in
                         if self.action != .noAction {
                             self.onFinish?()

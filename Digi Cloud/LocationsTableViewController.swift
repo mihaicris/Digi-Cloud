@@ -15,7 +15,6 @@ class LocationsTableViewController: UITableViewController {
     var onFinish: (() -> Void)?
     var locations: [Location] = []
     fileprivate let action: ActionType
-    var sourceNodeLocation: Location?
     let tag: Int
 
     // MARK: - Initializers and Deinitializers
@@ -120,7 +119,6 @@ class LocationsTableViewController: UITableViewController {
     fileprivate func openMount(index: Int) {
         let controller = ListingViewController(action: self.action, for: locations[index], remove: nil)
         controller.title = locations[index].mount.name
-        controller.sourceNodeLocation = sourceNodeLocation
         if self.action != .noAction {
             controller.onFinish = { [unowned self] in
                 self.onFinish?()
