@@ -32,8 +32,8 @@ struct Node {
     }
 }
 
-extension Node: JSONDecodable {
     init?(JSON: Any) {
+extension Node {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,

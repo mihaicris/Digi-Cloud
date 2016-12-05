@@ -9,10 +9,6 @@
 import Foundation
 import UIKit
 
-protocol JSONDecodable {
-    init?(JSON: Any)
-}
-
 protocol ActionViewControllerDelegate: class {
     func didSelectOption(action: ActionType)
 }

@@ -23,7 +23,7 @@ struct Mount {
     }
 }
 
-extension Mount: JSONDecodable {
+extension Mount {
     init?(JSON: Any) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
