@@ -93,7 +93,7 @@ class SortFolderViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    private func setInitialActionNames() {
+    fileprivate func setInitialActionNames() {
         contextMenuSortActions = [
             NSLocalizedString("Folders first", comment: "Switch Title"),
             NSLocalizedString("Sort by Name",  comment: "Selection Title"),
@@ -102,7 +102,7 @@ class SortFolderViewController: UITableViewController {
             NSLocalizedString("Sort by Type",  comment: "Selection Title") ]
     }
 
-    private func setupViews() {
+    fileprivate func setupViews() {
 
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))

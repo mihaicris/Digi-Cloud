@@ -14,7 +14,7 @@ class LocationsTableViewController: UITableViewController {
 
     var onFinish: (() -> Void)?
     var mounts: [Mount] = []
-    private let action: ActionType
+    fileprivate let action: ActionType
     var sourceNodeLocation: Location?
     let tag: Int
 
@@ -80,7 +80,7 @@ class LocationsTableViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    private func setupNavigationBar() {
+    fileprivate func setupNavigationBar() {
         // Create navigation elements when coping or moving
 
         if action == .copy || action == .move {
@@ -92,7 +92,7 @@ class LocationsTableViewController: UITableViewController {
         self.title = NSLocalizedString("Locations", comment: "Window Title")
     }
 
-    private func setupTableView() {
+    fileprivate func setupTableView() {
         tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
         tableView.rowHeight = 78
         tableView.tableFooterView = UIView()
@@ -101,7 +101,7 @@ class LocationsTableViewController: UITableViewController {
         refreshControl = UIRefreshControl()
     }
 
-    private func getLocations() {
+    fileprivate func getLocations() {
         DigiClient.shared.getLocations() { (mounts, error) in
 
             self.refreshControl?.endRefreshing()
@@ -117,7 +117,7 @@ class LocationsTableViewController: UITableViewController {
         }
     }
 
-    private func openMount(index: Int) {
+    fileprivate func openMount(index: Int) {
         let location = Location(mount: mounts[index] , path: "/")
 
         let controller = ListingViewController(action: self.action, for: location, remove: nil)
@@ -132,7 +132,7 @@ class LocationsTableViewController: UITableViewController {
         navigationController?.pushViewController(controller, animated: true)
     }
     
-    @objc private func handleDone() {
+    @objc fileprivate func handleDone() {
         self.onFinish?()
     }
 }

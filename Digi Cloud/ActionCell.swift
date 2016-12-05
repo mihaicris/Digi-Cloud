@@ -50,7 +50,7 @@ class ActionCell: UITableViewCell {
 
     // MARK: - Helper Functions
 
-    private func addSwitch(delegate: ActionCellDelegate) {
+    fileprivate func addSwitch(delegate: ActionCellDelegate) {
         switchButton = UISwitch()
         switchButton.addTarget(self, action: #selector(handleSwitchValueChanged), for: UIControlEvents.valueChanged)
         contentView.addSubview(switchButton)
@@ -58,7 +58,7 @@ class ActionCell: UITableViewCell {
         switchButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 
-    @objc private func handleSwitchValueChanged() {
+    @objc fileprivate func handleSwitchValueChanged() {
         delegate?.onSwitchValueChanged(button: switchButton, value: switchButton.isOn)
     }
 }

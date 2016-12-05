@@ -87,7 +87,7 @@ class ContentViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    private func setupViews() {
+    fileprivate func setupViews() {
         view.addSubview(webView)
         view.addSubview(progressView)
         view.addConstraints(with: "H:|[v0]|", views: webView)

@@ -12,7 +12,7 @@ class DeleteViewController: UITableViewController {
 
     // MARK: - Properties
 
-    private var node: Node
+    fileprivate var node: Node
     weak var delegate: DeleteViewControllerDelegate?
 
     // MARK: - Initializers and Deinitializers
@@ -60,7 +60,7 @@ class DeleteViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    private func setupViews() {
+    fileprivate func setupViews() {
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
             view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
@@ -99,7 +99,7 @@ class DeleteViewController: UITableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 
-    private func createCell(title: String, color: UIColor) -> UITableViewCell {
+    fileprivate func createCell(title: String, color: UIColor) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = color

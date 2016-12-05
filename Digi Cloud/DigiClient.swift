@@ -34,7 +34,7 @@ final class DigiClient {
 
     // MARK: - Initializers and Deinitializers
 
-    private init() {}
+    fileprivate init() {}
 
     // MARK: - Helper Functions
 
@@ -128,7 +128,7 @@ final class DigiClient {
         }
         return components.url!
     }
-    private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
+    fileprivate func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = requestType
         request.allHTTPHeaderFields = headers

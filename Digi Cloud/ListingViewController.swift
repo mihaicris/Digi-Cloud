@@ -28,9 +28,9 @@ final class ListingViewController: UITableViewController {
     var currentIndex: IndexPath!
     var sourceNodeLocation: Location?
     fileprivate var searchController: UISearchController!
-    private var FileCellID: String = ""
-    private var FolderCellID: String = ""
-    private let dateFormatter: DateFormatter = {
+    fileprivate var FileCellID: String = ""
+    fileprivate var FolderCellID: String = ""
+    fileprivate let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
         f.timeStyle = .none
@@ -38,13 +38,13 @@ final class ListingViewController: UITableViewController {
         f.dateFormat = "dd.MM.YYY・HH:mm"
         return f
     }()
-    private let byteFormatter: ByteCountFormatter = {
+    fileprivate let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
         f.allowsNonnumericFormatting = false
         return f
     }()
-    private let busyIndicator: UIActivityIndicatorView = {
+    fileprivate let busyIndicator: UIActivityIndicatorView = {
         let i = UIActivityIndicatorView()
         i.hidesWhenStopped = true
         i.activityIndicatorViewStyle = .gray
@@ -59,7 +59,7 @@ final class ListingViewController: UITableViewController {
         l.textAlignment = .center
         return l
     }()
-    private var addFolderButton, sortButton: UIBarButtonItem!
+    fileprivate var addFolderButton, sortButton: UIBarButtonItem!
 
     // MARK: - Initializers and Deinitializers
 
@@ -224,7 +224,7 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Helper Methods
 
-    private func setupTableView() {
+    fileprivate func setupTableView() {
 
         switch self.action {
         case .copy, .move:
@@ -252,7 +252,7 @@ final class ListingViewController: UITableViewController {
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
 
-    private func setupViews() {
+    fileprivate func setupViews() {
         switch self.action {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
@@ -454,7 +454,7 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    @objc private func handleSortSelect() {
+    @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
             if dismiss {
@@ -471,7 +471,7 @@ final class ListingViewController: UITableViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc private func handleCreateFolder() {
+    @objc fileprivate func handleCreateFolder() {
         let controller = CreateFolderViewController(location: location)
         controller.onFinish = { [unowned self](folderName) in
             self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
@@ -507,11 +507,11 @@ final class ListingViewController: UITableViewController {
         present(navigationController, animated: true, completion: nil)
     }
 
-    @objc private func handleDone() {
+    @objc fileprivate func handleDone() {
         self.onFinish?()
     }
 
-    @objc private func handleCopyOrMove() {
+    @objc fileprivate func handleCopyOrMove() {
 
         // TODO: Show activity indicator
 

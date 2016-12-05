@@ -14,10 +14,10 @@ class CreateFolderViewController: UITableViewController {
 
     var onFinish: ((_ folderName: String?) -> Void)?
     var location: Location
-    private var leftBarButton: UIBarButtonItem!
+    fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
-    private var textField: UITextField!
-    private var messageLabel: UILabel!
+    fileprivate var textField: UITextField!
+    fileprivate var messageLabel: UILabel!
 
     // MARK: - Initializers and Deinitializers
 

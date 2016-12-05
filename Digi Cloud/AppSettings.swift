@@ -20,7 +20,7 @@ final class AppSettings {
     // MARK: - Properties
     static let shared: AppSettings = AppSettings()
     static var tableViewRowHeight: CGFloat = 50
-    private init() {}
+    fileprivate init() {}
     static var isAppFirstTimeStarted: Bool {
         get {
             return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue)

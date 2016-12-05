@@ -84,7 +84,7 @@ class LoginViewController: UIViewController {
 
     // MARK: - Helper Functions
 
-    private func setupViews() {
+    fileprivate func setupViews() {
         view.backgroundColor = UIColor(colorLiteralRed: 96 / 255, green: 95 / 255, blue: 199 / 255, alpha: 1.0)
 
         view.addSubview(emailTextField)
