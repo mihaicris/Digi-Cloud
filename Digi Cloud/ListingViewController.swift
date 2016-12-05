@@ -298,7 +298,9 @@ final class ListingViewController: UITableViewController {
                     self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                     self.busyIndicator.stopAnimating()
                     self.tableView.reloadData()
-                    
+                    // Hide the search bar
+                    // -20 = 44 (search bar height) - 20 (status bar height) - 44 (navigation bar height)
+                    self.tableView.contentOffset = CGPoint(x: 0, y: -20)
                     return
                 }
 
@@ -336,7 +338,7 @@ final class ListingViewController: UITableViewController {
                 }
             }
             // Hide the search bar
-            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+            self.tableView.contentOffset = CGPoint(x: 0, y: -20)
         }
     }
 
