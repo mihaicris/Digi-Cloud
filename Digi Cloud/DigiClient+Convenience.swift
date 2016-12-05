@@ -190,6 +190,27 @@ extension DigiClient {
         }
     }
 
+    func getTree(for location: Location, completionHandler: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
+        let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
+
+        var headers: [String: String] = ["Accept": "application/json"]
+        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+
+        let parameters = [ParametersKeys.Path: location.path]
+
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { (json, statusCode, error) in
+            if let error = error {
+                completionHandler(nil, error)
+                return
+            }
+            guard let json = json as? [String: Any] else {
+                completionHandler(nil, nil)
+                return
+            }
+            completionHandler(json, nil)
+        }
+    }
+
     /// Get information about a folder
     ///
     /// - Parameters:
@@ -233,12 +254,12 @@ extension DigiClient {
             return (size, files, folders)
         }
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { (json, statusCode, error) in
+        getTree(for: location) { json, error in
             if let error = error {
                 completionHandler((nil, nil, nil), error)
                 return
             }
-            guard let json = json as? [String: Any] else {
+            guard let json = json else {
                 completionHandler((nil, nil, nil), nil)
                 return
             }
