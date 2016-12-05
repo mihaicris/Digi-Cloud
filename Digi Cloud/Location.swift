@@ -14,7 +14,7 @@ struct Location {
 
     let mount: Mount
     let path:  String
-    var name: String? {
+    var nodeName: String? {
         return path.components(separatedBy: "/").last
     }
 

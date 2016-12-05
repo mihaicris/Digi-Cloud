@@ -520,7 +520,7 @@ final class ListingViewController: UITableViewController {
             return
         }
 
-        guard let originalDestionationName = self.sourceNodeLocation?.name else {
+        guard let originalDestionationName = self.sourceNodeLocation?.nodeName else {
             print("Couldn't get the destionation name")
             return
         }
