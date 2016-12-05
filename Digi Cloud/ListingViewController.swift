@@ -27,7 +27,7 @@ final class ListingViewController: UITableViewController {
     var content: [Node] = []
     var currentIndex: IndexPath!
     var sourceNodeLocation: Location?
-    private var searchController: UISearchController!
+    fileprivate var searchController: UISearchController!
     private var FileCellID: String = ""
     private var FolderCellID: String = ""
     private let dateFormatter: DateFormatter = {
@@ -236,7 +236,13 @@ final class ListingViewController: UITableViewController {
             searchController = UISearchController(searchResultsController: nil)
             searchController.loadViewIfNeeded()
             searchController.searchResultsUpdater = self
+            searchController.searchBar.delegate = self
             searchController.searchBar.sizeToFit()
+            searchController.searchBar.placeholder = NSLocalizedString("Search for files or folders", comment: "Action title")
+            searchController.searchBar.scopeButtonTitles = [
+                NSLocalizedString("Everywhere", comment: "Button title"),
+                NSLocalizedString("This folder", comment: "Button title")
+            ]
         }
 
         refreshControl = UIRefreshControl()
@@ -615,10 +621,21 @@ final class ListingViewController: UITableViewController {
 
 extension ListingViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        print("Search initiated")
         if searchController.searchBar.text!.characters.count < 3 {
             return
         }
-        print("reached updateSearchResults")
+        if searchController.searchBar.selectedScopeButtonIndex == 0 {
+            // TODO: Get the array with nodes from everywhere
+        } else {
+            // TODO: Get the array with nodes in this folder only
+        }
+    }
+}
+
+extension ListingViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        updateSearchResults(for: self.searchController)
     }
 }
 
