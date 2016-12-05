@@ -50,14 +50,11 @@ extension DigiClient {
                 completion(nil, statusCode, nil)
                 return
             }
-
             completion(data, statusCode, nil)
-
         }
-
     }
 
-    func getLocations(completionHandler: @escaping(_ result: [Mount]?, _ error: Error?) -> Void) {
+    func getLocations(completionHandler: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
         headers["Authorization"] = "Token \(DigiClient.shared.token!)"
@@ -72,8 +69,13 @@ extension DigiClient {
                         completionHandler(nil, JSONError.parce("Could not parce mountlist"))
                         return
                     }
-                    let mounts = mountsList.flatMap { Mount(JSON: $0) }
-                    completionHandler(mounts, nil)
+                    var locations: [Location] = []
+                    for mountJSON in mountsList {
+                        if let mount = Mount(JSON: mountJSON) {
+                            locations.append(Location(mount: mount, path: "/"))
+                        }
+                    }
+                    completionHandler(locations, nil)
 
                 } else {
                     completionHandler(nil, JSONError.parce("Could not parce data (getLocations)"))

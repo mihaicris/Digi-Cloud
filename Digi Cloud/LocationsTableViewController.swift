@@ -13,7 +13,7 @@ class LocationsTableViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: (() -> Void)?
-    var mounts: [Mount] = []
+    var locations: [Location] = []
     fileprivate let action: ActionType
     var sourceNodeLocation: Location?
     let tag: Int
@@ -57,12 +57,12 @@ class LocationsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mounts.count
+        return locations.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as! LocationCell
-        cell.locationLabel.text = mounts[indexPath.row].name
+        cell.locationLabel.text = locations[indexPath.row].mount.name
         return cell
     }
 
@@ -102,7 +102,7 @@ class LocationsTableViewController: UITableViewController {
     }
 
     fileprivate func getLocations() {
-        DigiClient.shared.getLocations() { (mounts, error) in
+        DigiClient.shared.getLocations() { locations, error in
 
             self.refreshControl?.endRefreshing()
 
@@ -110,18 +110,16 @@ class LocationsTableViewController: UITableViewController {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-            if let mounts = mounts {
-                self.mounts = mounts
+            if let locations = locations {
+                self.locations = locations
                 self.tableView.reloadData()
             }
         }
     }
 
     fileprivate func openMount(index: Int) {
-        let location = Location(mount: mounts[index] , path: "/")
-
-        let controller = ListingViewController(action: self.action, for: location, remove: nil)
-        controller.title = mounts[index].name
+        let controller = ListingViewController(action: self.action, for: locations[index], remove: nil)
+        controller.title = locations[index].mount.name
         controller.sourceNodeLocation = sourceNodeLocation
         if self.action != .noAction {
             controller.onFinish = { [unowned self] in
