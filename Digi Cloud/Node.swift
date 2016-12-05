@@ -18,22 +18,24 @@ struct Node {
     let size: Int64
     let contentType: String
     let ext: String
+    let location: Location
 
     // MARK: - Initializers and Deinitializers
 
-    init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String) {
+    init(location: Location, name: String, type: String, modified: TimeInterval, size: Int64, contentType: String) {
         self.name = name
         self.type = type
         self.modified = modified
         self.size = size
         self.contentType = contentType
+        self.location = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }
 }
 
-    init?(JSON: Any) {
 extension Node {
+    init?(JSON: Any, location: Location) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
@@ -49,6 +51,7 @@ extension Node {
         self.modified = modified
         self.size = size
         self.contentType = contentType
+        self.location = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }
