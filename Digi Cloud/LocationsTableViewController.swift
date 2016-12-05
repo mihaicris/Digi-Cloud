@@ -85,7 +85,7 @@ class LocationsTableViewController: UITableViewController {
 
         if action == .copy || action == .move {
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
-            let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
+            let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .done, target: self, action: #selector(handleDone))
 
             navigationItem.setRightBarButton(rightButton, animated: false)
         }
