@@ -80,8 +80,8 @@ class LocationsTableViewController: UITableViewController {
     // MARK: - Helper Functions
 
     fileprivate func setupNavigationBar() {
-        // Create navigation elements when coping or moving
 
+        // Create navigation elements when coping or moving
         if action == .copy || action == .move {
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
             let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .done, target: self, action: #selector(handleDone))
@@ -102,9 +102,7 @@ class LocationsTableViewController: UITableViewController {
 
     fileprivate func getLocations() {
         DigiClient.shared.getDIGIStorageLocations() { locations, error in
-
             self.refreshControl?.endRefreshing()
-
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
@@ -117,14 +115,13 @@ class LocationsTableViewController: UITableViewController {
     }
 
     fileprivate func openMount(index: Int) {
-        let controller = ListingViewController(action: self.action, for: locations[index], remove: nil)
+        let controller = ListingViewController(action: self.action, for: locations[index])
         controller.title = locations[index].mount.name
         if self.action != .noAction {
             controller.onFinish = { [unowned self] in
                 self.onFinish?()
             }
         }
-
         navigationController?.pushViewController(controller, animated: true)
     }
     

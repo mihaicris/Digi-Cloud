@@ -19,7 +19,6 @@ final class ListingViewController: UITableViewController {
     var onFinish: (() -> Void)?
     let action: ActionType
     var location: Location
-    var node: Node?  // Still needed?
     let tag: Int
     var needRefresh: Bool = true
     var content: [Node] = []
@@ -60,10 +59,9 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(action: ActionType, for location: Location, remove node: Node?) {
+    init(action: ActionType, for location: Location) {
         self.action = action
         self.location = location
-        self.node = node
 
         #if DEBUG
             count += 1
@@ -179,7 +177,7 @@ final class ListingViewController: UITableViewController {
             let nextPath = self.location.path + item.name + "/"
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
-            let controller = ListingViewController(action: self.action, for: nextLocation, remove: nil)
+            let controller = ListingViewController(action: self.action, for: nextLocation)
 
             controller.title = item.name
             if self.action != .noAction {
@@ -238,7 +236,6 @@ final class ListingViewController: UITableViewController {
                 NSLocalizedString("This folder", comment: "Button title")
             ]
         }
-
         refreshControl = UIRefreshControl()
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
@@ -280,19 +277,15 @@ final class ListingViewController: UITableViewController {
         }
 
         DigiClient.shared.getContent(at: location) { receivedContent, error in
-
             self.refreshControl?.endRefreshing()
-
             // Add search bar only in the main list (not in copy / move list)
             if self.tableView.tableHeaderView == nil && self.action == .noAction {
                 self.tableView.tableHeaderView = self.searchController.searchBar
             }
-
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-
             if var newContent = receivedContent {
                 if newContent.isEmpty {
                     self.content.removeAll()
@@ -304,17 +297,18 @@ final class ListingViewController: UITableViewController {
                     self.tableView.contentOffset = CGPoint(x: 0, y: -20)
                     return
                 }
-
                 // Content is not empty
                 switch self.action {
                 case .move:
                     // Move action! The indicated node will be removed from the list
-                    if let node = self.node {
-                        for (index, elem) in newContent.enumerated() {
-                            if elem.name == node.name {
-                                newContent.remove(at: index)
-                                break
-                            }
+                    guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
+                        print("Couldn't get the source node.")
+                        return
+                    }
+                    for (index, elem) in newContent.enumerated() {
+                        if elem.name == sourceNode.name {
+                            newContent.remove(at: index)
+                            break
                         }
                     }
                     if newContent.isEmpty {
@@ -329,7 +323,6 @@ final class ListingViewController: UITableViewController {
                         self.busyIndicator.stopAnimating()
                         self.tableView.reloadData()
                     }
-
                 // For cases .noAction and .copy
                 default:
                     self.content = newContent
@@ -338,8 +331,10 @@ final class ListingViewController: UITableViewController {
                     self.tableView.reloadData()
                 }
             }
-            // Hide the search bar
-            self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+            // Hide the search bar only in main list
+            if self.action == .noAction {
+                self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+            }
         }
     }
 
@@ -488,7 +483,7 @@ final class ListingViewController: UITableViewController {
             }
             let folderLocation = Location(mount: self.location.mount, path: nextPath)
 
-            let controller = ListingViewController(action: self.action, for: folderLocation, remove: nil)
+            let controller = ListingViewController(action: self.action, for: folderLocation)
             controller.title = folderName
             controller.onFinish = {[unowned self] in
                 self.onFinish?()
@@ -692,7 +687,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                     c.onFinish = { [unowned self] in
 
                         // Clear source node
-//                        (self.navigationController as? MainNavigationController)?.source = nil
+                        (self.navigationController as? MainNavigationController)?.source = nil
 
                         self.dismiss(animated: true) {
                             if self.needRefresh {
@@ -706,12 +701,7 @@ extension ListingViewController: ActionViewControllerDelegate {
 
                 // we need to cast in order to tet the mountID and path from it
                 if let p = p as? ListingViewController {
-
-                    // If the selected node for copy/move is a directory, we need to inject in
-                    // the top (current) ListingController, such that it won't be shown in the list
-                    let specificNode = index == previousControllers.count - 1 ? (node.type == "dir" ? node : nil) : nil
-
-                    let c = ListingViewController(action: action, for: p.location, remove: specificNode)
+                    let c = ListingViewController(action: action, for: p.location)
                     c.title = p.title
                     c.onFinish = { [unowned self] in
                         if self.action != .noAction {
@@ -720,7 +710,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                             self.dismiss(animated: true) {
 
                                 // Clear source node
-//                                (self.navigationController as? MainNavigationController)?.source = nil
+                                (self.navigationController as? MainNavigationController)?.source = nil
 
                                 if self.needRefresh {
                                     self.updateContent()
