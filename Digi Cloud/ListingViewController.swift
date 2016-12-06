@@ -248,17 +248,17 @@ final class ListingViewController: UITableViewController {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
 
-            let canceButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .done, target: self, action: #selector(handleDone))
+            let canceButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
             navigationItem.setRightBarButton(canceButton, animated: false)
             navigationController?.isToolbarHidden = false
 
             let buttonTitle = self.action == .copy ? NSLocalizedString("Save copy", comment: "Button Title") : NSLocalizedString("Move", comment: "Button Title")
-            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .done, target: self, action: #selector(handleCopyOrMove))
+            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
             // TODO: Activate when source and destination paths are not the same
             copyMoveButton.isEnabled = true
 
             let toolBarItems = [
-                UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .done, target: self, action: #selector(handleCreateFolder)),
+                UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateFolder)),
                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
                 copyMoveButton
             ]
@@ -370,7 +370,7 @@ final class ListingViewController: UITableViewController {
         case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "Button title") + (isAscending ? " ↑" : " ↓")
         case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
         }
-        sortButton      = UIBarButtonItem(title: buttonTitle, style: .done, target: self, action: #selector(handleSortSelect))
+        sortButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
         addFolderButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(handleCreateFolder))
         navigationItem.setRightBarButtonItems([sortButton, addFolderButton], animated: false)
     }
