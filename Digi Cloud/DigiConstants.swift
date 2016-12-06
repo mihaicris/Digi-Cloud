@@ -19,8 +19,10 @@ struct DefaultHeaders {
 }
 
 struct HeadersKeys {
+    static let Accept           = "Accept"
     static let Email            = "X-Koofr-Email"
     static let Password         = "X-Koofr-Password"
+    static let Authorization    = "Authorization"
 }
 
 struct HeaderResponses {
@@ -29,6 +31,10 @@ struct HeaderResponses {
 
 struct ParametersKeys {
     static let Path             = "path"
+    static let mountID          = "mountID"
+
+struct DataJSONKeys {
+    static let folderName       = "name"
 }
 
 struct Methods {

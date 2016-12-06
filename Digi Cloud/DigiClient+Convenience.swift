@@ -35,7 +35,7 @@ extension DigiClient {
     func getUserInfo(completion: @escaping(_ json: Any? , _ statusCode: Int?, _ error: Error?) -> Void) {
         let method = Methods.User
 
-        let headers: [String: String] = ["Accept": "application/json",
+        let headers: [String: String] = [HeadersKeys.Accept: "application/json",
                                          "Authorization": "Token \(DigiClient.shared.token!)"]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) {
@@ -57,7 +57,7 @@ extension DigiClient {
     func getDIGIStorageLocations(completionHandler: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
-        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) {
             (data, statusCode, error) in
@@ -87,7 +87,7 @@ extension DigiClient {
     func getContent(at location: Location, completionHandler: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.Headers
-        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
         let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) {
@@ -142,7 +142,7 @@ extension DigiClient {
 
         // prepare headers
         var headers = DefaultHeaders.Headers
-        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (path of the node to be renamed
         let parameters = [ParametersKeys.Path: location.path]
@@ -161,7 +161,7 @@ extension DigiClient {
 
         // prepare headers
         var headers: [String: String] = [:]
-        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (node path to be renamed
         let parameters = [ParametersKeys.Path: location.path]
@@ -177,13 +177,13 @@ extension DigiClient {
 
         // prepare headers
         var headers = DefaultHeaders.Headers
-        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters
         let parameters = [ParametersKeys.Path: location.path]
 
         // prepare new folder name in request body
-        let jsonBody = ["name": name]
+        let jsonBody = [DataJSONKeys.folderName: name]
 
         networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
             completionHandler(statusCode, error)
@@ -193,8 +193,8 @@ extension DigiClient {
     func getTree(at location: Location, completionHandler: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
-        var headers: [String: String] = ["Accept": "application/json"]
-        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+        var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         let parameters = [ParametersKeys.Path: location.path]
 
@@ -222,8 +222,8 @@ extension DigiClient {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
-        var headers: [String: String] = ["Accept": "application/json"]
-        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+        var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (node path to be renamed
         let parameters = [ParametersKeys.Path: location.path]
@@ -295,7 +295,7 @@ extension DigiClient {
         }
 
         var headers = DefaultHeaders.Headers
-        headers["Authorization"] = "Token \(DigiClient.shared.token!)"
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         let parameters = [ParametersKeys.Path: from.path]
 
