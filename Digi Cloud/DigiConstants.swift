@@ -32,6 +32,8 @@ struct HeaderResponses {
 struct ParametersKeys {
     static let Path             = "path"
     static let mountID          = "mountID"
+    static let queryString      = "query"
+}
 
 struct DataJSONKeys {
     static let folderName       = "name"
@@ -51,5 +53,6 @@ struct Methods {
     static let Tree             = "/api/v2/mounts/{id}/files/tree"
     static let Copy             = "/api/v2/mounts/{id}/files/copy"
     static let Move             = "/api/v2/mounts/{id}/files/move"
+    static let Search           = "/api/v2/search"
 }
 

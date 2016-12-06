@@ -190,6 +190,33 @@ extension DigiClient {
         }
     }
 
+    func search(for query: String, at location: Location?, completionHandler: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void) {
+        let method = Methods.Search
+
+        var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        var parameters: [String: String] = [
+            ParametersKeys.queryString: query
+        ]
+        if let location = location {
+            parameters[ParametersKeys.mountID] = location.mount.id
+        }
+
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _ , error in
+            if let error = error {
+                completionHandler(nil, error)
+                return
+            }
+            guard let json = json as? [String: Any] else {
+                completionHandler(nil, nil)
+                return
+            }
+            completionHandler(json, nil)
+        }
+
+    }
+
     func getTree(at location: Location, completionHandler: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 

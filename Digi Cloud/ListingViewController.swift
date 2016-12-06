@@ -22,6 +22,7 @@ final class ListingViewController: UITableViewController {
     let tag: Int
     var needRefresh: Bool = true
     var content: [Node] = []
+    var filteredContent: [Node] = []
     var currentIndex: IndexPath!
     fileprivate var searchController: UISearchController!
     fileprivate var FileCellID: String = ""
@@ -120,7 +121,11 @@ final class ListingViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return content.isEmpty ? 2 : content.count
+        if searchController.isActive {
+            return filteredContent.isEmpty ? 2 : filteredContent.count
+        } else {
+            return content.isEmpty ? 2 : content.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -228,16 +233,7 @@ final class ListingViewController: UITableViewController {
         default:
             self.FileCellID = "FileCellWithButton"
             self.FolderCellID = "DirectoryCellWithButton"
-            searchController = UISearchController(searchResultsController: nil)
-            searchController.loadViewIfNeeded()
-            searchController.searchResultsUpdater = self
-            searchController.searchBar.delegate = self
-            searchController.searchBar.sizeToFit()
-            searchController.searchBar.placeholder = NSLocalizedString("Search for files or folders", comment: "Action title")
-            searchController.searchBar.scopeButtonTitles = [
-                NSLocalizedString("Everywhere", comment: "Button title"),
-                NSLocalizedString("This folder", comment: "Button title")
-            ]
+            configureSearchController()
         }
         refreshControl = UIRefreshControl()
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
@@ -269,6 +265,19 @@ final class ListingViewController: UITableViewController {
         default:
             break
         }
+    }
+
+    fileprivate func configureSearchController() {
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.loadViewIfNeeded()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.searchBar.sizeToFit()
+        searchController.searchBar.placeholder = NSLocalizedString("Search for files or folders", comment: "Action title")
+        searchController.searchBar.scopeButtonTitles = [
+            NSLocalizedString("This folder", comment: "Button title"),
+            NSLocalizedString("Everywhere", comment: "Button title")
+        ]
     }
 
     fileprivate func updateContent() {
@@ -449,6 +458,19 @@ final class ListingViewController: UITableViewController {
 
     }
 
+    fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
+        if searchText.characters.count < 3 {
+            print("Too small")
+            return
+        }
+        if scope == 0 {
+            print("Search in current folder")
+        } else {
+            print("Search everywhere")
+        }
+        // TODO: reloadData in tableView
+    }
+
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
@@ -614,24 +636,13 @@ final class ListingViewController: UITableViewController {
 
 extension ListingViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        print("Search initiated")
-        if searchController.searchBar.text!.characters.count < 3 {
-            return
-        }
-        if searchController.searchBar.selectedScopeButtonIndex == 0 {
-            // TODO: Get the array with nodes from everywhere
-        } else {
-            // TODO: Get the array with nodes in this folder only
-
-            print(self.location)
-
-        }
+        filterContentForSearchText(searchText: searchController.searchBar.text!, scope: searchController.searchBar.selectedScopeButtonIndex)
     }
 }
 
 extension ListingViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        updateSearchResults(for: self.searchController)
+        filterContentForSearchText(searchText: searchBar.text!, scope: selectedScope)
     }
 }
 
