@@ -190,6 +190,14 @@ extension DigiClient {
         }
     }
 
+    /// Search for files or folders
+    ///
+    /// - Parameters:
+    ///   - query: String to search
+    ///   - location: Location to search (mount and path). If nil, search is made in all locations
+    ///   - completionHandler: The block called after the server has responded
+    ///   - json: The dictionary [String: Any] containing the search hits.
+    ///   - error: The error occured in the network request, nil for no error.
     func search(for query: String, at location: Location?, completionHandler: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
@@ -197,10 +205,11 @@ extension DigiClient {
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         var parameters: [String: String] = [
-            ParametersKeys.queryString: query
+            ParametersKeys.QueryString: query
         ]
         if let location = location {
-            parameters[ParametersKeys.mountID] = location.mount.id
+            parameters[ParametersKeys.MountID] = location.mount.id
+            parameters[ParametersKeys.Path] = location.path
         }
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _ , error in
@@ -214,7 +223,6 @@ extension DigiClient {
             }
             completionHandler(json, nil)
         }
-
     }
 
     func getTree(at location: Location, completionHandler: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {

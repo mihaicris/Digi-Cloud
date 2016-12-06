@@ -463,10 +463,11 @@ final class ListingViewController: UITableViewController {
             print("Too small")
             return
         }
-        if scope == 0 {
-            print("Search in current folder")
-        } else {
-            print("Search everywhere")
+
+        let searchLocation: Location? = scope == 0 ? self.location : nil
+
+        DigiClient.shared.search(for: searchText, at: searchLocation) { json, error in
+            print(json)
         }
         // TODO: reloadData in tableView
     }

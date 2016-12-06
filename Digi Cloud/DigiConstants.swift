@@ -31,8 +31,8 @@ struct HeaderResponses {
 
 struct ParametersKeys {
     static let Path             = "path"
-    static let mountID          = "mountID"
-    static let queryString      = "query"
+    static let MountID          = "mountId"
+    static let QueryString      = "query"
 }
 
 struct DataJSONKeys {
