@@ -656,9 +656,7 @@ extension ListingViewController: ActionViewControllerDelegate {
             controller.onFinish = { (newName, needRefresh) in
                 // dismiss RenameViewController
                 self.dismiss(animated: true) {
-                    if let name = newName {
-                        self.content[self.currentIndex.row] = Node(location: self.location, name: name, type: node.type,
-                                                                   modified: node.modified, size: node.size, contentType: node.contentType)
+                    if newName != nil {
                         self.updateContent()
                     } else {
                         if needRefresh {
