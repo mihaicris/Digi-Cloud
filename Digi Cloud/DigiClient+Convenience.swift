@@ -101,7 +101,7 @@ extension DigiClient {
                         completionHandler(nil, JSONError.parce("Could not parce filelist"))
                         return
                     }
-                    let content = fileList.flatMap { Node(JSON: $0, location: location) }
+                    let content = fileList.flatMap { Node(JSON: $0, parentLocation: location) }
                     completionHandler(content, nil)
                 } else {
                     completionHandler(nil, JSONError.parce("Could not parce data (getFiles)"))

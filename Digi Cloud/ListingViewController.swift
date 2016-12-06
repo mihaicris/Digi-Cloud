@@ -564,7 +564,7 @@ final class ListingViewController: UITableViewController {
             destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
         }
 
-        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.location, to: destinationLocation) {
+        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.nodeLocation, to: destinationLocation) {
             statusCode, error in
 
             func setNeededRefreshInMain() {
@@ -669,7 +669,7 @@ extension ListingViewController: ActionViewControllerDelegate {
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
-            
+
         case .copy, .move:
 
             // Save the source node in the MainNavigationController

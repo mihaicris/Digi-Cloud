@@ -17,9 +17,10 @@ struct Node {
     let modified: TimeInterval
     let size: Int64
     let contentType: String
+    let hash: String
     let ext: String
     let parentLocation: Location
-    var location: Location {
+    var nodeLocation: Location {
         get {
             return Location(mount: parentLocation.mount, path: parentLocation.path + name)
         }
@@ -27,20 +28,21 @@ struct Node {
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, name: String, type: String, modified: TimeInterval, size: Int64, contentType: String) {
+    init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String, hash: String, parentLocation: Location) {
         self.name = name
         self.type = type
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        self.parentLocation = location
+        self.hash = hash
+        self.parentLocation = parentLocation
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }
 }
 
 extension Node {
-    init?(JSON: Any, location: Location) {
+    init?(JSON: Any, parentLocation: Location) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
@@ -51,12 +53,14 @@ extension Node {
                 print("Could not parce keys")
             return nil
         }
+
         self.name = name
         self.type = type
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        self.parentLocation = location
+        self.hash = JSON["hash"] is NSNull ? "" : JSON["hash"] as! String
+        self.parentLocation = parentLocation
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }
