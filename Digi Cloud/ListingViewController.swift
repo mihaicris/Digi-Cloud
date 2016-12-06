@@ -100,6 +100,9 @@ final class ListingViewController: UITableViewController {
             self.busyIndicator.startAnimating()
             self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
             tableView.reloadData()
+            if action == .noAction && !needRefresh  {
+                self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+            }
         }
         super.viewWillAppear(animated)
     }
@@ -294,7 +297,9 @@ final class ListingViewController: UITableViewController {
                     self.tableView.reloadData()
                     // Hide the search bar
                     // -20 = 44 (search bar height) - 20 (status bar height) - 44 (navigation bar height)
-                    self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+                    if self.action == .noAction {
+                        self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+                    }
                     return
                 }
                 // Content is not empty
@@ -452,6 +457,9 @@ final class ListingViewController: UITableViewController {
             }
             self.sortContent()
             self.tableView.reloadData()
+            if self.action == .noAction {
+                self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+            }
             self.updateRightBarButtonItems()
         }
         controller.modalPresentationStyle = .popover
@@ -464,33 +472,34 @@ final class ListingViewController: UITableViewController {
     @objc fileprivate func handleCreateFolder() {
         let controller = CreateFolderViewController(location: location)
         controller.onFinish = { [unowned self](folderName) in
-            self.dismiss(animated: true, completion: nil) // dismiss AddFolderViewController
-
-            guard let folderName = folderName else {
-                // User cancelled the folder creation
-                return
-            }
-            let nextPath = self.location.path + folderName + "/"
-
-            // Set needRefresh in this list
-            self.needRefresh = true
-
-            // Set needRefresh in the main List
-            if let nav = self.presentingViewController as? UINavigationController {
-                if let cont = nav.topViewController as? ListingViewController {
-                    cont.needRefresh = true
+            // dismiss AddFolderViewController
+            self.dismiss(animated: true) {
+                guard let folderName = folderName else {
+                    // User cancelled the folder creation
+                    return
                 }
-            }
-            let folderLocation = Location(mount: self.location.mount, path: nextPath)
+                let nextPath = self.location.path + folderName + "/"
 
-            let controller = ListingViewController(action: self.action, for: folderLocation)
-            controller.title = folderName
-            controller.onFinish = {[unowned self] in
-                self.onFinish?()
+                // Set needRefresh in this list
+                self.needRefresh = true
+
+                // Set needRefresh in the main List
+                if let nav = self.presentingViewController as? UINavigationController {
+                    if let cont = nav.topViewController as? ListingViewController {
+                        cont.needRefresh = true
+                    }
+                }
+                let folderLocation = Location(mount: self.location.mount, path: nextPath)
+
+                let controller = ListingViewController(action: self.action, for: folderLocation)
+                controller.title = folderName
+                controller.onFinish = {[unowned self] in
+                    self.onFinish?()
+                }
+                self.navigationController?.pushViewController(controller, animated: true)
             }
-            self.navigationController?.pushViewController(controller, animated: true)
         }
-
+        tableView.tableHeaderView = nil
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true, completion: nil)
@@ -645,27 +654,24 @@ extension ListingViewController: ActionViewControllerDelegate {
         case .rename:
             let controller = RenameViewController(location: location, node: node)
             controller.onFinish = { (newName, needRefresh) in
-                self.dismiss(animated: true, completion: nil) // dismiss RenameViewController
-                if let name = newName {
-
-                    self.content[self.currentIndex.row] = Node(location:    self.location,
-                                                               name:        name,
-                                                               type:        node.type,
-                                                               modified:    node.modified,
-                                                               size:        node.size,
-                                                               contentType: node.contentType)
-                    self.sortContent()
-                    self.tableView.reloadData()
-                } else {
-                    if needRefresh {
+                // dismiss RenameViewController
+                self.dismiss(animated: true) {
+                    if let name = newName {
+                        self.content[self.currentIndex.row] = Node(location: self.location, name: name, type: node.type,
+                                                                   modified: node.modified, size: node.size, contentType: node.contentType)
                         self.updateContent()
+                    } else {
+                        if needRefresh {
+                            self.updateContent()
+                        }
                     }
                 }
             }
+            tableView.tableHeaderView = nil
             let navController = UINavigationController(rootViewController: controller)
             navController.modalPresentationStyle = .formSheet
             present(navController, animated: true, completion: nil)
-
+            
         case .copy, .move:
 
             // Save the source node in the MainNavigationController
@@ -757,6 +763,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                         if self.content.count == 0 {
                             self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                             self.tableView.reloadData()
+                            self.tableView.contentOffset = CGPoint(x: 0, y: -20)
                         } else {
                             self.tableView.deleteRows(at: [self.currentIndex], with: .left)
                         }
@@ -826,6 +833,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
                         if self.content.count == 0 {
                             self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                             self.tableView.reloadData()
+                            self.tableView.contentOffset = CGPoint(x: 0, y: -20)
                         } else {
                             self.tableView.deleteRows(at: [self.currentIndex], with: .left)
                         }
