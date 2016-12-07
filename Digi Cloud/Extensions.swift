@@ -19,7 +19,6 @@ extension UIViewController {
 }
 
 extension UIView {
-
     func addConstraints(with format: String, views: UIView...) {
         var viewsDictionary = [String: UIView]()
         for (index, view) in views.enumerated() {
@@ -27,14 +26,16 @@ extension UIView {
             viewsDictionary[key] = view
             view.translatesAutoresizingMaskIntoConstraints = false
         }
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format,
+                                                      options: NSLayoutFormatOptions(),
+                                                      metrics: nil,
+                                                      views: viewsDictionary))
     }
 }
 
 extension UserDefaults {
 
     // the raw value of the enum is the key for which the value is set
-
     enum UserDefaultsKeys: String {
         case isAppFirstTimeStarted
         case isLoggedIn

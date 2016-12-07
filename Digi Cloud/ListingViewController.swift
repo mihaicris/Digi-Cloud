@@ -9,9 +9,8 @@
 import UIKit
 
 #if DEBUG
-    var count: Int = 0
+var count: Int = 0
 #endif
-
 
 final class ListingViewController: UITableViewController {
 
@@ -19,7 +18,6 @@ final class ListingViewController: UITableViewController {
     var onFinish: (() -> Void)?
     let action: ActionType
     var location: Location
-    let tag: Int
     var needRefresh: Bool = true
     var content: [Node] = []
     var filteredContent: [Node] = []
@@ -58,6 +56,10 @@ final class ListingViewController: UITableViewController {
     }()
     fileprivate var addFolderButton, sortButton: UIBarButtonItem!
 
+    #if DEBUG
+    let tag: Int
+    #endif
+
     // MARK: - Initializers and Deinitializers
 
     init(action: ActionType, for location: Location) {
@@ -65,9 +67,9 @@ final class ListingViewController: UITableViewController {
         self.location = location
 
         #if DEBUG
-            count += 1
-            self.tag = count
-            print(self.tag, "✅", String(describing: type(of: self)), action)
+        count += 1
+        self.tag = count
+        print(self.tag, "✅", String(describing: type(of: self)), action)
         #endif
 
         super.init(style: .plain)
@@ -121,7 +123,7 @@ final class ListingViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.isActive {
+        if searchController != nil && searchController.isActive {
             return filteredContent.isEmpty ? 2 : filteredContent.count
         } else {
             return content.isEmpty ? 2 : content.count
@@ -247,17 +249,29 @@ final class ListingViewController: UITableViewController {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
 
-            let canceButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(handleDone))
-            navigationItem.setRightBarButton(canceButton, animated: false)
+            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
+                                               style: .plain,
+                                               target: self,
+                                               action: #selector(handleDone))
+            navigationItem.setRightBarButton(cancelButton, animated: false)
             navigationController?.isToolbarHidden = false
 
-            let buttonTitle = self.action == .copy ? NSLocalizedString("Save copy", comment: "Button Title") : NSLocalizedString("Move", comment: "Button Title")
-            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
+            let buttonTitle = self.action == .copy ?
+                    NSLocalizedString("Save copy", comment: "Button Title") :
+                    NSLocalizedString("Move", comment: "Button Title")
+
+            let copyMoveButton = UIBarButtonItem(title: buttonTitle,
+                                                 style: .plain,
+                                                 target: self,
+                                                 action: #selector(handleCopyOrMove))
             // TODO: Activate when source and destination paths are not the same
             copyMoveButton.isEnabled = true
 
             let toolBarItems = [
-                UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateFolder)),
+                UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"),
+                                style: .plain,
+                                target: self,
+                                action: #selector(handleCreateFolder)),
                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
                 copyMoveButton
             ]
@@ -332,7 +346,9 @@ final class ListingViewController: UITableViewController {
                         self.tableView.reloadData()
                     } else {
                         // Sort the content by name ascending with folders shown first
-                        newContent.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+                        newContent.sort {
+                            return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
+                        }
                         self.content = newContent
                         self.busyIndicator.stopAnimating()
                         self.tableView.reloadData()
@@ -368,7 +384,8 @@ final class ListingViewController: UITableViewController {
         let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(M_PI_2)) : CGAffineTransform.identity
         let color: UIColor = active ? .black : .darkGray
         actionButton.setTitleColor(color, for: .normal)
-        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 1,
+                       options: UIViewAnimationOptions.curveEaseOut, animations: {
             actionButton.transform = transform
         }, completion: nil)
     }
@@ -466,8 +483,8 @@ final class ListingViewController: UITableViewController {
 
         let searchLocation: Location? = scope == 0 ? self.location : nil
 
-        DigiClient.shared.search(for: searchText, at: searchLocation) { json, error in
-            print(json)
+        DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { json, error in
+            
         }
         // TODO: reloadData in tableView
     }
@@ -554,7 +571,7 @@ final class ListingViewController: UITableViewController {
             var renamed = false
             var found: Bool
             repeat {
-                // reset before ncheck of all nodes
+                // reset before check of all nodes
                 found = false
 
                 // check all nodes for the initial name or new name incremented
@@ -573,7 +590,7 @@ final class ListingViewController: UITableViewController {
                         // Pad number (using Foundation Method)
                         let countString = String(format: " (%d)", copyCount)
 
-                        // If name has an extension, we intercalete the count number
+                        // If name has an extension, we introduce the count number
                         if index != nil {
                             destinationName.insert(contentsOf: countString.characters, at: index!)
                         } else {
@@ -637,7 +654,8 @@ final class ListingViewController: UITableViewController {
 
 extension ListingViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchText: searchController.searchBar.text!, scope: searchController.searchBar.selectedScopeButtonIndex)
+        filterContentForSearchText(searchText: searchController.searchBar.text!,
+                                   scope: searchController.searchBar.selectedScopeButtonIndex)
     }
 }
 
@@ -855,7 +873,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
                         break
                     }
                 } else {
-                    print("Error: could not obtain a statuscode")
+                    print("Error: could not obtain a status code")
                 }
             }
         }

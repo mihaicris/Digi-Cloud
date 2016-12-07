@@ -10,7 +10,7 @@ import UIKit
 
 class CustomNavBar: UINavigationBar {
 
-    // Cancell animation for navigationItem when presented on a formsheet modal presentation style
+    // Cancel animation for navigationItem when presented on a formsheet modal presentation style
     override func popItem(animated: Bool) -> UINavigationItem? {
         return super.popItem(animated: false)
     }

@@ -37,11 +37,12 @@ class FolderInfoViewController: UITableViewController {
                 paragraph.lineHeightMultiple = 1.3
                 label.numberOfLines = 2
 
-                let filesString = NSLocalizedString("%d files\n", comment: "Informatin")
+                let filesString = NSLocalizedString("%d files\n", comment: "Information")
                 let text1 = String.localizedStringWithFormat(filesString, files)
-                let folderString = NSLocalizedString("%d folders", comment: "Informatin")
+                let folderString = NSLocalizedString("%d folders", comment: "Information")
                 let text2 = String.localizedStringWithFormat(folderString, folders)
-                let attributedText = NSMutableAttributedString(string: text1 + text2, attributes: [NSParagraphStyleAttributeName: paragraph])
+                let attributedText = NSMutableAttributedString(string: text1 + text2,
+                                                               attributes: [NSParagraphStyleAttributeName: paragraph])
                 label.attributedText = attributedText
 
                 return label
@@ -184,7 +185,10 @@ class FolderInfoViewController: UITableViewController {
 
     fileprivate func setupViews() {
         tableView.isScrollEnabled = false
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"), style: .plain, target: self, action: #selector(handleDone))
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(handleDone))
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
         self.title = NSLocalizedString("Folder information", comment: "Window Title")
     }
@@ -195,7 +199,7 @@ class FolderInfoViewController: UITableViewController {
 
         let folderLocation = Location(mount: self.location.mount, path: folderPath)
 
-        DigiClient.shared.getFolderInfo(location: folderLocation, completionHandler: { (info, error) in
+        DigiClient.shared.getFolderInfo(location: folderLocation, completion: { (info, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
                 return

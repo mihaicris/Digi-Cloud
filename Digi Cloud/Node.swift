@@ -28,7 +28,8 @@ struct Node {
 
     // MARK: - Initializers and Deinitializers
 
-    init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String, hash: String, parentLocation: Location) {
+    init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String, hash: String,
+         parentLocation: Location) {
         self.name = name
         self.type = type
         self.modified = modified

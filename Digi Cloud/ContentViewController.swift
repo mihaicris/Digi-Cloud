@@ -54,7 +54,9 @@ class ContentViewController: UIViewController {
 
         setupViews()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action,
+                                                            target: self,
+                                                            action: #selector(handleAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
 
     }
@@ -68,7 +70,7 @@ class ContentViewController: UIViewController {
         deleteDocumentsFolder()
 
         // Start downloading File
-        session = DigiClient.shared.startFileDownload(at: location, delegate: self)
+        session = DigiClient.shared.startDownloadFile(at: location, delegate: self)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -103,7 +105,9 @@ class ContentViewController: UIViewController {
 
         // Delete all content of the Documents directory
         do {
-            let directoryContents = try fileManager.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
+            let directoryContents = try fileManager.contentsOfDirectory(at: documentsUrl,
+                                                                        includingPropertiesForKeys: nil,
+                                                                        options: [])
             for url in directoryContents {
                 try fileManager.removeItem(at: url)
             }
@@ -133,10 +137,10 @@ extension ContentViewController: URLSessionDownloadDelegate {
             try fileManager.moveItem(at: location, to: self.fileUrl)
 
             DispatchQueue.main.async {
-                // load downloded file in the view
+                // load file in the view
                 self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
 
-                // enable rightbarbutton for exporting
+                // enable right bar button for exporting
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
             }
         } catch let error {
@@ -144,7 +148,8 @@ extension ContentViewController: URLSessionDownloadDelegate {
         }
     }
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
+                    didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
 
         // calculate the progress value
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)

@@ -62,7 +62,7 @@ class LoginViewController: UIViewController {
     }
     #endif
 
-    // MARK: - Overrided Methods and Properties
+    // MARK: - Overridden Methods and Properties
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent

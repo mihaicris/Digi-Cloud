@@ -143,7 +143,7 @@ class CreateFolderViewController: UITableViewController {
         rightBarButton.isEnabled = false
 
         // network request for rename
-        DigiClient.shared.createFolder(in: location, name: folderName) { (statusCode, error) in
+        DigiClient.shared.createFolderNode(in: location, name: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error
