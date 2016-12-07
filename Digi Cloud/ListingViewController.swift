@@ -103,9 +103,7 @@ final class ListingViewController: UITableViewController {
             self.busyIndicator.startAnimating()
             self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
             tableView.reloadData()
-            if action == .noAction && !needRefresh  {
-                self.tableView.contentOffset = CGPoint(x: 0, y: -20)
-            }
+            self.hideSearchBar()
         }
         super.viewWillAppear(animated)
     }
@@ -313,22 +311,9 @@ final class ListingViewController: UITableViewController {
                 return
             }
             if var newContent = receivedContent {
-                if newContent.isEmpty {
-                    self.content.removeAll()
-                    self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                    self.busyIndicator.stopAnimating()
-                    self.tableView.reloadData()
-                    // Hide the search bar
-                    // -20 = 44 (search bar height) - 20 (status bar height) - 44 (navigation bar height)
-                    if self.action == .noAction {
-                        self.tableView.contentOffset = CGPoint(x: 0, y: -20)
-                    }
-                    return
-                }
-                // Content is not empty
                 switch self.action {
                 case .move:
-                    // Move action! The indicated node will be removed from the list
+                    // Move action. The indicated node will be removed from the list.
                     guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
                         print("Couldn't get the source node.")
                         return
@@ -342,29 +327,26 @@ final class ListingViewController: UITableViewController {
                     if newContent.isEmpty {
                         self.content.removeAll()
                         self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                        self.busyIndicator.stopAnimating()
-                        self.tableView.reloadData()
                     } else {
                         // Sort the content by name ascending with folders shown first
                         newContent.sort {
                             return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
                         }
                         self.content = newContent
-                        self.busyIndicator.stopAnimating()
-                        self.tableView.reloadData()
                     }
-                // For cases .noAction and .copy
+                case .copy:
+                    newContent.sort {
+                        return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
+                    }
+                    self.content = newContent
                 default:
                     self.content = newContent
                     self.sortContent()
-                    self.busyIndicator.stopAnimating()
-                    self.tableView.reloadData()
                 }
             }
-            // Hide the search bar only in main list
-            if self.action == .noAction {
-                self.tableView.contentOffset = CGPoint(x: 0, y: -20)
-            }
+            self.busyIndicator.stopAnimating()
+            self.tableView.reloadData()
+            self.hideSearchBar()
         }
     }
 
@@ -489,6 +471,16 @@ final class ListingViewController: UITableViewController {
         // TODO: reloadData in tableView
     }
 
+    fileprivate func hideSearchBar() {
+        switch (action) {
+        case .copy, .move, .rename: break
+        default:
+            // Hide the search bar
+            // -20 = 44 (search bar height) - 20 (status bar height) - 44 (navigation bar height)
+            self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+        }
+    }
+
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
@@ -497,9 +489,7 @@ final class ListingViewController: UITableViewController {
             }
             self.sortContent()
             self.tableView.reloadData()
-            if self.action == .noAction {
-                self.tableView.contentOffset = CGPoint(x: 0, y: -20)
-            }
+            self.hideSearchBar()
             self.updateRightBarButtonItems()
         }
         controller.modalPresentationStyle = .popover
@@ -791,7 +781,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                         if self.content.count == 0 {
                             self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                             self.tableView.reloadData()
-                            self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+                            self.hideSearchBar()
                         } else {
                             self.tableView.deleteRows(at: [self.currentIndex], with: .left)
                         }
@@ -861,7 +851,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
                         if self.content.count == 0 {
                             self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                             self.tableView.reloadData()
-                            self.tableView.contentOffset = CGPoint(x: 0, y: -20)
+                            self.hideSearchBar()
                         } else {
                             self.tableView.deleteRows(at: [self.currentIndex], with: .left)
                         }
