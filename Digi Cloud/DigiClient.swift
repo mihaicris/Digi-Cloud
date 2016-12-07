@@ -38,11 +38,21 @@ final class DigiClient {
 
     // MARK: - Helper Functions
 
-    func networkTask(requestType:       String,
-                     method:            String,
-                     headers:           [String: String]?,
-                     json:              [String: String]?,
-                     parameters:        [String: Any]?,
+
+    /// Send a HTTP Network Request
+    ///
+    /// - Parameters:
+    ///   - requestType: The request type like GET, POST, PUT, DELETE, etc.
+    ///   - method: The methode of the HTTP request (without http://)
+    ///   - headers: Dictionary with HTTP headers
+    ///   - json: Dictionary for HTTP Body JSON
+    ///   - parameters: A dictionary with query parameters in the request
+    ///   - completion: The block called after the server has responded
+    ///   - data: The data of the network response
+    ///   - response: The status code of the newtork response
+    ///   - error: The error occurred in the network request, nil for no error.
+    func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: String]?,
+                     parameters: [String: Any]?,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
@@ -136,7 +146,8 @@ final class DigiClient {
         return request
     }
 
-    func authenticate(email: String, password: String, completion: @escaping(_ success: Bool, _ error: Error?) -> Void) {
+    func authenticate(email: String, password: String,
+                      completion: @escaping(_ success: Bool, _ error: Error?) -> Void) {
         let method = Methods.Token
         let headers = DefaultHeaders.Headers
         let jsonBody = ["password": password, "email": email]
@@ -210,6 +221,13 @@ final class DigiClient {
         }
     }
 
+    /// Gets the content of nodes of a location in the Cloud storage
+    ///
+    /// - Parameters:
+    ///   - location: The location to get the content
+    ///   - completion: The block called after the server has responded
+    ///   - result: Returned content as an array of nodes
+    ///   - error: The error occurred in the network request, nil for no error.
     func getContent(at location: Location,
                     completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
@@ -237,6 +255,12 @@ final class DigiClient {
         }
     }
 
+    /// Starts donwload of a file
+    ///
+    /// - Parameters:
+    ///   - location: Location of the file
+    ///   - delegate: The object delegate which will handle the events while and after downloading
+    /// - Returns: The URL session for the download
     func startDownloadFile(at location: Location, delegate: AnyObject) -> URLSession {
 
         // create the special session with custom delegate for download task
@@ -263,6 +287,14 @@ final class DigiClient {
         return session
     }
 
+    /// Renames a node
+    ///
+    /// - Parameters:
+    ///   - location: Location of the node to be renamed
+    ///   - name: The new name of the node
+    ///   - completion: The block called after the server has responded
+    ///   - statusCode: Returned network request status code
+    ///   - error: The error occurred in the network request, nil for no error.
     func renameNode(at location: Location, with name: String,
                     completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
@@ -283,6 +315,13 @@ final class DigiClient {
         }
     }
 
+    /// Deletes a node (file or folder)
+    ///
+    /// - Parameters:
+    ///   - location: Location of the node
+    ///   - completion: The block called after the server has responded
+    ///   - statusCode: Returned network request status code
+    ///   - error: The error occurred in the network request, nil for no error.
     func deleteNode(at location: Location,
                     completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
@@ -300,6 +339,14 @@ final class DigiClient {
         }
     }
 
+    /// Create a node of type folder
+    ///
+    /// - Parameters:
+    ///   - location: Location at which the folder is created
+    ///   - name: Folder name
+    ///   - completion: The block called after the server has responded
+    ///   - statusCode: Returned network request status code
+    ///   - error: The error occurred in the network request, nil for no error.
     func createFolderNode(in location: Location, name: String,
                           completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
@@ -359,7 +406,9 @@ final class DigiClient {
     /// Get the complete tree structure of a location
     /// - Parameters:
     ///   - location: The location of which the tree is returned
-    ///   - completion:
+    ///   - completion: The block called after the server has responded
+    ///   - json: The dictionary [String: Any] containing the search hits.
+    ///   - error: The error occurred in the network request, nil for no error.
     func getTree(at location: Location,
                  completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
@@ -385,11 +434,12 @@ final class DigiClient {
     /// Get information about a folder
     ///
     /// - Parameters:
-    ///   - path: path of the folder
-    ///   - completion: completion handler with info about folder and error
-    ///   -
+    ///   - location: The location of which we get the information
+    ///   - completion: The block called after the server has responded
+    ///   - info: Tuple containing size, number of files and number of folders
+    ///   - error: The error occurred in the network request, nil for no error.
     func getFolderInfo(location: Location,
-                       completion: @escaping(_ size: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
+                       completion: @escaping(_ info: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -477,4 +527,3 @@ final class DigiClient {
         }
     }
 }
-
