@@ -48,13 +48,11 @@ final class ListingViewController: UITableViewController {
     }()
     fileprivate let emptyFolderLabel: UILabel = {
         let l = UILabel()
-        l.text = NSLocalizedString("Loading ...", comment: "Information")
         l.textColor = UIColor.lightGray
-        l.sizeToFit()
         l.textAlignment = .center
         return l
     }()
-    fileprivate var addFolderButton, sortButton: UIBarButtonItem!
+    fileprivate var searchButton, addFolderButton, sortButton: UIBarButtonItem!
 
     #if DEBUG
     let tag: Int
@@ -67,9 +65,9 @@ final class ListingViewController: UITableViewController {
         self.location = location
 
         #if DEBUG
-        count += 1
-        self.tag = count
-        print(self.tag, "✅", String(describing: type(of: self)), action)
+            count += 1
+            self.tag = count
+            print(self.tag, "✅", String(describing: type(of: self)), action)
         #endif
 
         super.init(style: .plain)
@@ -103,13 +101,14 @@ final class ListingViewController: UITableViewController {
             self.busyIndicator.startAnimating()
             self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
             tableView.reloadData()
-            self.hideSearchBar()
         }
+        tableView.tableHeaderView = nil
         super.viewWillAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         super.viewWillDisappear(animated)
     }
 
@@ -192,7 +191,7 @@ final class ListingViewController: UITableViewController {
 
                 // Make sens only if this is a copy or move controller
                 controller.onFinish = { [unowned self] in
-                   self.onFinish?()
+                    self.onFinish?()
                 }
             }
             navigationController?.pushViewController(controller, animated: true)
@@ -216,8 +215,11 @@ final class ListingViewController: UITableViewController {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if refreshControl?.isRefreshing == true {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-                self.updateContent()
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.8) {
+                self.refreshControl?.endRefreshing()
+                self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                self.busyIndicator.stopAnimating()
+                self.tableView.reloadData()
             }
         }
     }
@@ -235,7 +237,10 @@ final class ListingViewController: UITableViewController {
             self.FolderCellID = "DirectoryCellWithButton"
             configureSearchController()
         }
+
         refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
+
         tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -255,8 +260,8 @@ final class ListingViewController: UITableViewController {
             navigationController?.isToolbarHidden = false
 
             let buttonTitle = self.action == .copy ?
-                    NSLocalizedString("Save copy", comment: "Button Title") :
-                    NSLocalizedString("Move", comment: "Button Title")
+                NSLocalizedString("Save copy", comment: "Button Title") :
+                NSLocalizedString("Move", comment: "Button Title")
 
             let copyMoveButton = UIBarButtonItem(title: buttonTitle,
                                                  style: .plain,
@@ -295,47 +300,40 @@ final class ListingViewController: UITableViewController {
     fileprivate func updateContent() {
 
         self.needRefresh = false
-
-        if content.isEmpty {
+        self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
+        if self.refreshControl?.isRefreshing == false {
             self.busyIndicator.startAnimating()
         }
 
         DigiClient.shared.getContent(at: location) { receivedContent, error in
-            self.refreshControl?.endRefreshing()
-            // Add search bar only in the main list (not in copy / move list)
-            if self.tableView.tableHeaderView == nil && self.action == .noAction {
-                self.tableView.tableHeaderView = self.searchController.searchBar
+
+            if self.refreshControl?.isRefreshing == false {
+                self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                self.busyIndicator.stopAnimating()
             }
+
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
             if var newContent = receivedContent {
                 switch self.action {
-                case .move:
+                case .copy, .move:
                     // Move action. The indicated node will be removed from the list.
                     guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
                         print("Couldn't get the source node.")
                         return
                     }
-                    for (index, elem) in newContent.enumerated() {
-                        if elem.name == sourceNode.name {
-                            newContent.remove(at: index)
-                            break
+                    if self.action == .move {
+                        for (index, elem) in newContent.enumerated() {
+                            if elem.name == sourceNode.name {
+                                newContent.remove(at: index)
+                                break
+                            }
                         }
                     }
-                    if newContent.isEmpty {
-                        self.content.removeAll()
-                        self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                    } else {
-                        // Sort the content by name ascending with folders shown first
-                        newContent.sort {
-                            return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
-                        }
-                        self.content = newContent
-                    }
-                case .copy:
                     newContent.sort {
+                        // Sort the content by name ascending with folders shown first
                         return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
                     }
                     self.content = newContent
@@ -343,10 +341,12 @@ final class ListingViewController: UITableViewController {
                     self.content = newContent
                     self.sortContent()
                 }
+                if self.refreshControl?.isRefreshing == true {
+                    return
+                }
+
+                self.tableView.reloadData()
             }
-            self.busyIndicator.stopAnimating()
-            self.tableView.reloadData()
-            self.hideSearchBar()
         }
     }
 
@@ -368,7 +368,7 @@ final class ListingViewController: UITableViewController {
         actionButton.setTitleColor(color, for: .normal)
         UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 1,
                        options: UIViewAnimationOptions.curveEaseOut, animations: {
-            actionButton.transform = transform
+                        actionButton.transform = transform
         }, completion: nil)
     }
 
@@ -385,7 +385,8 @@ final class ListingViewController: UITableViewController {
         }
         sortButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
         addFolderButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(handleCreateFolder))
-        navigationItem.setRightBarButtonItems([sortButton, addFolderButton], animated: false)
+        searchButton    = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
+        navigationItem.setRightBarButtonItems([sortButton, addFolderButton, searchButton], animated: false)
     }
 
     fileprivate func sortByName() {
@@ -466,19 +467,9 @@ final class ListingViewController: UITableViewController {
         let searchLocation: Location? = scope == 0 ? self.location : nil
 
         DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { json, error in
-            
+
         }
         // TODO: reloadData in tableView
-    }
-
-    fileprivate func hideSearchBar() {
-        switch (action) {
-        case .copy, .move, .rename: break
-        default:
-            // Hide the search bar
-            // -20 = 44 (search bar height) - 20 (status bar height) - 44 (navigation bar height)
-            self.tableView.contentOffset = CGPoint(x: 0, y: -20)
-        }
     }
 
     @objc fileprivate func handleSortSelect() {
@@ -489,7 +480,6 @@ final class ListingViewController: UITableViewController {
             }
             self.sortContent()
             self.tableView.reloadData()
-            self.hideSearchBar()
             self.updateRightBarButtonItems()
         }
         controller.modalPresentationStyle = .popover
@@ -537,6 +527,15 @@ final class ListingViewController: UITableViewController {
 
     @objc fileprivate func handleDone() {
         self.onFinish?()
+    }
+
+    @objc fileprivate func handleRefresh() {
+        self.updateContent()
+    }
+
+    @objc fileprivate func handleSearch() {
+        self.tableView.tableHeaderView = searchController.searchBar
+        self.searchController.searchBar.becomeFirstResponder()
     }
 
     @objc fileprivate func handleCopyOrMove() {
@@ -653,6 +652,10 @@ extension ListingViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         filterContentForSearchText(searchText: searchBar.text!, scope: selectedScope)
     }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
 }
 
 extension ListingViewController: UIPopoverPresentationControllerDelegate {
@@ -666,138 +669,136 @@ extension ListingViewController: ActionViewControllerDelegate {
     func didSelectOption(action: ActionType) {
 
         self.animateActionButton(active: false)
-        dismiss(animated: true, completion: nil) // dismiss ActionsViewController
+        dismiss(animated: true) {
+            let node: Node = self.content[self.currentIndex.row]
 
-        let node: Node = content[currentIndex.row]
-
-        switch action {
-        case .rename:
-            let controller = RenameViewController(location: location, node: node)
-            controller.onFinish = { (newName, needRefresh) in
-                // dismiss RenameViewController
-                self.dismiss(animated: true) {
-                    if newName != nil {
-                        self.updateContent()
-                    } else {
-                        if needRefresh {
+            switch action {
+            case .rename:
+                let controller = RenameViewController(location: self.location, node: node)
+                controller.onFinish = { (newName, needRefresh) in
+                    // dismiss RenameViewController
+                    self.dismiss(animated: true) {
+                        if newName != nil {
                             self.updateContent()
-                        }
-                    }
-                }
-            }
-            tableView.tableHeaderView = nil
-            let navController = UINavigationController(rootViewController: controller)
-            navController.modalPresentationStyle = .formSheet
-            present(navController, animated: true, completion: nil)
-
-        case .copy, .move:
-
-            // Save the source node in the MainNavigationController
-            (self.navigationController as? MainNavigationController)?.source = node
-
-            guard let previousControllers = navigationController?.viewControllers else {
-                print("Couldn't get the previous navigation controllers!")
-                return
-            }
-
-            var controllers: [UIViewController] = []
-
-            for (index, p) in previousControllers.enumerated() {
-
-                // If index is 0 than this is a location controller
-                if index == 0 {
-                    let c = LocationsTableViewController(action: action)
-                    c.title = NSLocalizedString("Locations", comment: "Window Title")
-                    c.onFinish = { [unowned self] in
-
-                        // Clear source node
-                        (self.navigationController as? MainNavigationController)?.source = nil
-
-                        self.dismiss(animated: true) {
-                            if self.needRefresh {
+                        } else {
+                            if needRefresh {
                                 self.updateContent()
                             }
                         }
                     }
-                    controllers.append(c)
-                    continue
+                }
+                let navController = UINavigationController(rootViewController: controller)
+                navController.modalPresentationStyle = .formSheet
+                self.present(navController, animated: true, completion: nil)
+
+            case .copy, .move:
+
+                // Save the source node in the MainNavigationController
+                (self.navigationController as? MainNavigationController)?.source = node
+
+                guard let previousControllers = self.navigationController?.viewControllers else {
+                    print("Couldn't get the previous navigation controllers!")
+                    return
                 }
 
-                // we need to cast in order to tet the mountID and path from it
-                if let p = p as? ListingViewController {
-                    let c = ListingViewController(action: action, for: p.location)
-                    c.title = p.title
-                    c.onFinish = { [unowned self] in
-                        if self.action != .noAction {
-                            self.onFinish?()
-                        } else {
+                var controllers: [UIViewController] = []
+
+                for (index, p) in previousControllers.enumerated() {
+
+                    // If index is 0 than this is a location controller
+                    if index == 0 {
+                        let c = LocationsTableViewController(action: action)
+                        c.title = NSLocalizedString("Locations", comment: "Window Title")
+                        c.onFinish = { [unowned self] in
+
+                            // Clear source node
+                            (self.navigationController as? MainNavigationController)?.source = nil
+
                             self.dismiss(animated: true) {
-
-                                // Clear source node
-                                (self.navigationController as? MainNavigationController)?.source = nil
-
                                 if self.needRefresh {
                                     self.updateContent()
                                 }
                             }
                         }
+                        controllers.append(c)
+                        continue
                     }
-                    controllers.append(c)
-                }
-            }
 
-            let navController = UINavigationController(navigationBarClass: CustomNavBar.self, toolbarClass: nil)
-            navController.setViewControllers(controllers, animated: false)
-            navController.modalPresentationStyle = .formSheet
-            present(navController, animated: true, completion: nil)
+                    // we need to cast in order to tet the mountID and path from it
+                    if let p = p as? ListingViewController {
+                        let c = ListingViewController(action: action, for: p.location)
+                        c.title = p.title
+                        c.onFinish = { [unowned self] in
+                            if self.action != .noAction {
+                                self.onFinish?()
+                            } else {
+                                self.dismiss(animated: true) {
 
-        case .delete:
+                                    // Clear source node
+                                    (self.navigationController as? MainNavigationController)?.source = nil
 
-            if node.type == "file" {
-                let controller = DeleteViewController(node: node)
-                controller.delegate = self
-
-                // position alert on the same row with the file
-                var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
-                for view in sourceView.subviews {
-                    if view.tag == 1 {
-                        sourceView = view.subviews[0]
+                                    if self.needRefresh {
+                                        self.updateContent()
+                                    }
+                                }
+                            }
+                        }
+                        controllers.append(c)
                     }
                 }
-                controller.modalPresentationStyle = .popover
-                controller.popoverPresentationController?.sourceView = sourceView
-                controller.popoverPresentationController?.sourceRect = sourceView.bounds
-                present(controller, animated: true, completion: nil)
-            }
 
-        case .folderInfo:
-            let controller = FolderInfoViewController(location: self.location, node: node)
-            controller.onFinish = { (success, needRefresh) in
+                let navController = UINavigationController(navigationBarClass: CustomNavBar.self, toolbarClass: nil)
+                navController.setViewControllers(controllers, animated: false)
+                navController.modalPresentationStyle = .formSheet
+                self.present(navController, animated: true, completion: nil)
 
-                // dismiss FolderViewController
-                self.dismiss(animated: true) {
-                    if success {
-                        self.content.remove(at: self.currentIndex.row)
-                        if self.content.count == 0 {
-                            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                            self.tableView.reloadData()
-                            self.hideSearchBar()
+            case .delete:
+
+                if node.type == "file" {
+                    let controller = DeleteViewController(node: node)
+                    controller.delegate = self
+
+                    // position alert on the same row with the file
+                    var sourceView = self.tableView.cellForRow(at: self.currentIndex)!.contentView
+                    for view in sourceView.subviews {
+                        if view.tag == 1 {
+                            sourceView = view.subviews[0]
+                        }
+                    }
+                    controller.modalPresentationStyle = .popover
+                    controller.popoverPresentationController?.sourceView = sourceView
+                    controller.popoverPresentationController?.sourceRect = sourceView.bounds
+                    self.present(controller, animated: true, completion: nil)
+                }
+
+            case .folderInfo:
+                let controller = FolderInfoViewController(location: self.location, node: node)
+                controller.onFinish = { (success, needRefresh) in
+
+                    // dismiss FolderViewController
+                    self.dismiss(animated: true) {
+                        if success {
+                            self.content.remove(at: self.currentIndex.row)
+                            if self.content.count == 0 {
+                                self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                                self.tableView.reloadData()
+                            } else {
+                                self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                            }
                         } else {
-                            self.tableView.deleteRows(at: [self.currentIndex], with: .left)
-                        }
-                    } else {
-                        if needRefresh {
-                            self.updateContent()
+                            if needRefresh {
+                                self.updateContent()
+                            }
                         }
                     }
                 }
-            }
-            let navController = UINavigationController(rootViewController: controller)
-            navController.modalPresentationStyle = .formSheet
-            present(navController, animated: true, completion: nil)
+                let navController = UINavigationController(rootViewController: controller)
+                navController.modalPresentationStyle = .formSheet
+                self.present(navController, animated: true, completion: nil)
 
-        default:
-            return
+            default:
+                return
+            }
         }
     }
 }
@@ -851,7 +852,6 @@ extension ListingViewController: DeleteViewControllerDelegate {
                         if self.content.count == 0 {
                             self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                             self.tableView.reloadData()
-                            self.hideSearchBar()
                         } else {
                             self.tableView.deleteRows(at: [self.currentIndex], with: .left)
                         }
