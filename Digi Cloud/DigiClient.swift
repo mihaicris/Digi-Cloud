@@ -43,13 +43,13 @@ final class DigiClient {
     ///
     /// - Parameters:
     ///   - requestType: The request type like GET, POST, PUT, DELETE, etc.
-    ///   - method: The methode of the HTTP request (without http://)
+    ///   - method: The method of the HTTP request (without http://)
     ///   - headers: Dictionary with HTTP headers
     ///   - json: Dictionary for HTTP Body JSON
     ///   - parameters: A dictionary with query parameters in the request
     ///   - completion: The block called after the server has responded
     ///   - data: The data of the network response
-    ///   - response: The status code of the newtork response
+    ///   - response: The status code of the network response
     ///   - error: The error occurred in the network request, nil for no error.
     func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: String]?,
                      parameters: [String: Any]?,
@@ -255,7 +255,7 @@ final class DigiClient {
         }
     }
 
-    /// Starts donwload of a file
+    /// Starts the download of a file
     ///
     /// - Parameters:
     ///   - location: Location of the file
