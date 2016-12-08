@@ -596,7 +596,7 @@ final class ListingViewController: UITableViewController {
             destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
         }
 
-        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.nodeLocation, to: destinationLocation) {
+        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.location, to: destinationLocation) {
             statusCode, error in
 
             func setNeededRefreshInMain() {

@@ -19,31 +19,26 @@ struct Node {
     let contentType: String
     let hash: String
     let ext: String
-    let parentLocation: Location
-    var nodeLocation: Location {
-        get {
-            return Location(mount: parentLocation.mount, path: parentLocation.path + name)
-        }
-    }
+    var location: Location
 
     // MARK: - Initializers and Deinitializers
 
     init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String, hash: String,
-         parentLocation: Location) {
+         location: Location) {
         self.name = name
         self.type = type
         self.modified = modified
         self.size = size
         self.contentType = contentType
         self.hash = hash
-        self.parentLocation = parentLocation
+        self.location = location.appending(name: name)
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }
 }
 
 extension Node {
-    init?(JSON: Any, parentLocation: Location) {
+    init?(JSON: Any, location: Location) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
@@ -60,8 +55,8 @@ extension Node {
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        self.hash = JSON["hash"] is NSNull ? "" : JSON["hash"] as! String
-        self.parentLocation = parentLocation
+        self.hash = JSON["hash"] is NSNull ? "" : JSON["hash"] as? String ?? ""
+        self.location = location.appending(name: name)
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }

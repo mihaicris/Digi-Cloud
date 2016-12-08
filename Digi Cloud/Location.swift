@@ -25,6 +25,10 @@ struct Location {
         self.path = path
     }
 
+    func appending(name: String) -> Location {
+        return Location(mount: mount, path: String("\(path)\(name)"))
+    }
+
 }
 
 extension Location: Equatable {
