@@ -45,7 +45,9 @@ class CreateFolderViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        textField.becomeFirstResponder()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.textField.becomeFirstResponder()
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

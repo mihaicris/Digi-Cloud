@@ -364,12 +364,15 @@ final class ListingViewController: UITableViewController {
             return
         }
         let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(M_PI_2)) : CGAffineTransform.identity
-        let color: UIColor = active ? .black : .darkGray
-        actionButton.setTitleColor(color, for: .normal)
-        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 1,
-                       options: UIViewAnimationOptions.curveEaseOut, animations: {
-                        actionButton.transform = transform
-        }, completion: nil)
+        UIView.animate(withDuration: 0.4,
+                       delay: 0.0,
+                       usingSpringWithDamping: 1,
+                       initialSpringVelocity: 1,
+                       options: UIViewAnimationOptions.curveEaseOut,
+                       animations: {
+                          actionButton.transform = transform
+                       },
+                       completion: nil)
     }
 
     fileprivate func updateRightBarButtonItems() {
