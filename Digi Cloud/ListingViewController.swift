@@ -463,13 +463,13 @@ final class ListingViewController: UITableViewController {
 
     fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
         if searchText.characters.count < 3 {
-            print("Too small")
             return
         }
 
         let searchLocation: Location? = scope == 0 ? self.location : nil
 
         DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { json, error in
+
 
         }
         // TODO: reloadData in tableView

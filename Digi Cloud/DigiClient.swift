@@ -242,11 +242,23 @@ final class DigiClient {
                 return
             } else {
                 if let dict = data as? [String: Any] {
-                    guard let fileList = dict["files"] as? [[String: Any]] else {
+                    guard let nodeList = dict["files"] as? [[String: Any]] else {
                         completion(nil, JSONError.parce("Could not parce filelist"))
                         return
                     }
-                    let content = fileList.flatMap { Node(JSON: $0, location: location) }
+                    var content: [Node] = []
+                    for nodeJSON in nodeList {
+                        guard let nodeName = nodeJSON["name"] as? String else {
+                            completion (nil, JSONError.parce("JSON Error"))
+                            return
+                        }
+                        let locationNode = Location(mount: location.mount, path: location.path + nodeName)
+                        guard let node = Node(JSON: nodeJSON, location: locationNode) else {
+                            completion (nil, JSONError.parce("JSON Error"))
+                            return
+                        }
+                        content.append(node)
+                    }
                     completion(content, nil)
                 } else {
                     completion(nil, JSONError.parce("Could not parce data (getFiles)"))
@@ -376,7 +388,7 @@ final class DigiClient {
     ///   - json: The dictionary [String: Any] containing the search hits.
     ///   - error: The error occurred in the network request, nil for no error.
     func searchNodes(for query: String, at location: Location?,
-                     completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void) {
+                     completion: @escaping (_ json: [Node]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
         var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
@@ -395,11 +407,37 @@ final class DigiClient {
                 completion(nil, error)
                 return
             }
-            guard let json = json as? [String: Any] else {
-                completion(nil, nil)
+            guard let json = json as? [String: Any],
+                let hitsJSON = json["hits"] as? [[String: Any]],
+                let mountsJSON = json["mounts"] as? [String: Any]
+            else {
+                completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
                 return
             }
-            completion(json, nil)
+
+            var results: [Node] = []
+
+            for hitJSON in hitsJSON {
+                guard let hitMountId = hitJSON["mountId"] as? String,
+                    let hitMount = mountsJSON[hitMountId] as? [String: Any],
+                    let hitMountStruct = Mount(JSON: hitMount),
+                    let hitPath = hitJSON["path"] as? String,
+                    let hitName = hitJSON["name"] as? String,
+                    let hitType = hitJSON["type"] as? String,
+                    let hitModified = hitJSON["modified"] as? TimeInterval,
+                    let hitSize = hitJSON["size"] as? Int64,
+                    let hitContentType = hitJSON["contentType"] as? String else {
+                        completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
+                        return
+                }
+                let hitLocation = Location(mount: hitMountStruct, path: hitPath)
+                let hitNode = Node(name: hitName, type: hitType, modified: hitModified, size: hitSize, contentType: hitContentType,
+                                hash: "", location: hitLocation)
+                results.append(hitNode)
+            }
+
+
+            completion(results, nil)
         }
     }
 

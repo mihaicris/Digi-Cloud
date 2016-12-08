@@ -31,7 +31,7 @@ struct Node {
         self.size = size
         self.contentType = contentType
         self.hash = hash
-        self.location = location.appending(name: name)
+        self.location = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }
@@ -56,7 +56,7 @@ extension Node {
         self.size = size
         self.contentType = contentType
         self.hash = JSON["hash"] is NSNull ? "" : JSON["hash"] as? String ?? ""
-        self.location = location.appending(name: name)
+        self.location = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
     }
