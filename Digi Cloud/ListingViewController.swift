@@ -522,7 +522,6 @@ final class ListingViewController: UITableViewController {
                 self.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        tableView.tableHeaderView = nil
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true, completion: nil)
@@ -537,7 +536,10 @@ final class ListingViewController: UITableViewController {
     }
 
     @objc fileprivate func handleSearch() {
-        self.tableView.tableHeaderView = searchController.searchBar
+        self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
+        if self.tableView.tableHeaderView == nil {
+            self.tableView.tableHeaderView = searchController.searchBar
+        }
         self.searchController.searchBar.becomeFirstResponder()
     }
 
