@@ -385,7 +385,7 @@ final class DigiClient {
     ///   - query: String to search
     ///   - location: Location to search (mount and path). If nil, search is made in all locations
     ///   - completion: The block called after the server has responded
-    ///   - json: The dictionary [String: Any] containing the search hits.
+    ///   - json: An array containing the search hits (Nodes).
     ///   - error: The error occurred in the network request, nil for no error.
     func searchNodes(for query: String, at location: Location?,
                      completion: @escaping (_ json: [Node]?, _ error: Error?) -> Void) {
@@ -435,7 +435,6 @@ final class DigiClient {
                                 hash: "", location: hitLocation)
                 results.append(hitNode)
             }
-
 
             completion(results, nil)
         }
