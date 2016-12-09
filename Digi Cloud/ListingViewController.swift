@@ -357,6 +357,7 @@ final class ListingViewController: UITableViewController {
                     if self.tableView.isDragging {
                         return
                     } else {
+                        self.updateMessageForEmptyFolder()
                         self.endRefreshAndReloadTable()
                     }
                 } else {
@@ -372,16 +373,16 @@ final class ListingViewController: UITableViewController {
     fileprivate func updateMessageForEmptyFolder() {
         // For the case when the folder is empty, setting the message text on screen.
         if self.content.isEmpty {
-            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
             self.busyIndicator.stopAnimating()
+            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
         }
     }
 
     fileprivate func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.refreshControl?.endRefreshing()
-            self.updateMessageForEmptyFolder()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.updateMessageForEmptyFolder()
                 self.tableView.reloadData()
             }
         }
@@ -841,7 +842,7 @@ extension ListingViewController: ActionViewControllerDelegate {
                         if success {
                             self.content.remove(at: self.currentIndex.row)
                             if self.content.count == 0 {
-                                self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                                self.updateMessageForEmptyFolder()
                                 self.tableView.reloadData()
                             } else {
                                 self.tableView.deleteRows(at: [self.currentIndex], with: .left)
@@ -910,8 +911,8 @@ extension ListingViewController: DeleteViewControllerDelegate {
                     switch code {
                     case 200:
                         self.content.remove(at: self.currentIndex.row)
-                        if self.content.count == 0 {
-                            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                        if self.content.isEmpty {
+                            self.updateMessageForEmptyFolder()
                             self.tableView.reloadData()
                         } else {
                             self.tableView.deleteRows(at: [self.currentIndex], with: .left)
