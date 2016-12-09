@@ -150,7 +150,12 @@ final class ListingViewController: UITableViewController {
             return cell
         }
 
-        let data = content[indexPath.row]
+        var data: Node
+        if searchController != nil && searchController.isActive {
+            data = filteredContent[indexPath.row]
+        } else {
+            data = content[indexPath.row]
+        }
 
         if data.type == "dir" {
             let cell = tableView.dequeueReusableCell(withIdentifier: FolderCellID, for: indexPath) as! DirectoryCell
@@ -177,7 +182,13 @@ final class ListingViewController: UITableViewController {
 
         tableView.deselectRow(at: indexPath, animated: false)
 
-        let item = content[indexPath.row]
+        var item: Node
+
+        if searchController != nil && searchController.isActive {
+            item = filteredContent[indexPath.row]
+        } else {
+            item = content[indexPath.row]
+        }
 
         if item.type == "dir" {
             // This is a Folder
@@ -481,8 +492,16 @@ final class ListingViewController: UITableViewController {
 
         let searchLocation: Location? = scope == 0 ? self.location : nil
 
-        DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { json, error in
-
+        DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { nodes, error in
+            guard error == nil else {
+                print("Error: \(error!.localizedDescription)")
+                return
+            }
+            if let nodes = nodes {
+                self.filteredContent = nodes
+                // TODO: Sort results with folder first?
+                self.tableView.reloadData()
+            }
 
         }
         // TODO: reloadData in tableView
