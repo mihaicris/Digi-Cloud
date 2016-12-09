@@ -318,7 +318,6 @@ final class ListingViewController: UITableViewController {
         }
 
         DigiClient.shared.getContent(at: location) { receivedContent, error in
-
             self.isUpdating = false
 
             guard error == nil else {
@@ -328,7 +327,7 @@ final class ListingViewController: UITableViewController {
             if var newContent = receivedContent {
                 switch self.action {
                 case .copy, .move:
-                    // Move action. The indicated node will be removed from the list.
+                    // Only in move action, the moved node is not shown in the list.
                     guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
                         print("Couldn't get the source node.")
                         return
@@ -341,24 +340,33 @@ final class ListingViewController: UITableViewController {
                             }
                         }
                     }
+                    // While copy and move, we sort by name with folders shown first.
                     newContent.sort {
-                        // Sort the content by name ascending with folders shown first
                         return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
                     }
                     self.content = newContent
+                // In normal case (.noAction) we just sort the content with the method saved by the user.
                 default:
                     self.content = newContent
                     self.sortContent()
                 }
+
+                // For the case when the folder is empty, setting the message text on screen.
+                if self.content.isEmpty {
+                    self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                    self.busyIndicator.stopAnimating()
+                }
+
+                // In case the user pulled the table to refresh, reload table only if the user has finished dragging.
                 if self.refreshControl?.isRefreshing == true  {
                     if self.tableView.isDragging {
                         return
                     } else {
-                        self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                        self.busyIndicator.stopAnimating()
                         self.endRefreshAndReloadTable()
                     }
                 }
+
+                // The content update is made while normal navigating through folders, in this case simply reload the table.
                 self.tableView.reloadData()
             }
         }
@@ -374,6 +382,7 @@ final class ListingViewController: UITableViewController {
             }
         }
     }
+
     fileprivate func sortContent() {
         switch AppSettings.sortMethod {
         case .byName:        sortByName()
