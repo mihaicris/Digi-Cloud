@@ -19,6 +19,7 @@ final class ListingViewController: UITableViewController {
     fileprivate let action: ActionType
     fileprivate var location: Location
     fileprivate var needRefresh: Bool = true
+    fileprivate var isUpdating: Bool = false
     fileprivate var content: [Node] = []
     fileprivate var filteredContent: [Node] = []
     fileprivate var currentIndex: IndexPath!
@@ -215,14 +216,10 @@ final class ListingViewController: UITableViewController {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if refreshControl?.isRefreshing == true {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                self.refreshControl?.endRefreshing()
-                self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                self.busyIndicator.stopAnimating()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                    self.tableView.reloadData()
-                }
+            if self.isUpdating {
+                return
             }
+            endRefreshAndReloadTable()
         }
     }
 
@@ -302,17 +299,16 @@ final class ListingViewController: UITableViewController {
     fileprivate func updateContent() {
 
         self.needRefresh = false
+        self.isUpdating = true
         self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
+
         if self.refreshControl?.isRefreshing == false {
             self.busyIndicator.startAnimating()
         }
 
         DigiClient.shared.getContent(at: location) { receivedContent, error in
 
-            if self.refreshControl?.isRefreshing == false {
-                self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                self.busyIndicator.stopAnimating()
-            }
+            self.isUpdating = false
 
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
@@ -343,14 +339,30 @@ final class ListingViewController: UITableViewController {
                     self.content = newContent
                     self.sortContent()
                 }
-                if self.refreshControl?.isRefreshing == true {
-                    return
+                if self.refreshControl?.isRefreshing == true  {
+                    if self.tableView.isDragging {
+                        return
+                    } else {
+                        self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+                        self.busyIndicator.stopAnimating()
+                        self.endRefreshAndReloadTable()
+                    }
                 }
                 self.tableView.reloadData()
             }
         }
     }
 
+    fileprivate func endRefreshAndReloadTable() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            self.refreshControl?.endRefreshing()
+            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+            self.busyIndicator.stopAnimating()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                self.tableView.reloadData()
+            }
+        }
+    }
     fileprivate func sortContent() {
         switch AppSettings.sortMethod {
         case .byName:        sortByName()
@@ -593,7 +605,7 @@ final class ListingViewController: UITableViewController {
                         }
                     }
                 }
-            } while (renamed == true && found == true)
+            } while (renamed && found)
 
             // change the file/folder name with incremented one
             destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)

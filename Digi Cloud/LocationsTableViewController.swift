@@ -13,8 +13,9 @@ class LocationsTableViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: (() -> Void)?
-    var locations: [Location] = []
+    fileprivate var locations: [Location] = []
     fileprivate let action: ActionType
+    fileprivate var isUpdating: Bool = false
 
     #if DEBUG
     let tag: Int
@@ -77,12 +78,10 @@ class LocationsTableViewController: UITableViewController {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if refreshControl?.isRefreshing == true {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                self.refreshControl?.endRefreshing()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                    self.tableView.reloadData()
-                }
+            if self.isUpdating {
+                return
             }
+            self.endRefreshAndReloadTable()
         }
     }
 
@@ -114,7 +113,13 @@ class LocationsTableViewController: UITableViewController {
     }
 
     fileprivate func getLocations() {
+
+        self.isUpdating = true
+
         DigiClient.shared.getDIGIStorageLocations() { locations, error in
+
+            self.isUpdating = false
+
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
@@ -123,7 +128,12 @@ class LocationsTableViewController: UITableViewController {
                 self.locations = locations
             }
             if self.refreshControl?.isRefreshing == true {
-                return
+                if self.tableView.isDragging {
+                    return
+                }
+                else {
+                    self.endRefreshAndReloadTable()
+                }
             }
             self.tableView.reloadData()
         }
@@ -138,6 +148,15 @@ class LocationsTableViewController: UITableViewController {
             }
         }
         navigationController?.pushViewController(controller, animated: true)
+    }
+
+    fileprivate func endRefreshAndReloadTable() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            self.refreshControl?.endRefreshing()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                self.tableView.reloadData()
+            }
+        }
     }
 
     @objc fileprivate func handleRefresh() {
