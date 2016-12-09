@@ -23,10 +23,10 @@ class ActionViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var node: Node
     weak var delegate: ActionViewControllerDelegate?
-    var contextMenuFileActions: [ActionCell] = []
-    var contextMenuFolderActions: [ActionCell] = []
+    fileprivate var node: Node
+    fileprivate var contextMenuFileActions: [ActionCell] = []
+    fileprivate var contextMenuFolderActions: [ActionCell] = []
 
     // MARK: - Initializers and Deinitializers
 

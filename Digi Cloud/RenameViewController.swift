@@ -13,7 +13,7 @@ class RenameViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
-    let location: Location
+    fileprivate let location: Location
     fileprivate var node: Node
     fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!

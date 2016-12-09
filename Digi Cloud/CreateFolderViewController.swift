@@ -13,7 +13,7 @@ class CreateFolderViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ folderName: String?) -> Void)?
-    var location: Location
+    fileprivate var location: Location
     fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var textField: UITextField!

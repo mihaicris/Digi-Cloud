@@ -13,9 +13,9 @@ class FolderInfoViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
-    var location: Location
-    var node: Node
-    let sizeFormatter: ByteCountFormatter = {
+    fileprivate var location: Location
+    fileprivate var node: Node
+    fileprivate let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.allowsNonnumericFormatting = false
         f.countStyle = .binary

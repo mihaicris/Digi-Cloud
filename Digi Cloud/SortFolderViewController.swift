@@ -13,7 +13,7 @@ class SortFolderViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ dismiss: Bool) -> Void)?
-    var contextMenuSortActions: [String] = []
+    fileprivate var contextMenuSortActions: [String] = []
 
     // MARK: - Initializers and Deinitializers
 
