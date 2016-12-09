@@ -573,6 +573,10 @@ final class ListingViewController: UITableViewController {
     }
 
     @objc fileprivate func handleRefresh() {
+        if self.isUpdating {
+            self.refreshControl?.endRefreshing()
+            return
+        }
         self.updateContent()
     }
 

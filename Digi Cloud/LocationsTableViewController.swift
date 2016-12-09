@@ -160,6 +160,10 @@ class LocationsTableViewController: UITableViewController {
     }
 
     @objc fileprivate func handleRefresh() {
+        if self.isUpdating {
+            self.refreshControl?.endRefreshing()
+            return
+        }
         getLocations()
     }
 
