@@ -311,6 +311,7 @@ final class ListingViewController: UITableViewController {
 
         self.needRefresh = false
         self.isUpdating = true
+
         self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
 
         if self.refreshControl?.isRefreshing == false {
@@ -351,12 +352,6 @@ final class ListingViewController: UITableViewController {
                     self.sortContent()
                 }
 
-                // For the case when the folder is empty, setting the message text on screen.
-                if self.content.isEmpty {
-                    self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-                    self.busyIndicator.stopAnimating()
-                }
-
                 // In case the user pulled the table to refresh, reload table only if the user has finished dragging.
                 if self.refreshControl?.isRefreshing == true  {
                     if self.tableView.isDragging {
@@ -364,19 +359,28 @@ final class ListingViewController: UITableViewController {
                     } else {
                         self.endRefreshAndReloadTable()
                     }
-                }
+                } else {
+                    self.updateMessageForEmptyFolder()
 
-                // The content update is made while normal navigating through folders, in this case simply reload the table.
-                self.tableView.reloadData()
+                    // The content update is made while normal navigating through folders, in this case simply reload the table.
+                    self.tableView.reloadData()
+                }
             }
+        }
+    }
+
+    fileprivate func updateMessageForEmptyFolder() {
+        // For the case when the folder is empty, setting the message text on screen.
+        if self.content.isEmpty {
+            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+            self.busyIndicator.stopAnimating()
         }
     }
 
     fileprivate func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.refreshControl?.endRefreshing()
-            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
-            self.busyIndicator.stopAnimating()
+            self.updateMessageForEmptyFolder()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 self.tableView.reloadData()
             }

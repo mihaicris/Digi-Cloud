@@ -134,8 +134,9 @@ class LocationsTableViewController: UITableViewController {
                 else {
                     self.endRefreshAndReloadTable()
                 }
+            } else {
+                self.tableView.reloadData()
             }
-            self.tableView.reloadData()
         }
     }
 
@@ -164,7 +165,7 @@ class LocationsTableViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
-        getLocations()
+        self.getLocations()
     }
 
     @objc fileprivate func handleDone() {
