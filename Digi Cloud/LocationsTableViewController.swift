@@ -50,6 +50,10 @@ class LocationsTableViewController: UITableViewController {
         super.viewDidLoad()
         setupNavigationBar()
         setupTableView()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         getLocations()
     }
 
@@ -73,8 +77,11 @@ class LocationsTableViewController: UITableViewController {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if refreshControl?.isRefreshing == true {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.getLocations()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                self.refreshControl?.endRefreshing()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -103,19 +110,22 @@ class LocationsTableViewController: UITableViewController {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
     }
 
     fileprivate func getLocations() {
         DigiClient.shared.getDIGIStorageLocations() { locations, error in
-            self.refreshControl?.endRefreshing()
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
             if let locations = locations {
                 self.locations = locations
-                self.tableView.reloadData()
             }
+            if self.refreshControl?.isRefreshing == true {
+                return
+            }
+            self.tableView.reloadData()
         }
     }
 
@@ -129,7 +139,11 @@ class LocationsTableViewController: UITableViewController {
         }
         navigationController?.pushViewController(controller, animated: true)
     }
-    
+
+    @objc fileprivate func handleRefresh() {
+        getLocations()
+    }
+
     @objc fileprivate func handleDone() {
         self.onFinish?()
     }

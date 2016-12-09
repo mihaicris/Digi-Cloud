@@ -16,12 +16,12 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
     var onFinish: (() -> Void)?
-    let action: ActionType
-    var location: Location
-    var needRefresh: Bool = true
-    var content: [Node] = []
-    var filteredContent: [Node] = []
-    var currentIndex: IndexPath!
+    fileprivate let action: ActionType
+    fileprivate var location: Location
+    fileprivate var needRefresh: Bool = true
+    fileprivate var content: [Node] = []
+    fileprivate var filteredContent: [Node] = []
+    fileprivate var currentIndex: IndexPath!
     fileprivate var searchController: UISearchController!
     fileprivate var FileCellID: String = ""
     fileprivate var FolderCellID: String = ""
@@ -219,7 +219,9 @@ final class ListingViewController: UITableViewController {
                 self.refreshControl?.endRefreshing()
                 self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                 self.busyIndicator.stopAnimating()
-                self.tableView.reloadData()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -344,7 +346,6 @@ final class ListingViewController: UITableViewController {
                 if self.refreshControl?.isRefreshing == true {
                     return
                 }
-
                 self.tableView.reloadData()
             }
         }
@@ -684,7 +685,14 @@ extension ListingViewController: ActionViewControllerDelegate {
                     // dismiss RenameViewController
                     self.dismiss(animated: true) {
                         if newName != nil {
-                            self.updateContent()
+                            self.content[self.currentIndex.row] = Node(name: newName!, type: node.type,
+                                                                       modified: node.modified, size: node.size,
+                                                                       contentType: node.contentType, hash: node.hash,
+                                                                       location: node.location)
+                            self.tableView.reloadRows(at: [self.currentIndex], with: .middle)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                                self.updateContent()
+                            }
                         } else {
                             if needRefresh {
                                 self.updateContent()
