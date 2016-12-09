@@ -215,7 +215,7 @@ final class ListingViewController: UITableViewController {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if refreshControl?.isRefreshing == true {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.8) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 self.refreshControl?.endRefreshing()
                 self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
                 self.busyIndicator.stopAnimating()

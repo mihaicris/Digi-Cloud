@@ -61,13 +61,13 @@ class MainNavigationController: UINavigationController {
 
     func showLoginScreen() {
         // present modally the login view, after a very small delay
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(50), execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             let controller = LoginViewController()
             controller.onFinish = {
                 self.viewControllers = [LocationsTableViewController(action: .noAction)]
                 self.dismiss(animated: true, completion: nil) // dismiss LoginViewController
             }
             self.present(controller, animated: true, completion: nil)
-        })
+        }
     }
 }
