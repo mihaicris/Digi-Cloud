@@ -181,6 +181,7 @@ final class ListingViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         tableView.deselectRow(at: indexPath, animated: false)
+        refreshControl?.endRefreshing()
 
         var item: Node
 
