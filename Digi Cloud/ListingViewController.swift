@@ -121,20 +121,14 @@ final class ListingViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController != nil && searchController.isActive {
-            return filteredContent.isEmpty ? 2 : filteredContent.count
-        } else {
-            return content.isEmpty ? 2 : content.count
-        }
+        return content.isEmpty ? 2 : content.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         if content.isEmpty {
             let cell = UITableViewCell()
             cell.isUserInteractionEnabled = false
             if indexPath.row == 1 {
-
                 let v = UIView()
                 v.translatesAutoresizingMaskIntoConstraints = false
                 v.addSubview(busyIndicator)
@@ -150,28 +144,23 @@ final class ListingViewController: UITableViewController {
             return cell
         }
 
-        var data: Node
-        if searchController != nil && searchController.isActive {
-            data = filteredContent[indexPath.row]
-        } else {
-            data = content[indexPath.row]
-        }
+        let item = content[indexPath.row]
 
-        if data.type == "dir" {
+        if item.type == "dir" {
             let cell = tableView.dequeueReusableCell(withIdentifier: FolderCellID, for: indexPath) as! DirectoryCell
             cell.delegate = self
 
-            cell.folderNameLabel.text = data.name
+            cell.folderNameLabel.text = item.name
 
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: FileCellID, for: indexPath) as! FileCell
             cell.delegate = self
 
-            let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: data.modified / 1000))
-            cell.fileNameLabel.text = data.name
+            let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
+            cell.fileNameLabel.text = item.name
 
-            let fileSizeString = byteFormatter.string(fromByteCount: data.size) + "・" + modifiedDate
+            let fileSizeString = byteFormatter.string(fromByteCount: item.size) + "・" + modifiedDate
             cell.fileSizeLabel.text = fileSizeString
 
             return cell
@@ -183,14 +172,7 @@ final class ListingViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
         refreshControl?.endRefreshing()
 
-        var item: Node
-
-        if searchController != nil && searchController.isActive {
-            item = filteredContent[indexPath.row]
-        } else {
-            item = content[indexPath.row]
-        }
-
+        let item = content[indexPath.row]
         if item.type == "dir" {
             // This is a Folder
 
@@ -296,11 +278,15 @@ final class ListingViewController: UITableViewController {
     }
 
     fileprivate func configureSearchController() {
-        searchController = UISearchController(searchResultsController: nil)
+        let src = SearchResultController()
+        searchController = UISearchController(searchResultsController: src)
+        searchController.delegate = self
         searchController.loadViewIfNeeded()
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
+        searchController.searchResultsUpdater = src
+        searchController.searchBar.delegate = src
         searchController.searchBar.sizeToFit()
+        searchController.searchBar.autocorrectionType = .no
+        searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.placeholder = NSLocalizedString("Search for files or folders", comment: "Action title")
         searchController.searchBar.scopeButtonTitles = [
             NSLocalizedString("This folder", comment: "Button title"),
@@ -500,28 +486,6 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
-        if searchText.characters.count < 3 {
-            return
-        }
-
-        let searchLocation: Location? = scope == 0 ? self.location : nil
-
-        DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { nodes, error in
-            guard error == nil else {
-                print("Error: \(error!.localizedDescription)")
-                return
-            }
-            if let nodes = nodes {
-                self.filteredContent = nodes
-                // TODO: Sort results with folder first?
-                self.tableView.reloadData()
-            }
-
-        }
-        // TODO: reloadData in tableView
-    }
-
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
@@ -692,25 +656,6 @@ final class ListingViewController: UITableViewController {
                 }
             }
         }
-
-
-    }
-}
-
-extension ListingViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchText: searchController.searchBar.text!,
-                                   scope: searchController.searchBar.selectedScopeButtonIndex)
-    }
-}
-
-extension ListingViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        filterContentForSearchText(searchText: searchBar.text!, scope: selectedScope)
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
     }
 }
 
@@ -931,4 +876,17 @@ extension ListingViewController: DeleteViewControllerDelegate {
             }
         }
     }
+}
+
+extension ListingViewController: UISearchControllerDelegate {
+    func willPresentSearchController(_ searchController: UISearchController) {
+        DispatchQueue.main.async {
+            searchController.searchResultsController?.view.isHidden = false
+        }
+    }
+    func didPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchResultsController?.view.isHidden = false
+    }
+
+
 }

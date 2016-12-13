@@ -24,6 +24,7 @@
 		8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */; };
 		839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
+		83A9BE1B1DFFDDDC003FD974 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */; };
 		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
 		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
 		83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
@@ -60,6 +61,7 @@
 		8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		839A22E21DC11BA400758730 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
+		83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultController.swift; sourceTree = "<group>"; };
 		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
@@ -177,9 +179,18 @@
 				83F994491DD093A00023FB5D /* Main */,
 				83F994471DD093700023FB5D /* Login */,
 				83F9944B1DD093C90023FB5D /* Listing */,
+				83A9BE191DFFDD9E003FD974 /* Search */,
 				83F9944E1DD094E20023FB5D /* Content */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		83A9BE191DFFDD9E003FD974 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */,
+			);
+			name = Search;
 			sourceTree = "<group>";
 		};
 		83EF1D461D8FBDC400ACE008 /* Models */ = {
@@ -343,6 +354,7 @@
 				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
 				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
 				832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */,
+				83A9BE1B1DFFDDDC003FD974 /* SearchResultController.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */,
