@@ -31,7 +31,7 @@ class DeleteViewController: UITableViewController {
         print("[DEINIT]: " + String(describing: type(of: self)))
     }
     #endif
-    
+
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

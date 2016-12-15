@@ -38,7 +38,6 @@ final class DigiClient {
 
     // MARK: - Helper Functions
 
-
     /// Send a HTTP Network Request
     ///
     /// - Parameters:
@@ -76,7 +75,6 @@ final class DigiClient {
             // stop network indication
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-
 
                 /* GUARD: Was there an error? */
                 guard error == nil else {
@@ -169,7 +167,7 @@ final class DigiClient {
         }
     }
 
-    func getUserInfo(completion: @escaping(_ json: Any? , _ statusCode: Int?, _ error: Error?) -> Void) {
+    func getUserInfo(completion: @escaping(_ json: Any?, _ statusCode: Int?, _ error: Error?) -> Void) {
         let method = Methods.User
 
         let headers: [String: String] = [HeadersKeys.Accept: "application/json",
@@ -402,7 +400,7 @@ final class DigiClient {
             parameters[ParametersKeys.Path] = location.path
         }
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _ , error in
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
             if let error = error {
                 completion(nil, error)
                 return
@@ -538,10 +536,10 @@ final class DigiClient {
     ///   - completion:        Function to handle the status code and error response
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
-    func copyOrMoveNode(action:     ActionType, from: Location, to: Location,
+    func copyOrMoveNode(action: ActionType, from: Location, to: Location,
                         completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
 
-        var method : String
+        var method: String
 
         switch action {
         case .copy:

@@ -245,7 +245,7 @@ extension RenameViewController: UITextFieldDelegate {
         setMessage(onScreen: false)
         positionCursor()
     }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if rightBarButton.isEnabled {
             textField.resignFirstResponder()
@@ -255,4 +255,3 @@ extension RenameViewController: UITextFieldDelegate {
         return false
     }
 }
-

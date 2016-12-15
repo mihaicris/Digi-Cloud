@@ -168,7 +168,7 @@ extension ContentViewController: WKNavigationDelegate {
             self.progressView.alpha = 0
         })
     }
-    
+
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         // TODO: Show UIView for Export recommendation
         print(error.localizedDescription)

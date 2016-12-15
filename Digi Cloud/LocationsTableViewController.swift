@@ -67,7 +67,9 @@ class LocationsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as! LocationCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as? LocationCell else {
+            return UITableViewCell()
+        }
         cell.locationLabel.text = locations[indexPath.row].mount.name
         return cell
     }
@@ -130,8 +132,7 @@ class LocationsTableViewController: UITableViewController {
             if self.refreshControl?.isRefreshing == true {
                 if self.tableView.isDragging {
                     return
-                }
-                else {
+                } else {
                     self.endRefreshAndReloadTable()
                 }
             } else {
@@ -172,4 +173,3 @@ class LocationsTableViewController: UITableViewController {
         self.onFinish?()
     }
 }
-

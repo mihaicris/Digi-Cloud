@@ -38,7 +38,7 @@ extension Mount {
 }
 
 extension Mount: Equatable {
-    static func ==(lhs: Mount, rhs: Mount) -> Bool {
+    static func == (lhs: Mount, rhs: Mount) -> Bool {
         return lhs.id == rhs.id && lhs.name == rhs.name
     }
 }

@@ -58,7 +58,7 @@ class DirectoryCell: BaseListCell {
 
         folderIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
         folderNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 1).isActive = true
-        
+
         super.setupViews()
     }
 }

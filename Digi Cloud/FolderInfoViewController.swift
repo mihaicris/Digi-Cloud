@@ -95,8 +95,8 @@ class FolderInfoViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0:     return NSLocalizedString("Name",               comment: "TableCell Header Title")
-        case 1:     return NSLocalizedString("Size",               comment: "TableCell Header Title")
+        case 0:     return NSLocalizedString("Name", comment: "TableCell Header Title")
+        case 1:     return NSLocalizedString("Size", comment: "TableCell Header Title")
         case 2:     return NSLocalizedString("Folder content", comment: "TableCell Header Title")
         default:    return ""
         }
@@ -104,7 +104,7 @@ class FolderInfoViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {
-        case 2:     return NSLocalizedString("Note: Including subfolders",     comment: "TableCell Footer Title")
+        case 2:     return NSLocalizedString("Note: Including subfolders", comment: "TableCell Footer Title")
         case 3:     return NSLocalizedString("This action is not reversible!", comment: "TableCell Footer Title")
         default:    return ""
         }
@@ -264,4 +264,3 @@ extension FolderInfoViewController: DeleteViewControllerDelegate {
         }
     }
 }
-

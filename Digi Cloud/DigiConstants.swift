@@ -55,4 +55,3 @@ struct Methods {
     static let Move             = "/api/v2/mounts/{id}/files/move"
     static let Search           = "/api/v2/search"
 }
-

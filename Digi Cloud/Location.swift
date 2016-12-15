@@ -13,7 +13,7 @@ struct Location {
     // MARK: - Properties
 
     let mount: Mount
-    let path:  String
+    let path: String
     var nodeName: String? {
         return path.components(separatedBy: "/").last
     }
@@ -27,7 +27,7 @@ struct Location {
 }
 
 extension Location: Equatable {
-    static func ==(lhs: Location, rhs: Location) -> Bool {
+    static func == (lhs: Location, rhs: Location) -> Bool {
         return lhs.mount == rhs.mount && lhs.path == rhs.path
     }
 }

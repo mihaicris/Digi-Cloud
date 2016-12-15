@@ -96,10 +96,10 @@ class SortFolderViewController: UITableViewController {
     fileprivate func setInitialActionNames() {
         contextMenuSortActions = [
             NSLocalizedString("Folders first", comment: "Switch Title"),
-            NSLocalizedString("Sort by Name",  comment: "Selection Title"),
-            NSLocalizedString("Sort by Date",  comment: "Selection Title"),
-            NSLocalizedString("Sort by Size",  comment: "Selection Title"),
-            NSLocalizedString("Sort by Type",  comment: "Selection Title") ]
+            NSLocalizedString("Sort by Name", comment: "Selection Title"),
+            NSLocalizedString("Sort by Date", comment: "Selection Title"),
+            NSLocalizedString("Sort by Size", comment: "Selection Title"),
+            NSLocalizedString("Sort by Type", comment: "Selection Title") ]
     }
 
     fileprivate func setupViews() {

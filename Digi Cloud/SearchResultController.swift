@@ -15,7 +15,6 @@ class SearchResultController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
@@ -50,7 +49,6 @@ class SearchResultController: UITableViewController {
         // TODO: reloadData in tableView
     }
 
-
 }
 
 extension SearchResultController: UISearchResultsUpdating {
@@ -69,5 +67,3 @@ extension SearchResultController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
     }
 }
-
-

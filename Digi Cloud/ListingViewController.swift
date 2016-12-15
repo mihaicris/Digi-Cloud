@@ -24,8 +24,8 @@ final class ListingViewController: UITableViewController {
     fileprivate var filteredContent: [Node] = []
     fileprivate var currentIndex: IndexPath!
     fileprivate var searchController: UISearchController!
-    fileprivate var FileCellID: String = ""
-    fileprivate var FolderCellID: String = ""
+    fileprivate var fileCellID: String = ""
+    fileprivate var folderCellID: String = ""
     fileprivate let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
@@ -147,14 +147,18 @@ final class ListingViewController: UITableViewController {
         let item = content[indexPath.row]
 
         if item.type == "dir" {
-            let cell = tableView.dequeueReusableCell(withIdentifier: FolderCellID, for: indexPath) as! DirectoryCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: folderCellID, for: indexPath) as? DirectoryCell else {
+                return UITableViewCell()
+            }
             cell.delegate = self
 
             cell.folderNameLabel.text = item.name
 
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: FileCellID, for: indexPath) as! FileCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? FileCell else {
+                return UITableViewCell()
+            }
             cell.delegate = self
 
             let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
@@ -223,19 +227,19 @@ final class ListingViewController: UITableViewController {
 
         switch self.action {
         case .copy, .move:
-            self.FileCellID = "FileCell"
-            self.FolderCellID = "DirectoryCell"
+            self.fileCellID = "FileCell"
+            self.folderCellID = "DirectoryCell"
         default:
-            self.FileCellID = "FileCellWithButton"
-            self.FolderCellID = "DirectoryCellWithButton"
+            self.fileCellID = "FileCellWithButton"
+            self.folderCellID = "DirectoryCellWithButton"
             configureSearchController()
         }
 
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
 
-        tableView.register(FileCell.self, forCellReuseIdentifier: FileCellID)
-        tableView.register(DirectoryCell.self, forCellReuseIdentifier: FolderCellID)
+        tableView.register(FileCell.self, forCellReuseIdentifier: fileCellID)
+        tableView.register(DirectoryCell.self, forCellReuseIdentifier: folderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
@@ -340,7 +344,7 @@ final class ListingViewController: UITableViewController {
                 }
 
                 // In case the user pulled the table to refresh, reload table only if the user has finished dragging.
-                if self.refreshControl?.isRefreshing == true  {
+                if self.refreshControl?.isRefreshing == true {
                     if self.tableView.isDragging {
                         return
                     } else {
@@ -887,6 +891,5 @@ extension ListingViewController: UISearchControllerDelegate {
     func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchResultsController?.view.isHidden = false
     }
-
 
 }
