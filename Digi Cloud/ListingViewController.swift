@@ -288,7 +288,6 @@ final class ListingViewController: UITableViewController {
         searchController.loadViewIfNeeded()
         searchController.searchResultsUpdater = src
         searchController.searchBar.delegate = src
-        searchController.searchBar.sizeToFit()
         searchController.searchBar.autocorrectionType = .no
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.placeholder = NSLocalizedString("Search for files or folders", comment: "Action title")
@@ -558,6 +557,7 @@ final class ListingViewController: UITableViewController {
         self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
         if self.tableView.tableHeaderView == nil {
             self.tableView.tableHeaderView = searchController.searchBar
+            searchController.searchBar.sizeToFit()
         }
         self.searchController.searchBar.becomeFirstResponder()
     }
