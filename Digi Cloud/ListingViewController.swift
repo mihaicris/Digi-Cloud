@@ -165,7 +165,7 @@ final class ListingViewController: UITableViewController {
             cell.fileNameLabel.text = item.name
 
             let fileSizeString = byteFormatter.string(fromByteCount: item.size) + "・" + modifiedDate
-            cell.fileSizeLabel.text = fileSizeString
+            cell.fileDetailsLabel.text = fileSizeString
 
             return cell
         }

@@ -27,7 +27,7 @@ class FileCell: BaseListCell {
         return label
     }()
 
-    var fileSizeLabel: UILabel = {
+    var fileDetailsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "HelveticaNeue", size: 11)
@@ -42,12 +42,12 @@ class FileCell: BaseListCell {
             if highlighted {
                 contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
                 fileNameLabel.textColor = .white
-                fileSizeLabel.textColor = UIColor.init(white: 0.8, alpha: 1)
+                fileDetailsLabel.textColor = UIColor.init(white: 0.8, alpha: 1)
                 actionButton.setTitleColor(.white, for: .normal)
             } else {
                 contentView.backgroundColor = nil
                 fileNameLabel.textColor = .black
-                fileSizeLabel.textColor = .darkGray
+                fileDetailsLabel.textColor = .darkGray
                 actionButton.setTitleColor(.darkGray, for: .normal)
             }
         }
@@ -66,7 +66,7 @@ class FileCell: BaseListCell {
         if !self.hasButton {
             isUserInteractionEnabled = false
             fileNameLabel.isEnabled = false
-            fileSizeLabel.isEnabled = false
+            fileDetailsLabel.isEnabled = false
             buttonRightSpace = 30
         }
 
@@ -74,12 +74,12 @@ class FileCell: BaseListCell {
 
         contentView.addSubview(fileIcon)
         contentView.addSubview(fileNameLabel)
-        contentView.addSubview(fileSizeLabel)
+        contentView.addSubview(fileDetailsLabel)
 
         contentView.addConstraints(with: "H:|-15-[v0(26)]-10-[v1]-\(buttonRightSpace)-|", views: fileIcon, fileNameLabel)
-        contentView.addConstraints(with: "H:[v0]-10-[v1]", views: fileIcon, fileSizeLabel)
+        contentView.addConstraints(with: "H:[v0]-10-[v1]", views: fileIcon, fileDetailsLabel)
         contentView.addConstraints(with: "V:[v0(26)]", views: fileIcon)
-        contentView.addConstraints(with: "V:[v0]-2-[v1]", views: fileNameLabel, fileSizeLabel)
+        contentView.addConstraints(with: "V:[v0]-2-[v1]", views: fileNameLabel, fileDetailsLabel)
 
         fileIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
         fileNameLabel.topAnchor.constraint(equalTo: fileIcon.topAnchor, constant: -3).isActive = true
