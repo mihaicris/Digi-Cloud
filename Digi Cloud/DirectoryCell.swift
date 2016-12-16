@@ -20,7 +20,7 @@ class DirectoryCell: BaseListCell {
 
     var folderNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue-Medium", size: 16)
+        label.font = UIFont(name: "HelveticaNeue-Medium", size: 15)
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
