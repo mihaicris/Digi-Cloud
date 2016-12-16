@@ -12,8 +12,17 @@ class SearchResultController: UITableViewController {
 
     // MARK: - Properties
     var filteredContent = [Node]()
+    let location: Location
 
     // MARK: - Initializers and Deinitializers
+    init(currentLocation: Location) {
+        self.location = currentLocation
+        super.init(style: .plain)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Overridden Methods and Properties
 
@@ -32,9 +41,9 @@ class SearchResultController: UITableViewController {
             return
         }
 
-//        let searchLocation: Location? = scope == 0 ? self.location : nil
+        let searchLocation: Location? = scope == 0 ? self.location : nil
 
-        DigiClient.shared.searchNodes(for: searchText, at: nil) { nodes, error in
+        DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { nodes, error in
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return

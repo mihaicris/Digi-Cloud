@@ -282,7 +282,7 @@ final class ListingViewController: UITableViewController {
     }
 
     fileprivate func setupSearchController() {
-        let src = SearchResultController()
+        let src = SearchResultController(currentLocation: self.location)
         searchController = UISearchController(searchResultsController: src)
         searchController.delegate = self
         searchController.loadViewIfNeeded()
