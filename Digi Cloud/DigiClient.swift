@@ -53,7 +53,10 @@ final class DigiClient {
     func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: String]?,
                      parameters: [String: Any]?,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
+
+        #if DEBUG
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        #endif
 
         /* 1. Build the URL, Configure the request */
         let url = self.getURL(method: method, parameters: parameters)
@@ -74,7 +77,10 @@ final class DigiClient {
             (data, response, error) in
             // stop network indication
             DispatchQueue.main.async {
+
+                #if DEBUG
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                #endif
 
                 /* GUARD: Was there an error? */
                 guard error == nil else {
