@@ -232,7 +232,7 @@ final class ListingViewController: UITableViewController {
         default:
             self.fileCellID = "FileCellWithButton"
             self.folderCellID = "DirectoryCellWithButton"
-            configureSearchController()
+            setupSearchController()
         }
 
         refreshControl = UIRefreshControl()
@@ -281,7 +281,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func configureSearchController() {
+    fileprivate func setupSearchController() {
         let src = SearchResultController()
         searchController = UISearchController(searchResultsController: src)
         searchController.delegate = self
@@ -581,18 +581,18 @@ final class ListingViewController: UITableViewController {
             var destinationName = sourceNode.name
 
             var copyCount: Int = 0
-            var renamed = false
-            var found: Bool
+            var wasRenamed = false
+            var wasFound: Bool
             repeat {
                 // reset before check of all nodes
-                found = false
+                wasFound = false
 
                 // check all nodes for the initial name or new name incremented
                 for node in self.content {
                     if node.name == destinationName {
                         // set the flags
-                        found = true
-                        renamed = true
+                        wasFound = true
+                        wasRenamed = true
 
                         // increment counter in the new file name
                         copyCount += 1
@@ -611,7 +611,7 @@ final class ListingViewController: UITableViewController {
                         }
                     }
                 }
-            } while (renamed && found)
+            } while (wasRenamed && wasFound)
 
             // change the file/folder name with incremented one
             destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
