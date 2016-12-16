@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */; };
+		83164FED1E03F473001048D7 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83164FEC1E03F473001048D7 /* SearchCell.swift */; };
 		831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B9F581D992BD7003DAF42 /* DigiClient.swift */; };
 		8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
 		832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateFolderViewController.swift; sourceTree = "<group>"; };
+		83164FEC1E03F473001048D7 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		831B9F581D992BD7003DAF42 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiClient.swift; sourceTree = "<group>"; };
 		8321FC5A1D9568FE002D6413 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
 				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
 				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
+				83164FEC1E03F473001048D7 /* SearchCell.swift */,
 				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
 				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
 			);
@@ -364,6 +367,7 @@
 				83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */,
 				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
 				83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */,
+				83164FED1E03F473001048D7 /* SearchCell.swift in Sources */,
 				83EF1D481D8FBDDA00ACE008 /* Node.swift in Sources */,
 				835406051D952FFD00019D53 /* Extensions.swift in Sources */,
 				83CE7A001DE45D77002212A9 /* Location.swift in Sources */,

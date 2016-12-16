@@ -12,7 +12,16 @@ class SearchResultController: UITableViewController {
 
     // MARK: - Properties
     var filteredContent = [Node]()
-    let location: Location
+    weak var searchController: UISearchController?
+    fileprivate let location: Location
+    fileprivate var fileCellID: String = ""
+    fileprivate let byteFormatter: ByteCountFormatter = {
+        let f = ByteCountFormatter()
+        f.countStyle = .binary
+        f.allowsNonnumericFormatting = false
+        return f
+    }()
+    fileprivate var searchInCurrentMount: Bool = true
 
     // MARK: - Initializers and Deinitializers
     init(currentLocation: Location) {
@@ -28,18 +37,58 @@ class SearchResultController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.edgesForExtendedLayout = .bottom
+        setupTableView()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return filteredContent.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? SearchCell else {
+            return UITableViewCell()
+        }
+        let node = filteredContent[indexPath.row]
+
+        if node.type == "dir" {
+            cell.nodeIcon.image = UIImage(named: "FolderIcon")
+            cell.nodeNameLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 16)
+        } else {
+            cell.nodeIcon.image = UIImage(named: "FileIcon")
+            cell.nodeNameLabel.font = UIFont(name: "HelveticaNeue", size: 16)
+        }
+        cell.nodeNameLabel.text = node.name
+        cell.nodeMountLabel.text = node.location.mount.name
+        cell.nodePathLabel.text = node.location.path
+
+        return cell
+    }
+
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.searchController?.searchBar.resignFirstResponder()
     }
 
     // MARK: - Helper Functions
 
+    fileprivate func setupTableView() {
+        self.fileCellID = "SearchFileCell"
+        tableView.register(SearchCell.self, forCellReuseIdentifier: fileCellID)
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.rowHeight = AppSettings.tableViewRowHeight
+    }
+
     fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
-        if searchText.characters.count < 3 {
+        let count = searchText.characters.count
+        if count < 3 {
+            if count == 0 {
+                self.filteredContent.removeAll()
+                self.tableView.reloadData()
+            }
             return
         }
+        searchInCurrentMount = scope == 0 ? true  : false
 
         let searchLocation: Location? = scope == 0 ? self.location : nil
 
@@ -50,20 +99,20 @@ class SearchResultController: UITableViewController {
             }
             if let nodes = nodes {
                 self.filteredContent = nodes
-                // TODO: Sort results with folder first?
+                self.filteredContent.sort {
+                    return $0.type < $1.type
+                }
                 self.tableView.reloadData()
             }
-
         }
-        // TODO: reloadData in tableView
     }
-
 }
 
 extension SearchResultController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchText: searchController.searchBar.text!,
-                                   scope: searchController.searchBar.selectedScopeButtonIndex)
+        self.searchController = searchController
+        self.view.isHidden = false
+        filterContentForSearchText(searchText: searchController.searchBar.text!, scope: searchController.searchBar.selectedScopeButtonIndex)
     }
 }
 
