@@ -888,8 +888,16 @@ extension ListingViewController: UISearchControllerDelegate {
             searchController.searchResultsController?.view.isHidden = false
         }
     }
+
     func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchResultsController?.view.isHidden = false
     }
 
+    func willDismissSearchController(_ searchController: UISearchController) {
+        guard let src = searchController.searchResultsController as? SearchResultController else {
+            return
+        }
+        src.filteredContent.removeAll()
+        src.tableView.reloadData()
+    }
 }
