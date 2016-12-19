@@ -40,6 +40,7 @@ class SearchCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .darkGray
         label.font = UIFont(name: "HelveticaNeue", size: 11)
+        label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
     var mountBackgroundColor: UIColor?

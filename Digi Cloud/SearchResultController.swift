@@ -22,7 +22,7 @@ class SearchResultController: UITableViewController {
         return f
     }()
     fileprivate var searchInCurrentMount: Bool = true
-    fileprivate var currentColor = UIColor(hue: 0, saturation: 0.7, brightness: 0.6, alpha: 1.0)
+    fileprivate var currentColor = UIColor(hue: 0.35, saturation: 0.5, brightness: 0.7, alpha: 1.0)
     fileprivate var mountNames: [String: UIColor] = [:]
 
     // MARK: - Initializers and Deinitializers
@@ -61,26 +61,41 @@ class SearchResultController: UITableViewController {
             cell.nodeIcon.image = UIImage(named: "FileIcon")
             cell.nodeNameLabel.font = UIFont(name: "HelveticaNeue", size: 16)
         }
-        cell.nodeNameLabel.text = node.name
+
         cell.nodeMountLabel.text = node.location.mount.name
 
         if mountNames[node.location.mount.name] == nil {
             mountNames[node.location.mount.name] = currentColor
-            var _hue: CGFloat = 0
-            var _saturation: CGFloat = 0
-            var _brightness: CGFloat = 0
-            var _alpha: CGFloat = 0
-            _ = currentColor.getHue(&_hue, saturation: &_saturation, brightness: &_brightness, alpha: &_alpha)
-            currentColor = UIColor.init(hue: _hue + 0.2, saturation: _saturation, brightness: _brightness, alpha: _alpha)
+            var hue: CGFloat = 0
+            var saturation: CGFloat = 0
+            var brightness: CGFloat = 0
+            var alpha: CGFloat = 0
+            _ = currentColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+            currentColor = UIColor.init(hue: hue + 0.15, saturation: saturation, brightness: brightness, alpha: alpha)
         }
         cell.mountBackgroundColor = mountNames[node.location.mount.name]
-        cell.nodePathLabel.text = node.location.path
 
         if node.type == "dir" {
             cell.contentView.backgroundColor = UIColor.init(white: 0.95, alpha: 1.0)
         } else {
             cell.contentView.backgroundColor = UIColor.init(white: 1, alpha: 1.0)
         }
+
+        cell.nodePathLabel.text = node.location.path
+
+        let name = node.name
+        let attributedText = NSMutableAttributedString(string: name)
+
+        guard let searchedText = searchController?.searchBar.text else {
+            return cell
+        }
+
+        let nsString = NSString(string: name.lowercased())
+        let nsRange = nsString.range(of: searchedText.lowercased())
+
+        let backGrdColor = UIColor.init(red: 1.0, green: 0.85, blue: 0.85, alpha: 1.0)
+        attributedText.addAttributes([NSBackgroundColorAttributeName: backGrdColor], range: nsRange)
+        cell.nodeNameLabel.attributedText = attributedText
 
         return cell
     }
