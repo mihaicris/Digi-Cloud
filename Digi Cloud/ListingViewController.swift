@@ -298,7 +298,7 @@ final class ListingViewController: UITableViewController {
 
     fileprivate func setRefreshControlTitle(started: Bool) {
         let title: String
-        let attributes: [String: Any] = [NSFontAttributeName: UIFont(name: "Helvetica-Light", size: 13) as Any,
+        let attributes: [String: Any] = [NSFontAttributeName: UIFont(name: "Helvetica-Light", size: 11) as Any,
                                          NSForegroundColorAttributeName: UIColor.init(white: 0.2, alpha: 1.0)as Any]
         if started {
             title = NSLocalizedString("Refreshing ...", comment: "Title")
