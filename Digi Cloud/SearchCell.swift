@@ -25,11 +25,11 @@ class SearchCell: UITableViewCell {
         return label
     }()
     let nodeMountLabel: UILabelWithPadding = {
-        let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 1, paddingRight: 5)
+        let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
         label.textColor = .darkGray
-        label.font = UIFont(name: "HelveticaNeue-CondensedBold", size: 12)
+        label.font = UIFont(name: "HelveticaNeue", size: 11)
         label.textColor = .white
-        label.layer.cornerRadius = 7
+        label.layer.cornerRadius = 4
         label.clipsToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
