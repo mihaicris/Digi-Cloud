@@ -20,22 +20,20 @@ class SearchCell: UITableViewCell {
     var nodeNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "HelveticaNeue", size: 15)
+        label.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
-    var nodeMountLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "---- Mount ----"
-        label.textAlignment = .center
+    let nodeMountLabel: UILabelWithPadding = {
+        let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 1, paddingRight: 5)
+        label.textColor = .darkGray
+        label.font = UIFont(name: "HelveticaNeue-CondensedBold", size: 12)
         label.textColor = .white
-        label.sizeToFit()
-        label.font = UIFont(name: "HelveticaNeue", size: 11)
-        label.alpha = 0.6
-        label.layer.cornerRadius = 4
-        label.layer.masksToBounds = true
+        label.layer.cornerRadius = 7
+        label.clipsToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
+
     }()
     var nodePathLabel: UILabel = {
         let label = UILabel()
@@ -44,6 +42,7 @@ class SearchCell: UITableViewCell {
         label.font = UIFont(name: "HelveticaNeue", size: 11)
         return label
     }()
+    var mountBackgroundColor: UIColor?
 
     // MARK: - Initializers and Deinitializers
 
@@ -60,46 +59,41 @@ class SearchCell: UITableViewCell {
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        if highlighted {
-            self.nodeMountLabel.backgroundColor = UIColor(colorLiteralRed: 245/255, green: 145/255, blue: 5/255, alpha: 1.0)
-        } else {
-            self.nodeMountLabel.backgroundColor = UIColor(colorLiteralRed: 255/255, green: 155/255, blue: 15/255, alpha: 1.0)
-        }
+        self.nodeMountLabel.backgroundColor = mountBackgroundColor
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        if selected {
-            self.nodeMountLabel.backgroundColor = UIColor(colorLiteralRed: 245/255, green: 145/255, blue: 5/255, alpha: 1.0)
-        } else {
-            self.nodeMountLabel.backgroundColor = UIColor(colorLiteralRed: 255/255, green: 155/255, blue: 15/255, alpha: 1.0)
-        }
+        self.nodeMountLabel.backgroundColor = mountBackgroundColor
     }
 
     // MARK: - Helper Functions
 
-    func setupViews() {
-        separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
-
+    fileprivate func setupViews() {
         contentView.addSubview(nodeIcon)
         contentView.addSubview(nodeNameLabel)
         contentView.addSubview(nodeMountLabel)
         contentView.addSubview(nodePathLabel)
+        setupConstraints()
+    }
 
-        contentView.addConstraints(with: "H:|-15-[v0(26)]-10-[v1]-30-|", views: nodeIcon, nodeNameLabel)
+    fileprivate func setupConstraints() {
+        NSLayoutConstraint.activate([
+            nodeIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            nodeIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1),
+            nodeIcon.widthAnchor.constraint(equalToConstant: 26),
+            nodeIcon.heightAnchor.constraint(equalToConstant: 26),
 
-        nodeIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
-        nodeIcon.heightAnchor.constraint(equalToConstant: 26)
+            nodeNameLabel.leadingAnchor.constraint(equalTo: nodeIcon.trailingAnchor, constant: 10),
+            nodeNameLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor),
+            nodeNameLabel.topAnchor.constraint(equalTo: nodeIcon.topAnchor, constant: -7),
 
-        nodeNameLabel.topAnchor.constraint(equalTo: nodeIcon.topAnchor, constant: -5).isActive = true
+            nodeMountLabel.leadingAnchor.constraint(equalTo: nodeNameLabel.leadingAnchor),
+            nodeMountLabel.topAnchor.constraint(equalTo: nodeNameLabel.bottomAnchor, constant: 2),
 
-        nodeMountLabel.leadingAnchor.constraint(equalTo: nodeIcon.trailingAnchor, constant: 10).isActive = true
-        nodeMountLabel.topAnchor.constraint(equalTo: nodeNameLabel.bottomAnchor, constant: 2).isActive = true
-        nodeMountLabel.widthAnchor.constraint(equalToConstant: nodeMountLabel.bounds.width).isActive = true
-        nodeMountLabel.heightAnchor.constraint(equalToConstant: nodeMountLabel.bounds.height - 3).isActive = true
-
-        nodePathLabel.leadingAnchor.constraint(equalTo: nodeMountLabel.trailingAnchor, constant: 3).isActive = true
-        nodePathLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -30).isActive = true
-        nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor).isActive = true
+            nodePathLabel.leadingAnchor.constraint(equalTo: nodeMountLabel.trailingAnchor, constant: 2),
+            nodePathLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor),
+            nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor)
+        ])
     }
 }

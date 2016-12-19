@@ -12,6 +12,7 @@
 		831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B9F581D992BD7003DAF42 /* DigiClient.swift */; };
 		8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
 		832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
+		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
 		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
 		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
 		835406051D952FFD00019D53 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* Extensions.swift */; };
@@ -48,6 +49,7 @@
 		831B9F581D992BD7003DAF42 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiClient.swift; sourceTree = "<group>"; };
 		8321FC5A1D9568FE002D6413 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
+		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		835406041D952FFD00019D53 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
 				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
 				83164FEC1E03F473001048D7 /* SearchCell.swift */,
+				834181761E07FB1100F32A2F /* UILabelWithPadding.swift */,
 				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
 				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
 			);
@@ -380,6 +383,7 @@
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */,
 				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
+				834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */,
 				839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

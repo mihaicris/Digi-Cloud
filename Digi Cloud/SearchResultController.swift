@@ -22,6 +22,8 @@ class SearchResultController: UITableViewController {
         return f
     }()
     fileprivate var searchInCurrentMount: Bool = true
+    fileprivate var currentColor = UIColor(hue: 0, saturation: 0.7, brightness: 0.6, alpha: 1.0)
+    fileprivate var mountNames: [String: UIColor] = [:]
 
     // MARK: - Initializers and Deinitializers
     init(currentLocation: Location) {
@@ -61,9 +63,30 @@ class SearchResultController: UITableViewController {
         }
         cell.nodeNameLabel.text = node.name
         cell.nodeMountLabel.text = node.location.mount.name
+
+        if mountNames[node.location.mount.name] == nil {
+            mountNames[node.location.mount.name] = currentColor
+            var _hue: CGFloat = 0
+            var _saturation: CGFloat = 0
+            var _brightness: CGFloat = 0
+            var _alpha: CGFloat = 0
+            _ = currentColor.getHue(&_hue, saturation: &_saturation, brightness: &_brightness, alpha: &_alpha)
+            currentColor = UIColor.init(hue: _hue + 0.2, saturation: _saturation, brightness: _brightness, alpha: _alpha)
+        }
+        cell.mountBackgroundColor = mountNames[node.location.mount.name]
         cell.nodePathLabel.text = node.location.path
 
+        if node.type == "dir" {
+            cell.contentView.backgroundColor = UIColor.init(white: 0.95, alpha: 1.0)
+        } else {
+            cell.contentView.backgroundColor = UIColor.init(white: 1, alpha: 1.0)
+        }
+
         return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -77,6 +100,7 @@ class SearchResultController: UITableViewController {
         tableView.register(SearchCell.self, forCellReuseIdentifier: fileCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
+        tableView.separatorStyle = .none
     }
 
     fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
@@ -100,7 +124,7 @@ class SearchResultController: UITableViewController {
             if let nodes = nodes {
                 self.filteredContent = nodes
                 self.filteredContent.sort {
-                    return $0.type < $1.type
+                    return $0.location.mount.name < $1.location.mount.name
                 }
                 self.tableView.reloadData()
             }
