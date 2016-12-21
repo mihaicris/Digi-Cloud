@@ -22,7 +22,7 @@ class SearchResultController: UITableViewController {
         return f
     }()
     fileprivate var searchInCurrentMount: Bool = true
-    fileprivate var currentColor = UIColor(hue: 0.35, saturation: 0.5, brightness: 0.7, alpha: 1.0)
+    fileprivate var currentColor = UIColor(hue: 0.17, saturation: 0.55, brightness: 0.75, alpha: 1.0)
     fileprivate var mountNames: [String: UIColor] = [:]
 
     // MARK: - Initializers and Deinitializers
@@ -86,7 +86,7 @@ class SearchResultController: UITableViewController {
         let nsString = NSString(string: name.lowercased())
         let nsRange = nsString.range(of: searchedText.lowercased())
 
-        let backGrdColor = UIColor.init(red: 1.0, green: 0.85, blue: 0.85, alpha: 1.0)
+        let backGrdColor = UIColor.init(red: 1.0, green: 0.88, blue: 0.88, alpha: 1.0)
         attributedText.addAttributes([NSBackgroundColorAttributeName: backGrdColor], range: nsRange)
         cell.nodeNameLabel.attributedText = attributedText
 
