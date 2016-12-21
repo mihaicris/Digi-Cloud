@@ -501,6 +501,12 @@ final class ListingViewController: UITableViewController {
 
     }
 
+    fileprivate func resetSearchViewControllerIndex() {
+        if let nav = navigationController as? MainNavigationController {
+            nav.searchResultsControllerIndex = nil
+        }
+    }
+
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
@@ -567,12 +573,25 @@ final class ListingViewController: UITableViewController {
     }
 
     @objc fileprivate func handleSearch() {
-        self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
-        if self.tableView.tableHeaderView == nil {
-            searchController.searchBar.sizeToFit()
-            self.tableView.tableHeaderView = searchController.searchBar
+        guard let nav = self.navigationController as? MainNavigationController else {
+            print("Could not get the MainNavigationController")
+            return
         }
-        self.searchController.searchBar.becomeFirstResponder()
+
+        // If index of the search controller is set, and it is different than the current index on
+        // navigation stack, then we pop to the saved index, otherwise we show the search controller.
+        if let index = nav.searchResultsControllerIndex, index != nav.viewControllers.count - 1 {
+            let searchResultsController = nav.viewControllers[index]
+            _ = self.navigationController?.popToViewController(searchResultsController, animated: true)
+        } else {
+            nav.searchResultsControllerIndex = nav.viewControllers.count - 1
+            self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
+            if self.tableView.tableHeaderView == nil {
+                searchController.searchBar.sizeToFit()
+                self.tableView.tableHeaderView = searchController.searchBar
+            }
+            searchController.searchBar.becomeFirstResponder()
+        }
     }
 
     @objc fileprivate func handleCopyOrMove() {
@@ -910,6 +929,7 @@ extension ListingViewController: UISearchControllerDelegate {
         guard let src = searchController.searchResultsController as? SearchResultController else {
             return
         }
+        resetSearchViewControllerIndex()
         src.filteredContent.removeAll()
         src.tableView.reloadData()
     }
