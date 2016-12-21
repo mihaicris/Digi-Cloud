@@ -243,6 +243,7 @@ final class ListingViewController: UITableViewController {
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: folderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
+        definesPresentationContext = true
     }
 
     fileprivate func setupViews() {
@@ -568,8 +569,8 @@ final class ListingViewController: UITableViewController {
     @objc fileprivate func handleSearch() {
         self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
         if self.tableView.tableHeaderView == nil {
-            self.tableView.tableHeaderView = searchController.searchBar
             searchController.searchBar.sizeToFit()
+            self.tableView.tableHeaderView = searchController.searchBar
         }
         self.searchController.searchBar.becomeFirstResponder()
     }

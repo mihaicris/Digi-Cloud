@@ -13,7 +13,7 @@ class SearchResultController: UITableViewController {
     // MARK: - Properties
     var filteredContent = [Node]()
     weak var searchController: UISearchController?
-    fileprivate let location: Location
+    fileprivate let currentLocation: Location
     fileprivate var fileCellID: String = ""
     fileprivate let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
@@ -27,7 +27,7 @@ class SearchResultController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
     init(currentLocation: Location) {
-        self.location = currentLocation
+        self.currentLocation = currentLocation
         super.init(style: .plain)
     }
 
@@ -74,13 +74,6 @@ class SearchResultController: UITableViewController {
             currentColor = UIColor.init(hue: hue + 0.15, saturation: saturation, brightness: brightness, alpha: alpha)
         }
         cell.mountBackgroundColor = mountNames[node.location.mount.name]
-
-        if node.type == "dir" {
-            cell.contentView.backgroundColor = UIColor.init(white: 0.95, alpha: 1.0)
-        } else {
-            cell.contentView.backgroundColor = UIColor.init(white: 1, alpha: 1.0)
-        }
-
         cell.nodePathLabel.text = node.location.path
 
         let name = node.name
@@ -102,6 +95,14 @@ class SearchResultController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+        searchController?.searchBar.resignFirstResponder()
+        let node = filteredContent[indexPath.row]
+        let controller = node.type == "dir"
+            ? ListingViewController(action: .noAction, for: node.location)
+            : ContentViewController(location: node.location)
+        controller.title = node.name
+        let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController
+        nav?.pushViewController(controller, animated: true)
     }
 
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -129,7 +130,7 @@ class SearchResultController: UITableViewController {
         }
         searchInCurrentMount = scope == 0 ? true  : false
 
-        let searchLocation: Location? = scope == 0 ? self.location : nil
+        let searchLocation: Location? = scope == 0 ? self.currentLocation : nil
 
         DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { nodes, error in
             guard error == nil else {
