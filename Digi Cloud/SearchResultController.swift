@@ -120,6 +120,7 @@ class SearchResultController: UITableViewController {
     }
 
     fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
+
         let count = searchText.characters.count
         if count < 3 {
             if count == 0 {
@@ -140,7 +141,11 @@ class SearchResultController: UITableViewController {
             if let nodes = nodes {
                 self.filteredContent = nodes
                 self.filteredContent.sort {
-                    return $0.location.mount.name < $1.location.mount.name
+                    if $0.type == $1.type {
+                        return $0.score > $1.score
+                    } else {
+                        return $0.type < $1.type
+                    }
                 }
                 self.tableView.reloadData()
             }

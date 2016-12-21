@@ -20,17 +20,19 @@ struct Node {
     let hash: String
     let ext: String
     var location: Location
+    var score: Double
 
     // MARK: - Initializers and Deinitializers
 
     init(name: String, type: String, modified: TimeInterval, size: Int64, contentType: String, hash: String,
-         location: Location) {
+         score: Double = 0, location: Location) {
         self.name = name
         self.type = type
         self.modified = modified
         self.size = size
         self.contentType = contentType
         self.hash = hash
+        self.score = score
         self.location = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
@@ -56,6 +58,7 @@ extension Node {
         self.size = size
         self.contentType = contentType
         self.hash = JSON["hash"] is NSNull ? "" : JSON["hash"] as? String ?? ""
+        self.score = JSON["score"] as? Double ?? 0
         self.location = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""

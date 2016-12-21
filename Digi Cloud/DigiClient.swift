@@ -430,13 +430,14 @@ final class DigiClient {
                     let hitType = hitJSON["type"] as? String,
                     let hitModified = hitJSON["modified"] as? TimeInterval,
                     let hitSize = hitJSON["size"] as? Int64,
+                    let hitScore = hitJSON["score"] as? Double,
                     let hitContentType = hitJSON["contentType"] as? String else {
                         completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
                         return
                 }
                 let hitLocation = Location(mount: hitMountStruct, path: hitPath)
                 let hitNode = Node(name: hitName, type: hitType, modified: hitModified, size: hitSize, contentType: hitContentType,
-                                hash: "", location: hitLocation)
+                                   hash: "", score: hitScore, location: hitLocation)
                 results.append(hitNode)
             }
 
