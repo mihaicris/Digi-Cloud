@@ -31,3 +31,11 @@ extension Location: Equatable {
         return lhs.mount == rhs.mount && lhs.path == rhs.path
     }
 }
+
+extension Location: Hashable {
+    var hashValue: Int {
+        get {
+            return mount.name.hashValue ^ (path.hashValue &* 7197972913)
+        }
+    }
+}

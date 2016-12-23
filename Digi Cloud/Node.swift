@@ -64,3 +64,18 @@ extension Node {
         self.ext = components.count > 1 ? components.last! : ""
     }
 }
+
+extension Node: Hashable {
+    var hashValue: Int {
+        get {
+            return location.hashValue ^ (name.hashValue &* 7197972913)
+        }
+    }
+}
+
+extension Node: Equatable {
+    static func == (lhs: Node, rhs: Node) -> Bool {
+        return lhs.location == rhs.location
+
+    }
+}
