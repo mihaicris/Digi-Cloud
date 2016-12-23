@@ -207,7 +207,7 @@ final class DigiClient {
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) {
-            (data, statusCode, error) in
+            (data, _, error) in
             if let error = error {
                 completion(nil, error)
             } else {
@@ -246,7 +246,7 @@ final class DigiClient {
         let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) {
-            (data, responseCode, error) in
+            (data, _, error) in
             if let error = error {
                 completion(nil, error)
                 return
@@ -466,7 +466,7 @@ final class DigiClient {
 
         let parameters = [ParametersKeys.Path: location.path]
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { (json, statusCode, error) in
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { (json, _, error) in
             if let error = error {
                 completion(nil, error)
                 return
@@ -487,7 +487,7 @@ final class DigiClient {
     ///   - info: Tuple containing size, number of files and number of folders
     ///   - error: The error occurred in the network request, nil for no error.
     func getFolderInfo(location: Location,
-                       completion: @escaping(_ info: (Int64?, Int?, Int?), _ error: Error?) -> Void) {
+                       completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -570,7 +570,7 @@ final class DigiClient {
 
         let json: [String: String] = ["toMountId": to.mount.id, "toPath": to.path]
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: parameters) { (dataResponse, statusCode, error) in
+        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
         }
     }

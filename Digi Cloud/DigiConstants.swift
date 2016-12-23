@@ -15,7 +15,7 @@ struct API {
 
 struct DefaultHeaders {
     static let Headers          = ["Content-Type": "application/json",
-                                   "Accept"      : "application/json"]
+                                   "Accept": "application/json"]
 }
 
 struct HeadersKeys {

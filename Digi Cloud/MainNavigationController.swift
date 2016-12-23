@@ -44,7 +44,7 @@ class MainNavigationController: UINavigationController {
             // TODO: Show activity indicator
 
             DigiClient.shared.getUserInfo {
-                json, statusCode, error in
+                _, statusCode, error in
 
                 guard error == nil || statusCode == 200 else {
                     print(error!.localizedDescription)

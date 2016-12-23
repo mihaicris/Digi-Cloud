@@ -120,7 +120,7 @@ class LoginViewController: UIViewController {
         spinner.startAnimating()
 
         DigiClient.shared.authenticate(email: email, password: password) {
-            (success, error) in
+            (success, _) in
             self.spinner.stopAnimating()
             if success {
                 // save token for automatic login
