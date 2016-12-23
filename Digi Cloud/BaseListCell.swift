@@ -1,5 +1,5 @@
 //
-//  BBaseListCell.swift
+//  BaseListCell.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 20/10/16.

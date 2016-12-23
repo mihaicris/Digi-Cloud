@@ -34,7 +34,7 @@ class UILabelWithPadding: UILabel {
     }
 
     override func drawText(in rect: CGRect) {
-        let insets: UIEdgeInsets = UIEdgeInsets(top: paddingTop, left: paddingLeft, bottom: paddingBottom, right: paddingRight)
+        let insets = UIEdgeInsets(top: paddingTop, left: paddingLeft, bottom: paddingBottom, right: paddingRight)
         super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
     }
 

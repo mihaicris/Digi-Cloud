@@ -1,5 +1,5 @@
 //
-//  CustomTextField.swift
+//  LoginField.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 29/09/16.

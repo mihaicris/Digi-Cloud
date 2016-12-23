@@ -1,5 +1,5 @@
 //
-//  CustomLoginButton.swift
+//  LoginButton.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 03/10/16.

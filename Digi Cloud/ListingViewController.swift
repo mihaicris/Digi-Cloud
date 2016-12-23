@@ -64,13 +64,11 @@ final class ListingViewController: UITableViewController {
     init(action: ActionType, for location: Location) {
         self.action = action
         self.location = location
-
         #if DEBUG
             count += 1
             self.tag = count
             print(self.tag, "✅", String(describing: type(of: self)), action)
         #endif
-
         super.init(style: .plain)
     }
 
@@ -188,7 +186,7 @@ final class ListingViewController: UITableViewController {
             controller.title = item.name
             if self.action != .noAction {
 
-                // Make sens only if this is a copy or move controller
+                // It makes sens only if this is a copy or move controller
                 controller.onFinish = { [unowned self] in
                     self.onFinish?()
                 }

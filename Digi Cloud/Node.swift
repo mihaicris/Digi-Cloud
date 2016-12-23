@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Node.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 19/09/16.

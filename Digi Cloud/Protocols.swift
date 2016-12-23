@@ -6,7 +6,6 @@
 //  Copyright © 2016 Mihai Cristescu. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 protocol ActionViewControllerDelegate: class {
