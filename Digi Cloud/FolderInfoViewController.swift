@@ -25,12 +25,8 @@ class FolderInfoViewController: UITableViewController {
     fileprivate var deleteButton: UIButton!
     fileprivate var noElementsLabel = UILabel()
     fileprivate var folderSizeLabel = UILabel()
-    fileprivate var noElements: (Int?, Int?) = (nil, nil) {
+    fileprivate var folderInfo = FolderInfo() {
         didSet {
-            guard let files = noElements.0,
-                let folders = noElements.1 else {
-                    return
-            }
             self.noElementsLabel = {
                 let label = UILabel()
                 let paragraph = NSMutableParagraphStyle()
@@ -38,24 +34,17 @@ class FolderInfoViewController: UITableViewController {
                 label.numberOfLines = 2
 
                 let filesString = NSLocalizedString("%d files\n", comment: "Information")
-                let text1 = String.localizedStringWithFormat(filesString, files)
+                let text1 = String.localizedStringWithFormat(filesString, folderInfo.files)
                 let folderString = NSLocalizedString("%d folders", comment: "Information")
-                let text2 = String.localizedStringWithFormat(folderString, folders)
+                let text2 = String.localizedStringWithFormat(folderString, folderInfo.folders)
                 let attributedText = NSMutableAttributedString(string: text1 + text2,
                                                                attributes: [NSParagraphStyleAttributeName: paragraph])
                 label.attributedText = attributedText
 
                 return label
             }()
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .automatic)
-        }
-    }
-    fileprivate var folderSize: Int64? {
-        didSet {
-            if let size = self.folderSize {
-                self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: size)
-                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
-            }
+            self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: folderInfo.size)
+            self.tableView.reloadData()
         }
     }
 
@@ -203,8 +192,11 @@ class FolderInfoViewController: UITableViewController {
                 print(error!.localizedDescription)
                 return
             }
-            self.folderSize = info.0
-            self.noElements = (info.1, info.2)
+            if let info = info {
+                self.folderInfo = info
+            } else {
+                // TODO: Show information that folder was not correctly calculated.
+            }
         })
     }
 

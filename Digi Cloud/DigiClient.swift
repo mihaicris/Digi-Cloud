@@ -24,6 +24,12 @@ enum Authentication: Error {
     case login(String)
 }
 
+struct FolderInfo {
+    var size: Int64 = 0
+    var files: Int = 0
+    var folders: Int = 0
+}
+
 final class DigiClient {
 
     // MARK: - Properties
@@ -496,41 +502,41 @@ final class DigiClient {
         ///
         /// - Parameter parent: parent folder
         /// - Returns: return tuple with (size of child, number of files, number of folders)
-        func getChildInfo(_ parent: [String: Any]) -> (Int64, Int, Int) {
-            var size: Int64 = 0
-            var files: Int = 0
-            var folders: Int = 0
+        func getChildInfo(_ parent: [String: Any]) -> FolderInfo {
+            var info = FolderInfo()
             if let childType = parent["type"] as? String, childType == "file" {
-                files += 1
-                if let childSize = parent["size"] as? Int64 {
-                    return (childSize, files, folders)
+                info.files += 1
+                if let size = parent["size"] as? Int64 {
+                    info.size += size
+                    return info
                 }
             }
             if let children = parent["children"] as? [[String: Any]] {
-                folders += 1
+                info.folders += 1
                 for child in children {
-                    let info = getChildInfo(child)
-                    size += info.0
-                    files += info.1
-                    folders += info.2
+                    let childInfo = getChildInfo(child)
+                    info.size += childInfo.size
+                    info.files += childInfo.files
+                    info.folders += childInfo.folders
                 }
             }
-            return (size, files, folders)
+            return info
         }
 
         getTree(at: location) { json, error in
             if let error = error {
-                completion((nil, nil, nil), error)
+                completion(nil, error)
                 return
             }
             guard let json = json else {
-                completion((nil, nil, nil), nil)
+                completion(nil, nil)
                 return
             }
-            let info = getChildInfo(json)
+            var info = getChildInfo(json)
+            info.folders -= 1
 
             // Subtracting 1 because the root folder is also counted
-            completion((info.0, info.1, info.2 - 1), nil)
+            completion(info, nil)
         }
     }
 
