@@ -504,7 +504,7 @@
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				INFOPLIST_FILE = "Digi Cloud/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mihaicris.Digi-Cloud";
+				PRODUCT_BUNDLE_IDENTIFIER = "ro.mihaicris.Digi-Cloud";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -518,7 +518,7 @@
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				INFOPLIST_FILE = "Digi Cloud/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mihaicris.Digi-Cloud";
+				PRODUCT_BUNDLE_IDENTIFIER = "ro.mihaicris.Digi-Cloud";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 2;
