@@ -306,6 +306,7 @@ final class ListingViewController: UITableViewController {
         }
         refreshControl?.attributedTitle = NSAttributedString(string: title, attributes: attributes)
     }
+    
     fileprivate func updateContent() {
 
         self.needRefresh = false

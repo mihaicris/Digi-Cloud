@@ -68,7 +68,7 @@ extension Node {
 extension Node: Hashable {
     var hashValue: Int {
         get {
-            return location.hashValue ^ (name.hashValue &* 7197972913)
+            return location.hashValue ^ (name.hashValue &* 72913)
         }
     }
 }

@@ -35,7 +35,7 @@ extension Location: Equatable {
 extension Location: Hashable {
     var hashValue: Int {
         get {
-            return mount.name.hashValue ^ (path.hashValue &* 7197972913)
+            return mount.name.hashValue ^ (path.hashValue &* 72913)
         }
     }
 }
