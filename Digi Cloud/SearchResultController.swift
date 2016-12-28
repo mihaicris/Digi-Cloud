@@ -133,7 +133,7 @@ class SearchResultController: UITableViewController {
 
         let searchLocation: Location? = scope == 0 ? self.currentLocation : nil
 
-        DigiClient.shared.searchNodes(for: searchText, at: searchLocation) { nodes, error in
+        DigiClient.shared.searchNodes(query: searchText, at: searchLocation) { nodes, error in
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return

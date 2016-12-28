@@ -238,8 +238,8 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - result: Returned content as an array of nodes
     ///   - error: The error occurred in the network request, nil for no error.
-    func getContent(at location: Location,
-                    completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+    func getContent(of location: Location,
+                     completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.Headers
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
@@ -317,8 +317,9 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func renameNode(at location: Location, with name: String,
-                    completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func renameNode(at location: Location,
+                      with name: String,
+                     completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
         let method = Methods.Rename.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -345,7 +346,7 @@ final class DigiClient {
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
     func deleteNode(at location: Location,
-                    completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+                     completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
         let method = Methods.Remove.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -369,8 +370,9 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func createFolderNode(in location: Location, name: String,
-                          completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func createFolderNode(at location: Location,
+                            with name: String,
+                           completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -397,8 +399,9 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - json: An array containing the search hits (Nodes).
     ///   - error: The error occurred in the network request, nil for no error.
-    func searchNodes(for query: String, at location: Location?,
-                     completion: @escaping (_ json: [Node]?, _ error: Error?) -> Void) {
+    func searchNodes(query: String,
+               at location: Location?,
+                completion: @escaping (_ json: [Node]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
         var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
@@ -412,7 +415,11 @@ final class DigiClient {
             parameters[ParametersKeys.Path] = location.path
         }
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
+        networkTask(requestType: "GET",
+                         method: method,
+                        headers: headers,
+                           json: nil,
+                     parameters: parameters) { json, _, error in
             if let error = error {
                 completion(nil, error)
                 return
@@ -458,7 +465,7 @@ final class DigiClient {
     ///   - json: The dictionary [String: Any] containing the search hits.
     ///   - error: The error occurred in the network request, nil for no error.
     func getTree(at location: Location,
-                 completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
+                  completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
@@ -486,8 +493,8 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - info: Tuple containing size, number of files and number of folders
     ///   - error: The error occurred in the network request, nil for no error.
-    func getFolderInfo(location: Location,
-                       completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
+    func getFolderInfo(at location: Location,
+                        completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -549,8 +556,10 @@ final class DigiClient {
     ///   - completion:        Function to handle the status code and error response
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
-    func copyOrMoveNode(action: ActionType, from: Location, to: Location,
-                        completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func copyOrMoveNode(action: ActionType,
+                          from: Location,
+                            to: Location,
+                    completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
 
         var method: String
 

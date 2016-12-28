@@ -317,7 +317,7 @@ final class ListingViewController: UITableViewController {
             self.busyIndicator.startAnimating()
         }
 
-        DigiClient.shared.getContent(at: location) { receivedContent, error in
+        DigiClient.shared.getContent(of: location) { receivedContent, error in
             self.isUpdating = false
 
             guard error == nil else {

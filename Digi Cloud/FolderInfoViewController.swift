@@ -189,7 +189,7 @@ class FolderInfoViewController: UITableViewController {
 
         let folderLocation = Location(mount: self.location.mount, path: folderPath)
 
-        DigiClient.shared.getFolderInfo(location: folderLocation, completion: { (info, error) in
+        DigiClient.shared.getFolderInfo(at: folderLocation, completion: { (info, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
                 return
