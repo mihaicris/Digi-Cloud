@@ -33,10 +33,22 @@ class FolderInfoViewController: UITableViewController {
                 paragraph.lineHeightMultiple = 1.3
                 label.numberOfLines = 2
 
-                let filesString = NSLocalizedString("%d files\n", comment: "Information")
+                let filesString: String
+                if folderInfo.files == 1 {
+                    filesString = NSLocalizedString("1 file\n", comment: "Information")
+                } else {
+                    filesString = NSLocalizedString("%d files\n", comment: "Information")
+                }
+
+                let foldersString: String
+                if folderInfo.folders == 1 {
+                    foldersString = NSLocalizedString("1 folder", comment: "Information")
+                } else {
+                    foldersString = NSLocalizedString("%d folders", comment: "Information")
+                }
+
                 let text1 = String.localizedStringWithFormat(filesString, folderInfo.files)
-                let folderString = NSLocalizedString("%d folders", comment: "Information")
-                let text2 = String.localizedStringWithFormat(folderString, folderInfo.folders)
+                let text2 = String.localizedStringWithFormat(foldersString, folderInfo.folders)
                 let attributedText = NSMutableAttributedString(string: text1 + text2,
                                                                attributes: [NSParagraphStyleAttributeName: paragraph])
                 label.attributedText = attributedText
