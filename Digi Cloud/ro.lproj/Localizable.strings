@@ -1,0 +1,170 @@
+/* Information */
+"%d files
+" = "%d fișiere
+";
+
+/* Information */
+"%d folders" = "%d directoare";
+
+/* Question for user */
+"Are you sure you want to delete this file?" = "Sigur se șterge acest fișier?";
+
+/* Question for user */
+"Are you sure you want to delete this folder?" = "Sigur se șterge acest director?";
+
+/* Button Title */
+"Cancel" = "Renunță";
+
+/* Error Information
+   Error message */
+"Characters \\ / : ? < > \" | are not allowed." = "Caracterele \\ / : ? < > \" | nu sunt permise.";
+
+/* Window prompt */
+"Choose a destination" = "Alege o destinație";
+
+/* Selection Title */
+"Copy" = "Copiază";
+
+/* Button Title */
+"Create" = "Creează";
+
+/* Button Title
+   Window Title */
+"Create Folder" = "Creare director";
+
+/* Button title */
+"Date" = "Dată";
+
+/* Button title
+   Selection Title */
+"Delete" = "Șterge";
+
+/* Button Title, keep the leading/trailing spaces! */
+"Delete Folder" = "Șterge director";
+
+/* Button Title
+   Button title */
+"Done" = "Gata";
+
+/* TextField Name */
+"EMAIL ADDRESS" = "ADRESĂ DE EMAIL";
+
+/* Window Title */
+"Error" = "Eroare";
+
+/* Button title */
+"Everywhere" = "Peste tot";
+
+/* Error message */
+"File is no longer available. Folder will refresh." = "Fișierul nu mai este disponibil. Directorul se va actualiza.";
+
+/* Textfield placeholder */
+"Folder Name" = "Nume director";
+
+/* Error message */
+"Folder already exists. Please choose a different name." = "Directorul există deja. Alege un alt nume.";
+
+/* TableCell Header Title */
+"Folder content" = "Conținut director";
+
+/* Selection Title
+   Window Title */
+"Folder information" = "Informații director";
+
+/* Information */
+"Folder is Empty" = "Directorul este gol";
+
+/* Switch Title */
+"Folders first" = "Directoare la început";
+
+/* Button Title */
+"LOGIN" = "AUTENTIFICARE";
+
+/* Information */
+"Loading ..." = "Se încarcă ...";
+
+/* Window Title */
+"Locations" = "Locații";
+
+/* Selection Title */
+"Make available offline" = "Disponibil fără internet";
+
+/* Button Title
+   Selection Title */
+"Move" = "Mută";
+
+/* Button title
+   TableCell Header Title */
+"Name" = "Nume";
+
+/* Error Information */
+"Name is the same." = "Numele este același";
+
+/* TableCell Footer Title */
+"Note: Including subfolders" = "Notă: Inclusiv subdirectoare";
+
+/* TextField Name */
+"PASSWORD" = "PAROLĂ";
+
+/* Title */
+"Pull to refresh this folder" = "Trage pentru a actualiza directorul";
+
+/* Title */
+"Refreshing ..." = "Se actualizează ...";
+
+/* Button Title
+   Selection Title */
+"Rename" = "Redenumește";
+
+/* Window Title */
+"Rename File" = "Redenumire fișier";
+
+/* Window Title */
+"Rename Folder" = "Redenumire director";
+
+/* Button Title */
+"Save copy" = "Salvează copia";
+
+/* Action title */
+"Search for files or folders" = "Căutare fișiere sau directoare";
+
+/* Error message */
+"Server replied with Status Code: " = "Serverul a răspuns cu codul de stare: ";
+
+/* Selection Title */
+"Share" = "Partajează";
+
+/* Button title
+   TableCell Header Title */
+"Size" = "Mărime";
+
+/* Selection Title */
+"Sort by Date" = "Sortează după dată";
+
+/* Selection Title */
+"Sort by Name" = "Sortează după nume";
+
+/* Selection Title */
+"Sort by Size" = "Sortează după mărime";
+
+/* Selection Title */
+"Sort by Type" = "Sortează după tip";
+
+/* Window Title */
+"Sort folder" = "Sortare director";
+
+/* TableCell Footer Title */
+"This action is not reversible!" = "Aceată acțiune nu este reversibilă!";
+
+/* Button title */
+"This folder" = "Acest director";
+
+/* Error message */
+"This name already exists. Please choose a different one." = "Numele există deja. Alege unul diferit.";
+
+/* Button title */
+"Type" = "Tip";
+
+/* Error Message */
+"Unauthorized access" = "Acces neautorizat";
+

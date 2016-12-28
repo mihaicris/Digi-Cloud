@@ -293,6 +293,7 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.placeholder = NSLocalizedString("Search for files or folders", comment: "Action title")
         searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This folder", comment: "Button title"),
                                                         NSLocalizedString("Everywhere", comment: "Button title")]
+        searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: "Button Title"), forKey: "cancelButtonText")
     }
 
     fileprivate func setRefreshControlTitle(started: Bool) {
