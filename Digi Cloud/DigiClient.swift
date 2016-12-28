@@ -203,10 +203,11 @@ final class DigiClient {
 
     func getDIGIStorageLocations(completion: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
+        let parameters: [String: Any] = ["type": "device"]
         var headers = DefaultHeaders.Headers
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) {
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) {
             (data, _, error) in
             if let error = error {
                 completion(nil, error)
