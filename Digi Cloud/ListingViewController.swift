@@ -302,11 +302,11 @@ final class ListingViewController: UITableViewController {
         if started {
             title = NSLocalizedString("Refreshing ...", comment: "Title")
         } else {
-            title = NSLocalizedString("Pull to refresh", comment: "Title")
+            title = NSLocalizedString("Pull to refresh this folder", comment: "Title")
         }
         refreshControl?.attributedTitle = NSAttributedString(string: title, attributes: attributes)
     }
-    
+
     fileprivate func updateContent() {
 
         self.needRefresh = false
