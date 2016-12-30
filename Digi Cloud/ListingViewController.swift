@@ -507,6 +507,38 @@ final class ListingViewController: UITableViewController {
         }
     }
 
+    fileprivate func setBusyIndicatorView(_ visible: Bool) {
+        guard let navControllerView = navigationController?.view else {
+            return
+        }
+        if visible {
+            let screenSize = navControllerView.bounds.size
+            let origin = CGPoint(x: (screenSize.width / 2) - 45, y: (screenSize.height / 2) - 45)
+            let frame = CGRect(origin: origin, size: CGSize(width: 90, height: 90))
+            let overlayView = UIView(frame: frame)
+            overlayView.layer.cornerRadius = 8
+            overlayView.backgroundColor = UIColor.init(white: 0.7, alpha: 0.8)
+            overlayView.tag = 1
+            navControllerView.addSubview(overlayView)
+
+            let activityIndicator = UIActivityIndicatorView()
+            activityIndicator.startAnimating()
+            activityIndicator.activityIndicatorViewStyle = .white
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            navControllerView.addSubview(activityIndicator)
+
+            NSLayoutConstraint.activate([
+                activityIndicator.centerXAnchor.constraint(equalTo: navControllerView.centerXAnchor),
+                activityIndicator.centerYAnchor.constraint(equalTo: navControllerView.centerYAnchor)
+            ])
+
+        } else {
+            if let overlayView = navControllerView.viewWithTag(1) {
+                overlayView.removeFromSuperview()
+            }
+        }
+    }
+
     @objc fileprivate func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
@@ -596,7 +628,7 @@ final class ListingViewController: UITableViewController {
 
     @objc fileprivate func handleCopyOrMove() {
 
-        // TODO: Show activity indicator
+        setBusyIndicatorView(true)
 
         guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
             print("Couldn't get the source node name.")
@@ -663,7 +695,7 @@ final class ListingViewController: UITableViewController {
                 }
             }
 
-            // TODO: Stop activity indicator
+            self.setBusyIndicatorView(false)
 
             guard error == nil else {
                 print(error!.localizedDescription)
