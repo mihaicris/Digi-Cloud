@@ -53,5 +53,6 @@ struct Methods {
     static let Tree             = "/api/v2/mounts/{id}/files/tree"
     static let Copy             = "/api/v2/mounts/{id}/files/copy"
     static let Move             = "/api/v2/mounts/{id}/files/move"
+    static let Links            = "/api/v2/mounts/{id}/links"
     static let Search           = "/api/v2/search"
 }
