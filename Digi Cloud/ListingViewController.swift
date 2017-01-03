@@ -321,9 +321,18 @@ final class ListingViewController: UITableViewController {
 
         DigiClient.shared.getContent(of: location) { receivedContent, error in
             self.isUpdating = false
+            self.busyIndicator.stopAnimating()
 
             guard error == nil else {
-                print("Error: \(error!.localizedDescription)")
+                switch error! {
+                case NetworkingError.wrongStatus(let message):
+                    self.refreshControl?.endRefreshing()
+                    self.emptyFolderLabel.text = message
+                    self.content.removeAll()
+                    self.tableView.reloadData()
+                default:
+                    print("Error: \(error!.localizedDescription)")
+                }
                 return
             }
             if var newContent = receivedContent {
@@ -374,7 +383,6 @@ final class ListingViewController: UITableViewController {
     fileprivate func updateMessageForEmptyFolder() {
         // For the case when the folder is empty, setting the message text on screen.
         if self.content.isEmpty {
-            self.busyIndicator.stopAnimating()
             self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
         }
     }
