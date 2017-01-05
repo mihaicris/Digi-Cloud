@@ -13,6 +13,7 @@ class LoginViewController: UIViewController {
     // MARK: - Properties
 
     var onFinish: (() -> Void)?
+
     let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
         spinner.translatesAutoresizingMaskIntoConstraints = false
@@ -124,7 +125,7 @@ class LoginViewController: UIViewController {
             self.spinner.stopAnimating()
             if success {
                 // save token for automatic login
-                AppSettings.loginToken = DigiClient.shared.token
+                AppSettings.accountLoggedIn = email
                 self.onFinish?()
             } else {
                     let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),

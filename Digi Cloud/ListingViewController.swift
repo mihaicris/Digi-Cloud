@@ -791,7 +791,7 @@ extension ListingViewController: ActionViewControllerDelegate {
 
                     // If index is 0 than this is a location controller
                     if index == 0 {
-                        let c = LocationsTableViewController(action: action)
+                        let c = LocationsViewController(action: action)
                         c.title = NSLocalizedString("Locations", comment: "Window Title")
                         c.onFinish = { [unowned self] in
 

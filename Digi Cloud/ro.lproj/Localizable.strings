@@ -94,6 +94,9 @@
 /* Window Title */
 "Locations" = "Locații";
 
+/* Error message */
+"Location is no longer available!" = "Locația nu mai este disponibilă!";
+
 /* Selection Title */
 "Make available offline" = "Disponibil fără internet";
 

@@ -10,6 +10,9 @@ import UIKit
 
 class MainNavigationController: UINavigationController {
 
+    // Closure called when user has logged out.
+    var onLogout: (() -> Void)?
+
     // This property will hold the source node when copying or moving action
     // It can be accessed by any view controller on the stack of controllers
     var source: Node?
@@ -23,55 +26,19 @@ class MainNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
-        // we check if app is launched for the first time, if yes, we initialize some settings
-        if !AppSettings.isAppFirstTimeStarted {
-
-            // Set that App has been started first time
-            AppSettings.isAppFirstTimeStarted = true
-
-            // Set sorting defaults
-            AppSettings.showFoldersFirst = true
-            AppSettings.sortMethod = .byName
-            AppSettings.sortAscending = true
-
-        }
-
-        // if there is a token saved, we load the locations, otherwise present the login screen
-        if let token = AppSettings.loginToken {
-            DigiClient.shared.token = token
-
-            // TODO: Show activity indicator
-
-            DigiClient.shared.getUserInfo {
-                _, statusCode, error in
-
-                guard error == nil || statusCode == 200 else {
-                    print(error!.localizedDescription)
-                    print("StatusCode: \(statusCode)")
-                    DigiClient.shared.token = nil
-                    self.showLoginScreen()
-                    return
-                }
-                let controller = LocationsTableViewController(action: .noAction)
-                self.viewControllers = [controller]
-            }
-        } else {
-            showLoginScreen()
-        }
+        let controller = LocationsViewController(action: .noAction)
+        pushViewController(controller, animated: false)
     }
 
     // MARK: - Helper Functions
 
-    func showLoginScreen() {
-        // present modally the login view, after a very small delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            let controller = LoginViewController()
-            controller.onFinish = {
-                self.viewControllers = [LocationsTableViewController(action: .noAction)]
-                self.dismiss(animated: true, completion: nil) // dismiss LoginViewController
-            }
-            self.present(controller, animated: true, completion: nil)
+    fileprivate func showLoginScreen() {
+        let controller = LoginViewController()
+        controller.onFinish = { [weak self] in
+            self?.viewControllers = [LocationsViewController(action: .noAction)]
+            self?.dismiss(animated: true, completion: nil) // dismiss LoginViewController
         }
+        self.present(controller, animated: true, completion: nil)
     }
+
 }

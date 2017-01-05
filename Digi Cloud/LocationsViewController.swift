@@ -1,5 +1,5 @@
 //
-//  LocationsTableViewController.swift
+//  LocationsViewController.swift
 //  test
 //
 //  Created by Mihai Cristescu on 15/09/16.
@@ -8,11 +8,12 @@
 
 import UIKit
 
-class LocationsTableViewController: UITableViewController {
+class LocationsViewController: UITableViewController {
 
     // MARK: - Properties
 
     var onFinish: (() -> Void)?
+
     fileprivate var locations: [Location] = []
     fileprivate let action: ActionType
     fileprivate var isUpdating: Bool = false
@@ -45,6 +46,7 @@ class LocationsTableViewController: UITableViewController {
         count -= 1
     }
     #endif
+
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
@@ -100,6 +102,9 @@ class LocationsTableViewController: UITableViewController {
                                               action: #selector(handleDone))
 
             navigationItem.setRightBarButton(rightButton, animated: false)
+        } else {
+            let settingsButton = UIBarButtonItem(image: UIImage(named: "Settings-Icon"), style: .plain, target: self, action: #selector(handleShowSettings))
+            self.navigationItem.setRightBarButton(settingsButton, animated: false)
         }
         self.title = NSLocalizedString("Locations", comment: "Window Title")
     }
@@ -167,6 +172,14 @@ class LocationsTableViewController: UITableViewController {
             return
         }
         self.getLocations()
+    }
+
+    @objc fileprivate func handleShowSettings() {
+        // For the moment only logout.
+        if let navController = self.navigationController as? MainNavigationController {
+            AppSettings.accountLoggedIn = nil
+            navController.onLogout?()
+        }
     }
 
     @objc fileprivate func handleDone() {

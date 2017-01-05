@@ -15,39 +15,31 @@ enum SortMethodType: Int {
     case byContentType
 }
 
-final class AppSettings {
+struct AppSettings {
 
     // MARK: - Properties
     static let shared: AppSettings = AppSettings()
     static var tableViewRowHeight: CGFloat = 50
     fileprivate init() {}
-    static var isAppFirstTimeStarted: Bool {
+    static var wasAppStarted: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.wasAppStarted.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.wasAppStarted.rawValue)
             UserDefaults.standard.synchronize()
         }
     }
-    static var isLoggedIn: Bool {
+    static var accountLoggedIn: String? {
         get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue)
+            return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.userLogged.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.userLogged.rawValue)
             UserDefaults.standard.synchronize()
         }
     }
-    static var loginToken: String? {
-        get {
-            return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue)
-            UserDefaults.standard.synchronize()
-        }
-    }
+
     static var showFoldersFirst: Bool {
         get {
             return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue)

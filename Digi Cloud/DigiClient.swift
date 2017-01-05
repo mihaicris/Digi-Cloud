@@ -171,6 +171,9 @@ final class DigiClient {
             }
             if statusCode == 200 {
                 if let json = json as? [String: String] {
+
+                    // TODO: Save the token in the KeyChain Security
+
                     self.token = json["token"]
                     completion(true, nil)
                 }
