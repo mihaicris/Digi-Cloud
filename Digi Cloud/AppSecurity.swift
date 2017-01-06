@@ -49,4 +49,8 @@ struct AppSecurity {
           return debug_Accounts[account]
     }
 
+    static func save(token: String, account: String) throws {
+        // TODO: Implement Save of Token in the KeyChain
+    }
+
 }

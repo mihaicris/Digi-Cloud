@@ -30,15 +30,4 @@ class MainNavigationController: UINavigationController {
         pushViewController(controller, animated: false)
     }
 
-    // MARK: - Helper Functions
-
-    fileprivate func showLoginScreen() {
-        let controller = LoginViewController()
-        controller.onFinish = { [weak self] in
-            self?.viewControllers = [LocationsViewController(action: .noAction)]
-            self?.dismiss(animated: true, completion: nil) // dismiss LoginViewController
-        }
-        self.present(controller, animated: true, completion: nil)
-    }
-
 }

@@ -15,7 +15,6 @@
 		8320C2551E1E3B6400413B36 /* UIView+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */; };
 		8320C2571E1E3B7800413B36 /* UserDefaults+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */; };
 		8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */; };
-		8320C25B1E1E4EA800413B36 /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C25A1E1E4EA800413B36 /* FlowController.swift */; };
 		8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
 		832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
 		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
@@ -53,6 +52,7 @@
 		83F160761E1C14090057887A /* Accounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 83F160751E1C14090057887A /* Accounts.json */; };
 		83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994511DD09B340023FB5D /* SortFolderViewController.swift */; };
 		83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994531DD0A1E90023FB5D /* ActionCell.swift */; };
+		E5832D392FF98C031D43515B /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5832C4125BB550AC54A5C59 /* FlowController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,7 +64,6 @@
 		8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+DigiCloud.swift"; sourceTree = "<group>"; };
 		8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+DigiCloud.swift"; sourceTree = "<group>"; };
 		8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+DigiCloud.swift"; sourceTree = "<group>"; };
-		8320C25A1E1E4EA800413B36 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
 		8321FC5A1D9568FE002D6413 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
@@ -108,6 +107,7 @@
 		83F160751E1C14090057887A /* Accounts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Accounts.json; sourceTree = "<group>"; };
 		83F994511DD09B340023FB5D /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortFolderViewController.swift; sourceTree = "<group>"; };
 		83F994531DD0A1E90023FB5D /* ActionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionCell.swift; sourceTree = "<group>"; };
+		E5832C4125BB550AC54A5C59 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,7 +216,7 @@
 		839BAE201D8BE00E00A43452 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8320C25A1E1E4EA800413B36 /* FlowController.swift */,
+				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
 				83F994491DD093A00023FB5D /* Introduction */,
 				83F994471DD093700023FB5D /* Accounts */,
 				83F9944B1DD093C90023FB5D /* Listing */,
@@ -399,7 +399,6 @@
 				8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */,
 				83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */,
 				8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */,
-				8320C25B1E1E4EA800413B36 /* FlowController.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
 				8320C2531E1E3B4900413B36 /* UIViewController+DigiCloud.swift in Sources */,
 				83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */,
@@ -437,6 +436,7 @@
 				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
 				834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */,
 				839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */,
+				E5832D392FF98C031D43515B /* FlowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

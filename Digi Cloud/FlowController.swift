@@ -21,16 +21,17 @@ class FlowController {
         var controller: UIViewController
 
         if AppSettings.wasAppStarted {
-            if let account = AppSettings.accountLoggedIn {
-                DigiClient.shared.token = AppSecurity.getToken(account: account)
-                controller = self.createMainNavigationController()
-            } else {
-                controller = self.createAccountSelectionController()
-            }
+            if let account = AppSettings.accountLoggedIn,
+                let token = AppSecurity.getToken(account: account) {
+                    DigiClient.shared.token = token
+                    controller = self.createMainNavigationController()
+                } else {
+                    AppSettings.accountLoggedIn = nil
+                    controller = self.createAccountSelectionController()
+                }
         } else {
             controller = self.createIntroController()
         }
-
         return controller
     }
 
@@ -54,7 +55,7 @@ class FlowController {
 
     fileprivate func createAccountSelectionController() -> UIViewController {
 
-        let controller = AccountSelectionViewController(collectionViewLayout: UICollectionViewLayout())
+        let controller = AccountSelectionViewController()
         controller.onSelect = { [weak self] in
             self?.window.rootViewController = self?.rootController()
         }

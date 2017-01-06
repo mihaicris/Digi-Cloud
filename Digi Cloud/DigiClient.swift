@@ -157,7 +157,7 @@ final class DigiClient {
     }
 
     func authenticate(email: String, password: String,
-                      completion: @escaping(_ success: Bool, _ error: Error?) -> Void) {
+                      completion: @escaping(_ token: String?, _ error: Error?) -> Void) {
         let method = Methods.Token
         let headers = DefaultHeaders.Headers
         let jsonBody = ["password": password, "email": email]
@@ -166,19 +166,16 @@ final class DigiClient {
             (json, statusCode, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
-                completion(false, error!)
+                completion(nil, error!)
                 return
             }
             if statusCode == 200 {
                 if let json = json as? [String: String] {
-
-                    // TODO: Save the token in the KeyChain Security
-
-                    self.token = json["token"]
-                    completion(true, nil)
+                    let token  = json["token"]
+                    completion(token, nil)
                 }
             } else {
-                completion(false, nil)
+                completion(nil, nil)
             }
         }
     }

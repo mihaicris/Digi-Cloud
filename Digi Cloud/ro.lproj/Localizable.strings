@@ -63,6 +63,8 @@
 /* Button title */
 "Everywhere" = "Peste tot";
 
+"for" = "pentru";
+
 /* Error message */
 "File is no longer available. Folder will refresh." = "Fișierul nu mai este disponibil. Directorul se va actualiza.";
 
@@ -74,6 +76,14 @@
 
 /* TableCell Header Title */
 "Folder content" = "Conținut director";
+
+"Log in to Another Account" = "Autentificare în alt cont";
+
+"No accounts" = "Niciun cont salvat";
+
+"Add Account" = "Adaugă un cont";
+
+"Sign Up for Digi Storage" = "Obține un cont Digi Storage";
 
 /* Selection Title
    Window Title */
