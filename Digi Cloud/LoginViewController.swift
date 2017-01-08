@@ -60,7 +60,7 @@ class LoginViewController: UIViewController {
     fileprivate let cancelButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle("✘", for: .normal)
+        b.setTitle("✕", for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.titleLabel?.font = UIFont(name: "Helvetica", size: 22)
         b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
