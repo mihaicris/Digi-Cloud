@@ -167,7 +167,7 @@ class AccountSelectionViewController: UIViewController {
         }
 
         controller.onSuccess = { [weak self] account, token in
-            self?.dismiss(animated: true, completion: {
+            self?.dismiss(animated: true) {
 
                 guard let wself = self else { return }
 
@@ -187,7 +187,7 @@ class AccountSelectionViewController: UIViewController {
                         print(error.localizedDescription)
                     }
                 }
-            })
+            }
         }
         present(controller, animated: true, completion: nil)
     }
