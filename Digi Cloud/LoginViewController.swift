@@ -50,14 +50,14 @@ class LoginViewController: UIViewController {
         return field
     }()
 
-    fileprivate lazy var loginButton: LoginButton = {
+    fileprivate let loginButton: LoginButton = {
         let button = LoginButton()
         button.setTitle(NSLocalizedString("LOGIN", comment: "Button Title"), for: .normal)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
 
-    fileprivate lazy var cancelButton: UIButton = {
+    fileprivate let cancelButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle("✘", for: .normal)
