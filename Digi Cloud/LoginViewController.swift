@@ -181,6 +181,8 @@ class LoginViewController: UIViewController {
     }
 
     @objc fileprivate func handleCancel() {
+        emailTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
         self.onCancel?()
     }
 
