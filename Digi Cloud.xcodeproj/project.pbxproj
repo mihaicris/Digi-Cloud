@@ -30,14 +30,14 @@
 		8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsViewController.swift */; };
 		8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */; };
 		8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */; };
-		8395CA0C1E1C0B3000306F84 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA0B1E1C0B3000306F84 /* Account.swift */; };
 		839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
 		83A9BE1B1DFFDDDC003FD974 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */; };
-		83B1DB751E1E97F500917F86 /* AppSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B1DB741E1E97F500917F86 /* AppSecurity.swift */; };
 		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
+		83B6B3271E23FFCF00806B14 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6B3261E23FFCF00806B14 /* AccountCell.swift */; };
 		83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D3951E13C781005258B3 /* InfoPlist.strings */; };
 		83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D39A1E13DCF4005258B3 /* Localizable.strings */; };
+		83C7D1081E23A9B700E3D508 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D1061E23A9B700E3D508 /* Account.swift */; };
 		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
 		83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
 		83CE7A001DE45D77002212A9 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE79FF1DE45D77002212A9 /* Location.swift */; };
@@ -81,18 +81,18 @@
 		8370412B1D8B2264000EDBAE /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSelectionViewController.swift; sourceTree = "<group>"; };
-		8395CA0B1E1C0B3000306F84 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		839A22E21DC11BA400758730 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
 		83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultController.swift; sourceTree = "<group>"; };
-		83B1DB741E1E97F500917F86 /* AppSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSecurity.swift; sourceTree = "<group>"; };
 		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		83B6B3261E23FFCF00806B14 /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
 		83B6D3881E13C045005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D3891E13C1C0005258B3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D38A1E13C1C8005258B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D38B1E13C1D5005258B3 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D3941E13C781005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		83B6D3991E13DCF4005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		83C7D1061E23A9B700E3D508 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
 		83CE79FF1DE45D77002212A9 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -161,7 +161,6 @@
 		835406021D95180F00019D53 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				83B1DB741E1E97F500917F86 /* AppSecurity.swift */,
 				83419B291DCA077F0016215C /* AppSettings.swift */,
 				831B9F581D992BD7003DAF42 /* DigiClient.swift */,
 				839BAE241D8BFD6500A43452 /* DigiConstants.swift */,
@@ -237,7 +236,7 @@
 		83EF1D461D8FBDC400ACE008 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8395CA0B1E1C0B3000306F84 /* Account.swift */,
+				83C7D1061E23A9B700E3D508 /* Account.swift */,
 				83CE79FF1DE45D77002212A9 /* Location.swift */,
 				83EF1D6B1D8FE26400ACE008 /* Mount.swift */,
 				83EF1D471D8FBDDA00ACE008 /* Node.swift */,
@@ -248,6 +247,7 @@
 		83F994461DD092870023FB5D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				83B6B3261E23FFCF00806B14 /* AccountCell.swift */,
 				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
 				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
 				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
@@ -399,6 +399,7 @@
 				8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */,
 				83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */,
 				8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */,
+				83B6B3271E23FFCF00806B14 /* AccountCell.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
 				8320C2531E1E3B4900413B36 /* UIViewController+DigiCloud.swift in Sources */,
 				83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */,
@@ -417,6 +418,7 @@
 				83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */,
 				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
 				83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */,
+				83C7D1081E23A9B700E3D508 /* Account.swift in Sources */,
 				83164FED1E03F473001048D7 /* SearchCell.swift in Sources */,
 				83EF1D481D8FBDDA00ACE008 /* Node.swift in Sources */,
 				8320C2571E1E3B7800413B36 /* UserDefaults+DigiCloud.swift in Sources */,
@@ -427,11 +429,9 @@
 				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
 				832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */,
 				83A9BE1B1DFFDDDC003FD974 /* SearchResultController.swift in Sources */,
-				8395CA0C1E1C0B3000306F84 /* Account.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */,
-				83B1DB751E1E97F500917F86 /* AppSecurity.swift in Sources */,
 				8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */,
 				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
 				834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */,

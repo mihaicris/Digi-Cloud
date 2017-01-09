@@ -12,7 +12,7 @@ class LoginViewController: UIViewController {
 
     // MARK: - Properties
 
-    var onSuccess: ((_ account: String, _ token: String) -> Void)?
+    var onSuccess: (() -> Void)?
 
     var onCancel: (() -> Void)?
 
@@ -70,7 +70,7 @@ class LoginViewController: UIViewController {
     fileprivate let forgotPasswordButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle("Forgot password?", for: .normal)
+        b.setTitle(NSLocalizedString("Forgot password?", comment: "Question"), for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
         b.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
@@ -118,18 +118,18 @@ class LoginViewController: UIViewController {
             tv.textAlignment = .center
             tv.translatesAutoresizingMaskIntoConstraints = false
 
-            let aText = NSMutableAttributedString(string: "Hello!",
-                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 30)!,
+            let aText = NSMutableAttributedString(string: NSLocalizedString("Hello!", comment: ""),
+                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 28)!,
                                                                NSForegroundColorAttributeName: UIColor.white])
-            aText.append(NSAttributedString(string: "\n\nPlease provide the credentials for your Digi Storage account.",
+            aText.append(NSAttributedString(string: "\n\n"))
+            aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: "Information"),
                                             attributes: [NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 16)!,
                                                         NSForegroundColorAttributeName: UIColor.white]))
-
             let aPar = NSMutableParagraphStyle()
             aPar.alignment = .center
             let range = NSRange(location: 0, length: aText.string.characters.count)
             aText.addAttributes([NSParagraphStyleAttributeName: aPar], range: range)
-
+            tv.textContainerInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
             tv.attributedText = aText
             return tv
         }()
@@ -147,11 +147,11 @@ class LoginViewController: UIViewController {
             cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
             titleTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleTextView.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -20),
-            titleTextView.widthAnchor.constraint(equalTo: emailTextField.widthAnchor, constant: -20),
+            titleTextView.bottomAnchor.constraint(equalTo: emailTextField.topAnchor),
+            titleTextView.widthAnchor.constraint(equalTo: emailTextField.widthAnchor),
             emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40),
-            emailTextField.widthAnchor.constraint(equalToConstant: 320),
+            emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30),
+            emailTextField.widthAnchor.constraint(equalToConstant: 340),
             emailTextField.heightAnchor.constraint(equalToConstant: 50),
             passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20),
@@ -187,8 +187,10 @@ class LoginViewController: UIViewController {
     }
 
     @objc fileprivate func handleLogin() {
+
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
+
         guard let email = emailTextField.text,
             let password = passwordTextField.text,
             email.characters.count > 0,
@@ -218,6 +220,7 @@ class LoginViewController: UIViewController {
                 self.present(alert, animated: false, completion: nil)
                 return
             }
+
             guard let token = token else {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
                                             message: NSLocalizedString("Unauthorized access", comment: "Error Message"),
@@ -228,10 +231,21 @@ class LoginViewController: UIViewController {
                 self.present(alert, animated: false, completion: nil)
                 return
             }
-
-            AppSettings.accountLoggedIn = email
+            let account = Account(account: email)
+            do {
+                try account.save(token: token)
+            } catch {
+                let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
+                                              message: NSLocalizedString("An error has occurred while saving the account.\nPlease try again later!", comment: "Error Message"),
+                                              preferredStyle: UIAlertControllerStyle.alert)
+                let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                alert.addAction(actionOK)
+                self.present(alert, animated: false, completion: nil)
+                return
+            }
+            AppSettings.loggedAccount = email
             DigiClient.shared.token = token
-            self.onSuccess?(email, token)
+            self.onSuccess?()
         }
     }
 }

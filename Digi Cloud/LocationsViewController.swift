@@ -177,7 +177,7 @@ class LocationsViewController: UITableViewController {
     @objc fileprivate func handleShowSettings() {
         // For the moment only logout.
         if let navController = self.navigationController as? MainNavigationController {
-            AppSettings.accountLoggedIn = nil
+            AppSettings.loggedAccount = nil
             navController.onLogout?()
         }
     }

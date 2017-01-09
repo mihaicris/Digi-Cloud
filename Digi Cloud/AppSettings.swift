@@ -30,7 +30,7 @@ struct AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
-    static var accountLoggedIn: String? {
+    static var loggedAccount: String? {
         get {
             return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.userLogged.rawValue)
         }

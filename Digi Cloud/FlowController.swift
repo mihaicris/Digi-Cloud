@@ -21,14 +21,18 @@ class FlowController {
         var controller: UIViewController
 
         if AppSettings.wasAppStarted {
-            if let account = AppSettings.accountLoggedIn,
-                let token = AppSecurity.getToken(account: account) {
+            if let account = AppSettings.loggedAccount {
+                let loggedAccount = Account(account: account)
+                do {
+                    let token = try loggedAccount.readToken()
                     DigiClient.shared.token = token
                     controller = self.createMainNavigationController()
-                } else {
-                    AppSettings.accountLoggedIn = nil
+                } catch {
                     controller = self.createAccountSelectionController()
                 }
+            } else {
+                controller = self.createAccountSelectionController()
+            }
         } else {
             controller = self.createIntroController()
         }

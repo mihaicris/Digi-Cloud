@@ -34,6 +34,10 @@ class IntroductionViewController: UIViewController {
         }
     }
 
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
     // MARK: - Helper Functions
 
     fileprivate func setupViews() {
