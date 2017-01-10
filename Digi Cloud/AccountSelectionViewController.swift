@@ -8,7 +8,9 @@
 
 import UIKit
 
-class AccountSelectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class AccountSelectionViewController: UIViewController,
+                                      UICollectionViewDelegate, UICollectionViewDataSource,
+                                      UICollectionViewDelegateFlowLayout {
 
     // MARK: - Properties
 
@@ -90,12 +92,9 @@ class AccountSelectionViewController: UIViewController, UICollectionViewDelegate
             attributes: [NSFontAttributeName: UIFont(name: "Didot-Italic", size: 20) as Any]))
         attributedText.append(NSAttributedString(string: "Digi Storage",
                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
-
         let nsString = NSString(string: attributedText.string)
-
         var nsRange = nsString.range(of: "Cloud")
         attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
-
         nsRange = nsString.range(of: "Storage")
         attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
 
@@ -103,12 +102,21 @@ class AccountSelectionViewController: UIViewController, UICollectionViewDelegate
         return l
     }()
 
+    fileprivate let manageAccountsButton: UIButton = {
+        let b = UIButton(type: UIButtonType.system)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitle(NSLocalizedString("Manage Accounts", comment: "Button Title"), for: .normal)
+        b.setTitleColor(.white, for: .normal)
+        b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
+        b.addTarget(self, action: #selector(handleManageAccounts), for: .touchUpInside)
+        return b
+    }()
+
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        accountsCollectionView.register(AccountCell.self, forCellWithReuseIdentifier: cellId)
+        accountsCollectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
         setupViews()
     }
 
@@ -130,7 +138,7 @@ class AccountSelectionViewController: UIViewController, UICollectionViewDelegate
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? AccountCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? AccountCollectionCell else {
             return UICollectionViewCell()
         }
         cell.account = accounts[indexPath.item]
@@ -181,9 +189,9 @@ class AccountSelectionViewController: UIViewController, UICollectionViewDelegate
         view.backgroundColor = UIColor.init(red: 40/255, green: 78/255, blue: 55/255, alpha: 1.0)
 
         view.addSubview(logoBigLabel)
-        view.addSubview(stackView)
         view.addSubview(noAccountsLabel)
         view.addSubview(accountsCollectionView)
+        view.addSubview(stackView)
         stackView.addArrangedSubview(signUpLabel)
 
         NSLayoutConstraint.activate([
@@ -199,28 +207,27 @@ class AccountSelectionViewController: UIViewController, UICollectionViewDelegate
             stackView.centerYAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.height * 0.035)
         ])
 
-        updateVisibility()
+        configureOtherViews()
     }
 
-    fileprivate func updateVisibility() {
+    fileprivate func configureOtherViews() {
         if accounts.count == 0 {
-            stackView.removeArrangedSubview(loginToAnotherAccountButton)
+            loginToAnotherAccountButton.removeFromSuperview()
+            manageAccountsButton.removeFromSuperview()
             stackView.insertArrangedSubview(addAccountButton, at: 0)
             accountsCollectionView.isHidden = true
             noAccountsLabel.isHidden = false
-            addAccountButton.isHidden = false
-            loginToAnotherAccountButton.isHidden = true
         } else {
-            stackView.removeArrangedSubview(addAccountButton)
+            addAccountButton.removeFromSuperview()
             stackView.insertArrangedSubview(loginToAnotherAccountButton, at: 0)
+            stackView.insertArrangedSubview(manageAccountsButton, at: 0)
             accountsCollectionView.isHidden = false
             noAccountsLabel.isHidden = true
-            addAccountButton.isHidden = true
             loginToAnotherAccountButton.isHidden = false
         }
     }
 
-    @objc fileprivate func handleShowLogin(_: AnyObject) {
+    @objc fileprivate func handleShowLogin() {
         let controller = LoginViewController()
         controller.modalPresentationStyle = .formSheet
 
@@ -242,7 +249,16 @@ class AccountSelectionViewController: UIViewController, UICollectionViewDelegate
         self.onSelect?()
     }
 
-    fileprivate func getSavedAccounts() {
+    @objc fileprivate func handleManageAccounts() {
+        let controller = ManageAccountsViewController(accounts: accounts)
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .popover
+        navController.popoverPresentationController?.sourceView = manageAccountsButton
+        navController.popoverPresentationController?.sourceRect = manageAccountsButton.bounds
+        present(navController, animated: true, completion: nil)
+    }
+
+    func getSavedAccounts() {
         /*
          Make sure the collection view is up-to-date by first reloading the
          acocunts items from the keychain and then reloading the table view.
@@ -252,7 +268,7 @@ class AccountSelectionViewController: UIViewController, UICollectionViewDelegate
         } catch {
             fatalError("Error fetching account items - \(error)")
         }
-        updateVisibility()
+        configureOtherViews()
         accountsCollectionView.reloadData()
     }
 }

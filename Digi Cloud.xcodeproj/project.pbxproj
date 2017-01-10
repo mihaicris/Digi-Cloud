@@ -29,12 +29,14 @@
 		8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412A1D8B2264000EDBAE /* LoginViewController.swift */; };
 		8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsViewController.swift */; };
 		8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */; };
+		83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */; };
+		83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E631E25345500C8AE52 /* AccountTableViewCell.swift */; };
 		8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */; };
 		839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
 		83A9BE1B1DFFDDDC003FD974 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */; };
 		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
-		83B6B3271E23FFCF00806B14 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6B3261E23FFCF00806B14 /* AccountCell.swift */; };
+		83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */; };
 		83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D3951E13C781005258B3 /* InfoPlist.strings */; };
 		83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D39A1E13DCF4005258B3 /* Localizable.strings */; };
 		83C7D1081E23A9B700E3D508 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D1061E23A9B700E3D508 /* Account.swift */; };
@@ -80,12 +82,14 @@
 		8370412A1D8B2264000EDBAE /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8370412B1D8B2264000EDBAE /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
+		83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountsViewController.swift; sourceTree = "<group>"; };
+		83851E631E25345500C8AE52 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
 		8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSelectionViewController.swift; sourceTree = "<group>"; };
 		839A22E21DC11BA400758730 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
 		83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultController.swift; sourceTree = "<group>"; };
 		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
-		83B6B3261E23FFCF00806B14 /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
+		83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCollectionCell.swift; sourceTree = "<group>"; };
 		83B6D3881E13C045005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D3891E13C1C0005258B3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D38A1E13C1C8005258B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -247,7 +251,8 @@
 		83F994461DD092870023FB5D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				83B6B3261E23FFCF00806B14 /* AccountCell.swift */,
+				83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */,
+				83851E631E25345500C8AE52 /* AccountTableViewCell.swift */,
 				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
 				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
 				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
@@ -267,6 +272,7 @@
 			children = (
 				8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */,
 				8370412A1D8B2264000EDBAE /* LoginViewController.swift */,
+				83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */,
 			);
 			name = Accounts;
 			sourceTree = "<group>";
@@ -399,7 +405,8 @@
 				8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */,
 				83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */,
 				8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */,
-				83B6B3271E23FFCF00806B14 /* AccountCell.swift in Sources */,
+				83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */,
+				83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
 				8320C2531E1E3B4900413B36 /* UIViewController+DigiCloud.swift in Sources */,
 				83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */,
@@ -414,6 +421,7 @@
 				83D281011D9D747A00D74661 /* LoginField.swift in Sources */,
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
 				8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */,
+				83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */,
 				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,
 				83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */,
 				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
