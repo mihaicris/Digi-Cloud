@@ -20,20 +20,25 @@ class FlowController {
 
         var controller: UIViewController
 
-        if AppSettings.wasAppStarted {
-            if let account = AppSettings.loggedAccount {
-                let loggedAccount = Account(account: account)
-                do {
-                    let token = try loggedAccount.readToken()
-                    DigiClient.shared.token = token
-                    controller = self.createMainNavigationController()
-                } catch {
+        if AppSettings.hasRunBefore {
+            if AppSettings.shouldReplayIntro {
+                controller = self.createIntroController()
+            } else {
+                if let account = AppSettings.loggedAccount {
+                    let loggedAccount = Account(account: account)
+                    do {
+                        let token = try loggedAccount.readToken()
+                        DigiClient.shared.token = token
+                        controller = self.createMainNavigationController()
+                    } catch {
+                        controller = self.createAccountSelectionController()
+                    }
+                } else {
                     controller = self.createAccountSelectionController()
                 }
-            } else {
-                controller = self.createAccountSelectionController()
             }
         } else {
+            AppSettings.clearKeychainItems()
             controller = self.createIntroController()
         }
         return controller

@@ -11,7 +11,8 @@ import Foundation.NSUserDefaults
 extension UserDefaults {
 
     enum UserDefaultsKeys: String {
-        case wasAppStarted
+        case hasRunBefore
+        case shouldReplayIntro
         case userLogged
         case loginToken
         case showFoldersFirst

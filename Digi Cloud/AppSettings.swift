@@ -18,18 +18,33 @@ enum SortMethodType: Int {
 struct AppSettings {
 
     // MARK: - Properties
+
     static let shared: AppSettings = AppSettings()
+
     static var tableViewRowHeight: CGFloat = 50
+
     fileprivate init() {}
-    static var wasAppStarted: Bool {
+
+    static var hasRunBefore: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.wasAppStarted.rawValue)
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.hasRunBefore.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.wasAppStarted.rawValue)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.hasRunBefore.rawValue)
             UserDefaults.standard.synchronize()
         }
     }
+
+    static var shouldReplayIntro: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.shouldReplayIntro.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.shouldReplayIntro.rawValue)
+            UserDefaults.standard.synchronize()
+        }
+    }
+
     static var loggedAccount: String? {
         get {
             return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.userLogged.rawValue)
@@ -49,6 +64,7 @@ struct AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
+
     static var sortMethod: SortMethodType {
         get {
             let value = UserDefaults.standard.integer(forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue)
@@ -59,8 +75,20 @@ struct AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
+
     static var sortAscending: Bool {
         get { return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
+    }
+
+    static func clearKeychainItems() {
+        do {
+            let accounts = try Account.accountItems()
+            for account in accounts {
+                try account.deleteItem()
+            }
+        } catch {
+            fatalError("There was an error while deleting the existing Keychain account stored tokens.")
+        }
     }
 }
