@@ -10,21 +10,14 @@ import UIKit
 
 class AccountCell: UICollectionViewCell {
 
+    // MARK: - Properties
+
     var account: Account? {
         didSet {
             if let accountName = account?.account {
                 accountLabel.text = accountName
             }
         }
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     let profileImage: UIImageView = {
@@ -48,6 +41,19 @@ class AccountCell: UICollectionViewCell {
         l.textColor = .white
         return l
     }()
+
+    // MARK: - Overridden Methods and Properties
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Helper Functions
 
     fileprivate func setupViews() {
 
