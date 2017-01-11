@@ -22,12 +22,12 @@ class AccountSelectionViewController: UIViewController,
 
     fileprivate var accountsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.backgroundColor = .clear
-        cv.layer.cornerRadius = 10
+        cv.layer.cornerRadius = 25
         cv.layer.masksToBounds = true
+        cv.backgroundColor = UIColor.init(white: 0.0, alpha: 0.05)
         return cv
     }()
 
@@ -129,8 +129,11 @@ class AccountSelectionViewController: UIViewController,
         return .lightContent
     }
 
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        accountsCollectionView.collectionViewLayout.invalidateLayout()
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        guard let layout = accountsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
+            return
+        }
+        layout.invalidateLayout()
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -146,24 +149,50 @@ class AccountSelectionViewController: UIViewController,
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 200, height: 200)
+        return CGSize(width: 200, height: 100)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let flowLayout = (collectionViewLayout as! UICollectionViewFlowLayout)
-        let cellSpacing = flowLayout.minimumInteritemSpacing
-        let cellWidth = flowLayout.itemSize.width
-        let cellCount = CGFloat(collectionView.numberOfItems(inSection: section))
-        let collectionViewWidth = collectionView.bounds.size.width
-        let totalCellWidth = cellCount * cellWidth
-        let totalCellSpacing = cellSpacing * (cellCount - 1)
-        let totalCellsWidth = totalCellWidth + totalCellSpacing
-        let edgeInsets = (collectionViewWidth - totalCellsWidth) / 2.0
-        return edgeInsets > 0 ? UIEdgeInsets(top: 0, left: edgeInsets, bottom: 0, right: edgeInsets) : UIEdgeInsets(top: 0, left: cellSpacing, bottom: 0, right: cellSpacing)
-    }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 100
+        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
+            return UIEdgeInsets.zero
+        }
+
+        let colWidth = collectionView.bounds.width
+        let colHeight = collectionView.bounds.height
+
+        var topInset: CGFloat = 0, leftInset: CGFloat = 0, bottomInset: CGFloat = 0, rightInset: CGFloat = 0
+
+        let items = CGFloat(collectionView.numberOfItems(inSection: section))
+
+        let spacingHoriz: CGFloat = 20
+        let spacingVert: CGFloat = 20
+
+        layout.minimumInteritemSpacing = spacingHoriz
+        layout.minimumLineSpacing = spacingVert
+
+        switch items {
+        case 1:
+            topInset = (colHeight - 100)/2
+            leftInset = (colWidth - 200)/2
+        case 2:
+            topInset = (colHeight - 100)/2
+            leftInset = (colWidth - (200 * 2) - spacingHoriz)/2
+        case 3:
+            topInset = (colHeight - (100 * 3) - (spacingVert * 2))/2
+            leftInset = (colWidth - 200)/2
+        case 4:
+            topInset = (colHeight - (100 * 2) - (spacingVert * 1))/2
+            leftInset = (colWidth - (200 * 2) - (spacingHoriz * 1))/2
+        default:
+            topInset = (colHeight - (100 * 3) - (spacingVert * 2))/2
+            leftInset = (colWidth - (200 * 2) - (spacingHoriz * 1))/2
+        }
+
+        bottomInset = topInset
+        rightInset = leftInset
+
+        return UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -186,7 +215,7 @@ class AccountSelectionViewController: UIViewController,
 
         setNeedsStatusBarAppearanceUpdate()
 
-        view.backgroundColor = UIColor.init(red: 40/255, green: 78/255, blue: 55/255, alpha: 1.0)
+        view.backgroundColor = UIColor.init(red: 40/255, green: 78/255, blue: 65/255, alpha: 1.0)
 
         view.addSubview(logoBigLabel)
         view.addSubview(noAccountsLabel)
@@ -200,7 +229,7 @@ class AccountSelectionViewController: UIViewController,
             accountsCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             accountsCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             NSLayoutConstraint(item: accountsCollectionView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 0.7, constant: 0.0),
-            NSLayoutConstraint(item: accountsCollectionView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.37, constant: 0.0),
+            NSLayoutConstraint(item: accountsCollectionView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
             noAccountsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
@@ -240,7 +269,6 @@ class AccountSelectionViewController: UIViewController,
                 self?.onSelect?()
             }
         }
-
         present(controller, animated: true, completion: nil)
     }
 
@@ -268,6 +296,7 @@ class AccountSelectionViewController: UIViewController,
         } catch {
             fatalError("Error fetching account items - \(error)")
         }
+
         configureOtherViews()
         accountsCollectionView.reloadData()
     }

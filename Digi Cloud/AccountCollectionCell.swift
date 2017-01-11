@@ -24,18 +24,15 @@ class AccountCollectionCell: UICollectionViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.layer.cornerRadius = 10
-        iv.layer.borderColor = UIColor.white.cgColor
-        iv.layer.borderWidth = 1
-        iv.layer.masksToBounds = true
-        iv.backgroundColor = UIColor.init(white: 1, alpha: 0.1)
+        iv.image = #imageLiteral(resourceName: "AccountIcon")
+        iv.tintColor = UIColor.green
         return iv
     }()
 
     let accountLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 14)
+        l.font = UIFont.boldSystemFont(ofSize: 14)
         l.textAlignment = .center
         l.numberOfLines = 2
         l.textColor = .white
@@ -57,16 +54,16 @@ class AccountCollectionCell: UICollectionViewCell {
 
     fileprivate func setupViews() {
 
-        contentView.addSubview(profileImage)
-        contentView.addSubview(accountLabel)
+        addSubview(profileImage)
+        addSubview(accountLabel)
 
         NSLayoutConstraint.activate([
-            profileImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-            profileImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            profileImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-            profileImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
-            accountLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.0),
-            accountLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            profileImage.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.4),
+            profileImage.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            profileImage.topAnchor.constraint(equalTo: self.topAnchor),
+            profileImage.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.4),
+            accountLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.0),
+            accountLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             accountLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 5)
         ])
     }
