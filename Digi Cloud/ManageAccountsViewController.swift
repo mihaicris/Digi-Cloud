@@ -68,7 +68,7 @@ class ManageAccountsViewController: UITableViewController {
         preferredContentSize.height = 250
         preferredContentSize.width = 400
         title = NSLocalizedString("Accounts", comment: "Window Title")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(toggleEditMode))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(toggleEditMode))
     }
 
     @objc fileprivate func toggleEditMode() {
