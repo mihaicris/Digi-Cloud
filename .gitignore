@@ -66,3 +66,5 @@ fastlane/test_output
 
 # App Code
 .idea/
+
+Accounts.json

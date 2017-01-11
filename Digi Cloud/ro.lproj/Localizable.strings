@@ -14,6 +14,14 @@
 /* Information */
 "1 folder" = "1 director";
 
+/* Button Title */
+"Add Account" = "Adaugă un cont";
+
+/* Error Message */
+"An error has occurred.
+Please try again later!" = "A avut loc o eroare.
+Te rugăm să încerci mai târziu!";
+
 /* Question for user */
 "Are you sure you want to delete this file?" = "Sigur se șterge acest fișier?";
 
@@ -85,14 +93,29 @@
 /* Switch Title */
 "Folders first" = "Directoare la început";
 
+/* Question */
+"Forgot password?" = "Ai uitat parola?";
+
+/* No comment provided by engineer. */
+"Hello!" = "Salut!";
+
+/* Window Title */
+"Information" = "Informații";
+
 /* Button Title */
 "LOGIN" = "AUTENTIFICARE";
 
 /* Information */
 "Loading ..." = "Se încarcă ...";
 
+/* Error message */
+"Location is no longer available!" = "Locația nu mai este disponibilă!";
+
 /* Window Title */
 "Locations" = "Locații";
+
+/* Button Title */
+"Log in to Another Account" = "Autentificare în alt cont";
 
 /* Selection Title */
 "Make available offline" = "Disponibil fără internet";
@@ -108,11 +131,23 @@
 /* Error Information */
 "Name is the same." = "Numele este același";
 
+/* Label, information */
+"No accounts" = "Niciun cont salvat";
+
 /* TableCell Footer Title */
 "Note: Including subfolders" = "Notă: Inclusiv subdirectoare";
 
 /* TextField Name */
 "PASSWORD" = "PAROLĂ";
+
+/* Information */
+"Please contact RCS RDS for password information." = "Te rugăm să contactezi compania RCS RDS pentru informații despre parolă.";
+
+/* Error Message */
+"Please fill in the fields." = "Te rugăm să completezi toate câmpurile.";
+
+/* Information */
+"Please provide the credentials for your Digi Storage account." = "Te rugăm să furnizezi datale de autentificare pentru contul tău Digi Storage.";
 
 /* Title */
 "Pull to refresh this folder" = "Trage pentru a actualiza directorul";
@@ -141,6 +176,9 @@
 
 /* Selection Title */
 "Share" = "Partajează";
+
+/* Button Title */
+"Sign Up for Digi Storage" = "Obține un cont Digi Storage";
 
 /* Button title
    TableCell Header Title */
@@ -175,4 +213,7 @@
 
 /* Error Message */
 "Unauthorized access" = "Acces neautorizat";
+
+/* a word */
+"for" = "pentru";
 

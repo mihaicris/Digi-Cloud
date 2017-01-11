@@ -10,26 +10,36 @@
 		8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */; };
 		83164FED1E03F473001048D7 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83164FEC1E03F473001048D7 /* SearchCell.swift */; };
 		831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B9F581D992BD7003DAF42 /* DigiClient.swift */; };
+		8320C2511E1E2BD300413B36 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */; };
+		8320C2531E1E3B4900413B36 /* UIViewController+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2521E1E3B4900413B36 /* UIViewController+DigiCloud.swift */; };
+		8320C2551E1E3B6400413B36 /* UIView+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */; };
+		8320C2571E1E3B7800413B36 /* UserDefaults+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */; };
+		8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */; };
 		8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
 		832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
 		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
 		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
 		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
-		835406051D952FFD00019D53 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* Extensions.swift */; };
+		835406051D952FFD00019D53 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */; };
 		83562CAC1DB8C19B006FF04A /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAB1DB8C19B006FF04A /* ActionViewController.swift */; };
 		83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAD1DB8D098006FF04A /* BaseListCell.swift */; };
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
 		837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */; };
 		8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412A1D8B2264000EDBAE /* LoginViewController.swift */; };
-		8370412E1D8B2264000EDBAE /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */; };
+		8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsViewController.swift */; };
 		8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */; };
+		83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */; };
+		83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E631E25345500C8AE52 /* AccountTableViewCell.swift */; };
+		8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */; };
 		839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
 		83A9BE1B1DFFDDDC003FD974 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */; };
 		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
+		83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */; };
 		83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D3951E13C781005258B3 /* InfoPlist.strings */; };
 		83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D39A1E13DCF4005258B3 /* Localizable.strings */; };
+		83C7D1081E23A9B700E3D508 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D1061E23A9B700E3D508 /* Account.swift */; };
 		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
 		83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
 		83CE7A001DE45D77002212A9 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE79FF1DE45D77002212A9 /* Location.swift */; };
@@ -41,20 +51,27 @@
 		83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6B1D8FE26400ACE008 /* Mount.swift */; };
 		83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6F1D900F9700ACE008 /* FileCell.swift */; };
 		83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D711D900FA700ACE008 /* DirectoryCell.swift */; };
+		83F160761E1C14090057887A /* Accounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 83F160751E1C14090057887A /* Accounts.json */; };
 		83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994511DD09B340023FB5D /* SortFolderViewController.swift */; };
 		83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994531DD0A1E90023FB5D /* ActionCell.swift */; };
+		E5832D392FF98C031D43515B /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5832C4125BB550AC54A5C59 /* FlowController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateFolderViewController.swift; sourceTree = "<group>"; };
 		83164FEC1E03F473001048D7 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		831B9F581D992BD7003DAF42 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiClient.swift; sourceTree = "<group>"; };
+		8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
+		8320C2521E1E3B4900413B36 /* UIViewController+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+DigiCloud.swift"; sourceTree = "<group>"; };
+		8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+DigiCloud.swift"; sourceTree = "<group>"; };
+		8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+DigiCloud.swift"; sourceTree = "<group>"; };
+		8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+DigiCloud.swift"; sourceTree = "<group>"; };
 		8321FC5A1D9568FE002D6413 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
-		835406041D952FFD00019D53 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
 		83562CAB1DB8C19B006FF04A /* ActionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		83562CAD1DB8D098006FF04A /* BaseListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseListCell.swift; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,18 +80,23 @@
 		8370411F1D8B1DEE000EDBAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		837041211D8B1DEE000EDBAE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8370412A1D8B2264000EDBAE /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		8370412B1D8B2264000EDBAE /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
+		83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountsViewController.swift; sourceTree = "<group>"; };
+		83851E631E25345500C8AE52 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
+		8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSelectionViewController.swift; sourceTree = "<group>"; };
 		839A22E21DC11BA400758730 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
 		83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultController.swift; sourceTree = "<group>"; };
 		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCollectionCell.swift; sourceTree = "<group>"; };
 		83B6D3881E13C045005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D3891E13C1C0005258B3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D38A1E13C1C8005258B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D38B1E13C1D5005258B3 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D3941E13C781005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		83B6D3991E13DCF4005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		83C7D1061E23A9B700E3D508 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
 		83CE79FF1DE45D77002212A9 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -86,8 +108,10 @@
 		83EF1D6B1D8FE26400ACE008 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mount.swift; sourceTree = "<group>"; };
 		83EF1D6F1D900F9700ACE008 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
 		83EF1D711D900FA700ACE008 /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryCell.swift; sourceTree = "<group>"; };
+		83F160751E1C14090057887A /* Accounts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Accounts.json; sourceTree = "<group>"; };
 		83F994511DD09B340023FB5D /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortFolderViewController.swift; sourceTree = "<group>"; };
 		83F994531DD0A1E90023FB5D /* ActionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionCell.swift; sourceTree = "<group>"; };
+		E5832C4125BB550AC54A5C59 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +157,7 @@
 			children = (
 				8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */,
 				8370411C1D8B1DEE000EDBAE /* Assets.xcassets */,
+				83F160751E1C14090057887A /* Accounts.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -141,8 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				83419B291DCA077F0016215C /* AppSettings.swift */,
-				839BAE241D8BFD6500A43452 /* DigiConstants.swift */,
 				831B9F581D992BD7003DAF42 /* DigiClient.swift */,
+				839BAE241D8BFD6500A43452 /* DigiConstants.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -150,7 +175,11 @@
 		835406031D952FD900019D53 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				835406041D952FFD00019D53 /* Extensions.swift */,
+				835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */,
+				8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */,
+				8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */,
+				8320C2521E1E3B4900413B36 /* UIViewController+DigiCloud.swift */,
+				8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -190,8 +219,9 @@
 		839BAE201D8BE00E00A43452 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				83F994491DD093A00023FB5D /* Main */,
-				83F994471DD093700023FB5D /* Login */,
+				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
+				83F994491DD093A00023FB5D /* Introduction */,
+				83F994471DD093700023FB5D /* Accounts */,
 				83F9944B1DD093C90023FB5D /* Listing */,
 				83A9BE191DFFDD9E003FD974 /* Search */,
 				83F9944E1DD094E20023FB5D /* Content */,
@@ -210,9 +240,10 @@
 		83EF1D461D8FBDC400ACE008 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				83EF1D471D8FBDDA00ACE008 /* Node.swift */,
-				83EF1D6B1D8FE26400ACE008 /* Mount.swift */,
+				83C7D1061E23A9B700E3D508 /* Account.swift */,
 				83CE79FF1DE45D77002212A9 /* Location.swift */,
+				83EF1D6B1D8FE26400ACE008 /* Mount.swift */,
+				83EF1D471D8FBDDA00ACE008 /* Node.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -220,45 +251,50 @@
 		83F994461DD092870023FB5D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */,
+				83851E631E25345500C8AE52 /* AccountTableViewCell.swift */,
+				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
+				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
+				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
+				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
+				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
+				83DB658C1DDF12C900A53440 /* LocationCell.swift */,
 				8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */,
 				83D281001D9D747A00D74661 /* LoginField.swift */,
-				83DB658C1DDF12C900A53440 /* LocationCell.swift */,
-				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
-				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
-				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
 				83164FEC1E03F473001048D7 /* SearchCell.swift */,
 				834181761E07FB1100F32A2F /* UILabelWithPadding.swift */,
-				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
-				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
 		};
-		83F994471DD093700023FB5D /* Login */ = {
+		83F994471DD093700023FB5D /* Accounts */ = {
 			isa = PBXGroup;
 			children = (
+				8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */,
 				8370412A1D8B2264000EDBAE /* LoginViewController.swift */,
+				83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */,
 			);
-			name = Login;
+			name = Accounts;
 			sourceTree = "<group>";
 		};
-		83F994491DD093A00023FB5D /* Main */ = {
+		83F994491DD093A00023FB5D /* Introduction */ = {
 			isa = PBXGroup;
 			children = (
-				83B2DAF21DB66219000955B7 /* MainNavigationController.swift */,
+				8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */,
 			);
-			name = Main;
+			name = Introduction;
 			sourceTree = "<group>";
 		};
 		83F9944B1DD093C90023FB5D /* Listing */ = {
 			isa = PBXGroup;
 			children = (
-				8370412B1D8B2264000EDBAE /* LocationsTableViewController.swift */,
-				83DADF221DE59ED300987E1A /* ListingViewController.swift */,
 				83562CAB1DB8C19B006FF04A /* ActionViewController.swift */,
 				8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */,
 				839A22E21DC11BA400758730 /* DeleteViewController.swift */,
 				83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */,
+				83DADF221DE59ED300987E1A /* ListingViewController.swift */,
+				8370412B1D8B2264000EDBAE /* LocationsViewController.swift */,
+				83B2DAF21DB66219000955B7 /* MainNavigationController.swift */,
 				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
 				83F994511DD09B340023FB5D /* SortFolderViewController.swift */,
 			);
@@ -335,6 +371,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83F160761E1C14090057887A /* Accounts.json in Resources */,
 				837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */,
 				83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */,
 				83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */,
@@ -367,10 +404,15 @@
 			files = (
 				8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */,
 				83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */,
-				8370412E1D8B2264000EDBAE /* LocationsTableViewController.swift in Sources */,
+				8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */,
+				83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */,
+				83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
+				8320C2531E1E3B4900413B36 /* UIViewController+DigiCloud.swift in Sources */,
 				83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */,
 				8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */,
+				8320C2551E1E3B6400413B36 /* UIView+DigiCloud.swift in Sources */,
+				8320C2511E1E2BD300413B36 /* IntroductionViewController.swift in Sources */,
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
 				83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */,
 				8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */,
@@ -378,13 +420,17 @@
 				83562CAC1DB8C19B006FF04A /* ActionViewController.swift in Sources */,
 				83D281011D9D747A00D74661 /* LoginField.swift in Sources */,
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
+				8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */,
+				83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */,
 				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,
 				83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */,
 				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
 				83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */,
+				83C7D1081E23A9B700E3D508 /* Account.swift in Sources */,
 				83164FED1E03F473001048D7 /* SearchCell.swift in Sources */,
 				83EF1D481D8FBDDA00ACE008 /* Node.swift in Sources */,
-				835406051D952FFD00019D53 /* Extensions.swift in Sources */,
+				8320C2571E1E3B7800413B36 /* UserDefaults+DigiCloud.swift in Sources */,
+				835406051D952FFD00019D53 /* FileManager+DigiCloud.swift in Sources */,
 				83CE7A001DE45D77002212A9 /* Location.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
 				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
@@ -394,9 +440,11 @@
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */,
+				8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */,
 				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
 				834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */,
 				839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */,
+				E5832D392FF98C031D43515B /* FlowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,39 +15,46 @@ enum SortMethodType: Int {
     case byContentType
 }
 
-final class AppSettings {
+struct AppSettings {
 
     // MARK: - Properties
+
     static let shared: AppSettings = AppSettings()
+
     static var tableViewRowHeight: CGFloat = 50
+
     fileprivate init() {}
-    static var isAppFirstTimeStarted: Bool {
+
+    static var hasRunBefore: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.hasRunBefore.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.isAppFirstTimeStarted.rawValue)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.hasRunBefore.rawValue)
             UserDefaults.standard.synchronize()
         }
     }
-    static var isLoggedIn: Bool {
+
+    static var shouldReplayIntro: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue)
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.shouldReplayIntro.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.isLoggedIn.rawValue)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.shouldReplayIntro.rawValue)
             UserDefaults.standard.synchronize()
         }
     }
-    static var loginToken: String? {
+
+    static var loggedAccount: String? {
         get {
-            return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue)
+            return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.userLogged.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.loginToken.rawValue)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.userLogged.rawValue)
             UserDefaults.standard.synchronize()
         }
     }
+
     static var showFoldersFirst: Bool {
         get {
             return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue)
@@ -57,6 +64,7 @@ final class AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
+
     static var sortMethod: SortMethodType {
         get {
             let value = UserDefaults.standard.integer(forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue)
@@ -67,8 +75,20 @@ final class AppSettings {
             UserDefaults.standard.synchronize()
         }
     }
+
     static var sortAscending: Bool {
         get { return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
+    }
+
+    static func clearKeychainItems() {
+        do {
+            let accounts = try Account.accountItems()
+            for account in accounts {
+                try account.deleteItem()
+            }
+        } catch {
+            fatalError("There was an error while deleting the existing Keychain account stored tokens.")
+        }
     }
 }
