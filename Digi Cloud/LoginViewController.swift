@@ -109,7 +109,7 @@ class LoginViewController: UIViewController {
 
     fileprivate func setupViews() {
 
-        view.backgroundColor = UIColor.init(red: 40/255, green: 78/255, blue: 55/255, alpha: 1.0)
+        view.backgroundColor = UIColor.init(red: 40/255, green: 78/255, blue: 65/255, alpha: 1.0)
 
         let titleTextView: UITextView = {
             let tv = UITextView()
