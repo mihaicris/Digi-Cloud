@@ -26,6 +26,7 @@ final class ListingViewController: UITableViewController {
     fileprivate var searchController: UISearchController!
     fileprivate var fileCellID: String = ""
     fileprivate var folderCellID: String = ""
+
     fileprivate let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
@@ -34,12 +35,14 @@ final class ListingViewController: UITableViewController {
         f.dateFormat = "dd.MM.YYY・HH:mm"
         return f
     }()
+
     fileprivate let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
         f.allowsNonnumericFormatting = false
         return f
     }()
+
     fileprivate let busyIndicator: UIActivityIndicatorView = {
         let i = UIActivityIndicatorView()
         i.hidesWhenStopped = true
@@ -47,12 +50,24 @@ final class ListingViewController: UITableViewController {
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
     }()
+
     fileprivate let emptyFolderLabel: UILabel = {
         let l = UILabel()
         l.textColor = UIColor.lightGray
         l.textAlignment = .center
         return l
     }()
+
+    fileprivate lazy var messageStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.spacing = 10
+        sv.alignment = .center
+        sv.addArrangedSubview(self.busyIndicator)
+        sv.addArrangedSubview(self.emptyFolderLabel)
+        return sv
+    }()
+
     fileprivate var searchButton, addFolderButton, sortButton: UIBarButtonItem!
 
     #if DEBUG
@@ -97,8 +112,8 @@ final class ListingViewController: UITableViewController {
         }
         if needRefresh {
             content.removeAll()
-            self.busyIndicator.startAnimating()
-            self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
+            busyIndicator.startAnimating()
+            emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
             tableView.reloadData()
         }
         tableView.tableHeaderView = nil
@@ -124,20 +139,17 @@ final class ListingViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if content.isEmpty {
+
             let cell = UITableViewCell()
             cell.isUserInteractionEnabled = false
-            if indexPath.row == 1 {
-                let v = UIView()
-                v.translatesAutoresizingMaskIntoConstraints = false
-                v.addSubview(busyIndicator)
-                v.addSubview(emptyFolderLabel)
-                v.addConstraints(with: "H:|[v0]-5-[v1]|", views: busyIndicator, emptyFolderLabel)
-                busyIndicator.centerYAnchor.constraint(equalTo: v.centerYAnchor).isActive = true
-                emptyFolderLabel.centerYAnchor.constraint(equalTo: v.centerYAnchor).isActive = true
 
-                cell.contentView.addSubview(v)
-                v.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
-                v.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            if indexPath.row == 1 {
+                cell.contentView.addSubview(messageStackView)
+                NSLayoutConstraint.activate([
+                    messageStackView.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
+                    messageStackView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+                ])
+
             }
             return cell
         }
@@ -298,7 +310,7 @@ final class ListingViewController: UITableViewController {
 
     fileprivate func setRefreshControlTitle(started: Bool) {
         let title: String
-        let attributes: [String: Any] = [NSFontAttributeName: UIFont(name: "Helvetica-Light", size: 11) as Any,
+        let attributes: [String: Any] = [NSFontAttributeName: UIFont(name: "Helvetica", size: 10) as Any,
                                          NSForegroundColorAttributeName: UIColor.init(white: 0.2, alpha: 1.0)as Any]
         if started {
             title = NSLocalizedString("Refreshing ...", comment: "Title")
@@ -313,15 +325,12 @@ final class ListingViewController: UITableViewController {
         self.needRefresh = false
         self.isUpdating = true
 
-        self.emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
-
-        if self.refreshControl?.isRefreshing == false {
-            self.busyIndicator.startAnimating()
+        if self.refreshControl?.isRefreshing == true {
+            messageStackView.removeFromSuperview()
         }
 
         DigiClient.shared.getContent(of: location) { receivedContent, error in
             self.isUpdating = false
-            self.busyIndicator.stopAnimating()
 
             guard error == nil else {
                 switch error! {
@@ -383,7 +392,8 @@ final class ListingViewController: UITableViewController {
     fileprivate func updateMessageForEmptyFolder() {
         // For the case when the folder is empty, setting the message text on screen.
         if self.content.isEmpty {
-            self.emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+            busyIndicator.stopAnimating()
+            emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
         }
     }
 
