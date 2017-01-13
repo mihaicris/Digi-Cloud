@@ -47,6 +47,7 @@
 		83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF221DE59ED300987E1A /* ListingViewController.swift */; };
 		83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF241DE5C41E00987E1A /* CustomNavBar.swift */; };
 		83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DB658C1DDF12C900A53440 /* LocationCell.swift */; };
+		83EC31471E2915A8009E12B6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EC31461E2915A8009E12B6 /* SettingsViewController.swift */; };
 		83EF1D481D8FBDDA00ACE008 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* Node.swift */; };
 		83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6B1D8FE26400ACE008 /* Mount.swift */; };
 		83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6F1D900F9700ACE008 /* FileCell.swift */; };
@@ -103,6 +104,7 @@
 		83DADF221DE59ED300987E1A /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingViewController.swift; sourceTree = "<group>"; };
 		83DADF241DE5C41E00987E1A /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
 		83DB658C1DDF12C900A53440 /* LocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		83EC31461E2915A8009E12B6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		83EF1D471D8FBDDA00ACE008 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Node.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83EF1D6B1D8FE26400ACE008 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mount.swift; sourceTree = "<group>"; };
 		83EF1D6F1D900F9700ACE008 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
@@ -219,11 +221,12 @@
 			isa = PBXGroup;
 			children = (
 				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
-				83F994491DD093A00023FB5D /* Introduction */,
 				83F994471DD093700023FB5D /* Accounts */,
+				83F9944E1DD094E20023FB5D /* Content */,
+				83F994491DD093A00023FB5D /* Introduction */,
 				83F9944B1DD093C90023FB5D /* Listing */,
 				83A9BE191DFFDD9E003FD974 /* Search */,
-				83F9944E1DD094E20023FB5D /* Content */,
+				83EC31451E29154F009E12B6 /* Settings */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -234,6 +237,14 @@
 				83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */,
 			);
 			name = Search;
+			sourceTree = "<group>";
+		};
+		83EC31451E29154F009E12B6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				83EC31461E2915A8009E12B6 /* SettingsViewController.swift */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		83EF1D461D8FBDC400ACE008 /* Models */ = {
@@ -421,6 +432,7 @@
 				8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */,
 				83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */,
 				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,
+				83EC31471E2915A8009E12B6 /* SettingsViewController.swift in Sources */,
 				83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */,
 				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
 				83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */,

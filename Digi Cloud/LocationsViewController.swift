@@ -104,7 +104,7 @@ class LocationsViewController: UITableViewController {
             navigationItem.setRightBarButton(rightButton, animated: false)
         } else {
             let settingsButton = UIBarButtonItem(image: UIImage(named: "Settings-Icon"), style: .plain, target: self, action: #selector(handleShowSettings))
-            self.navigationItem.setRightBarButton(settingsButton, animated: false)
+            self.navigationItem.setLeftBarButton(settingsButton, animated: false)
         }
         self.title = NSLocalizedString("Locations", comment: "Window Title")
     }
@@ -175,11 +175,11 @@ class LocationsViewController: UITableViewController {
     }
 
     @objc fileprivate func handleShowSettings() {
-        // For the moment only logout.
-        if let navController = self.navigationController as? MainNavigationController {
-            AppSettings.loggedAccount = nil
-            navController.onLogout?()
-        }
+        let controller = SettingsViewController(style: .grouped)
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .popover
+        navController.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
+        present(navController, animated: true, completion: nil)
     }
 
     @objc fileprivate func handleDone() {
