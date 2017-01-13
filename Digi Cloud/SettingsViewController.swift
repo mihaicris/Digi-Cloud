@@ -58,9 +58,9 @@ class SettingsViewController: UITableViewController {
         cell.selectionStyle = .none
 
         switch indexPath.section {
-
         case 0:
-            cell.textLabel?.text = NSLocalizedString("Logout", comment: "Action name")
+            cell.textLabel?.text = NSLocalizedString("Logout", comment: "Button Title")
+            cell.textLabel?.textColor = .blue
             cell.contentView.addSubview(confirmButton)
 
             confirmButtonHorizontalConstraint = confirmButton.leadingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)
@@ -88,7 +88,7 @@ class SettingsViewController: UITableViewController {
         }
     }
 
-    fileprivate func handleLogout(_ cell: UITableViewCell) {
+    @objc fileprivate func handleLogout(_ cell: UITableViewCell) {
         confirmButtonHorizontalConstraint.isActive = false
         if confirmButton.tag == 0 {
             confirmButton.tag = 1
