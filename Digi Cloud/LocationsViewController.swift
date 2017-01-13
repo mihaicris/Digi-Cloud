@@ -116,7 +116,7 @@ class LocationsViewController: UITableViewController {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
+        refreshControl?.addTarget(self, action: #selector(handleRefreshLocations), for: UIControlEvents.valueChanged)
     }
 
     fileprivate func getLocations() {
@@ -166,7 +166,7 @@ class LocationsViewController: UITableViewController {
         }
     }
 
-    @objc fileprivate func handleRefresh() {
+    @objc fileprivate func handleRefreshLocations() {
         if self.isUpdating {
             self.refreshControl?.endRefreshing()
             return
