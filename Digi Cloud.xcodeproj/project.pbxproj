@@ -109,7 +109,6 @@
 		83EF1D6B1D8FE26400ACE008 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mount.swift; sourceTree = "<group>"; };
 		83EF1D6F1D900F9700ACE008 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
 		83EF1D711D900FA700ACE008 /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryCell.swift; sourceTree = "<group>"; };
-		83F160751E1C14090057887A /* Accounts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Accounts.json; sourceTree = "<group>"; };
 		83F994511DD09B340023FB5D /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortFolderViewController.swift; sourceTree = "<group>"; };
 		83F994531DD0A1E90023FB5D /* ActionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionCell.swift; sourceTree = "<group>"; };
 		E5832C4125BB550AC54A5C59 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
@@ -158,7 +157,6 @@
 			children = (
 				8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */,
 				8370411C1D8B1DEE000EDBAE /* Assets.xcassets */,
-				83F160751E1C14090057887A /* Accounts.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
