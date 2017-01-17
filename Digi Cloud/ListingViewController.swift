@@ -451,7 +451,7 @@ final class ListingViewController: UITableViewController {
     }
 
     fileprivate func sortByName() {
-        if AppSettings.showFoldersFirst {
+        if AppSettings.showsFoldersFirst {
             if AppSettings.sortAscending {
                 self.content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
             } else {
@@ -467,7 +467,7 @@ final class ListingViewController: UITableViewController {
     }
 
     fileprivate func sortByDate() {
-        if AppSettings.showFoldersFirst {
+        if AppSettings.showsFoldersFirst {
             if AppSettings.sortAscending {
                 self.content.sort { return $0.type == $1.type ? ($0.modified < $1.modified) : ($0.type < $1.type) }
             } else {

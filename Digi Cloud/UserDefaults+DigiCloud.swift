@@ -15,7 +15,7 @@ extension UserDefaults {
         case shouldReplayIntro
         case userLogged
         case loginToken
-        case showFoldersFirst
+        case showsFoldersFirst
         case sortMethod
         case sortAscending
     }

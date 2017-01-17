@@ -23,7 +23,7 @@ class IntroductionViewController: UIViewController {
         view.backgroundColor = .magenta
         setupViews()
 
-        self.setDefaultAppSettings()
+        AppSettings.setDefaultAppSettings()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -53,17 +53,6 @@ class IntroductionViewController: UIViewController {
         }()
 
         view.addSubview(label)
-    }
-
-    fileprivate func setDefaultAppSettings() {
-
-        // Set that App has been started for the first time
-        AppSettings.hasRunBefore = true
-
-        // Set sorting defaults
-        AppSettings.showFoldersFirst = true
-        AppSettings.sortMethod = .byName
-        AppSettings.sortAscending = true
     }
 
 }

@@ -55,12 +55,12 @@ struct AppSettings {
         }
     }
 
-    static var showFoldersFirst: Bool {
+    static var showsFoldersFirst: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue)
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.showsFoldersFirst.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.showFoldersFirst.rawValue)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.showsFoldersFirst.rawValue)
             UserDefaults.standard.synchronize()
         }
     }
@@ -77,8 +77,14 @@ struct AppSettings {
     }
 
     static var sortAscending: Bool {
-        get { return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue) }
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.sortAscending.rawValue)
+            UserDefaults.standard.synchronize()
+
+        }
     }
 
     static func clearKeychainItems() {
@@ -90,5 +96,17 @@ struct AppSettings {
         } catch {
             fatalError("There was an error while deleting the existing Keychain account stored tokens.")
         }
+    }
+
+    static func setDefaultAppSettings() {
+
+        // Set that App has been started for the first time
+        hasRunBefore = true
+
+        // Sorting settings
+        showsFoldersFirst = true
+        sortMethod = .byName
+        sortAscending = true
+
     }
 }

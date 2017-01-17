@@ -67,7 +67,7 @@ class SortFolderViewController: UITableViewController {
                 cell.switchButton.isOn = true
                 cell.switchButton.isEnabled = false
             } else {
-                cell.switchButton!.isOn = AppSettings.showFoldersFirst
+                cell.switchButton!.isOn = AppSettings.showsFoldersFirst
             }
         }
         return cell
@@ -142,7 +142,7 @@ class SortFolderViewController: UITableViewController {
 extension SortFolderViewController: ActionCellDelegate {
     func onSwitchValueChanged(button: UISwitch, value: Bool) {
         if button.tag == 0 {
-            AppSettings.showFoldersFirst = value
+            AppSettings.showsFoldersFirst = value
             self.onFinish?(false)
         }
     }
