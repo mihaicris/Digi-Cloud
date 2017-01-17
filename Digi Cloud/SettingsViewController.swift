@@ -10,7 +10,7 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
 
-    fileprivate let confirmButton: UIButton = {
+    private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.layer.cornerRadius = 5
@@ -24,7 +24,7 @@ class SettingsViewController: UITableViewController {
         return b
     }()
 
-    fileprivate var confirmButtonHorizontalConstraint: NSLayoutConstraint!
+    private var confirmButtonHorizontalConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,10 +95,6 @@ class SettingsViewController: UITableViewController {
         return cell
     }
 
-    @objc private func toggleAllowingCellularAccessSetting() {
-        AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
-    }
-
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
@@ -110,7 +106,11 @@ class SettingsViewController: UITableViewController {
         }
     }
 
-    @objc fileprivate func handleLogout(_ cell: UITableViewCell) {
+    @objc private func toggleAllowingCellularAccessSetting() {
+        AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
+    }
+
+    @objc private func handleLogout(_ cell: UITableViewCell) {
         confirmButtonHorizontalConstraint.isActive = false
         if confirmButton.tag == 0 {
             confirmButton.tag = 1
@@ -130,14 +130,14 @@ class SettingsViewController: UITableViewController {
                          completion: nil)
     }
 
-    @objc fileprivate func handleLogoutConfirmed() {
+    @objc private func handleLogoutConfirmed() {
         if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
             AppSettings.loggedAccount = nil
             navController.onLogout?()
         }
     }
 
-    @objc fileprivate func handleAppStoreReview() {
+    @objc private func handleAppStoreReview() {
         let urlstring = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=1173649518"
         guard let url = URL(string: urlstring) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
