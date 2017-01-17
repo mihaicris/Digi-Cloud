@@ -19,11 +19,11 @@ struct AppSettings {
 
     // MARK: - Properties
 
+    private init() {}
+
     static let shared: AppSettings = AppSettings()
 
     static var tableViewRowHeight: CGFloat = 50
-
-    fileprivate init() {}
 
     static var hasRunBefore: Bool {
         get {
@@ -87,17 +87,6 @@ struct AppSettings {
         }
     }
 
-    static func clearKeychainItems() {
-        do {
-            let accounts = try Account.accountItems()
-            for account in accounts {
-                try account.deleteItem()
-            }
-        } catch {
-            fatalError("There was an error while deleting the existing Keychain account stored tokens.")
-        }
-    }
-
     static var allowsCellularAccess: Bool {
         get {
             return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.allowsCellularAccess.rawValue)
@@ -106,6 +95,17 @@ struct AppSettings {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.allowsCellularAccess.rawValue)
             UserDefaults.standard.synchronize()
 
+        }
+    }
+
+    static func clearKeychainItems() {
+        do {
+            let accounts = try Account.accountItems()
+            for account in accounts {
+                try account.deleteItem()
+            }
+        } catch {
+            fatalError("There was an error while deleting the existing Keychain account stored tokens.")
         }
     }
 
