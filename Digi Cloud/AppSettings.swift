@@ -98,6 +98,17 @@ struct AppSettings {
         }
     }
 
+    static var allowsCellularAccess: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.allowsCellularAccess.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.allowsCellularAccess.rawValue)
+            UserDefaults.standard.synchronize()
+
+        }
+    }
+
     static func setDefaultAppSettings() {
 
         // Set that App has been started for the first time
@@ -108,5 +119,7 @@ struct AppSettings {
         sortMethod = .byName
         sortAscending = true
 
+        // Network settings
+        allowsCellularAccess = false
     }
 }

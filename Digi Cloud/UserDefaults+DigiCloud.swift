@@ -18,6 +18,7 @@ extension UserDefaults {
         case showsFoldersFirst
         case sortMethod
         case sortAscending
+        case allowsCellularAccess
     }
 
 }

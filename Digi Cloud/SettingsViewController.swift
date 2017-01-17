@@ -32,25 +32,27 @@ class SettingsViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var number = 0
-
         switch section {
-
         case 0: number = 1
-
+        case 1: number = 1
         default:
             break
         }
-
         return number
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return NSLocalizedString("USER", comment: "Section title")
+        switch section {
+        case 0:
+            return NSLocalizedString("USER", comment: "Section title")
+        default:
+            return NSLocalizedString("NETWORK", comment: "Section title")
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -64,11 +66,26 @@ class SettingsViewController: UITableViewController {
             cell.textLabel?.textColor = .defaultColor
             cell.contentView.addSubview(confirmButton)
 
-            confirmButtonHorizontalConstraint = confirmButton.leadingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)
+            confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
 
             NSLayoutConstraint.activate([
                 confirmButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 confirmButtonHorizontalConstraint
+            ])
+        case 1:
+            cell.textLabel?.text = NSLocalizedString("Mobile Data", comment: "Button Title")
+            let mobileDataUISwitch: UISwitch = {
+                let s = UISwitch()
+                s.isOn = AppSettings.allowsCellularAccess
+                s.translatesAutoresizingMaskIntoConstraints = false
+                s.addTarget(self, action: #selector(toggleAllowingCellularAccessSetting), for: .valueChanged)
+                return s
+            }()
+
+            cell.contentView.addSubview(mobileDataUISwitch)
+            NSLayoutConstraint.activate([
+                mobileDataUISwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                mobileDataUISwitch.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor)
             ])
 
         default:
@@ -76,6 +93,10 @@ class SettingsViewController: UITableViewController {
         }
 
         return cell
+    }
+
+    @objc private func toggleAllowingCellularAccessSetting() {
+        AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -93,10 +114,10 @@ class SettingsViewController: UITableViewController {
         confirmButtonHorizontalConstraint.isActive = false
         if confirmButton.tag == 0 {
             confirmButton.tag = 1
-            confirmButtonHorizontalConstraint = confirmButton.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -10)
+            confirmButtonHorizontalConstraint = confirmButton.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor)
         } else {
             confirmButton.tag = 0
-            confirmButtonHorizontalConstraint = confirmButton.leadingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)
+            confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
         }
         confirmButtonHorizontalConstraint.isActive = true
 
