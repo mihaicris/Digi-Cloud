@@ -32,36 +32,79 @@ class SettingsViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var number = 0
         switch section {
-        case 0: number = 1
-        case 1: number = 1
-        default:
-            break
+        case  0: return 2 // ABOUT THE APP
+        case  1: return 2 // DATA
+        case  2: return 1 // USER
+        default: return 0
         }
-        return number
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0:
-            return NSLocalizedString("USER", comment: "Section title")
-        default:
-            return NSLocalizedString("NETWORK", comment: "Section title")
+        case 0:  return NSLocalizedString("ABOUT DIGI CLOUD", comment: "Section title")
+        case 1:  return NSLocalizedString("DATA", comment: "Section title")
+        case 2:  return NSLocalizedString("USER", comment: "Section title")
+        default: return nil
         }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell = UITableViewCell()
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
         cell.selectionStyle = .none
 
         switch indexPath.section {
         case 0:
+            // About the app
+            switch indexPath.row {
+            case 0:
+                // App version
+                cell.textLabel?.text = NSLocalizedString("App Version", comment: "Label Title")
+                cell.detailTextLabel?.text = "\(UIApplication.Version)"
+            case 1:
+                // Rate the app
+                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "Button Title")
+                cell.textLabel?.textColor = .defaultColor
+            default:
+                break
+            }
+
+        case 1:
+            // Data
+            switch indexPath.row {
+            case 0:
+                // Allow celular
+                cell.textLabel?.text = NSLocalizedString("Mobile Data", comment: "Button Title")
+                let mobileDataUISwitch: UISwitch = {
+                    let s = UISwitch()
+                    s.isOn = AppSettings.allowsCellularAccess
+                    s.translatesAutoresizingMaskIntoConstraints = false
+                    s.addTarget(self, action: #selector(toggleAllowingCellularAccessSetting), for: .valueChanged)
+                    return s
+                }()
+
+                cell.contentView.addSubview(mobileDataUISwitch)
+                NSLayoutConstraint.activate([
+                    mobileDataUISwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                    mobileDataUISwitch.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor)
+                ])
+            case 1:
+                // Clean cache
+                cell.textLabel?.text = NSLocalizedString("Clear Cache", comment: "Button Title")
+                cell.textLabel?.textColor = .defaultColor
+                let str = NSLocalizedString("Currently:", comment: "")
+                cell.detailTextLabel?.text = "\(str) 0 KB"
+            default:
+                break
+            }
+
+        case 2:
+            // USER
             cell.textLabel?.text = NSLocalizedString("Logout", comment: "Button Title")
             cell.textLabel?.textColor = .defaultColor
             cell.contentView.addSubview(confirmButton)
@@ -72,24 +115,9 @@ class SettingsViewController: UITableViewController {
                 confirmButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 confirmButtonHorizontalConstraint
             ])
-        case 1:
-            cell.textLabel?.text = NSLocalizedString("Mobile Data", comment: "Button Title")
-            let mobileDataUISwitch: UISwitch = {
-                let s = UISwitch()
-                s.isOn = AppSettings.allowsCellularAccess
-                s.translatesAutoresizingMaskIntoConstraints = false
-                s.addTarget(self, action: #selector(toggleAllowingCellularAccessSetting), for: .valueChanged)
-                return s
-            }()
-
-            cell.contentView.addSubview(mobileDataUISwitch)
-            NSLayoutConstraint.activate([
-                mobileDataUISwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                mobileDataUISwitch.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor)
-            ])
 
         default:
-            break
+            return UITableViewCell()
         }
 
         return cell
@@ -100,6 +128,14 @@ class SettingsViewController: UITableViewController {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         switch indexPath.section {
         case 0:
+            if indexPath.row == 1 {
+                handleAppStoreReview()
+            }
+        case 1:
+            if indexPath.row == 1 {
+                handleClearCache()
+            }
+        case 2:
             handleLogout(cell)
         default:
             break
@@ -141,5 +177,9 @@ class SettingsViewController: UITableViewController {
         let urlstring = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=1173649518"
         guard let url = URL(string: urlstring) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+
+    private func handleClearCache() {
+        // TODO: Implement this
     }
 }
