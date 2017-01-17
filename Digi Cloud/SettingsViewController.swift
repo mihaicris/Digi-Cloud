@@ -17,9 +17,10 @@ class SettingsViewController: UITableViewController {
         b.clipsToBounds = true
         b.setTitleColor(.white, for: .normal)
         b.setTitle(NSLocalizedString("Confirm", comment: "Button Title"), for: .normal)
+        b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         b.addTarget(self, action: #selector(handleLogoutConfirmed), for: .touchUpInside)
-        b.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
-        b.backgroundColor = .red
+        b.contentEdgeInsets = UIEdgeInsets(top: 6, left: 8, bottom: 6, right: 8)
+        b.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.25, alpha: 1.0)
         return b
     }()
 
@@ -60,7 +61,7 @@ class SettingsViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             cell.textLabel?.text = NSLocalizedString("Logout", comment: "Button Title")
-            cell.textLabel?.textColor = .blue
+            cell.textLabel?.textColor = .defaultColor
             cell.contentView.addSubview(confirmButton)
 
             confirmButtonHorizontalConstraint = confirmButton.leadingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)
