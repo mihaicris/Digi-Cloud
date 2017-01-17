@@ -25,17 +25,17 @@ class AccountCollectionCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.image = #imageLiteral(resourceName: "AccountIcon")
-        iv.tintColor = UIColor.green
+        iv.tintColor = UIColor(red: 0.2, green: 0.4, blue: 0.2, alpha: 1.0)
         return iv
     }()
 
     let accountLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.boldSystemFont(ofSize: 14)
+        l.font = UIFont(name: "HelveticaNeue-Bold", size: 12)
+        l.textColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
         l.textAlignment = .center
         l.numberOfLines = 2
-        l.textColor = .white
         return l
     }()
 

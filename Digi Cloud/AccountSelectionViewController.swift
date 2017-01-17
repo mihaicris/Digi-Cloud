@@ -34,7 +34,7 @@ class AccountSelectionViewController: UIViewController,
     fileprivate let noAccountsLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.textColor = UIColor.init(red: 161/255, green: 168/255, blue: 209/255, alpha: 1.0)
+        l.textColor = UIColor(red: 161/255, green: 168/255, blue: 209/255, alpha: 1.0)
         l.text = NSLocalizedString("No accounts", comment: "Label, information")
         l.font = UIFont(name: "HelveticaNeue-light", size: 30)
         return l
