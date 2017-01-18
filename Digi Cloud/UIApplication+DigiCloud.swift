@@ -10,14 +10,10 @@ import UIKit.UIApplication
 
 extension UIApplication {
     class var Build: String {
-        get {
-            return Bundle.main.infoDictionary?[kCFBundleVersionKey as String] as? String ?? ""
-        }
+        return Bundle.main.infoDictionary?[kCFBundleVersionKey as String] as? String ?? ""
     }
 
     class var Version: String {
-        get {
-            return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-        }
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
 }
