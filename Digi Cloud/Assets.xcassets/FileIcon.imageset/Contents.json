@@ -1,14 +1,17 @@
 {
   "images" : [
     {
-      "idiom" : "ipad",
-      "filename" : "fileIcon.png",
+      "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
+      "idiom" : "universal",
       "filename" : "fileIcon@2x.png",
       "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

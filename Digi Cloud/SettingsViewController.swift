@@ -13,13 +13,13 @@ class SettingsViewController: UITableViewController {
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.layer.cornerRadius = 5
+        b.layer.cornerRadius = 8
         b.clipsToBounds = true
         b.setTitleColor(.white, for: .normal)
         b.setTitle(NSLocalizedString("Confirm", comment: "Button Title"), for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         b.addTarget(self, action: #selector(handleLogoutConfirmed), for: .touchUpInside)
-        b.contentEdgeInsets = UIEdgeInsets(top: 6, left: 8, bottom: 6, right: 8)
+        b.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         b.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.25, alpha: 1.0)
         return b
     }()

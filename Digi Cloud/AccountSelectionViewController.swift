@@ -15,7 +15,10 @@ class AccountSelectionViewController: UIViewController,
     // MARK: - Properties
 
     fileprivate let cellId = "Cell"
-
+    let cellWidth: CGFloat = 200
+    let cellHeight: CGFloat = 100
+    let spacingHoriz: CGFloat = 20
+    let spacingVert: CGFloat = 20
     var onSelect: (() -> Void)?
 
     fileprivate var accounts = [Account]()
@@ -149,7 +152,7 @@ class AccountSelectionViewController: UIViewController,
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 200, height: 100)
+        return CGSize(width: cellWidth, height: cellHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -161,32 +164,29 @@ class AccountSelectionViewController: UIViewController,
         let colWidth = collectionView.bounds.width
         let colHeight = collectionView.bounds.height
 
-        var topInset: CGFloat = 0, leftInset: CGFloat = 0, bottomInset: CGFloat = 0, rightInset: CGFloat = 0
+        var topInset, leftInset, bottomInset, rightInset: CGFloat
 
         let items = CGFloat(collectionView.numberOfItems(inSection: section))
-
-        let spacingHoriz: CGFloat = 20
-        let spacingVert: CGFloat = 20
 
         layout.minimumInteritemSpacing = spacingHoriz
         layout.minimumLineSpacing = spacingVert
 
         switch items {
         case 1:
-            topInset = (colHeight - 100)/2
-            leftInset = (colWidth - 200)/2
+            topInset = (colHeight - cellHeight)/2
+            leftInset = (colWidth - cellWidth)/2
         case 2:
-            topInset = (colHeight - 100)/2
-            leftInset = (colWidth - (200 * 2) - spacingHoriz)/2
+            topInset = (colHeight - cellHeight)/2
+            leftInset = (colWidth - (cellWidth * 2) - spacingHoriz)/2
         case 3:
-            topInset = (colHeight - (100 * 3) - (spacingVert * 2))/2
-            leftInset = (colWidth - 200)/2
+            topInset = (colHeight - (cellHeight * 3) - (spacingVert * 2))/2
+            leftInset = (colWidth - cellWidth)/2
         case 4:
-            topInset = (colHeight - (100 * 2) - (spacingVert * 1))/2
-            leftInset = (colWidth - (200 * 2) - (spacingHoriz * 1))/2
+            topInset = (colHeight - (cellHeight * 2) - (spacingVert * 1))/2
+            leftInset = (colWidth - (cellWidth * 2) - (spacingHoriz * 1))/2
         default:
-            topInset = (colHeight - (100 * 3) - (spacingVert * 2))/2
-            leftInset = (colWidth - (200 * 2) - (spacingHoriz * 1))/2
+            topInset = (colHeight - (cellHeight * 3) - (spacingVert * 2))/2
+            leftInset = (colWidth - (cellWidth * 2) - (spacingHoriz * 1))/2
         }
 
         bottomInset = topInset

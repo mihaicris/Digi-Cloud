@@ -1,14 +1,17 @@
 {
   "images" : [
     {
-      "idiom" : "ipad",
-      "filename" : "folderIcon.png",
+      "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
+      "idiom" : "universal",
       "filename" : "folderIcon@2x.png",
       "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

@@ -25,7 +25,8 @@ class AccountCollectionCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.image = #imageLiteral(resourceName: "AccountIcon")
-        iv.tintColor = UIColor(red: 0.2, green: 0.4, blue: 0.2, alpha: 1.0)
+        iv.layer.cornerRadius = 10
+        iv.layer.masksToBounds = true
         return iv
     }()
 
