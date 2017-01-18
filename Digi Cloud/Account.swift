@@ -7,6 +7,7 @@
 */
 
 import Foundation
+import UIKit.UIImage
 
 struct Account {
     // MARK: Types
@@ -25,6 +26,8 @@ struct Account {
     private static let accessGroup: String? = nil
 
     private(set) var account: String
+
+    var profileImage: UIImage?
 
     // MARK: Intialization
 

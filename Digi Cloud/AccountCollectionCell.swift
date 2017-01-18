@@ -17,6 +17,9 @@ class AccountCollectionCell: UICollectionViewCell {
             if let accountName = account?.account {
                 accountLabel.text = accountName
             }
+            if let image = account?.profileImage {
+                profileImage.image = image
+            }
         }
     }
 

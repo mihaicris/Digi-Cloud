@@ -152,6 +152,7 @@
 				83B6D39A1E13DCF4005258B3 /* Localizable.strings */,
 				83B6D3951E13C781005258B3 /* InfoPlist.strings */,
 				83CD0C651DE34C730078E5FC /* Logging.swift */,
+				830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */,
 				837041211D8B1DEE000EDBAE /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -218,7 +219,6 @@
 				835405FB1D94FCA900019D53 /* Protocols */,
 				835406011D9517BE00019D53 /* Resources */,
 				835406001D9517AB00019D53 /* Supporting Files */,
-				830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */,
 			);
 			path = "Digi Cloud";
 			sourceTree = "<group>";

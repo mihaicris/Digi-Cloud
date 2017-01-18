@@ -297,6 +297,23 @@ class AccountSelectionViewController: UIViewController,
             fatalError("Error fetching account items - \(error)")
         }
 
+        // Fetch Gravatar profileImages if exist
+        let queue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+
+        for (index, account) in accounts.enumerated() {
+            queue.async {
+                if let url = URL(string: "https://www.gravatar.com/avatar/\(account.account.md5())?s=400&d=404") {
+                    if let data = try? Data(contentsOf: url) {
+                        let profileImage = UIImage(data: data)
+                        DispatchQueue.main.async {
+                            self.accounts[index].profileImage = profileImage
+                            self.accountsCollectionView.reloadData()
+                        }
+                    }
+                }
+            }
+        }
+
         configureOtherViews()
         accountsCollectionView.reloadData()
     }
