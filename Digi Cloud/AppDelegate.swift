@@ -28,10 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
 
         #if DEBUG
-        let documentsDir = FileManager.documentsDir()
-        DLog(name: "Documents Directory", object: documentsDir)
-        let cachesDir = FileManager.cachesDir()
-        DLog(name: "Caches Directory", object: cachesDir)
+            print(FileManager.documentsDir().path, "\n")
+            print(FileManager.cachesDir().path, "\n")
         #endif
 
         return true

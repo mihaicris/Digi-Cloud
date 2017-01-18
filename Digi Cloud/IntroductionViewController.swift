@@ -24,6 +24,7 @@ class IntroductionViewController: UIViewController {
         setupViews()
 
         AppSettings.setDefaultAppSettings()
+        FileManager.createFilesFolder()
     }
 
     override func viewDidAppear(_ animated: Bool) {
