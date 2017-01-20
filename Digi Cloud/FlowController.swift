@@ -66,9 +66,15 @@ class FlowController {
 
         let controller = AccountSelectionViewController()
         controller.onSelect = { [weak self] in
-            self?.window.rootViewController = self?.rootController()
+            UIView.animate(withDuration: 0.4, animations: {
+                self?.window.alpha = 0.0
+            }, completion: { (_) in
+                self?.window.rootViewController = self?.rootController()
+                UIView.animate(withDuration: 0.2, animations: {
+                    self?.window.alpha = 1.0
+                })
+            })
         }
-
         return controller
     }
 
