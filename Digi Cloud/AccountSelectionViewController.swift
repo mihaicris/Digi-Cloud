@@ -19,9 +19,20 @@ class AccountSelectionViewController: UIViewController,
     let cellHeight: CGFloat = 100
     let spacingHoriz: CGFloat = 20
     let spacingVert: CGFloat = 20
+
+    private var isExecuting = false
+
     var onSelect: (() -> Void)?
 
     fileprivate var accounts = [Account]()
+
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView()
+        ai.hidesWhenStopped = true
+        ai.activityIndicatorViewStyle = .white
+        ai.translatesAutoresizingMaskIntoConstraints = false
+        return ai
+    }()
 
     fileprivate var accountsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -203,6 +214,12 @@ class AccountSelectionViewController: UIViewController,
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        guard !isExecuting else { return }
+        isExecuting = true
+
+        self.activityIndicatorView.startAnimating()
+
         let account = accounts[indexPath.item]
         do {
             DigiClient.shared.token = try account.readToken()
@@ -210,7 +227,15 @@ class AccountSelectionViewController: UIViewController,
             fatalError("Cannot load the token from the Keychain.")
         }
         AppSettings.loggedAccount = account.account
-        self.onSelect?()
+
+        self.accounts.removeAll()
+        self.accounts.append(account)
+        collectionView.reloadData()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.onSelect?()
+        }
+
     }
 
     // MARK: - Helper Functions
@@ -227,6 +252,7 @@ class AccountSelectionViewController: UIViewController,
         view.addSubview(logoBigLabel)
         view.addSubview(noAccountsLabel)
         view.addSubview(accountsCollectionView)
+        view.addSubview(activityIndicatorView)
         view.addSubview(stackView)
         stackView.addArrangedSubview(signUpLabel)
 
@@ -237,6 +263,8 @@ class AccountSelectionViewController: UIViewController,
             accountsCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             NSLayoutConstraint(item: accountsCollectionView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 0.7, constant: 0.0),
             NSLayoutConstraint(item: accountsCollectionView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: accountsCollectionView.centerXAnchor),
+            NSLayoutConstraint(item: activityIndicatorView, attribute: .centerY, relatedBy: .equal, toItem: accountsCollectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
             noAccountsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
@@ -277,11 +305,6 @@ class AccountSelectionViewController: UIViewController,
             }
         }
         present(controller, animated: true, completion: nil)
-    }
-
-    @objc fileprivate func handleSelectAccount() {
-
-        self.onSelect?()
     }
 
     @objc fileprivate func handleManageAccounts() {
