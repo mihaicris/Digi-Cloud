@@ -10,6 +10,8 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
 
+    private var isExecuting = false
+
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -167,9 +169,20 @@ class SettingsViewController: UITableViewController {
     }
 
     @objc private func handleLogoutConfirmed() {
+
+        guard !isExecuting else { return }
+        isExecuting = true
+
         if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
             AppSettings.loggedAccount = nil
-            navController.onLogout?()
+            dismiss(animated: true, completion: {
+                if let controller = navController.visibleViewController as? LocationsViewController {
+                    controller.activityIndicator.startAnimating()
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    navController.onLogout?()
+                }
+            })
         }
     }
 

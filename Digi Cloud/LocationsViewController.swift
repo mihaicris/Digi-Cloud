@@ -18,6 +18,14 @@ class LocationsViewController: UITableViewController {
     fileprivate let action: ActionType
     fileprivate var isUpdating: Bool = false
 
+    let activityIndicator: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView()
+        ai.hidesWhenStopped = true
+        ai.activityIndicatorViewStyle = .gray
+        ai.translatesAutoresizingMaskIntoConstraints = false
+        return ai
+    }()
+
     #if DEBUG
     let tag: Int
     #endif
@@ -52,6 +60,7 @@ class LocationsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
+        setupActivityIndicatorView()
         setupTableView()
     }
 
@@ -90,6 +99,14 @@ class LocationsViewController: UITableViewController {
     }
 
     // MARK: - Helper Functions
+
+    private func setupActivityIndicatorView() {
+        view.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -44)
+        ])
+    }
 
     fileprivate func setupNavigationBar() {
 
