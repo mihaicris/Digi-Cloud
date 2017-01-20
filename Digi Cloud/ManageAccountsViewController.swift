@@ -51,13 +51,13 @@ class ManageAccountsViewController: UITableViewController {
             let account = accounts[indexPath.row]
             do {
                 try account.deleteItem()
+                account.deleteProfileImageFromCache()
                 accounts.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-
                 if accounts.isEmpty {
                     dismiss(animated: true, completion: nil)
                 }
-                controller.getSavedAccounts()
+                controller.fetchAccountsFromKeychain()
             } catch {
                 fatalError("Error while deleting account from Keychain.")
             }

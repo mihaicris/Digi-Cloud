@@ -234,6 +234,7 @@ class LoginViewController: UIViewController {
             let account = Account(account: email)
             do {
                 try account.save(token: token)
+                account.fetchProfileImage()
             } catch {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
                                               message: NSLocalizedString("An error has occurred while saving the account.\nPlease try again later!", comment: "Error Message"),

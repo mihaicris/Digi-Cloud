@@ -173,4 +173,26 @@ struct Account {
 
         return query
     }
+
+    func fetchProfileImage() {
+        // Fetch Gravatar profileImages if exist
+        let queue = DispatchQueue.global(qos: .background)
+        queue.async {
+            if let url = URL(string: "https://www.gravatar.com/avatar/\(self.account.md5())?s=400&d=404") {
+                let cache = Cache()
+                if let data = try? Data(contentsOf: url) {
+                    // Save in cache profile image
+                    cache.save(type: .profile, data: data, for: self.account)
+                } else {
+                    // Delete cached profile image (if there is any profile image saved)
+                    cache.clear(type: .profile, key: self.account)
+                }
+            }
+        }
+    }
+
+    func deleteProfileImageFromCache() {
+        let cache = Cache()
+        cache.clear(type: .profile, key: account)
+    }
 }

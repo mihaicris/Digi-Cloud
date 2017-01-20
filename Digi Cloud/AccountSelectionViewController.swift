@@ -125,7 +125,7 @@ class AccountSelectionViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getSavedAccounts()
+        fetchAccountsFromKeychain()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -273,7 +273,7 @@ class AccountSelectionViewController: UIViewController,
 
         controller.onSuccess = { [weak self] in
             self?.dismiss(animated: true) {
-                self?.onSelect?()
+                self?.fetchAccountsFromKeychain()
             }
         }
         present(controller, animated: true, completion: nil)
@@ -293,7 +293,7 @@ class AccountSelectionViewController: UIViewController,
         present(navController, animated: true, completion: nil)
     }
 
-    func getSavedAccounts() {
+    func fetchAccountsFromKeychain() {
         /*
          Make sure the collection view is up-to-date by first reloading the
          acocunts items from the keychain and then reloading the table view.
@@ -304,31 +304,10 @@ class AccountSelectionViewController: UIViewController,
             fatalError("Error fetching account items - \(error)")
         }
         configureOtherViews()
-        for (index, account) in accounts.enumerated() {
-            fetchProfileImageFromGravatar(index: index, account: account)
+        for account in accounts {
+            account.fetchProfileImage()
         }
         accountsCollectionView.reloadData()
-    }
-
-    private func fetchProfileImageFromGravatar(index: Int, account: Account) {
-        // Fetch Gravatar profileImages if exist
-        let queue = DispatchQueue.global(qos: .background)
-        queue.async {
-            if let url = URL(string: "https://www.gravatar.com/avatar/\(account.account.md5())?s=400&d=404") {
-                let cache = Cache()
-                if let data = try? Data(contentsOf: url) {
-                    // Save in cache profile image
-                    cache.save(type: .profile, data: data, for: account.account)
-                    DispatchQueue.main.async {
-                        let indexPath = IndexPath(item: index, section: 0)
-                        self.accountsCollectionView.reloadItems(at: [indexPath])
-                    }
-                } else {
-                    // Delete cached profile image (if there is any profile image saved)
-                    cache.clear(type: .profile, key: account.account)
-                }
-            }
-        }
     }
 
 }
