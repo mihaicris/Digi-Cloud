@@ -226,14 +226,23 @@
 			path = "Digi Cloud";
 			sourceTree = "<group>";
 		};
+		839882E11E3257D20002C6E9 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				83B2DAF21DB66219000955B7 /* MainNavigationController.swift */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
 		839BAE201D8BE00E00A43452 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
 				83F994471DD093700023FB5D /* Accounts */,
 				83F9944E1DD094E20023FB5D /* Content */,
+				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
 				83F994491DD093A00023FB5D /* Introduction */,
 				83F9944B1DD093C90023FB5D /* Listing */,
+				839882E11E3257D20002C6E9 /* Main */,
 				83A9BE191DFFDD9E003FD974 /* Search */,
 				83EC31451E29154F009E12B6 /* Settings */,
 			);
@@ -313,7 +322,6 @@
 				83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */,
 				83DADF221DE59ED300987E1A /* ListingViewController.swift */,
 				8370412B1D8B2264000EDBAE /* LocationsViewController.swift */,
-				83B2DAF21DB66219000955B7 /* MainNavigationController.swift */,
 				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
 				83F994511DD09B340023FB5D /* SortFolderViewController.swift */,
 			);
