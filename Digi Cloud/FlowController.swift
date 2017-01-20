@@ -63,17 +63,9 @@ class FlowController {
     }
 
     fileprivate func createAccountSelectionController() -> UIViewController {
-
         let controller = AccountSelectionViewController()
         controller.onSelect = { [weak self] in
-            UIView.animate(withDuration: 0.4, animations: {
-                self?.window.alpha = 0.0
-            }, completion: { (_) in
-                self?.window.rootViewController = self?.rootController()
-                UIView.animate(withDuration: 0.2, animations: {
-                    self?.window.alpha = 1.0
-                })
-            })
+            self?.transitionToNewRootController()
         }
         return controller
     }
@@ -81,9 +73,20 @@ class FlowController {
     fileprivate func createMainNavigationController() -> UIViewController {
         let controller = MainNavigationController()
         controller.onLogout = { [weak self] in
-            self?.window.rootViewController = self?.rootController()
+            self?.transitionToNewRootController()
         }
         return controller
+    }
+
+    private func transitionToNewRootController() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.window.alpha = 0.0
+        }, completion: { (_) in
+            self.window.rootViewController = self.rootController()
+            UIView.animate(withDuration: 0.05, animations: {
+                self.window.alpha = 1.0
+            })
+        })
     }
 
 }
