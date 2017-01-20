@@ -27,8 +27,6 @@ struct Account {
 
     private(set) var account: String
 
-    var profileImage: UIImage?
-
     // MARK: Intialization
 
     init(account: String, accessGroup: String? = nil) {

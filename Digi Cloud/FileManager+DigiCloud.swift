@@ -10,30 +10,31 @@ import Foundation.NSFileManager
 
 extension FileManager {
 
-    class func documentsDir() -> URL {
+    static func documentsDir() -> URL {
         return self.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 
     }
 
-    class func cachesDir() -> URL {
+    static func cachesDir() -> URL {
         return self.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     }
 
-    class func createFilesFolder() {
-
-        // create the custom folder path
-        let filesURL = documentsDir().appendingPathComponent("files")
-        let path = filesURL.path
-
-        if !self.default.fileExists(atPath: path) {
-           do {
-                try self.default.createDirectory(atPath: path,
-                                                 withIntermediateDirectories: false,
-                                                 attributes: nil)
-           } catch {
-                print("Error creating files folder in documents dir: \(error)")
-           }
+    static func createPersistentCacheFolders() {
+        let urls = [
+            documentsDir().appendingPathComponent(CacheFolders.Files),
+            documentsDir().appendingPathComponent(CacheFolders.Profiles)
+        ]
+        for url in urls {
+            let path = url.path
+            if !self.default.fileExists(atPath: path) {
+                do {
+                    try self.default.createDirectory(atPath: path,
+                                                     withIntermediateDirectories: false,
+                                                     attributes: nil)
+                } catch {
+                    print("Error creating folder \(url.lastPathComponent) in documents dir: \(error)")
+                }
+            }
         }
     }
-
 }

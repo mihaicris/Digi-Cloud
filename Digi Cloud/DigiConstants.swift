@@ -56,3 +56,8 @@ struct Methods {
     static let Links            = "/api/v2/mounts/{id}/links"
     static let Search           = "/api/v2/search"
 }
+
+struct CacheFolders {
+    static let Profiles  = "ProfileImages"
+    static let Files    = "Files"
+}

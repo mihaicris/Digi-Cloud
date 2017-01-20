@@ -147,7 +147,14 @@ class AccountSelectionViewController: UIViewController,
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? AccountCollectionCell else {
             return UICollectionViewCell()
         }
-        cell.account = accounts[indexPath.item]
+        let cache = Cache()
+        let account = accounts[indexPath.item]
+        cell.accountLabel.text = account.account
+        if let data = cache.load(type: .profile, key: account.account) {
+            cell.profileImage.image = UIImage(data: data)
+        } else {
+            cell.profileImage.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
+        }
         return cell
     }
 
@@ -296,25 +303,32 @@ class AccountSelectionViewController: UIViewController,
         } catch {
             fatalError("Error fetching account items - \(error)")
         }
-
-        // Fetch Gravatar profileImages if exist
-        let queue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
-
+        configureOtherViews()
         for (index, account) in accounts.enumerated() {
-            queue.async {
-                if let url = URL(string: "https://www.gravatar.com/avatar/\(account.account.md5())?s=400&d=404") {
-                    if let data = try? Data(contentsOf: url) {
-                        let profileImage = UIImage(data: data)
-                        DispatchQueue.main.async {
-                            self.accounts[index].profileImage = profileImage
-                            self.accountsCollectionView.reloadData()
-                        }
+            fetchProfileImageFromGravatar(index: index, account: account)
+        }
+        accountsCollectionView.reloadData()
+    }
+
+    private func fetchProfileImageFromGravatar(index: Int, account: Account) {
+        // Fetch Gravatar profileImages if exist
+        let queue = DispatchQueue.global(qos: .background)
+        queue.async {
+            if let url = URL(string: "https://www.gravatar.com/avatar/\(account.account.md5())?s=400&d=404") {
+                let cache = Cache()
+                if let data = try? Data(contentsOf: url) {
+                    // Save in cache profile image
+                    cache.save(type: .profile, data: data, for: account.account)
+                    DispatchQueue.main.async {
+                        let indexPath = IndexPath(item: index, section: 0)
+                        self.accountsCollectionView.reloadItems(at: [indexPath])
                     }
+                } else {
+                    // Delete cached profile image (if there is any profile image saved)
+                    cache.clear(type: .profile, key: account.account)
                 }
             }
         }
-
-        configureOtherViews()
-        accountsCollectionView.reloadData()
     }
+
 }

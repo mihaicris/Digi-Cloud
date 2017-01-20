@@ -12,22 +12,10 @@ class AccountCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
 
-    var account: Account? {
-        didSet {
-            if let accountName = account?.account {
-                accountLabel.text = accountName
-            }
-            if let image = account?.profileImage {
-                profileImage.image = image
-            }
-        }
-    }
-
     let profileImage: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.image = #imageLiteral(resourceName: "AccountIcon")
         iv.layer.cornerRadius = 10
         iv.layer.masksToBounds = true
         return iv
