@@ -232,9 +232,21 @@ class LoginViewController: UIViewController {
                 return
             }
             let account = Account(account: email)
+
             do {
                 try account.save(token: token)
+                #if DEBUG
+                    try Account(account: email + "-2").save(token: token)
+                    try Account(account: email + "-3").save(token: token)
+                    try Account(account: email + "-4").save(token: token)
+                    try Account(account: email + "-5").save(token: token)
+                    try Account(account: email + "-6").save(token: token)
+                    try Account(account: email + "-7").save(token: token)
+                    try Account(account: email + "-8").save(token: token)
+                #endif
+
                 account.fetchProfileImage()
+
             } catch {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
                                               message: NSLocalizedString("An error has occurred while saving the account.\nPlease try again later!", comment: "Error Message"),
