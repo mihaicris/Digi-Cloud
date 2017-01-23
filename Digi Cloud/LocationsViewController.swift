@@ -140,7 +140,7 @@ class LocationsViewController: UITableViewController {
 
         self.isUpdating = true
 
-        DigiClient.shared.getDIGIStorageLocations() { locations, error in
+        DigiClient.shared.getDIGIStorageLocations { locations, error in
 
             self.isUpdating = false
 

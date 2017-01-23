@@ -699,8 +699,7 @@ final class ListingViewController: UITableViewController {
             destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
         }
 
-        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.location, to: destinationLocation) {
-            statusCode, error in
+        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.location, to: destinationLocation) { statusCode, error in
 
             func setNeededRefreshInMain() {
                 // Set needRefresh true in the main Listing controller
@@ -931,8 +930,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
 
             // network request for delete
             let deleteLocation = Location(mount: self.location.mount, path: nodePath)
-            DigiClient.shared.deleteNode(at: deleteLocation) {
-                (statusCode, error) in
+            DigiClient.shared.deleteNode(at: deleteLocation) { statusCode, error in
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error
