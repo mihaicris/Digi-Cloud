@@ -16,6 +16,8 @@ class ManageAccountsViewController: UITableViewController {
 
     var accounts: [Account]
 
+    var onAddAccount: (() -> Void)?
+
     lazy var controller: AccountSelectionViewController? = {
         return self.navigationController?.presentingViewController as? AccountSelectionViewController
     }()
@@ -159,7 +161,9 @@ class ManageAccountsViewController: UITableViewController {
     }
 
     @objc private func addAction() {
-        print("add")
+        dismiss(animated: true) {
+            self.onAddAccount?()
+        }
     }
 
     @objc private func editAction() {

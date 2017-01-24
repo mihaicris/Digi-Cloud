@@ -289,7 +289,7 @@ class AccountSelectionViewController: UIViewController,
         }
     }
 
-    @objc fileprivate func handleShowLogin() {
+    @objc func handleShowLogin() {
         let controller = LoginViewController()
         controller.modalPresentationStyle = .formSheet
 
@@ -307,6 +307,11 @@ class AccountSelectionViewController: UIViewController,
 
     @objc fileprivate func handleManageAccounts() {
         let controller = ManageAccountsViewController(accounts: accounts)
+
+        controller.onAddAccount = { [weak self] in
+            self?.handleShowLogin()
+        }
+
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .popover
         navController.popoverPresentationController?.sourceView = manageAccountsButton
