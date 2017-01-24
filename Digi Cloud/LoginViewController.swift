@@ -116,6 +116,8 @@ class LoginViewController: UIViewController {
             tv.backgroundColor = .clear
             tv.textColor = .white
             tv.textAlignment = .center
+            tv.isEditable = false
+            tv.isSelectable = false
             tv.translatesAutoresizingMaskIntoConstraints = false
 
             let aText = NSMutableAttributedString(string: NSLocalizedString("Hello!", comment: ""),
