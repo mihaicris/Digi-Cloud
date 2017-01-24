@@ -72,6 +72,19 @@ class ManageAccountsViewController: UITableViewController {
     }
 
     @objc fileprivate func toggleEditMode() {
+        var button: UIBarButtonItem
+        if tableView.isEditing {
+            button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: "Button Title"),
+                                     style: UIBarButtonItemStyle.plain,
+                                     target: self,
+                                     action: #selector(toggleEditMode))
+        } else {
+            button = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button Title"),
+                                     style: UIBarButtonItemStyle.plain,
+                                     target: self,
+                                     action: #selector(toggleEditMode))
+        }
+        navigationItem.setRightBarButton(button, animated: false)
         tableView.isEditing = !tableView.isEditing
     }
 
