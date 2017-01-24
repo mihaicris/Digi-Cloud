@@ -12,25 +12,54 @@ class AccountTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        imageView?.layer.cornerRadius = 5
-        imageView?.layer.masksToBounds = true
-        imageView?.contentMode = .scaleAspectFit
-        textLabel?.font = UIFont.systemFont(ofSize: 14)
+        setupViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    let profileImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.layer.cornerRadius = 5
+        iv.layer.masksToBounds = true
+        iv.contentMode = .scaleAspectFit
+        return iv
+    }()
+
+    let accountNameLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.systemFont(ofSize: 18)
+        return l
+    }()
+
+    private func setupViews() {
+        profileImageView.backgroundColor = .red
+        contentView.addSubview(profileImageView)
+        contentView.addSubview(accountNameLabel)
+
+        NSLayoutConstraint.activate([
+            profileImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            profileImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
+            profileImageView.widthAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
+            accountNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            accountNameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 10),
+            accountNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
+        ])
+    }
+
     var account: Account? {
         didSet {
-            if let accountName = account?.account {
-                self.textLabel?.text = accountName
+            if let name = account?.account {
+                self.accountNameLabel.text = "Mihai Cristescu"
                 let cache = Cache()
-                if let data = cache.load(type: .profile, key: accountName) {
-                    self.imageView?.image = UIImage(data: data)
+                if let data = cache.load(type: .profile, key: name) {
+                    self.profileImageView.image = UIImage(data: data)
                 } else {
-                    self.imageView?.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
+                    self.profileImageView.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
                 }
             }
         }

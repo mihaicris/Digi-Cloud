@@ -11,7 +11,6 @@ import UIKit
 class AccountSelectionViewController: UIViewController,
                                       UICollectionViewDelegate, UICollectionViewDataSource,
                                       UICollectionViewDelegateFlowLayout {
-
     // MARK: - Properties
 
     fileprivate let cellId = "Cell"
@@ -327,10 +326,14 @@ class AccountSelectionViewController: UIViewController,
             fatalError("Error fetching account items - \(error)")
         }
         configureOtherViews()
+
+        if accounts.count == 0 {
+            dismiss(animated: true, completion: nil)
+        }
+
         for account in accounts {
             account.fetchProfileImage()
         }
         accountsCollectionView.reloadData()
     }
-
 }
