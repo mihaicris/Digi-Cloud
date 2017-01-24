@@ -15,13 +15,11 @@ class SettingsViewController: UITableViewController {
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.layer.cornerRadius = 8
-        b.clipsToBounds = true
         b.setTitleColor(.white, for: .normal)
         b.setTitle(NSLocalizedString("Confirm", comment: "Button Title"), for: .normal)
-        b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         b.addTarget(self, action: #selector(handleLogoutConfirmed), for: .touchUpInside)
-        b.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        b.contentEdgeInsets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
         b.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.25, alpha: 1.0)
         return b
     }()
@@ -114,7 +112,8 @@ class SettingsViewController: UITableViewController {
             confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
 
             NSLayoutConstraint.activate([
-                confirmButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
+                confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
                 confirmButtonHorizontalConstraint
             ])
 
@@ -152,7 +151,7 @@ class SettingsViewController: UITableViewController {
         confirmButtonHorizontalConstraint.isActive = false
         if confirmButton.tag == 0 {
             confirmButton.tag = 1
-            confirmButtonHorizontalConstraint = confirmButton.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor)
+            confirmButtonHorizontalConstraint = confirmButton.rightAnchor.constraint(equalTo: cell.contentView.rightAnchor)
         } else {
             confirmButton.tag = 0
             confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)

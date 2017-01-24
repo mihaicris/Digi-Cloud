@@ -260,9 +260,9 @@
 		839BAE201D8BE00E00A43452 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
 				83F994471DD093700023FB5D /* Accounts */,
 				83F9944E1DD094E20023FB5D /* Content */,
-				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
 				83F994491DD093A00023FB5D /* Introduction */,
 				83F9944B1DD093C90023FB5D /* Listing */,
 				839882E11E3257D20002C6E9 /* Main */,
