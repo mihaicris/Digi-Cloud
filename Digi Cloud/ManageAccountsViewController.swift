@@ -61,7 +61,7 @@ class ManageAccountsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return 55.0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -139,7 +139,6 @@ class ManageAccountsViewController: UITableViewController {
             }
         }
         self.deleteButton.title = NSLocalizedString("Delete All", comment: "Button Title")
-
     }
 
     @objc fileprivate func toggleEditMode() {

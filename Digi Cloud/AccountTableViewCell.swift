@@ -31,7 +31,7 @@ class AccountTableViewCell: UITableViewCell {
     let accountNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 18)
+        l.font = UIFont.systemFont(ofSize: 16)
         return l
     }()
 
