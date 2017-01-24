@@ -42,11 +42,11 @@ class AccountTableViewCell: UITableViewCell {
 
         NSLayoutConstraint.activate([
             profileImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             profileImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
             profileImageView.widthAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
-            accountNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            accountNameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 10),
+            accountNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -3),
+            accountNameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 15),
             accountNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
         ])
     }
