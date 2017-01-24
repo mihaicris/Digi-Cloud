@@ -9,8 +9,7 @@
 import UIKit
 
 class AccountSelectionViewController: UIViewController,
-                                      UICollectionViewDelegate, UICollectionViewDataSource,
-                                      UICollectionViewDelegateFlowLayout {
+                                      UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // MARK: - Properties
 
     fileprivate let cellId = "Cell"
@@ -134,8 +133,8 @@ class AccountSelectionViewController: UIViewController,
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         fetchAccountsFromKeychain()
+        super.viewWillAppear(animated)
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -143,10 +142,10 @@ class AccountSelectionViewController: UIViewController,
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        guard let layout = accountsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
-            return
+        if let layout = accountsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.invalidateLayout()
         }
-        layout.invalidateLayout()
+        super.viewWillTransition(to: size, with: coordinator)
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
