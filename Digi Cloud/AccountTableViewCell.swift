@@ -36,7 +36,7 @@ class AccountTableViewCell: UITableViewCell {
     }()
 
     private func setupViews() {
-        profileImageView.backgroundColor = .red
+
         contentView.addSubview(profileImageView)
         contentView.addSubview(accountNameLabel)
 
