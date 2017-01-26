@@ -54,7 +54,7 @@ class AccountTableViewCell: UITableViewCell {
     var account: Account? {
         didSet {
             if let name = account?.account {
-                self.accountNameLabel.text = "Mihai Cristescu"
+                self.accountNameLabel.text = name
                 let cache = Cache()
                 if let data = cache.load(type: .profile, key: name) {
                     self.profileImageView.image = UIImage(data: data)
