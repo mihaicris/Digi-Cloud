@@ -22,6 +22,7 @@ enum JSONError: Error {
 }
 enum Authentication: Error {
     case login(String)
+    case revoke(String)
 }
 
 struct FolderInfo {
@@ -178,7 +179,21 @@ final class DigiClient {
         }
     }
 
+    func revokeAuthentication(for token: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+        let method = Methods.Token
+        let headers: [String: String] = ["Authorization": "Token \(token)"]
+
+        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
+            guard error == nil else {
+                completion(nil, Authentication.revoke("There was an error at revoke token API request."))
+                return
+            }
+            completion(statusCode, nil)
+        }
+    }
+
     func getUserInfo(completion: @escaping(_ json: Any?, _ statusCode: Int?, _ error: Error?) -> Void) {
+
         let method = Methods.User
 
         let headers: [String: String] = [HeadersKeys.Accept: "application/json",

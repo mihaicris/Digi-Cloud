@@ -114,6 +114,15 @@ struct Account {
     }
 
     func deleteItem() throws {
+
+        // Revoke token
+        do {
+            let token = try readToken()
+            revokeToken(token)
+        } catch {
+            print("There was an error while reading the token.\n Could not revoke the token [API Request]")
+        }
+
         // Delete the existing item from the keychain.
         let query = Account.keychainQuery(account: account)
         let status = SecItemDelete(query as CFDictionary)
@@ -194,5 +203,18 @@ struct Account {
     func deleteProfileImageFromCache() {
         let cache = Cache()
         cache.clear(type: .profile, key: account)
+    }
+
+    func revokeToken(_ token: String) {
+        let queue = DispatchQueue.global(qos: .background)
+        queue.async {
+            DigiClient.shared.revokeAuthentication(for: token, completion: { statusCode, error in
+                if error != nil {
+                    print(error!.localizedDescription)
+                } else if let statusCode = statusCode, statusCode != 204 {
+                    print("Status code [API Request -> revoke Token]: \(statusCode) [❗️Warning❗️]")
+                }
+            })
+        }
     }
 }
