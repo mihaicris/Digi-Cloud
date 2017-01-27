@@ -8,8 +8,7 @@
 
 import Foundation
 
-public func DLog<T>( name: String,
-                     object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+public func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
     #if DEBUG
         let queue = Thread.isMainThread ? "Main (UI)" : "Background"
         print("\n_____________________________________________________")
@@ -17,7 +16,6 @@ public func DLog<T>( name: String,
         print("Function:    \(function)")
         print("Line:        \(line)")
         print("Thread:      \(queue)")
-        print("\(name):")
         print("\(object())")
         print("_____________________________________________________\n")
     #endif

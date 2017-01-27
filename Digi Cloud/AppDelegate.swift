@@ -29,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         #if DEBUG
             print(FileManager.documentsDir().path, "\n")
-            print(FileManager.cachesDir().path, "\n")
         #endif
 
         return true
