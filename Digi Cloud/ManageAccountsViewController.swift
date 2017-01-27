@@ -17,10 +17,9 @@ class ManageAccountsViewController: UITableViewController {
     var accounts: [Account]
 
     var onAddAccount: (() -> Void)?
+    var onFinish: (() -> Void)?
 
-    lazy var controller: AccountSelectionViewController? = {
-        return self.navigationController?.presentingViewController as? AccountSelectionViewController
-    }()
+    let controller: AccountSelectionViewController
 
     lazy var addButton: UIBarButtonItem = {
         let b = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction))
@@ -44,8 +43,9 @@ class ManageAccountsViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(accounts: [Account]) {
+    init(controller: AccountSelectionViewController, accounts: [Account]) {
         self.accounts = accounts
+        self.controller = controller
         super.init(style: UITableViewStyle.plain)
     }
 
@@ -90,22 +90,11 @@ class ManageAccountsViewController: UITableViewController {
 
         if editingStyle == .delete {
 
-            guard let controller = navigationController?.presentingViewController as? AccountSelectionViewController else {
-                return
-            }
+            self.wipeAccount(at: indexPath)
 
-            let account = accounts[indexPath.row]
-            do {
-                try account.deleteItem()
-                account.deleteProfileImageFromCache()
-                accounts.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-                if accounts.isEmpty {
-                    dismiss(animated: true, completion: nil)
-                }
-                controller.fetchAccountsFromKeychain()
-            } catch {
-                fatalError("Error while deleting account from Keychain.")
+            // If no accounts are stored in the model, the manage window is dismissed
+            if accounts.isEmpty {
+                self.onFinish?()
             }
         }
     }
@@ -118,6 +107,34 @@ class ManageAccountsViewController: UITableViewController {
         title = NSLocalizedString("Accounts", comment: "Window Title")
 
         updateButtonsToMatchTableState()
+    }
+
+    private func wipeAccount(at indexPath: IndexPath) {
+
+        let account = accounts[indexPath.row]
+
+        do {
+            // Revoke the token
+            account.revokeToken()
+
+            // Delete profile image from local storage
+            account.deleteProfileImageFromCache()
+
+            // Delete account (token) from Keychain
+            try account.deleteItem()
+
+            // Delete account from the models
+            self.accounts.remove(at: indexPath.row)
+            controller.accounts.remove(at: indexPath.row)
+
+            // Delete account on screen
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            controller.accountsCollectionView.deleteItems(at: [indexPath])
+
+        } catch {
+            fatalError("Error while deleting account from Keychain.")
+        }
+
     }
 
     private func updateButtonsToMatchTableState() {
@@ -202,20 +219,17 @@ class ManageAccountsViewController: UITableViewController {
 
     @objc private func deleteConfirmed(_ action: UIAlertAction) {
 
-        if let selectedRows = self.tableView.indexPathsForSelectedRows?.reversed() {
+        if let selectedRows = self.tableView.indexPathsForSelectedRows?.reversed(), selectedRows.count != accounts.count {
+
             self.tableView.beginUpdates()
+
             for selectedIndex in selectedRows {
-                let account = accounts[selectedIndex.row]
-                do {
-                    try account.deleteItem()
-                    account.deleteProfileImageFromCache()
-                    tableView.deleteRows(at: [selectedIndex], with: .automatic)
-                    accounts.remove(at: selectedIndex.row)
-                } catch {
-                    fatalError("Error while deleting account from Keychain.")
-                }
+                wipeAccount(at: selectedIndex)
             }
+
+            // Table view is animating the deletions
             self.tableView.endUpdates()
+
         } else {
             // Delete all accounts
             for account in accounts {
@@ -224,12 +238,17 @@ class ManageAccountsViewController: UITableViewController {
                 } catch {
                     fatalError("Error while deleting account from Keychain.")
                 }
+                // Dimiss the Login controller after all accounts have been removed
+                FileManager.deleteProfileImagesCacheDirectory()
+                FileManager.createProfileImagesCacheDirectory()
+                self.onFinish?()
             }
         }
         self.tableView.setEditing(false, animated: true)
         self.updateButtonsToMatchTableState()
 
-        controller?.fetchAccountsFromKeychain()
+        controller.fetchAccountsFromKeychain()
+        controller.accountsCollectionView.reloadData()
     }
 
     @objc private func cancelAction() {

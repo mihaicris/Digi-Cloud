@@ -22,7 +22,7 @@ class AccountSelectionViewController: UIViewController,
 
     var onSelect: (() -> Void)?
 
-    fileprivate var accounts = [Account]()
+    var accounts = [Account]()
 
     private let activityIndicatorView: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
@@ -32,7 +32,7 @@ class AccountSelectionViewController: UIViewController,
         return ai
     }()
 
-    fileprivate var accountsCollectionView: UICollectionView = {
+    var accountsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -306,10 +306,15 @@ class AccountSelectionViewController: UIViewController,
     }
 
     @objc fileprivate func handleManageAccounts() {
-        let controller = ManageAccountsViewController(accounts: accounts)
+        let controller = ManageAccountsViewController(controller: self, accounts: accounts)
 
         controller.onAddAccount = { [weak self] in
             self?.handleShowLogin()
+        }
+
+        controller.onFinish = { [weak self] in
+            self?.fetchAccountsFromKeychain()
+            self?.dismiss(animated: true, completion: nil)
         }
 
         let navController = UINavigationController(rootViewController: controller)
@@ -326,18 +331,13 @@ class AccountSelectionViewController: UIViewController,
          */
         do {
             accounts = try Account.accountItems()
+            for account in accounts {
+                account.fetchProfileImage()
+            }
+            configureOtherViews()
+            accountsCollectionView.reloadData()
         } catch {
             fatalError("Error fetching account items - \(error)")
         }
-        configureOtherViews()
-
-        if accounts.count == 0 {
-            dismiss(animated: true, completion: nil)
-        }
-
-        for account in accounts {
-            account.fetchProfileImage()
-        }
-        accountsCollectionView.reloadData()
     }
 }

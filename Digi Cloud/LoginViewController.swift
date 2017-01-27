@@ -233,21 +233,24 @@ class LoginViewController: UIViewController {
                 self.present(alert, animated: false, completion: nil)
                 return
             }
+
             let account = Account(account: email)
 
             do {
+                // Save the token in the Keychain
                 try account.save(token: token)
-                #if DEBUG
-                    try Account(account: email + "-2").save(token: token)
-                    try Account(account: email + "-3").save(token: token)
-                    try Account(account: email + "-4").save(token: token)
-                    try Account(account: email + "-5").save(token: token)
-                    try Account(account: email + "-6").save(token: token)
-                    try Account(account: email + "-7").save(token: token)
-                    try Account(account: email + "-8").save(token: token)
-                #endif
 
+                // Save profile image view from Gravatar if exists.
                 account.fetchProfileImage()
+
+                // Save in Userdefaults this user as logged in
+                AppSettings.loggedAccount = email
+
+                // save the Token for current session
+                DigiClient.shared.token = token
+
+                // Dismiss the login screen
+                self.onSuccess?()
 
             } catch {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
@@ -256,11 +259,7 @@ class LoginViewController: UIViewController {
                 let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                 alert.addAction(actionOK)
                 self.present(alert, animated: false, completion: nil)
-                return
             }
-            AppSettings.loggedAccount = email
-            DigiClient.shared.token = token
-            self.onSuccess?()
         }
     }
 }

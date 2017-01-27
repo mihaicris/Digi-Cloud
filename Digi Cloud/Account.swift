@@ -114,15 +114,6 @@ struct Account {
     }
 
     func deleteItem() throws {
-
-        // Revoke token
-        do {
-            let token = try readToken()
-            revokeToken(token)
-        } catch {
-            print("There was an error while reading the token.\n Could not revoke the token [API Request]")
-        }
-
         // Delete the existing item from the keychain.
         let query = Account.keychainQuery(account: account)
         let status = SecItemDelete(query as CFDictionary)
@@ -185,8 +176,7 @@ struct Account {
 
     func fetchProfileImage() {
         // Fetch Gravatar profileImages if exist
-        let queue = DispatchQueue.global(qos: .background)
-        queue.async {
+        DispatchQueue.global(qos: .background).async {
             if let url = URL(string: "https://www.gravatar.com/avatar/\(self.account.md5())?s=400&d=404") {
                 let cache = Cache()
                 if let data = try? Data(contentsOf: url) {
@@ -205,16 +195,19 @@ struct Account {
         cache.clear(type: .profile, key: account)
     }
 
-    func revokeToken(_ token: String) {
-        let queue = DispatchQueue.global(qos: .background)
-        queue.async {
-            DigiClient.shared.revokeAuthentication(for: token, completion: { statusCode, error in
-                if error != nil {
-                    print(error!.localizedDescription)
-                } else if let statusCode = statusCode, statusCode != 204 {
-                    print("Status code [API Request -> revoke Token]: \(statusCode) [❗️Warning❗️]")
-                }
-            })
+    func revokeToken() {
+        if let token = try? readToken() {
+            DispatchQueue.global(qos: .background).async {
+                DigiClient.shared.revokeAuthentication(for: token, completion: { statusCode, error in
+                    if error != nil {
+                        print(error!.localizedDescription)
+                    } else if let statusCode = statusCode, statusCode != 204 {
+                        print("Status code [API Request -> revoke Token]: \(statusCode) [❗️Warning❗️]")
+                    }
+                })
+            }
+        } else {
+            print("Could not retrieve a token from Keychain for revoking.")
         }
     }
 }
