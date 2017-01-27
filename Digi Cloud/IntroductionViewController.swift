@@ -24,7 +24,8 @@ class IntroductionViewController: UIViewController {
         setupViews()
 
         AppSettings.setDefaultAppSettings()
-        FileManager.createPersistentCacheFolders()
+        FileManager.createProfileImagesCacheDirectory()
+        FileManager.createFilesCacheDirectory()
     }
 
     override func viewDidAppear(_ animated: Bool) {
