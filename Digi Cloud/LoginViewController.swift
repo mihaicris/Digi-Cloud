@@ -240,17 +240,18 @@ class LoginViewController: UIViewController {
                 // Save the token in the Keychain
                 try account.save(token: token)
 
-                // Save profile image view from Gravatar if exists.
-                account.fetchProfileImage()
-
                 // Save in Userdefaults this user as logged in
                 AppSettings.loggedAccount = email
 
                 // save the Token for current session
                 DigiClient.shared.token = token
 
-                // Dismiss the login screen
-                self.onSuccess?()
+                // Save profile image view from Gravatar if exists.
+                account.fetchProfileImage {
+
+                    // Dismiss the login screen
+                    self.onSuccess?()
+                }
 
             } catch {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),

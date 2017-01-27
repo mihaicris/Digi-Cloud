@@ -332,7 +332,9 @@ class AccountSelectionViewController: UIViewController,
         do {
             accounts = try Account.accountItems()
             for account in accounts {
-                account.fetchProfileImage()
+                account.fetchProfileImage {
+                    self.accountsCollectionView.reloadData()
+                }
             }
             configureOtherViews()
             accountsCollectionView.reloadData()

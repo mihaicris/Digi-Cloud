@@ -174,7 +174,7 @@ struct Account {
         return query
     }
 
-    func fetchProfileImage() {
+    func fetchProfileImage(_ completion: @escaping () -> Void ) {
         // Fetch Gravatar profileImages if exist
         DispatchQueue.global(qos: .background).async {
             if let url = URL(string: "https://www.gravatar.com/avatar/\(self.account.md5())?s=400&d=404") {
@@ -185,6 +185,9 @@ struct Account {
                 } else {
                     // Delete cached profile image (if there is any profile image saved)
                     cache.clear(type: .profile, key: self.account)
+                }
+                DispatchQueue.main.async {
+                    completion()
                 }
             }
         }
