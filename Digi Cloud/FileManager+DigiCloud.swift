@@ -45,17 +45,11 @@ extension FileManager {
             try self.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
         } catch {
             print(error.localizedDescription)
-            fatalError()
         }
     }
 
     static func deleteDirectory(at url: URL) {
-        do {
-            try self.default.removeItem(at: url)
-        } catch {
-            print(error.localizedDescription)
-            fatalError()
-        }
+        try? self.default.removeItem(at: url)
     }
 
 }
