@@ -192,25 +192,33 @@ final class DigiClient {
         }
     }
 
-    func getUserInfo(completion: @escaping(_ json: Any?, _ statusCode: Int?, _ error: Error?) -> Void) {
+    func getUserInfo(for token: String, completion: @escaping(_ response: (firstName: String, lastName: String)?, _ error: Error?) -> Void) {
 
         let method = Methods.User
 
         let headers: [String: String] = [HeadersKeys.Accept: "application/json",
-                                         "Authorization": "Token \(DigiClient.shared.token!)"]
+                                         "Authorization": "Token \(token)"]
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { data, statusCode, error in
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { jsonData, statusCode, error in
 
             guard error == nil else {
-                completion(nil, nil, error)
+                completion(nil, error)
                 return
             }
 
             guard statusCode == 200 else {
-                completion(nil, statusCode, nil)
+                completion(nil, NetworkingError.wrongStatus("Wrong status \(statusCode) while receiving user info request."))
                 return
             }
-            completion(data, statusCode, nil)
+
+            guard let json = jsonData as? [String: String],
+                let firstName = json["firstName"],
+                let lastName = json["lastName"] else {
+                completion(nil, JSONError.parce("Could not parce json response for user info request."))
+                return
+            }
+
+            completion((firstName, lastName), nil)
         }
     }
 
