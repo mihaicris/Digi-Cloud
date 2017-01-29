@@ -234,13 +234,21 @@ class ManageAccountsViewController: UITableViewController {
             // Delete all accounts
             for account in accounts {
                 do {
+                    // Revoke the token
+                    account.revokeToken()
+
+                    // Delete the account token from Keychain
                     try account.deleteItem()
+
                 } catch {
                     fatalError("Error while deleting account from Keychain.")
                 }
-                // Dimiss the Login controller after all accounts have been removed
+
+                // Delete all profile images
                 FileManager.deleteProfileImagesCacheDirectory()
                 FileManager.createProfileImagesCacheDirectory()
+
+                // Dimiss the Login controller after all accounts have been removed
                 self.onFinish?()
             }
         }
