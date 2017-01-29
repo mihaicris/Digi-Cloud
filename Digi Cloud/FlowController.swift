@@ -24,8 +24,8 @@ class FlowController {
             if AppSettings.shouldReplayIntro {
                 controller = self.createIntroController()
             } else {
-                if let account = AppSettings.loggedAccount {
-                    let loggedAccount = Account(account: account)
+                if let username = AppSettings.loggedAccount {
+                    let loggedAccount = Account(username: username)
                     do {
                         let token = try loggedAccount.readToken()
                         DigiClient.shared.token = token

@@ -155,8 +155,8 @@ class AccountSelectionViewController: UIViewController,
         }
         let cache = Cache()
         let account = accounts[indexPath.item]
-        cell.accountLabel.text = account.account
-        if let data = cache.load(type: .profile, key: account.account) {
+        cell.accountLabel.text = account.username
+        if let data = cache.load(type: .profile, key: account.username) {
             cell.profileImage.image = UIImage(data: data)
         } else {
             cell.profileImage.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
@@ -340,11 +340,11 @@ class AccountSelectionViewController: UIViewController,
             DigiClient.shared.token = try account.readToken()
 
             // Save in Userdefaults this user as logged in
-            AppSettings.loggedAccount = account.account
+            AppSettings.loggedAccount = account.username
 
             // Animate the selected account in the collection view
             let indexPaths = accounts.enumerated().flatMap({ (offset, element) -> IndexPath? in
-                if element.account == account.account {
+                if element.username == account.username {
                     return nil
                 }
                 return IndexPath(item: offset, section: 0)

@@ -53,10 +53,10 @@ class AccountTableViewCell: UITableViewCell {
 
     var account: Account? {
         didSet {
-            if let name = account?.account {
-                self.accountNameLabel.text = name
+            if let username = account?.username {
+                self.accountNameLabel.text = username
                 let cache = Cache()
-                if let data = cache.load(type: .profile, key: name) {
+                if let data = cache.load(type: .profile, key: username) {
                     self.profileImageView.image = UIImage(data: data)
                 } else {
                     self.profileImageView.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")

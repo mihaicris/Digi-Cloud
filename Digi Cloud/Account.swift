@@ -25,12 +25,12 @@ struct Account {
 
     private static let accessGroup: String? = nil
 
-    private(set) var account: String
+    private(set) var username: String
 
     // MARK: Intialization
 
-    init(account: String, accessGroup: String? = nil) {
-        self.account = account
+    init(username: String, accessGroup: String? = nil) {
+        self.username = username
     }
 
     // MARK: Keychain access
@@ -40,7 +40,7 @@ struct Account {
             Build a query to find the item that matches the service, account and
             access group.
         */
-        var query = Account.keychainQuery(account: account)
+        var query = Account.keychainQuery(account: username)
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         query[kSecReturnAttributes as String] = kCFBooleanTrue
         query[kSecReturnData as String] = kCFBooleanTrue
@@ -78,7 +78,7 @@ struct Account {
             var attributesToUpdate = [String: AnyObject]()
             attributesToUpdate[kSecValueData as String] = encodedPassword as AnyObject?
 
-            let query = Account.keychainQuery(account: account)
+            let query = Account.keychainQuery(account: username)
             let status = SecItemUpdate(query as CFDictionary, attributesToUpdate as CFDictionary)
 
             // Throw an error if an unexpected status was returned.
@@ -88,7 +88,7 @@ struct Account {
                 No password was found in the keychain. Create a dictionary to save
                 as a new keychain item.
             */
-            var newItem = Account.keychainQuery(account: account)
+            var newItem = Account.keychainQuery(account: username)
             newItem[kSecValueData as String] = encodedPassword as AnyObject?
 
             // Add a the new item to the keychain.
@@ -104,18 +104,18 @@ struct Account {
         var attributesToUpdate = [String: AnyObject]()
         attributesToUpdate[kSecAttrAccount as String] = newAccountName as AnyObject?
 
-        let query = Account.keychainQuery(account: self.account)
+        let query = Account.keychainQuery(account: self.username)
         let status = SecItemUpdate(query as CFDictionary, attributesToUpdate as CFDictionary)
 
         // Throw an error if an unexpected status was returned.
         guard status == noErr || status == errSecItemNotFound else { throw AccountError.unhandledError(status: status) }
 
-        self.account = newAccountName
+        self.username = newAccountName
     }
 
     func deleteItem() throws {
         // Delete the existing item from the keychain.
-        let query = Account.keychainQuery(account: account)
+        let query = Account.keychainQuery(account: username)
         let status = SecItemDelete(query as CFDictionary)
 
         // Throw an error if an unexpected status was returned.
@@ -149,7 +149,7 @@ struct Account {
         for result in resultData {
             guard let account  = result[kSecAttrAccount as String] as? String else { throw AccountError.unexpectedItemData }
 
-            let passwordItem = Account(account: account, accessGroup: accessGroup)
+            let passwordItem = Account(username: account, accessGroup: accessGroup)
             passwordItems.append(passwordItem)
         }
 
@@ -178,14 +178,14 @@ struct Account {
 
         // Fetch Gravatar profileImages if exist
         DispatchQueue.global(qos: .background).async {
-            if let url = URL(string: "https://www.gravatar.com/avatar/\(self.account.md5())?s=400&d=404") {
+            if let url = URL(string: "https://www.gravatar.com/avatar/\(self.username.md5())?s=400&d=404") {
                 let cache = Cache()
                 if let data = try? Data(contentsOf: url) {
                     // Save in cache profile image
-                    cache.save(type: .profile, data: data, for: self.account)
+                    cache.save(type: .profile, data: data, for: self.username)
                 } else {
                     // Delete cached profile image (if there is any profile image saved)
-                    cache.clear(type: .profile, key: self.account)
+                    cache.clear(type: .profile, key: self.username)
                 }
                 DispatchQueue.main.async {
                     completion()
@@ -196,7 +196,11 @@ struct Account {
 
     func deleteProfileImageFromCache() {
         let cache = Cache()
-        cache.clear(type: .profile, key: account)
+        cache.clear(type: .profile, key: username)
+    }
+
+    func fetchUserInfo(_ completion: @escaping () -> Void) {
+
     }
 
     func revokeToken() {

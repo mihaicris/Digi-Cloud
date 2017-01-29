@@ -235,7 +235,7 @@ class LoginViewController: UIViewController {
                 return
             }
 
-            let account = Account(account: email)
+            let account = Account(username: email)
 
             do {
                 // Save the token in the Keychain

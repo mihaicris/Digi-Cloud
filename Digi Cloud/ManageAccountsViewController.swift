@@ -120,10 +120,10 @@ class ManageAccountsViewController: UITableViewController {
             // Delete profile image from local storage
             account.deleteProfileImageFromCache()
 
-            // Delete account (token) from Keychain
+            // Delete account token from Keychain
             try account.deleteItem()
 
-            // Delete account from the models
+            // Delete account from the model
             self.accounts.remove(at: indexPath.row)
             controller.accounts.remove(at: indexPath.row)
 
@@ -237,7 +237,7 @@ class ManageAccountsViewController: UITableViewController {
                     // Revoke the token
                     account.revokeToken()
 
-                    // Delete the account token from Keychain
+                    // Delete account token from Keychain
                     try account.deleteItem()
 
                 } catch {
