@@ -24,7 +24,7 @@ class AccountSelectionViewController: UIViewController,
 
     var accounts = [Account]()
 
-    private let activityIndicatorView: UIActivityIndicatorView = {
+    private let spinner: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
         ai.hidesWhenStopped = true
         ai.activityIndicatorViewStyle = .white
@@ -130,11 +130,8 @@ class AccountSelectionViewController: UIViewController,
         super.viewDidLoad()
         accountsCollectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
         setupViews()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
         fetchAccountsFromKeychain()
-        super.viewWillAppear(animated)
+        fetchProfileImagesfromGravatar()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -213,32 +210,16 @@ class AccountSelectionViewController: UIViewController,
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
+        // Prevents a second selection
         guard !isExecuting else { return }
         isExecuting = true
 
-        self.activityIndicatorView.startAnimating()
-
-        let account = accounts[indexPath.item]
-        do {
-            DigiClient.shared.token = try account.readToken()
-        } catch {
-            fatalError("Cannot load the token from the Keychain.")
-        }
-        AppSettings.loggedAccount = account.account
-
-        self.accounts.removeAll()
-        self.accounts.append(account)
-        collectionView.reloadData()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.onSelect?()
-        }
-
+        switchToAccount(accounts[indexPath.item])
     }
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
 
         accountsCollectionView.delegate = self
         accountsCollectionView.dataSource = self
@@ -250,7 +231,7 @@ class AccountSelectionViewController: UIViewController,
         view.addSubview(logoBigLabel)
         view.addSubview(noAccountsLabel)
         view.addSubview(accountsCollectionView)
-        view.addSubview(activityIndicatorView)
+        view.addSubview(spinner)
         view.addSubview(stackView)
         stackView.addArrangedSubview(signUpLabel)
 
@@ -261,18 +242,17 @@ class AccountSelectionViewController: UIViewController,
             accountsCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             NSLayoutConstraint(item: accountsCollectionView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 0.7, constant: 0.0),
             NSLayoutConstraint(item: accountsCollectionView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
-            activityIndicatorView.centerXAnchor.constraint(equalTo: accountsCollectionView.centerXAnchor),
-            NSLayoutConstraint(item: activityIndicatorView, attribute: .centerY, relatedBy: .equal, toItem: accountsCollectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
+            spinner.centerXAnchor.constraint(equalTo: accountsCollectionView.centerXAnchor),
+            NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: accountsCollectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
             noAccountsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
             stackView.centerYAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.height * 0.035)
-        ])
+            ])
 
-        configureOtherViews()
     }
 
-    fileprivate func configureOtherViews() {
+    private func finalizeViews() {
         if accounts.count == 0 {
             loginToAnotherAccountButton.removeFromSuperview()
             manageAccountsButton.removeFromSuperview()
@@ -289,7 +269,7 @@ class AccountSelectionViewController: UIViewController,
         }
     }
 
-    @objc func handleShowLogin() {
+    @objc private func handleShowLogin() {
         let controller = LoginViewController()
         controller.modalPresentationStyle = .formSheet
 
@@ -297,15 +277,20 @@ class AccountSelectionViewController: UIViewController,
             self?.dismiss(animated: true, completion: nil)
         }
 
-        controller.onSuccess = { [weak self] in
+        controller.onSuccess = { [weak self] account in
             self?.dismiss(animated: true) {
                 self?.fetchAccountsFromKeychain()
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self?.switchToAccount(account)
+
+                }
             }
         }
         present(controller, animated: true, completion: nil)
     }
 
-    @objc fileprivate func handleManageAccounts() {
+    @objc private func handleManageAccounts() {
         let controller = ManageAccountsViewController(controller: self, accounts: accounts)
 
         controller.onAddAccount = { [weak self] in
@@ -331,15 +316,55 @@ class AccountSelectionViewController: UIViewController,
          */
         do {
             accounts = try Account.accountItems()
-            for account in accounts {
-                account.fetchProfileImage {
-                    self.accountsCollectionView.reloadData()
-                }
-            }
-            configureOtherViews()
+            finalizeViews()
             accountsCollectionView.reloadData()
         } catch {
             fatalError("Error fetching account items - \(error)")
+        }
+    }
+
+    private func fetchProfileImagesfromGravatar() {
+        for account in accounts {
+            account.fetchProfileImage {
+                self.accountsCollectionView.reloadData()
+            }
+        }
+    }
+
+    private func switchToAccount(_ account: Account) {
+
+        spinner.startAnimating()
+
+        do {
+            // save the Token for current session
+            DigiClient.shared.token = try account.readToken()
+
+            // Save in Userdefaults this user as logged in
+            AppSettings.loggedAccount = account.account
+
+            // Animate the selected account in the collection view
+            let indexPaths = accounts.enumerated().flatMap({ (offset, element) -> IndexPath? in
+                if element.account == account.account {
+                    return nil
+                }
+                return IndexPath(item: offset, section: 0)
+            })
+
+            accounts.removeAll()
+            accounts.append(account)
+
+            accountsCollectionView.performBatchUpdates({
+                self.accountsCollectionView.deleteItems(at: indexPaths)
+            }, completion: { _ in
+
+                // Show account locations
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                    self.onSelect?()
+                }
+            })
+
+        } catch {
+            fatalError("Cannot load the token from the Keychain.")
         }
     }
 }

@@ -175,6 +175,7 @@ struct Account {
     }
 
     func fetchProfileImage(_ completion: @escaping () -> Void ) {
+
         // Fetch Gravatar profileImages if exist
         DispatchQueue.global(qos: .background).async {
             if let url = URL(string: "https://www.gravatar.com/avatar/\(self.account.md5())?s=400&d=404") {

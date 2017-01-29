@@ -12,7 +12,7 @@ class LoginViewController: UIViewController {
 
     // MARK: - Properties
 
-    var onSuccess: (() -> Void)?
+    var onSuccess: ((Account) -> Void)?
 
     var onCancel: (() -> Void)?
 
@@ -211,9 +211,10 @@ class LoginViewController: UIViewController {
 
         DigiClient.shared.authenticate(email: email, password: password) { token, error in
 
-            self.spinner.stopAnimating()
-
             guard error == nil else {
+
+                self.spinner.stopAnimating()
+
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
                                             message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "Error Message"),
                                      preferredStyle: UIAlertControllerStyle.alert)
@@ -240,17 +241,11 @@ class LoginViewController: UIViewController {
                 // Save the token in the Keychain
                 try account.save(token: token)
 
-                // Save in Userdefaults this user as logged in
-                AppSettings.loggedAccount = email
-
-                // save the Token for current session
-                DigiClient.shared.token = token
-
                 // Save profile image view from Gravatar if exists.
                 account.fetchProfileImage {
 
-                    // Dismiss the login screen
-                    self.onSuccess?()
+                 // Dismiss the login screen
+                 self.onSuccess?(account)
                 }
 
             } catch {
