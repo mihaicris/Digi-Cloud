@@ -193,7 +193,7 @@ class LoginViewController: UIViewController {
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
 
-        guard let email = emailTextField.text,
+        guard let email = emailTextField.text?.lowercased(),
             let password = passwordTextField.text,
             email.characters.count > 0,
             password.characters.count > 0
