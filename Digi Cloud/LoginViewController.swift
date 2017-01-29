@@ -225,6 +225,9 @@ class LoginViewController: UIViewController {
             }
 
             guard let token = token else {
+
+                self.spinner.stopAnimating()
+
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
                                             message: NSLocalizedString("Unauthorized access", comment: "Error Message"),
                                      preferredStyle: UIAlertControllerStyle.alert)
@@ -241,11 +244,15 @@ class LoginViewController: UIViewController {
                 // Save the token in the Keychain
                 try account.save(token: token)
 
-                // Save profile image view from Gravatar if exists.
-                account.fetchProfileImage {
+                // Fetch user info (firstName, lastName)
+                account.fetchAccountInfo {
 
-                 // Dismiss the login screen
-                 self.onSuccess?(account)
+                    // Save profile image view from Gravatar if exists.
+                    account.fetchProfileImage {
+
+                        // Dismiss the login screen
+                        self.onSuccess?(account)
+                    }
                 }
 
             } catch {

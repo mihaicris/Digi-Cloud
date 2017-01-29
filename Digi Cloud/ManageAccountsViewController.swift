@@ -120,6 +120,9 @@ class ManageAccountsViewController: UITableViewController {
             // Delete profile image from local storage
             account.deleteProfileImageFromCache()
 
+            // Delete the account info (name) from User defaults
+            UserDefaults.standard.removeObject(forKey: account.username)
+
             // Delete account token from Keychain
             try account.deleteItem()
 
@@ -236,6 +239,9 @@ class ManageAccountsViewController: UITableViewController {
                 do {
                     // Revoke the token
                     account.revokeToken()
+
+                    // Delete the account info (name) from User defaults
+                    UserDefaults.standard.removeObject(forKey: account.username)
 
                     // Delete account token from Keychain
                     try account.deleteItem()

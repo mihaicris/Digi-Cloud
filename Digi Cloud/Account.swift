@@ -199,8 +199,28 @@ struct Account {
         cache.clear(type: .profile, key: username)
     }
 
-    func fetchUserInfo(_ completion: @escaping () -> Void) {
+    func fetchAccountInfo(_ completion: @escaping () -> Void) {
+        if let token = try? readToken() {
+            DispatchQueue.global(qos: .background).async {
+                DigiClient.shared.getUserInfo(for: token) { result, error in
+                    guard error == nil else {
+                        print(error!.localizedDescription)
+                        return
+                    }
+                    if let result = result {
 
+                        UserDefaults.standard.set("\(result.firstName) \(result.lastName)", forKey: self.username)
+                        UserDefaults.standard.synchronize()
+
+                        DispatchQueue.main.async {
+                            completion()
+                        }
+                    }
+                }
+            }
+        } else {
+            print("Could not retrieve a token from Keychain for revoking.")
+        }
     }
 
     func revokeToken() {
