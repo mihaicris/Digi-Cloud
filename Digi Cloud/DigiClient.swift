@@ -156,11 +156,11 @@ final class DigiClient {
         return request
     }
 
-    func authenticate(email: String, password: String,
+    func authenticate(username: String, password: String,
                       completion: @escaping(_ token: String?, _ error: Error?) -> Void) {
         let method = Methods.Token
         let headers = DefaultHeaders.Headers
-        let jsonBody = ["password": password, "email": email]
+        let jsonBody = ["password": password, "email": username]
 
         networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: nil) { json, statusCode, error in
             guard error == nil else {

@@ -70,7 +70,7 @@ class ContentViewController: UIViewController {
 
         // TODO: - If the file has changed in the cloud, it should be redownloaded again.
         // Check if the hash of the file is the same with the hash saved locally 
-        
+
         if !FileManager.default.fileExists(atPath: fileUrl.path) {
 
             // Show progress view

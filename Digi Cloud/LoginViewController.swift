@@ -23,7 +23,7 @@ class LoginViewController: UIViewController {
         return spinner
     }()
 
-    fileprivate lazy var emailTextField: LoginField = {
+    fileprivate lazy var usernameTextField: LoginField = {
         let field = LoginField()
         field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "TextField Name").uppercased()
 
@@ -102,7 +102,7 @@ class LoginViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        emailTextField.becomeFirstResponder()
+        usernameTextField.becomeFirstResponder()
     }
 
     // MARK: - Helper Functions
@@ -138,35 +138,35 @@ class LoginViewController: UIViewController {
 
         view.addSubview(cancelButton)
         view.addSubview(titleTextView)
-        view.addSubview(emailTextField)
+        view.addSubview(usernameTextField)
         view.addSubview(passwordTextField)
         view.addSubview(loginButton)
         view.addSubview(spinner)
         view.addSubview(forgotPasswordButton)
 
         NSLayoutConstraint.activate([
-            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
-            cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-            titleTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-            titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleTextView.bottomAnchor.constraint(equalTo: emailTextField.topAnchor),
-            titleTextView.widthAnchor.constraint(equalTo: emailTextField.widthAnchor),
-            emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30),
-            emailTextField.widthAnchor.constraint(equalToConstant: 340),
-            emailTextField.heightAnchor.constraint(equalToConstant: 50),
-            passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20),
-            passwordTextField.widthAnchor.constraint(equalTo: emailTextField.widthAnchor),
-            passwordTextField.heightAnchor.constraint(equalToConstant: 50),
-            loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30),
-            loginButton.widthAnchor.constraint(equalToConstant: 150),
-            loginButton.heightAnchor.constraint(equalToConstant: 40),
-            forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            forgotPasswordButton.centerYAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 30),
-            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            spinner.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 30)
+                cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+                cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
+                titleTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+                titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor),
+                titleTextView.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
+                usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30),
+                usernameTextField.widthAnchor.constraint(equalToConstant: 340),
+                usernameTextField.heightAnchor.constraint(equalToConstant: 50),
+                passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                passwordTextField.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 20),
+                passwordTextField.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
+                passwordTextField.heightAnchor.constraint(equalToConstant: 50),
+                loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30),
+                loginButton.widthAnchor.constraint(equalToConstant: 150),
+                loginButton.heightAnchor.constraint(equalToConstant: 40),
+                forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                forgotPasswordButton.centerYAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 30),
+                spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                spinner.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 30)
         ])
     }
 
@@ -183,20 +183,20 @@ class LoginViewController: UIViewController {
     }
 
     @objc fileprivate func handleCancel() {
-        emailTextField.resignFirstResponder()
+        usernameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         self.onCancel?()
     }
 
     @objc fileprivate func handleLogin() {
 
-        emailTextField.resignFirstResponder()
+        usernameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
 
-        guard let email = emailTextField.text?.lowercased(),
-            let password = passwordTextField.text,
-            email.characters.count > 0,
-            password.characters.count > 0
+        guard let username = usernameTextField.text?.lowercased(),
+              let password = passwordTextField.text,
+              username.characters.count > 0,
+              password.characters.count > 0
         else {
             let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
                                           message: NSLocalizedString("Please fill in the fields.", comment: "Error Message"),
@@ -209,7 +209,7 @@ class LoginViewController: UIViewController {
 
         spinner.startAnimating()
 
-        DigiClient.shared.authenticate(email: email, password: password) { token, error in
+        DigiClient.shared.authenticate(username: username, password: password) { token, error in
 
             guard error == nil else {
 
@@ -238,7 +238,7 @@ class LoginViewController: UIViewController {
                 return
             }
 
-            let account = Account(username: email)
+            let account = Account(username: username)
 
             do {
                 // Save the token in the Keychain
