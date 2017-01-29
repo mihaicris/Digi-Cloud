@@ -13,10 +13,9 @@ class ContentViewController: UIViewController {
 
     // MARK: - Properties
 
-    let fileManager = FileManager.default
     let location: Location
     var fileUrl: URL!
-    var session: URLSession!
+    var session: URLSession?
 
     fileprivate lazy var webView: WKWebView = {
         let view = WKWebView()
@@ -63,20 +62,33 @@ class ContentViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
 
-        // Show progress view
-        progressView.isHidden = false
+        // get the file name from current path
+        let fileName: String = self.location.path.components(separatedBy: "/").last!
 
-        // Delete downloaded file if exists
-        deleteDocumentsFolder()
+        // create destination file url
+        self.fileUrl = FileManager.filesCacheDirectory.appendingPathComponent(fileName)
 
-        // Start downloading File
-        session = DigiClient.shared.startDownloadFile(at: location, delegate: self)
+        // TODO: - If the file has changed in the cloud, it should be redownloaded again.
+        // Check if the hash of the file is the same with the hash saved locally 
+        
+        if !FileManager.default.fileExists(atPath: fileUrl.path) {
+
+            // Show progress view
+            progressView.isHidden = false
+
+            // Start downloading File
+            session = DigiClient.shared.startDownloadFile(at: location, delegate: self)
+
+        } else {
+            loadFileContent()
+        }
+
     }
 
     override func viewWillDisappear(_ animated: Bool) {
 
         // Close session and delegate
-        session.invalidateAndCancel()
+        session?.invalidateAndCancel()
     }
 
     // MARK: - Helper Functions
@@ -89,7 +101,7 @@ class ContentViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    fileprivate func setupViews() {
+    private func setupViews() {
         view.addSubview(webView)
         view.addSubview(progressView)
         view.addConstraints(with: "H:|[v0]|", views: webView)
@@ -98,22 +110,13 @@ class ContentViewController: UIViewController {
         view.addConstraints(with: "V:|-64-[v0(2)]", views: progressView)
     }
 
-    fileprivate func deleteDocumentsFolder() {
+    fileprivate func loadFileContent() {
 
-        // Get the Documents Folder in the user space
-        let documentsUrl =  fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        // load file in the view
+        self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
 
-        // Delete all content of the Documents directory
-        do {
-            let directoryContents = try fileManager.contentsOfDirectory(at: documentsUrl,
-                                                                        includingPropertiesForKeys: nil,
-                                                                        options: [])
-            for url in directoryContents {
-                try fileManager.removeItem(at: url)
-            }
-        } catch {
-            print("Could not delete the content of Documents folder: \(error.localizedDescription)")
-        }
+        // enable right bar button for exporting
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
     }
 }
 
@@ -123,26 +126,20 @@ extension ContentViewController: URLSessionDownloadDelegate {
         // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
         session.invalidateAndCancel()
 
-        // get the Documents Folder in the user space
-        let documentsUrl =  fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-
         // get the file name from current path
         let fileName: String = self.location.path.components(separatedBy: "/").last!
 
         // create destination file url
-        self.fileUrl = documentsUrl.appendingPathComponent(fileName)
+        self.fileUrl = FileManager.filesCacheDirectory.appendingPathComponent(fileName)
 
         // get the downloaded file from temp folder
         do {
-            try fileManager.moveItem(at: location, to: self.fileUrl)
+            try FileManager.default.moveItem(at: location, to: self.fileUrl)
 
             DispatchQueue.main.async {
-                // load file in the view
-                self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
-
-                // enable right bar button for exporting
-                self.navigationItem.rightBarButtonItem?.isEnabled = true
+                self.loadFileContent()
             }
+
         } catch let error {
             print("Could not move file to disk: \(error.localizedDescription)")
         }
