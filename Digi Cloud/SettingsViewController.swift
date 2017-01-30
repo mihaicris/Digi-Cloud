@@ -145,6 +145,7 @@ class SettingsViewController: UITableViewController {
 
     @objc private func toggleAllowingCellularAccessSetting() {
         AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
+        DigiClient.shared.renewSession()
     }
 
     @objc private func handleLogout(_ cell: UITableViewCell) {

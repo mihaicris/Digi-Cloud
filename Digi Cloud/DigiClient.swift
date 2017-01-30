@@ -36,14 +36,28 @@ final class DigiClient {
     // MARK: - Properties
 
     static let shared: DigiClient = DigiClient()
+
+    var session: URLSession?
+
     var task: URLSessionDataTask?
+
     var token: String!
 
     // MARK: - Initializers and Deinitializers
 
-    private init() {}
+    private init() {
+        renewSession()
+    }
 
     // MARK: - Helper Functions
+
+    func renewSession() {
+        session?.invalidateAndCancel()
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 20
+        config.allowsCellularAccess = AppSettings.allowsCellularAccess
+        session = URLSession(configuration: config)
+    }
 
     /// Send a HTTP Network Request
     ///
@@ -62,7 +76,7 @@ final class DigiClient {
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
         #if DEBUG
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
         #endif
 
         /* 1. Build the URL, Configure the request */
@@ -80,12 +94,13 @@ final class DigiClient {
         }
 
         /* 2. Make the request */
-        task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            // stop network indication
+        task = session?.dataTask(with: request) { (data, response, error) in
+
             DispatchQueue.main.async {
 
                 #if DEBUG
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    // stop network indication
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 #endif
 
                 /* GUARD: Was there an error? */
@@ -130,7 +145,7 @@ final class DigiClient {
         task?.resume()
     }
 
-    func getURL(method: String, parameters: [String: Any]?) -> URL {
+    private func getURL(method: String, parameters: [String: Any]?) -> URL {
         var components = URLComponents()
         components.scheme = API.Scheme
         components.host = API.Host
@@ -149,7 +164,7 @@ final class DigiClient {
         return components.url!
     }
 
-    func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
+    private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = requestType
         request.allHTTPHeaderFields = headers
@@ -214,8 +229,8 @@ final class DigiClient {
             guard let json = jsonData as? [String: String],
                 let firstName = json["firstName"],
                 let lastName = json["lastName"] else {
-                completion(nil, JSONError.parce("Could not parce json response for user info request."))
-                return
+                    completion(nil, JSONError.parce("Could not parce json response for user info request."))
+                    return
             }
 
             completion((firstName, lastName), nil)
@@ -260,6 +275,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func getContent(of location: Location,
                     completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+        
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.Headers
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
@@ -432,7 +448,7 @@ final class DigiClient {
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         var parameters: [String: String] = [
-                ParametersKeys.QueryString: query
+            ParametersKeys.QueryString: query
         ]
         if let location = location {
             parameters[ParametersKeys.MountID] = location.mount.id
@@ -440,45 +456,45 @@ final class DigiClient {
         }
 
         networkTask(requestType: "GET",
-                         method: method,
-                        headers: headers,
-                           json: nil,
-                     parameters: parameters) { json, _, error in
-            if let error = error {
-                completion(nil, error)
-                return
-            }
-            guard let json = json as? [String: Any],
-                let hitsJSON = json["hits"] as? [[String: Any]],
-                let mountsJSON = json["mounts"] as? [String: Any]
-            else {
-                completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
-                return
-            }
+                    method: method,
+                    headers: headers,
+                    json: nil,
+                    parameters: parameters) { json, _, error in
+                        if let error = error {
+                            completion(nil, error)
+                            return
+                        }
+                        guard let json = json as? [String: Any],
+                            let hitsJSON = json["hits"] as? [[String: Any]],
+                            let mountsJSON = json["mounts"] as? [String: Any]
+                            else {
+                                completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
+                                return
+                        }
 
-            var results: [Node] = []
+                        var results: [Node] = []
 
-            for hitJSON in hitsJSON {
-                guard let hitMountId = hitJSON["mountId"] as? String,
-                    let hitMount = mountsJSON[hitMountId] as? [String: Any],
-                    let hitMountStruct = Mount(JSON: hitMount),
-                    let hitPath = hitJSON["path"] as? String,
-                    let hitName = hitJSON["name"] as? String,
-                    let hitType = hitJSON["type"] as? String,
-                    let hitModified = hitJSON["modified"] as? TimeInterval,
-                    let hitSize = hitJSON["size"] as? Int64,
-                    let hitScore = hitJSON["score"] as? Double,
-                    let hitContentType = hitJSON["contentType"] as? String else {
-                        completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
-                        return
-                }
-                let hitLocation = Location(mount: hitMountStruct, path: hitPath)
-                let hitNode = Node(name: hitName, type: hitType, modified: hitModified, size: hitSize, contentType: hitContentType,
-                                   hash: "", score: hitScore, location: hitLocation)
-                results.append(hitNode)
-            }
+                        for hitJSON in hitsJSON {
+                            guard let hitMountId = hitJSON["mountId"] as? String,
+                                let hitMount = mountsJSON[hitMountId] as? [String: Any],
+                                let hitMountStruct = Mount(JSON: hitMount),
+                                let hitPath = hitJSON["path"] as? String,
+                                let hitName = hitJSON["name"] as? String,
+                                let hitType = hitJSON["type"] as? String,
+                                let hitModified = hitJSON["modified"] as? TimeInterval,
+                                let hitSize = hitJSON["size"] as? Int64,
+                                let hitScore = hitJSON["score"] as? Double,
+                                let hitContentType = hitJSON["contentType"] as? String else {
+                                    completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
+                                    return
+                            }
+                            let hitLocation = Location(mount: hitMountStruct, path: hitPath)
+                            let hitNode = Node(name: hitName, type: hitType, modified: hitModified, size: hitSize, contentType: hitContentType,
+                                               hash: "", score: hitScore, location: hitLocation)
+                            results.append(hitNode)
+                        }
 
-            completion(results, nil)
+                        completion(results, nil)
         }
     }
 
@@ -607,4 +623,5 @@ final class DigiClient {
             completion(statusCode, error)
         }
     }
+
 }
