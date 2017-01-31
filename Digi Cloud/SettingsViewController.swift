@@ -187,9 +187,16 @@ class SettingsViewController: UITableViewController {
     }
 
     @objc private func handleAppStoreReview() {
-        let urlstring = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=1173649518"
-        guard let url = URL(string: urlstring) else { return }
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+
+        if #available(iOS 10.0, *) {
+            let urlstring = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=1173649518"
+            guard let url = URL(string: urlstring) else { return }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            let urlstring = "https://itunes.apple.com/app/id1173649518"
+            guard let url = URL(string: urlstring) else { return }
+            UIApplication.shared.openURL(url)
+        }
     }
 
     private func handleClearCache() {
