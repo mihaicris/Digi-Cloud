@@ -139,10 +139,10 @@ class AccountSelectionViewController: UIViewController,
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         if let layout = accountsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.invalidateLayout()
         }
-        super.viewWillTransition(to: size, with: coordinator)
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
