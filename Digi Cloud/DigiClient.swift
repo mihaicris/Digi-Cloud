@@ -254,8 +254,8 @@ final class DigiClient {
                 return
             }
 
-            guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Wrong status \(statusCode) while receiving user info request."))
+            guard statusCode != nil && statusCode == 200 else {
+                completion(nil, NetworkingError.wrongStatus("Wrong status \(statusCode!) while receiving user info request."))
                 return
             }
 
