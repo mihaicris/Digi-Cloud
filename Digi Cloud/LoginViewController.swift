@@ -118,6 +118,7 @@ class LoginViewController: UIViewController {
             tv.textAlignment = .center
             tv.isEditable = false
             tv.isSelectable = false
+            tv.isScrollEnabled = false
             tv.translatesAutoresizingMaskIntoConstraints = false
 
             let aText = NSMutableAttributedString(string: NSLocalizedString("Hello!", comment: ""),
