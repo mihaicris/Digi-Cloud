@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import Digi_Cloud
 
 class DigiCloudTests: XCTestCase {
 
@@ -18,8 +19,8 @@ class DigiCloudTests: XCTestCase {
         super.tearDown()
     }
 
-    func testExample() {
-        XCTAssert(true)
+    func test() {
+        XCTAssert(true, "Dummy test.")
     }
 
 }
