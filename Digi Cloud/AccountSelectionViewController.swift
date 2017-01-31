@@ -156,9 +156,9 @@ class AccountSelectionViewController: UIViewController,
         let cache = Cache()
         let account = accounts[indexPath.item]
         if let name = UserDefaults.standard.string(forKey: account.username) {
-            cell.accountLabel.text = name
+            cell.accountNameLabel.text = name
         } else {
-            cell.accountLabel.text = account.username
+            cell.accountNameLabel.text = account.username
         }
 
         if let data = cache.load(type: .profile, key: account.username) {

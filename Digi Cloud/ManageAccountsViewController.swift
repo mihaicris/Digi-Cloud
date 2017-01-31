@@ -83,7 +83,11 @@ class ManageAccountsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.updateButtonsToMatchTableState()
+        if tableView.isEditing {
+            self.updateButtonsToMatchTableState()
+        } else {
+            tableView.deselectRow(at: indexPath, animated: false)
+        }
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {

@@ -21,11 +21,11 @@ class AccountCollectionCell: UICollectionViewCell {
         return iv
     }()
 
-    let accountLabel: UILabel = {
+    let accountNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont(name: "HelveticaNeue-Bold", size: 14)
-        l.textColor = UIColor(white: 0.9, alpha: 1.0)
+        l.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        l.textColor = UIColor.white
         l.textAlignment = .center
         l.numberOfLines = 2
         return l
@@ -47,16 +47,16 @@ class AccountCollectionCell: UICollectionViewCell {
     fileprivate func setupViews() {
 
         addSubview(profileImage)
-        addSubview(accountLabel)
+        addSubview(accountNameLabel)
 
         NSLayoutConstraint.activate([
             profileImage.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.4),
             profileImage.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             profileImage.topAnchor.constraint(equalTo: self.topAnchor),
             profileImage.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.4),
-            accountLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.0),
-            accountLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            accountLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 5)
+            accountNameLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.0),
+            accountNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            accountNameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 5)
         ])
     }
 }
