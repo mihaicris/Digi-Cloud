@@ -71,8 +71,7 @@ final class DigiClient {
     ///   - data: The data of the network response
     ///   - response: The status code of the network response
     ///   - error: The error occurred in the network request, nil for no error.
-    func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: String]?,
-                     parameters: [String: Any]?,
+    func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: String]?, parameters: [String: Any]?,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
         #if DEBUG
@@ -145,6 +144,12 @@ final class DigiClient {
         task?.resume()
     }
 
+    /// Creates a URL with specific specifications
+    ///
+    /// - Parameters:
+    ///   - method: The method of the URL
+    ///   - parameters: Query parameters
+    /// - Returns: The new URL
     private func getURL(method: String, parameters: [String: Any]?) -> URL {
         var components = URLComponents()
         components.scheme = API.Scheme
@@ -164,6 +169,13 @@ final class DigiClient {
         return components.url!
     }
 
+    /// Creates a URL request with specific specifications
+    ///
+    /// - Parameters:
+    ///   - url: The base URL
+    ///   - requestType: Type of http request ("GET", "POST", "PUT", "DELETE" etc.)
+    ///   - headers: Additional http headers to include in the URL request
+    /// - Returns: The new URL Request
     private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = requestType
@@ -171,8 +183,15 @@ final class DigiClient {
         return request
     }
 
-    func authenticate(username: String, password: String,
-                      completion: @escaping(_ token: String?, _ error: Error?) -> Void) {
+    /// Authenticate an user with given credentials
+    ///
+    /// - Parameters:
+    ///   - username: Authentication username
+    ///   - password: Authentication password
+    ///   - completion: The block called after the server has responded
+    ///   - token: Authentication token provided by the API server
+    ///   - error: The error occurred in the network request, nil for no error.
+    func authenticate(username: String, password: String, completion: @escaping(_ token: String?, _ error: Error?) -> Void) {
         let method = Methods.Token
         let headers = DefaultHeaders.Headers
         let jsonBody = ["password": password, "email": username]
@@ -194,6 +213,13 @@ final class DigiClient {
         }
     }
 
+    /// Revokes an authentiation token
+    ///
+    /// - Parameters:
+    ///   - token: Token to revoke
+    ///   - completion: The block called after the server has responded
+    ///   - statusCode: The statusCode of the http request
+    ///   - error: The error occurred in the network request, nil for no error.
     func revokeAuthentication(for token: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         let method = Methods.Token
         let headers: [String: String] = ["Authorization": "Token \(token)"]
@@ -207,6 +233,13 @@ final class DigiClient {
         }
     }
 
+    /// Gets the user information
+    ///
+    /// - Parameters:
+    ///   - token: autentication token for requested user
+    ///   - completion: The block called after the server has responded
+    ///   - response: Returned tuple which contains the firstname and lastname of the user
+    ///   - error: The error occurred in the network request, nil for no error.
     func getUserInfo(for token: String, completion: @escaping(_ response: (firstName: String, lastName: String)?, _ error: Error?) -> Void) {
 
         let method = Methods.User
@@ -237,6 +270,12 @@ final class DigiClient {
         }
     }
 
+    /// Gets the locations in the Cloud storage
+    ///
+    /// - Parameters:
+    ///   - completion: The block called after the server has responded
+    ///   - result: Returned content as an array of locations
+    ///   - error: The error occurred in the network request, nil for no error.
     func getDIGIStorageLocations(completion: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
         var headers = DefaultHeaders.Headers
@@ -273,9 +312,8 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - result: Returned content as an array of nodes
     ///   - error: The error occurred in the network request, nil for no error.
-    func getContent(of location: Location,
-                    completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
-        
+    func getContent(of location: Location, completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.Headers
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
@@ -357,9 +395,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func renameNode(at location: Location,
-                    with name: String,
-                    completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func renameNode(at location: Location, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
         let method = Methods.Rename.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -385,8 +421,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func deleteNode(at location: Location,
-                    completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func deleteNode(at location: Location, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
         let method = Methods.Remove.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -410,9 +445,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func createFolderNode(at location: Location,
-                          with name: String,
-                          completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func createFolderNode(at location: Location, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -439,9 +472,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - json: An array containing the search hits (Nodes).
     ///   - error: The error occurred in the network request, nil for no error.
-    func searchNodes(query: String,
-                     at location: Location?,
-                     completion: @escaping (_ json: [Node]?, _ error: Error?) -> Void) {
+    func searchNodes(query: String, at location: Location?, completion: @escaping (_ json: [Node]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
         var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
@@ -504,8 +535,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - json: The dictionary [String: Any] containing the search hits.
     ///   - error: The error occurred in the network request, nil for no error.
-    func getTree(at location: Location,
-                 completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
+    func getTree(at location: Location, completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
@@ -533,8 +563,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - info: Tuple containing size, number of files and number of folders
     ///   - error: The error occurred in the network request, nil for no error.
-    func getFolderInfo(at location: Location,
-                       completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
+    func getFolderInfo(at location: Location, completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -596,10 +625,7 @@ final class DigiClient {
     ///   - completion:        Function to handle the status code and error response
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
-    func copyOrMoveNode(action: ActionType,
-                        from: Location,
-                        to: Location,
-                        completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func copyOrMoveNode(action: ActionType, from: Location, to: Location, completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
 
         var method: String
 
