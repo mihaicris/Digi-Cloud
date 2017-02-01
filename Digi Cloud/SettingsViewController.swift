@@ -24,6 +24,13 @@ class SettingsViewController: UITableViewController {
         return b
     }()
 
+    private let byteFormatter: ByteCountFormatter = {
+        let f = ByteCountFormatter()
+        f.countStyle = .binary
+        f.allowsNonnumericFormatting = false
+        return f
+    }()
+
     private var confirmButtonHorizontalConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
@@ -50,6 +57,23 @@ class SettingsViewController: UITableViewController {
         case 1:  return NSLocalizedString("DATA", comment: "Section title")
         case 2:  return NSLocalizedString("USER", comment: "Section title")
         default: return nil
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        if section == 1 {
+            let str = NSLocalizedString("Currently using:", comment: "")
+
+            var sizeString = NSLocalizedString("Error", comment: "")
+
+            if let size = FileManager.sizeOfFilesCacheDirectory() {
+                sizeString = byteFormatter.string(fromByteCount: Int64(size))
+            }
+
+            return "\(str) \(sizeString)"
+
+        } else {
+            return nil
         }
     }
 
@@ -97,8 +121,6 @@ class SettingsViewController: UITableViewController {
                 // Clean cache
                 cell.textLabel?.text = NSLocalizedString("Clear Cache", comment: "Button Title")
                 cell.textLabel?.textColor = .defaultColor
-                let str = NSLocalizedString("Currently:", comment: "")
-                cell.detailTextLabel?.text = "\(str) 0 KB"
             default:
                 break
             }
@@ -201,5 +223,6 @@ class SettingsViewController: UITableViewController {
 
     private func handleClearCache() {
         FileManager.emptyFilesCache()
+        tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
     }
 }
