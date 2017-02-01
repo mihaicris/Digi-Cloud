@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RenameViewController: UITableViewController {
+class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: - Properties
 
@@ -18,8 +18,27 @@ class RenameViewController: UITableViewController {
     fileprivate var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     fileprivate var textField: UITextField!
-    fileprivate var messageLabel: UILabel!
+
+    fileprivate var messageLabel: UILabel = {
+            let l = UILabel()
+            l.translatesAutoresizingMaskIntoConstraints = false
+            l.textAlignment = .center
+            l.font = UIFont.systemFont(ofSize: 14)
+            l.textColor = .darkGray
+            l.alpha = 0.0
+            return l
+    }()
+
     fileprivate var needRefresh: Bool
+
+    fileprivate lazy var tableView: UITableView = {
+        let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        let t = UITableView(frame: frame, style: .grouped)
+        t.translatesAutoresizingMaskIntoConstraints = false
+        t.delegate = self
+        t.dataSource = self
+        return t
+    }()
 
     // MARK: - Initializers and Deinitializers
 
@@ -27,7 +46,7 @@ class RenameViewController: UITableViewController {
         self.location = location
         self.node = node
         self.needRefresh = false
-        super.init(style: .grouped)
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -55,11 +74,13 @@ class RenameViewController: UITableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    // MARK: - TableView Delegate
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.selectionStyle = .none
 
@@ -93,18 +114,87 @@ class RenameViewController: UITableViewController {
 
     fileprivate func setupViews() {
 
-        messageLabel = {
-            let label = UILabel()
-            label.textAlignment = .center
-            label.font = UIFont.systemFont(ofSize: 14)
-            label.textColor = .darkGray
-            label.alpha = 0.0
-            return label
+        let actionsListLabel: UILabel = {
+            let l = UILabel()
+            l.translatesAutoresizingMaskIntoConstraints = false
+            l.textColor = .darkGray
+            l.text = NSLocalizedString("Rename utilities:", comment: "")
+            l.font = UIFont.systemFont(ofSize: 16)
+            return l
         }()
 
+        let actionsContainerView: UIView = {
+            let v = UIView()
+            v.layer.cornerRadius = 5
+            v.translatesAutoresizingMaskIntoConstraints = false
+            v.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 1.0, alpha: 1.0)
+            return v
+        }()
+
+        let convert_type_0_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace underscore with space", comment: ""),
+                                                          delegate: self,
+                                                          selector: #selector(handleConvert(_:)),
+                                                          tag: 0)
+
+        let convert_type_1_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace space with underscore", comment: ""),
+                                                          delegate: self,
+                                                          selector: #selector(handleConvert(_:)),
+                                                          tag: 1)
+
+        let convert_type_2_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to Sentence Case", comment: ""),
+                                                          delegate: self,
+                                                          selector: #selector(handleConvert(_:)),
+                                                          tag: 2)
+
+        let convert_type_3_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to lower case", comment: ""),
+                                                          delegate: self,
+                                                          selector: #selector(handleConvert(_:)),
+                                                          tag: 3)
+
+        let convert_type_4_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to UPPER CASE", comment: ""),
+                                                          delegate: self,
+                                                          selector: #selector(handleConvert(_:)),
+                                                          tag: 4)
+
+        let actionButtonsStackview: UIStackView = {
+            let s = UIStackView(arrangedSubviews: [convert_type_0_Button, convert_type_1_Button, convert_type_2_Button,
+                                                   convert_type_3_Button, convert_type_4_Button])
+            s.translatesAutoresizingMaskIntoConstraints = false
+            s.alignment = .fill
+            s.axis = .vertical
+            s.spacing = 10
+            return s
+        }()
+
+        view.addSubview(tableView)
+
         tableView.addSubview(messageLabel)
-        tableView.addConstraints(with: "V:|-100-[v0]|", views: messageLabel)
-        tableView.centerXAnchor.constraint(equalTo: messageLabel.centerXAnchor).isActive = true
+
+        view.addSubview(actionsContainerView)
+        actionsContainerView.addSubview(actionsListLabel)
+        actionsContainerView.addSubview(actionButtonsStackview)
+
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+
+            messageLabel.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 100),
+            messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+
+            actionsContainerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+            actionsContainerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
+            actionsContainerView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: 40),
+            actionsContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+
+            actionsListLabel.topAnchor.constraint(equalTo: actionsContainerView.topAnchor, constant: 10),
+            actionsListLabel.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20),
+
+            actionButtonsStackview.topAnchor.constraint(equalTo: actionsContainerView.topAnchor, constant: 40),
+            actionButtonsStackview.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20),
+        ])
+
         tableView.isScrollEnabled = false
 
         leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
@@ -237,6 +327,45 @@ class RenameViewController: UITableViewController {
                 setRenameButtonActive(true)
             }
         }
+    }
+
+    @objc private func handleConvert(_ sender: UIButton) {
+        guard let string = textField.text, string.characters.count > 0 else { return }
+
+        switch sender.tag {
+        case 0:
+            // Replace underscore with space
+            textField.text = string.replacingOccurrences(of: "_", with: " ")
+        case 1:
+            // Replace space with underscore
+            textField.text = string.replacingOccurrences(of: " ", with: "_")
+        case 2:
+            // Change to Sentence Case
+            let components = string.components(separatedBy: ".")
+            if components.count > 1 {
+                let filename = components.dropLast().joined(separator: ".")
+                let fileExtension = components.last!
+                textField.text = filename.capitalized.appending(".").appending(fileExtension)
+            } else {
+                textField.text = string.capitalized
+            }
+        case 3:
+            // Change to lower case
+            textField.text = textField.text?.lowercased()
+        case 4:
+            // Change to UPPER CASE
+            let components = string.components(separatedBy: ".")
+            if components.count > 1 {
+                let filename = components.dropLast().joined(separator: ".")
+                let fileExtension = components.last!
+                textField.text = filename.uppercased().appending(".").appending(fileExtension)
+            } else {
+                textField.text = string.uppercased()
+            }
+        default:
+            break
+        }
+        handleTextFieldChange()
     }
 }
 

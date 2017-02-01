@@ -17,6 +17,7 @@
 		8320C2571E1E3B7800413B36 /* UserDefaults+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */; };
 		8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */; };
 		8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
+		8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */; };
 		832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
 		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
 		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
@@ -83,6 +84,7 @@
 		8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+DigiCloud.swift"; sourceTree = "<group>"; };
 		8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+DigiCloud.swift"; sourceTree = "<group>"; };
 		8321FC5A1D9568FE002D6413 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
+		8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameUtilitiesButton.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				83DB658C1DDF12C900A53440 /* LocationCell.swift */,
 				8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */,
 				83D281001D9D747A00D74661 /* LoginField.swift */,
+				8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */,
 				83164FEC1E03F473001048D7 /* SearchCell.swift */,
 				834181761E07FB1100F32A2F /* UILabelWithPadding.swift */,
 			);
@@ -531,6 +534,7 @@
 				832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */,
 				83A9BE1B1DFFDDDC003FD974 /* SearchResultController.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
+				8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */,
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */,
 				83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */,
