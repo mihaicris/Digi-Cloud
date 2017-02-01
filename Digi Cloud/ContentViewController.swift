@@ -66,7 +66,7 @@ class ContentViewController: UIViewController {
         let fileName: String = self.location.path.components(separatedBy: "/").last!
 
         // create destination file url
-        self.fileUrl = FileManager.filesCacheDirectory.appendingPathComponent(fileName)
+        self.fileUrl = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
 
         // TODO: - If the file has changed in the cloud, it should be redownloaded again.
         // Check if the hash of the file is the same with the hash saved locally 
@@ -130,7 +130,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
         let fileName: String = self.location.path.components(separatedBy: "/").last!
 
         // create destination file url
-        self.fileUrl = FileManager.filesCacheDirectory.appendingPathComponent(fileName)
+        self.fileUrl = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
 
         // get the downloaded file from temp folder
         do {

@@ -15,28 +15,28 @@ extension FileManager {
 
     }
 
-    static var profileImagesCacheDirectory: URL {
+    static var profileImagesCacheDirectoryURL: URL {
         return documentsDir().appendingPathComponent(CacheFolders.Profiles)
     }
 
-    static var filesCacheDirectory: URL {
+    static var filesCacheDirectoryURL: URL {
         return documentsDir().appendingPathComponent(CacheFolders.Files)
     }
 
     static func createProfileImagesCacheDirectory() {
-        createDirectory(at: profileImagesCacheDirectory)
+        createDirectory(at: profileImagesCacheDirectoryURL)
     }
 
     static func createFilesCacheDirectory() {
-        createDirectory(at: filesCacheDirectory)
+        createDirectory(at: filesCacheDirectoryURL)
     }
 
     static func deleteProfileImagesCacheDirectory() {
-        deleteDirectory(at: profileImagesCacheDirectory)
+        deleteDirectory(at: profileImagesCacheDirectoryURL)
     }
 
     static func deleteFilesCacheDirectory() {
-        deleteDirectory(at: filesCacheDirectory)
+        deleteDirectory(at: filesCacheDirectoryURL)
     }
 
     static func emptyProfileImagesCache() {
