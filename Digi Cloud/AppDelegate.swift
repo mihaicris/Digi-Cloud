@@ -31,6 +31,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(FileManager.documentsDir().path, "\n")
         #endif
 
+        createWorkingDirectories()
+
         return true
+    }
+
+    private func createWorkingDirectories() {
+        FileManager.createProfileImagesCacheDirectory()
+        FileManager.createFilesCacheDirectory()
     }
 }

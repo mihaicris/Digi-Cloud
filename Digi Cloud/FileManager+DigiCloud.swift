@@ -36,7 +36,17 @@ extension FileManager {
     }
 
     static func deleteFilesCacheDirectory() {
-        deleteDirectory(at: profileImagesCacheDirectory)
+        deleteDirectory(at: filesCacheDirectory)
+    }
+
+    static func emptyProfileImagesCache() {
+        deleteFilesCacheDirectory()
+        createFilesCacheDirectory()
+    }
+
+    static func emptyFilesCache() {
+        deleteFilesCacheDirectory()
+        createFilesCacheDirectory()
     }
 
     static func createDirectory(at url: URL) {

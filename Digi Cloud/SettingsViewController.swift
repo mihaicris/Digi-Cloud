@@ -200,6 +200,6 @@ class SettingsViewController: UITableViewController {
     }
 
     private func handleClearCache() {
-        // TODO: Implement this
+        FileManager.emptyFilesCache()
     }
 }
