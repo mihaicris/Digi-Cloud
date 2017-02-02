@@ -1,5 +1,5 @@
 //
-//  ActionsViewController.swift
+//  NodeActionsViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 20/10/16.
@@ -19,7 +19,7 @@ enum ActionType: Int {
     case share
 }
 
-class ActionViewController: UITableViewController {
+class NodeActionsViewController: UITableViewController {
 
     // MARK: - Properties
 
