@@ -68,7 +68,7 @@ final class ListingViewController: UITableViewController {
         return sv
     }()
 
-    fileprivate var searchButton, addFolderButton, sortButton: UIBarButtonItem!
+    fileprivate var searchButton, moreActionsButton, sortButton: UIBarButtonItem!
 
     #if DEBUG
     let tag: Int
@@ -149,7 +149,6 @@ final class ListingViewController: UITableViewController {
                     messageStackView.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
                     messageStackView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
                 ])
-
             }
             return cell
         }
@@ -282,7 +281,7 @@ final class ListingViewController: UITableViewController {
                 UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"),
                                 style: .plain,
                                 target: self,
-                                action: #selector(handleCreateFolder)),
+                                action: #selector(handleCreateDirectory)),
                 UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
                 copyMoveButton
             ]
@@ -444,9 +443,9 @@ final class ListingViewController: UITableViewController {
         case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
         }
         sortButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
-        addFolderButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(handleCreateFolder))
+        moreActionsButton = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
         searchButton    = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
-        navigationItem.setRightBarButtonItems([sortButton, addFolderButton, searchButton], animated: false)
+        navigationItem.setRightBarButtonItems([moreActionsButton, sortButton, searchButton], animated: false)
     }
 
     fileprivate func sortByName() {
@@ -546,13 +545,37 @@ final class ListingViewController: UITableViewController {
             self.updateRightBarButtonItems()
         }
         controller.modalPresentationStyle = .popover
-        guard let buttonView = navigationItem.rightBarButtonItems?[0].value(forKey: "view") as? UIView else { return }
+        guard let buttonView = navigationItem.rightBarButtonItems?[1].value(forKey: "view") as? UIView else { return }
         controller.popoverPresentationController?.sourceView = buttonView
         controller.popoverPresentationController?.sourceRect = buttonView.bounds
         present(controller, animated: true, completion: nil)
     }
 
-    @objc fileprivate func handleCreateFolder() {
+    @objc private func handleShowMoreActions() {
+        let controller = MoreActionsViewController(style: .plain)
+
+        controller.modalPresentationStyle = .popover
+        guard let buttonView = navigationItem.rightBarButtonItems?[0].value(forKey: "view") as? UIView else { return }
+        controller.popoverPresentationController?.sourceView = buttonView
+        controller.popoverPresentationController?.sourceRect = buttonView.bounds
+
+        controller.onFinish = { [unowned self] selection in
+            self.dismiss(animated: true) {
+                switch selection {
+                case .createDirectory:
+                    self.handleCreateDirectory()
+                    break
+                case .selectionMode:
+                    break
+                }
+            }
+        }
+
+        present(controller, animated: true, completion: nil)
+    }
+
+    @objc fileprivate func handleCreateDirectory() {
+
         let controller = CreateFolderViewController(location: location)
         controller.onFinish = { [unowned self](folderName) in
             // dismiss AddFolderViewController
@@ -881,7 +904,7 @@ extension ListingViewController: BaseListCellDelegate {
         self.currentIndex = indexPath
         self.animateActionButton(active: true)
 
-        let controller = ActionViewController(node: self.content[indexPath.row])
+        let controller = NodeActionsViewController(node: self.content[indexPath.row])
         controller.delegate = self
 
         var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
