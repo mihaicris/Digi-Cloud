@@ -276,7 +276,6 @@ final class ListingViewController: UITableViewController {
                                                  style: .plain,
                                                  target: self,
                                                  action: #selector(handleCopyOrMove))
-            // TODO: Activate when source and destination paths are not the same
             copyMoveButton.isEnabled = true
 
             let toolBarItems = [
@@ -607,6 +606,7 @@ final class ListingViewController: UITableViewController {
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true, completion: nil)
+
     }
 
     @objc fileprivate func handleDone() {
@@ -658,13 +658,11 @@ final class ListingViewController: UITableViewController {
         let index = getIndexBeforeExtension(fileName: sourceNode.name)
 
         if self.action == .copy {
-            // TODO: Check if the content has already this name
-
             var destinationName = sourceNode.name
-
             var copyCount: Int = 0
             var wasRenamed = false
             var wasFound: Bool
+
             repeat {
                 // reset before check of all nodes
                 wasFound = false
