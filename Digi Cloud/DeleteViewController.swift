@@ -103,7 +103,7 @@ class DeleteViewController: UITableViewController {
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = color
         cell.textLabel?.text = title
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 18)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
         return cell
     }
 }

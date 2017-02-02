@@ -166,7 +166,7 @@ class FolderInfoViewController: UITableViewController {
             deleteButton.layer.borderWidth = (1 / UIScreen.main.scale) * 1.2
             deleteButton.setTitle(NSLocalizedString("Delete Folder", comment: "Button Title, keep the leading/trailing spaces!"), for: .normal)
             deleteButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 15, bottom: 7, right: 15)
-            deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
             deleteButton.setTitleColor(.red, for: .normal)
             deleteButton.addTarget(self, action: #selector(handleDelete), for: .touchUpInside)
 
