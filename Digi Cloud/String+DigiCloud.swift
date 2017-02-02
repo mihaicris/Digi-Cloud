@@ -22,4 +22,25 @@ extension String {
         }
         return hexString
     }
+
+    func getIndexBeforeExtension() -> String.Index? {
+
+        // file has an extension?
+        let components = self.components(separatedBy: ".")
+
+        guard components.count > 1 else {
+            return nil
+        }
+
+        // yes, it has
+        let fileExtension = components.last!
+
+        // setting the cursor in the textField before the extension including the "."
+        if let range = self.range(of: fileExtension) {
+            return self.index(before: range.lowerBound)
+        } else {
+            return nil
+        }
+
+    }
 }

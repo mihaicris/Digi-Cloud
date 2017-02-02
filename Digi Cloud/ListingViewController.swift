@@ -497,27 +497,6 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func getIndexBeforeExtension(fileName: String) -> String.Index? {
-
-        // file has an extension?
-        let components = fileName.components(separatedBy: ".")
-
-        guard components.count > 1 else {
-            return nil
-        }
-
-        // yes, it has
-        let fileExtension = components.last!
-
-        // setting the cursor in the textField before the extension including the "."
-        if let range = fileName.range(of: fileExtension) {
-            return fileName.index(before: range.lowerBound)
-        } else {
-            return nil
-        }
-
-    }
-
     fileprivate func resetSearchViewControllerIndex() {
         if let nav = navigationController as? MainNavigationController {
             nav.searchResultsControllerIndex = nil
@@ -655,7 +634,7 @@ final class ListingViewController: UITableViewController {
 
         var destinationLocation = Location(mount: self.location.mount, path: self.location.path + sourceNode.name)
 
-        let index = getIndexBeforeExtension(fileName: sourceNode.name)
+        let index = sourceNode.name.getIndexBeforeExtension()
 
         if self.action == .copy {
             var destinationName = sourceNode.name
