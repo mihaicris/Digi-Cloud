@@ -109,6 +109,7 @@ final class ListingViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         if self.action == .noAction {
             updateRightBarButtonItems()
+            tableView.tableHeaderView = nil
         }
         if needRefresh {
             content.removeAll()
@@ -116,7 +117,6 @@ final class ListingViewController: UITableViewController {
             emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
             tableView.reloadData()
         }
-        tableView.tableHeaderView = nil
         super.viewWillAppear(animated)
     }
 
