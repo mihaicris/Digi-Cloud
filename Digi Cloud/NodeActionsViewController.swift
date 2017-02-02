@@ -9,7 +9,7 @@
 import UIKit
 
 enum ActionType: Int {
-    case noAction = 0
+    case noAction
     case makeOffline
     case rename
     case copy
