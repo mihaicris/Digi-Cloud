@@ -24,8 +24,8 @@ final class ListingViewController: UITableViewController {
     fileprivate var filteredContent: [Node] = []
     fileprivate var currentIndex: IndexPath!
     fileprivate var searchController: UISearchController!
-    fileprivate var fileCellID: String = ""
-    fileprivate var folderCellID: String = ""
+    fileprivate var fileCellID = String()
+    fileprivate var folderCellID = String()
 
     fileprivate let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -68,26 +68,44 @@ final class ListingViewController: UITableViewController {
         return sv
     }()
 
-    fileprivate var searchButton, moreActionsButton, sortButton: UIBarButtonItem!
-
     @objc private func dummy() {}
 
-    lazy var copyInEditModeButton: UIBarButtonItem = {
+    fileprivate var sortBarButton: UIBarButtonItem!
+
+    private lazy var moreActionsBarButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
+        return b
+    }()
+
+    private lazy var searchBarButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
+        return b
+    }()
+
+    private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+
+    private lazy var createFolderBarButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self,
+                                action: #selector(handleCreateDirectory))
+        return b
+    }()
+
+    private lazy var copyInEditModeButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
         return b
     }()
 
-    lazy var moveInEditModeButton: UIBarButtonItem = {
+    private lazy var moveInEditModeButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
         return b
     }()
 
-    lazy var deleteInEditModeButton: UIBarButtonItem = {
+    private lazy var deleteInEditModeButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Delete", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
         return b
     }()
 
-    lazy var cancelInEditModeButton: UIBarButtonItem = {
+    private lazy var cancelInEditModeButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(cancelEditMode))
         return b
     }()
@@ -290,33 +308,27 @@ final class ListingViewController: UITableViewController {
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
 
             let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
-                                               style: .plain,
-                                               target: self,
-                                               action: #selector(handleDone))
-            navigationItem.setRightBarButton(cancelButton, animated: false)
+                                               style: .plain, target: self, action: #selector(handleDone))
+
+            navigationItem.rightBarButtonItem = cancelButton
+
             navigationController?.isToolbarHidden = false
 
             let buttonTitle = self.action == .copy ?
                 NSLocalizedString("Save copy", comment: "Button Title") :
                 NSLocalizedString("Move", comment: "Button Title")
 
-            let copyMoveButton = UIBarButtonItem(title: buttonTitle,
-                                                 style: .plain,
-                                                 target: self,
-                                                 action: #selector(handleCopyOrMove))
+            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
             copyMoveButton.isEnabled = true
 
-            let toolBarItems = [
-                UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"),
-                                style: .plain,
-                                target: self,
-                                action: #selector(handleCreateDirectory)),
-                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-                copyMoveButton
-            ]
-            setToolbarItems(toolBarItems, animated: false)
+            self.toolbarItems = [createFolderBarButton, flexibleBarButton, copyMoveButton]
         default:
-            break
+
+            let toolbarItems = [deleteInEditModeButton, flexibleBarButton, copyInEditModeButton, flexibleBarButton, moveInEditModeButton]
+            toolbarItems.forEach {
+                $0.isEnabled = false
+            }
+            self.toolbarItems = toolbarItems
         }
     }
 
@@ -476,11 +488,9 @@ final class ListingViewController: UITableViewController {
             case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "Button title") + (isAscending ? " ↑" : " ↓")
             case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
             }
-            sortButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
-            moreActionsButton = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
-            searchButton    = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
+            sortBarButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
 
-            rightBarButtonItems.append(contentsOf: [moreActionsButton, sortButton, searchButton])
+            rightBarButtonItems.append(contentsOf: [moreActionsBarButton, sortBarButton, searchBarButton])
         }
 
         navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
@@ -784,11 +794,13 @@ final class ListingViewController: UITableViewController {
 
     private func activateEditMode() {
         tableView.setEditing(true, animated: true)
+        navigationController?.setToolbarHidden(false, animated: true)
         updateRightBarButtonItems()
     }
 
     @objc private func cancelEditMode() {
         tableView.setEditing(false, animated: true)
+        navigationController?.setToolbarHidden(true, animated: true)
         updateRightBarButtonItems()
     }
 
