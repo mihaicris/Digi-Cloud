@@ -70,6 +70,28 @@ final class ListingViewController: UITableViewController {
 
     fileprivate var searchButton, moreActionsButton, sortButton: UIBarButtonItem!
 
+    @objc private func dummy() {}
+
+    lazy var copyInEditModeButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
+        return b
+    }()
+
+    lazy var moveInEditModeButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
+        return b
+    }()
+
+    lazy var deleteInEditModeButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Delete", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
+        return b
+    }()
+
+    lazy var cancelInEditModeButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(cancelEditMode))
+        return b
+    }()
+
     #if DEBUG
     let tag: Int
     #endif
@@ -184,6 +206,8 @@ final class ListingViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        guard !tableView.isEditing else { return }
 
         tableView.deselectRow(at: indexPath, animated: false)
         refreshControl?.endRefreshing()
@@ -438,19 +462,28 @@ final class ListingViewController: UITableViewController {
 
     fileprivate func updateRightBarButtonItems() {
 
-        var buttonTitle: String
-        let isAscending = AppSettings.sortAscending
+        var rightBarButtonItems = [UIBarButtonItem]()
 
-        switch AppSettings.sortMethod {
-        case .byName:        buttonTitle = NSLocalizedString("Name", comment: "Button title") + (isAscending ? " ↑" : " ↓")
-        case .byDate:        buttonTitle = NSLocalizedString("Date", comment: "Button title") + (isAscending ? " ↑" : " ↓")
-        case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "Button title") + (isAscending ? " ↑" : " ↓")
-        case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+        if tableView.isEditing {
+            rightBarButtonItems.append(cancelInEditModeButton)
+        } else {
+            var buttonTitle: String
+            let isAscending = AppSettings.sortAscending
+
+            switch AppSettings.sortMethod {
+            case .byName:        buttonTitle = NSLocalizedString("Name", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            case .byDate:        buttonTitle = NSLocalizedString("Date", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            }
+            sortButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
+            moreActionsButton = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
+            searchButton    = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
+
+            rightBarButtonItems.append(contentsOf: [moreActionsButton, sortButton, searchButton])
         }
-        sortButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
-        moreActionsButton = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
-        searchButton    = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
-        navigationItem.setRightBarButtonItems([moreActionsButton, sortButton, searchButton], animated: false)
+
+        navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
     }
 
     fileprivate func sortByName() {
@@ -565,15 +598,15 @@ final class ListingViewController: UITableViewController {
         controller.popoverPresentationController?.sourceRect = buttonView.bounds
 
         controller.onFinish = { [unowned self] selection in
-            self.dismiss(animated: true) {
-                switch selection {
-                case .createDirectory:
-                    self.handleCreateDirectory()
-                    break
-                case .selectionMode:
-                    self.activateSelectMode()
-                    break
-                }
+            self.dismiss(animated: true, completion: nil)
+
+            switch selection {
+            case .createDirectory:
+                self.handleCreateDirectory()
+                break
+            case .selectionMode:
+                self.activateEditMode()
+                break
             }
         }
 
@@ -749,10 +782,16 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    private func activateSelectMode() {
+    private func activateEditMode() {
         tableView.setEditing(true, animated: true)
-        tableView.reloadData()
+        updateRightBarButtonItems()
     }
+
+    @objc private func cancelEditMode() {
+        tableView.setEditing(false, animated: true)
+        updateRightBarButtonItems()
+    }
+
 }
 
 extension ListingViewController: UIPopoverPresentationControllerDelegate {
