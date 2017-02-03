@@ -160,15 +160,18 @@ final class ListingViewController: UITableViewController {
                 return UITableViewCell()
             }
             cell.delegate = self
+            cell.hasButton = !tableView.isEditing
 
             cell.folderNameLabel.text = item.name
-
             return cell
+
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? FileCell else {
                 return UITableViewCell()
             }
+
             cell.delegate = self
+            cell.hasButton = !tableView.isEditing
 
             let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
             cell.fileNameLabel.text = item.name
@@ -242,6 +245,8 @@ final class ListingViewController: UITableViewController {
             self.fileCellID = "FileCellWithButton"
             self.folderCellID = "DirectoryCellWithButton"
             setupSearchController()
+            definesPresentationContext = true
+            tableView.allowsMultipleSelectionDuringEditing = true
         }
 
         refreshControl = UIRefreshControl()
@@ -252,7 +257,7 @@ final class ListingViewController: UITableViewController {
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: folderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
-        definesPresentationContext = true
+
     }
 
     fileprivate func setupViews() {
@@ -566,6 +571,7 @@ final class ListingViewController: UITableViewController {
                     self.handleCreateDirectory()
                     break
                 case .selectionMode:
+                    self.activateSelectMode()
                     break
                 }
             }
@@ -741,6 +747,11 @@ final class ListingViewController: UITableViewController {
                 }
             }
         }
+    }
+
+    private func activateSelectMode() {
+        tableView.setEditing(true, animated: true)
+        tableView.reloadData()
     }
 }
 

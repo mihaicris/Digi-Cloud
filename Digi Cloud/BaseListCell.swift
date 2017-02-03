@@ -43,6 +43,11 @@ class BaseListCell: UITableViewCell {
         self.setupViews()
     }
 
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        actionButton.alpha = editing ? 0 : 1
+        super.setEditing(editing, animated: animated)
+    }
+
     // MARK: - Helper Functions
 
     func setupViews() {
