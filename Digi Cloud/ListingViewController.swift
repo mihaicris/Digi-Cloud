@@ -829,10 +829,6 @@ final class ListingViewController: UITableViewController {
         updateNavigationBarRightButtonItems()
     }
 
-    private func completionHandlerForMultipleItemsEdit() {
-
-    }
-
     @objc private func handleMultipleItemsEdit(_ sender: UIBarButtonItem) {
 
         guard let action = ActionType(rawValue: sender.tag) else { return }
