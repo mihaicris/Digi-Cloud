@@ -68,8 +68,6 @@ final class ListingViewController: UITableViewController {
         return sv
     }()
 
-    @objc private func dummy() {}
-
     fileprivate var sortBarButton: UIBarButtonItem!
 
     private lazy var moreActionsBarButton: UIBarButtonItem = {
@@ -85,23 +83,32 @@ final class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self,
-                                action: #selector(handleCreateDirectory))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateDirectory))
         return b
     }()
 
     private lazy var copyInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
+        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: "Button Title"), style: .plain, target: self, action: #selector(handleMultipleItemsEdit(_:)))
+        b.tag = ActionType.copy.rawValue
         return b
     }()
 
     private lazy var moveInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
+        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: "Button Title"), style: .plain, target: self, action: #selector(handleMultipleItemsEdit(_:)))
+        b.tag = ActionType.move.rawValue
         return b
     }()
 
     private lazy var deleteInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Delete", comment: "Button Title"), style: .plain, target: self, action: #selector(dummy))
+        let v = UIButton(type: UIButtonType.system)
+        v.setTitle(NSLocalizedString("Delete", comment: "Button Title"), for: .normal)
+        v.addTarget(self, action: #selector(handleMultipleItemsEdit(_:)), for: .touchUpInside)
+        v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
+        v.setTitleColor(.red, for: .normal)
+        v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        v.sizeToFit()
+        v.tag = ActionType.delete.rawValue
+        let b = UIBarButtonItem(customView: v)
         return b
     }()
 
@@ -148,7 +155,7 @@ final class ListingViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         if self.action == .noAction {
-            updateRightBarButtonItems()
+            updateNavigationBarRightButtonItems()
             tableView.tableHeaderView = nil
         }
         if needRefresh {
@@ -223,9 +230,18 @@ final class ListingViewController: UITableViewController {
         }
     }
 
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+            updateToolBarButtonItemsToMatchTableState()
+        }
+    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        guard !tableView.isEditing else { return }
+        if tableView.isEditing {
+            updateToolBarButtonItemsToMatchTableState()
+            return
+        }
 
         tableView.deselectRow(at: indexPath, animated: false)
         refreshControl?.endRefreshing()
@@ -323,12 +339,7 @@ final class ListingViewController: UITableViewController {
 
             self.toolbarItems = [createFolderBarButton, flexibleBarButton, copyMoveButton]
         default:
-
-            let toolbarItems = [deleteInEditModeButton, flexibleBarButton, copyInEditModeButton, flexibleBarButton, moveInEditModeButton]
-            toolbarItems.forEach {
-                $0.isEnabled = false
-            }
-            self.toolbarItems = toolbarItems
+            self.toolbarItems = [deleteInEditModeButton, flexibleBarButton, copyInEditModeButton, flexibleBarButton, moveInEditModeButton]
         }
     }
 
@@ -472,7 +483,7 @@ final class ListingViewController: UITableViewController {
                        completion: nil)
     }
 
-    fileprivate func updateRightBarButtonItems() {
+    fileprivate func updateNavigationBarRightButtonItems() {
 
         var rightBarButtonItems = [UIBarButtonItem]()
 
@@ -494,6 +505,14 @@ final class ListingViewController: UITableViewController {
         }
 
         navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
+    }
+
+    private func updateToolBarButtonItemsToMatchTableState() {
+        if tableView.indexPathsForSelectedRows != nil, toolbarItems != nil {
+            self.toolbarItems!.forEach { $0.isEnabled = true }
+        } else {
+            self.toolbarItems!.forEach { $0.isEnabled = false }
+        }
     }
 
     fileprivate func sortByName() {
@@ -590,7 +609,7 @@ final class ListingViewController: UITableViewController {
             }
             self.sortContent()
             self.tableView.reloadData()
-            self.updateRightBarButtonItems()
+            self.updateNavigationBarRightButtonItems()
         }
         controller.modalPresentationStyle = .popover
         guard let buttonView = navigationItem.rightBarButtonItems?[1].value(forKey: "view") as? UIView else { return }
@@ -795,15 +814,29 @@ final class ListingViewController: UITableViewController {
     private func activateEditMode() {
         tableView.setEditing(true, animated: true)
         navigationController?.setToolbarHidden(false, animated: true)
-        updateRightBarButtonItems()
+        updateNavigationBarRightButtonItems()
+        updateToolBarButtonItemsToMatchTableState()
     }
 
     @objc private func cancelEditMode() {
         tableView.setEditing(false, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
-        updateRightBarButtonItems()
+        updateNavigationBarRightButtonItems()
     }
 
+    @objc private func handleMultipleItemsEdit(_ sender: UIBarButtonItem) {
+        guard let action = ActionType(rawValue: sender.tag) else { return }
+        switch action {
+        case .delete:
+            print("DELETE")
+        case .copy:
+            print("COPY")
+        case .move:
+            print("MOVE")
+        default:
+            break
+        }
+    }
 }
 
 extension ListingViewController: UIPopoverPresentationControllerDelegate {
