@@ -20,6 +20,7 @@ final class ListingViewController: UITableViewController {
     fileprivate var location: Location
     fileprivate var needRefresh: Bool = true
     fileprivate var isUpdating: Bool = false
+    fileprivate var isActionConfirmed: Bool = false
     fileprivate var content: [Node] = []
     fileprivate var filteredContent: [Node] = []
     fileprivate var currentIndex: IndexPath!
@@ -580,7 +581,7 @@ final class ListingViewController: UITableViewController {
             let overlayView = UIView(frame: frame)
             overlayView.layer.cornerRadius = 8
             overlayView.backgroundColor = UIColor.init(white: 0.7, alpha: 0.8)
-            overlayView.tag = 1
+            overlayView.tag = 9999
             navControllerView.addSubview(overlayView)
 
             let activityIndicator = UIActivityIndicatorView()
@@ -595,8 +596,12 @@ final class ListingViewController: UITableViewController {
             ])
 
         } else {
-            if let overlayView = navControllerView.viewWithTag(1) {
-                overlayView.removeFromSuperview()
+            if let overlayView = navControllerView.viewWithTag(9999) {
+                UIView.animate(withDuration: 0.4, animations: {
+                    overlayView.alpha = 0
+                }, completion: { _ in
+                    overlayView.removeFromSuperview()
+                })
             }
         }
     }
@@ -824,17 +829,70 @@ final class ListingViewController: UITableViewController {
         updateNavigationBarRightButtonItems()
     }
 
+    private func completionHandlerForMultipleItemsEdit() {
+
+    }
+
     @objc private func handleMultipleItemsEdit(_ sender: UIBarButtonItem) {
+
         guard let action = ActionType(rawValue: sender.tag) else { return }
+        guard let selectedItemsIndexPaths = tableView.indexPathsForSelectedRows else { return }
+
+        let nodes = selectedItemsIndexPaths.map { content[$0.row] }
+
+        let dispatchGroup = DispatchGroup()
+
         switch action {
         case .delete:
-            print("DELETE")
+
+            guard isActionConfirmed else {
+                let question = String(format: "Are you sure you want to delete %d items?", nodes.count)
+                let title = NSLocalizedString(question, comment: "Question")
+                let message = NSLocalizedString("This action is not reversible.", comment: "Notice")
+                let confirmationController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+                let deleteAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .destructive, handler: { _ in
+                    self.isActionConfirmed = true
+                    self.handleMultipleItemsEdit(sender)
+                })
+
+                let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
+                confirmationController.addAction(deleteAction)
+                confirmationController.addAction(cancelAction)
+                present(confirmationController, animated: true, completion: nil)
+                return
+            }
+
+            self.isActionConfirmed = false
+            self.setBusyIndicatorView(true)
+
+            nodes.forEach {
+
+                dispatchGroup.enter()
+
+                DigiClient.shared.deleteNode(at: $0.location) { _, error in
+                    // TODO: Stop spinner
+                    guard error == nil else {
+                        // TODO: Show message for error
+                        print(error!.localizedDescription)
+                        return
+                    }
+                    // TODO: Handle http status code
+                    dispatchGroup.leave()
+                }
+            }
         case .copy:
             print("COPY")
         case .move:
             print("MOVE")
         default:
             break
+        }
+
+        dispatchGroup.notify(queue: DispatchQueue.main) {
+            self.setBusyIndicatorView(false)
+            self.cancelEditMode()
+            self.updateContent()
         }
     }
 }
