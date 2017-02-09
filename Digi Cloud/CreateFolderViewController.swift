@@ -148,8 +148,14 @@ class CreateFolderViewController: UITableViewController {
         DigiClient.shared.createFolderNode(at: location, with: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
-                // TODO: Show message for error
-                print(error!.localizedDescription)
+                let title = NSLocalizedString("Error", comment: "Title")
+                let message = NSLocalizedString("There was an error creating the directory.", comment: "Notice")
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
+
+                DLog(object: error!.localizedDescription)
+
                 return
             }
             if let code = statusCode {
