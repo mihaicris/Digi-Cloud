@@ -391,6 +391,12 @@ final class ListingViewController: UITableViewController {
                     self.content.removeAll()
                     self.tableView.reloadData()
                 default:
+                    self.refreshControl?.endRefreshing()
+                    let message = NSLocalizedString("There was an error refreshing the location.", comment: "Notice")
+                    let title = NSLocalizedString("Error", comment: "Title")
+                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
                     print("Error: \(error!.localizedDescription)")
                 }
                 return
@@ -802,13 +808,36 @@ final class ListingViewController: UITableViewController {
                     self.onFinish?()
                 case 400:
                     // Bad request ( Folder already exists, invalid file name?)
-                    // TODO: Show error message and wait for dismiss
-                    print("Status Code 400 : Bad request")
+
+                    var message: String
+                    if sourceNode.type == "dir" {
+                        message = NSLocalizedString("An error has occured. The directory already exists in the destination or the destination location no longer exists.", comment: "Notice")
+                    } else {
+                        message = NSLocalizedString("An error has occured. The file already exists in the destination or the destination location no longer exists.", comment: "Notice")
+                    }
+                    let title = NSLocalizedString("Error", comment: "Title")
+                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+
                 case 404:
+
                     // Not Found (Folder do not exists anymore), folder will refresh
-                    print("Status Code 404 : Not found")
-                    setNeededRefreshInMain()
-                    self.onFinish?()
+                    var message: String
+                    if sourceNode.type == "dir" {
+                        message = NSLocalizedString("The directory no longer exists.", comment: "Notice")
+                    } else {
+                        message = NSLocalizedString("The file no longer exists.", comment: "Notice")
+                    }
+
+                    let title = NSLocalizedString("Error", comment: "Title")
+                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                        setNeededRefreshInMain()
+                        self.onFinish?()
+                    }))
+                    self.present(alertController, animated: true, completion: nil)
+
                 default :
                     print("Server replied with Status Code: ", code)
                     // TODO: Show message and wait for dismiss
