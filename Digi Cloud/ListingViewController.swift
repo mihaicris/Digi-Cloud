@@ -28,9 +28,10 @@ final class ListingViewController: UITableViewController {
     private var fileCellID = String()
     private var folderCellID = String()
     private let dispatchGroup = DispatchGroup()
-    private var didReceivedNetworkError: Bool = false
-    private var didReceivedStatus400: Bool = false
-    private var didReceivedStatus404: Bool = false
+    private var didReceivedNetworkError = false
+    private var didReceivedStatus400 = false
+    private var didReceivedStatus404 = false
+    private var didSucceedCopyOrMove = false
 
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -414,14 +415,8 @@ final class ListingViewController: UITableViewController {
                         return
                     }
                     if self.editaction == .move {
-                        for (index, elem) in newContent.enumerated() {
-
-                            for sourceNode in sourceNodes {
-                                if elem.name == sourceNode.name {
-                                    newContent.remove(at: index)
-                                    break
-                                }
-                            }
+                        newContent = newContent.filter {
+                            return (!sourceNodes.contains($0) || $0.type == "file")
                         }
                     }
                     // While copy and move, we sort by name with folders shown first.
@@ -733,7 +728,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    private func setNeededRefreshInMain() {
+    private func setNeedsRefreshInMain() {
         // Set needRefresh true in the main Listing controller
         if let nav = self.presentingViewController as? UINavigationController {
             for controller in nav.viewControllers {
@@ -803,12 +798,14 @@ final class ListingViewController: UITableViewController {
                 switch code {
                 case 200:
                     // Operation successfully completed
-                    self.setNeededRefreshInMain()
+                    self.setNeedsRefreshInMain()
+                    self.didSucceedCopyOrMove = true
                 case 400:
                     // Bad request ( Folder already exists, invalid file name?)
                     self.didReceivedStatus400 = true
                 case 404:
                     // Not Found (Folder do not exists anymore), folder will refresh
+                    self.setNeedsRefreshInMain()
                     self.didReceivedStatus404 = true
                 default :
                     print("Server replied with Status Code: ", code)
@@ -826,43 +823,50 @@ final class ListingViewController: UITableViewController {
             return
         }
 
+        didSucceedCopyOrMove = false
+        didReceivedNetworkError = false
+        didReceivedStatus400 = false
+        didReceivedStatus404 = false
+
         for sourceNode in sourceNodes {
             dispatchGroup.enter()
             doCopyOrMove(node: sourceNode)
         }
 
         dispatchGroup.notify(queue: DispatchQueue.main) {
+
             self.setBusyIndicatorView(false)
 
             if self.didReceivedNetworkError {
                 let title = NSLocalizedString("Error", comment: "Title")
-                let message = NSLocalizedString("There was an error while processing the request.", comment: "Notice")
+                let message = NSLocalizedString("An error has occured while processing the request.", comment: "Notice")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
                 return
+            } else {
+                if self.didReceivedStatus400 {
+                    let message = NSLocalizedString("An error has occured. Some elements already exists at the destination or the destination location no longer exists.", comment: "Notice")
+                    let title = NSLocalizedString("Error", comment: "Title")
+                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                } else {
+                    if self.didReceivedStatus404 {
+                        let message = NSLocalizedString("An error has occured. Some elements no longer exists.", comment: "Notice")
+                        let title = NSLocalizedString("Error", comment: "Title")
+                        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                            self.onFinish?()
+                        }))
+                        self.present(alertController, animated: true, completion: nil)
+                        return
+                    }
+                }
             }
 
-            if self.didReceivedStatus400 {
-                let message = NSLocalizedString("An error has occured. The element already exists at the destination or the destination location no longer exists.", comment: "Notice")
-                let title = NSLocalizedString("Error", comment: "Title")
-                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alertController, animated: true, completion: nil)
-                return
-            }
-
-            if self.didReceivedStatus404 {
-                let message = NSLocalizedString("The element no longer exists.", comment: "Notice")
-                let title = NSLocalizedString("Error", comment: "Title")
-                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                    self.setNeededRefreshInMain()
-                    self.onFinish?()
-                }))
-                self.present(alertController, animated: true, completion: nil)
-                return
-            }
+            // Finish multiple edits without issues
             self.onFinish?()
         }
     }
@@ -877,71 +881,144 @@ final class ListingViewController: UITableViewController {
     @objc private func cancelEditMode() {
         tableView.setEditing(false, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
-        self.setBusyIndicatorView(false)
         updateNavigationBarRightButtonItems()
     }
 
     @objc private func handleMultipleItemsEdit(_ sender: UIBarButtonItem) {
 
-        guard let action = ActionType(rawValue: sender.tag) else { return }
+        guard let chosenAction = ActionType(rawValue: sender.tag) else { return }
         guard let selectedItemsIndexPaths = tableView.indexPathsForSelectedRows else { return }
 
         let nodes = selectedItemsIndexPaths.map { content[$0.row] }
 
-        let dispatchGroup = DispatchGroup()
-
-        switch action {
+        switch chosenAction {
         case .delete:
-
-            guard isActionConfirmed else {
-                let question = String(format: "Are you sure you want to delete %d items?", nodes.count)
-                let title = NSLocalizedString(question, comment: "Question")
-                let message = NSLocalizedString("This action is not reversible.", comment: "Notice")
-                let confirmationController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
-                let deleteAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .destructive, handler: { _ in
-                    self.isActionConfirmed = true
-                    self.handleMultipleItemsEdit(sender)
-                })
-
-                let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
-                confirmationController.addAction(deleteAction)
-                confirmationController.addAction(cancelAction)
-                present(confirmationController, animated: true, completion: nil)
-                return
-            }
-
-            self.isActionConfirmed = false
-            self.setBusyIndicatorView(true)
-
-            nodes.forEach {
-
-                dispatchGroup.enter()
-
-                DigiClient.shared.deleteNode(at: $0.location) { _, error in
-                    // TODO: Stop spinner
-                    guard error == nil else {
-                        // TODO: Show message for error
-                        print(error!.localizedDescription)
-                        return
-                    }
-                    // TODO: Handle http status code
-                    dispatchGroup.leave()
-                }
-            }
-        case .copy:
-            print("COPY")
-        case .move:
-            print("MOVE")
+            self.doDelete(nodes: nodes)
+        case .copy, .move:
+            self.showViewControllerForCopyOrMove(action: chosenAction, nodes: nodes)
         default:
             break
         }
+    }
 
+    private func doDelete(nodes: [Node]) {
+        guard isActionConfirmed else {
+            let question = String(format: "Are you sure you want to delete %d items?", nodes.count)
+            let title = NSLocalizedString(question, comment: "Question")
+            let message = NSLocalizedString("This action is not reversible.", comment: "Notice")
+            let confirmationController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+            let deleteAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .destructive, handler: { _ in
+                self.isActionConfirmed = true
+                self.doDelete(nodes: nodes)
+            })
+
+            let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
+            confirmationController.addAction(deleteAction)
+            confirmationController.addAction(cancelAction)
+            present(confirmationController, animated: true, completion: nil)
+            return
+        }
+
+        self.isActionConfirmed = false
+        self.setBusyIndicatorView(true)
+
+        didSucceedCopyOrMove = false
+        didReceivedNetworkError = false
+        didReceivedStatus400 = false
+        didReceivedStatus404 = false
+
+        nodes.forEach {
+
+            self.dispatchGroup.enter()
+
+            DigiClient.shared.deleteNode(at: $0.location) { _, error in
+                // TODO: Stop spinner
+                guard error == nil else {
+                    // TODO: Show message for error
+                    print(error!.localizedDescription)
+                    return
+                }
+                // TODO: Handle http status code
+                self.dispatchGroup.leave()
+            }
+        }
+
+        // After all deletions have finished...
         dispatchGroup.notify(queue: DispatchQueue.main) {
             self.setBusyIndicatorView(false)
             self.cancelEditMode()
-            self.updateContent()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.updateContent()
+            }
         }
+
+    }
+
+    fileprivate func showViewControllerForCopyOrMove(action: ActionType, nodes: [Node]) {
+
+        // Save the source node in the MainNavigationController
+        (self.navigationController as? MainNavigationController)?.sourceNodes = nodes
+
+        guard let previousControllers = self.navigationController?.viewControllers else {
+            print("Couldn't get the previous navigation controllers!")
+            return
+        }
+
+        var controllers: [UIViewController] = []
+
+        for (index, p) in previousControllers.enumerated() {
+
+            // If index is 0 than this is a location controller
+            if index == 0 {
+                let c = LocationsViewController(action: action)
+                c.title = NSLocalizedString("Locations", comment: "Window Title")
+                c.onFinish = { [unowned self] in
+
+                    // Clear source node
+                    (self.navigationController as? MainNavigationController)?.sourceNodes = nil
+
+                    self.dismiss(animated: true) {
+                        if self.needRefresh {
+                            self.updateContent()
+                        }
+                    }
+                }
+                controllers.append(c)
+                continue
+            }
+
+            // we need to cast in order to tet the mountID and path from it
+            if let p = p as? ListingViewController {
+                let c = ListingViewController(action: action, for: p.location)
+                c.title = p.title
+                c.onFinish = { [unowned self] in
+                    if self.editaction != .noAction {
+                        self.onFinish?()
+                    } else {
+                        self.dismiss(animated: true) {
+
+                            // Clear source node
+                            (self.navigationController as? MainNavigationController)?.sourceNodes = nil
+
+                            if self.needRefresh {
+                                self.cancelEditMode()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                    self.updateContent()
+                                }
+                            }
+                        }
+                    }
+                }
+                controllers.append(c)
+            }
+        }
+
+        let navController = UINavigationController(navigationBarClass: CustomNavBar.self, toolbarClass: nil)
+        navController.setViewControllers(controllers, animated: false)
+        navController.modalPresentationStyle = .formSheet
+        self.present(navController, animated: true, completion: nil)
+
     }
 }
 
@@ -987,64 +1064,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
             case .copy, .move:
 
-                // Save the source node in the MainNavigationController
-                (self.navigationController as? MainNavigationController)?.sourceNodes = [node]
-
-                guard let previousControllers = self.navigationController?.viewControllers else {
-                    print("Couldn't get the previous navigation controllers!")
-                    return
-                }
-
-                var controllers: [UIViewController] = []
-
-                for (index, p) in previousControllers.enumerated() {
-
-                    // If index is 0 than this is a location controller
-                    if index == 0 {
-                        let c = LocationsViewController(action: action)
-                        c.title = NSLocalizedString("Locations", comment: "Window Title")
-                        c.onFinish = { [unowned self] in
-
-                            // Clear source node
-                            (self.navigationController as? MainNavigationController)?.sourceNodes = nil
-
-                            self.dismiss(animated: true) {
-                                if self.needRefresh {
-                                    self.updateContent()
-                                }
-                            }
-                        }
-                        controllers.append(c)
-                        continue
-                    }
-
-                    // we need to cast in order to tet the mountID and path from it
-                    if let p = p as? ListingViewController {
-                        let c = ListingViewController(action: action, for: p.location)
-                        c.title = p.title
-                        c.onFinish = { [unowned self] in
-                            if self.editaction != .noAction {
-                                self.onFinish?()
-                            } else {
-                                self.dismiss(animated: true) {
-
-                                    // Clear source node
-                                    (self.navigationController as? MainNavigationController)?.sourceNodes = nil
-
-                                    if self.needRefresh {
-                                        self.updateContent()
-                                    }
-                                }
-                            }
-                        }
-                        controllers.append(c)
-                    }
-                }
-
-                let navController = UINavigationController(navigationBarClass: CustomNavBar.self, toolbarClass: nil)
-                navController.setViewControllers(controllers, animated: false)
-                navController.modalPresentationStyle = .formSheet
-                self.present(navController, animated: true, completion: nil)
+                self.showViewControllerForCopyOrMove(action: action, nodes: [node])
 
             case .delete:
 
@@ -1135,6 +1155,11 @@ extension ListingViewController: DeleteViewControllerDelegate {
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error
+                    let message = NSLocalizedString("There was an error while deleting.", comment: "Notice")
+                    let title = NSLocalizedString("Error", comment: "Title")
+                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
                     print(error!.localizedDescription)
                     return
                 }
