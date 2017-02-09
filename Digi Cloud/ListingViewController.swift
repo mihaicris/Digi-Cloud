@@ -27,6 +27,10 @@ final class ListingViewController: UITableViewController {
     private var searchController: UISearchController!
     private var fileCellID = String()
     private var folderCellID = String()
+    private let dispatchGroup = DispatchGroup()
+    private var didReceivedNetworkError: Bool = false
+    private var didReceivedStatus400: Bool = false
+    private var didReceivedStatus404: Bool = false
 
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -405,15 +409,18 @@ final class ListingViewController: UITableViewController {
                 switch self.editaction {
                 case .copy, .move:
                     // Only in move action, the moved node is not shown in the list.
-                    guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.sourceNode else {
+                    guard let sourceNodes = (self.presentingViewController as? MainNavigationController)?.sourceNodes else {
                         print("Couldn't get the source node.")
                         return
                     }
                     if self.editaction == .move {
                         for (index, elem) in newContent.enumerated() {
-                            if elem.name == sourceNode.name {
-                                newContent.remove(at: index)
-                                break
+
+                            for sourceNode in sourceNodes {
+                                if elem.name == sourceNode.name {
+                                    newContent.remove(at: index)
+                                    break
+                                }
                             }
                         }
                     }
@@ -726,15 +733,18 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc private func handleCopyOrMove() {
-
-        setBusyIndicatorView(true)
-
-        guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.sourceNode else {
-            print("Couldn't get the source node name.")
-            return
+    private func setNeededRefreshInMain() {
+        // Set needRefresh true in the main Listing controller
+        if let nav = self.presentingViewController as? UINavigationController {
+            for controller in nav.viewControllers {
+                if let controller = controller as? ListingViewController {
+                    controller.needRefresh = true
+                }
+            }
         }
+    }
 
+    private func doCopyOrMove(node sourceNode: Node) {
         var destinationLocation = Location(mount: self.location.mount, path: self.location.path + sourceNode.name)
 
         let index = sourceNode.name.getIndexBeforeExtension()
@@ -781,22 +791,11 @@ final class ListingViewController: UITableViewController {
 
         DigiClient.shared.copyOrMoveNode(action: self.editaction, from: sourceNode.location, to: destinationLocation) { statusCode, error in
 
-            func setNeededRefreshInMain() {
-                // Set needRefresh true in the main Listing controller
-                if let nav = self.presentingViewController as? UINavigationController {
-                    for controller in nav.viewControllers {
-                        if let controller = controller as? ListingViewController {
-                            controller.needRefresh = true
-                        }
-                    }
-                }
-            }
-
-            self.setBusyIndicatorView(false)
+            self.dispatchGroup.leave()
 
             guard error == nil else {
-                print(error!.localizedDescription)
-                // TODO: Show error message and wait for dismiss
+                self.didReceivedNetworkError = true
+                DLog(object: error!.localizedDescription)
                 return
             }
 
@@ -804,45 +803,67 @@ final class ListingViewController: UITableViewController {
                 switch code {
                 case 200:
                     // Operation successfully completed
-                    setNeededRefreshInMain()
-                    self.onFinish?()
+                    self.setNeededRefreshInMain()
                 case 400:
                     // Bad request ( Folder already exists, invalid file name?)
-
-                    var message: String
-                    if sourceNode.type == "dir" {
-                        message = NSLocalizedString("An error has occured. The directory already exists in the destination or the destination location no longer exists.", comment: "Notice")
-                    } else {
-                        message = NSLocalizedString("An error has occured. The file already exists in the destination or the destination location no longer exists.", comment: "Notice")
-                    }
-                    let title = NSLocalizedString("Error", comment: "Title")
-                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alertController, animated: true, completion: nil)
-
+                    self.didReceivedStatus400 = true
                 case 404:
-
                     // Not Found (Folder do not exists anymore), folder will refresh
-                    var message: String
-                    if sourceNode.type == "dir" {
-                        message = NSLocalizedString("The directory no longer exists.", comment: "Notice")
-                    } else {
-                        message = NSLocalizedString("The file no longer exists.", comment: "Notice")
-                    }
-
-                    let title = NSLocalizedString("Error", comment: "Title")
-                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                        setNeededRefreshInMain()
-                        self.onFinish?()
-                    }))
-                    self.present(alertController, animated: true, completion: nil)
-
+                    self.didReceivedStatus404 = true
                 default :
                     print("Server replied with Status Code: ", code)
-                    // TODO: Show message and wait for dismiss
                 }
             }
+        }
+    }
+
+    @objc private func handleCopyOrMove() {
+
+        setBusyIndicatorView(true)
+
+        guard let sourceNodes = (self.presentingViewController as? MainNavigationController)?.sourceNodes else {
+            print("Couldn't get the source node name.")
+            return
+        }
+
+        for sourceNode in sourceNodes {
+            dispatchGroup.enter()
+            doCopyOrMove(node: sourceNode)
+        }
+
+        dispatchGroup.notify(queue: DispatchQueue.main) {
+            self.setBusyIndicatorView(false)
+
+            if self.didReceivedNetworkError {
+                let title = NSLocalizedString("Error", comment: "Title")
+                let message = NSLocalizedString("There was an error while processing the request.", comment: "Notice")
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
+                return
+            }
+
+            if self.didReceivedStatus400 {
+                let message = NSLocalizedString("An error has occured. The element already exists at the destination or the destination location no longer exists.", comment: "Notice")
+                let title = NSLocalizedString("Error", comment: "Title")
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
+                return
+            }
+
+            if self.didReceivedStatus404 {
+                let message = NSLocalizedString("The element no longer exists.", comment: "Notice")
+                let title = NSLocalizedString("Error", comment: "Title")
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                    self.setNeededRefreshInMain()
+                    self.onFinish?()
+                }))
+                self.present(alertController, animated: true, completion: nil)
+                return
+            }
+            self.onFinish?()
         }
     }
 
@@ -967,7 +988,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
             case .copy, .move:
 
                 // Save the source node in the MainNavigationController
-                (self.navigationController as? MainNavigationController)?.sourceNode = node
+                (self.navigationController as? MainNavigationController)?.sourceNodes = [node]
 
                 guard let previousControllers = self.navigationController?.viewControllers else {
                     print("Couldn't get the previous navigation controllers!")
@@ -985,7 +1006,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                         c.onFinish = { [unowned self] in
 
                             // Clear source node
-                            (self.navigationController as? MainNavigationController)?.sourceNode = nil
+                            (self.navigationController as? MainNavigationController)?.sourceNodes = nil
 
                             self.dismiss(animated: true) {
                                 if self.needRefresh {
@@ -1008,7 +1029,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                                 self.dismiss(animated: true) {
 
                                     // Clear source node
-                                    (self.navigationController as? MainNavigationController)?.sourceNode = nil
+                                    (self.navigationController as? MainNavigationController)?.sourceNodes = nil
 
                                     if self.needRefresh {
                                         self.updateContent()

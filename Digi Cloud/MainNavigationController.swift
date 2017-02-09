@@ -15,7 +15,7 @@ class MainNavigationController: UINavigationController {
 
     // This property will hold the source node when copying or moving action
     // It can be accessed by any view controller on the stack of controllers
-    var sourceNode: Node?
+    var sourceNodes: [Node]?
 
     // The viewcontroller index where the search controller has been initiated.
     // Following search actions will be routed to this viewcontroller
