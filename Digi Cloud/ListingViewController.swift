@@ -399,7 +399,7 @@ final class ListingViewController: UITableViewController {
                 switch self.action {
                 case .copy, .move:
                     // Only in move action, the moved node is not shown in the list.
-                    guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
+                    guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.sourceNode else {
                         print("Couldn't get the source node.")
                         return
                     }
@@ -724,7 +724,7 @@ final class ListingViewController: UITableViewController {
 
         setBusyIndicatorView(true)
 
-        guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.source else {
+        guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.sourceNode else {
             print("Couldn't get the source node name.")
             return
         }
@@ -938,7 +938,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
             case .copy, .move:
 
                 // Save the source node in the MainNavigationController
-                (self.navigationController as? MainNavigationController)?.source = node
+                (self.navigationController as? MainNavigationController)?.sourceNode = node
 
                 guard let previousControllers = self.navigationController?.viewControllers else {
                     print("Couldn't get the previous navigation controllers!")
@@ -956,7 +956,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                         c.onFinish = { [unowned self] in
 
                             // Clear source node
-                            (self.navigationController as? MainNavigationController)?.source = nil
+                            (self.navigationController as? MainNavigationController)?.sourceNode = nil
 
                             self.dismiss(animated: true) {
                                 if self.needRefresh {
@@ -979,7 +979,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                                 self.dismiss(animated: true) {
 
                                     // Clear source node
-                                    (self.navigationController as? MainNavigationController)?.source = nil
+                                    (self.navigationController as? MainNavigationController)?.sourceNode = nil
 
                                     if self.needRefresh {
                                         self.updateContent()
