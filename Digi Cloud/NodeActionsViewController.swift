@@ -23,7 +23,7 @@ class NodeActionsViewController: UITableViewController {
 
     // MARK: - Properties
 
-    weak var delegate: ActionViewControllerDelegate?
+    weak var delegate: NodeActionsViewControllerDelegate?
 
     fileprivate var node: Node
 

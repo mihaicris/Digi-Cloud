@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ActionViewControllerDelegate: class {
+protocol NodeActionsViewControllerDelegate: class {
     func didSelectOption(action: ActionType)
 }
 

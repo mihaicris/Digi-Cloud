@@ -900,7 +900,7 @@ extension ListingViewController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-extension ListingViewController: ActionViewControllerDelegate {
+extension ListingViewController: NodeActionsViewControllerDelegate {
     func didSelectOption(action: ActionType) {
 
         self.animateActionButton(active: false)
