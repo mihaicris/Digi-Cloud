@@ -580,8 +580,9 @@ final class ListingViewController: UITableViewController {
             let frame = CGRect(origin: origin, size: CGSize(width: 90, height: 90))
             let overlayView = UIView(frame: frame)
             overlayView.layer.cornerRadius = 8
-            overlayView.backgroundColor = UIColor.init(white: 0.7, alpha: 0.8)
+            overlayView.backgroundColor = UIColor.init(white: 0.75, alpha: 1.0)
             overlayView.tag = 9999
+
             navControllerView.addSubview(overlayView)
 
             let activityIndicator = UIActivityIndicatorView()
@@ -826,6 +827,7 @@ final class ListingViewController: UITableViewController {
     @objc private func cancelEditMode() {
         tableView.setEditing(false, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
+        self.setBusyIndicatorView(false)
         updateNavigationBarRightButtonItems()
     }
 
