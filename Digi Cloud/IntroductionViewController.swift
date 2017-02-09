@@ -40,7 +40,7 @@ class IntroductionViewController: UIViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
         let label: UILabel = {
             let l = UILabel()
             l.text = "Introduction"

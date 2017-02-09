@@ -15,17 +15,17 @@ class FolderInfoViewController: UITableViewController {
     var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
     fileprivate var location: Location
     fileprivate var node: Node
-    fileprivate let sizeFormatter: ByteCountFormatter = {
+    private let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.allowsNonnumericFormatting = false
         f.countStyle = .binary
         return f
     }()
-    fileprivate var rightBarButton: UIBarButtonItem!
-    fileprivate var deleteButton: UIButton!
-    fileprivate var noElementsLabel = UILabel()
-    fileprivate var folderSizeLabel = UILabel()
-    fileprivate var folderInfo = FolderInfo() {
+    private var rightBarButton: UIBarButtonItem!
+    private var deleteButton: UIButton!
+    private var noElementsLabel = UILabel()
+    private var folderSizeLabel = UILabel()
+    private var folderInfo = FolderInfo() {
         didSet {
             self.noElementsLabel = {
                 let label = UILabel()
@@ -185,7 +185,7 @@ class FolderInfoViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
         tableView.isScrollEnabled = false
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"),
                                          style: .plain,
@@ -195,7 +195,7 @@ class FolderInfoViewController: UITableViewController {
         self.title = NSLocalizedString("Folder information", comment: "Window Title")
     }
 
-    fileprivate func updateFolderInfo() {
+    private func updateFolderInfo() {
 
         let folderPath = self.location.path + node.name
 
@@ -214,11 +214,11 @@ class FolderInfoViewController: UITableViewController {
         })
     }
 
-    @objc fileprivate func handleDone() {
+    @objc private func handleDone() {
         onFinish?(false, false)
     }
 
-    @objc fileprivate func handleDelete() {
+    @objc private func handleDelete() {
         let controller = DeleteViewController(node: node)
         controller.delegate = self
         controller.modalPresentationStyle = .popover

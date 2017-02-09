@@ -13,11 +13,11 @@ class CreateFolderViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ folderName: String?) -> Void)?
-    fileprivate var location: Location
-    fileprivate var leftBarButton: UIBarButtonItem!
+    private var location: Location
+    private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
-    fileprivate var textField: UITextField!
-    fileprivate var messageLabel: UILabel!
+    private var textField: UITextField!
+    private var messageLabel: UILabel!
 
     // MARK: - Initializers and Deinitializers
 
@@ -76,7 +76,7 @@ class CreateFolderViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
 
         messageLabel = {
             let label = UILabel()
@@ -112,7 +112,7 @@ class CreateFolderViewController: UITableViewController {
         self.title = NSLocalizedString("Create Folder", comment: "Window Title")
     }
 
-    fileprivate func hasInvalidCharacters(name: String) -> Bool {
+    private func hasInvalidCharacters(name: String) -> Bool {
         let charset: Set<Character> = ["\\", "/", ":", "?", "<", ">", "\"", "|"]
         return !charset.isDisjoint(with: name.characters)
     }
@@ -126,7 +126,7 @@ class CreateFolderViewController: UITableViewController {
         })
     }
 
-    @objc fileprivate func handleCancel() {
+    @objc private func handleCancel() {
         textField.resignFirstResponder()
         onFinish?(nil)
     }
@@ -181,7 +181,7 @@ class CreateFolderViewController: UITableViewController {
         }
     }
 
-    @objc fileprivate func handleTextFieldChange() {
+    @objc private func handleTextFieldChange() {
         if let name = textField.text {
             if name.isEmpty {
                 self.rightBarButton.isEnabled = false
@@ -203,9 +203,9 @@ extension CreateFolderViewController: UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if rightBarButton.isEnabled {
+        if self.rightBarButton.isEnabled {
             textField.resignFirstResponder()
-            handleCreateFolder()
+            self.handleCreateFolder()
             return false
         }
         return false

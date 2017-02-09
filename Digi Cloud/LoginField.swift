@@ -12,7 +12,7 @@ class LoginField: UITextField {
 
     // MARK: - Properties
 
-    fileprivate let label = UILabel()
+    private let label = UILabel()
 
     public var textFieldName: String? {
         get {

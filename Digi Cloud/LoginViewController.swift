@@ -16,14 +16,14 @@ class LoginViewController: UIViewController {
 
     var onCancel: (() -> Void)?
 
-    fileprivate let spinner: UIActivityIndicatorView = {
+    private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.hidesWhenStopped = true
         return spinner
     }()
 
-    fileprivate lazy var usernameTextField: LoginField = {
+    private lazy var usernameTextField: LoginField = {
         let field = LoginField()
         field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "TextField Name").uppercased()
 
@@ -36,7 +36,7 @@ class LoginViewController: UIViewController {
         return field
     }()
 
-    fileprivate lazy var passwordTextField: LoginField = {
+    private lazy var passwordTextField: LoginField = {
         let field = LoginField()
         field.textFieldName = NSLocalizedString("PASSWORD", comment: "TextField Name").uppercased()
 
@@ -50,14 +50,14 @@ class LoginViewController: UIViewController {
         return field
     }()
 
-    fileprivate let loginButton: LoginButton = {
+    private let loginButton: LoginButton = {
         let button = LoginButton()
         button.setTitle(NSLocalizedString("LOGIN", comment: "Button Title"), for: .normal)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
 
-    fileprivate let cancelButton: UIButton = {
+    private let cancelButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle("✕", for: .normal)
@@ -67,7 +67,7 @@ class LoginViewController: UIViewController {
         return b
     }()
 
-    fileprivate let forgotPasswordButton: UIButton = {
+    private let forgotPasswordButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Forgot password?", comment: "Question"), for: .normal)
@@ -107,7 +107,7 @@ class LoginViewController: UIViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
 
         view.backgroundColor = UIColor.init(red: 40/255, green: 78/255, blue: 65/255, alpha: 1.0)
 
@@ -171,7 +171,7 @@ class LoginViewController: UIViewController {
         ])
     }
 
-    @objc fileprivate func handleForgotPassword() {
+    @objc private func handleForgotPassword() {
         let alert = UIAlertController(title: NSLocalizedString("Information", comment: "Window Title"),
                                     message: NSLocalizedString("Please contact RCS RDS for password information.", comment: "Information"),
                              preferredStyle: UIAlertControllerStyle.alert)
@@ -183,13 +183,13 @@ class LoginViewController: UIViewController {
         return
     }
 
-    @objc fileprivate func handleCancel() {
+    @objc private func handleCancel() {
         usernameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         self.onCancel?()
     }
 
-    @objc fileprivate func handleLogin() {
+    @objc private func handleLogin() {
 
         usernameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()

@@ -13,13 +13,13 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Properties
 
     var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
-    fileprivate let location: Location
-    fileprivate var node: Node
-    fileprivate var leftBarButton: UIBarButtonItem!
+    private let location: Location
+    private var node: Node
+    private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
-    fileprivate var textField: UITextField!
+    private var textField: UITextField!
 
-    fileprivate var messageLabel: UILabel = {
+    private var messageLabel: UILabel = {
             let l = UILabel()
             l.translatesAutoresizingMaskIntoConstraints = false
             l.textAlignment = .center
@@ -29,9 +29,9 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return l
     }()
 
-    fileprivate var needRefresh: Bool
+    private var needRefresh: Bool
 
-    fileprivate lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         let t = UITableView(frame: frame, style: .grouped)
         t.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +112,7 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
 
         let actionsListLabel: UILabel = {
             let l = UILabel()
@@ -236,12 +236,12 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
 
-    fileprivate func hasInvalidCharacters(name: String) -> Bool {
+    private func hasInvalidCharacters(name: String) -> Bool {
         let charset: Set<Character> = ["\\", "/", ":", "?", "<", ">", "\"", "|"]
         return !charset.isDisjoint(with: name.characters)
     }
 
-    fileprivate func setRenameButtonActive(_ value: Bool) {
+    private func setRenameButtonActive(_ value: Bool) {
         self.rightBarButton.isEnabled = value
 
     }
@@ -255,7 +255,7 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
         })
     }
 
-    @objc fileprivate func handleCancel() {
+    @objc private func handleCancel() {
         textField.resignFirstResponder()
         onFinish?(nil, needRefresh)
     }
@@ -310,7 +310,7 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
 
-    @objc fileprivate func handleTextFieldChange() {
+    @objc private func handleTextFieldChange() {
         if let newName = textField.text {
             if newName.isEmpty {
                 setRenameButtonActive(false)
@@ -371,14 +371,14 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
 extension RenameViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        setMessage(onScreen: false)
-        positionCursor()
+        self.setMessage(onScreen: false)
+        self.positionCursor()
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if rightBarButton.isEnabled {
+        if self.rightBarButton.isEnabled {
             textField.resignFirstResponder()
-            handleRename()
+            self.handleRename()
             return false
         }
         return false

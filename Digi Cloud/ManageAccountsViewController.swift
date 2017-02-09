@@ -167,7 +167,7 @@ class ManageAccountsViewController: UITableViewController {
         self.deleteButton.title = NSLocalizedString("Delete All", comment: "Button Title")
     }
 
-    @objc fileprivate func toggleEditMode() {
+    @objc private func toggleEditMode() {
         var button: UIBarButtonItem
         if tableView.isEditing {
             button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: "Button Title"),

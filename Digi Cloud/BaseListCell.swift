@@ -59,7 +59,7 @@ class BaseListCell: UITableViewCell {
         }
     }
 
-    @objc fileprivate func handleAction() {
+    @objc private func handleAction() {
 
         delegate?.showActionController(for: actionButton)
     }

@@ -17,7 +17,7 @@ class ContentViewController: UIViewController {
     var fileUrl: URL!
     var session: URLSession?
 
-    fileprivate lazy var webView: WKWebView = {
+    private lazy var webView: WKWebView = {
         let view = WKWebView()
         view.navigationDelegate = self
         return view

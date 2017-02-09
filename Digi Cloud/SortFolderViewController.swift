@@ -13,7 +13,7 @@ class SortFolderViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ dismiss: Bool) -> Void)?
-    fileprivate var contextMenuSortActions: [String] = []
+    private var contextMenuSortActions: [String] = []
 
     // MARK: - Initializers and Deinitializers
 
@@ -93,7 +93,7 @@ class SortFolderViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setInitialActionNames() {
+    private func setInitialActionNames() {
         contextMenuSortActions = [
             NSLocalizedString("Directories first", comment: "Switch Title"),
             NSLocalizedString("Sort by Name", comment: "Selection Title"),
@@ -102,7 +102,7 @@ class SortFolderViewController: UITableViewController {
             NSLocalizedString("Sort by Type", comment: "Selection Title") ]
     }
 
-    fileprivate func setupViews() {
+    private func setupViews() {
 
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))

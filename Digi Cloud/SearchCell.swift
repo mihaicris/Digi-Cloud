@@ -70,7 +70,7 @@ class SearchCell: UITableViewCell {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
         contentView.addSubview(nodeIcon)
         contentView.addSubview(nodeNameLabel)
         contentView.addSubview(nodeMountLabel)
@@ -78,7 +78,7 @@ class SearchCell: UITableViewCell {
         setupConstraints()
     }
 
-    fileprivate func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             nodeIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             nodeIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1),

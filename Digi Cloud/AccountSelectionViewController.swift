@@ -12,7 +12,7 @@ class AccountSelectionViewController: UIViewController,
                                       UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // MARK: - Properties
 
-    fileprivate let cellId = "Cell"
+    private let cellId = "Cell"
     let cellWidth: CGFloat = 200
     let cellHeight: CGFloat = 100
     let spacingHoriz: CGFloat = 20
@@ -43,7 +43,7 @@ class AccountSelectionViewController: UIViewController,
         return cv
     }()
 
-    fileprivate let noAccountsLabel: UILabel = {
+    private let noAccountsLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = UIColor(red: 161/255, green: 168/255, blue: 209/255, alpha: 1.0)
@@ -52,7 +52,7 @@ class AccountSelectionViewController: UIViewController,
         return l
     }()
 
-    fileprivate let addAccountButton: UIButton = {
+    private let addAccountButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Add Account", comment: "Button Title"), for: .normal)
@@ -62,7 +62,7 @@ class AccountSelectionViewController: UIViewController,
         return b
     }()
 
-    fileprivate let stackView: UIStackView = {
+    private let stackView: UIStackView = {
         let st = UIStackView()
         st.translatesAutoresizingMaskIntoConstraints = false
         st.axis = .horizontal
@@ -71,7 +71,7 @@ class AccountSelectionViewController: UIViewController,
         return st
     }()
 
-    fileprivate let signUpLabel: UIButton = {
+    private let signUpLabel: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Sign Up for Digi Storage", comment: "Button Title"), for: .normal)
@@ -80,7 +80,7 @@ class AccountSelectionViewController: UIViewController,
         return b
     }()
 
-    fileprivate let loginToAnotherAccountButton: UIButton = {
+    private let loginToAnotherAccountButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Log in to Another Account", comment: "Button Title"), for: .normal)
@@ -90,7 +90,7 @@ class AccountSelectionViewController: UIViewController,
         return b
     }()
 
-    fileprivate let logoBigLabel: UILabel = {
+    private let logoBigLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = .white
@@ -114,7 +114,7 @@ class AccountSelectionViewController: UIViewController,
         return l
     }()
 
-    fileprivate let manageAccountsButton: UIButton = {
+    private let manageAccountsButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Manage Accounts", comment: "Button Title"), for: .normal)

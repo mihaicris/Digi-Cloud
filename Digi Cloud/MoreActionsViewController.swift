@@ -62,7 +62,7 @@ class MoreActionsViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
             view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
@@ -97,7 +97,7 @@ class MoreActionsViewController: UITableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 
-    fileprivate func createCell(title: String, color: UIColor) -> UITableViewCell {
+    private func createCell(title: String, color: UIColor) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.textLabel?.textAlignment = .left
         cell.textLabel?.textColor = color

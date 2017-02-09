@@ -44,7 +44,7 @@ class AccountCollectionCell: UICollectionViewCell {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
 
         addSubview(profileImage)
         addSubview(accountNameLabel)

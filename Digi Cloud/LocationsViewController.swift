@@ -14,9 +14,9 @@ class LocationsViewController: UITableViewController {
 
     var onFinish: (() -> Void)?
 
-    fileprivate var locations: [Location] = []
-    fileprivate let action: ActionType
-    fileprivate var isUpdating: Bool = false
+    private var locations: [Location] = []
+    private let action: ActionType
+    private var isUpdating: Bool = false
 
     let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
@@ -108,7 +108,7 @@ class LocationsViewController: UITableViewController {
         ])
     }
 
-    fileprivate func setupNavigationBar() {
+    private func setupNavigationBar() {
 
         // Create navigation elements when coping or moving
         if action == .copy || action == .move {
@@ -126,7 +126,7 @@ class LocationsViewController: UITableViewController {
         self.title = NSLocalizedString("Locations", comment: "Window Title")
     }
 
-    fileprivate func setupTableView() {
+    private func setupTableView() {
         tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
         tableView.rowHeight = 78
         tableView.tableFooterView = UIView()
@@ -136,7 +136,7 @@ class LocationsViewController: UITableViewController {
         refreshControl?.addTarget(self, action: #selector(handleRefreshLocations), for: UIControlEvents.valueChanged)
     }
 
-    fileprivate func getLocations() {
+    private func getLocations() {
 
         self.isUpdating = true
 
@@ -163,7 +163,7 @@ class LocationsViewController: UITableViewController {
         }
     }
 
-    fileprivate func openMount(index: Int) {
+    private func openMount(index: Int) {
         let controller = ListingViewController(action: self.action, for: locations[index])
         controller.title = locations[index].mount.name
         if self.action != .noAction {
@@ -174,7 +174,7 @@ class LocationsViewController: UITableViewController {
         navigationController?.pushViewController(controller, animated: true)
     }
 
-    fileprivate func endRefreshAndReloadTable() {
+    private func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.refreshControl?.endRefreshing()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
@@ -183,7 +183,7 @@ class LocationsViewController: UITableViewController {
         }
     }
 
-    @objc fileprivate func handleRefreshLocations() {
+    @objc private func handleRefreshLocations() {
         if self.isUpdating {
             self.refreshControl?.endRefreshing()
             return
@@ -191,7 +191,7 @@ class LocationsViewController: UITableViewController {
         self.getLocations()
     }
 
-    @objc fileprivate func handleShowSettings() {
+    @objc private func handleShowSettings() {
         let controller = SettingsViewController(style: .grouped)
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .popover
@@ -199,7 +199,7 @@ class LocationsViewController: UITableViewController {
         present(navController, animated: true, completion: nil)
     }
 
-    @objc fileprivate func handleDone() {
+    @objc private func handleDone() {
         self.onFinish?()
     }
 }

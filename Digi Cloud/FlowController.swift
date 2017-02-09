@@ -10,7 +10,7 @@ import UIKit
 
 class FlowController {
 
-    fileprivate var window: UIWindow
+    private var window: UIWindow
 
     init(window: UIWindow) {
         self.window = window
@@ -44,7 +44,7 @@ class FlowController {
         return controller
     }
 
-    fileprivate func createIntroController() -> UIViewController {
+    private func createIntroController() -> UIViewController {
 
         let controller = IntroductionViewController()
 
@@ -62,7 +62,7 @@ class FlowController {
         return navController
     }
 
-    fileprivate func createAccountSelectionController() -> UIViewController {
+    private func createAccountSelectionController() -> UIViewController {
         let controller = AccountSelectionViewController()
         controller.onSelect = { [weak self] in
             self?.transitionToNewRootController()
@@ -70,7 +70,7 @@ class FlowController {
         return controller
     }
 
-    fileprivate func createMainNavigationController() -> UIViewController {
+    private func createMainNavigationController() -> UIViewController {
         let controller = MainNavigationController()
         controller.onLogout = { [weak self] in
             self?.transitionToNewRootController()

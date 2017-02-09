@@ -37,7 +37,7 @@ class LocationCell: UITableViewCell {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
         contentView.addSubview(locationLabel)
         contentView.addConstraints(with: "H:|-15-[v0]|", views: locationLabel)
         contentView.addConstraints(with: "V:|[v0]|", views: locationLabel)

@@ -13,17 +13,17 @@ class SearchResultController: UITableViewController {
     // MARK: - Properties
     var filteredContent = [Node]()
     weak var searchController: UISearchController?
-    fileprivate let currentLocation: Location
-    fileprivate var fileCellID: String = ""
-    fileprivate let byteFormatter: ByteCountFormatter = {
+    private let currentLocation: Location
+    private var fileCellID: String = ""
+    private let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
         f.allowsNonnumericFormatting = false
         return f
     }()
-    fileprivate var searchInCurrentMount: Bool = true
-    fileprivate var currentColor = UIColor(hue: 0.17, saturation: 0.55, brightness: 0.75, alpha: 1.0)
-    fileprivate var mountNames: [String: UIColor] = [:]
+    private var searchInCurrentMount: Bool = true
+    private var currentColor = UIColor(hue: 0.17, saturation: 0.55, brightness: 0.75, alpha: 1.0)
+    private var mountNames: [String: UIColor] = [:]
 
     // MARK: - Initializers and Deinitializers
     init(currentLocation: Location) {
@@ -111,7 +111,7 @@ class SearchResultController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupTableView() {
+    private func setupTableView() {
         self.fileCellID = "SearchFileCell"
         tableView.register(SearchCell.self, forCellReuseIdentifier: fileCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false

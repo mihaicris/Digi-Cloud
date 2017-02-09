@@ -25,11 +25,11 @@ class NodeActionsViewController: UITableViewController {
 
     weak var delegate: NodeActionsViewControllerDelegate?
 
-    fileprivate var node: Node
+    private var node: Node
 
-    fileprivate var contextMenuFileActions: [ActionCell] = []
+    private var contextMenuFileActions: [ActionCell] = []
 
-    fileprivate var contextMenuFolderActions: [ActionCell] = []
+    private var contextMenuFolderActions: [ActionCell] = []
 
     // MARK: - Initializers and Deinitializers
 
@@ -78,7 +78,7 @@ class NodeActionsViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    fileprivate func setupViews() {
+    private func setupViews() {
         let folderActions = [ActionCell(title: NSLocalizedString("Share", comment: "Selection Title"), action: .share),
                              ActionCell(title: NSLocalizedString("Rename", comment: "Selection Title"), action: .rename),
                              ActionCell(title: NSLocalizedString("Copy", comment: "Selection Title"), action: .copy),

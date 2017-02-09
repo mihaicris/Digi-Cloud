@@ -16,19 +16,19 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
     var onFinish: (() -> Void)?
-    fileprivate let action: ActionType
+    fileprivate let editaction: ActionType
     fileprivate var location: Location
     fileprivate var needRefresh: Bool = true
-    fileprivate var isUpdating: Bool = false
-    fileprivate var isActionConfirmed: Bool = false
+    private var isUpdating: Bool = false
+    private var isActionConfirmed: Bool = false
     fileprivate var content: [Node] = []
-    fileprivate var filteredContent: [Node] = []
+    private var filteredContent: [Node] = []
     fileprivate var currentIndex: IndexPath!
-    fileprivate var searchController: UISearchController!
-    fileprivate var fileCellID = String()
-    fileprivate var folderCellID = String()
+    private var searchController: UISearchController!
+    private var fileCellID = String()
+    private var folderCellID = String()
 
-    fileprivate let dateFormatter: DateFormatter = {
+    private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
         f.timeStyle = .none
@@ -37,14 +37,14 @@ final class ListingViewController: UITableViewController {
         return f
     }()
 
-    fileprivate let byteFormatter: ByteCountFormatter = {
+    private let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
         f.allowsNonnumericFormatting = false
         return f
     }()
 
-    fileprivate let busyIndicator: UIActivityIndicatorView = {
+    private let busyIndicator: UIActivityIndicatorView = {
         let i = UIActivityIndicatorView()
         i.hidesWhenStopped = true
         i.activityIndicatorViewStyle = .gray
@@ -52,14 +52,14 @@ final class ListingViewController: UITableViewController {
         return i
     }()
 
-    fileprivate let emptyFolderLabel: UILabel = {
+    private let emptyFolderLabel: UILabel = {
         let l = UILabel()
         l.textColor = UIColor.lightGray
         l.textAlignment = .center
         return l
     }()
 
-    fileprivate lazy var messageStackView: UIStackView = {
+    private lazy var messageStackView: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.spacing = 10
@@ -69,7 +69,7 @@ final class ListingViewController: UITableViewController {
         return sv
     }()
 
-    fileprivate var sortBarButton: UIBarButtonItem!
+    private var sortBarButton: UIBarButtonItem!
 
     private lazy var moreActionsBarButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
@@ -125,7 +125,7 @@ final class ListingViewController: UITableViewController {
     // MARK: - Initializers and Deinitializers
 
     init(action: ActionType, for location: Location) {
-        self.action = action
+        self.editaction = action
         self.location = location
         #if DEBUG
             count += 1
@@ -141,7 +141,7 @@ final class ListingViewController: UITableViewController {
 
     #if DEBUG
     deinit {
-        print(self.tag, "❌", String(describing: type(of: self)), action)
+        print(self.tag, "❌", String(describing: type(of: self)), editaction)
         count -= 1
     }
     #endif
@@ -155,7 +155,7 @@ final class ListingViewController: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        if self.action == .noAction {
+        if self.editaction == .noAction {
             updateNavigationBarRightButtonItems()
             tableView.tableHeaderView = nil
         }
@@ -254,10 +254,10 @@ final class ListingViewController: UITableViewController {
             let nextPath = self.location.path + item.name + "/"
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
-            let controller = ListingViewController(action: self.action, for: nextLocation)
+            let controller = ListingViewController(action: self.editaction, for: nextLocation)
 
             controller.title = item.name
-            if self.action != .noAction {
+            if self.editaction != .noAction {
 
                 // It makes sens only if this is a copy or move controller
                 controller.onFinish = { [unowned self] in
@@ -270,7 +270,7 @@ final class ListingViewController: UITableViewController {
 
             // This is a file
 
-            if self.action != .noAction {
+            if self.editaction != .noAction {
                 return
             }
 
@@ -294,9 +294,9 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Helper Methods
 
-    fileprivate func setupTableView() {
+    private func setupTableView() {
 
-        switch self.action {
+        switch self.editaction {
         case .copy, .move:
             self.fileCellID = "FileCell"
             self.folderCellID = "DirectoryCell"
@@ -319,8 +319,8 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    fileprivate func setupViews() {
-        switch self.action {
+    private func setupViews() {
+        switch self.editaction {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
 
@@ -331,7 +331,7 @@ final class ListingViewController: UITableViewController {
 
             navigationController?.isToolbarHidden = false
 
-            let buttonTitle = self.action == .copy ?
+            let buttonTitle = self.editaction == .copy ?
                 NSLocalizedString("Save copy", comment: "Button Title") :
                 NSLocalizedString("Move", comment: "Button Title")
 
@@ -344,7 +344,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func setupSearchController() {
+    private func setupSearchController() {
         let src = SearchResultController(currentLocation: self.location)
         searchController = UISearchController(searchResultsController: src)
         searchController.delegate = self
@@ -359,7 +359,7 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: "Button Title"), forKey: "cancelButtonText")
     }
 
-    fileprivate func setRefreshControlTitle(started: Bool) {
+    private func setRefreshControlTitle(started: Bool) {
         let title: String
         let attributes: [String: Any] = [NSFontAttributeName: UIFont(name: "Helvetica", size: 10) as Any,
                                          NSForegroundColorAttributeName: UIColor.init(white: 0.2, alpha: 1.0)as Any]
@@ -402,14 +402,14 @@ final class ListingViewController: UITableViewController {
                 return
             }
             if var newContent = receivedContent {
-                switch self.action {
+                switch self.editaction {
                 case .copy, .move:
                     // Only in move action, the moved node is not shown in the list.
                     guard let sourceNode = (self.presentingViewController as? MainNavigationController)?.sourceNode else {
                         print("Couldn't get the source node.")
                         return
                     }
-                    if self.action == .move {
+                    if self.editaction == .move {
                         for (index, elem) in newContent.enumerated() {
                             if elem.name == sourceNode.name {
                                 newContent.remove(at: index)
@@ -454,7 +454,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func endRefreshAndReloadTable() {
+    private func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.refreshControl?.endRefreshing()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -465,7 +465,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func sortContent() {
+    private func sortContent() {
         switch AppSettings.sortMethod {
         case .byName:        sortByName()
         case .byDate:        sortByDate()
@@ -490,7 +490,7 @@ final class ListingViewController: UITableViewController {
                        completion: nil)
     }
 
-    fileprivate func updateNavigationBarRightButtonItems() {
+    private func updateNavigationBarRightButtonItems() {
 
         var rightBarButtonItems = [UIBarButtonItem]()
 
@@ -522,7 +522,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func sortByName() {
+    private func sortByName() {
         if AppSettings.showsFoldersFirst {
             if AppSettings.sortAscending {
                 self.content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
@@ -538,7 +538,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func sortByDate() {
+    private func sortByDate() {
         if AppSettings.showsFoldersFirst {
             if AppSettings.sortAscending {
                 self.content.sort { return $0.type == $1.type ? ($0.modified < $1.modified) : ($0.type < $1.type) }
@@ -554,7 +554,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func sortBySize() {
+    private func sortBySize() {
         if AppSettings.sortAscending {
             self.content.sort { return $0.type == $1.type ? ($0.size < $1.size) : ($0.type < $1.type) }
         } else {
@@ -562,7 +562,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func sortByContentType() {
+    private func sortByContentType() {
         if AppSettings.sortAscending {
             self.content.sort { return $0.type == $1.type ? ($0.ext < $1.ext) : ($0.type < $1.type) }
         } else {
@@ -576,7 +576,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func setBusyIndicatorView(_ visible: Bool) {
+    private func setBusyIndicatorView(_ visible: Bool) {
         guard let navControllerView = navigationController?.view else {
             return
         }
@@ -613,7 +613,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc fileprivate func handleSortSelect() {
+    @objc private func handleSortSelect() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self](dismiss) in
             if dismiss {
@@ -654,7 +654,7 @@ final class ListingViewController: UITableViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc fileprivate func handleCreateDirectory() {
+    @objc private func handleCreateDirectory() {
 
         let controller = CreateFolderViewController(location: location)
         controller.onFinish = { [unowned self](folderName) in
@@ -677,7 +677,7 @@ final class ListingViewController: UITableViewController {
                 }
                 let folderLocation = Location(mount: self.location.mount, path: nextPath)
 
-                let controller = ListingViewController(action: self.action, for: folderLocation)
+                let controller = ListingViewController(action: self.editaction, for: folderLocation)
                 controller.title = folderName
                 controller.onFinish = {[unowned self] in
                     self.onFinish?()
@@ -691,11 +691,11 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    @objc fileprivate func handleDone() {
+    @objc private func handleDone() {
         self.onFinish?()
     }
 
-    @objc fileprivate func handleRefresh() {
+    @objc private func handleRefresh() {
         if self.isUpdating {
             self.refreshControl?.endRefreshing()
             return
@@ -704,7 +704,7 @@ final class ListingViewController: UITableViewController {
         self.updateContent()
     }
 
-    @objc fileprivate func handleSearch() {
+    @objc private func handleSearch() {
         guard let nav = self.navigationController as? MainNavigationController else {
             print("Could not get the MainNavigationController")
             return
@@ -726,7 +726,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc fileprivate func handleCopyOrMove() {
+    @objc private func handleCopyOrMove() {
 
         setBusyIndicatorView(true)
 
@@ -739,7 +739,7 @@ final class ListingViewController: UITableViewController {
 
         let index = sourceNode.name.getIndexBeforeExtension()
 
-        if self.action == .copy {
+        if self.editaction == .copy {
             var destinationName = sourceNode.name
             var copyCount: Int = 0
             var wasRenamed = false
@@ -779,7 +779,7 @@ final class ListingViewController: UITableViewController {
             destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
         }
 
-        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.location, to: destinationLocation) { statusCode, error in
+        DigiClient.shared.copyOrMoveNode(action: self.editaction, from: sourceNode.location, to: destinationLocation) { statusCode, error in
 
             func setNeededRefreshInMain() {
                 // Set needRefresh true in the main Listing controller
@@ -1002,7 +1002,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                         let c = ListingViewController(action: action, for: p.location)
                         c.title = p.title
                         c.onFinish = { [unowned self] in
-                            if self.action != .noAction {
+                            if self.editaction != .noAction {
                                 self.onFinish?()
                             } else {
                                 self.dismiss(animated: true) {
@@ -1157,7 +1157,7 @@ extension ListingViewController: UISearchControllerDelegate {
         guard let src = searchController.searchResultsController as? SearchResultController else {
             return
         }
-        resetSearchViewControllerIndex()
+        self.resetSearchViewControllerIndex()
         src.filteredContent.removeAll()
         src.tableView.reloadData()
     }
