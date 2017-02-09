@@ -170,7 +170,7 @@ class CreateFolderViewController: UITableViewController {
                     self.setMessage(onScreen: true, message)
                 case 404:
                     // Not Found (Folder do not exists anymore), folder will refresh
-                    let message = NSLocalizedString("File is no longer available. Folder will refresh.", comment: "Error message")
+                    let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "Error message")
                     self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
                     self.setMessage(onScreen: true, message)
                 default :

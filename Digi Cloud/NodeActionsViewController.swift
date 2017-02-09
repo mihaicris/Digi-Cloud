@@ -83,7 +83,7 @@ class NodeActionsViewController: UITableViewController {
                              ActionCell(title: NSLocalizedString("Rename", comment: "Selection Title"), action: .rename),
                              ActionCell(title: NSLocalizedString("Copy", comment: "Selection Title"), action: .copy),
                              ActionCell(title: NSLocalizedString("Move", comment: "Selection Title"), action: .move),
-                             ActionCell(title: NSLocalizedString("Folder information", comment: "Selection Title"), action: .folderInfo)]
+                             ActionCell(title: NSLocalizedString("Directory information", comment: "Selection Title"), action: .folderInfo)]
 
         contextMenuFolderActions.append(contentsOf: folderActions)
 

@@ -89,7 +89,7 @@ final class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateDirectory))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Directory", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateDirectory))
         return b
     }()
 
@@ -358,8 +358,8 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.delegate = src
         searchController.searchBar.autocorrectionType = .no
         searchController.searchBar.autocapitalizationType = .none
-        searchController.searchBar.placeholder = NSLocalizedString("Search for files or folders", comment: "Action title")
-        searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This folder", comment: "Button title"),
+        searchController.searchBar.placeholder = NSLocalizedString("Search for files or directories", comment: "Action title")
+        searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This directory", comment: "Button title"),
                                                         NSLocalizedString("Everywhere", comment: "Button title")]
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: "Button Title"), forKey: "cancelButtonText")
     }
@@ -371,7 +371,7 @@ final class ListingViewController: UITableViewController {
         if started {
             title = NSLocalizedString("Refreshing ...", comment: "Title")
         } else {
-            title = NSLocalizedString("Pull to refresh this folder", comment: "Title")
+            title = NSLocalizedString("Pull to refresh this directory", comment: "Title")
         }
         refreshControl?.attributedTitle = NSAttributedString(string: title, attributes: attributes)
     }
@@ -452,7 +452,7 @@ final class ListingViewController: UITableViewController {
         // For the case when the folder is empty, setting the message text on screen.
         if self.content.isEmpty {
             busyIndicator.stopAnimating()
-            emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "Information")
+            emptyFolderLabel.text = NSLocalizedString("Directory is Empty", comment: "Information")
         }
     }
 

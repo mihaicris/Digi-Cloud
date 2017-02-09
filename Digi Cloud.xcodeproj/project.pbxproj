@@ -32,6 +32,7 @@
 		8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsViewController.swift */; };
 		8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */; };
 		8373DE041E321A690083D614 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373DE031E321A690083D614 /* Cache.swift */; };
+		837E53F71E4CDF2B00D8A5AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */; };
 		83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */; };
 		83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E631E25345500C8AE52 /* AccountTableViewCell.swift */; };
 		8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */; };
@@ -102,6 +103,7 @@
 		8370412B1D8B2264000EDBAE /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		8373DE031E321A690083D614 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		837E53F81E4CDF2B00D8A5AA /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountsViewController.swift; sourceTree = "<group>"; };
 		83851E631E25345500C8AE52 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
 		8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSelectionViewController.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 		83F7EEFE1E369A7D0033F03D /* Digi Cloud Tests */ = {
 			isa = PBXGroup;
 			children = (
+				837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */,
 				83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */,
 				83F7EF011E369A7D0033F03D /* Info.plist */,
 			);
@@ -473,6 +476,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837E53F71E4CDF2B00D8A5AA /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,6 +584,14 @@
 				83B6D38B1E13C1D5005258B3 /* hu */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				837E53F81E4CDF2B00D8A5AA /* ro */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		83B6D3951E13C781005258B3 /* InfoPlist.strings */ = {

@@ -112,7 +112,7 @@ class SortFolderViewController: UITableViewController {
 
         let titleName: UILabel = {
             let label = UILabel()
-            label.text = NSLocalizedString("Sort folder", comment: "Window Title")
+            label.text = NSLocalizedString("Sort directory", comment: "Window Title")
             label.font = UIFont.systemFont(ofSize: 14)
             label.translatesAutoresizingMaskIntoConstraints = false
             return label

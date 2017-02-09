@@ -213,7 +213,7 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
         rightBarButton.isEnabled = false
 
         self.title = node.type == "dir" ?
-            NSLocalizedString("Rename Folder", comment: "Window Title") :
+            NSLocalizedString("Rename Directory", comment: "Window Title") :
             NSLocalizedString("Rename File", comment: "Window Title")
     }
 
@@ -297,7 +297,7 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     self.setMessage(onScreen: true, message)
                 case 404:
                     // Not Found (Node do not exists anymore), folder will refresh
-                    let message = NSLocalizedString("File is no longer available. Folder will refresh.", comment: "Error message")
+                    let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "Error message")
                     self.needRefresh = true
                     self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
                     self.setMessage(onScreen: true, message)

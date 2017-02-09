@@ -72,7 +72,7 @@ class DeleteViewController: UITableViewController {
             if node.type == "file" {
                 label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "Question for user")
             } else {
-                label.text = NSLocalizedString("Are you sure you want to delete this folder?", comment: "Question for user")
+                label.text = NSLocalizedString("Are you sure you want to delete this directory?", comment: "Question for user")
             }
             label.font = UIFont.systemFont(ofSize: 14)
             return label

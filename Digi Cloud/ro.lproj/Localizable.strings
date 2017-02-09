@@ -1,35 +1,74 @@
 /* Information */
+"%d directories" = "%d directoare";
+
+/* Information */
 "%d files
 " = "%d fișiere
 ";
 
 /* Information */
-"%d folders" = "%d directoare";
+"1 directory" = "1 director";
 
 /* Information */
 "1 file
 " = "1 fișier
 ";
 
-/* Information */
-"1 folder" = "1 director";
+/* Section title */
+"ABOUT DIGI CLOUD" = "DESPRE DIGI CLOUD";
+
+/* Window Title */
+"Accounts" = "Conturi";
 
 /* Button Title */
 "Add Account" = "Adaugă un cont";
+
+/* Notice */
+"An error has occured while processing the request." = "A avut loc o eroare la procesarea cererii.";
+
+/* Notice */
+"An error has occured. Some elements already exists at the destination or the destination location no longer exists." = "A avut loc o eroare. Element deja există la destinație sau locația destinație nu mai este disponibilă.";
+
+/* Notice */
+"An error has occured. Some elements no longer exists." = "A avut loc o eroare. Fișierele nu mai există.";
+
+/* Error Message */
+"An error has occurred while saving the account.
+Please try again later!" = "A avut loc o eroare la salvarea contului.
+Încercați mai târziu!";
 
 /* Error Message */
 "An error has occurred.
 Please try again later!" = "A avut loc o eroare.
 Te rugăm să încerci mai târziu!";
 
+/* Label Title */
+"App Version" = "Versiune aplicație";
+
+/* Question for user */
+"Are you sure you want to delete this directory?" = "Sigur se șterge acest director?";
+
 /* Question for user */
 "Are you sure you want to delete this file?" = "Sigur se șterge acest fișier?";
 
-/* Question for user */
-"Are you sure you want to delete this folder?" = "Sigur se șterge acest director?";
+/* No comment provided by engineer. */
+"Are you sure you want to remove these accounts?" = "Sigur se șterg aceste conturi?";
 
-/* Button Title */
+/* No comment provided by engineer. */
+"Are you sure you want to remove this account?" = "Sigur se șterge acest cont?";
+
+/* Action Title
+   Button Title */
 "Cancel" = "Renunță";
+
+/* No comment provided by engineer. */
+"Change to Sentence Case" = "Schimbă în stil Propoziție";
+
+/* No comment provided by engineer. */
+"Change to UPPER CASE" = "Schimbă în litere MARI";
+
+/* No comment provided by engineer. */
+"Change to lower case" = "Schimbă în litere mici";
 
 /* Error Information
    Error message */
@@ -38,25 +77,64 @@ Te rugăm să încerci mai târziu!";
 /* Window prompt */
 "Choose a destination" = "Alege o destinație";
 
-/* Selection Title */
+/* Button Title */
+"Clear Cache" = "Curățare memoria cache";
+
+/* Button Title */
+"Confirm" = "Confirmă";
+
+/* Alert Title */
+"Confirm Deletion" = "Confirmă ștergerea";
+
+/* Button Title
+   Selection Title */
 "Copy" = "Copiază";
 
 /* Button Title */
 "Create" = "Creează";
 
-/* Button Title
-   Window Title */
-"Create Folder" = "Creare director";
+/* Button title
+   Button Title */
+"Create Directory" = "Creeare director";
+
+/* Window Title */
+"Create Folder" = "Creeare director";
+
+/* No comment provided by engineer. */
+"Currently using:" = "Memorie curentă:";
+
+/* Section title */
+"DATA" = "DATE";
 
 /* Button title */
 "Date" = "Dată";
 
-/* Button title
+/* Button Title
+   Button title
    Selection Title */
 "Delete" = "Șterge";
 
+/* Button Title */
+"Delete (%d)" = "Șterge (%d)";
+
+/* Button Title */
+"Delete All" = "Șterge toate";
+
 /* Button Title, keep the leading/trailing spaces! */
-"Delete Folder" = "Șterge director";
+"Delete Directory" = "Șterge director";
+
+/* Switch Title */
+"Directories first" = "Directoare la început";
+
+/* TableCell Header Title */
+"Directory content" = "Conținut director";
+
+/* Selection Title
+   Window Title */
+"Directory information" = "Informații director";
+
+/* Information */
+"Directory is Empty" = "Directorul este gol";
 
 /* Button Title
    Button title */
@@ -65,33 +143,24 @@ Te rugăm să încerci mai târziu!";
 /* TextField Name */
 "EMAIL ADDRESS" = "ADRESĂ EMAIL";
 
-/* Window Title */
+/* Button Title */
+"Edit" = "Editare";
+
+/* Title
+   Window Title */
 "Error" = "Eroare";
 
 /* Button title */
 "Everywhere" = "Peste tot";
 
 /* Error message */
-"File is no longer available. Folder will refresh." = "Fișierul nu mai este disponibil. Directorul se va actualiza.";
+"File is no longer available. Directory will refresh." = "Fișierul nu mai este disponibil. Conținutul directorului se va actualiza.";
 
 /* Textfield placeholder */
 "Folder Name" = "Nume director";
 
 /* Error message */
 "Folder already exists. Please choose a different name." = "Directorul există deja. Alege un alt nume.";
-
-/* TableCell Header Title */
-"Folder content" = "Conținut director";
-
-/* Selection Title
-   Window Title */
-"Folder information" = "Informații director";
-
-/* Information */
-"Folder is Empty" = "Directorul este gol";
-
-/* Switch Title */
-"Folders first" = "Directoare la început";
 
 /* Question */
 "Forgot password?" = "Ai uitat parola?";
@@ -117,8 +186,20 @@ Te rugăm să încerci mai târziu!";
 /* Button Title */
 "Log in to Another Account" = "Autentificare în alt cont";
 
+/* Button Title */
+"Logout" = "Deconectare";
+
 /* Selection Title */
 "Make available offline" = "Disponibil fără internet";
+
+/* Button Title */
+"Manage Accounts" = "Gestionare conturi";
+
+/* Button Title */
+"Mobile Data" = "Date mobile";
+
+/* Question for user */
+"More actions" = "Mai multe acțiuni";
 
 /* Button Title
    Selection Title */
@@ -137,6 +218,9 @@ Te rugăm să încerci mai târziu!";
 /* TableCell Footer Title */
 "Note: Including subfolders" = "Notă: Inclusiv subdirectoare";
 
+/* Action Title */
+"OK" = "OK";
+
 /* TextField Name */
 "PASSWORD" = "PAROLĂ";
 
@@ -150,7 +234,10 @@ Te rugăm să încerci mai târziu!";
 "Please provide the credentials for your Digi Storage account." = "Te rugăm să furnizezi datale de autentificare pentru contul tău Digi Storage.";
 
 /* Title */
-"Pull to refresh this folder" = "Trage pentru a actualiza directorul";
+"Pull to refresh this directory" = "Trage pentru actualizare";
+
+/* Button Title */
+"Rate the App" = "Dă o notă aplicației";
 
 /* Title */
 "Refreshing ..." = "Se actualizează ...";
@@ -160,19 +247,34 @@ Te rugăm să încerci mai târziu!";
 "Rename" = "Redenumește";
 
 /* Window Title */
-"Rename File" = "Redenumire fișier";
+"Rename Directory" = "Redenumire director";
 
 /* Window Title */
-"Rename Folder" = "Redenumire director";
+"Rename File" = "Redenumire fișier";
+
+/* No comment provided by engineer. */
+"Rename utilities:" = "Utilitare redenumire:";
+
+/* No comment provided by engineer. */
+"Replace space with underscore" = "Înlocuire spațiu with caracter de subliniere";
+
+/* No comment provided by engineer. */
+"Replace underscore with space" = "Înlocuire caracter de subliniere cu spațiu";
 
 /* Button Title */
-"Save copy" = "Salvează copia";
+"Save copy" = "Salvează copie";
 
 /* Action title */
-"Search for files or folders" = "Căutare fișiere sau directoare";
+"Search for files or directories" = "Cauta fișiere sau directoare";
+
+/* Button title */
+"Select Mode" = "Mod selecție";
 
 /* Error message */
 "Server replied with Status Code: " = "Serverul a răspuns cu codul de stare: ";
+
+/* Window Title */
+"Settings" = "Setări";
 
 /* Selection Title */
 "Share" = "Partajează";
@@ -197,13 +299,28 @@ Te rugăm să încerci mai târziu!";
 "Sort by Type" = "Sortează după tip";
 
 /* Window Title */
-"Sort folder" = "Sortare director";
+"Sort directory" = "Sortează directorul";
+
+/* Notice */
+"There was an error creating the directory." = "A avut loc o eroare la crearea directorului.";
+
+/* Notice */
+"There was an error refreshing the location." = "A avut loc o eroare la actualizarea directorului.";
+
+/* Notice */
+"There was an error refreshing the locations." = "A avut loc o eroare la actualizarea locațiilor.";
+
+/* Notice */
+"There was an error while deleting." = "A avut loc o eroare la ștergere.";
 
 /* TableCell Footer Title */
 "This action is not reversible!" = "Aceată acțiune nu este reversibilă!";
 
+/* Notice */
+"This action is not reversible." = "Aceată acțiune nu este reversibilă.";
+
 /* Button title */
-"This folder" = "Acest director";
+"This directory" = "Acest director";
 
 /* Error message */
 "This name already exists. Please choose a different one." = "Numele există deja. Alege unul diferit.";
@@ -211,8 +328,14 @@ Te rugăm să încerci mai târziu!";
 /* Button title */
 "Type" = "Tip";
 
+/* Section title */
+"USER" = "UTILIZATOR";
+
 /* Error Message */
 "Unauthorized access" = "Acces neautorizat";
+
+/* No comment provided by engineer. */
+"Yes" = "Da";
 
 /* a word */
 "for" = "pentru";

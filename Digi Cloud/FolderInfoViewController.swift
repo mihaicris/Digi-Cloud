@@ -42,9 +42,9 @@ class FolderInfoViewController: UITableViewController {
 
                 let foldersString: String
                 if folderInfo.folders == 1 {
-                    foldersString = NSLocalizedString("1 folder", comment: "Information")
+                    foldersString = NSLocalizedString("1 directory", comment: "Information")
                 } else {
-                    foldersString = NSLocalizedString("%d folders", comment: "Information")
+                    foldersString = NSLocalizedString("%d directories", comment: "Information")
                 }
 
                 let text1 = String.localizedStringWithFormat(filesString, folderInfo.files)
@@ -98,7 +98,7 @@ class FolderInfoViewController: UITableViewController {
         switch section {
         case 0:     return NSLocalizedString("Name", comment: "TableCell Header Title")
         case 1:     return NSLocalizedString("Size", comment: "TableCell Header Title")
-        case 2:     return NSLocalizedString("Folder content", comment: "TableCell Header Title")
+        case 2:     return NSLocalizedString("Directory content", comment: "TableCell Header Title")
         default:    return ""
         }
     }
@@ -164,7 +164,7 @@ class FolderInfoViewController: UITableViewController {
             deleteButton.layer.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.05).cgColor
             deleteButton.layer.cornerRadius = 8
             deleteButton.layer.borderWidth = (1 / UIScreen.main.scale) * 1.2
-            deleteButton.setTitle(NSLocalizedString("Delete Folder", comment: "Button Title, keep the leading/trailing spaces!"), for: .normal)
+            deleteButton.setTitle(NSLocalizedString("Delete Directory", comment: "Button Title, keep the leading/trailing spaces!"), for: .normal)
             deleteButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 15, bottom: 7, right: 15)
             deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
             deleteButton.setTitleColor(.red, for: .normal)
@@ -192,7 +192,7 @@ class FolderInfoViewController: UITableViewController {
                                          target: self,
                                          action: #selector(handleDone))
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
-        self.title = NSLocalizedString("Folder information", comment: "Window Title")
+        self.title = NSLocalizedString("Directory information", comment: "Window Title")
     }
 
     private func updateFolderInfo() {
