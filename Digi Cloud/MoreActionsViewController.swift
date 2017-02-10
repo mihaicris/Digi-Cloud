@@ -47,9 +47,9 @@ class MoreActionsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
-            return createCell(title: NSLocalizedString("Create Directory", comment: "Button title"), color: .defaultColor)
+            return createCell(title: NSLocalizedString("Create Directory", comment: ""), color: .defaultColor)
         } else {
-            return createCell(title: NSLocalizedString("Select Mode", comment: "Button title"), color: .defaultColor)
+            return createCell(title: NSLocalizedString("Select Mode", comment: ""), color: .defaultColor)
         }
     }
 
@@ -72,7 +72,7 @@ class MoreActionsViewController: UITableViewController {
         let message: UILabel = {
             let label = UILabel()
             label.textAlignment = .center
-            label.text = NSLocalizedString("More actions", comment: "Question for user")
+            label.text = NSLocalizedString("More actions", comment: "")
             label.font = UIFont.systemFont(ofSize: 14)
             return label
         }()

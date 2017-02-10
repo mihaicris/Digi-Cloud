@@ -197,11 +197,11 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         tableView.isScrollEnabled = false
 
-        leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
+        leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
                                         style: .plain,
                                         target: self,
                                         action: #selector(handleCancel))
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename", comment: "Button Title"),
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename", comment: ""),
                                          style: .plain,
                                          target: self,
                                          action: #selector(handleRename))
@@ -213,8 +213,8 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
         rightBarButton.isEnabled = false
 
         self.title = node.type == "dir" ?
-            NSLocalizedString("Rename Directory", comment: "Window Title") :
-            NSLocalizedString("Rename File", comment: "Window Title")
+            NSLocalizedString("Rename Directory", comment: "") :
+            NSLocalizedString("Rename File", comment: "")
     }
 
     fileprivate func positionCursor() {
@@ -293,16 +293,16 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 case 400:
                     // Bad request ( Node already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
-                    let message = NSLocalizedString("This name already exists. Please choose a different one.", comment: "Error message")
+                    let message = NSLocalizedString("This name already exists. Please choose a different one.", comment: "")
                     self.setMessage(onScreen: true, message)
                 case 404:
                     // Not Found (Node do not exists anymore), folder will refresh
-                    let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "Error message")
+                    let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "")
                     self.needRefresh = true
-                    self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
+                    self.leftBarButton.title = NSLocalizedString("Done", comment: "")
                     self.setMessage(onScreen: true, message)
                 default :
-                    let message = NSLocalizedString("Server replied with Status Code: ", comment: "Error message")
+                    let message = NSLocalizedString("Server replied with Status Code: ", comment: "")
                     self.needRefresh = true
                     self.setMessage(onScreen: true, message + String(code))
                 }
@@ -315,11 +315,11 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if newName.isEmpty {
                 setRenameButtonActive(false)
             } else if hasInvalidCharacters(name: newName) {
-                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed.", comment: "Error Information")
+                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed.", comment: "")
                 setMessage(onScreen: true, message)
                 setRenameButtonActive(false)
             } else if node.name.lowercased() == newName.lowercased() {
-                let message = NSLocalizedString("Name is the same.", comment: "Error Information")
+                let message = NSLocalizedString("Name is the same.", comment: "")
                 setMessage(onScreen: true, message)
                 setRenameButtonActive(false)
             } else {

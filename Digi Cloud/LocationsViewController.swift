@@ -112,8 +112,8 @@ class LocationsViewController: UITableViewController {
 
         // Create navigation elements when coping or moving
         if action == .copy || action == .move {
-            self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
-            let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
+            self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
+            let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
                                               style: .plain,
                                               target: self,
                                               action: #selector(handleDone))
@@ -123,7 +123,7 @@ class LocationsViewController: UITableViewController {
             let settingsButton = UIBarButtonItem(image: UIImage(named: "Settings-Icon"), style: .plain, target: self, action: #selector(handleShowSettings))
             self.navigationItem.setLeftBarButton(settingsButton, animated: false)
         }
-        self.title = NSLocalizedString("Locations", comment: "Window Title")
+        self.title = NSLocalizedString("Locations", comment: "")
     }
 
     private func setupTableView() {
@@ -147,8 +147,8 @@ class LocationsViewController: UITableViewController {
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 self.endRefreshAndReloadTable()
-                let message = NSLocalizedString("There was an error refreshing the locations.", comment: "Notice")
-                let title = NSLocalizedString("Error", comment: "Title")
+                let message = NSLocalizedString("There was an error refreshing the locations.", comment: "")
+                let title = NSLocalizedString("Error", comment: "")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)

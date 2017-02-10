@@ -35,16 +35,16 @@ class FolderInfoViewController: UITableViewController {
 
                 let filesString: String
                 if folderInfo.files == 1 {
-                    filesString = NSLocalizedString("1 file\n", comment: "Information")
+                    filesString = NSLocalizedString("1 file\n", comment: "")
                 } else {
-                    filesString = NSLocalizedString("%d files\n", comment: "Information")
+                    filesString = NSLocalizedString("%d files\n", comment: "")
                 }
 
                 let foldersString: String
                 if folderInfo.folders == 1 {
-                    foldersString = NSLocalizedString("1 directory", comment: "Information")
+                    foldersString = NSLocalizedString("1 directory", comment: "")
                 } else {
-                    foldersString = NSLocalizedString("%d directories", comment: "Information")
+                    foldersString = NSLocalizedString("%d directories", comment: "")
                 }
 
                 let text1 = String.localizedStringWithFormat(filesString, folderInfo.files)
@@ -96,17 +96,17 @@ class FolderInfoViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0:     return NSLocalizedString("Name", comment: "TableCell Header Title")
-        case 1:     return NSLocalizedString("Size", comment: "TableCell Header Title")
-        case 2:     return NSLocalizedString("Directory content", comment: "TableCell Header Title")
+        case 0:     return NSLocalizedString("Name", comment: "")
+        case 1:     return NSLocalizedString("Size", comment: "")
+        case 2:     return NSLocalizedString("Directory content", comment: "")
         default:    return ""
         }
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {
-        case 2:     return NSLocalizedString("Note: Including subfolders", comment: "TableCell Footer Title")
-        case 3:     return NSLocalizedString("This action is not reversible!", comment: "TableCell Footer Title")
+        case 2:     return NSLocalizedString("Note: Including subfolders", comment: "")
+        case 3:     return NSLocalizedString("This action is not reversible.", comment: "")
         default:    return ""
         }
     }
@@ -164,7 +164,7 @@ class FolderInfoViewController: UITableViewController {
             deleteButton.layer.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.05).cgColor
             deleteButton.layer.cornerRadius = 8
             deleteButton.layer.borderWidth = (1 / UIScreen.main.scale) * 1.2
-            deleteButton.setTitle(NSLocalizedString("Delete Directory", comment: "Button Title, keep the leading/trailing spaces!"), for: .normal)
+            deleteButton.setTitle(NSLocalizedString("Delete Directory", comment: ""), for: .normal)
             deleteButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 15, bottom: 7, right: 15)
             deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
             deleteButton.setTitleColor(.red, for: .normal)
@@ -187,12 +187,12 @@ class FolderInfoViewController: UITableViewController {
 
     private func setupViews() {
         tableView.isScrollEnabled = false
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button title"),
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
                                          style: .plain,
                                          target: self,
                                          action: #selector(handleDone))
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
-        self.title = NSLocalizedString("Directory information", comment: "Window Title")
+        self.title = NSLocalizedString("Directory information", comment: "")
     }
 
     private func updateFolderInfo() {

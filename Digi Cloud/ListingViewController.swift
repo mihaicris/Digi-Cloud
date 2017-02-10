@@ -89,25 +89,25 @@ final class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Directory", comment: "Button Title"), style: .plain, target: self, action: #selector(handleCreateDirectory))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Directory", comment: ""), style: .plain, target: self, action: #selector(handleCreateDirectory))
         return b
     }()
 
     private lazy var copyInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: "Button Title"), style: .plain, target: self, action: #selector(handleMultipleItemsEdit(_:)))
+        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .plain, target: self, action: #selector(handleMultipleItemsEdit(_:)))
         b.tag = ActionType.copy.rawValue
         return b
     }()
 
     private lazy var moveInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: "Button Title"), style: .plain, target: self, action: #selector(handleMultipleItemsEdit(_:)))
+        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .plain, target: self, action: #selector(handleMultipleItemsEdit(_:)))
         b.tag = ActionType.move.rawValue
         return b
     }()
 
     private lazy var deleteInEditModeButton: UIBarButtonItem = {
         let v = UIButton(type: UIButtonType.system)
-        v.setTitle(NSLocalizedString("Delete", comment: "Button Title"), for: .normal)
+        v.setTitle(NSLocalizedString("Delete", comment: ""), for: .normal)
         v.addTarget(self, action: #selector(handleMultipleItemsEdit(_:)), for: .touchUpInside)
         v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
         v.setTitleColor(.red, for: .normal)
@@ -119,7 +119,7 @@ final class ListingViewController: UITableViewController {
     }()
 
     private lazy var cancelInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(cancelEditMode))
+        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelEditMode))
         return b
     }()
 
@@ -167,7 +167,7 @@ final class ListingViewController: UITableViewController {
         if needRefresh {
             content.removeAll()
             busyIndicator.startAnimating()
-            emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "Information")
+            emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "")
             tableView.reloadData()
         }
         super.viewWillAppear(animated)
@@ -327,9 +327,9 @@ final class ListingViewController: UITableViewController {
     private func setupViews() {
         switch self.editaction {
         case .copy, .move:
-            self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "Window prompt")
+            self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
 
-            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
+            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
                                                style: .plain, target: self, action: #selector(handleDone))
 
             navigationItem.rightBarButtonItem = cancelButton
@@ -337,8 +337,8 @@ final class ListingViewController: UITableViewController {
             navigationController?.isToolbarHidden = false
 
             let buttonTitle = self.editaction == .copy ?
-                NSLocalizedString("Save copy", comment: "Button Title") :
-                NSLocalizedString("Move", comment: "Button Title")
+                NSLocalizedString("Save copy", comment: "") :
+                NSLocalizedString("Move", comment: "")
 
             let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
             copyMoveButton.isEnabled = true
@@ -358,10 +358,10 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.delegate = src
         searchController.searchBar.autocorrectionType = .no
         searchController.searchBar.autocapitalizationType = .none
-        searchController.searchBar.placeholder = NSLocalizedString("Search for files or directories", comment: "Action title")
-        searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This directory", comment: "Button title"),
-                                                        NSLocalizedString("Everywhere", comment: "Button title")]
-        searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: "Button Title"), forKey: "cancelButtonText")
+        searchController.searchBar.placeholder = NSLocalizedString("Search for files or directories", comment: "")
+        searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This directory", comment: ""),
+                                                        NSLocalizedString("Everywhere", comment: "")]
+        searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
     }
 
     private func setRefreshControlTitle(started: Bool) {
@@ -369,9 +369,9 @@ final class ListingViewController: UITableViewController {
         let attributes: [String: Any] = [NSFontAttributeName: UIFont(name: "Helvetica", size: 10) as Any,
                                          NSForegroundColorAttributeName: UIColor.init(white: 0.2, alpha: 1.0)as Any]
         if started {
-            title = NSLocalizedString("Refreshing ...", comment: "Title")
+            title = NSLocalizedString("Refreshing ...", comment: "")
         } else {
-            title = NSLocalizedString("Pull to refresh this directory", comment: "Title")
+            title = NSLocalizedString("Pull to refresh this directory", comment: "")
         }
         refreshControl?.attributedTitle = NSAttributedString(string: title, attributes: attributes)
     }
@@ -397,8 +397,8 @@ final class ListingViewController: UITableViewController {
                     self.tableView.reloadData()
                 default:
                     self.refreshControl?.endRefreshing()
-                    let message = NSLocalizedString("There was an error refreshing the location.", comment: "Notice")
-                    let title = NSLocalizedString("Error", comment: "Title")
+                    let message = NSLocalizedString("There was an error refreshing the location.", comment: "")
+                    let title = NSLocalizedString("Error", comment: "")
                     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alertController, animated: true, completion: nil)
@@ -452,7 +452,7 @@ final class ListingViewController: UITableViewController {
         // For the case when the folder is empty, setting the message text on screen.
         if self.content.isEmpty {
             busyIndicator.stopAnimating()
-            emptyFolderLabel.text = NSLocalizedString("Directory is Empty", comment: "Information")
+            emptyFolderLabel.text = NSLocalizedString("Directory is Empty", comment: "")
         }
     }
 
@@ -503,10 +503,10 @@ final class ListingViewController: UITableViewController {
             let isAscending = AppSettings.sortAscending
 
             switch AppSettings.sortMethod {
-            case .byName:        buttonTitle = NSLocalizedString("Name", comment: "Button title") + (isAscending ? " ↑" : " ↓")
-            case .byDate:        buttonTitle = NSLocalizedString("Date", comment: "Button title") + (isAscending ? " ↑" : " ↓")
-            case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "Button title") + (isAscending ? " ↑" : " ↓")
-            case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "Button title") + (isAscending ? " ↑" : " ↓")
+            case .byName:        buttonTitle = NSLocalizedString("Name", comment: "") + (isAscending ? " ↑" : " ↓")
+            case .byDate:        buttonTitle = NSLocalizedString("Date", comment: "") + (isAscending ? " ↑" : " ↓")
+            case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "") + (isAscending ? " ↑" : " ↓")
+            case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "") + (isAscending ? " ↑" : " ↓")
             }
             sortBarButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
 
@@ -838,24 +838,24 @@ final class ListingViewController: UITableViewController {
             self.setBusyIndicatorView(false)
 
             if self.didReceivedNetworkError {
-                let title = NSLocalizedString("Error", comment: "Title")
-                let message = NSLocalizedString("An error has occured while processing the request.", comment: "Notice")
+                let title = NSLocalizedString("Error", comment: "")
+                let message = NSLocalizedString("An error has occured while processing the request.", comment: "")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
                 return
             } else {
                 if self.didReceivedStatus400 {
-                    let message = NSLocalizedString("An error has occured. Some elements already exists at the destination or the destination location no longer exists.", comment: "Notice")
-                    let title = NSLocalizedString("Error", comment: "Title")
+                    let message = NSLocalizedString("An error has occured. Some elements already exists at the destination or the destination location no longer exists.", comment: "")
+                    let title = NSLocalizedString("Error", comment: "")
                     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alertController, animated: true, completion: nil)
                     return
                 } else {
                     if self.didReceivedStatus404 {
-                        let message = NSLocalizedString("An error has occured. Some elements no longer exists.", comment: "Notice")
-                        let title = NSLocalizedString("Error", comment: "Title")
+                        let message = NSLocalizedString("An error has occured. Some elements no longer exists.", comment: "")
+                        let title = NSLocalizedString("Error", comment: "")
                         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
                             self.onFinish?()
@@ -903,9 +903,10 @@ final class ListingViewController: UITableViewController {
 
     private func doDelete(nodes: [Node]) {
         guard isActionConfirmed else {
-            let question = String(format: "Are you sure you want to delete %d items?", nodes.count)
-            let title = NSLocalizedString(question, comment: "Question")
-            let message = NSLocalizedString("This action is not reversible.", comment: "Notice")
+
+            let string = NSLocalizedString("Are you sure you want to delete %d items?", comment: "")
+            let title = String.localizedStringWithFormat(string, nodes.count)
+            let message = NSLocalizedString("This action is not reversible.", comment: "")
             let confirmationController = UIAlertController(title: title, message: message, preferredStyle: .alert)
 
             let deleteAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .destructive, handler: { _ in
@@ -972,7 +973,7 @@ final class ListingViewController: UITableViewController {
             // If index is 0 than this is a location controller
             if index == 0 {
                 let c = LocationsViewController(action: action)
-                c.title = NSLocalizedString("Locations", comment: "Window Title")
+                c.title = NSLocalizedString("Locations", comment: "")
                 c.onFinish = { [unowned self] in
 
                     // Clear source node
@@ -1155,8 +1156,8 @@ extension ListingViewController: DeleteViewControllerDelegate {
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error
-                    let message = NSLocalizedString("There was an error while deleting.", comment: "Notice")
-                    let title = NSLocalizedString("Error", comment: "Title")
+                    let message = NSLocalizedString("There was an error while deleting.", comment: "")
+                    let title = NSLocalizedString("Error", comment: "")
                     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alertController, animated: true, completion: nil)

@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
 
         #if DEBUG
-            print(FileManager.documentsDir().path, "\n")
+        print(FileManager.documentsDir().path, "\n")
         #endif
 
         createWorkingDirectories()

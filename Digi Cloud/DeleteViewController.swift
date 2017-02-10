@@ -49,8 +49,7 @@ class DeleteViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return createCell(title: NSLocalizedString("Delete", comment: "Button title") ,
-                          color: .red)
+        return createCell(title: NSLocalizedString("Delete", comment: ""), color: .red)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -70,9 +69,9 @@ class DeleteViewController: UITableViewController {
             let label = UILabel()
             label.textAlignment = .center
             if node.type == "file" {
-                label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "Question for user")
+                label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "")
             } else {
-                label.text = NSLocalizedString("Are you sure you want to delete this directory?", comment: "Question for user")
+                label.text = NSLocalizedString("Are you sure you want to delete this directory?", comment: "")
             }
             label.font = UIFont.systemFont(ofSize: 14)
             return label

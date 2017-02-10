@@ -25,7 +25,7 @@ class LoginViewController: UIViewController {
 
     private lazy var usernameTextField: LoginField = {
         let field = LoginField()
-        field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "TextField Name").uppercased()
+        field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "").uppercased()
 
         #if DEBUG
         let dict = ProcessInfo.processInfo.environment
@@ -38,7 +38,7 @@ class LoginViewController: UIViewController {
 
     private lazy var passwordTextField: LoginField = {
         let field = LoginField()
-        field.textFieldName = NSLocalizedString("PASSWORD", comment: "TextField Name").uppercased()
+        field.textFieldName = NSLocalizedString("PASSWORD", comment: "").uppercased()
 
         #if DEBUG
         let dict = ProcessInfo.processInfo.environment
@@ -52,7 +52,7 @@ class LoginViewController: UIViewController {
 
     private let loginButton: LoginButton = {
         let button = LoginButton()
-        button.setTitle(NSLocalizedString("LOGIN", comment: "Button Title"), for: .normal)
+        button.setTitle(NSLocalizedString("LOGIN", comment: ""), for: .normal)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
@@ -70,7 +70,7 @@ class LoginViewController: UIViewController {
     private let forgotPasswordButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Forgot password?", comment: "Question"), for: .normal)
+        b.setTitle(NSLocalizedString("Forgot password?", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
         b.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
@@ -125,7 +125,7 @@ class LoginViewController: UIViewController {
                                                   attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 28)!,
                                                                NSForegroundColorAttributeName: UIColor.white])
             aText.append(NSAttributedString(string: "\n\n"))
-            aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: "Information"),
+            aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: ""),
                                             attributes: [NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 16)!,
                                                         NSForegroundColorAttributeName: UIColor.white]))
             let aPar = NSMutableParagraphStyle()
@@ -172,8 +172,8 @@ class LoginViewController: UIViewController {
     }
 
     @objc private func handleForgotPassword() {
-        let alert = UIAlertController(title: NSLocalizedString("Information", comment: "Window Title"),
-                                    message: NSLocalizedString("Please contact RCS RDS for password information.", comment: "Information"),
+        let alert = UIAlertController(title: NSLocalizedString("Information", comment: ""),
+                                    message: NSLocalizedString("Please contact RCS RDS for password information.", comment: ""),
                              preferredStyle: UIAlertControllerStyle.alert)
 
         let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
@@ -199,8 +199,8 @@ class LoginViewController: UIViewController {
               username.characters.count > 0,
               password.characters.count > 0
         else {
-            let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
-                                          message: NSLocalizedString("Please fill in the fields.", comment: "Error Message"),
+            let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                          message: NSLocalizedString("Please fill in the fields.", comment: ""),
                                           preferredStyle: UIAlertControllerStyle.alert)
             let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
             alert.addAction(actionOK)
@@ -216,8 +216,8 @@ class LoginViewController: UIViewController {
 
                 self.spinner.stopAnimating()
 
-                let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
-                                            message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "Error Message"),
+                let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                            message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: ""),
                                      preferredStyle: UIAlertControllerStyle.alert)
                 let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                 alert.addAction(actionOK)
@@ -229,8 +229,8 @@ class LoginViewController: UIViewController {
 
                 self.spinner.stopAnimating()
 
-                let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
-                                            message: NSLocalizedString("Unauthorized access", comment: "Error Message"),
+                let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                            message: NSLocalizedString("Unauthorized access", comment: ""),
                                      preferredStyle: UIAlertControllerStyle.alert)
 
                 let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
@@ -257,8 +257,8 @@ class LoginViewController: UIViewController {
                 }
 
             } catch {
-                let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Window Title"),
-                                              message: NSLocalizedString("An error has occurred while saving the account.\nPlease try again later!", comment: "Error Message"),
+                let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                              message: NSLocalizedString("An error has occurred while saving the account.\nPlease try again later!", comment: ""),
                                               preferredStyle: UIAlertControllerStyle.alert)
                 let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                 alert.addAction(actionOK)

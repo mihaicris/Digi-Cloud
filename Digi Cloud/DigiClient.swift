@@ -325,7 +325,7 @@ final class DigiClient {
                 return
             }
             guard statusCode != 400 else {
-                let message = NSLocalizedString("Location is no longer available!", comment: "Error message")
+                let message = NSLocalizedString("Location is no longer available!", comment: "")
                 completion(nil, NetworkingError.wrongStatus(message))
                 return
             }

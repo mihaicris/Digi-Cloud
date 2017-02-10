@@ -27,17 +27,17 @@ class ManageAccountsViewController: UITableViewController {
     }()
 
     lazy var editButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: "Button Title"), style: .plain, target: self, action: #selector(editAction))
+        let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .plain, target: self, action: #selector(editAction))
         return b
     }()
 
     lazy var deleteButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: "Button Title"), style: .plain, target: self, action: #selector(deleteAction))
+        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .plain, target: self, action: #selector(deleteAction))
         return b
     }()
 
     lazy var cancelButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"), style: .plain, target: self, action: #selector(cancelAction))
+        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelAction))
         return b
     }()
 
@@ -108,7 +108,7 @@ class ManageAccountsViewController: UITableViewController {
     private func setupViews() {
         preferredContentSize.height = 400
         preferredContentSize.width = 350
-        title = NSLocalizedString("Accounts", comment: "Window Title")
+        title = NSLocalizedString("Accounts", comment: "")
 
         updateButtonsToMatchTableState()
     }
@@ -159,23 +159,23 @@ class ManageAccountsViewController: UITableViewController {
     private func updateDeleteButtonTitle() {
         if let selectedRows = self.tableView.indexPathsForSelectedRows {
             if selectedRows.count != accounts.count {
-                let titleFormatString = NSLocalizedString("Delete (%d)", comment: "Button Title")
+                let titleFormatString = NSLocalizedString("Delete (%d)", comment: "")
                 self.deleteButton.title = String(format: titleFormatString, selectedRows.count)
                 return
             }
         }
-        self.deleteButton.title = NSLocalizedString("Delete All", comment: "Button Title")
+        self.deleteButton.title = NSLocalizedString("Delete All", comment: "")
     }
 
     @objc private func toggleEditMode() {
         var button: UIBarButtonItem
         if tableView.isEditing {
-            button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: "Button Title"),
+            button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""),
                                      style: UIBarButtonItemStyle.plain,
                                      target: self,
                                      action: #selector(toggleEditMode))
         } else {
-            button = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Button Title"),
+            button = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
                                      style: UIBarButtonItemStyle.plain,
                                      target: self,
                                      action: #selector(toggleEditMode))
@@ -204,15 +204,15 @@ class ManageAccountsViewController: UITableViewController {
             messageString = NSLocalizedString("Are you sure you want to remove these accounts?", comment: "")
         }
 
-        let alertController = UIAlertController(title: NSLocalizedString("Confirm Deletion", comment: "Alert Title"),
+        let alertController = UIAlertController(title: NSLocalizedString("Confirm Deletion", comment: ""),
                                                 message: messageString,
                                                 preferredStyle: .alert)
 
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Action Title"),
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""),
                                          style: .cancel,
                                          handler: nil)
 
-        let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: "Action Title"),
+        let okAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""),
                                          style: .destructive,
                                          handler: deleteConfirmed)
 

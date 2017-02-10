@@ -16,7 +16,7 @@ class SettingsViewController: UITableViewController {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitleColor(.white, for: .normal)
-        b.setTitle(NSLocalizedString("Confirm", comment: "Button Title"), for: .normal)
+        b.setTitle(NSLocalizedString("Confirm", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         b.addTarget(self, action: #selector(handleLogoutConfirmed), for: .touchUpInside)
         b.contentEdgeInsets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
@@ -35,7 +35,7 @@ class SettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Settings", comment: "Window Title")
+        title = NSLocalizedString("Settings", comment: "")
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -53,9 +53,9 @@ class SettingsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0:  return NSLocalizedString("ABOUT DIGI CLOUD", comment: "Section title")
-        case 1:  return NSLocalizedString("DATA", comment: "Section title")
-        case 2:  return NSLocalizedString("USER", comment: "Section title")
+        case 0:  return NSLocalizedString("ABOUT DIGI CLOUD", comment: "")
+        case 1:  return NSLocalizedString("DATA", comment: "")
+        case 2:  return NSLocalizedString("USER", comment: "")
         default: return nil
         }
     }
@@ -88,11 +88,11 @@ class SettingsViewController: UITableViewController {
             switch indexPath.row {
             case 0:
                 // App version
-                cell.textLabel?.text = NSLocalizedString("App Version", comment: "Label Title")
+                cell.textLabel?.text = NSLocalizedString("App Version", comment: "")
                 cell.detailTextLabel?.text = "\(UIApplication.Version)"
             case 1:
                 // Rate the app
-                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "Button Title")
+                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "")
                 cell.textLabel?.textColor = .defaultColor
             default:
                 break
@@ -103,7 +103,7 @@ class SettingsViewController: UITableViewController {
             switch indexPath.row {
             case 0:
                 // Allow celular
-                cell.textLabel?.text = NSLocalizedString("Mobile Data", comment: "Button Title")
+                cell.textLabel?.text = NSLocalizedString("Mobile Data", comment: "")
                 let mobileDataUISwitch: UISwitch = {
                     let s = UISwitch()
                     s.isOn = AppSettings.allowsCellularAccess
@@ -119,7 +119,7 @@ class SettingsViewController: UITableViewController {
                 ])
             case 1:
                 // Clean cache
-                cell.textLabel?.text = NSLocalizedString("Clear Cache", comment: "Button Title")
+                cell.textLabel?.text = NSLocalizedString("Clear Cache", comment: "")
                 cell.textLabel?.textColor = .defaultColor
             default:
                 break
@@ -127,7 +127,7 @@ class SettingsViewController: UITableViewController {
 
         case 2:
             // USER
-            cell.textLabel?.text = NSLocalizedString("Logout", comment: "Button Title")
+            cell.textLabel?.text = NSLocalizedString("Logout", comment: "")
             cell.textLabel?.textColor = .defaultColor
             cell.contentView.addSubview(confirmButton)
 

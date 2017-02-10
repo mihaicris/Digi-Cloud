@@ -59,7 +59,7 @@ class CreateFolderViewController: UITableViewController {
         cell.selectionStyle = .none
 
         textField = UITextField()
-        textField.placeholder = NSLocalizedString("Folder Name", comment: "Textfield placeholder")
+        textField.placeholder = NSLocalizedString("Folder Name", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
@@ -93,12 +93,12 @@ class CreateFolderViewController: UITableViewController {
 
         tableView.isScrollEnabled = false
 
-        leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Button Title"),
+        leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
                                         style: .plain,
                                         target: self,
                                         action: #selector(handleCancel))
 
-        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Create", comment: "Button Title"),
+        rightBarButton = UIBarButtonItem(title: NSLocalizedString("Create", comment: ""),
                                          style: .plain,
                                          target: self,
                                          action: #selector(handleCreateFolder))
@@ -109,7 +109,7 @@ class CreateFolderViewController: UITableViewController {
         // disable Create button
         rightBarButton.isEnabled = false
 
-        self.title = NSLocalizedString("Create Folder", comment: "Window Title")
+        self.title = NSLocalizedString("Create Folder", comment: "")
     }
 
     private func hasInvalidCharacters(name: String) -> Bool {
@@ -148,8 +148,8 @@ class CreateFolderViewController: UITableViewController {
         DigiClient.shared.createFolderNode(at: location, with: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
-                let title = NSLocalizedString("Error", comment: "Title")
-                let message = NSLocalizedString("There was an error creating the directory.", comment: "Notice")
+                let title = NSLocalizedString("Error", comment: "")
+                let message = NSLocalizedString("There was an error creating the directory.", comment: "")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
@@ -166,15 +166,15 @@ class CreateFolderViewController: UITableViewController {
                 case 400:
                     // Bad request ( Folder already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
-                    let message = NSLocalizedString("Folder already exists. Please choose a different name.", comment: "Error message")
+                    let message = NSLocalizedString("Folder already exists. Please choose a different name.", comment: "")
                     self.setMessage(onScreen: true, message)
                 case 404:
                     // Not Found (Folder do not exists anymore), folder will refresh
-                    let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "Error message")
-                    self.leftBarButton.title = NSLocalizedString("Done", comment: "Button Title")
+                    let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "")
+                    self.leftBarButton.title = NSLocalizedString("Done", comment: "")
                     self.setMessage(onScreen: true, message)
                 default :
-                    let message = NSLocalizedString("Server replied with Status Code: ", comment: "Error message")
+                    let message = NSLocalizedString("Server replied with Status Code: ", comment: "")
                     self.setMessage(onScreen: true, message + String(code))
                 }
             }
@@ -186,7 +186,7 @@ class CreateFolderViewController: UITableViewController {
             if name.isEmpty {
                 self.rightBarButton.isEnabled = false
             } else if hasInvalidCharacters(name: name) {
-                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed.", comment: "Error message")
+                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed.", comment: "")
                 setMessage(onScreen: true, message)
                 self.rightBarButton.isEnabled = false
             } else {

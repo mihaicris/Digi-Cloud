@@ -95,11 +95,12 @@ class SortFolderViewController: UITableViewController {
 
     private func setInitialActionNames() {
         contextMenuSortActions = [
-            NSLocalizedString("Directories first", comment: "Switch Title"),
-            NSLocalizedString("Sort by Name", comment: "Selection Title"),
-            NSLocalizedString("Sort by Date", comment: "Selection Title"),
-            NSLocalizedString("Sort by Size", comment: "Selection Title"),
-            NSLocalizedString("Sort by Type", comment: "Selection Title") ]
+            NSLocalizedString("Directories first", comment: ""),
+            NSLocalizedString("Sort by Name", comment: ""),
+            NSLocalizedString("Sort by Date", comment: ""),
+            NSLocalizedString("Sort by Size", comment: ""),
+            NSLocalizedString("Sort by Type", comment: "")
+        ]
     }
 
     private func setupViews() {
@@ -112,7 +113,7 @@ class SortFolderViewController: UITableViewController {
 
         let titleName: UILabel = {
             let label = UILabel()
-            label.text = NSLocalizedString("Sort directory", comment: "Window Title")
+            label.text = NSLocalizedString("Sort directory", comment: "")
             label.font = UIFont.systemFont(ofSize: 14)
             label.translatesAutoresizingMaskIntoConstraints = false
             return label

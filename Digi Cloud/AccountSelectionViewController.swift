@@ -47,7 +47,7 @@ class AccountSelectionViewController: UIViewController,
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = UIColor(red: 161/255, green: 168/255, blue: 209/255, alpha: 1.0)
-        l.text = NSLocalizedString("No accounts", comment: "Label, information")
+        l.text = NSLocalizedString("No accounts", comment: "")
         l.font = UIFont(name: "HelveticaNeue-light", size: 30)
         return l
     }()
@@ -55,7 +55,7 @@ class AccountSelectionViewController: UIViewController,
     private let addAccountButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Add Account", comment: "Button Title"), for: .normal)
+        b.setTitle(NSLocalizedString("Add Account", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
         b.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
@@ -74,7 +74,7 @@ class AccountSelectionViewController: UIViewController,
     private let signUpLabel: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Sign Up for Digi Storage", comment: "Button Title"), for: .normal)
+        b.setTitle(NSLocalizedString("Sign Up for Digi Storage", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
         return b
@@ -83,7 +83,7 @@ class AccountSelectionViewController: UIViewController,
     private let loginToAnotherAccountButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Log in to Another Account", comment: "Button Title"), for: .normal)
+        b.setTitle(NSLocalizedString("Log in to Another Account", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
         b.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
@@ -99,7 +99,7 @@ class AccountSelectionViewController: UIViewController,
         let color = UIColor.init(red: 48/255, green: 133/255, blue: 243/255, alpha: 1.0)
         let attributedText = NSMutableAttributedString(string: "Digi Cloud",
                                                        attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 48) as Any])
-        let word = NSLocalizedString("for", comment: "a word")
+        let word = NSLocalizedString("for", comment: "")
         attributedText.append(NSAttributedString(string: "\n\(word)  ",
             attributes: [NSFontAttributeName: UIFont(name: "Didot-Italic", size: 20) as Any]))
         attributedText.append(NSAttributedString(string: "Digi Storage",
@@ -117,7 +117,7 @@ class AccountSelectionViewController: UIViewController,
     private let manageAccountsButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Manage Accounts", comment: "Button Title"), for: .normal)
+        b.setTitle(NSLocalizedString("Manage Accounts", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
         b.addTarget(self, action: #selector(handleManageAccounts), for: .touchUpInside)
