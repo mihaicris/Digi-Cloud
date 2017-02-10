@@ -904,7 +904,17 @@ final class ListingViewController: UITableViewController {
     private func doDelete(nodes: [Node]) {
         guard isActionConfirmed else {
 
-            let string = NSLocalizedString("Are you sure you want to delete %d items?", comment: "")
+            let string: String
+            if nodes.count == 1 {
+                if nodes.first!.type == "dir" {
+                    string = NSLocalizedString("Are you sure you want to delete this directory?", comment: "")
+                } else {
+                    string = NSLocalizedString("Are you sure you want to delete this file?", comment: "")
+                }
+            } else {
+                string = NSLocalizedString("Are you sure you want to delete %d items?", comment: "")
+            }
+
             let title = String.localizedStringWithFormat(string, nodes.count)
             let message = NSLocalizedString("This action is not reversible.", comment: "")
             let confirmationController = UIAlertController(title: title, message: message, preferredStyle: .alert)

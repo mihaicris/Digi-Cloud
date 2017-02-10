@@ -109,7 +109,7 @@ class CreateFolderViewController: UITableViewController {
         // disable Create button
         rightBarButton.isEnabled = false
 
-        self.title = NSLocalizedString("Create Folder", comment: "")
+        self.title = NSLocalizedString("Create Directory", comment: "")
     }
 
     private func hasInvalidCharacters(name: String) -> Bool {
