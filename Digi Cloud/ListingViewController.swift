@@ -383,27 +383,28 @@ final class ListingViewController: UITableViewController {
         self.needRefresh = false
         self.isUpdating = true
 
-        if self.refreshControl?.isRefreshing == true {
-            messageStackView.removeFromSuperview()
-        }
-
         DigiClient.shared.getContent(of: location) { receivedContent, error in
             self.isUpdating = false
 
             guard error == nil else {
+
                 switch error! {
                 case NetworkingError.wrongStatus(let message):
-                    self.refreshControl?.endRefreshing()
                     self.emptyFolderLabel.text = message
                     self.content.removeAll()
                     self.tableView.reloadData()
                 default:
-                    self.refreshControl?.endRefreshing()
-                    let message = NSLocalizedString("There was an error refreshing the location.", comment: "")
-                    let title = NSLocalizedString("Error", comment: "")
-                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alertController, animated: true, completion: nil)
+
+                    if !self.tableView.isDragging {
+                        let message = NSLocalizedString("There was an error refreshing the location.", comment: "")
+                        let title = NSLocalizedString("Error", comment: "")
+                        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                        self.busyIndicator.stopAnimating()
+                        self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
+
                     print("Error: \(error!.localizedDescription)")
                 }
                 return
