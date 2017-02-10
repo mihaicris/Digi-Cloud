@@ -131,13 +131,13 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(action: ActionType, for location: Location) {
-        self.editaction = action
+    init(editaction: ActionType, for location: Location) {
+        self.editaction = editaction
         self.location = location
         #if DEBUG_CONTROLLERS
             count += 1
             self.tag = count
-            print(self.tag, "✅", String(describing: type(of: self)), action)
+            print(self.tag, "✅", String(describing: type(of: self)), editaction)
         #endif
         super.init(style: .plain)
     }
@@ -261,7 +261,7 @@ final class ListingViewController: UITableViewController {
             let nextPath = self.location.path + item.name + "/"
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
-            let controller = ListingViewController(action: self.editaction, for: nextLocation)
+            let controller = ListingViewController(editaction: self.editaction, for: nextLocation)
 
             controller.title = item.name
             if self.editaction != .noAction {
@@ -681,7 +681,7 @@ final class ListingViewController: UITableViewController {
                 }
                 let folderLocation = Location(mount: self.location.mount, path: nextPath)
 
-                let controller = ListingViewController(action: self.editaction, for: folderLocation)
+                let controller = ListingViewController(editaction: self.editaction, for: folderLocation)
                 controller.title = folderName
                 controller.onFinish = {[unowned self] in
                     self.onFinish?()
@@ -786,6 +786,8 @@ final class ListingViewController: UITableViewController {
             destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
         }
 
+        dispatchGroup.enter()
+
         DigiClient.shared.copyOrMoveNode(action: self.editaction, from: sourceNode.location, to: destinationLocation) { statusCode, error in
 
             #if DEBUG_CONTROLLERS
@@ -841,7 +843,6 @@ final class ListingViewController: UITableViewController {
         #endif
 
         for sourceNode in sourceNodes {
-            dispatchGroup.enter()
             doCopyOrMove(node: sourceNode)
         }
 
@@ -980,61 +981,64 @@ final class ListingViewController: UITableViewController {
 
     fileprivate func showViewControllerForCopyOrMove(action: ActionType, nodes: [Node]) {
 
+        func updateTableState() {
+
+            // Clear source nodes
+            (self.navigationController as? MainNavigationController)?.sourceNodes = nil
+
+            if self.needRefresh {
+
+                if self.tableView.isEditing {
+                    self.cancelEditMode()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.updateContent()
+                    }
+                } else {
+                    self.updateContent()
+                }
+            }
+        }
+
         // Save the source node in the MainNavigationController
         (self.navigationController as? MainNavigationController)?.sourceNodes = nodes
 
-        guard let previousControllers = self.navigationController?.viewControllers else {
+        guard let stackControllers = self.navigationController?.viewControllers else {
             print("Couldn't get the previous navigation controllers!")
             return
         }
 
         var controllers: [UIViewController] = []
 
-        for (index, p) in previousControllers.enumerated() {
+        for controller in stackControllers {
 
-            // If index is 0 than this is a location controller
-            if index == 0 {
+            if controller is LocationsViewController {
+
                 let c = LocationsViewController(action: action)
                 c.title = NSLocalizedString("Locations", comment: "")
+
                 c.onFinish = { [unowned self] in
-
-                    // Clear source node
-                    (self.navigationController as? MainNavigationController)?.sourceNodes = nil
-
                     self.dismiss(animated: true) {
-                        if self.needRefresh {
-                            self.updateContent()
-                        }
+                        updateTableState()
                     }
                 }
+
                 controllers.append(c)
                 continue
-            }
 
-            // we need to cast in order to tet the mountID and path from it
-            if let p = p as? ListingViewController {
-                let c = ListingViewController(action: action, for: p.location)
-                c.title = p.title
+            } else {
+
+                let c = ListingViewController(editaction: action, for: (controller as! ListingViewController).location)
+                c.title = controller.title
+
                 c.onFinish = { [unowned self] in
-                    if self.editaction != .noAction {
-                        self.onFinish?()
-                    } else {
-                        self.dismiss(animated: true) {
-
-                            // Clear source node
-                            (self.navigationController as? MainNavigationController)?.sourceNodes = nil
-
-                            if self.needRefresh {
-                                self.cancelEditMode()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                    self.updateContent()
-                                }
-                            }
-                        }
+                    self.dismiss(animated: true) {
+                       updateTableState()
                     }
                 }
+
                 controllers.append(c)
             }
+
         }
 
         let navController = UINavigationController(navigationBarClass: CustomNavBar.self, toolbarClass: nil)
