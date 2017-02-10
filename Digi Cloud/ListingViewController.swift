@@ -8,8 +8,10 @@
 
 import UIKit
 
-#if DEBUG
+#if DEBUG_CONTROLLERS
 var count: Int = 0
+var taskStarted: Int = 0
+var taskFinished: Int = 0
 #endif
 
 final class ListingViewController: UITableViewController {
@@ -123,7 +125,7 @@ final class ListingViewController: UITableViewController {
         return b
     }()
 
-    #if DEBUG
+    #if DEBUG_CONTROLLERS
     let tag: Int
     #endif
 
@@ -132,7 +134,7 @@ final class ListingViewController: UITableViewController {
     init(action: ActionType, for location: Location) {
         self.editaction = action
         self.location = location
-        #if DEBUG
+        #if DEBUG_CONTROLLERS
             count += 1
             self.tag = count
             print(self.tag, "✅", String(describing: type(of: self)), action)
@@ -144,7 +146,7 @@ final class ListingViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    #if DEBUG
+    #if DEBUG_CONTROLLERS
     deinit {
         print(self.tag, "❌", String(describing: type(of: self)), editaction)
         count -= 1
@@ -786,6 +788,11 @@ final class ListingViewController: UITableViewController {
 
         DigiClient.shared.copyOrMoveNode(action: self.editaction, from: sourceNode.location, to: destinationLocation) { statusCode, error in
 
+            #if DEBUG_CONTROLLERS
+            print("Task \(taskFinished) finished")
+            taskFinished += 1
+            #endif
+
             self.dispatchGroup.leave()
 
             guard error == nil else {
@@ -827,6 +834,11 @@ final class ListingViewController: UITableViewController {
         didReceivedNetworkError = false
         didReceivedStatus400 = false
         didReceivedStatus404 = false
+
+        #if DEBUG_CONTROLLERS
+        taskStarted = 0
+        taskFinished = 0
+        #endif
 
         for sourceNode in sourceNodes {
             dispatchGroup.enter()

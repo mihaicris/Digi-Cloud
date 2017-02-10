@@ -26,7 +26,7 @@ class LocationsViewController: UITableViewController {
         return ai
     }()
 
-    #if DEBUG
+    #if DEBUG_CONTROLLERS
     let tag: Int
     #endif
 
@@ -35,7 +35,7 @@ class LocationsViewController: UITableViewController {
     init(action: ActionType) {
         self.action = action
 
-        #if DEBUG
+        #if DEBUG_CONTROLLERS
         count += 1
         self.tag = count
         print(self.tag, "✅", String(describing: type(of: self)), action)
@@ -48,7 +48,7 @@ class LocationsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    #if DEBUG
+    #if DEBUG_CONTROLLERS
     deinit {
         print(self.tag, "❌", String(describing: type(of: self)), action)
         count -= 1

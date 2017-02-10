@@ -22,7 +22,7 @@ class MoreActionsViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    #if DEBUG
+    #if DEBUG_CONTROLLERS
     deinit {
         print("[DEINIT]: " + String(describing: type(of: self)))
     }

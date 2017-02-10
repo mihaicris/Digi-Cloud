@@ -26,7 +26,7 @@ class DeleteViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    #if DEBUG
+    #if DEBUG_CONTROLLERS
     deinit {
         print("[DEINIT]: " + String(describing: type(of: self)))
     }

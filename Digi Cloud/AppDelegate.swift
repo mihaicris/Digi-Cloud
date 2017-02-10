@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = self.flowController.rootController()
         window?.makeKeyAndVisible()
 
-        #if DEBUG
+        #if DEBUG_CONTROLLERS
         print(FileManager.documentsDir().path, "\n")
         #endif
 

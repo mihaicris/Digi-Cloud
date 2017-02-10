@@ -68,7 +68,7 @@ class FolderInfoViewController: UITableViewController {
         super.init(style: .grouped)
     }
 
-    #if DEBUG
+    #if DEBUG_CONTROLLERS
     deinit {
         print("[DEINIT]: " + String(describing: type(of: self)))
     }

@@ -9,7 +9,7 @@
 import Foundation
 
 public func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-    #if DEBUG
+    #if DEBUG_CONTROLLERS
         let queue = Thread.isMainThread ? "Main (UI)" : "Background"
         print("\n_____________________________________________________")
         print("File:        \(file.components(separatedBy: "/").last!)")
