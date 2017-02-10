@@ -321,8 +321,19 @@ class AccountSelectionViewController: UIViewController,
          */
         do {
             accounts = try Account.accountItems()
+
             finalizeViews()
-            accountsCollectionView.reloadData()
+
+            let dispatchGroup = DispatchGroup()
+            accounts.forEach {
+                dispatchGroup.enter()
+                $0.fetchAccountInfo {
+                    dispatchGroup.leave()
+                }
+                dispatchGroup.notify(queue: DispatchQueue.main, execute: {
+                    self.accountsCollectionView.reloadData()
+                })
+            }
         } catch {
             fatalError("Error fetching account items - \(error)")
         }
