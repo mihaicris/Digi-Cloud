@@ -14,8 +14,10 @@ struct API {
 }
 
 struct DefaultHeaders {
-    static let Headers          = ["Content-Type": "application/json",
-                                   "Accept": "application/json"]
+    static let GetHeaders       = ["Accept": "application/json"]
+    static let DelHeaders       = ["Accept": "application/json"]
+    static let PostHeaders      = ["Accept": "application/json", "Content-Type": "application/json"]
+    static let PutHeaders       = ["Accept": "application/json", "Content-Type": "application/json"]
 }
 
 struct HeadersKeys {

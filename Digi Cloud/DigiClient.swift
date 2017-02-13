@@ -194,7 +194,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func authenticate(username: String, password: String, completion: @escaping(_ token: String?, _ error: Error?) -> Void) {
         let method = Methods.Token
-        let headers = DefaultHeaders.Headers
+        let headers = DefaultHeaders.PostHeaders
         let jsonBody = ["password": password, "email": username]
 
         networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: nil) { json, statusCode, error in
@@ -223,7 +223,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func revokeAuthentication(for token: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         let method = Methods.Token
-        let headers: [String: String] = ["Authorization": "Token \(token)"]
+        let headers: [String: String] = ["Accept": "*/*", HeadersKeys.Authorization: "Token \(token)"]
 
         networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
             guard error == nil else {
@@ -244,9 +244,7 @@ final class DigiClient {
     func getUserInfo(for token: String, completion: @escaping(_ response: (firstName: String, lastName: String)?, _ error: Error?) -> Void) {
 
         let method = Methods.User
-
-        let headers: [String: String] = [HeadersKeys.Accept: "application/json",
-                                         "Authorization": "Token \(token)"]
+        let headers: [String: String] = ["Accept": "*/*", HeadersKeys.Authorization: "Token \(token)"]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { jsonData, statusCode, error in
 
@@ -277,9 +275,9 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - result: Returned content as an array of locations
     ///   - error: The error occurred in the network request, nil for no error.
-    func getDIGIStorageLocations(completion: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
+    func getMounts(completion: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
-        var headers = DefaultHeaders.Headers
+        var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { data, _, error in
@@ -316,8 +314,10 @@ final class DigiClient {
     func getContent(of location: Location, completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
 
         let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
-        var headers = DefaultHeaders.Headers
+
+        var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
         let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
@@ -379,7 +379,8 @@ final class DigiClient {
 
         // create url request with the current token in the HTTP headers
         var request = URLRequest(url: url)
-        request.addValue("Token " + DigiClient.shared.token, forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("Token " + DigiClient.shared.token!, forHTTPHeaderField: "Authorization")
 
         // create and start download task
         let downloadTask = session.downloadTask(with: request)
@@ -401,7 +402,7 @@ final class DigiClient {
         let method = Methods.Rename.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
-        var headers = DefaultHeaders.Headers
+        var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (path of the node to be renamed
@@ -427,7 +428,7 @@ final class DigiClient {
         let method = Methods.Remove.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
-        var headers: [String: String] = [:]
+        var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (node path to be renamed
@@ -451,7 +452,7 @@ final class DigiClient {
         let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
-        var headers = DefaultHeaders.Headers
+        var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters
@@ -476,7 +477,7 @@ final class DigiClient {
     func searchNodes(query: String, at location: Location?, completion: @escaping (_ json: [Node]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
-        var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
+        var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         var parameters: [String: String] = [
@@ -487,11 +488,7 @@ final class DigiClient {
             parameters[ParametersKeys.Path] = location.path
         }
 
-        networkTask(requestType: "GET",
-                    method: method,
-                    headers: headers,
-                    json: nil,
-                    parameters: parameters) { json, _, error in
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
                         if let error = error {
                             completion(nil, error)
                             return
@@ -539,7 +536,7 @@ final class DigiClient {
     func getTree(at location: Location, completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
         let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
-        var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
+        var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         let parameters = [ParametersKeys.Path: location.path]
@@ -639,7 +636,7 @@ final class DigiClient {
             return
         }
 
-        var headers = DefaultHeaders.Headers
+        var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         let parameters = [ParametersKeys.Path: from.path]
