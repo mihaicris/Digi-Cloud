@@ -474,7 +474,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - json: An array containing the search hits (Nodes).
     ///   - error: The error occurred in the network request, nil for no error.
-    func searchNodes(query: String, at location: Location?, completion: @escaping (_ json: [Node]?, _ error: Error?) -> Void) {
+    func searchNodes(query: String, at location: Location?, completion: @escaping (_ json: [NodeHit]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
         var headers = DefaultHeaders.GetHeaders
@@ -489,41 +489,21 @@ final class DigiClient {
         }
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
-                        if let error = error {
-                            completion(nil, error)
-                            return
-                        }
-                        guard let json = json as? [String: Any],
-                            let hitsJSON = json["hits"] as? [[String: Any]],
-                            let mountsJSON = json["mounts"] as? [String: Any]
-                            else {
-                                completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
-                                return
-                        }
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            guard let json = json as? [String: Any],
+                let hitsJSON = json["hits"] as? [[String: Any]],
+                let mountsJSON = json["mounts"] as? [String: Any]
+                else {
+                    completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
+                    return
+            }
 
-                        var results: [Node] = []
+            let results = hitsJSON.flatMap { NodeHit(hitsJSON: $0, mountsJSON: mountsJSON ) }
 
-                        for hitJSON in hitsJSON {
-                            guard let hitMountId = hitJSON["mountId"] as? String,
-                                let hitMount = mountsJSON[hitMountId] as? [String: Any],
-                                let hitMountStruct = Mount(JSON: hitMount),
-                                let hitPath = hitJSON["path"] as? String,
-                                let hitName = hitJSON["name"] as? String,
-                                let hitType = hitJSON["type"] as? String,
-                                let hitModified = hitJSON["modified"] as? TimeInterval,
-                                let hitSize = hitJSON["size"] as? Int64,
-                                let hitScore = hitJSON["score"] as? Double,
-                                let hitContentType = hitJSON["contentType"] as? String else {
-                                    completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
-                                    return
-                            }
-                            let hitLocation = Location(mount: hitMountStruct, path: hitPath)
-                            let hitNode = Node(name: hitName, type: hitType, modified: hitModified, size: hitSize, contentType: hitContentType,
-                                               hash: "", score: hitScore, location: hitLocation)
-                            results.append(hitNode)
-                        }
-
-                        completion(results, nil)
+            completion(results, nil)
         }
     }
 

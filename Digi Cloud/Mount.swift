@@ -14,13 +14,6 @@ struct Mount {
 
     let id: String
     let name: String
-
-    // MARK: - Initializers and Deinitializers
-
-    init(id: String, name: String) {
-        self.id = id
-        self.name = name
-    }
 }
 
 extension Mount {

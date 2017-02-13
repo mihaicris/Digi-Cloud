@@ -11,7 +11,7 @@ import UIKit
 class SearchResultController: UITableViewController {
 
     // MARK: - Properties
-    var filteredContent = [Node]()
+    var filteredContent = [NodeHit]()
     weak var searchController: UISearchController?
     private let currentLocation: Location
     private var fileCellID: String = ""
@@ -133,12 +133,12 @@ class SearchResultController: UITableViewController {
 
         let searchLocation: Location? = scope == 0 ? self.currentLocation : nil
 
-        DigiClient.shared.searchNodes(query: searchText, at: searchLocation) { nodes, error in
+        DigiClient.shared.searchNodes(query: searchText, at: searchLocation) { nodeHits, error in
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-            if let nodes = nodes {
+            if let nodes = nodeHits {
                 self.filteredContent = nodes
                 self.filteredContent.sort {
                     if $0.type == $1.type {

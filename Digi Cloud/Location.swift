@@ -14,16 +14,6 @@ struct Location {
 
     let mount: Mount
     let path: String
-    var nodeName: String? {
-        return path.components(separatedBy: "/").last
-    }
-
-    // MARK: - Initializers and Deinitializers
-
-    init(mount: Mount, path: String) {
-        self.mount = mount
-        self.path = path
-    }
 }
 
 extension Location: Equatable {

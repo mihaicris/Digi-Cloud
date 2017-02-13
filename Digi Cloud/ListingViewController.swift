@@ -1071,10 +1071,8 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                     // dismiss RenameViewController
                     self.dismiss(animated: true) {
                         if newName != nil {
-                            self.content[self.currentIndex.row] = Node(name: newName!, type: node.type,
-                                                                       modified: node.modified, size: node.size,
-                                                                       contentType: node.contentType, hash: node.hash,
-                                                                       location: node.location)
+                            self.content[self.currentIndex.row].name = newName!
+
                             self.tableView.reloadRows(at: [self.currentIndex], with: .middle)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                                 self.updateContent()
