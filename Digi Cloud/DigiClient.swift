@@ -311,9 +311,9 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - result: Returned content as an array of nodes
     ///   - error: The error occurred in the network request, nil for no error.
-    func getContent(of location: Location, completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+    func getFilesList(of location: Location, completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
 
-        let method = Methods.ListFiles.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesList.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
@@ -369,7 +369,7 @@ final class DigiClient {
         let session = URLSession(configuration: configuration, delegate: delegate as? ContentViewController, delegateQueue: nil)
 
         // prepare the method string for download file by inserting the current mount
-        let method =  Methods.GetFile.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method =  Methods.FilesGet.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare the query parameter path with the current File path
         let parameters = [ParametersKeys.Path: location.path]
@@ -399,7 +399,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func renameNode(at location: Location, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.Rename.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesRename.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.PutHeaders
@@ -425,7 +425,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func deleteNode(at location: Location, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.Remove.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.DelHeaders
@@ -449,7 +449,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func createFolderNode(at location: Location, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
-        let method = Methods.CreateFolder.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesFolder.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.PostHeaders
@@ -474,19 +474,11 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - json: An array containing the search hits (Nodes).
     ///   - error: The error occurred in the network request, nil for no error.
-    func searchNodes(query: String, at location: Location?, completion: @escaping (_ json: [NodeHit]?, _ error: Error?) -> Void) {
+    func searchNodes(parameters: [String: String], completion: @escaping (_ json: [NodeHit]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
-
-        var parameters: [String: String] = [
-            ParametersKeys.QueryString: query
-        ]
-        if let location = location {
-            parameters[ParametersKeys.MountID] = location.mount.id
-            parameters[ParametersKeys.Path] = location.path
-        }
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
             if let error = error {
@@ -514,7 +506,7 @@ final class DigiClient {
     ///   - json: The dictionary [String: Any] containing the search hits.
     ///   - error: The error occurred in the network request, nil for no error.
     func getTree(at location: Location, completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
-        let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
@@ -543,7 +535,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func getFolderInfo(at location: Location, completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
         // prepare the method string for create new folder
-        let method = Methods.Tree.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
@@ -609,9 +601,9 @@ final class DigiClient {
 
         switch action {
         case .copy:
-            method = Methods.Copy.replacingOccurrences(of: "{id}", with: from.mount.id)
+            method = Methods.FilesCopy.replacingOccurrences(of: "{id}", with: from.mount.id)
         case .move:
-            method = Methods.Move.replacingOccurrences(of: "{id}", with: from.mount.id)
+            method = Methods.FilesMove.replacingOccurrences(of: "{id}", with: from.mount.id)
         default:
             return
         }

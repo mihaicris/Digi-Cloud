@@ -383,7 +383,7 @@ final class ListingViewController: UITableViewController {
         self.needRefresh = false
         self.isUpdating = true
 
-        DigiClient.shared.getContent(of: location) { receivedContent, error in
+        DigiClient.shared.getFilesList(of: location) { receivedContent, error in
             self.isUpdating = false
 
             guard error == nil else {

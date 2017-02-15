@@ -121,6 +121,20 @@ class SearchResultController: UITableViewController {
 
     fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
 
+        /* 
+         Request parameters:
+         
+             query: Option[String]
+             offset: Int
+             limit: Int
+             sortField: String
+             sortDir: String // asc or desc
+             mime: String     TODO?
+             mountId: String
+             path: String
+             tags: Seq[String] // format: tag=nameoftag=value
+         */
+
         let count = searchText.characters.count
         if count < 3 {
             if count == 0 {
@@ -131,9 +145,16 @@ class SearchResultController: UITableViewController {
         }
         searchInCurrentMount = scope == 0 ? true  : false
 
-        let searchLocation: Location? = scope == 0 ? self.currentLocation : nil
+        var parameters: [String: String] = [
+            ParametersKeys.QueryString: searchText,
+        ]
 
-        DigiClient.shared.searchNodes(query: searchText, at: searchLocation) { nodeHits, error in
+        if scope == 0 {
+            parameters[ParametersKeys.MountID] = self.currentLocation.mount.id
+            parameters[ParametersKeys.Path] = self.currentLocation.path
+        }
+
+        DigiClient.shared.searchNodes(parameters: parameters) { nodeHits, error in
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
