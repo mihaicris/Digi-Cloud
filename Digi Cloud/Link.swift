@@ -1,5 +1,5 @@
 //
-//  Links.swift
+//  Link.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 13/02/2017.
@@ -21,13 +21,13 @@ struct Link {
     let hash: String
     let host: String
     let hasPassword: Bool
-    let password: String
+    let password: String?
     let validTo: TimeInterval?
     let passwordRequired: Bool
 }
 
 extension Link {
-    init?(JSON: Any) {
+    init?(JSON: Any?) {
         guard let JSON = JSON as? [String: Any],
             let id = JSON["id"] as? String,
             let name = JSON["name"] as? String,
@@ -38,7 +38,6 @@ extension Link {
             let hash = JSON["hash"] as? String,
             let host = JSON["host"] as? String,
             let hasPassword = JSON["hasPassword"] as? Bool,
-            let password = JSON["password"] as? String,
             let passwordRequired = JSON["passwordRequired"] as? Bool
         else { return nil }
 
@@ -51,8 +50,8 @@ extension Link {
         self.hash = hash
         self.host = host
         self.hasPassword = hasPassword
-        self.password = password
+        self.password = JSON["password"] as? String
         self.passwordRequired =  passwordRequired
-        self.validTo = JSON["validTo"] is NSNull ? nil : JSON["validTo"] as? TimeInterval
+        self.validTo = JSON["validTo"] as? TimeInterval
     }
 }

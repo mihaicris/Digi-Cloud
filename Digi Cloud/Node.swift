@@ -17,7 +17,9 @@ struct Node {
     let modified: TimeInterval
     let size: Int64
     let contentType: String
-    let hash: String
+    let hash: String?
+    let link: Link?
+    let receiver: Receiver?
     let ext: String
     var location: Location
 }
@@ -40,7 +42,9 @@ extension Node {
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        self.hash = JSON["hash"] is NSNull ? "" : JSON["hash"] as? String ?? ""
+        self.hash = JSON["hash"] as? String
+        self.link = Link(JSON: JSON["link"])
+        self.receiver = Receiver(JSON: JSON["receiver"])
         self.location = location
         let components = self.name.components(separatedBy: ".")
         self.ext = components.count > 1 ? components.last! : ""
@@ -49,7 +53,7 @@ extension Node {
 
 extension Node: Hashable {
     var hashValue: Int {
-        return self.hash.hashValue
+        return self.hash?.hashValue ?? 0
     }
 }
 

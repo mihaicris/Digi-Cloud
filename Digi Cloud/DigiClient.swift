@@ -311,9 +311,9 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - result: Returned content as an array of nodes
     ///   - error: The error occurred in the network request, nil for no error.
-    func getFilesList(of location: Location, completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+    func getBundle(of location: Location, completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
 
-        let method = Methods.FilesList.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
