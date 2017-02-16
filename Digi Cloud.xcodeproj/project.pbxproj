@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8302319E1E559ECB001CDC00 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302319D1E559ECB001CDC00 /* Bookmark.swift */; };
 		830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830CCDD01E2FAA8A006E0846 /* String+DigiCloud.swift */; };
 		8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */; };
 		83164FED1E03F473001048D7 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83164FEC1E03F473001048D7 /* SearchCell.swift */; };
@@ -78,6 +79,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8302319D1E559ECB001CDC00 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Digi Cloud-Bridging-Header.h"; sourceTree = "<group>"; };
 		830CCDD01E2FAA8A006E0846 /* String+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+DigiCloud.swift"; sourceTree = "<group>"; };
 		8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateFolderViewController.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				8328F80E1E51EA7E00DE4453 /* NodeHit.swift */,
 				8328F8101E51FF2E00DE4453 /* Link.swift */,
 				836731B81E53DCD3001EA961 /* Receiver.swift */,
+				8302319D1E559ECB001CDC00 /* Bookmark.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
 				8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */,
 				83A8356D1E2E6A1500F347BD /* UIApplication+DigiCloud.swift in Sources */,
+				8302319E1E559ECB001CDC00 /* Bookmark.swift in Sources */,
 				83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */,
 				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,
 				83EC31471E2915A8009E12B6 /* SettingsViewController.swift in Sources */,
