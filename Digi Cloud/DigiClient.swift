@@ -304,6 +304,36 @@ final class DigiClient {
         }
     }
 
+    /// Gets the bookmarks saved by the user
+    ///
+    /// - Parameters:
+    ///   - completion: The block called after the server has responded
+    ///   - bookmarks: Returned content as an array of bookmarks
+    ///   - error: The error occurred in the network request, nil for no error.
+    func getBookmarks(completion: @escaping(_ bookmarks: [Bookmark]?, _ error: Error?) -> Void) {
+
+        let method = Methods.UserBookmarks
+
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { json, _, error in
+            guard error == nil else {
+                completion(nil, error!)
+                return
+            }
+
+            guard let dict = json as? [String: Any],
+                let bookmarkJSONArray = dict["bookmarks"] as? [[String: Any]] else {
+                completion(nil, JSONError.parce("Could not parce bookmarks response"))
+                return
+            }
+
+            let bookmarks = bookmarkJSONArray.flatMap { Bookmark(JSON: $0) }
+            completion(bookmarks, nil)
+        }
+    }
+
     /// Gets the content of nodes of a location in the Cloud storage
     ///
     /// - Parameters:
