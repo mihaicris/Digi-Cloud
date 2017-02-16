@@ -17,6 +17,8 @@ enum ActionType: Int {
     case delete
     case folderInfo
     case share
+    case sendLink
+    case receiveFiles
 }
 
 class NodeActionsViewController: UITableViewController {
@@ -79,7 +81,9 @@ class NodeActionsViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
-        let folderActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
+        let folderActions = [ActionCell(title: NSLocalizedString("Send Link", comment: ""), action: .sendLink),
+                             ActionCell(title: NSLocalizedString("Receive Files", comment: ""), action: .receiveFiles),
+                             ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
                              ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
                              ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),
                              ActionCell(title: NSLocalizedString("Move", comment: ""), action: .move),
@@ -87,7 +91,7 @@ class NodeActionsViewController: UITableViewController {
 
         contextMenuFolderActions.append(contentsOf: folderActions)
 
-        let fileActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
+        let fileActions = [ActionCell(title: NSLocalizedString("Send link", comment: ""), action: .sendLink),
                            ActionCell(title: NSLocalizedString("Make available offline", comment: ""), action: .makeOffline),
                            ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
                            ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),
