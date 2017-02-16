@@ -483,7 +483,7 @@ final class ListingViewController: UITableViewController {
         guard let actionButton = (tableView.cellForRow(at: currentIndex) as? BaseListCell)?.actionButton else {
             return
         }
-        let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(M_PI_2)) : CGAffineTransform.identity
+        let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(Double.pi)) : CGAffineTransform.identity
         UIView.animate(withDuration: 0.4,
                        delay: 0.0,
                        usingSpringWithDamping: 1,
