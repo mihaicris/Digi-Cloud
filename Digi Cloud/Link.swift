@@ -22,6 +22,7 @@ struct Link {
     let host: String
     let hasPassword: Bool
     let password: String?
+    let validFrom: TimeInterval?
     let validTo: TimeInterval?
     let passwordRequired: Bool
 }
@@ -52,6 +53,7 @@ extension Link {
         self.hasPassword = hasPassword
         self.password = JSON["password"] as? String
         self.passwordRequired =  passwordRequired
+        self.validFrom = JSON["validFrom"] as? TimeInterval
         self.validTo = JSON["validTo"] as? TimeInterval
     }
 }

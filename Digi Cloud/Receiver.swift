@@ -22,6 +22,7 @@ struct Receiver {
     let host: String
     let hasPassword: Bool
     let password: String?
+    let validFrom: TimeInterval?
     let validTo: TimeInterval?
     let alert: Bool
 }
@@ -51,6 +52,7 @@ extension Receiver {
         self.host = host
         self.hasPassword = hasPassword
         self.password = JSON["password"] as? String
+        self.validFrom = JSON["validFrom"] as? TimeInterval
         self.validTo = JSON["validTo"] as? TimeInterval
         self.alert =  alert
     }
