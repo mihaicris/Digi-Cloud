@@ -36,7 +36,7 @@ extension NodeHit {
             let size = JSON["size"] as? Int64,
             let contentType = JSON["contentType"] as? String
             else {
-                print("Could not parce keys")
+                print("Could not parse keys")
             return nil
         }
         self.mountId = mountId
@@ -52,7 +52,7 @@ extension NodeHit {
 
         guard let mountJSON = mountsJSON[mountId] as? [String: Any],
               let mountName = mountJSON["name"] as? String else {
-            print("Could not parce keys")
+            print("Could not parse keys")
             return nil
         }
 

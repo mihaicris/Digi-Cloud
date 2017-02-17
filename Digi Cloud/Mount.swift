@@ -22,7 +22,7 @@ extension Mount {
             let name = JSON["name"] as? String,
             let id = JSON["id"] as? String
             else {
-            print("Could not parce keys")
+            print("Could not parse keys")
             return nil
         }
         self.name = name

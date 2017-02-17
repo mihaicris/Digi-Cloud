@@ -33,7 +33,7 @@ extension Node {
             let size = JSON["size"] as? Int64,
             let contentType = JSON["contentType"] as? String
             else {
-                print("Could not parce keys")
+                print("Could not parse keys")
             return nil
         }
 

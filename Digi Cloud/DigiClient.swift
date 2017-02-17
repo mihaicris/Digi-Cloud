@@ -18,7 +18,7 @@ enum NetworkingError: Error {
     case data(String)
 }
 enum JSONError: Error {
-    case parce(String)
+    case parse(String)
 }
 enum Authentication: Error {
     case login(String)
@@ -89,7 +89,7 @@ final class DigiClient {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: json, options: [])
             } catch {
-                completion(nil, nil, JSONError.parce("Could not convert json into data!"))
+                completion(nil, nil, JSONError.parse("Could not convert json into data!"))
             }
         }
 
@@ -137,7 +137,7 @@ final class DigiClient {
                     let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     completion(json, statusCode, nil)
                 } catch {
-                    completion(nil, statusCode, JSONError.parce("Could not parse the data as JSON"))
+                    completion(nil, statusCode, JSONError.parse("Could not parse the data as JSON"))
                 }
             } // End of dispatched block
         }
@@ -261,7 +261,7 @@ final class DigiClient {
             guard let json = jsonData as? [String: String],
                 let firstName = json["firstName"],
                 let lastName = json["lastName"] else {
-                    completion(nil, JSONError.parce("Could not parce json response for user info request."))
+                    completion(nil, JSONError.parse("Could not parse json response for user info request."))
                     return
             }
 
@@ -286,7 +286,7 @@ final class DigiClient {
             } else {
                 if let dict = data as? [String: Any] {
                     guard let mountsList = dict["mounts"] as? [Any] else {
-                        completion(nil, JSONError.parce("Could not parce mount "))
+                        completion(nil, JSONError.parse("Could not parse mount "))
                         return
                     }
                     var locations: [Location] = []
@@ -298,7 +298,7 @@ final class DigiClient {
                     completion(locations, nil)
 
                 } else {
-                    completion(nil, JSONError.parce("Could not parce data (getLocations)"))
+                    completion(nil, JSONError.parse("Could not parse data (getLocations)"))
                 }
             }
         }
@@ -325,7 +325,7 @@ final class DigiClient {
 
             guard let dict = json as? [String: Any],
                 let bookmarkJSONArray = dict["bookmarks"] as? [[String: Any]] else {
-                completion(nil, JSONError.parce("Could not parce bookmarks response"))
+                completion(nil, JSONError.parse("Could not parse bookmarks response"))
                 return
             }
 
@@ -362,25 +362,25 @@ final class DigiClient {
             }
             if let dict = data as? [String: Any] {
                 guard let nodeList = dict["files"] as? [[String: Any]] else {
-                    completion(nil, JSONError.parce("Could not parce filelist"))
+                    completion(nil, JSONError.parse("Could not parse filelist"))
                     return
                 }
                 var content: [Node] = []
                 for nodeJSON in nodeList {
                     guard let nodeName = nodeJSON["name"] as? String else {
-                        completion (nil, JSONError.parce("JSON Error"))
+                        completion (nil, JSONError.parse("JSON Error"))
                         return
                     }
                     let locationNode = Location(mount: location.mount, path: location.path + nodeName)
                     guard let node = Node(JSON: nodeJSON, location: locationNode) else {
-                        completion (nil, JSONError.parce("JSON Error"))
+                        completion (nil, JSONError.parse("JSON Error"))
                         return
                     }
                     content.append(node)
                 }
                 completion(content, nil)
             } else {
-                completion(nil, JSONError.parce("Could not parce data (getFiles)"))
+                completion(nil, JSONError.parse("Could not parse data (getFiles)"))
             }
 
         }
@@ -519,7 +519,7 @@ final class DigiClient {
                 let hitsJSON = json["hits"] as? [[String: Any]],
                 let mountsJSON = json["mounts"] as? [String: Any]
                 else {
-                    completion(nil, JSONError.parce("Couldn't parce the json to get the hits and mounts from search results."))
+                    completion(nil, JSONError.parse("Couldn't parse the json to get the hits and mounts from search results."))
                     return
             }
 
