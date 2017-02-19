@@ -29,6 +29,7 @@ struct Link {
 
 extension Link {
     init?(JSON: Any?) {
+        if JSON == nil { return nil }
         guard let JSON = JSON as? [String: Any],
             let id = JSON["id"] as? String,
             let name = JSON["name"] as? String,
@@ -40,7 +41,10 @@ extension Link {
             let host = JSON["host"] as? String,
             let hasPassword = JSON["hasPassword"] as? Bool,
             let passwordRequired = JSON["passwordRequired"] as? Bool
-        else { return nil }
+            else {
+                print("Couldnt parse JSON")
+                return nil
+        }
 
         self.id = id
         self.name = name

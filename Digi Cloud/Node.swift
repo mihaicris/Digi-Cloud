@@ -18,6 +18,7 @@ struct Node {
     let size: Int64
     let contentType: String
     let hash: String?
+    let share: Mount?
     let link: Link?
     let receiver: Receiver?
     let ext: String
@@ -33,8 +34,8 @@ extension Node {
             let size = JSON["size"] as? Int64,
             let contentType = JSON["contentType"] as? String
             else {
-                print("Could not parse keys")
-            return nil
+                print("Couldnt parse JSON")
+                return nil
         }
 
         self.name = name
@@ -43,6 +44,7 @@ extension Node {
         self.size = size
         self.contentType = contentType
         self.hash = JSON["hash"] as? String
+        self.share = Mount(JSON: JSON["mount"])
         self.link = Link(JSON: JSON["link"])
         self.receiver = Receiver(JSON: JSON["receiver"])
         self.location = location

@@ -17,14 +17,16 @@ struct Mount {
 }
 
 extension Mount {
-    init?(JSON: Any) {
+    init?(JSON: Any?) {
+        if JSON == nil { return nil }
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let id = JSON["id"] as? String
             else {
-            print("Could not parse keys")
-            return nil
+                print("Couldnt parse JSON")
+                return nil
         }
+
         self.name = name
         self.id = id
     }
