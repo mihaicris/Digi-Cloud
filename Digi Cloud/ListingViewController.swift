@@ -650,6 +650,7 @@ final class ListingViewController: UITableViewController {
                 self.handleCreateDirectory()
                 break
             case .selectionMode:
+                if self.content.isEmpty { return }
                 self.activateEditMode()
                 break
             }
