@@ -12,6 +12,17 @@ class FileCell: BaseListCell {
 
     // MARK: - Properties
 
+    override var hasButton: Bool {
+        didSet {
+            super.setupActionsButton()
+            if !hasButton {
+                isUserInteractionEnabled = false
+                fileNameLabel.isEnabled = false
+                fileDetailsLabel.isEnabled = false
+            }
+        }
+    }
+
     var fileIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "FileIcon"))
         imageView.contentMode = .scaleAspectFit
@@ -34,6 +45,8 @@ class FileCell: BaseListCell {
         return label
     }()
 
+    var rightPaddingButtonConstraint: NSLayoutConstraint?
+
     // MARK: - Overridden Methods and Properties
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
@@ -43,12 +56,12 @@ class FileCell: BaseListCell {
                 contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
                 fileNameLabel.textColor = .white
                 fileDetailsLabel.textColor = UIColor.init(white: 0.8, alpha: 1)
-                actionButton.setTitleColor(.white, for: .normal)
+                actionsButton.setTitleColor(.white, for: .normal)
             } else {
                 contentView.backgroundColor = nil
                 fileNameLabel.textColor = .black
                 fileDetailsLabel.textColor = .darkGray
-                actionButton.setTitleColor(.darkGray, for: .normal)
+                actionsButton.setTitleColor(.darkGray, for: .normal)
             }
         }
     }
@@ -56,19 +69,6 @@ class FileCell: BaseListCell {
     // MARK: - Helper Functions
 
     override func setupViews() {
-
-        super.setupViews()
-
-        // copy or move screen
-
-        var buttonRightSpace = 80
-
-        if !self.hasButton {
-            isUserInteractionEnabled = false
-            fileNameLabel.isEnabled = false
-            fileDetailsLabel.isEnabled = false
-            buttonRightSpace = 30
-        }
 
         separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
 
@@ -84,4 +84,5 @@ class FileCell: BaseListCell {
         fileIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
         fileNameLabel.topAnchor.constraint(equalTo: fileIcon.topAnchor, constant: -3).isActive = true
     }
+
 }

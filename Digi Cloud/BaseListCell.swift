@@ -12,11 +12,18 @@ class BaseListCell: UITableViewCell {
 
     // MARK: - Properties
 
-    var hasButton: Bool = false
+    var hasButton: Bool = false {
+        didSet {
+            setupActionsButton()
+            buttonRightSpace = hasButton ? 80 : 30
+            layoutSubviews()
+        }
+    }
+    var isSender: Bool = false
 
     weak var delegate: BaseListCellDelegate?
 
-    lazy var actionButton: UIButton = {
+    lazy var actionsButton: UIButton = {
         let button = UIButton(type: UIButtonType.system)
         button.setTitle("⋯", for: .normal)
         button.tag = 1
@@ -26,6 +33,8 @@ class BaseListCell: UITableViewCell {
         button.addTarget(self, action: #selector(handleAction), for: .touchUpInside)
         return button
     }()
+
+    var buttonRightSpace: CGFloat = 80
 
     // MARK: - Initializers and Deinitializers
 
@@ -37,30 +46,32 @@ class BaseListCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        if let identifier = reuseIdentifier, identifier.hasSuffix("WithButton") {
-            self.hasButton = true
-        }
         self.setupViews()
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
-        actionButton.alpha = editing ? 0 : 1
+        actionsButton.alpha = editing ? 0 : 1
         super.setEditing(editing, animated: animated)
     }
 
     // MARK: - Helper Functions
 
     func setupViews() {
-        if self.hasButton {
-            contentView.addSubview(actionButton)
-            contentView.addConstraints(with: "H:[v0(64)]-(-4)-|", views: actionButton)
-            actionButton.heightAnchor.constraint(equalToConstant: AppSettings.tableViewRowHeight * 0.95).isActive = true
-            actionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        self.clipsToBounds = true
+    }
+
+    func setupActionsButton() {
+        if hasButton {
+            contentView.addSubview(actionsButton)
+            contentView.addConstraints(with: "H:[v0(64)]-(-4)-|", views: actionsButton)
+            actionsButton.heightAnchor.constraint(equalToConstant: AppSettings.tableViewRowHeight * 0.95).isActive = true
+            actionsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        } else {
+            actionsButton.removeFromSuperview()
         }
     }
 
     @objc private func handleAction() {
-
-        delegate?.showActionController(for: actionButton)
+        delegate?.showActionController(for: actionsButton)
     }
 }

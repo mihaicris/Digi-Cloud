@@ -215,9 +215,13 @@ final class ListingViewController: UITableViewController {
                 return UITableViewCell()
             }
             cell.delegate = self
-            cell.hasButton = !tableView.isEditing
 
+            cell.hasButton = editaction == .noAction
+
+            cell.isShared = item.share != nil
+            cell.isReceiver = item.receiver != nil
             cell.folderNameLabel.text = item.name
+
             return cell
 
         } else {
@@ -226,7 +230,8 @@ final class ListingViewController: UITableViewController {
             }
 
             cell.delegate = self
-            cell.hasButton = !tableView.isEditing
+
+            cell.hasButton = editaction == .noAction
 
             let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
             cell.fileNameLabel.text = item.name
@@ -303,17 +308,11 @@ final class ListingViewController: UITableViewController {
 
     private func setupTableView() {
 
-        switch self.editaction {
-        case .copy, .move:
-            self.fileCellID = "FileCell"
-            self.folderCellID = "DirectoryCell"
-        default:
-            self.fileCellID = "FileCellWithButton"
-            self.folderCellID = "DirectoryCellWithButton"
-            setupSearchController()
-            definesPresentationContext = true
-            tableView.allowsMultipleSelectionDuringEditing = true
-        }
+        self.fileCellID = "FileCell"
+        self.folderCellID = "DirectoryCell"
+        setupSearchController()
+        definesPresentationContext = true
+        tableView.allowsMultipleSelectionDuringEditing = true
 
         refreshControl = UIRefreshControl()
         setRefreshControlTitle(started: false)
@@ -480,7 +479,7 @@ final class ListingViewController: UITableViewController {
     }
 
     fileprivate func animateActionButton(active: Bool) {
-        guard let actionButton = (tableView.cellForRow(at: currentIndex) as? BaseListCell)?.actionButton else {
+        guard let actionsButton = (tableView.cellForRow(at: currentIndex) as? BaseListCell)?.actionsButton else {
             return
         }
         let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(Double.pi)) : CGAffineTransform.identity
@@ -490,7 +489,7 @@ final class ListingViewController: UITableViewController {
                        initialSpringVelocity: 1,
                        options: UIViewAnimationOptions.curveEaseOut,
                        animations: {
-                          actionButton.transform = transform
+                          actionsButton.transform = transform
                        },
                        completion: nil)
     }

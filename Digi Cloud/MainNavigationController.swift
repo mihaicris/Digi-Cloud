@@ -17,8 +17,8 @@ class MainNavigationController: UINavigationController {
     // It can be accessed by any view controller on the stack of controllers
     var sourceNodes: [Node]?
 
-    // The viewcontroller index where the search controller has been initiated.
-    // Following search actions will be routed to this viewcontroller
+    // The view controller index where the search controller has been initiated.
+    // Following search actions will be routed to this view controller
     var searchResultsControllerIndex: Int?
 
     // MARK: - Overridden Methods and Properties
