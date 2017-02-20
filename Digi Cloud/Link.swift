@@ -8,9 +8,9 @@
 
 import Foundation
 
-enum LinkType {
-    case download
-    case upload
+enum LinkType: String {
+    case download = "links"
+    case upload = "receivers"
 }
 
 struct Link {

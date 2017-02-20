@@ -658,16 +658,11 @@ final class DigiClient {
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func getLink(for type: LinkType, at location: Location, isDirectory: Bool, completion: @escaping (_ link: Any?, _ error: Error?) -> Void) {
+    func getLink(type: LinkType, location: Location, isDirectory: Bool, completion: @escaping (_ link: Any?, _ error: Error?) -> Void) {
 
-        let method: String
-
-        switch type {
-        case .download:
-            method = Methods.Links.replacingOccurrences(of: "{id}", with: location.mount.id)
-        case .upload:
-            method = Methods.Receivers.replacingOccurrences(of: "{id}", with: location.mount.id)
-        }
+        let method = Methods.Links
+            .replacingOccurrences(of: "{id}", with: location.mount.id)
+            .replacingOccurrences(of: "{type}", with: type.rawValue)
 
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
@@ -701,4 +696,38 @@ final class DigiClient {
         }
     }
 
+    func resetLinkPassword(type: LinkType, mountId: String, linkId: String, completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
+
+        let method = Methods.LinkResetPassword
+            .replacingOccurrences(of: "{mountId}", with: mountId)
+            .replacingOccurrences(of: "{type}", with: type.rawValue)
+            .replacingOccurrences(of: "{linkId}", with: linkId)
+
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        networkTask(requestType: "PUT", method: method, headers: headers, json: nil, parameters: nil) { json, _, error in
+
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            switch type {
+            case .download:
+                guard let link = Link(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    return
+                }
+                completion(link, nil)
+
+            case .upload:
+                guard let receiver = Receiver(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    return
+                }
+                completion(receiver, nil)
+            }
+        }
+    }
 }
