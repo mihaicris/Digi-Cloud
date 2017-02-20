@@ -706,7 +706,7 @@ final class DigiClient {
     ///
     /// - Parameters:
     ///   - type:        Link type (.download or .upload)
-    ///   - mountId:     Mount id
+    ///   - location:    Link location
     ///   - linkId:      Link id
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
@@ -721,10 +721,15 @@ final class DigiClient {
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: nil, parameters: nil) { json, _, error in
+        networkTask(requestType: "PUT", method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
 
             if let error = error {
                 completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, NetworkingError.wrongStatus("Status is different than 200!"))
                 return
             }
 
@@ -745,6 +750,64 @@ final class DigiClient {
             }
         }
     }
+
+    /// Remove link (download/upload) password
+    ///
+    /// - Parameters:
+    ///   - type:        Link type (.download or .upload)
+    ///   - location:    Link location
+    ///   - linkId:      Link id
+    ///   - completion:  Function to handle the status code and error response
+    ///   - link:        Returned Link (Link or Receiver)
+    ///   - error:       Networking error (nil if no error)
+    func removeLinkPassword(type: LinkType, location: Location, linkId: String, completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
+
+        let method = Methods.LinkRemovePassword
+            .replacingOccurrences(of: "{mountId}", with: location.mount.id)
+            .replacingOccurrences(of: "{linkType}", with: type.rawValue)
+            .replacingOccurrences(of: "{linkId}", with: linkId)
+
+        var headers = DefaultHeaders.DelHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
+
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, NetworkingError.wrongStatus("Status is different than 200!"))
+                return
+            }
+
+            switch type {
+            case .download:
+                guard let link = Link(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    return
+                }
+                completion(link, nil)
+
+            case .upload:
+                guard let receiver = Receiver(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    return
+                }
+                completion(receiver, nil)
+            }
+        }
+    }
+
+    func setLinkCustomShortUrl() {
+
+    }
+
+    func setLinkCustomValidity() {
+
+    }
+
     /// Delete link (download/upload) password
     ///
     /// - Parameters:

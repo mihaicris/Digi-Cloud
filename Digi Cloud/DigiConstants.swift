@@ -58,7 +58,7 @@ struct Methods {
     static let FilesMove           = "/api/v2/mounts/{id}/files/move"
     static let Links               = "/api/v2/mounts/{mountId}/{linkType}"
     static let LinkDelete          = "/api/v2/mounts/{mountId}/{linkType}/{linkId}"
-    static let LinkRemovePassword  = "/api/v2/mounts/{mountId}/{linkType}/password"
+    static let LinkRemovePassword  = "/api/v2/mounts/{mountId}/{linkType}/{linkId}/password"
     static let LinkResetPassword   = "/api/v2/mounts/{mountId}/{linkType}/{linkId}/password/reset"
     static let Search              = "/api/v2/search"
 }
