@@ -83,7 +83,7 @@ class NodeActionsViewController: UITableViewController {
     private func setupViews() {
         let folderActions = [ActionCell(title: NSLocalizedString("Send Download Link", comment: ""), action: .sendLink),
                              ActionCell(title: NSLocalizedString("Send Upload Link", comment: ""), action: .receiveFiles),
-                             ActionCell(title: NSLocalizedString("Share with DIGI user", comment: ""), action: .share),
+                             ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
                              ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
                              ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),
                              ActionCell(title: NSLocalizedString("Move", comment: ""), action: .move),
