@@ -663,15 +663,14 @@ final class DigiClient {
     /// - Parameters:
     ///   - type:        Link type (.download or .upload)
     ///   - location:    Source location
-    ///   - isDirectory: If location is a directory
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
     func getLink(type: LinkType, location: Location, completion: @escaping (_ link: Any?, _ error: Error?) -> Void) {
 
         let method = Methods.Links
-            .replacingOccurrences(of: "{id}", with: location.mount.id)
-            .replacingOccurrences(of: "{type}", with: type.rawValue)
+            .replacingOccurrences(of: "{mountId}", with: location.mount.id)
+            .replacingOccurrences(of: "{linkType}", with: type.rawValue)
 
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
@@ -703,11 +702,20 @@ final class DigiClient {
         }
     }
 
-    func resetLinkPassword(type: LinkType, mountId: String, linkId: String, completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
+    /// Reset link (download/upload) password
+    ///
+    /// - Parameters:
+    ///   - type:        Link type (.download or .upload)
+    ///   - mountId:     Mount id
+    ///   - linkId:      Link id
+    ///   - completion:  Function to handle the status code and error response
+    ///   - link:        Returned Link
+    ///   - error:       Networking error (nil if no error)
+    func resetLinkPassword(type: LinkType, location: Location, linkId: String, completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkResetPassword
-            .replacingOccurrences(of: "{mountId}", with: mountId)
-            .replacingOccurrences(of: "{type}", with: type.rawValue)
+            .replacingOccurrences(of: "{mountId}", with: location.mount.id)
+            .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.GetHeaders
@@ -737,4 +745,38 @@ final class DigiClient {
             }
         }
     }
+    /// Delete link (download/upload) password
+    ///
+    /// - Parameters:
+    ///   - type:        Link type (.download or .upload)
+    ///   - location:    Link location
+    ///   - linkId:      Link Id
+    ///   - completion:  Function to handle the status code and error response
+    ///   - error:       Networking error (nil if no error)
+    func deleteLink(type: LinkType, location: Location, linkId: String, completion: @escaping (_ error: Error?) -> Void ) {
+
+        let method = Methods.LinkDelete
+            .replacingOccurrences(of: "{mountId}", with: location.mount.id)
+            .replacingOccurrences(of: "{linkType}", with: type.rawValue)
+            .replacingOccurrences(of: "{linkId}", with: linkId)
+
+        var headers = DefaultHeaders.DelHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
+
+            if let error = error {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 204 else {
+                completion(NetworkingError.wrongStatus("Status is different than 204!"))
+                return
+            }
+
+            completion(nil)
+        }
+    }
+
 }
