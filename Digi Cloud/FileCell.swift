@@ -15,6 +15,8 @@ class FileCell: BaseListCell {
     override var hasButton: Bool {
         didSet {
             super.setupActionsButton()
+
+            // In copy or move view controller it is not an active cell
             if !hasButton {
                 isUserInteractionEnabled = false
                 fileNameLabel.isEnabled = false
@@ -24,25 +26,25 @@ class FileCell: BaseListCell {
     }
 
     var fileIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "FileIcon"))
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+        let i = UIImageView(image: UIImage(named: "FileIcon"))
+        i.translatesAutoresizingMaskIntoConstraints = false
+        i.contentMode = .scaleAspectFit
+        return i
     }()
 
     var fileNameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "HelveticaNeue", size: 15)
-        label.lineBreakMode = .byTruncatingMiddle
-        return label
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont(name: "HelveticaNeue", size: 15)
+        l.lineBreakMode = .byTruncatingMiddle
+        return l
     }()
 
     var fileDetailsLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "HelveticaNeue", size: 11)
-        return label
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont(name: "HelveticaNeue", size: 11)
+        return l
     }()
 
     var rightPaddingButtonConstraint: NSLayoutConstraint?
@@ -79,13 +81,24 @@ class FileCell: BaseListCell {
         contentView.addSubview(fileNameLabel)
         contentView.addSubview(fileDetailsLabel)
 
-        contentView.addConstraints(with: "H:|-15-[v0(26)]-10-[v1]-\(buttonRightSpace)-|", views: fileIcon, fileNameLabel)
-        contentView.addConstraints(with: "H:[v0]-10-[v1]", views: fileIcon, fileDetailsLabel)
-        contentView.addConstraints(with: "V:[v0(26)]", views: fileIcon)
-        contentView.addConstraints(with: "V:[v0]-2-[v1]", views: fileNameLabel, fileDetailsLabel)
+        NSLayoutConstraint.activate([
+            // Dimmentional constraints
+            fileIcon.widthAnchor.constraint(equalToConstant: 26),
+            fileIcon.heightAnchor.constraint(equalToConstant: 26),
 
-        fileIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
-        fileNameLabel.topAnchor.constraint(equalTo: fileIcon.topAnchor, constant: -3).isActive = true
+            // Horizontal constraints
+            fileIcon.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
+            fileNameLabel.leftAnchor.constraint(equalTo: fileIcon.rightAnchor, constant: 10),
+            fileDetailsLabel.leftAnchor.constraint(equalTo: fileNameLabel.leftAnchor),
+
+            // Vertical constraints
+            fileIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1),
+            fileNameLabel.topAnchor.constraint(equalTo: fileIcon.topAnchor, constant: -3),
+            fileDetailsLabel.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 2)
+        ])
+
+        labelRightMarginConstraint = fileNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        labelRightMarginConstraint?.isActive = true
     }
 
 }

@@ -15,8 +15,6 @@ class BaseListCell: UITableViewCell {
     var hasButton: Bool = false {
         didSet {
             setupActionsButton()
-            buttonRightSpace = hasButton ? 80 : 30
-            layoutSubviews()
         }
     }
     var isSender: Bool = false
@@ -34,7 +32,7 @@ class BaseListCell: UITableViewCell {
         return button
     }()
 
-    var buttonRightSpace: CGFloat = 80
+    var labelRightMarginConstraint: NSLayoutConstraint?
 
     // MARK: - Initializers and Deinitializers
 
@@ -66,9 +64,12 @@ class BaseListCell: UITableViewCell {
             contentView.addConstraints(with: "H:[v0(64)]-(-4)-|", views: actionsButton)
             actionsButton.heightAnchor.constraint(equalToConstant: AppSettings.tableViewRowHeight * 0.95).isActive = true
             actionsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+            labelRightMarginConstraint?.constant = -70
         } else {
             actionsButton.removeFromSuperview()
+            labelRightMarginConstraint?.constant = -20
         }
+        layoutSubviews()
     }
 
     @objc private func handleAction() {

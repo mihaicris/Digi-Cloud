@@ -20,16 +20,18 @@ class DirectoryCell: BaseListCell {
     var isReceiver: Bool = false
 
     var folderIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "FolderIcon"))
-        imageView.contentMode = .scaleAspectFit
-        return imageView
+        let i = UIImageView(image: UIImage(named: "FolderIcon"))
+        i.contentMode = .scaleAspectFit
+        i.translatesAutoresizingMaskIntoConstraints = false
+        return i
     }()
 
     var folderNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue-Medium", size: 15)
-        label.lineBreakMode = .byTruncatingMiddle
-        return label
+        let l = UILabel()
+        l.font = UIFont(name: "HelveticaNeue-Medium", size: 15)
+        l.lineBreakMode = .byTruncatingMiddle
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
     }()
 
     let sharedLabel: UILabelWithPadding = {
@@ -80,15 +82,22 @@ class DirectoryCell: BaseListCell {
         contentView.addSubview(folderIcon)
         contentView.addSubview(folderNameLabel)
 
-        // Horizontal constraints
+        NSLayoutConstraint.activate([
+            // Dimmentional constraints
+            folderIcon.widthAnchor.constraint(equalToConstant: 26),
+            folderIcon.heightAnchor.constraint(equalToConstant: 26),
 
-        contentView.addConstraints(with: "H:|-15-[v0(26)]-10-[v1]-\(buttonRightSpace)-|", views: folderIcon, folderNameLabel)
-        contentView.addConstraints(with: "V:[v0(26)]", views: folderIcon)
+            // Horizontal constraints
+            folderIcon.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
+            folderNameLabel.leftAnchor.constraint(equalTo: folderIcon.rightAnchor, constant: 10),
 
-        // Vertical constraints
+            // Vertical constraints
+            folderIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1),
+            folderNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 1)
+        ])
 
-        folderIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1).isActive = true
-        folderNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 1).isActive = true
+        labelRightMarginConstraint = folderNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        labelRightMarginConstraint?.isActive = true
     }
 
     func setupSharedLabel() {
