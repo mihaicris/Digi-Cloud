@@ -269,6 +269,7 @@ final class ListingViewController: UITableViewController {
         refreshControl?.endRefreshing()
 
         let item = content[indexPath.row]
+
         if item.type == "dir" {
             // This is a Folder
 

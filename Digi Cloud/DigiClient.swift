@@ -898,8 +898,58 @@ final class DigiClient {
         }
     }
 
-    func setLinkCustomValidity() {
+    /// Set link validity
+    ///
+    /// - Parameters:
+    ///   - validTo:     timeIntervalSince1970 (seconds)
+    ///   - type:        Link type (.download or .upload)
+    ///   - location:    Link location
+    ///   - linkId:      Link id
+    ///   - completion:  Function to handle the status code and error response
+    ///   - link:        Returned link with validity updated
+    ///   - error:       Networking error (nil if no error)
+    func setLinkCustomValidity(validTo: TimeInterval,
+                               type: LinkType, location: Location, linkId: String,
+                               completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
 
+        let method = Methods.LinkValidity
+            .replacingOccurrences(of: "{mountId}", with: location.mount.id)
+            .replacingOccurrences(of: "{linkType}", with: type.rawValue)
+            .replacingOccurrences(of: "{linkId}", with: linkId)
+
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        let json = ["validTo": validTo * 1000]
+
+        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
+
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, NetworkingError.wrongStatus("Status is different than 200!"))
+                return
+            }
+
+            switch type {
+            case .download:
+                guard let link = Link(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    return
+                }
+                completion(link, nil)
+
+            case .upload:
+                guard let receiver = Receiver(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    return
+                }
+                completion(receiver, nil)
+            }
+        }
     }
 
     /// Delete link (download/upload) password
