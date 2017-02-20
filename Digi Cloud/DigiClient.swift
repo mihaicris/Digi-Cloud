@@ -75,7 +75,7 @@ final class DigiClient {
     func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: String]?, parameters: [String: Any]?,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
-        #if DEBUG_CONTROLLERS
+        #if DEBUG
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         #endif
 
@@ -98,8 +98,7 @@ final class DigiClient {
 
             DispatchQueue.main.async {
 
-                #if DEBUG_CONTROLLERS
-                    // stop network indication
+                #if DEBUG
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 #endif
 
