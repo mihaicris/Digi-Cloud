@@ -91,7 +91,7 @@ class NodeActionsViewController: UITableViewController {
 
         contextMenuFolderActions.append(contentsOf: folderActions)
 
-        let fileActions = [ActionCell(title: NSLocalizedString("Send link", comment: ""), action: .sendLink),
+        let fileActions = [ActionCell(title: NSLocalizedString("Send Link", comment: ""), action: .sendLink),
                            ActionCell(title: NSLocalizedString("Make available offline", comment: ""), action: .makeOffline),
                            ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
                            ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),

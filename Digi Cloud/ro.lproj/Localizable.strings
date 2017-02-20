@@ -226,6 +226,9 @@ Please try again later!" = "A avut loc o eroare.
 "Rate the App" = "Dă o notă aplicației";
 
 /* No comment provided by engineer. */
+"Receive Files" = "Link primire";
+
+/* No comment provided by engineer. */
 "Refreshing ..." = "Se actualizează ...";
 
 /* No comment provided by engineer. */
@@ -247,6 +250,9 @@ Please try again later!" = "A avut loc o eroare.
 "Replace underscore with space" = "Înlocuire caracter de subliniere cu spațiu";
 
 /* No comment provided by engineer. */
+"SHARED" = "PARTAJAT";
+
+/* No comment provided by engineer. */
 "Save copy" = "Salvează copie";
 
 /* No comment provided by engineer. */
@@ -254,6 +260,9 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "Select Mode" = "Mod selecție";
+
+/* No comment provided by engineer. */
+"Send Link" = "Link descărcare";
 
 /* No comment provided by engineer. */
 "Server replied with Status Code: " = "Serverul a răspuns cu codul de stare: ";
@@ -284,6 +293,9 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "Sort directory" = "Sortează directorul";
+
+/* No comment provided by engineer. */
+"The location is not available." = "Locația nu este disponibilă.";
 
 /* No comment provided by engineer. */
 "There was an error creating the directory." = "A avut loc o eroare la crearea directorului.";
