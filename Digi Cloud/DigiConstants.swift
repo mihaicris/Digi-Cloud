@@ -60,6 +60,7 @@ struct Methods {
     static let LinkDelete          = "/api/v2/mounts/{mountId}/{linkType}/{linkId}"
     static let LinkRemovePassword  = "/api/v2/mounts/{mountId}/{linkType}/{linkId}/password"
     static let LinkResetPassword   = "/api/v2/mounts/{mountId}/{linkType}/{linkId}/password/reset"
+    static let LinkCustomURL       = "/api/v2/mounts/{mountId}/{linkType}/{linkId}/urlHash"
     static let Search              = "/api/v2/search"
 }
 
