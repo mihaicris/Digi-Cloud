@@ -649,4 +649,56 @@ final class DigiClient {
         }
     }
 
+    /// Get the download/upload link for a location
+    ///
+    /// - Parameters:
+    ///   - type:        Link type (.download or .upload)
+    ///   - location:    Source location
+    ///   - isDirectory: If location is a directory
+    ///   - completion:  Function to handle the status code and error response
+    ///   - link:        Returned Link
+    ///   - error:       Networking error (nil if no error)
+    func getLink(for type: LinkType, at location: Location, isDirectory: Bool, completion: @escaping (_ link: Any?, _ error: Error?) -> Void) {
+
+        let method: String
+
+        switch type {
+        case .download:
+            method = Methods.Links.replacingOccurrences(of: "{id}", with: location.mount.id)
+        case .upload:
+            method = Methods.Receivers.replacingOccurrences(of: "{id}", with: location.mount.id)
+        }
+
+        var headers = DefaultHeaders.PostHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        let path = location.path + (isDirectory ? "/" : "")
+
+        let json = ["path": path]
+
+        networkTask(requestType: "POST", method: method, headers: headers, json: json, parameters: nil) { json, _, error in
+
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            switch type {
+            case .download:
+                guard let link = Link(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    return
+                }
+                completion(link, nil)
+
+            case .upload:
+                guard let receiver = Receiver(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    return
+                }
+                completion(receiver, nil)
+            }
+        }
+    }
+
 }

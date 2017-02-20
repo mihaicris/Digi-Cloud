@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum LinkType {
+    case download
+    case upload
+}
+
 struct Link {
 
     // MARK: - Properties
