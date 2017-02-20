@@ -98,7 +98,7 @@ class SearchResultController: UITableViewController {
         searchController?.searchBar.resignFirstResponder()
         let node = filteredContent[indexPath.row]
         let controller = node.type == "dir"
-            ? ListingViewController(editaction: .noAction, for: node.location)
+            ? ListingViewController(editAction: .noAction, for: node.location)
             : ContentViewController(location: node.location)
         controller.title = node.name
         let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController

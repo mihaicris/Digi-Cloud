@@ -18,7 +18,7 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
     var onFinish: (() -> Void)?
-    fileprivate let editaction: ActionType
+    fileprivate let editAction: ActionType
     fileprivate var location: Location
     fileprivate var needRefresh: Bool = true
     private var isUpdating: Bool = false
@@ -131,13 +131,13 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(editaction: ActionType, for location: Location) {
-        self.editaction = editaction
+    init(editAction: ActionType, for location: Location) {
+        self.editAction = editAction
         self.location = location
         #if DEBUG_CONTROLLERS
             count += 1
             self.tag = count
-            print(self.tag, "✅", String(describing: type(of: self)), editaction)
+            print(self.tag, "✅", String(describing: type(of: self)), editAction)
         #endif
         super.init(style: .plain)
     }
@@ -148,7 +148,7 @@ final class ListingViewController: UITableViewController {
 
     #if DEBUG_CONTROLLERS
     deinit {
-        print(self.tag, "❌", String(describing: type(of: self)), editaction)
+        print(self.tag, "❌", String(describing: type(of: self)), editAction)
         count -= 1
     }
     #endif
@@ -162,7 +162,7 @@ final class ListingViewController: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        if self.editaction == .noAction {
+        if self.editAction == .noAction {
             updateNavigationBarRightButtonItems()
             tableView.tableHeaderView = nil
         }
@@ -225,7 +225,7 @@ final class ListingViewController: UITableViewController {
             }
             cell.delegate = self
 
-            cell.hasButton = editaction == .noAction
+            cell.hasButton = editAction == .noAction
 
             cell.isShared = item.share != nil
             cell.isReceiver = item.receiver != nil
@@ -240,7 +240,7 @@ final class ListingViewController: UITableViewController {
 
             cell.delegate = self
 
-            cell.hasButton = editaction == .noAction
+            cell.hasButton = editAction == .noAction
 
             let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
             cell.fileNameLabel.text = item.name
@@ -275,10 +275,10 @@ final class ListingViewController: UITableViewController {
             let nextPath = self.location.path + item.name + "/"
             let nextLocation = Location(mount: self.location.mount, path: nextPath)
 
-            let controller = ListingViewController(editaction: self.editaction, for: nextLocation)
+            let controller = ListingViewController(editAction: self.editAction, for: nextLocation)
 
             controller.title = item.name
-            if self.editaction != .noAction {
+            if self.editAction != .noAction {
 
                 // It makes sens only if this is a copy or move controller
                 controller.onFinish = { [unowned self] in
@@ -291,7 +291,7 @@ final class ListingViewController: UITableViewController {
 
             // This is a file
 
-            if self.editaction != .noAction {
+            if self.editAction != .noAction {
                 return
             }
 
@@ -335,7 +335,7 @@ final class ListingViewController: UITableViewController {
     }
 
     private func setupViews() {
-        switch self.editaction {
+        switch self.editAction {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
 
@@ -346,7 +346,7 @@ final class ListingViewController: UITableViewController {
 
             navigationController?.isToolbarHidden = false
 
-            let buttonTitle = self.editaction == .copy ?
+            let buttonTitle = self.editAction == .copy ?
                 NSLocalizedString("Save copy", comment: "") :
                 NSLocalizedString("Move", comment: "")
 
@@ -418,14 +418,14 @@ final class ListingViewController: UITableViewController {
                 return
             }
             if var newContent = receivedContent {
-                switch self.editaction {
+                switch self.editAction {
                 case .copy, .move:
                     // Only in move action, the moved node is not shown in the list.
                     guard let sourceNodes = (self.presentingViewController as? MainNavigationController)?.sourceNodes else {
                         print("Couldn't get the source node.")
                         return
                     }
-                    if self.editaction == .move {
+                    if self.editAction == .move {
                         newContent = newContent.filter {
                             return (!sourceNodes.contains($0) || $0.type == "file")
                         }
@@ -691,7 +691,7 @@ final class ListingViewController: UITableViewController {
                 }
                 let folderLocation = Location(mount: self.location.mount, path: nextPath)
 
-                let controller = ListingViewController(editaction: self.editaction, for: folderLocation)
+                let controller = ListingViewController(editAction: self.editAction, for: folderLocation)
                 controller.title = folderName
                 controller.onFinish = {[unowned self] in
                     self.onFinish?()
@@ -756,7 +756,7 @@ final class ListingViewController: UITableViewController {
 
         let index = sourceNode.name.getIndexBeforeExtension()
 
-        if self.editaction == .copy {
+        if self.editAction == .copy {
             var destinationName = sourceNode.name
             var copyCount: Int = 0
             var wasRenamed = false
@@ -798,7 +798,7 @@ final class ListingViewController: UITableViewController {
 
         dispatchGroup.enter()
 
-        DigiClient.shared.copyOrMoveNode(action: self.editaction, from: sourceNode.location, to: destinationLocation) { statusCode, error in
+        DigiClient.shared.copyOrMoveNode(action: self.editAction, from: sourceNode.location, to: destinationLocation) { statusCode, error in
 
             #if DEBUG_CONTROLLERS
             print("Task \(taskFinished) finished")
@@ -1037,7 +1037,7 @@ final class ListingViewController: UITableViewController {
 
             } else {
 
-                let c = ListingViewController(editaction: action, for: (controller as! ListingViewController).location)
+                let c = ListingViewController(editAction: action, for: (controller as! ListingViewController).location)
                 c.title = controller.title
 
                 c.onFinish = { [unowned self] in

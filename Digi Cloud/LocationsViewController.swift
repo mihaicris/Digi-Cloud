@@ -170,7 +170,7 @@ class LocationsViewController: UITableViewController {
     }
 
     private func openMount(index: Int) {
-        let controller = ListingViewController(editaction: self.action, for: locations[index])
+        let controller = ListingViewController(editAction: self.action, for: locations[index])
         controller.title = locations[index].mount.name
         if self.action != .noAction {
             controller.onFinish = { [unowned self] in
