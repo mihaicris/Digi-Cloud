@@ -350,38 +350,47 @@ final class DigiClient {
         let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
+
             guard error == nil else {
                 completion(nil, error!)
                 return
             }
+
             guard statusCode != 400 else {
                 let message = NSLocalizedString("Location is no longer available!", comment: "")
                 completion(nil, NetworkingError.wrongStatus(message))
                 return
             }
-            if let dict = data as? [String: Any] {
-                guard let nodeList = dict["files"] as? [[String: Any]] else {
-                    completion(nil, JSONError.parse("Could not parse filelist"))
+
+            guard let dict = data as? [String: Any],
+                let nodeList = dict["files"] as? [[String: Any]] else {
+                    completion(nil, JSONError.parse("Could not parse data"))
                     return
-                }
-                var content: [Node] = []
-                for nodeJSON in nodeList {
-                    guard let nodeName = nodeJSON["name"] as? String else {
-                        completion (nil, JSONError.parse("JSON Error"))
-                        return
-                    }
-                    let locationNode = Location(mount: location.mount, path: location.path + nodeName)
-                    guard let node = Node(JSON: nodeJSON, location: locationNode) else {
-                        completion (nil, JSONError.parse("JSON Error"))
-                        return
-                    }
-                    content.append(node)
-                }
-                completion(content, nil)
-            } else {
-                completion(nil, JSONError.parse("Could not parse data (getFiles)"))
             }
 
+            var content: [Node] = []
+
+            for nodeJSON in nodeList {
+
+                guard let nodeName = nodeJSON["name"] as? String,
+                    let nodeType = nodeJSON["type"] as? String else {
+                        completion (nil, JSONError.parse("JSON Error"))
+                        return
+                }
+
+                let path = location.path + nodeName + (nodeType == "dir" ? "/" : "")
+
+                let locationNode = Location(mount: location.mount, path: path)
+
+                guard let node = Node(JSON: nodeJSON, location: locationNode) else {
+                    completion (nil, JSONError.parse("JSON Error"))
+                    return
+                }
+
+                content.append(node)
+            }
+
+            completion(content, nil)
         }
     }
 
@@ -658,7 +667,7 @@ final class DigiClient {
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func getLink(type: LinkType, location: Location, isDirectory: Bool, completion: @escaping (_ link: Any?, _ error: Error?) -> Void) {
+    func getLink(type: LinkType, location: Location, completion: @escaping (_ link: Any?, _ error: Error?) -> Void) {
 
         let method = Methods.Links
             .replacingOccurrences(of: "{id}", with: location.mount.id)
@@ -667,9 +676,7 @@ final class DigiClient {
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let path = location.path + (isDirectory ? "/" : "")
-
-        let json = ["path": path]
+        let json = ["path": location.path]
 
         networkTask(requestType: "POST", method: method, headers: headers, json: json, parameters: nil) { json, _, error in
 
