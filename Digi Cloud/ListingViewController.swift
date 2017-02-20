@@ -175,17 +175,26 @@ final class ListingViewController: UITableViewController {
         super.viewWillAppear(animated)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-        super.viewWillDisappear(animated)
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if needRefresh {
             self.updateContent()
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+
+        #if DEBUG
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        #endif
+
+        DigiClient.shared.task?.cancel()
+
+        if tableView.isEditing {
+            cancelEditMode()
+        }
+
+        super.viewWillDisappear(animated)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
