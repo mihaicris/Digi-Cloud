@@ -158,7 +158,11 @@ final class ListingViewController: UITableViewController {
         super.viewDidLoad()
         setupTableView()
         setupViews()
-        self.title = node.name
+        if node.name == "" {
+            self.title = node.location.mount.name
+        } else {
+            self.title = node.name
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
