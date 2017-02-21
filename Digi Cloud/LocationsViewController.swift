@@ -66,7 +66,7 @@ class LocationsViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        getLocations()
+        self.getMounts()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -111,6 +111,7 @@ class LocationsViewController: UITableViewController {
     private func setupNavigationBar() {
 
         // Create navigation elements when coping or moving
+
         if action == .copy || action == .move {
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
             let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
@@ -136,11 +137,11 @@ class LocationsViewController: UITableViewController {
         refreshControl?.addTarget(self, action: #selector(handleRefreshLocations), for: UIControlEvents.valueChanged)
     }
 
-    private func getLocations() {
+    private func getMounts() {
 
         self.isUpdating = true
 
-        DigiClient.shared.getMounts { mounts, error in
+        DigiClient.shared.getMounts { mountsList, error in
 
             self.isUpdating = false
 
@@ -155,9 +156,7 @@ class LocationsViewController: UITableViewController {
                 return
             }
 
-            if let mountsList = mounts {
-                self.mounts = mountsList
-            }
+            self.mounts = mountsList ?? []
 
             if self.refreshControl?.isRefreshing == true {
                 if self.tableView.isDragging {
@@ -173,10 +172,8 @@ class LocationsViewController: UITableViewController {
 
     private func openMount(index: Int) {
 
-        let location = Location(mount: mounts[index], path: "/")
+        let controller = ListingViewController(node: mounts[index].rootNode, action: self.action )
 
-        let controller = ListingViewController(editAction: self.action, for: location)
-        controller.title = mounts[index].name
         if self.action != .noAction {
             controller.onFinish = { [unowned self] in
                 self.onFinish?()
@@ -199,7 +196,7 @@ class LocationsViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
-        self.getLocations()
+        self.getMounts()
     }
 
     @objc private func handleShowSettings() {

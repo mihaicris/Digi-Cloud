@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct NodeHit {
+struct NodeHit: ContentItem {
 
     // MARK: - Properties
 

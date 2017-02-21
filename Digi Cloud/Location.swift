@@ -20,6 +20,13 @@ extension Location {
     var parentPath: String {
         return (path as NSString).deletingLastPathComponent
     }
+
+    func appendingPathComponent(_ component: String, isDirectory: Bool) -> Location {
+
+        let newPath = path + component + (isDirectory ? "/" : "")
+        return Location(mount: mount, path: newPath)
+
+    }
 }
 
 extension Location: Equatable {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Node {
+struct Node: ContentItem {
 
     // MARK: - Properties
 
@@ -51,12 +51,22 @@ extension Node {
 }
 
 extension Node {
+
+    // Extension of the node name (otherwise "")
     var ext: String {
         return (name as NSString).pathExtension
     }
 
+    // Location of the Node
     var location: Location {
-        let path = parentLocation.path + name + (type == "dir" ? "/" : "")
+
+        let path: String
+
+        if name == "" {
+            path = "/"
+        } else {
+            path = parentLocation.path + name + (type == "dir" ? "/" : "")
+        }
         return Location(mount: parentLocation.mount, path: path )
     }
 }

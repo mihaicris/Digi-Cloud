@@ -9,12 +9,21 @@
 import UIKit
 import WebKit
 
+protocol ContentItem {
+    var name: String { get }
+    var location: Location { get }
+    var type: String { get }
+    var modified: TimeInterval { get }
+    var size: Int64 { get }
+    var contentType: String { get }
+}
+
 class ContentViewController: UIViewController {
 
     // MARK: - Properties
 
-    let location: Location
-    var fileUrl: URL!
+    let item: ContentItem
+    var fileURL: URL!
     var session: URLSession?
 
     private lazy var webView: WKWebView = {
@@ -31,8 +40,8 @@ class ContentViewController: UIViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location) {
-        self.location = location
+    init(item: ContentItem) {
+        self.item = item
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -53,31 +62,28 @@ class ContentViewController: UIViewController {
 
         setupViews()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action,
-                                                            target: self,
-                                                            action: #selector(handleAction))
+        self.title = item.name
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
 
     }
 
     override func viewWillAppear(_ animated: Bool) {
 
-        // get the file name from current path
-        let fileName = (self.location.path as NSString).lastPathComponent
-
         // create destination file url
-        self.fileUrl = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
+        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(item.name)
 
         // TODO: - If the file has changed in the cloud, it should be redownloaded again.
         // Check if the hash of the file is the same with the hash saved locally 
 
-        if !FileManager.default.fileExists(atPath: fileUrl.path) {
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
 
             // Show progress view
             progressView.isHidden = false
 
             // Start downloading File
-            session = DigiClient.shared.startDownloadFile(at: location, delegate: self)
+            session = DigiClient.shared.startDownloadFile(at: item.location, delegate: self)
 
         } else {
             loadFileContent()
@@ -94,7 +100,7 @@ class ContentViewController: UIViewController {
     // MARK: - Helper Functions
 
     func handleAction() {
-        let controller = UIActivityViewController(activityItems: [fileUrl], applicationActivities: nil)
+        let controller = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
         controller.excludedActivityTypes = nil
         controller.modalPresentationStyle = .popover
         controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
@@ -113,7 +119,7 @@ class ContentViewController: UIViewController {
     fileprivate func loadFileContent() {
 
         // load file in the view
-        self.webView.loadFileURL(self.fileUrl, allowingReadAccessTo: self.fileUrl)
+        self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL)
 
         // enable right bar button for exporting
         self.navigationItem.rightBarButtonItem?.isEnabled = true
@@ -126,15 +132,12 @@ extension ContentViewController: URLSessionDownloadDelegate {
         // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
         session.invalidateAndCancel()
 
-        // get the file name from current path
-        let fileName: String = (self.location.path as NSString).lastPathComponent
-
         // create destination file url
-        self.fileUrl = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
+        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(item.name)
 
         // get the downloaded file from temp folder
         do {
-            try FileManager.default.moveItem(at: location, to: self.fileUrl)
+            try FileManager.default.moveItem(at: location, to: self.fileURL)
 
             DispatchQueue.main.async {
                 self.loadFileContent()

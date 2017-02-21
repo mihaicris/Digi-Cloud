@@ -22,7 +22,7 @@ class AccountSelectionViewController: UIViewController,
 
     var onSelect: (() -> Void)?
 
-    var accounts = [Account]()
+    var accounts: [Account] = []
 
     private let spinner: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()

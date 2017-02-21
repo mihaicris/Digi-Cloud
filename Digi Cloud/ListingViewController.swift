@@ -9,22 +9,21 @@
 import UIKit
 
 #if DEBUG_CONTROLLERS
-var count: Int = 0
-var taskStarted: Int = 0
-var taskFinished: Int = 0
+    var count: Int = 0
+    var taskStarted: Int = 0
+    var taskFinished: Int = 0
 #endif
 
 final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
     var onFinish: (() -> Void)?
-    fileprivate let editAction: ActionType
-    fileprivate var location: Location
+    fileprivate let action: ActionType
+    fileprivate var node: Node
     fileprivate var needRefresh: Bool = true
     private var isUpdating: Bool = false
     private var isActionConfirmed: Bool = false
     fileprivate var content: [Node] = []
-    private var filteredContent: [Node] = []
     fileprivate var currentIndex: IndexPath!
     private var searchController: UISearchController!
     private var fileCellID = String()
@@ -131,9 +130,9 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(editAction: ActionType, for location: Location) {
-        self.editAction = editAction
-        self.location = location
+    init(node: Node, action: ActionType) {
+        self.action = action
+        self.node = node
         #if DEBUG_CONTROLLERS
             count += 1
             self.tag = count
@@ -159,10 +158,11 @@ final class ListingViewController: UITableViewController {
         super.viewDidLoad()
         setupTableView()
         setupViews()
+        self.title = node.name
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        if self.editAction == .noAction {
+        if self.action == .noAction {
             updateNavigationBarRightButtonItems()
             tableView.tableHeaderView = nil
         }
@@ -225,7 +225,7 @@ final class ListingViewController: UITableViewController {
             }
             cell.delegate = self
 
-            cell.hasButton = editAction == .noAction
+            cell.hasButton = action == .noAction
 
             cell.isShared = item.share != nil
             cell.isReceiver = item.receiver != nil
@@ -240,7 +240,7 @@ final class ListingViewController: UITableViewController {
 
             cell.delegate = self
 
-            cell.hasButton = editAction == .noAction
+            cell.hasButton = action == .noAction
 
             let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
             cell.fileNameLabel.text = item.name
@@ -268,18 +268,14 @@ final class ListingViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
         refreshControl?.endRefreshing()
 
-        let item = content[indexPath.row]
+        let selectedNode = content[indexPath.row]
 
-        if item.type == "dir" {
+        if selectedNode.type == "dir" {
             // This is a Folder
 
-            let nextPath = self.location.path + item.name + "/"
-            let nextLocation = Location(mount: self.location.mount, path: nextPath)
+            let controller = ListingViewController(node: selectedNode, action: self.action)
 
-            let controller = ListingViewController(editAction: self.editAction, for: nextLocation)
-
-            controller.title = item.name
-            if self.editAction != .noAction {
+            if self.action != .noAction {
 
                 // It makes sens only if this is a copy or move controller
                 controller.onFinish = { [unowned self] in
@@ -292,15 +288,11 @@ final class ListingViewController: UITableViewController {
 
             // This is a file
 
-            if self.editAction != .noAction {
+            if self.action != .noAction {
                 return
             }
 
-            let nextPath = self.location.path + item.name
-            let nextLocation = Location(mount: self.location.mount, path: nextPath)
-
-            let controller = ContentViewController(location: nextLocation)
-            controller.title = item.name
+            let controller = ContentViewController(item: selectedNode)
             navigationController?.pushViewController(controller, animated: true)
         }
     }
@@ -336,7 +328,7 @@ final class ListingViewController: UITableViewController {
     }
 
     private func setupViews() {
-        switch self.editAction {
+        switch self.action {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
 
@@ -347,7 +339,7 @@ final class ListingViewController: UITableViewController {
 
             navigationController?.isToolbarHidden = false
 
-            let buttonTitle = self.editAction == .copy ?
+            let buttonTitle = self.action == .copy ?
                 NSLocalizedString("Save copy", comment: "") :
                 NSLocalizedString("Move", comment: "")
 
@@ -361,7 +353,8 @@ final class ListingViewController: UITableViewController {
     }
 
     private func setupSearchController() {
-        let src = SearchResultController(currentLocation: self.location)
+
+        let src = SearchResultController(node: node)
         searchController = UISearchController(searchResultsController: src)
         searchController.delegate = self
         searchController.loadViewIfNeeded()
@@ -392,7 +385,8 @@ final class ListingViewController: UITableViewController {
         self.needRefresh = false
         self.isUpdating = true
 
-        DigiClient.shared.getBundle(of: location) { receivedContent, error in
+        DigiClient.shared.getBundle(for: node) { receivedContent, error in
+
             self.isUpdating = false
 
             guard error == nil else {
@@ -418,15 +412,16 @@ final class ListingViewController: UITableViewController {
                 }
                 return
             }
+
             if var newContent = receivedContent {
-                switch self.editAction {
+                switch self.action {
                 case .copy, .move:
                     // Only in move action, the moved node is not shown in the list.
                     guard let sourceNodes = (self.presentingViewController as? MainNavigationController)?.sourceNodes else {
                         print("Couldn't get the source node.")
                         return
                     }
-                    if self.editAction == .move {
+                    if self.action == .move {
                         newContent = newContent.filter {
                             return (!sourceNodes.contains($0) || $0.type == "file")
                         }
@@ -506,7 +501,7 @@ final class ListingViewController: UITableViewController {
 
     private func updateNavigationBarRightButtonItems() {
 
-        var rightBarButtonItems = [UIBarButtonItem]()
+        var rightBarButtonItems: [UIBarButtonItem] = []
 
         if tableView.isEditing {
             rightBarButtonItems.append(cancelInEditModeButton)
@@ -671,15 +666,17 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleCreateDirectory() {
 
-        let controller = CreateFolderViewController(location: location)
+        let controller = CreateFolderViewController(location: node.location)
         controller.onFinish = { [unowned self](folderName) in
-            // dismiss AddFolderViewController
-            self.dismiss(animated: true) {
+
+            let completionBlock = {
                 guard let folderName = folderName else {
                     // User cancelled the folder creation
                     return
                 }
-                let nextPath = self.location.path + folderName + "/"
+
+                let newNode = Node(name: folderName, type: "dir", modified: 0, size: 0, contentType: "",
+                                   hash: nil, share: nil, link: nil, receiver: nil, parentLocation: self.node.location)
 
                 // Set needRefresh in this list
                 self.needRefresh = true
@@ -690,15 +687,18 @@ final class ListingViewController: UITableViewController {
                         cont.needRefresh = true
                     }
                 }
-                let folderLocation = Location(mount: self.location.mount, path: nextPath)
 
-                let controller = ListingViewController(editAction: self.editAction, for: folderLocation)
-                controller.title = folderName
+                let controller = ListingViewController(node: newNode, action: self.action)
+
                 controller.onFinish = {[unowned self] in
                     self.onFinish?()
                 }
                 self.navigationController?.pushViewController(controller, animated: true)
             }
+
+            // dismiss AddFolderViewController
+            self.dismiss(animated: true, completion: completionBlock)
+
         }
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
@@ -753,11 +753,12 @@ final class ListingViewController: UITableViewController {
     }
 
     private func doCopyOrMove(node sourceNode: Node) {
-        var destinationLocation = Location(mount: self.location.mount, path: self.location.path + sourceNode.name)
+
+        var destinationLocation = self.node.location.appendingPathComponent(sourceNode.name, isDirectory: sourceNode.type == "dir")
 
         let index = sourceNode.name.getIndexBeforeExtension()
 
-        if self.editAction == .copy {
+        if self.action == .copy {
             var destinationName = sourceNode.name
             var copyCount: Int = 0
             var wasRenamed = false
@@ -794,12 +795,13 @@ final class ListingViewController: UITableViewController {
             } while (wasRenamed && wasFound)
 
             // change the file/folder name with incremented one
-            destinationLocation = Location(mount: destinationLocation.mount, path: self.location.path + destinationName)
+
+            destinationLocation = self.node.location.appendingPathComponent(destinationName, isDirectory: sourceNode.type == "dir")
         }
 
         dispatchGroup.enter()
 
-        DigiClient.shared.copyOrMoveNode(action: self.editAction, from: sourceNode.location, to: destinationLocation) { statusCode, error in
+        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.location, to: destinationLocation) { statusCode, error in
 
             #if DEBUG_CONTROLLERS
                 print("Task \(taskFinished) finished")
@@ -963,11 +965,13 @@ final class ListingViewController: UITableViewController {
         didReceivedStatus400 = false
         didReceivedStatus404 = false
 
+        self.cancelEditMode()
+
         nodes.forEach {
 
             self.dispatchGroup.enter()
 
-            DigiClient.shared.deleteNode(at: $0.location) { _, error in
+            DigiClient.shared.delete(node: $0) { _, error in
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error
@@ -982,7 +986,6 @@ final class ListingViewController: UITableViewController {
         // After all deletions have finished...
         dispatchGroup.notify(queue: DispatchQueue.main) {
             self.setBusyIndicatorView(false)
-            self.cancelEditMode()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 self.updateContent()
             }
@@ -1038,7 +1041,8 @@ final class ListingViewController: UITableViewController {
 
             } else {
 
-                let c = ListingViewController(editAction: action, for: (controller as! ListingViewController).location)
+                let aNode = (controller as! ListingViewController).node
+                let c = ListingViewController(node: aNode, action: action)
                 c.title = controller.title
 
                 c.onFinish = { [unowned self] in
@@ -1072,7 +1076,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
         self.animateActionButton(active: false)
 
-        let handleSelection = {
+        let completionBlock = {
 
             let node: Node = self.content[self.currentIndex.row]
 
@@ -1087,7 +1091,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                 self.present(navController, animated: true, completion: nil)
 
             case .rename:
-                let controller = RenameViewController(location: self.location, node: node)
+                let controller = RenameViewController(node: node)
                 controller.onFinish = { (newName, needRefresh) in
                     // dismiss RenameViewController
                     self.dismiss(animated: true) {
@@ -1133,7 +1137,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                 }
 
             case .folderInfo:
-                let controller = FolderInfoViewController(location: self.location, node: node)
+                let controller = FolderInfoViewController(node: node)
                 controller.onFinish = { (success, needRefresh) in
 
                     // dismiss FolderViewController
@@ -1162,7 +1166,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
             }
         }
 
-        dismiss(animated: true, completion: handleSelection)
+        dismiss(animated: true, completion: completionBlock)
     }
 }
 
@@ -1194,13 +1198,10 @@ extension ListingViewController: BaseListCellDelegate {
 extension ListingViewController: DeleteViewControllerDelegate {
     func onConfirmDeletion() {
 
-        // Dismiss DeleteAlertViewController
-        dismiss(animated: true) {
-            let nodePath = self.location.path + self.content[self.currentIndex.row].name
+        let completionBlock = {
 
-            // network request for delete
-            let deleteLocation = Location(mount: self.location.mount, path: nodePath)
-            DigiClient.shared.deleteNode(at: deleteLocation) { statusCode, error in
+            let nodeToDelete = self.content[self.currentIndex.row]
+            DigiClient.shared.delete(node: nodeToDelete) { statusCode, error in
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error
@@ -1234,6 +1235,9 @@ extension ListingViewController: DeleteViewControllerDelegate {
                 }
             }
         }
+
+        // Dismiss DeleteAlertViewController
+        dismiss(animated: true, completion: completionBlock)
     }
 }
 

@@ -11,7 +11,7 @@ import UIKit.UIView
 extension UIView {
 
     func addConstraints(with format: String, views: UIView...) {
-        var viewsDictionary = [String: UIView]()
+        var viewsDictionary: [String: UIView] = [:]
         for (index, view) in views.enumerated() {
             let key = "v\(index)"
             viewsDictionary[key] = view

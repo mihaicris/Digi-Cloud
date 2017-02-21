@@ -13,7 +13,6 @@ class FolderInfoViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
-    fileprivate var location: Location
     fileprivate var node: Node
     private let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
@@ -62,8 +61,7 @@ class FolderInfoViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, node: Node) {
-        self.location = location
+    init(node: Node) {
         self.node = node
         super.init(style: .grouped)
     }
@@ -197,11 +195,7 @@ class FolderInfoViewController: UITableViewController {
 
     private func updateFolderInfo() {
 
-        let folderPath = self.location.path + node.name
-
-        let folderLocation = Location(mount: self.location.mount, path: folderPath)
-
-        DigiClient.shared.getFolderInfo(at: folderLocation, completion: { (info, error) in
+        DigiClient.shared.getDirectoryInfo(for: self.node, completion: { (info, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
                 return
@@ -232,15 +226,9 @@ class FolderInfoViewController: UITableViewController {
 extension FolderInfoViewController: DeleteViewControllerDelegate {
     func onConfirmDeletion() {
 
-        // Dismiss DeleteAlertViewController
-        dismiss(animated: true) {
+        let completion = {
 
-            let nodePath = self.location.path + self.node.name
-
-            // network request for delete
-
-            let deleteLocation = Location(mount: self.location.mount, path: nodePath)
-            DigiClient.shared.deleteNode(at: deleteLocation) { (statusCode, error) in
+            DigiClient.shared.delete(node: self.node) { (statusCode, error) in
 
                 // TODO: Stop spinner
                 guard error == nil else {
@@ -267,5 +255,8 @@ extension FolderInfoViewController: DeleteViewControllerDelegate {
                 }
             }
         }
+
+        // Dismiss DeleteAlertViewController
+        dismiss(animated: true, completion: completion)
     }
 }

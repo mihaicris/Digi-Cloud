@@ -13,7 +13,6 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Properties
 
     var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
-    private let location: Location
     private var node: Node
     private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
@@ -42,8 +41,7 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, node: Node) {
-        self.location = location
+    init(node: Node) {
         self.node = node
         self.needRefresh = false
         super.init(nibName: nil, bundle: nil)
@@ -267,14 +265,10 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         // get the new name, space trimmed
         let charSet = CharacterSet.whitespaces
-        guard let name = textField.text?.trimmingCharacters(in: charSet) else { return }
-
-        //build the path of node to be renamed
-        let nodePath = self.location.path + node.name
-        let renameLocation = Location(mount: self.location.mount, path: nodePath)
+        guard let newName = textField.text?.trimmingCharacters(in: charSet) else { return }
 
         // network request for rename
-        DigiClient.shared.renameNode(at: renameLocation, with: name) { (statusCode, error) in
+        DigiClient.shared.rename(node: self.node, with: newName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error
@@ -285,7 +279,7 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 switch code {
                 case 200:
                     // Rename successfully completed
-                    self.onFinish?(name, true)
+                    self.onFinish?(newName, true)
                 case 400:
                     // Bad request ( Node already exists, invalid file name?)
                     // show message and wait for a new name or cancel action

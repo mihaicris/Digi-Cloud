@@ -75,7 +75,7 @@ struct Account {
             try _ = readToken()
 
             // Update the existing item with the new password.
-            var attributesToUpdate = [String: AnyObject]()
+            var attributesToUpdate: [String: AnyObject] = [:]
             attributesToUpdate[kSecValueData as String] = encodedPassword as AnyObject?
 
             let query = Account.keychainQuery(account: username)
@@ -101,7 +101,7 @@ struct Account {
 
     mutating func renameAccount(_ newAccountName: String) throws {
         // Try to update an existing item with the new account name.
-        var attributesToUpdate = [String: AnyObject]()
+        var attributesToUpdate: [String: AnyObject] = [:]
         attributesToUpdate[kSecAttrAccount as String] = newAccountName as AnyObject?
 
         let query = Account.keychainQuery(account: self.username)
@@ -145,7 +145,8 @@ struct Account {
         guard let resultData = queryResult as? [[String : AnyObject]] else { throw AccountError.unexpectedItemData }
 
         // Create a `KeychainPasswordItem` for each dictionary in the query result.
-        var passwordItems = [Account]()
+        var passwordItems: [Account] = []
+
         for result in resultData {
             guard let account  = result[kSecAttrAccount as String] as? String else { throw AccountError.unexpectedItemData }
 
@@ -159,8 +160,11 @@ struct Account {
     // MARK: Convenience
 
     private static func keychainQuery(account: String? = nil, accessGroup: String? = nil) -> [String : AnyObject] {
-        var query = [String: AnyObject]()
+
+        var query: [String: AnyObject] = [:]
+
         query[kSecClass as String] = kSecClassGenericPassword
+
         query[kSecAttrService as String] = service as AnyObject?
 
         if let account = account {

@@ -11,23 +11,28 @@ import UIKit
 class SearchResultController: UITableViewController {
 
     // MARK: - Properties
-    var filteredContent = [NodeHit]()
+    var filteredContent: [NodeHit] = []
+
     weak var searchController: UISearchController?
-    private let currentLocation: Location
+
+    private let node: Node
+
     private var fileCellID: String = ""
+
     private let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
         f.allowsNonnumericFormatting = false
         return f
     }()
+
     private var searchInCurrentMount: Bool = true
     private var currentColor = UIColor(hue: 0.17, saturation: 0.55, brightness: 0.75, alpha: 1.0)
     private var mountNames: [String: UIColor] = [:]
 
     // MARK: - Initializers and Deinitializers
-    init(currentLocation: Location) {
-        self.currentLocation = currentLocation
+    init(node: Node) {
+        self.node = node
         super.init(style: .plain)
     }
 
@@ -96,11 +101,18 @@ class SearchResultController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         searchController?.searchBar.resignFirstResponder()
-        let node = filteredContent[indexPath.row]
-        let controller = node.type == "dir"
-            ? ListingViewController(editAction: .noAction, for: node.location)
-            : ContentViewController(location: node.location)
-        controller.title = node.name
+        let item = filteredContent[indexPath.row]
+
+        var parentPath = (item.location.path as NSString).deletingLastPathComponent
+        if parentPath != "/" {
+            parentPath += "/"
+        }
+        let parentLocation = Location(mount: item.location.mount, path: parentPath)
+
+        let resultNode = Node(name: item.name, type: item.type, modified: item.modified, size: item.size, contentType: item.contentType, hash: nil, share: nil, link: nil, receiver: nil, parentLocation: parentLocation)
+
+        let controller = item.type == "dir" ? ListingViewController(node: resultNode, action: .noAction) : ContentViewController(item: item)
+
         let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController
         nav?.pushViewController(controller, animated: true)
     }
@@ -150,24 +162,25 @@ class SearchResultController: UITableViewController {
         ]
 
         if scope == 0 {
-            parameters[ParametersKeys.MountID] = self.currentLocation.mount.id
-            parameters[ParametersKeys.Path] = self.currentLocation.path
+            parameters[ParametersKeys.MountID] = self.node.location.mount.id
+            parameters[ParametersKeys.Path] = self.node.location.path
         }
 
-        DigiClient.shared.searchNodes(parameters: parameters) { nodeHits, error in
+        DigiClient.shared.search(parameters: parameters) { results, error in
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-            if let nodes = nodeHits {
-                self.filteredContent = nodes
-                self.filteredContent.sort {
+            if var nodes = results {
+                nodes.sort {
                     if $0.type == $1.type {
                         return $0.score > $1.score
                     } else {
                         return $0.type < $1.type
                     }
                 }
+                self.filteredContent = nodes
+
                 self.tableView.reloadData()
             }
         }

@@ -157,7 +157,7 @@ final class DigiClient {
         components.path = method
 
         if let parameters = parameters {
-            components.queryItems = [URLQueryItem]()
+            components.queryItems = []
             for (key, value) in parameters {
                 let queryItem = URLQueryItem(name: key, value: "\(value)")
                 components.queryItems!.append(queryItem)
@@ -337,14 +337,16 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - result: Returned content as an array of nodes
     ///   - error: The error occurred in the network request, nil for no error.
-    func getBundle(of location: Location, completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
+    func getBundle(for node: Node, completion: @escaping(_ result: [Node]?, _ error: Error?) -> Void) {
 
-        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let nodeLocation = node.location
+
+        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: nodeLocation.mount.id)
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let parameters = [ParametersKeys.Path: location.path]
+        let parameters = [ParametersKeys.Path: nodeLocation.path]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
 
@@ -365,7 +367,7 @@ final class DigiClient {
                     return
             }
 
-            let content = nodesList.flatMap { Node(JSON: $0, parentLocation: location) }
+            let content = nodesList.flatMap { Node(JSON: $0, parentLocation: nodeLocation) }
 
             completion(content, nil)
         }
@@ -412,16 +414,16 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func renameNode(at location: Location, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func rename(node: Node, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.FilesRename.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesRename.replacingOccurrences(of: "{id}", with: node.location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (path of the node to be renamed
-        let parameters = [ParametersKeys.Path: location.path]
+        let parameters = [ParametersKeys.Path: node.location.path]
 
         // prepare new name in request body
         let jsonBody = ["name": name]
@@ -438,16 +440,16 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func deleteNode(at location: Location, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func delete(node: Node, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: node.location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters (node path to be renamed
-        let parameters = [ParametersKeys.Path: location.path]
+        let parameters = [ParametersKeys.Path: node.location.path]
 
         networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
@@ -487,9 +489,9 @@ final class DigiClient {
     ///   - query: String to search
     ///   - location: Location to search (mount and path). If nil, search is made in all locations
     ///   - completion: The block called after the server has responded
-    ///   - json: An array containing the search hits (Nodes).
+    ///   - results: An array containing the search hits.
     ///   - error: The error occurred in the network request, nil for no error.
-    func searchNodes(parameters: [String: String], completion: @escaping (_ json: [NodeHit]?, _ error: Error?) -> Void) {
+    func search(parameters: [String: String], completion: @escaping (_ results: [NodeHit]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
         var headers = DefaultHeaders.GetHeaders
@@ -521,12 +523,55 @@ final class DigiClient {
     ///   - json: The dictionary [String: Any] containing the search hits.
     ///   - error: The error occurred in the network request, nil for no error.
     func getTree(at location: Location, completion: @escaping (_ json: [String: Any]?, _ error: Error?) -> Void ) {
-        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.id)
+
+    }
+
+    /// Calculates information from Dictionary content (JSON folder tree)
+    ///
+    /// - Parameter parent: parent folder
+    /// - Returns: return tuple with (size of child, number of files, number of folders)
+    private func calculateNodeInfo(_ parent: [String: Any]) -> FolderInfo {
+        var info = FolderInfo()
+        if let childType = parent["type"] as? String, childType == "file" {
+            info.files += 1
+            if let size = parent["size"] as? Int64 {
+                info.size += size
+                return info
+            }
+        }
+        if let children = parent["children"] as? [[String: Any]] {
+            info.folders += 1
+            for child in children {
+                let childInfo = calculateNodeInfo(child)
+                info.size += childInfo.size
+                info.files += childInfo.files
+                info.folders += childInfo.folders
+            }
+        }
+        return info
+    }
+
+    /// Get information about a folder
+    ///
+    /// - Parameters:
+    ///   - location: The location of which we get the information
+    ///   - completion: The block called after the server has responded
+    ///   - info: Tuple containing size, number of files and number of folders
+    ///   - error: The error occurred in the network request, nil for no error.
+    func getDirectoryInfo(for node: Node, completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
+
+        // CHeck if node is a directory
+        guard node.type == "dir" else {
+            completion(nil, NSError(domain: "Bad input", code: 400, userInfo: nil))
+            return
+        }
+
+        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: node.location.mount.id)
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let parameters = [ParametersKeys.Path: location.path]
+        let parameters = [ParametersKeys.Path: node.location.path]
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { (json, _, error) in
             if let error = error {
@@ -537,63 +582,8 @@ final class DigiClient {
                 completion(nil, nil)
                 return
             }
-            completion(json, nil)
-        }
-    }
 
-    /// Get information about a folder
-    ///
-    /// - Parameters:
-    ///   - location: The location of which we get the information
-    ///   - completion: The block called after the server has responded
-    ///   - info: Tuple containing size, number of files and number of folders
-    ///   - error: The error occurred in the network request, nil for no error.
-    func getFolderInfo(at location: Location, completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
-        // prepare the method string for create new folder
-        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.id)
-
-        // prepare headers
-        var headers: [String: String] = [HeadersKeys.Accept: "application/json"]
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
-
-        // prepare parameters (node path to be renamed
-        let parameters = [ParametersKeys.Path: location.path]
-
-        /// Get information from Dictionary content (JSON folder tree)
-        ///
-        /// - Parameter parent: parent folder
-        /// - Returns: return tuple with (size of child, number of files, number of folders)
-        func getChildInfo(_ parent: [String: Any]) -> FolderInfo {
-            var info = FolderInfo()
-            if let childType = parent["type"] as? String, childType == "file" {
-                info.files += 1
-                if let size = parent["size"] as? Int64 {
-                    info.size += size
-                    return info
-                }
-            }
-            if let children = parent["children"] as? [[String: Any]] {
-                info.folders += 1
-                for child in children {
-                    let childInfo = getChildInfo(child)
-                    info.size += childInfo.size
-                    info.files += childInfo.files
-                    info.folders += childInfo.folders
-                }
-            }
-            return info
-        }
-
-        getTree(at: location) { json, error in
-            if let error = error {
-                completion(nil, error)
-                return
-            }
-            guard let json = json else {
-                completion(nil, nil)
-                return
-            }
-            var info = getChildInfo(json)
+            var info = self.calculateNodeInfo(json)
             info.folders -= 1
 
             // Subtracting 1 because the root folder is also counted
