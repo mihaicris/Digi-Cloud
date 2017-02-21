@@ -21,11 +21,11 @@ struct Node {
     let share: Mount?
     let link: Link?
     let receiver: Receiver?
-    var location: Location
+    var parentLocation: Location
 }
 
 extension Node {
-    init?(JSON: Any, location: Location) {
+    init?(JSON: Any, parentLocation: Location) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
@@ -46,13 +46,18 @@ extension Node {
         self.share = Mount(JSON: JSON["mount"])
         self.link = Link(JSON: JSON["link"])
         self.receiver = Receiver(JSON: JSON["receiver"])
-        self.location = location
+        self.parentLocation = parentLocation
     }
 }
 
 extension Node {
     var ext: String {
         return (name as NSString).pathExtension
+    }
+
+    var location: Location {
+        let path = parentLocation.path + name + (type == "dir" ? "/" : "")
+        return Location(mount: parentLocation.mount, path: path )
     }
 }
 

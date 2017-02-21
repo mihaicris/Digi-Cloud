@@ -360,32 +360,12 @@ final class DigiClient {
             }
 
             guard let dict = data as? [String: Any],
-                let nodeList = dict["files"] as? [[String: Any]] else {
+                let nodesList = dict["files"] as? [[String: Any]] else {
                     completion(nil, JSONError.parse("Could not parse data"))
                     return
             }
 
-            var content: [Node] = []
-
-            for nodeJSON in nodeList {
-
-                guard let nodeName = nodeJSON["name"] as? String,
-                    let nodeType = nodeJSON["type"] as? String else {
-                        completion (nil, JSONError.parse("JSON Error"))
-                        return
-                }
-
-                let path = location.path + nodeName + (nodeType == "dir" ? "/" : "")
-
-                let locationNode = Location(mount: location.mount, path: path)
-
-                guard let node = Node(JSON: nodeJSON, location: locationNode) else {
-                    completion (nil, JSONError.parse("JSON Error"))
-                    return
-                }
-
-                content.append(node)
-            }
+            let content = nodesList.flatMap { Node(JSON: $0, parentLocation: location) }
 
             completion(content, nil)
         }
