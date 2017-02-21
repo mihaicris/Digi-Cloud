@@ -274,32 +274,29 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - result: Returned content as an array of locations
     ///   - error: The error occurred in the network request, nil for no error.
-    func getMounts(completion: @escaping(_ result: [Location]?, _ error: Error?) -> Void) {
+    func getMounts(completion: @escaping(_ result: [Mount]?, _ error: Error?) -> Void) {
         let method = Methods.Mounts
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { data, _, error in
-            if let error = error {
-                completion(nil, error)
-            } else {
-                if let dict = data as? [String: Any] {
-                    guard let mountsList = dict["mounts"] as? [Any] else {
-                        completion(nil, JSONError.parse("Could not parse mount "))
-                        return
-                    }
-                    var locations: [Location] = []
-                    for mountJSON in mountsList {
-                        if let mount = Mount(JSON: mountJSON) {
-                            locations.append(Location(mount: mount, path: "/"))
-                        }
-                    }
-                    completion(locations, nil)
 
-                } else {
-                    completion(nil, JSONError.parse("Could not parse data (getLocations)"))
-                }
+            guard error == nil else {
+                completion(nil, error!)
+                return
             }
+
+            guard let dict = data as? [String: Any],
+                let mountsList = dict["mounts"] as? [Any]
+                else {
+                    completion(nil, JSONError.parse("Could not parse JSON"))
+                    return
+            }
+
+            let mounts = mountsList.flatMap { Mount(JSON: $0) }
+
+            completion(mounts, nil)
+
         }
     }
 

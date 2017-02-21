@@ -14,7 +14,7 @@ class LocationsViewController: UITableViewController {
 
     var onFinish: (() -> Void)?
 
-    private var locations: [Location] = []
+    private var mounts: [Mount] = []
     private let action: ActionType
     private var isUpdating: Bool = false
 
@@ -74,14 +74,14 @@ class LocationsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locations.count
+        return mounts.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as? LocationCell else {
             return UITableViewCell()
         }
-        cell.locationLabel.text = locations[indexPath.row].mount.name
+        cell.locationLabel.text = mounts[indexPath.row].name
         return cell
     }
 
@@ -140,7 +140,7 @@ class LocationsViewController: UITableViewController {
 
         self.isUpdating = true
 
-        DigiClient.shared.getMounts { locations, error in
+        DigiClient.shared.getMounts { mounts, error in
 
             self.isUpdating = false
 
@@ -154,9 +154,11 @@ class LocationsViewController: UITableViewController {
                 self.present(alertController, animated: true, completion: nil)
                 return
             }
-            if let locations = locations {
-                self.locations = locations
+
+            if let mountsList = mounts {
+                self.mounts = mountsList
             }
+
             if self.refreshControl?.isRefreshing == true {
                 if self.tableView.isDragging {
                     return
@@ -170,8 +172,11 @@ class LocationsViewController: UITableViewController {
     }
 
     private func openMount(index: Int) {
-        let controller = ListingViewController(editAction: self.action, for: locations[index])
-        controller.title = locations[index].mount.name
+
+        let location = Location(mount: mounts[index], path: "/")
+
+        let controller = ListingViewController(editAction: self.action, for: location)
+        controller.title = mounts[index].name
         if self.action != .noAction {
             controller.onFinish = { [unowned self] in
                 self.onFinish?()
