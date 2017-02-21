@@ -148,8 +148,8 @@ final class ListingViewController: UITableViewController {
 
     #if DEBUG_CONTROLLERS
     deinit {
-        print(self.tag, "❌", String(describing: type(of: self)), editAction)
-        count -= 1
+    print(self.tag, "❌", String(describing: type(of: self)), editAction)
+    count -= 1
     }
     #endif
 
@@ -212,7 +212,7 @@ final class ListingViewController: UITableViewController {
                 NSLayoutConstraint.activate([
                     messageStackView.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
                     messageStackView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-                ])
+                    ])
             }
             return cell
         }
@@ -411,8 +411,8 @@ final class ListingViewController: UITableViewController {
                         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(alertController, animated: true, completion: nil)
                     }
-                        self.busyIndicator.stopAnimating()
-                        self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
+                    self.busyIndicator.stopAnimating()
+                    self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
 
                     print("Error: \(error!.localizedDescription)")
                 }
@@ -499,8 +499,8 @@ final class ListingViewController: UITableViewController {
                        initialSpringVelocity: 1,
                        options: UIViewAnimationOptions.curveEaseOut,
                        animations: {
-                          actionsButton.transform = transform
-                       },
+                        actionsButton.transform = transform
+        },
                        completion: nil)
     }
 
@@ -614,7 +614,7 @@ final class ListingViewController: UITableViewController {
             NSLayoutConstraint.activate([
                 activityIndicator.centerXAnchor.constraint(equalTo: navControllerView.centerXAnchor),
                 activityIndicator.centerYAnchor.constraint(equalTo: navControllerView.centerYAnchor)
-            ])
+                ])
 
         } else {
             if let overlayView = navControllerView.viewWithTag(9999) {
@@ -802,8 +802,8 @@ final class ListingViewController: UITableViewController {
         DigiClient.shared.copyOrMoveNode(action: self.editAction, from: sourceNode.location, to: destinationLocation) { statusCode, error in
 
             #if DEBUG_CONTROLLERS
-            print("Task \(taskFinished) finished")
-            taskFinished += 1
+                print("Task \(taskFinished) finished")
+                taskFinished += 1
             #endif
 
             self.dispatchGroup.leave()
@@ -849,8 +849,8 @@ final class ListingViewController: UITableViewController {
         didReceivedStatus404 = false
 
         #if DEBUG_CONTROLLERS
-        taskStarted = 0
-        taskFinished = 0
+            taskStarted = 0
+            taskFinished = 0
         #endif
 
         for sourceNode in sourceNodes {
@@ -1043,7 +1043,7 @@ final class ListingViewController: UITableViewController {
 
                 c.onFinish = { [unowned self] in
                     self.dismiss(animated: true) {
-                       updateTableState()
+                        updateTableState()
                     }
                 }
 
@@ -1071,10 +1071,21 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
     func didSelectOption(action: ActionType) {
 
         self.animateActionButton(active: false)
-        dismiss(animated: true) {
+
+        let handleSelection = {
+
             let node: Node = self.content[self.currentIndex.row]
 
             switch action {
+
+            case .sendLink:
+
+                let controller = SharingViewController()
+
+                let navController = UINavigationController(rootViewController: controller)
+                navController.modalPresentationStyle = .formSheet
+                self.present(navController, animated: true, completion: nil)
+
             case .rename:
                 let controller = RenameViewController(location: self.location, node: node)
                 controller.onFinish = { (newName, needRefresh) in
@@ -1150,6 +1161,8 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                 return
             }
         }
+
+        dismiss(animated: true, completion: handleSelection)
     }
 }
 
