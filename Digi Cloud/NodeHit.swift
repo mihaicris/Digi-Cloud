@@ -20,7 +20,6 @@ struct NodeHit {
     let modified: TimeInterval
     let size: Int64
     let contentType: String
-    let ext: String
     let location: Location
 }
 
@@ -47,7 +46,6 @@ extension NodeHit {
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        self.ext = (name as NSString).pathExtension
 
         guard let mountJSON = mountsJSON[mountId] as? [String: Any],
               let mountName = mountJSON["name"] as? String else {
@@ -57,5 +55,11 @@ extension NodeHit {
 
         let mount = Mount(id: mountId, name: mountName)
         self.location = Location(mount: mount, path: path)
+    }
+}
+
+extension NodeHit {
+    var ext: String {
+        return (name as NSString).pathExtension
     }
 }

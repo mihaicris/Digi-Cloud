@@ -21,7 +21,6 @@ struct Node {
     let share: Mount?
     let link: Link?
     let receiver: Receiver?
-    let ext: String
     var location: Location
 }
 
@@ -48,7 +47,12 @@ extension Node {
         self.link = Link(JSON: JSON["link"])
         self.receiver = Receiver(JSON: JSON["receiver"])
         self.location = location
-        self.ext = (name as NSString).pathExtension
+    }
+}
+
+extension Node {
+    var ext: String {
+        return (name as NSString).pathExtension
     }
 }
 
@@ -61,6 +65,5 @@ extension Node: Hashable {
 extension Node: Equatable {
     static func == (lhs: Node, rhs: Node) -> Bool {
         return lhs.location == rhs.location
-
     }
 }
