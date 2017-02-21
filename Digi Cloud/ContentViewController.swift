@@ -63,7 +63,7 @@ class ContentViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
 
         // get the file name from current path
-        let fileName: String = self.location.path.components(separatedBy: "/").last!
+        let fileName = (self.location.path as NSString).lastPathComponent
 
         // create destination file url
         self.fileUrl = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
@@ -127,7 +127,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
         session.invalidateAndCancel()
 
         // get the file name from current path
-        let fileName: String = self.location.path.components(separatedBy: "/").last!
+        let fileName: String = (self.location.path as NSString).lastPathComponent
 
         // create destination file url
         self.fileUrl = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)

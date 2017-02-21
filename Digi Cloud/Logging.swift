@@ -12,7 +12,7 @@ public func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ func
     #if DEBUG_CONTROLLERS
         let queue = Thread.isMainThread ? "Main (UI)" : "Background"
         print("\n_____________________________________________________")
-        print("File:        \(file.components(separatedBy: "/").last!)")
+        print("File:        \((file as NSString).lastPathComponent)")
         print("Function:    \(function)")
         print("Line:        \(line)")
         print("Thread:      \(queue)")

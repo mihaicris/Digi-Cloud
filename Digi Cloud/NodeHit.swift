@@ -47,8 +47,7 @@ extension NodeHit {
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        let components = name.components(separatedBy: ".")
-        self.ext = components.count > 1 ? components.last! : ""
+        self.ext = (name as NSString).pathExtension
 
         guard let mountJSON = mountsJSON[mountId] as? [String: Any],
               let mountName = mountJSON["name"] as? String else {

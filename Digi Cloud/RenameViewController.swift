@@ -70,7 +70,6 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             self.textField.becomeFirstResponder()
-            self.positionCursor()
         }
     }
 
@@ -221,11 +220,8 @@ class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDa
         guard let elementName = textField.text else { return }
 
         // file has an extension?
-        let components = elementName.components(separatedBy: ".")
-        guard components.count > 1 else { return }
-
-        // yes, it has
-        let elementExtension = components.last!
+        let elementExtension = (elementName as NSString).pathExtension
+        if elementExtension == "" { return }
 
         // setting the cursor in the textField before the extension including the "."
         if let range = elementName.range(of: elementExtension) {

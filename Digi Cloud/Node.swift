@@ -48,8 +48,7 @@ extension Node {
         self.link = Link(JSON: JSON["link"])
         self.receiver = Receiver(JSON: JSON["receiver"])
         self.location = location
-        let components = self.name.components(separatedBy: ".")
-        self.ext = components.count > 1 ? components.last! : ""
+        self.ext = (name as NSString).pathExtension
     }
 }
 
