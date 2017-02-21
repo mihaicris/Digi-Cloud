@@ -103,13 +103,9 @@ class SearchResultController: UITableViewController {
         searchController?.searchBar.resignFirstResponder()
         let item = filteredContent[indexPath.row]
 
-        var parentPath = (item.location.path as NSString).deletingLastPathComponent
-        if parentPath != "/" {
-            parentPath += "/"
-        }
-        let parentLocation = Location(mount: item.location.mount, path: parentPath)
-
-        let resultNode = Node(name: item.name, type: item.type, modified: item.modified, size: item.size, contentType: item.contentType, hash: nil, share: nil, link: nil, receiver: nil, parentLocation: parentLocation)
+        let resultNode = Node(name: item.name, type: item.type, modified: item.modified,
+                              size: item.size, contentType: item.contentType, hash: nil, share: nil,
+                              link: nil, receiver: nil, parentLocation: item.location.parentLocation)
 
         let controller = item.type == "dir" ? ListingViewController(node: resultNode, action: .noAction) : ContentViewController(item: item)
 

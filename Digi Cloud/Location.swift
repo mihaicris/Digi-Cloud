@@ -17,8 +17,15 @@ struct Location {
 }
 
 extension Location {
-    var parentPath: String {
-        return (path as NSString).deletingLastPathComponent
+    var parentLocation: Location {
+
+        var parentPath = (path as NSString).deletingLastPathComponent
+
+        if parentPath != "/" {
+            parentPath += "/"
+        }
+
+        return Location(mount: self.mount, path: parentPath)
     }
 
     func appendingPathComponent(_ component: String, isDirectory: Bool) -> Location {
