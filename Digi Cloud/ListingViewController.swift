@@ -670,7 +670,7 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleCreateDirectory() {
 
-        let controller = CreateFolderViewController(location: node.location)
+        let controller = CreateDirectoryViewController(node: self.node)
         controller.onFinish = { [unowned self](folderName) in
 
             let completionBlock = {
@@ -805,7 +805,7 @@ final class ListingViewController: UITableViewController {
 
         dispatchGroup.enter()
 
-        DigiClient.shared.copyOrMoveNode(action: self.action, from: sourceNode.location, to: destinationLocation) { statusCode, error in
+        DigiClient.shared.copyOrMove(node: sourceNode, to: destinationLocation, action: self.action) { statusCode, error in
 
             #if DEBUG_CONTROLLERS
                 print("Task \(taskFinished) finished")

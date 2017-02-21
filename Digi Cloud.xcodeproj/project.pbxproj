@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		8302319E1E559ECB001CDC00 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302319D1E559ECB001CDC00 /* Bookmark.swift */; };
 		830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830CCDD01E2FAA8A006E0846 /* String+DigiCloud.swift */; };
-		8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */; };
+		8310C2791DC73456005DD1B9 /* CreateDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */; };
 		83164FED1E03F473001048D7 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83164FEC1E03F473001048D7 /* SearchCell.swift */; };
 		831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B9F581D992BD7003DAF42 /* DigiClient.swift */; };
 		8320C2511E1E2BD300413B36 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */; };
@@ -83,7 +83,7 @@
 		8302319D1E559ECB001CDC00 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Digi Cloud-Bridging-Header.h"; sourceTree = "<group>"; };
 		830CCDD01E2FAA8A006E0846 /* String+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+DigiCloud.swift"; sourceTree = "<group>"; };
-		8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateFolderViewController.swift; sourceTree = "<group>"; };
+		8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDirectoryViewController.swift; sourceTree = "<group>"; };
 		83164FEC1E03F473001048D7 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		831B9F581D992BD7003DAF42 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DigiClient.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
@@ -379,7 +379,7 @@
 		83F9944B1DD093C90023FB5D /* Listing */ = {
 			isa = PBXGroup;
 			children = (
-				8310C2781DC73456005DD1B9 /* CreateFolderViewController.swift */,
+				8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */,
 				839A22E21DC11BA400758730 /* DeleteViewController.swift */,
 				83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */,
 				83DADF221DE59ED300987E1A /* ListingViewController.swift */,
@@ -526,7 +526,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8310C2791DC73456005DD1B9 /* CreateFolderViewController.swift in Sources */,
+				8310C2791DC73456005DD1B9 /* CreateDirectoryViewController.swift in Sources */,
 				83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */,
 				8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */,
 				83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */,

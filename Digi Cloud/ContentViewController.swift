@@ -83,7 +83,7 @@ class ContentViewController: UIViewController {
             progressView.isHidden = false
 
             // Start downloading File
-            session = DigiClient.shared.startDownloadFile(at: item.location, delegate: self)
+            session = DigiClient.shared.startDownloadFile(for: item, delegate: self)
 
         } else {
             loadFileContent()

@@ -1,5 +1,5 @@
 //
-//  CreateFolderViewController.swift
+//  CreateDirectoryViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 31/10/16.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-class CreateFolderViewController: UITableViewController {
+class CreateDirectoryViewController: UITableViewController {
 
     // MARK: - Properties
 
     var onFinish: ((_ folderName: String?) -> Void)?
-    private var location: Location
+    private var node: Node
     private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     private var textField: UITextField!
@@ -21,8 +21,8 @@ class CreateFolderViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location) {
-        self.location = location
+    init(node: Node) {
+        self.node = node
         super.init(style: .grouped)
     }
 
@@ -145,7 +145,7 @@ class CreateFolderViewController: UITableViewController {
         rightBarButton.isEnabled = false
 
         // network request for rename
-        DigiClient.shared.createFolderNode(at: location, with: folderName) { (statusCode, error) in
+        DigiClient.shared.createDirectory(in: self.node, with: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 let title = NSLocalizedString("Error", comment: "")
@@ -197,7 +197,7 @@ class CreateFolderViewController: UITableViewController {
     }
 }
 
-extension CreateFolderViewController: UITextFieldDelegate {
+extension CreateDirectoryViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         setMessage(onScreen: false)
     }
