@@ -1087,9 +1087,11 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
             switch action {
 
-            case .sendLink:
+            case .sendLink, .receiveFiles:
 
-                let controller = SharingViewController()
+                let linkType = (action == .sendLink) ? LinkType.download : LinkType.upload
+
+                let controller = ShareLinkViewController(node: node, linkType: linkType)
 
                 let navController = UINavigationController(rootViewController: controller)
                 navController.modalPresentationStyle = .formSheet
