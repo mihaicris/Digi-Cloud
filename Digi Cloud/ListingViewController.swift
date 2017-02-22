@@ -1093,6 +1093,10 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
                 let controller = ShareLinkViewController(node: node, linkType: linkType)
 
+                controller.onFinish = { [unowned self] in
+                    self.dismiss(animated: true, completion: nil)
+                }
+
                 let navController = UINavigationController(rootViewController: controller)
                 navController.modalPresentationStyle = .formSheet
                 self.present(navController, animated: true, completion: nil)

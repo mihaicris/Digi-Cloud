@@ -12,6 +12,8 @@ class ShareLinkViewController: UIViewController {
 
     // MARK: - Properties
 
+    var onFinish: (() -> Void)?
+
     var link: Link?
     var receiver: Receiver?
 
@@ -37,9 +39,18 @@ class ShareLinkViewController: UIViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        view.backgroundColor = .red
+        setupNavigationItem()
     }
 
     // MARK: - Helper Functions
+    private func setupNavigationItem() {
 
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(handleCancel))
+
+        navigationItem.setRightBarButton(cancelButton, animated: false)
+    }
+
+    @objc private func handleCancel() {
+        onFinish?()
+    }
 }
