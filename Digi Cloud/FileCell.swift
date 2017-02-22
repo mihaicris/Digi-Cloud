@@ -82,7 +82,7 @@ class FileCell: BaseListCell {
         contentView.addSubview(fileDetailsLabel)
 
         NSLayoutConstraint.activate([
-            // Dimmentional constraints
+            // Dimentional constraints
             fileIcon.widthAnchor.constraint(equalToConstant: 26),
             fileIcon.heightAnchor.constraint(equalToConstant: 26),
 

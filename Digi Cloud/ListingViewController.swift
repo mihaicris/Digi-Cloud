@@ -233,7 +233,10 @@ final class ListingViewController: UITableViewController {
 
             cell.isShared = item.share != nil
             cell.isReceiver = item.receiver != nil
-            cell.folderNameLabel.text = item.name
+            cell.directoryNameLabel.text = item.name
+
+            let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
+            cell.directoryDetailsLabel.text = modifiedDateString
 
             return cell
 
@@ -243,14 +246,12 @@ final class ListingViewController: UITableViewController {
             }
 
             cell.delegate = self
-
             cell.hasButton = action == .noAction
-
-            let modifiedDate = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
             cell.fileNameLabel.text = item.name
 
-            let fileSizeString = byteFormatter.string(fromByteCount: item.size) + "・" + modifiedDate
-            cell.fileDetailsLabel.text = fileSizeString
+            let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
+            let fileDetailsString = byteFormatter.string(fromByteCount: item.size) + "・" + modifiedDateString
+            cell.fileDetailsLabel.text = fileDetailsString
 
             return cell
         }

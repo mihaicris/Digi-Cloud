@@ -19,18 +19,25 @@ class DirectoryCell: BaseListCell {
     }
     var isReceiver: Bool = false
 
-    var folderIcon: UIImageView = {
+    var directoryIcon: UIImageView = {
         let i = UIImageView(image: UIImage(named: "FolderIcon"))
         i.contentMode = .scaleAspectFit
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
     }()
 
-    var folderNameLabel: UILabel = {
+    var directoryNameLabel: UILabel = {
         let l = UILabel()
         l.font = UIFont(name: "HelveticaNeue-Medium", size: 15)
         l.lineBreakMode = .byTruncatingMiddle
         l.translatesAutoresizingMaskIntoConstraints = false
+        return l
+    }()
+
+    var directoryDetailsLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont(name: "HelveticaNeue", size: 11)
         return l
     }()
 
@@ -55,13 +62,15 @@ class DirectoryCell: BaseListCell {
 
         if highlighted {
             contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
-            folderNameLabel.textColor = UIColor.white
-            actionsButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+            directoryNameLabel.textColor = .white
+            directoryDetailsLabel.textColor = UIColor.init(white: 0.8, alpha: 1)
+            actionsButton.setTitleColor(.white, for: .normal)
             sharedLabel.alpha = 0
         } else {
             contentView.backgroundColor = nil
-            folderNameLabel.textColor = UIColor.black
-            actionsButton.setTitleColor(UIColor.darkGray, for: UIControlState.normal)
+            directoryNameLabel.textColor = .black
+            directoryDetailsLabel.textColor = .darkGray
+            actionsButton.setTitleColor(.darkGray, for: .normal)
             sharedLabel.alpha = 1
         }
     }
@@ -79,24 +88,27 @@ class DirectoryCell: BaseListCell {
 
         separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
 
-        contentView.addSubview(folderIcon)
-        contentView.addSubview(folderNameLabel)
+        contentView.addSubview(directoryIcon)
+        contentView.addSubview(directoryNameLabel)
+        contentView.addSubview(directoryDetailsLabel)
 
         NSLayoutConstraint.activate([
-            // Dimmentional constraints
-            folderIcon.widthAnchor.constraint(equalToConstant: 26),
-            folderIcon.heightAnchor.constraint(equalToConstant: 26),
+            // Dimentional constraints
+            directoryIcon.widthAnchor.constraint(equalToConstant: 26),
+            directoryIcon.heightAnchor.constraint(equalToConstant: 26),
 
             // Horizontal constraints
-            folderIcon.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
-            folderNameLabel.leftAnchor.constraint(equalTo: folderIcon.rightAnchor, constant: 10),
+            directoryIcon.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
+            directoryNameLabel.leftAnchor.constraint(equalTo: directoryIcon.rightAnchor, constant: 10),
+            directoryDetailsLabel.leftAnchor.constraint(equalTo: directoryNameLabel.leftAnchor),
 
             // Vertical constraints
-            folderIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1),
-            folderNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 1)
+            directoryIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1),
+            directoryNameLabel.topAnchor.constraint(equalTo: directoryIcon.topAnchor, constant: -3),
+            directoryDetailsLabel.topAnchor.constraint(equalTo: directoryNameLabel.bottomAnchor, constant: 2)
         ])
 
-        labelRightMarginConstraint = folderNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        labelRightMarginConstraint = directoryNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         labelRightMarginConstraint?.isActive = true
     }
 
