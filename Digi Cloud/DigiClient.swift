@@ -669,7 +669,7 @@ final class DigiClient {
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func resetLinkPassword(node: Node, linkId: String, type: LinkType, completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
+    func setOrResetLinkPassword(node: Node, linkId: String, type: LinkType, completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkResetPassword
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)

@@ -14,11 +14,9 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
 
     var onFinish: (() -> Void)?
 
-    var link: Link?
-    var receiver: Receiver?
-
-    let linkType: LinkType
-    let node: Node
+    private let linkType: LinkType
+    private let node: Node
+    private var linkId: String?
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
@@ -27,6 +25,15 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
         t.delegate = self
         t.dataSource = self
         return t
+    }()
+
+    let baseLinkLabel: UILabelWithPadding = {
+        let l = UILabelWithPadding(paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
+        l.textAlignment = .left
+        l.text = "http://s.go.ro/ "
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.systemFont(ofSize: 16)
+        return l
     }()
 
     private lazy var hashTextField: URLHashTextField = {
@@ -46,7 +53,6 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
     private let passwordLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "475939"
         l.font = UIFont.systemFont(ofSize: 16)
         return l
     }()
@@ -59,15 +65,35 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
         return b
     }()
 
+    private let validityLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.systemFont(ofSize: 16)
+        return l
+    }()
+
+    private let validityChangeButton: UIButton = {
+        let b = UIButton(type: .system)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitle(NSLocalizedString("Change", comment: ""), for: .normal)
+        b.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        b.addTarget(self, action: #selector(handleChangeValidity), for: .touchUpInside)
+        return b
+    }()
+
+    private lazy var validityButtonsStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+
+        return sv
+    }()
+
     // MARK: - Initializers and Deinitializers
 
     init(node: Node, linkType: LinkType) {
 
         self.node = node
         self.linkType = linkType
-
-        self.link = node.link
-        self.receiver = node.receiver
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -82,6 +108,10 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
         setupViews()
         setupNavigationItems()
         setupToolBarItems()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        requestLink()
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -121,16 +151,7 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
 
         switch indexPath.section {
         case 0:
-        // LINK
-
-            let baseLinkLabel: UILabelWithPadding = {
-                let l = UILabelWithPadding(paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
-                l.textAlignment = .left
-                l.text = "http://s.go.ro/ "
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.font = UIFont.systemFont(ofSize: 16)
-                return l
-            }()
+            // LINK
 
             cell.contentView.addSubview(baseLinkLabel)
             cell.contentView.addSubview(hashTextField)
@@ -146,7 +167,7 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
             ])
 
         case 1:
-        // PASSWORD
+            // PASSWORD
 
             cell.contentView.addSubview(passwordLabel)
             cell.contentView.addSubview(passwordResetButton)
@@ -155,15 +176,25 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
             NSLayoutConstraint.activate([
                 passwordLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
                 passwordLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                passwordResetButton.leadingAnchor.constraint(equalTo: passwordLabel.trailingAnchor, constant: 30),
+                passwordResetButton.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 100),
                 passwordResetButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 enablePasswordSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
                 enablePasswordSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
             ])
 
         case 2:
-        // VALIDITY
-            break
+            // VALIDITY
+
+            cell.contentView.addSubview(validityLabel)
+            cell.contentView.addSubview(validityChangeButton)
+
+            NSLayoutConstraint.activate([
+                validityLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validityLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                validityChangeButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                validityChangeButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
+
         default:
             fatalError("Wrong section index")
         }
@@ -210,7 +241,12 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private func setupNavigationItems() {
 
-        self.title = NSLocalizedString("Send Download Link", comment: "")
+        if linkType == .download {
+            self.title = NSLocalizedString("Send Download Link", comment: "")
+        } else {
+            self.title = NSLocalizedString("Send Upload Link", comment: "")
+        }
+
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))
         navigationItem.setRightBarButton(doneButton, animated: false)
     }
@@ -240,12 +276,104 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
         onFinish?()
     }
 
-    @objc private func handleSend() {}
+    @objc private func handleSend() {
+        // TODO: Implement
+    }
 
-    @objc private func handleDelete() {}
+    @objc private func handleDelete() {
 
-    @objc private func handleEnablePassword(_ sender: UISwitch) {}
+        guard let linkId = self.linkId else {
+            return
+        }
 
-    @objc private func handleResetPassword() {}
+        DigiClient.shared.deleteLink(node: self.node, type: self.linkType, linkId: linkId) { (error) in
+            guard error == nil else {
+                print("Error at deletion of the link.")
+                return
+            }
 
+            self.onFinish?()
+        }
+
+    }
+
+    @objc private func handleEnablePassword(_ sender: UISwitch) {
+
+        guard let linkId = self.linkId else {
+            return
+        }
+
+        if sender.isOn {
+            self.handleResetPassword()
+        } else {
+            DigiClient.shared.removeLinkPassword(node: self.node, linkId: linkId, type: linkType) { (result, error) in
+                guard error == nil else {
+                    print(error!.localizedDescription)
+                    return
+                }
+
+                self.process(result)
+            }
+        }
+    }
+
+    @objc private func handleResetPassword() {
+
+        guard let linkId = self.linkId else {
+            return
+        }
+
+        DigiClient.shared.setOrResetLinkPassword(node: self.node, linkId: linkId, type: linkType, completion: { (result, error) in
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+
+            self.process(result)
+        })
+    }
+
+    @objc private func handleChangeValidity() {
+        // TODO: Implement
+    }
+
+    private func requestLink() {
+
+        DigiClient.shared.getLink(for: self.node, type: self.linkType) { (result, error) in
+
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+
+            self.process(result)
+        }
+    }
+
+    private func process(_ result: Any?) {
+        if let link = result as? Link {
+            updateInformation(linkId: link.id, host: link.host, hash: link.hash, password: link.password)
+        } else if let receiver = result as? Receiver {
+            updateInformation(linkId: receiver.id, host: receiver.host, hash: receiver.hash, password: receiver.password)
+        } else {
+            print("Error: No valid link received.")
+        }
+    }
+
+    private func updateInformation(linkId: String, host: String, hash: String, password: String?) {
+
+        self.linkId = linkId
+        baseLinkLabel.text = String("\(host)/ ")
+        hashTextField.text = hash
+
+        if let password = password {
+            passwordLabel.text = password
+            enablePasswordSwitch.isOn = true
+            passwordResetButton.alpha = 1.0
+        } else {
+            passwordLabel.text =  NSLocalizedString("The link is public", comment: "")
+            enablePasswordSwitch.isOn = false
+            passwordResetButton.alpha = 0.0
+        }
+    }
 }
