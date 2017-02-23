@@ -59,7 +59,8 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private lazy var passwordResetButton: UIButton = {
         let b = UIButton(type: .system)
-        b.setImage(#imageLiteral(resourceName: "Refresh_icon"), for: .normal)
+        b.tintColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1.0)
+        b.setImage(#imageLiteral(resourceName: "Refresh_icon").withRenderingMode(.alwaysTemplate), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.addTarget(self, action: #selector(handleResetPassword), for: .touchUpInside)
         return b
@@ -84,7 +85,6 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
     private lazy var validityButtonsStackView: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
-
         return sv
     }()
 
@@ -323,7 +323,12 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
             return
         }
 
+        startSpinning()
+
         DigiClient.shared.setOrResetLinkPassword(node: self.node, linkId: linkId, type: linkType, completion: { (result, error) in
+
+            self.stopSpinning()
+
             guard error == nil else {
                 print(error!.localizedDescription)
                 return
@@ -376,4 +381,35 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
             passwordResetButton.alpha = 0.0
         }
     }
+
+    private var animating: Bool = false
+
+    private func startSpinning() {
+        if(!animating) {
+            animating = true
+            spinWithOptions(options: .curveEaseIn)
+        }
+    }
+
+    private func stopSpinning() {
+        animating = false
+    }
+
+    func spinWithOptions(options: UIViewAnimationOptions) {
+        UIView.animate(withDuration: 0.4, delay: 0.0, options: options, animations: { () -> Void in
+            let val: CGFloat = CGFloat((M_PI / Double(2.0)))
+            self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
+        }) { (finished: Bool) -> Void in
+
+            if(finished) {
+                if(self.animating) {
+                    self.spinWithOptions(options: .curveLinear)
+                } else if (options != .curveEaseOut) {
+                    self.spinWithOptions(options: .curveEaseOut)
+                }
+            }
+
+        }
+    }
+
 }
