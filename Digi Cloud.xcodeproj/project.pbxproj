@@ -28,6 +28,7 @@
 		835406051D952FFD00019D53 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */; };
 		83562CAC1DB8C19B006FF04A /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */; };
 		83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAD1DB8D098006FF04A /* BaseListCell.swift */; };
+		835E71A81E5F1F2000C4E1B4 /* URLHashTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */; };
 		836731B91E53DCD3001EA961 /* Receiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836731B81E53DCD3001EA961 /* Receiver.swift */; };
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
@@ -102,6 +103,7 @@
 		835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
 		83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeActionsViewController.swift; sourceTree = "<group>"; };
 		83562CAD1DB8D098006FF04A /* BaseListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseListCell.swift; sourceTree = "<group>"; };
+		835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLHashTextField.swift; sourceTree = "<group>"; };
 		836731B81E53DCD3001EA961 /* Receiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receiver.swift; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */,
 				83164FEC1E03F473001048D7 /* SearchCell.swift */,
 				834181761E07FB1100F32A2F /* UILabelWithPadding.swift */,
+				835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -538,6 +541,7 @@
 				8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */,
 				8320C2551E1E3B6400413B36 /* UIView+DigiCloud.swift in Sources */,
 				8320C2511E1E2BD300413B36 /* IntroductionViewController.swift in Sources */,
+				835E71A81E5F1F2000C4E1B4 /* URLHashTextField.swift in Sources */,
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
 				83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */,
 				8321FC5B1D9568FE002D6413 /* ContentViewController.swift in Sources */,
