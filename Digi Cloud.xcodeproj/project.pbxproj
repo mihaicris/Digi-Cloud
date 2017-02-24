@@ -24,6 +24,7 @@
 		832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
 		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
 		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
+		8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
 		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
 		835406051D952FFD00019D53 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */; };
 		83562CAC1DB8C19B006FF04A /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */; };
@@ -99,6 +100,7 @@
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		8350CDB41E6031030063227E /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
 		83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeActionsViewController.swift; sourceTree = "<group>"; };
@@ -179,6 +181,14 @@
 			name = Sharing;
 			sourceTree = "<group>";
 		};
+		8350CDAF1E602E7B0063227E /* Custom Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				8350CDB41E6031030063227E /* fontawesome-webfont.ttf */,
+			);
+			name = "Custom Fonts";
+			sourceTree = "<group>";
+		};
 		835405FB1D94FCA900019D53 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -210,6 +220,7 @@
 		835406011D9517BE00019D53 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8350CDAF1E602E7B0063227E /* Custom Fonts */,
 				8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */,
 				8370411C1D8B1DEE000EDBAE /* Assets.xcassets */,
 			);
@@ -493,6 +504,7 @@
 			files = (
 				837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */,
 				83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */,
+				8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */,
 				83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */,
 				8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */,
 			);

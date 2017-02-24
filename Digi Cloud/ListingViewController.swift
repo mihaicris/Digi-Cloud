@@ -238,7 +238,22 @@ final class ListingViewController: UITableViewController {
             cell.nameLabel.text = item.name
 
             let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
-            cell.detailsLabel.text = modifiedDateString
+
+            let detailAttributtedString = NSMutableAttributedString(string: modifiedDateString)
+
+            if cell.hasDownloadLink {
+                // http://fontawesome.io/icon/cloud-upload/
+                let attributedString = NSAttributedString(string: "  \u{f0ee}", attributes: [NSFontAttributeName: UIFont.init(name: "FontAwesome", size: 12)!])
+                detailAttributtedString.append(attributedString)
+            }
+
+            if cell.hasUploadLink {
+                // http://fontawesome.io/icon/cloud-download/
+                let attributedString = NSAttributedString(string: "  \u{f0ed}", attributes: [NSFontAttributeName: UIFont.init(name: "FontAwesome", size: 12)!])
+                detailAttributtedString.append(attributedString)
+            }
+
+            cell.detailsLabel.attributedText = detailAttributtedString
 
             return cell
 
@@ -255,8 +270,17 @@ final class ListingViewController: UITableViewController {
             cell.nameLabel.text = item.name
 
             let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
-            let fileDetailsString = byteFormatter.string(fromByteCount: item.size) + "・" + modifiedDateString
-            cell.detailsLabel.text = fileDetailsString
+            let sizeString = byteFormatter.string(fromByteCount: item.size)
+
+            let detailAttributtedString = NSMutableAttributedString(string: sizeString + "・" + modifiedDateString)
+
+            if cell.hasDownloadLink {
+                // http://fontawesome.io/icon/cloud-upload/
+                let attributedString = NSAttributedString(string: "  \u{f0ee}", attributes: [NSFontAttributeName: UIFont.init(name: "FontAwesome", size: 12)!])
+                detailAttributtedString.append(attributedString)
+            }
+
+            cell.detailsLabel.attributedText = detailAttributtedString
 
             return cell
         }
@@ -1099,7 +1123,9 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                 let controller = ShareLinkViewController(node: node, linkType: linkType)
 
                 controller.onFinish = { [unowned self] in
-                    self.dismiss(animated: true, completion: nil)
+                    self.dismiss(animated: true) {
+                        self.updateContent()
+                    }
                 }
 
                 let navController = UINavigationController(rootViewController: controller)
