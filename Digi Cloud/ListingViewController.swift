@@ -213,10 +213,10 @@ final class ListingViewController: UITableViewController {
 
             if indexPath.row == 1 {
                 cell.contentView.addSubview(messageStackView)
+
                 NSLayoutConstraint.activate([
                     messageStackView.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
-                    messageStackView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-                    ])
+                    messageStackView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
             }
             return cell
         }
@@ -224,34 +224,39 @@ final class ListingViewController: UITableViewController {
         let item = content[indexPath.row]
 
         if item.type == "dir" {
+
             guard let cell = tableView.dequeueReusableCell(withIdentifier: folderCellID, for: indexPath) as? DirectoryCell else {
                 return UITableViewCell()
             }
+
             cell.delegate = self
-
             cell.hasButton = action == .noAction
-
             cell.isShared = item.share != nil
-            cell.isReceiver = item.receiver != nil
-            cell.directoryNameLabel.text = item.name
+            cell.hasDownloadLink = item.link != nil
+            cell.hasUploadLink = item.receiver != nil
+
+            cell.nameLabel.text = item.name
 
             let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
-            cell.directoryDetailsLabel.text = modifiedDateString
+            cell.detailsLabel.text = modifiedDateString
 
             return cell
 
         } else {
+
             guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? FileCell else {
                 return UITableViewCell()
             }
 
             cell.delegate = self
             cell.hasButton = action == .noAction
-            cell.fileNameLabel.text = item.name
+            cell.hasDownloadLink = item.link != nil
+
+            cell.nameLabel.text = item.name
 
             let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
             let fileDetailsString = byteFormatter.string(fromByteCount: item.size) + "・" + modifiedDateString
-            cell.fileDetailsLabel.text = fileDetailsString
+            cell.detailsLabel.text = fileDetailsString
 
             return cell
         }

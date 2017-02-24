@@ -20,7 +20,6 @@ class URLHashTextField: UITextField {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        text = ""
         backgroundColor = UIColor(red: 217/255, green: 239/255, blue: 173/255, alpha: 1.0)
         layer.cornerRadius = 6
         translatesAutoresizingMaskIntoConstraints = false
