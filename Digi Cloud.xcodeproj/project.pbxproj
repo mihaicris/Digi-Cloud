@@ -60,6 +60,7 @@
 		83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF221DE59ED300987E1A /* ListingViewController.swift */; };
 		83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF241DE5C41E00987E1A /* CustomNavBar.swift */; };
 		83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DB658C1DDF12C900A53440 /* LocationCell.swift */; };
+		83E5DB421E607EF30093634E /* UIFont+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E5DB411E607EF30093634E /* UIFont+DigiCloud.swift */; };
 		83EC31471E2915A8009E12B6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EC31461E2915A8009E12B6 /* SettingsViewController.swift */; };
 		83EF1D481D8FBDDA00ACE008 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* Node.swift */; };
 		83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6B1D8FE26400ACE008 /* Mount.swift */; };
@@ -142,6 +143,7 @@
 		83DADF221DE59ED300987E1A /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListingViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83DADF241DE5C41E00987E1A /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
 		83DB658C1DDF12C900A53440 /* LocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		83E5DB411E607EF30093634E /* UIFont+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+DigiCloud.swift"; sourceTree = "<group>"; };
 		83EC31461E2915A8009E12B6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		83EF1D471D8FBDDA00ACE008 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Node.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83EF1D6B1D8FE26400ACE008 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Mount.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -248,6 +250,7 @@
 				8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */,
 				8320C2521E1E3B4900413B36 /* UIViewController+DigiCloud.swift */,
 				8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */,
+				83E5DB411E607EF30093634E /* UIFont+DigiCloud.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -578,6 +581,7 @@
 				83CE7A001DE45D77002212A9 /* Location.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
 				8328F80F1E51EA7E00DE4453 /* NodeHit.swift in Sources */,
+				83E5DB421E607EF30093634E /* UIFont+DigiCloud.swift in Sources */,
 				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
 				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
 				832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */,

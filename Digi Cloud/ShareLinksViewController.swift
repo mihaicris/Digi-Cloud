@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
 
     // MARK: - Properties
 
@@ -17,6 +17,8 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
     private let linkType: LinkType
     private let node: Node
     private var linkId: String?
+
+    private var result: Any?
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
@@ -87,6 +89,8 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
+
+    private var animating: Bool = false
 
     // MARK: - Initializers and Deinitializers
 
@@ -206,6 +210,8 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private func setupViews() {
 
+        tableView.alwaysBounceVertical = false
+
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -220,20 +226,27 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private func setupTableViewHeaderView() {
 
-        let frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 117)
-        let headerView = UIView(frame: frame)
+        let frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 85)
+        let headerView = UIImageView(frame: frame)
+        headerView.image = #imageLiteral(resourceName: "shareBackground")
+        headerView.contentMode = .scaleAspectFit
 
-        let headerImageView: UIImageView = {
-            let iv = UIImageView(image: #imageLiteral(resourceName: "download_link_image"))
-            iv.translatesAutoresizingMaskIntoConstraints = false
-            return iv
+        let code: String = (linkType == .download ) ? "\u{f0ee}" : "\u{f01a}"
+
+        let iconLabel: UILabel = {
+            let l = UILabel()
+            l.translatesAutoresizingMaskIntoConstraints = false
+            l.attributedText = NSAttributedString(string: String(code),
+                                                  attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 58),
+                                                               NSForegroundColorAttributeName: UIColor.defaultColor.withAlphaComponent(0.3)])
+            return l
         }()
 
-        headerView.addSubview(headerImageView)
+        headerView.addSubview(iconLabel)
 
         NSLayoutConstraint.activate([
-            headerImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
-            headerImageView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor)
+            iconLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            iconLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
         ])
 
         tableView.tableHeaderView = headerView
@@ -242,9 +255,9 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
     private func setupNavigationItems() {
 
         if linkType == .download {
-            self.title = NSLocalizedString("Send Download Link", comment: "")
+            self.title = NSLocalizedString("Download Link", comment: "")
         } else {
-            self.title = NSLocalizedString("Send Upload Link", comment: "")
+            self.title = NSLocalizedString("Upload Link", comment: "")
         }
 
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))
@@ -334,7 +347,7 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
                 return
             }
 
-            self.process(result)
+            self.result = result
         })
     }
 
@@ -382,8 +395,6 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
 
-    private var animating: Bool = false
-
     private func startSpinning() {
         if(!animating) {
             animating = true
@@ -397,19 +408,18 @@ class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func spinWithOptions(options: UIViewAnimationOptions) {
         UIView.animate(withDuration: 0.4, delay: 0.0, options: options, animations: { () -> Void in
-            let val: CGFloat = CGFloat((M_PI / Double(2.0)))
+            let val: CGFloat = CGFloat(Double.pi / 2.0)
             self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
         }) { (finished: Bool) -> Void in
-
             if(finished) {
                 if(self.animating) {
                     self.spinWithOptions(options: .curveLinear)
                 } else if (options != .curveEaseOut) {
                     self.spinWithOptions(options: .curveEaseOut)
+                } else {
+                    self.process(self.result)
                 }
             }
-
         }
     }
-
 }

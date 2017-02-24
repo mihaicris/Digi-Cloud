@@ -243,13 +243,13 @@ final class ListingViewController: UITableViewController {
 
             if cell.hasDownloadLink {
                 // http://fontawesome.io/icon/cloud-upload/
-                let attributedString = NSAttributedString(string: "  \u{f0ee}", attributes: [NSFontAttributeName: UIFont.init(name: "FontAwesome", size: 12)!])
+                let attributedString = NSAttributedString(string: "  \u{f0ee}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
             if cell.hasUploadLink {
                 // http://fontawesome.io/icon/cloud-download/
-                let attributedString = NSAttributedString(string: "  \u{f0ed}", attributes: [NSFontAttributeName: UIFont.init(name: "FontAwesome", size: 12)!])
+                let attributedString = NSAttributedString(string: "  \u{f01a}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
@@ -276,7 +276,7 @@ final class ListingViewController: UITableViewController {
 
             if cell.hasDownloadLink {
                 // http://fontawesome.io/icon/cloud-upload/
-                let attributedString = NSAttributedString(string: "  \u{f0ee}", attributes: [NSFontAttributeName: UIFont.init(name: "FontAwesome", size: 12)!])
+                let attributedString = NSAttributedString(string: "  \u{f0ee}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
@@ -1116,9 +1116,9 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
             switch action {
 
-            case .sendLink, .receiveFiles:
+            case .sendDownloadLink, .sendUploadLink:
 
-                let linkType = (action == .sendLink) ? LinkType.download : LinkType.upload
+                let linkType = (action == .sendDownloadLink) ? LinkType.download : LinkType.upload
 
                 let controller = ShareLinkViewController(node: node, linkType: linkType)
 

@@ -29,17 +29,25 @@ class ActionCell: UITableViewCell {
     ///   - action: test
     init(title: String, action: ActionType) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+
         self.textLabel?.text = title
         self.textLabel?.font = UIFont.systemFont(ofSize: 16)
+
         self.tag = action.rawValue
-        let color: UIColor
+
+        var color = UIColor.defaultColor
+
         switch action {
         case .noAction:
             color = .darkGray
         case .delete:
             color = .red
+        case .sendDownloadLink:
+            addActionIcon(fontAwesomeCode: "\u{f0ee}")
+        case .sendUploadLink:
+            addActionIcon(fontAwesomeCode: "\u{f01a}")
         default:
-            color = .defaultColor
+            break
         }
         self.textLabel?.textColor = color
     }
@@ -56,6 +64,24 @@ class ActionCell: UITableViewCell {
         contentView.addSubview(switchButton)
         contentView.addConstraints(with: "H:[v0]-10-|", views: switchButton)
         switchButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+    }
+
+    private func addActionIcon(fontAwesomeCode: Character) {
+        let iconLabel: UILabel = {
+            let l = UILabel()
+            l.translatesAutoresizingMaskIntoConstraints = false
+            l.attributedText = NSAttributedString(string: String(fontAwesomeCode),
+                                                  attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 16),
+                                                               NSForegroundColorAttributeName: UIColor.darkGray])
+            return l
+        }()
+
+        self.contentView.addSubview(iconLabel)
+
+        NSLayoutConstraint.activate([
+            iconLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            iconLabel.centerXAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.rightAnchor, constant: -4)
+        ])
     }
 
     @objc private func handleSwitchValueChanged() {
