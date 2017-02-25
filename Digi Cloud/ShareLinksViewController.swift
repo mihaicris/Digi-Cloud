@@ -33,7 +33,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     let baseLinkLabel: UILabelWithPadding = {
         let l = UILabelWithPadding(paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
         l.textAlignment = .left
-        l.text = "http://s.go.ro/ "
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 16)
         return l
@@ -199,7 +198,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             NSLayoutConstraint.activate([
                 passwordLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
                 passwordLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                passwordResetButton.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 100),
+                passwordResetButton.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 90),
                 passwordResetButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 enablePasswordSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
                 enablePasswordSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)

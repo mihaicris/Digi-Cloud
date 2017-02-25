@@ -72,7 +72,7 @@ class ActionCell: UITableViewCell {
             l.translatesAutoresizingMaskIntoConstraints = false
             l.attributedText = NSAttributedString(string: String(fontAwesomeCode),
                                                   attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 16),
-                                                               NSForegroundColorAttributeName: UIColor.darkGray])
+                                                               NSForegroundColorAttributeName: UIColor.lightGray])
             return l
         }()
 

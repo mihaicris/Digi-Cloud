@@ -21,7 +21,7 @@ class URLHashTextField: UITextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
-        layer.cornerRadius = 6
+        layer.cornerRadius = 8
         translatesAutoresizingMaskIntoConstraints = false
         autocapitalizationType = .none
         autocorrectionType = .no
@@ -31,7 +31,14 @@ class URLHashTextField: UITextField {
     }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        let inset = bounds.insetBy(dx: 4, dy: 0)
+
+        let padLeft: CGFloat = 4
+        let padRight: CGFloat = 20
+
+        let inset = CGRect(x: bounds.origin.x + padLeft,
+                           y: bounds.origin.y,
+                           width: bounds.width - padLeft - padRight,
+                           height: bounds.height)
         return inset
     }
 
