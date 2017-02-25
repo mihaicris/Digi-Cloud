@@ -18,6 +18,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private let node: Node
     private var linkId: String?
     private var originalHash: String
+    private var isSaving: Bool = false
 
     private var result: Any?
 
@@ -236,6 +237,13 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         textField.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
     }
 
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if !isSaving {
+            hashTextField.text = originalHash
+        }
+        return true
+    }
+
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 
         // Disable Save hash button if necessary
@@ -358,6 +366,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     @objc private func handleSaveShortURL() {
 
+        isSaving = true
+
         guard let hash = hashTextField.text, let alinkId = linkId else {
             print("No hash")
             return
@@ -369,9 +379,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
                 if let error = error as? NetworkingError {
                     if case NetworkingError.wrongStatus(_) = error {
-                        let message = NSLocalizedString("The short URL requested is not available.", comment: "")
-                        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        let title = NSLocalizedString("Error", comment: "")
+                        let message = NSLocalizedString("Sorry, this short URL is not available.", comment: "")
+                        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                        let alertAction = UIAlertAction(title: "OK", style: .default, handler: { _ in self.isSaving = false })
+                        alertController.addAction(alertAction)
                         self.present(alertController, animated: true, completion: nil)
                     }
                 } else {
@@ -380,7 +392,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
                 return
             }
-
+            self.isSaving = false
             self.originalHash = hash
             self.saveHashButton.alpha = 0.0
             self.hashTextField.resignFirstResponder()
@@ -388,8 +400,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     @objc private func handleCancelChangeShortURL() {
-        self.hashTextField.resignFirstResponder()
         hashTextField.text = self.originalHash
+        self.hashTextField.resignFirstResponder()
     }
 
     @objc private func handleDelete() {
@@ -482,6 +494,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         self.linkId = linkId
         baseLinkLabel.text = String("\(host)/")
         hashTextField.text = hash
+        originalHash = hash
 
         if let password = password {
             passwordLabel.text = password
