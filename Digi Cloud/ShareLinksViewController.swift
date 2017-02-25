@@ -250,6 +250,15 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return true
     }
 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if saveHashButton.alpha == 1.0 {
+            handleSaveShortURL()
+            return true
+        } else {
+            return false
+        }
+    }
+
     // MARK: - Helper Functions
 
     private func setupViews() {

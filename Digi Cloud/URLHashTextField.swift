@@ -26,6 +26,7 @@ class URLHashTextField: UITextField {
         autocapitalizationType = .none
         autocorrectionType = .no
         spellCheckingType = .no
+        keyboardType = .alphabet
         clearButtonMode = .whileEditing
         font = UIFont.boldSystemFont(ofSize: 16)
     }
