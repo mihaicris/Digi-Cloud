@@ -17,6 +17,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private let linkType: LinkType
     private let node: Node
     private var linkId: String?
+    private var originalHash: String
 
     private var result: Any?
 
@@ -42,6 +43,16 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         let tv = URLHashTextField()
         tv.delegate = self
         return tv
+    }()
+
+    private lazy var saveHashButton: UIButton = {
+        let b = UIButton(type: .system)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitle(NSLocalizedString("Save", comment: ""), for: .normal)
+        b.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        b.addTarget(self, action: #selector(handleSaveShortURL), for: .touchUpInside)
+        b.alpha = 0
+        return b
     }()
 
     private let enablePasswordSwitch: UISwitch = {
@@ -99,6 +110,13 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         self.node = node
         self.linkType = linkType
 
+        switch linkType {
+        case .download:
+            self.originalHash = node.link?.hash ?? ""
+        case .upload:
+            self.originalHash = node.receiver?.hash ?? ""
+        }
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -112,6 +130,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         setupViews()
         setupNavigationItems()
         setupToolBarItems()
+        addViewTapGestureRecognizer()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -120,10 +139,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 56
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -159,15 +174,19 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
             cell.contentView.addSubview(baseLinkLabel)
             cell.contentView.addSubview(hashTextField)
+            cell.contentView.addSubview(saveHashButton)
 
             NSLayoutConstraint.activate([
-                baseLinkLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
-                baseLinkLabel.trailingAnchor.constraint(equalTo: hashTextField.leadingAnchor),
                 baseLinkLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                baseLinkLabel.heightAnchor.constraint(equalToConstant: 36),
-                hashTextField.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                baseLinkLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+
+                saveHashButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                saveHashButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+
                 hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                hashTextField.heightAnchor.constraint(equalToConstant: 36)
+                hashTextField.trailingAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
+                hashTextField.heightAnchor.constraint(equalToConstant: 30),
+                hashTextField.leadingAnchor.constraint(equalTo: baseLinkLabel.trailingAnchor)
             ])
 
         case 1:
@@ -204,6 +223,32 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         }
 
         return cell
+    }
+
+    // MARK: - UItextFieldDelegate Conformance
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.backgroundColor = UIColor(red: 217/255, green: 239/255, blue: 173/255, alpha: 1.0)
+
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        saveHashButton.alpha = 0.0
+        textField.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
+    }
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        // Disable Save hash button if necessary
+        let textFieldText: NSString = (textField.text ?? "") as NSString
+        let newHash = textFieldText.replacingCharacters(in: range, with: string)
+
+        if newHash.characters.count == 0 || newHash == originalHash || hasInvalidCharacters(name: newHash) {
+            saveHashButton.alpha = 0.0
+        } else {
+            saveHashButton.alpha = 1.0
+        }
+        return true
     }
 
     // MARK: - Helper Functions
@@ -285,12 +330,58 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     }
 
+    private func addViewTapGestureRecognizer() {
+        let tgr = UITapGestureRecognizer(target: self, action: #selector(handleCancelChangeShortURL))
+        self.view.addGestureRecognizer(tgr)
+    }
+
+    private func hasInvalidCharacters(name: String) -> Bool {
+        let charset = CharacterSet.init(charactersIn: name)
+        return !charset.isDisjoint(with: CharacterSet.alphanumerics.inverted)
+    }
+
     @objc private func handleDone() {
         onFinish?()
     }
 
     @objc private func handleSend() {
         // TODO: Implement
+    }
+
+    @objc private func handleSaveShortURL() {
+
+        guard let hash = hashTextField.text, let alinkId = linkId else {
+            print("No hash")
+            return
+        }
+
+        DigiClient.shared.setLinkCustomShortUrl(node: self.node, linkId: alinkId, type: self.linkType, hash: hash) { _, error in
+
+            guard error == nil else {
+
+                if let error = error as? NetworkingError {
+                    if case NetworkingError.wrongStatus(_) = error {
+                        let message = NSLocalizedString("The short URL requested is not available.", comment: "")
+                        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+
+                return
+            }
+
+            self.originalHash = hash
+            self.saveHashButton.alpha = 0.0
+            self.hashTextField.resignFirstResponder()
+        }
+    }
+
+    @objc private func handleCancelChangeShortURL() {
+        self.hashTextField.resignFirstResponder()
+        hashTextField.text = self.originalHash
     }
 
     @objc private func handleDelete() {
@@ -381,7 +472,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private func updateInformation(linkId: String, host: String, hash: String, password: String?) {
 
         self.linkId = linkId
-        baseLinkLabel.text = String("\(host)/ ")
+        baseLinkLabel.text = String("\(host)/")
         hashTextField.text = hash
 
         if let password = password {
@@ -408,7 +499,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     func spinWithOptions(options: UIViewAnimationOptions) {
         UIView.animate(withDuration: 0.4, delay: 0.0, options: options, animations: { () -> Void in
-            let val: CGFloat = CGFloat(Double.pi / 2.0)
+            let val: CGFloat = CGFloat(Double.pi)
             self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
         }) { (finished: Bool) -> Void in
             if(finished) {
