@@ -72,7 +72,7 @@ final class DigiClient {
     ///   - data: The data of the network response
     ///   - response: The status code of the network response
     ///   - error: The error occurred in the network request, nil for no error.
-    func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: Any]?, parameters: [String: Any]?,
+    func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: Any]?, parameters: [String: String]?,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
         #if DEBUG
@@ -327,6 +327,105 @@ final class DigiClient {
 
             let bookmarks = bookmarkJSONArray.flatMap { Bookmark(JSON: $0) }
             completion(bookmarks, nil)
+        }
+    }
+
+    /// Set bookmarks
+    ///
+    /// - Parameters:
+    ///   - locations: array of Locations type. If locations is nil than all bookmarks will be removed.
+    ///   - completion: The block called after the server has responded
+    ///   - error: The error returned
+    func setBookmarks(locations: [Location], completion: @escaping(_ error: Error?) -> Void) {
+
+        let method = Methods.UserBookmarks
+
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        var json: [String: Any] = [:]
+        var bookmarks: [[String: String]] = []
+
+        locations.forEach {
+            var bookmark: [String: String] = [:]
+            bookmark["path"] = $0.path
+            bookmark["mountId"] = $0.mount.id
+            bookmarks.append(bookmark)
+        }
+
+        json["bookmarks"] = bookmarks
+
+        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
+            guard error == nil else {
+                completion(error!)
+                return
+            }
+
+            if statusCode == 204 {
+                completion(nil)
+            } else {
+                completion(NetworkingError.wrongStatus("Status Code is different than 204."))
+            }
+        }
+    }
+
+    /// Add bookmark
+    ///
+    /// - Parameters:
+    ///   - location: Location of the bookmark
+    ///   - completion: The block called after the server has responded
+    ///   - error: The error returned
+    func addBookmark(location: Location, completion: @escaping(_ error: Error?) -> Void) {
+        let method = Methods.UserBookmarks
+
+        var headers = DefaultHeaders.PostHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        var json: [String: String] = [:]
+        json["path"] = location.path
+        json["mountId"] = location.mount.id
+
+        networkTask(requestType: "POST", method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
+            guard error == nil else {
+                completion(error!)
+                return
+            }
+
+            if statusCode == 201 {
+                completion(nil)
+            } else {
+                completion(NetworkingError.wrongStatus("Status Code is different than 204."))
+            }
+        }
+    }
+
+    /// Remove bookmark
+    ///
+    /// - Parameters:
+    ///   - location: Location of the bookmark
+    ///   - completion: The block called after the server has responded
+    ///   - error: The error returned
+    func removeBookmark(location: Location, completion: @escaping(_ error: Error?) -> Void) {
+        let method = Methods.UserBookmarks
+
+        var headers = DefaultHeaders.DelHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        var parameters: [String: String] = [:]
+        parameters["mountId"] = location.mount.id
+        parameters["path"] = location.path
+
+        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { _, statusCode, error in
+            guard error == nil else {
+                completion(error!)
+                return
+            }
+
+            if statusCode == 204 {
+                completion(nil)
+            } else {
+                completion(NetworkingError.wrongStatus("Status Code is different than 204."))
+            }
         }
     }
 
