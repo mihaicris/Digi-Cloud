@@ -33,7 +33,7 @@ extension Mount {
 
     var rootNode: Node {
         let location = Location(mount: self, path: "/")
-        return Node(name: "", type: "dir", modified: 0, size: 0, contentType: "", hash: nil, share: nil, link: nil, receiver: nil, parentLocation: location)
+        return Node(name: "", type: "dir", modified: 0, size: 0, contentType: "", hash: nil, share: nil, downloadLink: nil, uploadLink: nil, parentLocation: location)
     }
 
     static func == (lhs: Mount, rhs: Mount) -> Bool {

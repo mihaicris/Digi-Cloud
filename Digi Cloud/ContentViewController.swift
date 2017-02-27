@@ -9,15 +9,6 @@
 import UIKit
 import WebKit
 
-protocol ContentItem {
-    var name: String { get }
-    var location: Location { get }
-    var type: String { get }
-    var modified: TimeInterval { get }
-    var size: Int64 { get }
-    var contentType: String { get }
-}
-
 class ContentViewController: UIViewController {
 
     // MARK: - Properties

@@ -19,9 +19,9 @@ struct Node: ContentItem {
     let contentType: String
     let hash: String?
     let share: Mount?
-    let link: Link?
-    let receiver: Receiver?
-    var parentLocation: Location
+    var downloadLink: DownloadLink?
+    var uploadLink: UploadLink?
+    let parentLocation: Location
 }
 
 extension Node {
@@ -44,8 +44,8 @@ extension Node {
         self.contentType = contentType
         self.hash = JSON["hash"] as? String
         self.share = Mount(JSON: JSON["mount"])
-        self.link = Link(JSON: JSON["link"])
-        self.receiver = Receiver(JSON: JSON["receiver"])
+        self.downloadLink = DownloadLink(JSON: JSON["link"])
+        self.uploadLink = UploadLink(JSON: JSON["receiver"])
         self.parentLocation = parentLocation
     }
 }
@@ -68,6 +68,14 @@ extension Node {
             path = parentLocation.path + name + (type == "dir" ? "/" : "")
         }
         return Location(mount: parentLocation.mount, path: path )
+    }
+
+    mutating func updateNode(with link: Link?) {
+        if let link = link as? DownloadLink {
+            self.downloadLink = link
+        } else if let link = link as? UploadLink {
+            self.uploadLink = link
+        }
     }
 }
 

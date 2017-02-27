@@ -232,8 +232,8 @@ final class ListingViewController: UITableViewController {
             cell.delegate = self
             cell.hasButton = action == .noAction
             cell.isShared = item.share != nil
-            cell.hasDownloadLink = item.link != nil
-            cell.hasUploadLink = item.receiver != nil
+            cell.hasDownloadLink = item.downloadLink != nil
+            cell.hasUploadLink = item.uploadLink != nil
 
             cell.nameLabel.text = item.name
 
@@ -265,7 +265,7 @@ final class ListingViewController: UITableViewController {
 
             cell.delegate = self
             cell.hasButton = action == .noAction
-            cell.hasDownloadLink = item.link != nil
+            cell.hasDownloadLink = item.downloadLink != nil
 
             cell.nameLabel.text = item.name
 
@@ -710,7 +710,7 @@ final class ListingViewController: UITableViewController {
                 }
 
                 let newNode = Node(name: folderName, type: "dir", modified: 0, size: 0, contentType: "",
-                                   hash: nil, share: nil, link: nil, receiver: nil, parentLocation: self.node.location)
+                                   hash: nil, share: nil, downloadLink: nil, uploadLink: nil, parentLocation: self.node.location)
 
                 // Set needRefresh in this list
                 self.needRefresh = true

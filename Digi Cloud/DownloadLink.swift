@@ -1,14 +1,19 @@
 //
-//  Receiver.swift
+//  DownloadLink.swift
 //  Digi Cloud
 //
-//  Created by Mihai Cristescu on 15/02/2017.
+//  Created by Mihai Cristescu on 13/02/2017.
 //  Copyright © 2017 Mihai Cristescu. All rights reserved.
 //
 
 import Foundation
 
-struct Receiver {
+enum LinkType: String {
+    case download = "links"
+    case upload = "receivers"
+}
+
+struct DownloadLink: Link {
 
     // MARK: - Properties
 
@@ -24,10 +29,12 @@ struct Receiver {
     let password: String?
     let validFrom: TimeInterval?
     let validTo: TimeInterval?
-    let alert: Bool
+
+    // own property
+    let passwordRequired: Bool
 }
 
-extension Receiver {
+extension DownloadLink {
     init?(JSON: Any?) {
         if JSON == nil { return nil }
         guard let JSON = JSON as? [String: Any],
@@ -40,7 +47,7 @@ extension Receiver {
             let hash = JSON["hash"] as? String,
             let host = JSON["host"] as? String,
             let hasPassword = JSON["hasPassword"] as? Bool,
-            let alert = JSON["alert"] as? Bool
+            let passwordRequired = JSON["passwordRequired"] as? Bool
             else {
                 print("Couldnt parse JSON")
                 return nil
@@ -56,8 +63,8 @@ extension Receiver {
         self.host = host
         self.hasPassword = hasPassword
         self.password = JSON["password"] as? String
+        self.passwordRequired =  passwordRequired
         self.validFrom = JSON["validFrom"] as? TimeInterval
         self.validTo = JSON["validTo"] as? TimeInterval
-        self.alert =  alert
     }
 }

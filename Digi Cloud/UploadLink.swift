@@ -1,19 +1,14 @@
 //
-//  Link.swift
+//  UploadLink.swift
 //  Digi Cloud
 //
-//  Created by Mihai Cristescu on 13/02/2017.
+//  Created by Mihai Cristescu on 15/02/2017.
 //  Copyright © 2017 Mihai Cristescu. All rights reserved.
 //
 
 import Foundation
 
-enum LinkType: String {
-    case download = "links"
-    case upload = "receivers"
-}
-
-struct Link {
+struct UploadLink: Link {
 
     // MARK: - Properties
 
@@ -29,10 +24,12 @@ struct Link {
     let password: String?
     let validFrom: TimeInterval?
     let validTo: TimeInterval?
-    let passwordRequired: Bool
+
+    // own property
+    let alert: Bool
 }
 
-extension Link {
+extension UploadLink {
     init?(JSON: Any?) {
         if JSON == nil { return nil }
         guard let JSON = JSON as? [String: Any],
@@ -45,7 +42,7 @@ extension Link {
             let hash = JSON["hash"] as? String,
             let host = JSON["host"] as? String,
             let hasPassword = JSON["hasPassword"] as? Bool,
-            let passwordRequired = JSON["passwordRequired"] as? Bool
+            let alert = JSON["alert"] as? Bool
             else {
                 print("Couldnt parse JSON")
                 return nil
@@ -61,8 +58,8 @@ extension Link {
         self.host = host
         self.hasPassword = hasPassword
         self.password = JSON["password"] as? String
-        self.passwordRequired =  passwordRequired
         self.validFrom = JSON["validFrom"] as? TimeInterval
         self.validTo = JSON["validTo"] as? TimeInterval
+        self.alert =  alert
     }
 }

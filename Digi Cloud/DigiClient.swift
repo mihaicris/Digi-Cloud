@@ -723,7 +723,7 @@ final class DigiClient {
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func getLink(for node: Node, type: LinkType, completion: @escaping (_ link: Any?, _ error: Error?) -> Void) {
+    func getLink(for node: Node, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void) {
 
         let method = Methods.Links
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
@@ -743,14 +743,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = Link(JSON: json) else {
+                guard let link = DownloadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = Receiver(JSON: json) else {
+                guard let receiver = UploadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
@@ -763,13 +763,19 @@ final class DigiClient {
     ///
     /// - Parameters:
     ///   - node:        Source node
-    ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func setOrResetLinkPassword(node: Node, linkId: String, type: LinkType, completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
+    func setOrResetLinkPassword(node: Node, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
+        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
+       
+        guard linkId != "" else {
+            print("Invalid Node")
+            return
+        }
+        
         let method = Methods.LinkResetPassword
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -792,14 +798,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = Link(JSON: json) else {
+                guard let link = DownloadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = Receiver(JSON: json) else {
+                guard let receiver = UploadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
@@ -812,13 +818,19 @@ final class DigiClient {
     ///
     /// - Parameters:
     ///   - node:        Source node
-    ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
     ///   - completion:  Function to handle the status code and error response
-    ///   - link:        Returned Link (Link or Receiver)
+    ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func removeLinkPassword(node: Node, linkId: String, type: LinkType, completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
+    func removeLinkPassword(node: Node, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
+        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
+        
+        guard linkId != "" else {
+            print("Invalid Node")
+            return
+        }
+        
         let method = Methods.LinkRemovePassword
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -841,14 +853,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = Link(JSON: json) else {
+                guard let link = DownloadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = Receiver(JSON: json) else {
+                guard let receiver = UploadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
@@ -861,15 +873,21 @@ final class DigiClient {
     ///
     /// - Parameters:
     ///   - node:        Source node
-    ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
     ///   - hash:        custom hash of the url "http://s.go.ro/hash"
     ///   - completion:  Function to handle the status code and error response
-    ///   - link:        Returned Link (Link or Receiver)
+    ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func setLinkCustomShortUrl(node: Node, linkId: String, type: LinkType, hash: String,
-                               completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
+    func setLinkCustomShortUrl(node: Node, type: LinkType, hash: String,
+                               completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
+        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
+        
+        guard linkId != "" else {
+            print("Invalid Node")
+            return
+        }
+        
         let method = Methods.LinkCustomURL
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -898,14 +916,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = Link(JSON: json) else {
+                guard let link = DownloadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = Receiver(JSON: json) else {
+                guard let receiver = UploadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
@@ -919,12 +937,18 @@ final class DigiClient {
     /// - Parameters:
     ///   - alert:       true for email notifications
     ///   - node:        Sourrce node
-    ///   - linkId:      Link id
     ///   - completion:  Function to handle the status code and error response
-    ///   - link:        Returned Receiver with alert property updated
+    ///   - link:        Returned UploadLink with alert property updated
     ///   - error:       Networking error (nil if no error)
-    func setReceiverAlert(_ alert: Bool, node: Node, linkId: String, completion: @escaping (_ receiver: Receiver?, _ error: Error?) -> Void ) {
+    func setReceiverAlert(_ alert: Bool, node: Node, completion: @escaping (_ receiver: UploadLink?, _ error: Error?) -> Void ) {
 
+        let linkId = node.uploadLink?.id ?? ""
+        
+        guard linkId != "" else {
+            print("Invalid Node")
+            return
+        }
+        
         let method = Methods.LinkSetAlert
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkId}", with: linkId)
@@ -946,7 +970,7 @@ final class DigiClient {
                 return
             }
 
-            guard let receiver = Receiver(JSON: json) else {
+            guard let receiver = UploadLink(JSON: json) else {
                 completion(nil, JSONError.parse("Could not parce the JSON"))
                 return
             }
@@ -960,14 +984,20 @@ final class DigiClient {
     /// - Parameters:
     ///   - node:        Source node
     ///   - type:        Link type (.download or .upload)
-    ///   - linkId:      Link id
     ///   - validTo:     timeIntervalSince1970 (seconds)
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned link with validity updated
     ///   - error:       Networking error (nil if no error)
-    func setLinkCustomValidity(node: Node, type: LinkType, linkId: String, validTo: TimeInterval,
-                               completion: @escaping (_ link: Any?, _ error: Error?) -> Void ) {
+    func setLinkCustomValidity(node: Node, type: LinkType, validTo: TimeInterval,
+                               completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
+        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
+        
+        guard linkId != "" else {
+            print("Invalid Node")
+            return
+        }
+        
         let method = Methods.LinkValidity
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -992,14 +1022,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = Link(JSON: json) else {
+                guard let link = DownloadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = Receiver(JSON: json) else {
+                guard let receiver = UploadLink(JSON: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON"))
                     return
                 }
@@ -1013,11 +1043,17 @@ final class DigiClient {
     /// - Parameters:
     ///   - node:        Source node
     ///   - type:        Link type (.download or .upload)
-    ///   - linkId:      Link Id
     ///   - completion:  Function to handle the status code and error response
     ///   - error:       Networking error (nil if no error)
-    func deleteLink(node: Node, type: LinkType, linkId: String, completion: @escaping (_ error: Error?) -> Void ) {
+    func deleteLink(node: Node, type: LinkType, completion: @escaping (_ error: Error?) -> Void ) {
 
+        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
+        
+        guard linkId != "" else {
+            print("Invalid Node")
+            return
+        }
+        
         let method = Methods.LinkDelete
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -1041,5 +1077,4 @@ final class DigiClient {
             completion(nil)
         }
     }
-
 }

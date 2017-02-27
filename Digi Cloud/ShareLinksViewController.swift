@@ -15,12 +15,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     var onFinish: (() -> Void)?
 
     private let linkType: LinkType
-    private let node: Node
-    private var linkId: String?
+    
+    private var node: Node
+
     private var originalHash: String
     private var isSaving: Bool = false
-
-    private var result: Any?
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
@@ -112,9 +111,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         switch linkType {
         case .download:
-            self.originalHash = node.link?.hash ?? ""
+            self.originalHash = node.downloadLink?.hash ?? ""
         case .upload:
-            self.originalHash = node.receiver?.hash ?? ""
+            self.originalHash = node.uploadLink?.hash ?? ""
         }
 
         super.init(nibName: nil, bundle: nil)
@@ -368,12 +367,12 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         isSaving = true
 
-        guard let hash = hashTextField.text, let alinkId = linkId else {
+        guard let hash = hashTextField.text else {
             print("No hash")
             return
         }
 
-        DigiClient.shared.setLinkCustomShortUrl(node: self.node, linkId: alinkId, type: self.linkType, hash: hash) { _, error in
+        DigiClient.shared.setLinkCustomShortUrl(node: self.node, type: self.linkType, hash: hash) { _, error in
 
             guard error == nil else {
 
@@ -406,11 +405,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     @objc private func handleDelete() {
 
-        guard let linkId = self.linkId else {
-            return
-        }
-
-        DigiClient.shared.deleteLink(node: self.node, type: self.linkType, linkId: linkId) { (error) in
+        DigiClient.shared.deleteLink(node: self.node, type: self.linkType) { (error) in
             guard error == nil else {
                 print("Error at deletion of the link.")
                 return
@@ -423,33 +418,26 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     @objc private func handleEnablePassword(_ sender: UISwitch) {
 
-        guard let linkId = self.linkId else {
-            return
-        }
-
         if sender.isOn {
             self.handleResetPassword()
         } else {
-            DigiClient.shared.removeLinkPassword(node: self.node, linkId: linkId, type: linkType) { (result, error) in
+            DigiClient.shared.removeLinkPassword(node: self.node, type: linkType) { (link, error) in
                 guard error == nil else {
                     print(error!.localizedDescription)
                     return
                 }
 
-                self.process(result)
+                self.node.updateNode(with: link)
+                self.updateValues(from: link)
             }
         }
     }
 
     @objc private func handleResetPassword() {
 
-        guard let linkId = self.linkId else {
-            return
-        }
-
         startSpinning()
 
-        DigiClient.shared.setOrResetLinkPassword(node: self.node, linkId: linkId, type: linkType, completion: { (result, error) in
+        DigiClient.shared.setOrResetLinkPassword(node: self.node, type: linkType, completion: { (link, error) in
 
             self.stopSpinning()
 
@@ -458,7 +446,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
 
-            self.result = result
+            self.node.updateNode(with: link)
         })
     }
 
@@ -468,35 +456,30 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     private func requestLink() {
 
-        DigiClient.shared.getLink(for: self.node, type: self.linkType) { (result, error) in
+        DigiClient.shared.getLink(for: self.node, type: self.linkType) { (link, error) in
 
             guard error == nil else {
                 print(error!.localizedDescription)
                 return
             }
 
-            self.process(result)
+            self.node.updateNode(with: link)
+            self.updateValues(from: link)
         }
     }
 
-    private func process(_ result: Any?) {
-        if let link = result as? Link {
-            updateInformation(linkId: link.id, host: link.host, hash: link.hash, password: link.password)
-        } else if let receiver = result as? Receiver {
-            updateInformation(linkId: receiver.id, host: receiver.host, hash: receiver.hash, password: receiver.password)
-        } else {
-            print("Error: No valid link received.")
+    private func updateValues(from link: Link?) {
+
+        guard let link = link  else {
+            print("Nothing to do.")
+            return
         }
-    }
-
-    private func updateInformation(linkId: String, host: String, hash: String, password: String?) {
-
-        self.linkId = linkId
-        baseLinkLabel.text = String("\(host)/")
-        hashTextField.text = hash
-        originalHash = hash
-
-        if let password = password {
+            
+        baseLinkLabel.text = String("\(link.host)/")
+        hashTextField.text = link.hash
+        originalHash = link.hash
+        
+        if let password = link.password {
             passwordLabel.text = password
             enablePasswordSwitch.isOn = true
             passwordResetButton.alpha = 1.0
@@ -505,6 +488,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             enablePasswordSwitch.isOn = false
             passwordResetButton.alpha = 0.0
         }
+        
+
     }
 
     private func startSpinning() {
@@ -529,7 +514,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 } else if (options != .curveEaseOut) {
                     self.spinWithOptions(options: .curveEaseOut)
                 } else {
-                    self.process(self.result)
+                    let link: Link? = self.linkType == .download ? self.node.downloadLink : self.node.uploadLink
+                    self.updateValues(from: link)
                 }
             }
         }
