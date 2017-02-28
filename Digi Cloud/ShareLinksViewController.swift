@@ -76,6 +76,14 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return sw
     }()
 
+    private let uploadNotificationSwitch: UISwitch = {
+        let sw = UISwitch()
+        sw.translatesAutoresizingMaskIntoConstraints = false
+        sw.isOn = false
+        sw.addTarget(self, action: #selector(handleToggleEmailNotification(_:)), for: .valueChanged)
+        return sw
+    }()
+
     private let passwordLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -186,7 +194,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return linkType == .download ? 3 : 4
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -200,6 +208,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             headerTitle = NSLocalizedString("PASSWORD", comment: "")
         case 2:
             headerTitle = NSLocalizedString("VALIDITY", comment: "")
+        case 3:
+            headerTitle = NSLocalizedString("NOTIFICATION", comment: "")
         default:
             fatalError("Wrong section index")
         }
@@ -228,7 +238,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return validityDateAndTimePicker.isHidden == false  && indexPath.section == 2 ? 100 : UITableViewAutomaticDimension
+        return validityDateAndTimePicker.isHidden == false  && indexPath.section == 2 ? 150 : UITableViewAutomaticDimension
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -300,6 +310,25 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 validityDateAndTimePicker.heightAnchor.constraint(equalTo: cell.contentView.heightAnchor),
                 saveCustomDateButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
                 saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
+
+        case 3:
+
+            let label: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.text = NSLocalizedString("Send email when receiving files", comment: "")
+                return l
+            }()
+
+            cell.contentView.addSubview(label)
+            cell.contentView.addSubview(uploadNotificationSwitch)
+
+            NSLayoutConstraint.activate([
+                label.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                uploadNotificationSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                uploadNotificationSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
             ])
 
         default:
@@ -608,6 +637,22 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         saveCustomDateButton.isHidden = true
 
         saveCustomValidationDate(validTo: validTo)
+    }
+
+    @objc private func handleToggleEmailNotification(_ sender: UISwitch) {
+
+        resetAllFields()
+
+        DigiClient.shared.setReceiverAlert(sender.isOn, node: self.node) { link, error in
+
+            guard error == nil else {
+                sender.setOn(!sender.isOn, animated: true)
+                print(error!.localizedDescription)
+                return
+            }
+
+            self.node.updateNode(with: link)
+        }
     }
 
     private func setDateAndTimePickerViewVisible(_ visible: Bool) {
