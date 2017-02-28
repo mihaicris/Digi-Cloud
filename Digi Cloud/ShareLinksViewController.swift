@@ -679,12 +679,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 print(error!.localizedDescription)
                 return
             }
-
-            self.changeValidityButton.isHidden = false
-            self.validityLabel.isHidden = false
-            self.validitySegmentedControl.isHidden = true
-            self.saveCustomDateButton.isHidden = true
-
+            self.resetAllFields()
             self.node.updateNode(with: link)
         }
     }
