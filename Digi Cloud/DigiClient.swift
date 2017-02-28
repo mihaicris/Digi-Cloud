@@ -770,12 +770,12 @@ final class DigiClient {
     func setOrResetLinkPassword(node: Node, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-       
+
         guard linkId != "" else {
             print("Invalid Node")
             return
         }
-        
+
         let method = Methods.LinkResetPassword
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -825,12 +825,12 @@ final class DigiClient {
     func removeLinkPassword(node: Node, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-        
+
         guard linkId != "" else {
             print("Invalid Node")
             return
         }
-        
+
         let method = Methods.LinkRemovePassword
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -882,12 +882,12 @@ final class DigiClient {
                                completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-        
+
         guard linkId != "" else {
             print("Invalid Node")
             return
         }
-        
+
         let method = Methods.LinkCustomURL
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -943,12 +943,12 @@ final class DigiClient {
     func setReceiverAlert(_ alert: Bool, node: Node, completion: @escaping (_ receiver: UploadLink?, _ error: Error?) -> Void ) {
 
         let linkId = node.uploadLink?.id ?? ""
-        
+
         guard linkId != "" else {
             print("Invalid Node")
             return
         }
-        
+
         let method = Methods.LinkSetAlert
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkId}", with: linkId)
@@ -988,16 +988,16 @@ final class DigiClient {
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned link with validity updated
     ///   - error:       Networking error (nil if no error)
-    func setLinkCustomValidity(node: Node, type: LinkType, validTo: TimeInterval,
+    func setLinkCustomValidity(node: Node, type: LinkType, validTo: TimeInterval?,
                                completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-        
+
         guard linkId != "" else {
             print("Invalid Node")
             return
         }
-        
+
         let method = Methods.LinkValidity
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
@@ -1006,7 +1006,11 @@ final class DigiClient {
         var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let json = ["validTo": validTo * 1000]
+        var json: [String: Any] = ["validFrom": NSNull(), "validTo": NSNull()]
+
+        if let validTo = validTo {
+            json["validTo"] = validTo * 1000
+        }
 
         networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
@@ -1048,12 +1052,12 @@ final class DigiClient {
     func deleteLink(node: Node, type: LinkType, completion: @escaping (_ error: Error?) -> Void ) {
 
         let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-        
+
         guard linkId != "" else {
             print("Invalid Node")
             return
         }
-        
+
         let method = Methods.LinkDelete
             .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)

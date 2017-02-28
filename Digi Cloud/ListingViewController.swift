@@ -36,9 +36,6 @@ final class ListingViewController: UITableViewController {
 
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.dateStyle = .medium
-        f.timeStyle = .none
-        f.locale = Locale.current
         f.dateFormat = "dd.MM.YYY・HH:mm"
         return f
     }()

@@ -15,11 +15,17 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     var onFinish: (() -> Void)?
 
     private let linkType: LinkType
-    
-    private var node: Node
+    private var node: Node {
+        didSet {
+            if !isAnimatingReset {
+                self.updateValues()
+            }
+        }
+    }
 
-    private var originalHash: String
+    private var originalLinkHash: String
     private var isSaving: Bool = false
+    private var isAnimatingReset: Bool = false
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
@@ -28,6 +34,14 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         t.delegate = self
         t.dataSource = self
         return t
+    }()
+
+    private var spinner: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView()
+        ai.translatesAutoresizingMaskIntoConstraints = false
+        ai.activityIndicatorViewStyle = .gray
+        ai.hidesWhenStopped = true
+        return ai
     }()
 
     let baseLinkLabel: UILabelWithPadding = {
@@ -50,7 +64,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         b.setTitle(NSLocalizedString("Save", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         b.addTarget(self, action: #selector(handleSaveShortURL), for: .touchUpInside)
-        b.alpha = 0
+        b.isHidden = true
         return b
     }()
 
@@ -85,7 +99,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return l
     }()
 
-    private let validityChangeButton: UIButton = {
+    private let changeValidityButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Change", comment: ""), for: .normal)
@@ -94,13 +108,47 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return b
     }()
 
-    private lazy var validityButtonsStackView: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
+    private let saveCustomDateButton: UIButton = {
+        let b = UIButton(type: .system)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitle(NSLocalizedString("Save", comment: ""), for: .normal)
+        b.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        b.addTarget(self, action: #selector(handleSaveCustomDate), for: .touchUpInside)
+        b.isHidden = true
+        return b
     }()
 
-    private var animating: Bool = false
+    private let validityDateAndTimePicker: UIDatePicker = {
+        let dp = UIDatePicker()
+        dp.translatesAutoresizingMaskIntoConstraints = false
+        dp.locale = .current
+        dp.datePickerMode = .dateAndTime
+        dp.minuteInterval = 30
+        dp.addTarget(self, action: #selector(handleValidateCustomDate(_:)), for: .valueChanged)
+        dp.isHidden = true
+        return dp
+    }()
+
+    private lazy var validitySegmentedControl: UISegmentedControl = {
+        let sc = UISegmentedControl(items: [
+            NSLocalizedString("1 hour", comment: ""),
+            NSLocalizedString("1 day", comment: ""),
+            NSLocalizedString("1 Month", comment: ""),
+            NSLocalizedString("Forever", comment: ""),
+            NSLocalizedString("Custom", comment: "")
+        ])
+        sc.translatesAutoresizingMaskIntoConstraints = false
+        sc.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12)], for: .normal)
+        sc.addTarget(self, action: #selector(handleValiditySelectorValueChanged(_:)), for: .valueChanged)
+        sc.isHidden = true
+        return sc
+    }()
+
+    private var dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateFormat = "dd.MM.YYY・HH:mm"
+        return df
+    }()
 
     // MARK: - Initializers and Deinitializers
 
@@ -111,9 +159,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         switch linkType {
         case .download:
-            self.originalHash = node.downloadLink?.hash ?? ""
+            self.originalLinkHash = node.downloadLink?.hash ?? ""
         case .upload:
-            self.originalHash = node.uploadLink?.hash ?? ""
+            self.originalLinkHash = node.uploadLink?.hash ?? ""
         }
 
         super.init(nibName: nil, bundle: nil)
@@ -133,6 +181,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        updateValues()
         requestLink()
     }
 
@@ -158,8 +207,28 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return headerTitle
     }
 
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+
+        guard section == 0 else { return "" }
+        var title: String = ""
+        var counter: Int = 0
+        if linkType == .download {
+            counter = self.node.downloadLink?.counter ?? 0
+            title += NSLocalizedString("Views: ", comment: "")
+        } else {
+            counter = self.node.uploadLink?.counter ?? 0
+            title += NSLocalizedString("Received: ", comment: "")
+        }
+        title += String(counter)
+        return title
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return validityDateAndTimePicker.isHidden == false  && indexPath.section == 2 ? 100 : UITableViewAutomaticDimension
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -178,15 +247,18 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             NSLayoutConstraint.activate([
                 baseLinkLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 baseLinkLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                baseLinkLabel.heightAnchor.constraint(equalToConstant: 30),
 
                 saveHashButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 saveHashButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
 
+                hashTextField.leadingAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.trailingAnchor),
+                hashTextField.trailingAnchor.constraint(equalTo: saveHashButton.leadingAnchor, constant: -8),
                 hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                hashTextField.trailingAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
-                hashTextField.heightAnchor.constraint(equalToConstant: 30),
-                hashTextField.leadingAnchor.constraint(equalTo: baseLinkLabel.trailingAnchor)
+                hashTextField.heightAnchor.constraint(equalToConstant: 30)
             ])
+
+            hashTextField.setContentHuggingPriority(249, for: .horizontal)
 
         case 1:
             // PASSWORD
@@ -208,13 +280,26 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             // VALIDITY
 
             cell.contentView.addSubview(validityLabel)
-            cell.contentView.addSubview(validityChangeButton)
+            cell.contentView.addSubview(changeValidityButton)
+            cell.contentView.addSubview(validitySegmentedControl)
+            cell.contentView.addSubview(validityDateAndTimePicker)
+            cell.contentView.addSubview(saveCustomDateButton)
+            cell.contentView.addSubview(spinner)
 
             NSLayoutConstraint.activate([
                 validityLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
                 validityLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                validityChangeButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
-                validityChangeButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+                changeValidityButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                changeValidityButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                validitySegmentedControl.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validitySegmentedControl.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                spinner.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                spinner.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                validityDateAndTimePicker.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validityDateAndTimePicker.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                validityDateAndTimePicker.heightAnchor.constraint(equalTo: cell.contentView.heightAnchor),
+                saveCustomDateButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
             ])
 
         default:
@@ -227,18 +312,22 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     // MARK: - UItextFieldDelegate Conformance
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        setDateAndTimePickerViewVisible(false)
+        validityLabel.isHidden = false
+        changeValidityButton.isHidden = false
+        validitySegmentedControl.isHidden = true
+        saveCustomDateButton.isHidden = true
         textField.backgroundColor = UIColor(red: 217/255, green: 239/255, blue: 173/255, alpha: 1.0)
-
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        saveHashButton.alpha = 0.0
+        saveHashButton.isHidden = true
         textField.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         if !isSaving {
-            hashTextField.text = originalHash
+            hashTextField.text = originalLinkHash
         }
         return true
     }
@@ -249,16 +338,16 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         let textFieldText: NSString = (textField.text ?? "") as NSString
         let newHash = textFieldText.replacingCharacters(in: range, with: string)
 
-        if newHash.characters.count == 0 || newHash == originalHash || hasInvalidCharacters(name: newHash) {
-            saveHashButton.alpha = 0.0
+        if newHash.characters.count == 0 || newHash == originalLinkHash || hasInvalidCharacters(name: newHash) {
+            saveHashButton.isHidden = true
         } else {
-            saveHashButton.alpha = 1.0
+            saveHashButton.isHidden = false
         }
         return true
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if saveHashButton.alpha == 1.0 {
+        if saveHashButton.isHidden == false {
             handleSaveShortURL()
             return true
         } else {
@@ -372,7 +461,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             return
         }
 
-        DigiClient.shared.setLinkCustomShortUrl(node: self.node, type: self.linkType, hash: hash) { _, error in
+        DigiClient.shared.setLinkCustomShortUrl(node: self.node, type: self.linkType, hash: hash) { link, error in
 
             guard error == nil else {
 
@@ -392,14 +481,13 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
             self.isSaving = false
-            self.originalHash = hash
-            self.saveHashButton.alpha = 0.0
-            self.hashTextField.resignFirstResponder()
+            self.originalLinkHash = hash
+            self.node.updateNode(with: link)
         }
     }
 
     @objc private func handleCancelChangeShortURL() {
-        hashTextField.text = self.originalHash
+        hashTextField.text = self.originalLinkHash
         self.hashTextField.resignFirstResponder()
     }
 
@@ -418,40 +506,150 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     @objc private func handleEnablePassword(_ sender: UISwitch) {
 
+        resetAllFields()
+
+        startSpinning()
+
         if sender.isOn {
             self.handleResetPassword()
         } else {
             DigiClient.shared.removeLinkPassword(node: self.node, type: linkType) { (link, error) in
+
                 guard error == nil else {
+                    self.stopSpinning()
+                    sender.setOn(true, animated: true)
                     print(error!.localizedDescription)
                     return
                 }
 
                 self.node.updateNode(with: link)
-                self.updateValues(from: link)
+
+                self.stopSpinning()
+
             }
         }
     }
 
     @objc private func handleResetPassword() {
 
+        resetAllFields()
         startSpinning()
 
         DigiClient.shared.setOrResetLinkPassword(node: self.node, type: linkType, completion: { (link, error) in
 
+            guard error == nil else {
+                self.stopSpinning()
+                print(error!.localizedDescription)
+                return
+            }
+
+            self.node.updateNode(with: link)
             self.stopSpinning()
+        })
+    }
+
+    @objc private func handleChangeValidity() {
+
+        resetAllFields()
+
+        validityLabel.isHidden = true
+        changeValidityButton.isHidden = true
+        validitySegmentedControl.isHidden = false
+        validitySegmentedControl.selectedSegmentIndex = UISegmentedControlNoSegment
+    }
+
+    @objc private func handleValiditySelectorValueChanged(_ sender: UISegmentedControl) {
+
+        var validTo: TimeInterval?
+        let calendarComponent: Calendar.Component?
+
+        switch sender.selectedSegmentIndex {
+        case 0:
+            calendarComponent = .hour
+        case 1:
+            calendarComponent = .day
+        case 2:
+            calendarComponent = .month
+        case 3:
+            calendarComponent = nil
+        case 4:
+            validitySegmentedControl.isHidden = true
+            setDateAndTimePickerViewVisible(true)
+            return
+        default:
+            return
+        }
+
+        if let calendarComponent = calendarComponent,
+            let date = Calendar.current.date(byAdding: calendarComponent, value: 1, to: Date()) {
+            validTo = date.timeIntervalSince1970
+        }
+
+        saveCustomValidationDate(validTo: validTo)
+    }
+
+    @objc private func handleValidateCustomDate(_ sender: UIDatePicker) {
+
+        let customDate = sender.date
+        let minimumDate = Calendar.current.date(byAdding: .minute, value: 30, to: Date())!
+
+        if customDate < minimumDate {
+            saveCustomDateButton.isHidden = true
+        } else {
+            saveCustomDateButton.isHidden = false
+        }
+    }
+
+    @objc private func handleSaveCustomDate() {
+
+        let customDate = validityDateAndTimePicker.date
+        let validTo = customDate.timeIntervalSince1970
+
+        saveCustomDateButton.isHidden = true
+
+        saveCustomValidationDate(validTo: validTo)
+    }
+
+    private func setDateAndTimePickerViewVisible(_ visible: Bool) {
+
+        if visible {
+            validityDateAndTimePicker.minimumDate = Date()
+            validityDateAndTimePicker.isHidden = false
+        } else {
+            validityDateAndTimePicker.isHidden = true
+        }
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+
+    private func saveCustomValidationDate(validTo: TimeInterval?) {
+
+        self.spinner.startAnimating()
+
+        DigiClient.shared.setLinkCustomValidity(node: self.node, type: linkType, validTo: validTo) { link, error in
+
+            self.spinner.stopAnimating()
 
             guard error == nil else {
                 print(error!.localizedDescription)
                 return
             }
 
+            self.changeValidityButton.isHidden = false
+            self.validityLabel.isHidden = false
+            self.validitySegmentedControl.isHidden = true
+            self.saveCustomDateButton.isHidden = true
+
             self.node.updateNode(with: link)
-        })
+        }
     }
 
-    @objc private func handleChangeValidity() {
-        // TODO: Implement
+    private func resetAllFields() {
+        hashTextField.resignFirstResponder()
+        setDateAndTimePickerViewVisible(false)
+        validityLabel.isHidden = false
+        changeValidityButton.isHidden = false
+        validitySegmentedControl.isHidden = true
     }
 
     private func requestLink() {
@@ -464,58 +662,62 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             }
 
             self.node.updateNode(with: link)
-            self.updateValues(from: link)
         }
     }
 
-    private func updateValues(from link: Link?) {
+    private func updateValues() {
 
-        guard let link = link  else {
-            print("Nothing to do.")
+        guard let link: Link = linkType == .download ? self.node.downloadLink : self.node.uploadLink else {
+            print("No valid link found.")
             return
         }
-            
+
+        hashTextField.resignFirstResponder()
         baseLinkLabel.text = String("\(link.host)/")
         hashTextField.text = link.hash
-        originalHash = link.hash
-        
+        originalLinkHash = link.hash
+
         if let password = link.password {
             passwordLabel.text = password
             enablePasswordSwitch.isOn = true
-            passwordResetButton.alpha = 1.0
+            passwordResetButton.isHidden = false
         } else {
             passwordLabel.text =  NSLocalizedString("The link is public", comment: "")
             enablePasswordSwitch.isOn = false
-            passwordResetButton.alpha = 0.0
+            passwordResetButton.isHidden = true
         }
-        
 
+        if let validTo = link.validTo {
+            let date = Date(timeIntervalSince1970: validTo / 1000)
+            validityLabel.text = dateFormatter.string(from: date)
+        } else {
+            validityLabel.text = NSLocalizedString("Link has no expiration date", comment: "")
+        }
     }
 
     private func startSpinning() {
-        if(!animating) {
-            animating = true
+        if(!isAnimatingReset) {
+            isAnimatingReset = true
             spinWithOptions(options: .curveEaseIn)
         }
     }
 
     private func stopSpinning() {
-        animating = false
+        isAnimatingReset = false
     }
 
     func spinWithOptions(options: UIViewAnimationOptions) {
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: options, animations: { () -> Void in
+        UIView.animate(withDuration: 0.5, delay: 0, options: options, animations: { () -> Void in
             let val: CGFloat = CGFloat(Double.pi)
             self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
         }) { (finished: Bool) -> Void in
             if(finished) {
-                if(self.animating) {
+                if(self.isAnimatingReset) {
                     self.spinWithOptions(options: .curveLinear)
                 } else if (options != .curveEaseOut) {
                     self.spinWithOptions(options: .curveEaseOut)
                 } else {
-                    let link: Link? = self.linkType == .download ? self.node.downloadLink : self.node.uploadLink
-                    self.updateValues(from: link)
+                    self.updateValues()
                 }
             }
         }
