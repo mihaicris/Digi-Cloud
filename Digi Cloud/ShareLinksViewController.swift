@@ -478,7 +478,36 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     @objc private func handleSend() {
-        // TODO: Implement
+        
+        let alink: Link? = linkType == .download ? self.node.downloadLink : self.node.uploadLink
+        
+        guard let link = alink else {
+            print("No valid link")
+            return
+        }
+        
+        let title = NSLocalizedString("Digi Storage file share", comment: "")
+        var content: String
+            
+        if linkType == .download {
+            content = NSLocalizedString("I am sending you a download link:", comment: "")
+        } else {
+            content = NSLocalizedString("I am sending you an upload link:", comment: "")
+        }
+        
+        content += " \(link.shortUrl)\n"
+        
+        if let password = link.password {
+            content += NSLocalizedString("Password is: ", comment: "")
+            content += password
+        }
+        
+        let controller = UIActivityViewController(activityItems: [content], applicationActivities: nil)
+        controller.setValue(title, forKey: "subject")
+        controller.excludedActivityTypes = nil
+        controller.modalPresentationStyle = .popover
+        controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(controller, animated: true, completion: nil)
     }
 
     @objc private func handleSaveShortURL() {
