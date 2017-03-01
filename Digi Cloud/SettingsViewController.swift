@@ -212,6 +212,7 @@ class SettingsViewController: UITableViewController {
                     controller.activityIndicator.startAnimating()
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    navController.viewControllers = []
                     navController.onLogout?()
                 }
             })
