@@ -348,14 +348,11 @@ final class ListingViewController: UITableViewController {
         tableView.allowsMultipleSelectionDuringEditing = true
 
         refreshControl = UIRefreshControl()
-        setRefreshControlTitle(started: false)
         refreshControl?.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
-
         tableView.register(FileCell.self, forCellReuseIdentifier: fileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: folderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
-
     }
 
     private func setupViews() {
@@ -397,18 +394,6 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This directory", comment: ""),
                                                         NSLocalizedString("Everywhere", comment: "")]
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
-    }
-
-    private func setRefreshControlTitle(started: Bool) {
-        let title: String
-        let attributes: [String: Any] = [NSFontAttributeName: UIFont(name: "Helvetica", size: 10) as Any,
-                                         NSForegroundColorAttributeName: UIColor.init(white: 0.2, alpha: 1.0)as Any]
-        if started {
-            title = NSLocalizedString("Refreshing ...", comment: "")
-        } else {
-            title = NSLocalizedString("Pull to refresh this directory", comment: "")
-        }
-        refreshControl?.attributedTitle = NSAttributedString(string: title, attributes: attributes)
     }
 
     fileprivate func updateContent() {
@@ -500,7 +485,6 @@ final class ListingViewController: UITableViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 self.updateMessageForEmptyFolder()
                 self.tableView.reloadData()
-                self.setRefreshControlTitle(started: false)
             }
         }
     }
@@ -746,7 +730,6 @@ final class ListingViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
-        setRefreshControlTitle(started: true)
         self.updateContent()
     }
 
