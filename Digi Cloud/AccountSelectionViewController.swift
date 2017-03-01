@@ -134,10 +134,8 @@ class AccountSelectionViewController: UIViewController,
         super.viewDidLoad()
         accountsCollectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
         setupViews()
-        fetchAccountsFromKeychain()
-        finalizeViews()
-        fetchAccountsInfo()
-        fetchProfileImagesfromGravatar()
+        getAccountsFromKeychain()
+        updateAccounts()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -263,7 +261,7 @@ class AccountSelectionViewController: UIViewController,
 
     }
 
-    private func finalizeViews() {
+    private func updateViews() {
         if accounts.count == 0 {
             loginToAnotherAccountButton.removeFromSuperview()
             manageAccountsButton.removeFromSuperview()
@@ -278,6 +276,7 @@ class AccountSelectionViewController: UIViewController,
             noAccountsLabel.isHidden = true
             loginToAnotherAccountButton.isHidden = false
         }
+        self.accountsCollectionView.reloadData()
     }
 
     @objc private func handleShowLogin() {
@@ -290,8 +289,7 @@ class AccountSelectionViewController: UIViewController,
 
         controller.onSuccess = { [weak self] account in
             self?.dismiss(animated: true) {
-                self?.fetchAccountsFromKeychain()
-
+                self?.getAccountsFromKeychain()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     self?.switchToAccount(account)
 
@@ -309,7 +307,7 @@ class AccountSelectionViewController: UIViewController,
         }
 
         controller.onFinish = { [weak self] in
-            self?.fetchAccountsFromKeychain()
+            self?.getAccountsFromKeychain()
             self?.dismiss(animated: true, completion: nil)
         }
 
@@ -320,39 +318,32 @@ class AccountSelectionViewController: UIViewController,
         present(navController, animated: true, completion: nil)
     }
 
-    func fetchAccountsFromKeychain() {
+    func getAccountsFromKeychain() {
         /*
          Make sure the collection view is up-to-date by first reloading the
          acocunts items from the keychain and then reloading the table view.
          */
         do {
             accounts = try Account.accountItems()
+            updateViews()
+
         } catch {
             fatalError("Error fetching account items - \(error)")
         }
     }
 
-    private func fetchAccountsInfo() {
+    private func updateAccounts() {
+
         let dispatchGroup = DispatchGroup()
         
         for account in accounts {
             dispatchGroup.enter()
+            dispatchGroup.enter()
+
             account.fetchAccountInfo {
                 dispatchGroup.leave()
             }
-        }
-        
-        dispatchGroup.notify(queue: DispatchQueue.main, execute: {
-            self.accountsCollectionView.reloadData()
-        })
-    }
-    
-    private func fetchProfileImagesfromGravatar() {
-        
-        let dispatchGroup = DispatchGroup()
-        
-        for account in accounts {
-            dispatchGroup.enter()
+            
             account.fetchProfileImage {
                 dispatchGroup.leave()
             }
@@ -362,7 +353,7 @@ class AccountSelectionViewController: UIViewController,
             self.accountsCollectionView.reloadData()
         })
     }
-
+    
     private func switchToAccount(_ account: Account) {
 
         spinner.startAnimating()

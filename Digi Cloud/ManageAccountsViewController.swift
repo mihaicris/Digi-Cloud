@@ -267,7 +267,7 @@ class ManageAccountsViewController: UITableViewController {
         self.tableView.setEditing(false, animated: true)
         self.updateButtonsToMatchTableState()
 
-        controller.fetchAccountsFromKeychain()
+        controller.getAccountsFromKeychain()
         controller.accountsCollectionView.reloadData()
     }
 
