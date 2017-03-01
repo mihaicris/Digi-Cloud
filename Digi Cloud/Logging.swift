@@ -9,7 +9,7 @@
 import Foundation
 
 public func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-    #if DEBUG_CONTROLLERS
+    #if DEBUG
         let queue = Thread.isMainThread ? "Main (UI)" : "Background"
         print("\n_____________________________________________________")
         print("File:        \((file as NSString).lastPathComponent)")
@@ -19,4 +19,32 @@ public func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ func
         print("\(object())")
         print("_____________________________________________________\n")
     #endif
+}
+
+func addressHeap<T: AnyObject>(o: T) -> Int {
+    return unsafeBitCast(o, to: Int.self)
+}
+
+public func INITLog(_ object: AnyObject) {
+    #if DEBUGCONTROLLERS
+        print(addressHeap(o: object), "✅", String(describing: type(of: object)))
+    #endif
+}
+
+public func DEINITLog(_ object: AnyObject) {
+    #if DEBUGCONTROLLERS
+        print(addressHeap(o: object), "❌", String(describing: type(of: object)))
+    #endif
+}
+
+func LogNSError(_ nserror: NSError) {
+    print("\n_____________________________________________________\n")
+    print("Domain: ", nserror.domain)
+    print("Code: ", nserror.code)
+    print("LocalizedDescription: ", nserror.localizedDescription, "\n")
+    print("LocalizedFailureReason: ", nserror.localizedFailureReason ?? "")
+    print("LocalizedRecoveryOption: ", nserror.localizedRecoveryOptions ?? "")
+    print("LocalizedRecoverySuggestion: ", nserror.localizedRecoverySuggestion ?? "", "\n")
+    for v in nserror.userInfo { print(v.0, ": ", v.1) }
+    print("_____________________________________________________\n")
 }

@@ -38,17 +38,14 @@ class NodeActionsViewController: UITableViewController {
     init(node: Node) {
         self.node = node
         super.init(style: .plain)
+        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    #if DEBUG_CONTROLLERS
-    deinit {
-        print("[DEINIT]: " + String(describing: type(of: self)))
-    }
-    #endif
+    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 

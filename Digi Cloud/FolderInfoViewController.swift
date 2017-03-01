@@ -66,11 +66,7 @@ class FolderInfoViewController: UITableViewController {
         super.init(style: .grouped)
     }
 
-    #if DEBUG_CONTROLLERS
-    deinit {
-        print("[DEINIT]: " + String(describing: type(of: self)))
-    }
-    #endif
+    deinit { DEINITLog(self) }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

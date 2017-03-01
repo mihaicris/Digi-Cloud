@@ -9,12 +9,24 @@
 import UIKit
 
 class FlowController {
-
+    
+    // MARK: - Properties
+    
     private var window: UIWindow
+    
+    // MARK: - Initializers and Deinitializers
 
     init(window: UIWindow) {
         self.window = window
+        INITLog(self)
     }
+
+    deinit { DEINITLog(self) }
+    
+    // MARK: - Overridden Methods and Properties
+    
+    
+    // MARK: - Helper Functions
 
     func rootController() -> UIViewController {
 
@@ -88,5 +100,4 @@ class FlowController {
             })
         })
     }
-
 }

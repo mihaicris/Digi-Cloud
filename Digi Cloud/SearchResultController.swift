@@ -31,15 +31,19 @@ class SearchResultController: UITableViewController {
     private var mountNames: [String: UIColor] = [:]
 
     // MARK: - Initializers and Deinitializers
+    
     init(node: Node) {
         self.node = node
         super.init(style: .plain)
+        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit { DEINITLog(self) }
+    
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

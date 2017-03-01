@@ -124,6 +124,10 @@ class AccountSelectionViewController: UIViewController,
         return b
     }()
 
+    // MARK: - Initializers and Deinitializers
+    
+    deinit { DEINITLog(self) }
+    
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

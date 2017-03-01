@@ -10,8 +10,10 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
 
+    // MARK: - Properties
+    
     private var isExecuting = false
-
+    
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -23,25 +25,31 @@ class SettingsViewController: UITableViewController {
         b.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.25, alpha: 1.0)
         return b
     }()
-
+    
     private let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
         f.allowsNonnumericFormatting = false
         return f
     }()
-
+    
     private var confirmButtonHorizontalConstraint: NSLayoutConstraint!
+
+    // MARK: - Initializers and Deinitializers
+    
+    deinit { DEINITLog(self) }
+    
+    // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = NSLocalizedString("Settings", comment: "")
     }
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case  0: return 2 // ABOUT THE APP
@@ -50,7 +58,7 @@ class SettingsViewController: UITableViewController {
         default: return 0
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:  return NSLocalizedString("ABOUT DIGI CLOUD", comment: "")
@@ -59,29 +67,29 @@ class SettingsViewController: UITableViewController {
         default: return nil
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         if section == 1 {
             let str = NSLocalizedString("Currently using:", comment: "")
-
+            
             var sizeString = NSLocalizedString("Error", comment: "")
-
+            
             if let size = FileManager.sizeOfFilesCacheDirectory() {
                 sizeString = byteFormatter.string(fromByteCount: Int64(size))
             }
-
+            
             return "\(str) \(sizeString)"
-
+            
         } else {
             return nil
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
         cell.selectionStyle = .none
-
+        
         switch indexPath.section {
         case 0:
             // About the app
@@ -97,7 +105,7 @@ class SettingsViewController: UITableViewController {
             default:
                 break
             }
-
+            
         case 1:
             // Data
             switch indexPath.row {
@@ -111,12 +119,12 @@ class SettingsViewController: UITableViewController {
                     s.addTarget(self, action: #selector(toggleAllowingCellularAccessSetting), for: .valueChanged)
                     return s
                 }()
-
+                
                 cell.contentView.addSubview(mobileDataUISwitch)
                 NSLayoutConstraint.activate([
                     mobileDataUISwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     mobileDataUISwitch.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor)
-                ])
+                    ])
             case 1:
                 // Clean cache
                 cell.textLabel?.text = NSLocalizedString("Clear Cache", comment: "")
@@ -124,28 +132,28 @@ class SettingsViewController: UITableViewController {
             default:
                 break
             }
-
+            
         case 2:
             // USER
             cell.textLabel?.text = NSLocalizedString("Logout", comment: "")
             cell.textLabel?.textColor = .defaultColor
             cell.contentView.addSubview(confirmButton)
-
+            
             confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
-
+            
             NSLayoutConstraint.activate([
                 confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
                 confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
                 confirmButtonHorizontalConstraint
-            ])
-
+                ])
+            
         default:
             return UITableViewCell()
         }
-
+        
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
@@ -164,6 +172,8 @@ class SettingsViewController: UITableViewController {
             break
         }
     }
+    
+    // MARK: - Helper Functions
 
     @objc private func toggleAllowingCellularAccessSetting() {
         AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess

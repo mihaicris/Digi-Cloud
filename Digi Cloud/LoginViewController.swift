@@ -79,11 +79,7 @@ class LoginViewController: UIViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    #if DEBUG
-    deinit {
-        print("[DEINIT]: " + String(describing: type(of: self)))
-    }
-    #endif
+    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 

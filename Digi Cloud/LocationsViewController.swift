@@ -17,6 +17,7 @@ class LocationsViewController: UITableViewController {
     private var mounts: [Mount] = []
     private let action: ActionType
     private var isUpdating: Bool = false
+    private var hasLoadedLocations: Bool = false
 
     let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
@@ -26,34 +27,19 @@ class LocationsViewController: UITableViewController {
         return ai
     }()
 
-    #if DEBUG_CONTROLLERS
-    let tag: Int
-    #endif
-
     // MARK: - Initializers and Deinitializers
 
     init(action: ActionType) {
         self.action = action
-
-        #if DEBUG_CONTROLLERS
-        count += 1
-        self.tag = count
-        print(self.tag, "✅", String(describing: type(of: self)), action)
-        #endif
-
         super.init(style: .grouped)
+        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    #if DEBUG_CONTROLLERS
-    deinit {
-        print(self.tag, "❌", String(describing: type(of: self)), action)
-        count -= 1
-    }
-    #endif
+    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 
@@ -66,9 +52,16 @@ class LocationsViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.getMounts()
+        if !hasLoadedLocations {
+            self.getMounts()
+        }
     }
-
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        DigiClient.shared.task?.cancel()
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -139,7 +132,8 @@ class LocationsViewController: UITableViewController {
 
     private func getMounts() {
 
-        self.isUpdating = true
+        isUpdating = true
+        hasLoadedLocations = false
 
         DigiClient.shared.getMounts { mountsList, error in
 
@@ -167,6 +161,8 @@ class LocationsViewController: UITableViewController {
             } else {
                 self.tableView.reloadData()
             }
+            
+            self.hasLoadedLocations = true
         }
     }
 

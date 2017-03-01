@@ -179,6 +179,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit { DEINITLog(self) }
+
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

@@ -94,7 +94,7 @@ final class DigiClient {
         }
 
         /* 2. Make the request */
-        task = session?.dataTask(with: request) { (data, response, error) in
+        task = session?.dataTask(with: request) { (data, response, error ) in
 
             DispatchQueue.main.async {
 
@@ -104,7 +104,22 @@ final class DigiClient {
 
                 /* GUARD: Was there an error? */
                 guard error == nil else {
-                    completion(nil, nil, NetworkingError.get("There was an error with your request: \(error!.localizedDescription)"))
+                    
+                    /* TODO: Implement error codes:
+                    
+                    -999  = Task was cancelled
+                    -1001 = Timed out
+                    
+                    */
+                    
+                    let nserror = error as! NSError
+                    
+                    LogNSError(nserror)
+                    
+                    if nserror.code == -999 /* Cancelled */ { return }
+
+                    completion(nil, nil, NetworkingError.get("There was an error with your request:\n\(nserror.localizedDescription)"))
+                    
                     return
                 }
 

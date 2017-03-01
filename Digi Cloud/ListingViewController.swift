@@ -8,8 +8,7 @@
 
 import UIKit
 
-#if DEBUG_CONTROLLERS
-    var count: Int = 0
+#if DEBUGCONTROLLERS
     var taskStarted: Int = 0
     var taskFinished: Int = 0
 #endif
@@ -121,33 +120,20 @@ final class ListingViewController: UITableViewController {
         return b
     }()
 
-    #if DEBUG_CONTROLLERS
-    let tag: Int
-    #endif
-
     // MARK: - Initializers and Deinitializers
 
     init(node: Node, action: ActionType) {
         self.action = action
         self.node = node
-        #if DEBUG_CONTROLLERS
-            count += 1
-            self.tag = count
-            print(self.tag, "✅", String(describing: type(of: self)), editAction)
-        #endif
         super.init(style: .plain)
+        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    #if DEBUG_CONTROLLERS
-    deinit {
-    print(self.tag, "❌", String(describing: type(of: self)), editAction)
-    count -= 1
-    }
-    #endif
+    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 
@@ -189,8 +175,6 @@ final class ListingViewController: UITableViewController {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         #endif
 
-        DigiClient.shared.task?.cancel()
-
         if tableView.isEditing {
             cancelEditMode()
         }
@@ -198,6 +182,11 @@ final class ListingViewController: UITableViewController {
         super.viewWillDisappear(animated)
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        DigiClient.shared.task?.cancel()
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return content.isEmpty ? 2 : content.count
     }
@@ -406,8 +395,9 @@ final class ListingViewController: UITableViewController {
             self.isUpdating = false
 
             guard error == nil else {
-
+                
                 switch error! {
+
                 case NetworkingError.wrongStatus(let message):
                     self.emptyFolderLabel.text = message
                     self.content.removeAll()
@@ -817,7 +807,7 @@ final class ListingViewController: UITableViewController {
 
         DigiClient.shared.copyOrMove(node: sourceNode, to: destinationLocation, action: self.action) { statusCode, error in
 
-            #if DEBUG_CONTROLLERS
+            #if DEBUGCONTROLLERS
                 print("Task \(taskFinished) finished")
                 taskFinished += 1
             #endif
@@ -864,7 +854,7 @@ final class ListingViewController: UITableViewController {
         didReceivedStatus400 = false
         didReceivedStatus404 = false
 
-        #if DEBUG_CONTROLLERS
+        #if DEBUGCONTROLLERS
             taskStarted = 0
             taskFinished = 0
         #endif

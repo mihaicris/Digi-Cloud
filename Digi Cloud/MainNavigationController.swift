@@ -10,6 +10,8 @@ import UIKit
 
 class MainNavigationController: UINavigationController {
 
+    // MARK: - Properties
+    
     // Closure called when user has logged out.
     var onLogout: (() -> Void)?
 
@@ -20,6 +22,10 @@ class MainNavigationController: UINavigationController {
     // The view controller index where the search controller has been initiated.
     // Following search actions will be routed to this view controller
     var searchResultsControllerIndex: Int?
+
+    // MARK: - Initializers and Deinitializers
+    
+    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 
