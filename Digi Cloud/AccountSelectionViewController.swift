@@ -135,9 +135,11 @@ class AccountSelectionViewController: UIViewController,
         accountsCollectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
         setupViews()
         fetchAccountsFromKeychain()
+        finalizeViews()
+        fetchAccountsInfo()
         fetchProfileImagesfromGravatar()
     }
-
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -325,30 +327,40 @@ class AccountSelectionViewController: UIViewController,
          */
         do {
             accounts = try Account.accountItems()
-
-            finalizeViews()
-
-            let dispatchGroup = DispatchGroup()
-            accounts.forEach {
-                dispatchGroup.enter()
-                $0.fetchAccountInfo {
-                    dispatchGroup.leave()
-                }
-                dispatchGroup.notify(queue: DispatchQueue.main, execute: {
-                    self.accountsCollectionView.reloadData()
-                })
-            }
         } catch {
             fatalError("Error fetching account items - \(error)")
         }
     }
 
-    private func fetchProfileImagesfromGravatar() {
+    private func fetchAccountsInfo() {
+        let dispatchGroup = DispatchGroup()
+        
         for account in accounts {
-            account.fetchProfileImage {
-                self.accountsCollectionView.reloadData()
+            dispatchGroup.enter()
+            account.fetchAccountInfo {
+                dispatchGroup.leave()
             }
         }
+        
+        dispatchGroup.notify(queue: DispatchQueue.main, execute: {
+            self.accountsCollectionView.reloadData()
+        })
+    }
+    
+    private func fetchProfileImagesfromGravatar() {
+        
+        let dispatchGroup = DispatchGroup()
+        
+        for account in accounts {
+            dispatchGroup.enter()
+            account.fetchProfileImage {
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: DispatchQueue.main, execute: {
+            self.accountsCollectionView.reloadData()
+        })
     }
 
     private func switchToAccount(_ account: Account) {
