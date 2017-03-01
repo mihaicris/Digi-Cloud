@@ -109,7 +109,8 @@ final class DigiClient {
                     
                     -999  = Task was cancelled
                     -1001 = Timed out
-                    
+                    -1009 = The internet connection appears to be offline
+                     
                     */
                     
                     let nserror = error as! NSError

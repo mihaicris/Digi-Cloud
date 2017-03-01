@@ -183,8 +183,8 @@ final class ListingViewController: UITableViewController {
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
         DigiClient.shared.task?.cancel()
+        super.viewDidDisappear(animated)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -385,17 +385,33 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
     }
 
+    
+    private func presentError() {
+
+        self.busyIndicator.stopAnimating()
+        self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
+
+        let message = NSLocalizedString("There was an error refreshing the location.", comment: "")
+        let title = NSLocalizedString("Error", comment: "")
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     fileprivate func updateContent() {
 
-        self.needRefresh = false
-        self.isUpdating = true
-
+        needRefresh = false
+        isUpdating = true
+        didReceivedNetworkError = false
+       
         DigiClient.shared.getBundle(for: node) { receivedContent, error in
 
             self.isUpdating = false
 
             guard error == nil else {
-                
+
+                self.didReceivedNetworkError = true
+
                 switch error! {
 
                 case NetworkingError.wrongStatus(let message):
@@ -403,18 +419,11 @@ final class ListingViewController: UITableViewController {
                     self.content.removeAll()
                     self.tableView.reloadData()
                 default:
-
-                    if !self.tableView.isDragging {
-                        let message = NSLocalizedString("There was an error refreshing the location.", comment: "")
-                        let title = NSLocalizedString("Error", comment: "")
-                        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                        self.present(alertController, animated: true, completion: nil)
+                    
+                    if self.tableView.isDragging {
+                        return
                     }
-                    self.busyIndicator.stopAnimating()
-                    self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
-
-                    print("Error: \(error!.localizedDescription)")
+                    self.presentError()
                 }
                 return
             }
@@ -448,11 +457,11 @@ final class ListingViewController: UITableViewController {
                     if self.tableView.isDragging {
                         return
                     } else {
-                        self.updateMessageForEmptyFolder()
+                        self.updateDirectoryMessage()
                         self.endRefreshAndReloadTable()
                     }
                 } else {
-                    self.updateMessageForEmptyFolder()
+                    self.updateDirectoryMessage()
 
                     // The content update is made while normal navigating through folders, in this case simply reload the table.
                     self.tableView.reloadData()
@@ -461,20 +470,24 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func updateMessageForEmptyFolder() {
-        // For the case when the folder is empty, setting the message text on screen.
-        if self.content.isEmpty {
-            busyIndicator.stopAnimating()
-            emptyFolderLabel.text = NSLocalizedString("Directory is Empty", comment: "")
-        }
+    fileprivate func updateDirectoryMessage() {
+        busyIndicator.stopAnimating()
+        emptyFolderLabel.text = NSLocalizedString("Directory is Empty", comment: "")
     }
 
     private func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.refreshControl?.endRefreshing()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                self.updateMessageForEmptyFolder()
-                self.tableView.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                
+                if self.didReceivedNetworkError {
+                   self.presentError()
+                    
+                } else {
+                    self.updateDirectoryMessage()
+                    self.tableView.reloadData()
+                }
+
             }
         }
     }
@@ -1157,7 +1170,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                         if success {
                             self.content.remove(at: self.currentIndex.row)
                             if self.content.count == 0 {
-                                self.updateMessageForEmptyFolder()
+                                self.updateDirectoryMessage()
                                 self.tableView.reloadData()
                             } else {
                                 self.tableView.deleteRows(at: [self.currentIndex], with: .left)
@@ -1230,7 +1243,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
                     case 200:
                         self.content.remove(at: self.currentIndex.row)
                         if self.content.isEmpty {
-                            self.updateMessageForEmptyFolder()
+                            self.updateDirectoryMessage()
                             self.tableView.reloadData()
                         } else {
                             self.tableView.deleteRows(at: [self.currentIndex], with: .left)

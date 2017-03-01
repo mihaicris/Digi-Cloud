@@ -57,9 +57,9 @@ class LocationsViewController: UITableViewController {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
