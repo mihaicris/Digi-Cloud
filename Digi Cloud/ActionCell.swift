@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ActionCell: UITableViewCell {
+final class ActionCell: UITableViewCell {
 
     // MARK: - Properties
 

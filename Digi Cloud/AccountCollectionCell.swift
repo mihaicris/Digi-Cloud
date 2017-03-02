@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AccountCollectionCell: UICollectionViewCell {
+final class AccountCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
 

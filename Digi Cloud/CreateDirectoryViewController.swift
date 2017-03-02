@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CreateDirectoryViewController: UITableViewController {
+final class CreateDirectoryViewController: UITableViewController {
 
     // MARK: - Properties
 

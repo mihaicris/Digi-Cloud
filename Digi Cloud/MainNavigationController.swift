@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainNavigationController: UINavigationController {
+final class MainNavigationController: UINavigationController {
 
     // MARK: - Properties
 

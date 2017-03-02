@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ManageAccountsViewController: UITableViewController {
+final class ManageAccountsViewController: UITableViewController {
 
     // MARK: - Properties
 

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LocationsViewController: UITableViewController {
+final class LocationsViewController: UITableViewController {
 
     // MARK: - Properties
 

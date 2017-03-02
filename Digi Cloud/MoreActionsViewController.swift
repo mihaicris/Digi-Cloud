@@ -14,7 +14,7 @@ enum MoreActions: Int {
     case sendUploadLink
 }
 
-class MoreActionsViewController: UITableViewController {
+final class MoreActionsViewController: UITableViewController {
 
     // MARK: - Properties
 

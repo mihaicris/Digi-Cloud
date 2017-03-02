@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UILabelWithPadding: UILabel {
+final class UILabelWithPadding: UILabel {
 
     let paddingTop: CGFloat
     let paddingLeft: CGFloat

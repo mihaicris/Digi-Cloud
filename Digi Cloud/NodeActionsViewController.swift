@@ -22,7 +22,7 @@ enum ActionType: Int {
     case sendUploadLink
 }
 
-class NodeActionsViewController: UITableViewController {
+final class NodeActionsViewController: UITableViewController {
 
     // MARK: - Properties
 

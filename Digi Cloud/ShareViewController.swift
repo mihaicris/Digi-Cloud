@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShareViewController: UITableViewController {
+final class ShareViewController: UITableViewController {
 
     // MARK: - Properties
 

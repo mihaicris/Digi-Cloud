@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AccountSelectionViewController: UIViewController,
+final class AccountSelectionViewController: UIViewController,
                                       UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // MARK: - Properties
 

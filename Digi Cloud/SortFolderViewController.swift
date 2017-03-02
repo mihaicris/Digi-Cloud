@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SortFolderViewController: UITableViewController {
+final class SortFolderViewController: UITableViewController {
 
     // MARK: - Properties
 

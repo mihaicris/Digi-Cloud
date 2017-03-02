@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AccountTableViewCell: UITableViewCell {
+final class AccountTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

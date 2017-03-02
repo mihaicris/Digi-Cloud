@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DeleteViewController: UITableViewController {
+final class DeleteViewController: UITableViewController {
 
     // MARK: - Properties
 

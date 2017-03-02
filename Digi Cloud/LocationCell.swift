@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LocationCell: UITableViewCell {
+final class LocationCell: UITableViewCell {
 
     // MARK: - Properties
 

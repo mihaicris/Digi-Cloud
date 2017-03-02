@@ -1083,7 +1083,7 @@ final class ListingViewController: UITableViewController {
 
     fileprivate func showShareViewController(node: Node) {
 
-        let onFinish: ()->Void = { [unowned self] in
+        let onFinish: () -> Void = { [unowned self] in
             self.dismiss(animated: true) {
                 self.updateContent()
                 if let navController = self.navigationController as? MainNavigationController {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RenameUtilitiesButton: UIButton {
+final class RenameUtilitiesButton: UIButton {
 
     // MARK: - Initializers and Deinitializers
 

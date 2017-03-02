@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchResultController: UITableViewController {
+final class SearchResultController: UITableViewController {
 
     // MARK: - Properties
     var filteredContent: [NodeHit] = []

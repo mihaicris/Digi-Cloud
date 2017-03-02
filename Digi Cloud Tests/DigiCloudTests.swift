@@ -9,7 +9,7 @@
 import XCTest
 @testable import Digi_Cloud
 
-class DigiCloudTests: XCTestCase {
+final class DigiCloudTests: XCTestCase {
 
     override func setUp() {
         super.setUp()

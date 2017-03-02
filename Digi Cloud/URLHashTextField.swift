@@ -8,7 +8,7 @@
 
 import UIKit
 
-class URLHashTextField: UITextField {
+final class URLHashTextField: UITextField {
 
     // MARK: - Initializers and Deinitializers
 

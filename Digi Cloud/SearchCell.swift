@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchCell: UITableViewCell {
+final class SearchCell: UITableViewCell {
 
     // MARK: - Properties
     var nodeIcon: UIImageView = {

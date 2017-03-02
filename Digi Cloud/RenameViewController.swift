@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class RenameViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: - Properties
 

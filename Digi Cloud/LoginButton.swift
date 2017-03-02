@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginButton: UIButton {
+final class LoginButton: UIButton {
 
     // MARK: - Initializers and Deinitializers
 

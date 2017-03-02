@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShareTableViewCell: UITableViewCell {
+final class ShareTableViewCell: UITableViewCell {
 
     // MARK: - Properties
 

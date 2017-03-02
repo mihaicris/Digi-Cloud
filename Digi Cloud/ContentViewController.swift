@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class ContentViewController: UIViewController {
+final class ContentViewController: UIViewController {
 
     // MARK: - Properties
 

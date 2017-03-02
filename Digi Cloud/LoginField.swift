@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginField: UITextField {
+final class LoginField: UITextField {
 
     // MARK: - Properties
 

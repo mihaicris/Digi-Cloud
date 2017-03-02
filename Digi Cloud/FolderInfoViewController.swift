@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FolderInfoViewController: UITableViewController {
+final class FolderInfoViewController: UITableViewController {
 
     // MARK: - Properties
 

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FileCell: BaseListCell {
+final class FileCell: BaseListCell {
 
     // MARK: - Properties
 

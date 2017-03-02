@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DirectoryCell: BaseListCell {
+final class DirectoryCell: BaseListCell {
 
     // MARK: - Properties
 
