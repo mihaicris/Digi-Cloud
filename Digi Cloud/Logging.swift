@@ -21,8 +21,9 @@ public func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ func
     #endif
 }
 
-func addressHeap<T: AnyObject>(o: T) -> Int {
-    return unsafeBitCast(o, to: Int.self)
+func addressHeap<T: AnyObject>(o: T) -> String {
+    let address = unsafeBitCast(o, to: Int.self)
+    return String(format: "%p", address)
 }
 
 public func INITLog(_ object: AnyObject) {
