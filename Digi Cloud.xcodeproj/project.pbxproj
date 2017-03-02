@@ -56,67 +56,6 @@
 		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
 		83CDFA2B1DD0BF8300BC1F57 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
 		83CE7A001DE45D77002212A9 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE79FF1DE45D77002212A9 /* Location.swift */; };
-		83CFC2AA1E66BB04005C0C77 /* CreateDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */; };
-		83CFC2AB1E66BB04005C0C77 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF241DE5C41E00987E1A /* CustomNavBar.swift */; };
-		83CFC2AC1E66BB04005C0C77 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsViewController.swift */; };
-		83CFC2AD1E66BB04005C0C77 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */; };
-		83CFC2AE1E66BB04005C0C77 /* AccountCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */; };
-		83CFC2AF1E66BB04005C0C77 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6B1D8FE26400ACE008 /* Mount.swift */; };
-		83CFC2B01E66BB04005C0C77 /* MoreActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BF27C81E438AB30019B1F7 /* MoreActionsViewController.swift */; };
-		83CFC2B11E66BB04005C0C77 /* UIViewController+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2521E1E3B4900413B36 /* UIViewController+DigiCloud.swift */; };
-		83CFC2B21E66BB04005C0C77 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
-		83CFC2B31E66BB04005C0C77 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */; };
-		83CFC2B41E66BB04005C0C77 /* UIView+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */; };
-		83CFC2B51E66BB04005C0C77 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */; };
-		83CFC2B61E66BB04005C0C77 /* URLHashTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */; };
-		83CFC2B71E66BB04005C0C77 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412A1D8B2264000EDBAE /* LoginViewController.swift */; };
-		83CFC2B81E66BB04005C0C77 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DB658C1DDF12C900A53440 /* LocationCell.swift */; };
-		83CFC2B91E66BB04005C0C77 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
-		83CFC2BA1E66BB04005C0C77 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */; };
-		83CFC2BB1E66BB04005C0C77 /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */; };
-		83CFC2BC1E66BB04005C0C77 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* LoginField.swift */; };
-		83CFC2BD1E66BB04005C0C77 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
-		83CFC2BE1E66BB04005C0C77 /* UIColor+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */; };
-		83CFC2BF1E66BB04005C0C77 /* UIApplication+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A8356C1E2E6A1500F347BD /* UIApplication+DigiCloud.swift */; };
-		83CFC2C01E66BB04005C0C77 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302319D1E559ECB001CDC00 /* Bookmark.swift */; };
-		83CFC2C11E66BB04005C0C77 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E631E25345500C8AE52 /* AccountTableViewCell.swift */; };
-		83CFC2C21E66BB04005C0C77 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6F1D900F9700ACE008 /* FileCell.swift */; };
-		83CFC2C31E66BB04005C0C77 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EC31461E2915A8009E12B6 /* SettingsViewController.swift */; };
-		83CFC2C41E66BB04005C0C77 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
-		83CFC2C51E66BB04005C0C77 /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D711D900FA700ACE008 /* DirectoryCell.swift */; };
-		83CFC2C61E66BB04005C0C77 /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAD1DB8D098006FF04A /* BaseListCell.swift */; };
-		83CFC2C71E66BB04005C0C77 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D1061E23A9B700E3D508 /* Account.swift */; };
-		83CFC2C81E66BB04005C0C77 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83164FEC1E03F473001048D7 /* SearchCell.swift */; };
-		83CFC2C91E66BB04005C0C77 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* Node.swift */; };
-		83CFC2CA1E66BB04005C0C77 /* UserDefaults+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */; };
-		83CFC2CB1E66BB04005C0C77 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */; };
-		83CFC2CC1E66BB04005C0C77 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE79FF1DE45D77002212A9 /* Location.swift */; };
-		83CFC2CD1E66BB04005C0C77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
-		83CFC2CE1E66BB04005C0C77 /* NodeHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F80E1E51EA7E00DE4453 /* NodeHit.swift */; };
-		83CFC2CF1E66BB04005C0C77 /* UIFont+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E5DB411E607EF30093634E /* UIFont+DigiCloud.swift */; };
-		83CFC2D01E66BB04005C0C77 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
-		83CFC2D11E66BB04005C0C77 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
-		83CFC2D21E66BB04005C0C77 /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
-		83CFC2D31E66BB04005C0C77 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */; };
-		83CFC2D41E66BB04005C0C77 /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994511DD09B340023FB5D /* SortFolderViewController.swift */; };
-		83CFC2D51E66BB04005C0C77 /* ShareLinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83873E571E5C3A6900D48E2A /* ShareLinksViewController.swift */; };
-		83CFC2D61E66BB04005C0C77 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */; };
-		83CFC2D71E66BB04005C0C77 /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF221DE59ED300987E1A /* ListingViewController.swift */; };
-		83CFC2D81E66BB04005C0C77 /* String+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830CCDD01E2FAA8A006E0846 /* String+DigiCloud.swift */; };
-		83CFC2D91E66BB04005C0C77 /* ActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994531DD0A1E90023FB5D /* ActionCell.swift */; };
-		83CFC2DA1E66BB04005C0C77 /* UploadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836731B81E53DCD3001EA961 /* UploadLink.swift */; };
-		83CFC2DB1E66BB04005C0C77 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */; };
-		83CFC2DC1E66BB04005C0C77 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B9F581D992BD7003DAF42 /* DigiClient.swift */; };
-		83CFC2DD1E66BB04005C0C77 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F8101E51FF2E00DE4453 /* DownloadLink.swift */; };
-		83CFC2DE1E66BB04005C0C77 /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
-		83CFC2DF1E66BB04005C0C77 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
-		83CFC2E01E66BB04005C0C77 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373DE031E321A690083D614 /* Cache.swift */; };
-		83CFC2E11E66BB04005C0C77 /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5832C4125BB550AC54A5C59 /* FlowController.swift */; };
-		83CFC2E41E66BB04005C0C77 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */; };
-		83CFC2E51E66BB04005C0C77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D39A1E13DCF4005258B3 /* Localizable.strings */; };
-		83CFC2E61E66BB04005C0C77 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
-		83CFC2E71E66BB04005C0C77 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D3951E13C781005258B3 /* InfoPlist.strings */; };
-		83CFC2E81E66BB04005C0C77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
 		83D281011D9D747A00D74661 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* LoginField.swift */; };
 		83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF221DE59ED300987E1A /* ListingViewController.swift */; };
 		83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF241DE5C41E00987E1A /* CustomNavBar.swift */; };
@@ -167,13 +106,13 @@
 		835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
 		83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeActionsViewController.swift; sourceTree = "<group>"; };
 		83562CAD1DB8D098006FF04A /* BaseListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseListCell.swift; sourceTree = "<group>"; };
+		835982771E680EDC00AA18C9 /* Digi Cloud.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Digi Cloud.plist"; sourceTree = "<group>"; };
 		835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLHashTextField.swift; sourceTree = "<group>"; };
 		836731B81E53DCD3001EA961 /* UploadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadLink.swift; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8370411C1D8B1DEE000EDBAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8370411F1D8B1DEE000EDBAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		837041211D8B1DEE000EDBAE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8370412A1D8B2264000EDBAE /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8370412B1D8B2264000EDBAE /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
@@ -200,8 +139,6 @@
 		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
 		83CE79FF1DE45D77002212A9 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		83CFC2EC1E66BB04005C0C77 /* Digi Cloud Compile Time.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud Compile Time.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		83CFC2ED1E66BB04005C0C77 /* Digi Cloud Compile Time.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Digi Cloud Compile Time.plist"; path = "/Users/mihaicris/cloned/digi-cloud/Digi Cloud Compile Time.plist"; sourceTree = "<absolute>"; };
 		83D281001D9D747A00D74661 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
 		83DADF221DE59ED300987E1A /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListingViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83DADF241DE5C41E00987E1A /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
@@ -214,7 +151,6 @@
 		83EF1D711D900FA700ACE008 /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryCell.swift; sourceTree = "<group>"; };
 		83F7EEFD1E369A7D0033F03D /* Digi Cloud Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Digi Cloud Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigiCloudTests.swift; sourceTree = "<group>"; };
-		83F7EF011E369A7D0033F03D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83F994511DD09B340023FB5D /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortFolderViewController.swift; sourceTree = "<group>"; };
 		83F994531DD0A1E90023FB5D /* ActionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionCell.swift; sourceTree = "<group>"; };
 		E5832C4125BB550AC54A5C59 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
@@ -222,13 +158,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		8370410F1D8B1DED000EDBAE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		83CFC2E21E66BB04005C0C77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -280,12 +209,11 @@
 		835406001D9517AB00019D53 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				83B6D39A1E13DCF4005258B3 /* Localizable.strings */,
-				83B6D3951E13C781005258B3 /* InfoPlist.strings */,
-				83CD0C651DE34C730078E5FC /* Logging.swift */,
+				835982771E680EDC00AA18C9 /* Digi Cloud.plist */,
 				830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */,
-				837041211D8B1DEE000EDBAE /* Info.plist */,
-				83CFC2ED1E66BB04005C0C77 /* Digi Cloud Compile Time.plist */,
+				83CD0C651DE34C730078E5FC /* Logging.swift */,
+				83B6D3951E13C781005258B3 /* InfoPlist.strings */,
+				83B6D39A1E13DCF4005258B3 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -340,7 +268,6 @@
 			children = (
 				837041121D8B1DED000EDBAE /* Digi Cloud.app */,
 				83F7EEFD1E369A7D0033F03D /* Digi Cloud Tests.xctest */,
-				83CFC2EC1E66BB04005C0C77 /* Digi Cloud Compile Time.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -393,6 +320,14 @@
 			name = Search;
 			sourceTree = "<group>";
 		};
+		83BC03FF1E6811400057B38E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		83EC31451E29154F009E12B6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -419,9 +354,8 @@
 		83F7EEFE1E369A7D0033F03D /* Digi Cloud Tests */ = {
 			isa = PBXGroup;
 			children = (
-				837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */,
+				83BC03FF1E6811400057B38E /* Supporting Files */,
 				83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */,
-				83F7EF011E369A7D0033F03D /* Info.plist */,
 			);
 			path = "Digi Cloud Tests";
 			sourceTree = "<group>";
@@ -509,23 +443,6 @@
 			productReference = 837041121D8B1DED000EDBAE /* Digi Cloud.app */;
 			productType = "com.apple.product-type.application";
 		};
-		83CFC2A81E66BB04005C0C77 /* Digi Cloud Compile Time */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 83CFC2E91E66BB04005C0C77 /* Build configuration list for PBXNativeTarget "Digi Cloud Compile Time" */;
-			buildPhases = (
-				83CFC2A91E66BB04005C0C77 /* Sources */,
-				83CFC2E21E66BB04005C0C77 /* Frameworks */,
-				83CFC2E31E66BB04005C0C77 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Digi Cloud Compile Time";
-			productName = "Digi Cloud";
-			productReference = 83CFC2EC1E66BB04005C0C77 /* Digi Cloud Compile Time.app */;
-			productType = "com.apple.product-type.application";
-		};
 		83F7EEFC1E369A7D0033F03D /* Digi Cloud Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83F7EF061E369A7D0033F03D /* Build configuration list for PBXNativeTarget "Digi Cloud Tests" */;
@@ -561,9 +478,6 @@
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
-					83CFC2A81E66BB04005C0C77 = {
-						DevelopmentTeam = S8V3V9GFN2;
-					};
 					83F7EEFC1E369A7D0033F03D = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = S8V3V9GFN2;
@@ -586,7 +500,6 @@
 			projectRoot = "";
 			targets = (
 				837041111D8B1DED000EDBAE /* Digi Cloud */,
-				83CFC2A81E66BB04005C0C77 /* Digi Cloud Compile Time */,
 				83F7EEFC1E369A7D0033F03D /* Digi Cloud Tests */,
 			);
 		};
@@ -602,18 +515,6 @@
 				8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */,
 				83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */,
 				8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		83CFC2E31E66BB04005C0C77 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				83CFC2E41E66BB04005C0C77 /* LaunchScreen.storyboard in Resources */,
-				83CFC2E51E66BB04005C0C77 /* Localizable.strings in Resources */,
-				83CFC2E61E66BB04005C0C77 /* fontawesome-webfont.ttf in Resources */,
-				83CFC2E71E66BB04005C0C77 /* InfoPlist.strings in Resources */,
-				83CFC2E81E66BB04005C0C77 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,69 +589,6 @@
 				839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */,
 				8373DE041E321A690083D614 /* Cache.swift in Sources */,
 				E5832D392FF98C031D43515B /* FlowController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		83CFC2A91E66BB04005C0C77 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				83CFC2AA1E66BB04005C0C77 /* CreateDirectoryViewController.swift in Sources */,
-				83CFC2AB1E66BB04005C0C77 /* CustomNavBar.swift in Sources */,
-				83CFC2AC1E66BB04005C0C77 /* LocationsViewController.swift in Sources */,
-				83CFC2AD1E66BB04005C0C77 /* ManageAccountsViewController.swift in Sources */,
-				83CFC2AE1E66BB04005C0C77 /* AccountCollectionCell.swift in Sources */,
-				83CFC2AF1E66BB04005C0C77 /* Mount.swift in Sources */,
-				83CFC2B01E66BB04005C0C77 /* MoreActionsViewController.swift in Sources */,
-				83CFC2B11E66BB04005C0C77 /* UIViewController+DigiCloud.swift in Sources */,
-				83CFC2B21E66BB04005C0C77 /* MainNavigationController.swift in Sources */,
-				83CFC2B31E66BB04005C0C77 /* LoginButton.swift in Sources */,
-				83CFC2B41E66BB04005C0C77 /* UIView+DigiCloud.swift in Sources */,
-				83CFC2B51E66BB04005C0C77 /* IntroductionViewController.swift in Sources */,
-				83CFC2B61E66BB04005C0C77 /* URLHashTextField.swift in Sources */,
-				83CFC2B71E66BB04005C0C77 /* LoginViewController.swift in Sources */,
-				83CFC2B81E66BB04005C0C77 /* LocationCell.swift in Sources */,
-				83CFC2B91E66BB04005C0C77 /* ContentViewController.swift in Sources */,
-				83CFC2BA1E66BB04005C0C77 /* FolderInfoViewController.swift in Sources */,
-				83CFC2BB1E66BB04005C0C77 /* NodeActionsViewController.swift in Sources */,
-				83CFC2BC1E66BB04005C0C77 /* LoginField.swift in Sources */,
-				83CFC2BD1E66BB04005C0C77 /* Protocols.swift in Sources */,
-				83CFC2BE1E66BB04005C0C77 /* UIColor+DigiCloud.swift in Sources */,
-				83CFC2BF1E66BB04005C0C77 /* UIApplication+DigiCloud.swift in Sources */,
-				83CFC2C01E66BB04005C0C77 /* Bookmark.swift in Sources */,
-				83CFC2C11E66BB04005C0C77 /* AccountTableViewCell.swift in Sources */,
-				83CFC2C21E66BB04005C0C77 /* FileCell.swift in Sources */,
-				83CFC2C31E66BB04005C0C77 /* SettingsViewController.swift in Sources */,
-				83CFC2C41E66BB04005C0C77 /* AppSettings.swift in Sources */,
-				83CFC2C51E66BB04005C0C77 /* DirectoryCell.swift in Sources */,
-				83CFC2C61E66BB04005C0C77 /* BaseListCell.swift in Sources */,
-				83CFC2C71E66BB04005C0C77 /* Account.swift in Sources */,
-				83CFC2C81E66BB04005C0C77 /* SearchCell.swift in Sources */,
-				83CFC2C91E66BB04005C0C77 /* Node.swift in Sources */,
-				83CFC2CA1E66BB04005C0C77 /* UserDefaults+DigiCloud.swift in Sources */,
-				83CFC2CB1E66BB04005C0C77 /* FileManager+DigiCloud.swift in Sources */,
-				83CFC2CC1E66BB04005C0C77 /* Location.swift in Sources */,
-				83CFC2CD1E66BB04005C0C77 /* AppDelegate.swift in Sources */,
-				83CFC2CE1E66BB04005C0C77 /* NodeHit.swift in Sources */,
-				83CFC2CF1E66BB04005C0C77 /* UIFont+DigiCloud.swift in Sources */,
-				83CFC2D01E66BB04005C0C77 /* DeleteViewController.swift in Sources */,
-				83CFC2D11E66BB04005C0C77 /* Logging.swift in Sources */,
-				83CFC2D21E66BB04005C0C77 /* RenameViewController.swift in Sources */,
-				83CFC2D31E66BB04005C0C77 /* SearchResultController.swift in Sources */,
-				83CFC2D41E66BB04005C0C77 /* SortFolderViewController.swift in Sources */,
-				83CFC2D51E66BB04005C0C77 /* ShareLinksViewController.swift in Sources */,
-				83CFC2D61E66BB04005C0C77 /* RenameUtilitiesButton.swift in Sources */,
-				83CFC2D71E66BB04005C0C77 /* ListingViewController.swift in Sources */,
-				83CFC2D81E66BB04005C0C77 /* String+DigiCloud.swift in Sources */,
-				83CFC2D91E66BB04005C0C77 /* ActionCell.swift in Sources */,
-				83CFC2DA1E66BB04005C0C77 /* UploadLink.swift in Sources */,
-				83CFC2DB1E66BB04005C0C77 /* AccountSelectionViewController.swift in Sources */,
-				83CFC2DC1E66BB04005C0C77 /* DigiClient.swift in Sources */,
-				83CFC2DD1E66BB04005C0C77 /* DownloadLink.swift in Sources */,
-				83CFC2DE1E66BB04005C0C77 /* UILabelWithPadding.swift in Sources */,
-				83CFC2DF1E66BB04005C0C77 /* DigiConstants.swift in Sources */,
-				83CFC2E01E66BB04005C0C77 /* Cache.swift in Sources */,
-				83CFC2E11E66BB04005C0C77 /* FlowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,8 +696,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG DEBUGCONTROLLERS";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -919,7 +758,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "Digi Cloud/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Digi Cloud.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
@@ -940,7 +779,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "Digi Cloud/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Digi Cloud.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test;
@@ -951,7 +790,61 @@
 			};
 			name = Release;
 		};
-		83CFC2EA1E66BB04005C0C77 /* Debug */ = {
+		83BC04001E6813DE0057B38E /* Debug Compile Time */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug Compile Time";
+		};
+		83BC04011E6813DE0057B38E /* Debug Compile Time */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -959,7 +852,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud Compile Time.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Digi Cloud.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
@@ -970,33 +863,29 @@
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
-			name = Debug;
+			name = "Debug Compile Time";
 		};
-		83CFC2EB1E66BB04005C0C77 /* Release */ = {
+		83BC04021E6813DE0057B38E /* Debug Compile Time */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud Compile Time.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test;
+				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mihaicris.ios.Digi-Cloud-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Digi Cloud.app/Digi Cloud";
 			};
-			name = Release;
+			name = "Debug Compile Time";
 		};
 		83F7EF041E369A7D0033F03D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "Digi Cloud Tests/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mihaicris.ios.Digi-Cloud-Tests";
@@ -1011,7 +900,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "Digi Cloud Tests/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mihaicris.ios.Digi-Cloud-Tests";
@@ -1028,6 +917,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				837041221D8B1DEE000EDBAE /* Debug */,
+				83BC04001E6813DE0057B38E /* Debug Compile Time */,
 				837041231D8B1DEE000EDBAE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1037,16 +927,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				837041251D8B1DEE000EDBAE /* Debug */,
+				83BC04011E6813DE0057B38E /* Debug Compile Time */,
 				837041261D8B1DEE000EDBAE /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		83CFC2E91E66BB04005C0C77 /* Build configuration list for PBXNativeTarget "Digi Cloud Compile Time" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				83CFC2EA1E66BB04005C0C77 /* Debug */,
-				83CFC2EB1E66BB04005C0C77 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -1055,6 +937,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83F7EF041E369A7D0033F03D /* Debug */,
+				83BC04021E6813DE0057B38E /* Debug Compile Time */,
 				83F7EF051E369A7D0033F03D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
