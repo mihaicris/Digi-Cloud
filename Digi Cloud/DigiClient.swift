@@ -60,6 +60,8 @@ final class DigiClient {
         session = URLSession(configuration: config)
     }
 
+    // MARK: - Main Network Call
+    
     /// Send a HTTP Network Request
     ///
     /// - Parameters:
@@ -199,6 +201,8 @@ final class DigiClient {
         return request
     }
 
+    // MARK: - Authentication
+    
     /// Authenticate an user with given credentials
     ///
     /// - Parameters:
@@ -249,6 +253,8 @@ final class DigiClient {
         }
     }
 
+    // MARK: - User Info
+    
     /// Gets the user information
     ///
     /// - Parameters:
@@ -284,6 +290,8 @@ final class DigiClient {
         }
     }
 
+    // MARK: - Mounts
+    
     /// Gets the locations in the Cloud storage
     ///
     /// - Parameters:
@@ -315,7 +323,52 @@ final class DigiClient {
 
         }
     }
+    
+    /// Gets the content of nodes of a location in the Cloud storage
+    ///
+    /// - Parameters:
+    ///   - location: The location to get the content
+    ///   - completion: The block called after the server has responded
+    ///   - result: Returned content as an array of nodes
+    ///   - error: The error occurred in the network request, nil for no error.
+    func getBundle(for node: Node, completion: @escaping(_ nodes: [Node]?, _ error: Error?) -> Void) {
+        
+        let nodeLocation = node.location
+        
+        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: nodeLocation.mount.id)
+        
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+        
+        let parameters = [ParametersKeys.Path: nodeLocation.path]
+        
+        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
+            
+            guard error == nil else {
+                completion(nil, error!)
+                return
+            }
+            
+            guard statusCode != 400 else {
+                let message = NSLocalizedString("Location is no longer available!", comment: "")
+                completion(nil, NetworkingError.wrongStatus(message))
+                return
+            }
+            
+            guard let dict = data as? [String: Any],
+                let nodesList = dict["files"] as? [[String: Any]] else {
+                    completion(nil, JSONError.parse("Could not parse data"))
+                    return
+            }
+            
+            let content = nodesList.flatMap { Node(JSON: $0, parentLocation: nodeLocation) }
+            
+            completion(content, nil)
+        }
+    }
 
+    // MARK: - Bookmarks
+    
     /// Gets the bookmarks saved by the user
     ///
     /// - Parameters:
@@ -444,49 +497,8 @@ final class DigiClient {
             }
         }
     }
-
-    /// Gets the content of nodes of a location in the Cloud storage
-    ///
-    /// - Parameters:
-    ///   - location: The location to get the content
-    ///   - completion: The block called after the server has responded
-    ///   - result: Returned content as an array of nodes
-    ///   - error: The error occurred in the network request, nil for no error.
-    func getBundle(for node: Node, completion: @escaping(_ nodes: [Node]?, _ error: Error?) -> Void) {
-
-        let nodeLocation = node.location
-
-        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: nodeLocation.mount.id)
-
-        var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
-
-        let parameters = [ParametersKeys.Path: nodeLocation.path]
-
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
-
-            guard error == nil else {
-                completion(nil, error!)
-                return
-            }
-
-            guard statusCode != 400 else {
-                let message = NSLocalizedString("Location is no longer available!", comment: "")
-                completion(nil, NetworkingError.wrongStatus(message))
-                return
-            }
-
-            guard let dict = data as? [String: Any],
-                let nodesList = dict["files"] as? [[String: Any]] else {
-                    completion(nil, JSONError.parse("Could not parse data"))
-                    return
-            }
-
-            let content = nodesList.flatMap { Node(JSON: $0, parentLocation: nodeLocation) }
-
-            completion(content, nil)
-        }
-    }
+    
+    // MARK: - Files
 
     /// Starts the download of a file
     ///
@@ -731,6 +743,8 @@ final class DigiClient {
         }
     }
 
+    // MARK: - Links
+    
     /// Get the download/upload link for a location
     ///
     /// - Parameters:
@@ -947,7 +961,7 @@ final class DigiClient {
             }
         }
     }
-
+    
     /// Set reciever link alert status
     ///
     /// - Parameters:
