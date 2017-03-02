@@ -22,6 +22,9 @@
 		8328F8111E51FF2E00DE4453 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F8101E51FF2E00DE4453 /* DownloadLink.swift */; };
 		8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */; };
 		832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
+		833F5DA71E68358B00EE3722 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DA61E68358B00EE3722 /* ShareViewController.swift */; };
+		833F5DA91E68372700EE3722 /* SharePermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DA81E68372700EE3722 /* SharePermissionsViewController.swift */; };
+		833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */; };
 		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
 		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
 		8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
@@ -41,7 +44,7 @@
 		837E53F71E4CDF2B00D8A5AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */; };
 		83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */; };
 		83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E631E25345500C8AE52 /* AccountTableViewCell.swift */; };
-		83873E581E5C3A6900D48E2A /* ShareLinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83873E571E5C3A6900D48E2A /* ShareLinksViewController.swift */; };
+		83873E581E5C3A6900D48E2A /* ShareLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */; };
 		8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */; };
 		839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
 		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
@@ -99,6 +102,9 @@
 		8328F8101E51FF2E00DE4453 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadLink.swift; sourceTree = "<group>"; };
 		8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameUtilitiesButton.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
+		833F5DA61E68358B00EE3722 /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		833F5DA81E68372700EE3722 /* SharePermissionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharePermissionsViewController.swift; sourceTree = "<group>"; };
+		833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareTableViewCell.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8350CDB41E6031030063227E /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
@@ -120,7 +126,7 @@
 		837E53F81E4CDF2B00D8A5AA /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountsViewController.swift; sourceTree = "<group>"; };
 		83851E631E25345500C8AE52 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
-		83873E571E5C3A6900D48E2A /* ShareLinksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareLinksViewController.swift; sourceTree = "<group>"; };
+		83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareLinkViewController.swift; sourceTree = "<group>"; };
 		8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSelectionViewController.swift; sourceTree = "<group>"; };
 		839A22E21DC11BA400758730 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
@@ -177,7 +183,9 @@
 		83454BEB1E5B3E6E005C85ED /* Sharing */ = {
 			isa = PBXGroup;
 			children = (
-				83873E571E5C3A6900D48E2A /* ShareLinksViewController.swift */,
+				833F5DA61E68358B00EE3722 /* ShareViewController.swift */,
+				83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */,
+				833F5DA81E68372700EE3722 /* SharePermissionsViewController.swift */,
 			);
 			name = Sharing;
 			sourceTree = "<group>";
@@ -377,6 +385,7 @@
 				83164FEC1E03F473001048D7 /* SearchCell.swift */,
 				834181761E07FB1100F32A2F /* UILabelWithPadding.swift */,
 				835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */,
+				833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -539,6 +548,7 @@
 				83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */,
 				83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
+				833F5DA71E68358B00EE3722 /* ShareViewController.swift in Sources */,
 				83BF27C91E438AB30019B1F7 /* MoreActionsViewController.swift in Sources */,
 				8320C2531E1E3B4900413B36 /* UIViewController+DigiCloud.swift in Sources */,
 				83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */,
@@ -572,15 +582,17 @@
 				8328F80F1E51EA7E00DE4453 /* NodeHit.swift in Sources */,
 				83E5DB421E607EF30093634E /* UIFont+DigiCloud.swift in Sources */,
 				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
+				833F5DA91E68372700EE3722 /* SharePermissionsViewController.swift in Sources */,
 				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
 				832F146E1DBA76250047FBBE /* RenameViewController.swift in Sources */,
 				83A9BE1B1DFFDDDC003FD974 /* SearchResultController.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
-				83873E581E5C3A6900D48E2A /* ShareLinksViewController.swift in Sources */,
+				83873E581E5C3A6900D48E2A /* ShareLinkViewController.swift in Sources */,
 				8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */,
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */,
 				83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */,
+				833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */,
 				836731B91E53DCD3001EA961 /* UploadLink.swift in Sources */,
 				8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */,
 				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,

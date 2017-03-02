@@ -79,9 +79,7 @@ class NodeActionsViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
-        let folderActions = [ActionCell(title: NSLocalizedString("Send Download Link", comment: ""), action: .sendDownloadLink),
-                             ActionCell(title: NSLocalizedString("Send Upload Link", comment: ""), action: .sendUploadLink),
-                             ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
+        let folderActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
                              ActionCell(title: NSLocalizedString("Bookmark", comment: ""), action: .bookmark),
                              ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
                              ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),
@@ -90,7 +88,7 @@ class NodeActionsViewController: UITableViewController {
 
         contextMenuFolderActions.append(contentsOf: folderActions)
 
-        let fileActions = [ActionCell(title: NSLocalizedString("Send Download Link", comment: ""), action: .sendDownloadLink),
+        let fileActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
                            ActionCell(title: NSLocalizedString("Make available offline", comment: ""), action: .makeOffline),
                            ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
                            ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),

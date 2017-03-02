@@ -43,12 +43,16 @@ class MoreActionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+
+        switch indexPath.row {
+        case 0:
             return createCell(title: NSLocalizedString("Create Directory", comment: ""), color: .defaultColor)
-        } else if indexPath.row == 1 {
+        case 1:
             return createCell(title: NSLocalizedString("Select Mode", comment: ""), color: .defaultColor)
-        } else {
-            return createCell(title: NSLocalizedString("Send Upload Link", comment: ""), color: .defaultColor)
+        case 2:
+            return createCell(title: NSLocalizedString("Share", comment: ""), color: .defaultColor)
+        default:
+            fatalError("Wrong action recieved.")
         }
     }
 

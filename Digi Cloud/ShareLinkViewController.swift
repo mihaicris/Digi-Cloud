@@ -15,6 +15,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     var onFinish: (() -> Void)?
 
     private let linkType: LinkType
+
     private var node: Node {
         didSet {
             if !isAnimatingReset {
@@ -152,6 +153,46 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return sc
     }()
 
+    var errorMessageVerticalConstraint: NSLayoutConstraint?
+
+    private lazy var waitingView: UIView = {
+
+        let v = UIView()
+
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        spinner.tag = 55
+        spinner.startAnimating()
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("Preparing Link", comment: "")
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.tag = 99
+        label.numberOfLines = 0
+
+        v.addSubview(spinner)
+        v.addSubview(label)
+
+        self.errorMessageVerticalConstraint = label.centerYAnchor.constraint(equalTo: v.centerYAnchor, constant: 40)
+
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: v.centerYAnchor),
+            label.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+            label.widthAnchor.constraint(equalTo: v.widthAnchor, multiplier: 0.8),
+            self.errorMessageVerticalConstraint!
+        ])
+
+        return v
+    }()
+
     private var dateFormatter: DateFormatter = {
         let df = DateFormatter()
         df.dateFormat = "dd.MM.YYY・HH:mm"
@@ -160,10 +201,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node, linkType: LinkType) {
+    init(node: Node, linkType: LinkType, onFinish: @escaping () -> Void) {
 
         self.node = node
         self.linkType = linkType
+        self.onFinish = onFinish
 
         switch linkType {
         case .download:
@@ -185,18 +227,19 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     override func viewDidLoad() {
         setupViews()
+        setupTableViewHeaderView()
         setupNavigationItems()
         setupToolBarItems()
         addViewTapGestureRecognizer()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        updateValues()
         requestLink()
+        super.viewWillAppear(true)
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return linkType == .download ? 3 : 4
+        return 3
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -210,8 +253,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             headerTitle = NSLocalizedString("PASSWORD", comment: "")
         case 2:
             headerTitle = NSLocalizedString("VALIDITY", comment: "")
-        case 3:
-            headerTitle = NSLocalizedString("NOTIFICATION", comment: "")
         default:
             fatalError("Wrong section index")
         }
@@ -236,7 +277,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return linkType == .upload && section == 0 ? 2 : 1
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -252,25 +293,46 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         case 0:
             // LINK
 
-            cell.contentView.addSubview(baseLinkLabel)
-            cell.contentView.addSubview(hashTextField)
-            cell.contentView.addSubview(saveHashButton)
+            if indexPath.row == 0 {
+                cell.contentView.addSubview(baseLinkLabel)
+                cell.contentView.addSubview(hashTextField)
+                cell.contentView.addSubview(saveHashButton)
 
-            NSLayoutConstraint.activate([
-                baseLinkLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                baseLinkLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
-                baseLinkLabel.heightAnchor.constraint(equalToConstant: 30),
+                NSLayoutConstraint.activate([
+                    baseLinkLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                    baseLinkLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                    baseLinkLabel.heightAnchor.constraint(equalToConstant: 30),
 
-                saveHashButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                saveHashButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                    saveHashButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                    saveHashButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
 
-                hashTextField.leadingAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.trailingAnchor),
-                hashTextField.trailingAnchor.constraint(equalTo: saveHashButton.leadingAnchor, constant: -8),
-                hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                hashTextField.heightAnchor.constraint(equalToConstant: 30)
-            ])
+                    hashTextField.leadingAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.trailingAnchor, constant: 2),
+                    hashTextField.trailingAnchor.constraint(equalTo: saveHashButton.leadingAnchor, constant: -8),
+                    hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                    hashTextField.heightAnchor.constraint(equalToConstant: 30)
+                ])
 
-            hashTextField.setContentHuggingPriority(249, for: .horizontal)
+                hashTextField.setContentHuggingPriority(249, for: .horizontal)
+
+            } else if linkType == .upload {
+
+                let label: UILabel = {
+                    let l = UILabel()
+                    l.translatesAutoresizingMaskIntoConstraints = false
+                    l.text = NSLocalizedString("Send email when receive files", comment: "")
+                    return l
+                }()
+
+                cell.contentView.addSubview(label)
+                cell.contentView.addSubview(uploadNotificationSwitch)
+
+                NSLayoutConstraint.activate([
+                    label.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                    label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                    uploadNotificationSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                    uploadNotificationSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+                    ])
+            }
 
         case 1:
             // PASSWORD
@@ -314,25 +376,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
             ])
 
-        case 3:
-
-            let label: UILabel = {
-                let l = UILabel()
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.text = NSLocalizedString("Send email when receiving files", comment: "")
-                return l
-            }()
-
-            cell.contentView.addSubview(label)
-            cell.contentView.addSubview(uploadNotificationSwitch)
-
-            NSLayoutConstraint.activate([
-                label.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
-                label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                uploadNotificationSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
-                uploadNotificationSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-            ])
-
         default:
             fatalError("Wrong section index")
         }
@@ -353,7 +396,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         saveHashButton.isHidden = true
-        textField.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
+        textField.backgroundColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1.0)
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -393,15 +436,19 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         tableView.alwaysBounceVertical = false
 
         view.addSubview(tableView)
+        view.addSubview(waitingView)
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
 
-        setupTableViewHeaderView()
+            waitingView.topAnchor.constraint(equalTo: view.topAnchor),
+            waitingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            waitingView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            waitingView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
     }
 
     private func setupTableViewHeaderView() {
@@ -435,9 +482,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private func setupNavigationItems() {
 
         if linkType == .download {
-            self.title = NSLocalizedString("Download Link", comment: "")
+            self.title = NSLocalizedString("Send Link", comment: "")
         } else {
-            self.title = NSLocalizedString("Upload Link", comment: "")
+            self.title = NSLocalizedString("Receive Files", comment: "")
         }
 
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))
@@ -445,6 +492,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func setupToolBarItems() {
+
         let sendButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleSend))
         let flexibleButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
@@ -460,9 +508,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             return b
         }()
 
-        self.navigationController?.isToolbarHidden = false
         self.setToolbarItems([deleteButton, flexibleButton, sendButton], animated: false)
-
     }
 
     private func addViewTapGestureRecognizer() {
@@ -728,10 +774,22 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         DigiClient.shared.getLink(for: self.node, type: self.linkType) { (link, error) in
 
             guard error == nil else {
-                print(error!.localizedDescription)
+
+                if let constraint = self.errorMessageVerticalConstraint {
+                    constraint.constant = 0
+                }
+
+                if let v = self.waitingView.viewWithTag(55) as? UIActivityIndicatorView {
+                    v.stopAnimating()
+                }
+
+                if let v = self.waitingView.viewWithTag(99) as? UILabel {
+                    v.text = NSLocalizedString("There was an error communicating with the network.", comment: "")
+                }
                 return
             }
 
+            self.navigationController?.setToolbarHidden(false, animated: false)
             self.node.updateNode(with: link)
         }
     }
@@ -764,6 +822,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         } else {
             validityLabel.text = NSLocalizedString("Link has no expiration date", comment: "")
         }
+
+        waitingView.removeFromSuperview()
     }
 
     private func startSpinning() {

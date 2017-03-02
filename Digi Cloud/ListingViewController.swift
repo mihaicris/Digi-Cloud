@@ -676,7 +676,7 @@ final class ListingViewController: UITableViewController {
                 self.activateEditMode()
                 break
             case .sendUploadLink:
-                self.showViewControllerForShareLinks(node: self.node, linkType: .upload)
+                self.showShareViewController(node: self.node)
             }
         }
 
@@ -1080,12 +1080,10 @@ final class ListingViewController: UITableViewController {
         self.present(navController, animated: true, completion: nil)
 
     }
-    
-    fileprivate func showViewControllerForShareLinks(node: Node, linkType: LinkType) {
-    
-        let controller = ShareLinkViewController(node: node, linkType: linkType)
-        
-        controller.onFinish = { [unowned self] in
+
+    fileprivate func showShareViewController(node: Node) {
+
+        let onFinish: ()->Void = { [unowned self] in
             self.dismiss(animated: true) {
                 self.updateContent()
                 if let navController = self.navigationController as? MainNavigationController {
@@ -1095,11 +1093,14 @@ final class ListingViewController: UITableViewController {
                 }
             }
         }
-        
+
+        let controller = node.type == "dir"
+            ? ShareViewController(node: node, onFinish: onFinish)
+            : ShareLinkViewController(node: node, linkType: .download, onFinish: onFinish)
+
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .formSheet
         self.present(navController, animated: true, completion: nil)
-        
     }
 }
 
@@ -1121,13 +1122,10 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
             switch action {
 
-            case .sendDownloadLink, .sendUploadLink:
+            case .share:
 
-                let linkType = (action == .sendDownloadLink) ? LinkType.download : LinkType.upload
-                
-                self.showViewControllerForShareLinks(node: node, linkType: linkType)
-                self.needRefresh = true
-                
+                self.showShareViewController(node: node)
+
             case .bookmark:
 
                 DigiClient.shared.getBookmarks(completion: { (bookmarks, error) in
