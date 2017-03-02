@@ -11,6 +11,7 @@ import UIKit
 enum MoreActions: Int {
     case createDirectory
     case selectionMode
+    case sendUploadLink
 }
 
 class MoreActionsViewController: UITableViewController {
@@ -38,14 +39,16 @@ class MoreActionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             return createCell(title: NSLocalizedString("Create Directory", comment: ""), color: .defaultColor)
-        } else {
+        } else if indexPath.row == 1 {
             return createCell(title: NSLocalizedString("Select Mode", comment: ""), color: .defaultColor)
+        } else {
+            return createCell(title: NSLocalizedString("Send Upload Link", comment: ""), color: .defaultColor)
         }
     }
 

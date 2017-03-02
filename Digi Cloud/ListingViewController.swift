@@ -675,6 +675,8 @@ final class ListingViewController: UITableViewController {
                 if self.content.isEmpty { return }
                 self.activateEditMode()
                 break
+            case .sendUploadLink:
+                self.showViewControllerForShareLinks(node: self.node, linkType: .upload)
             }
         }
 
@@ -1078,6 +1080,27 @@ final class ListingViewController: UITableViewController {
         self.present(navController, animated: true, completion: nil)
 
     }
+    
+    fileprivate func showViewControllerForShareLinks(node: Node, linkType: LinkType) {
+    
+        let controller = ShareLinkViewController(node: node, linkType: linkType)
+        
+        controller.onFinish = { [unowned self] in
+            self.dismiss(animated: true) {
+                self.updateContent()
+                if let navController = self.navigationController as? MainNavigationController {
+                    for controller in navController.viewControllers {
+                        (controller as? ListingViewController)?.needRefresh = true
+                    }
+                }
+            }
+        }
+        
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .formSheet
+        self.present(navController, animated: true, completion: nil)
+        
+    }
 }
 
 extension ListingViewController: UIPopoverPresentationControllerDelegate {
@@ -1101,19 +1124,10 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
             case .sendDownloadLink, .sendUploadLink:
 
                 let linkType = (action == .sendDownloadLink) ? LinkType.download : LinkType.upload
-
-                let controller = ShareLinkViewController(node: node, linkType: linkType)
-
-                controller.onFinish = { [unowned self] in
-                    self.dismiss(animated: true) {
-                        self.updateContent()
-                    }
-                }
-
-                let navController = UINavigationController(rootViewController: controller)
-                navController.modalPresentationStyle = .formSheet
-                self.present(navController, animated: true, completion: nil)
-
+                
+                self.showViewControllerForShareLinks(node: node, linkType: linkType)
+                self.needRefresh = true
+                
             case .bookmark:
 
                 DigiClient.shared.getBookmarks(completion: { (bookmarks, error) in
