@@ -34,3 +34,9 @@ extension Bookmark {
         self.path = path
     }
 }
+
+extension Bookmark: Equatable {
+    static func ==(lhs: Bookmark, rhs: Bookmark) -> Bool {
+        return lhs.mountId == rhs.mountId && lhs.path == rhs.path
+    }
+}

@@ -11,6 +11,7 @@ import UIKit
 enum ActionType: Int {
     case noAction
     case makeOffline
+    case bookmark
     case rename
     case copy
     case move
@@ -81,6 +82,7 @@ class NodeActionsViewController: UITableViewController {
         let folderActions = [ActionCell(title: NSLocalizedString("Send Download Link", comment: ""), action: .sendDownloadLink),
                              ActionCell(title: NSLocalizedString("Send Upload Link", comment: ""), action: .sendUploadLink),
                              ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
+                             ActionCell(title: NSLocalizedString("Bookmark", comment: ""), action: .bookmark),
                              ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
                              ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),
                              ActionCell(title: NSLocalizedString("Move", comment: ""), action: .move),

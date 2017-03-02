@@ -61,7 +61,7 @@ final class DigiClient {
     }
 
     // MARK: - Main Network Call
-    
+
     /// Send a HTTP Network Request
     ///
     /// - Parameters:
@@ -106,7 +106,7 @@ final class DigiClient {
 
                 /* GUARD: Was there an error? */
                 guard error == nil else {
-                    
+
                     /* TODO: Implement error codes:
                     
                     -999  = Task was cancelled
@@ -114,15 +114,15 @@ final class DigiClient {
                     -1009 = The internet connection appears to be offline
                      
                     */
-                    
+
                     let nserror = error as! NSError
-                    
+
                     LogNSError(nserror)
-                    
+
                     if nserror.code == -999 /* Cancelled */ { return }
 
                     completion(nil, nil, NetworkingError.get("There was an error with your request:\n\(nserror.localizedDescription)"))
-                    
+
                     return
                 }
 
@@ -202,7 +202,7 @@ final class DigiClient {
     }
 
     // MARK: - Authentication
-    
+
     /// Authenticate an user with given credentials
     ///
     /// - Parameters:
@@ -254,7 +254,7 @@ final class DigiClient {
     }
 
     // MARK: - User Info
-    
+
     /// Gets the user information
     ///
     /// - Parameters:
@@ -291,7 +291,7 @@ final class DigiClient {
     }
 
     // MARK: - Mounts
-    
+
     /// Gets the locations in the Cloud storage
     ///
     /// - Parameters:
@@ -323,7 +323,7 @@ final class DigiClient {
 
         }
     }
-    
+
     /// Gets the content of nodes of a location in the Cloud storage
     ///
     /// - Parameters:
@@ -332,43 +332,43 @@ final class DigiClient {
     ///   - result: Returned content as an array of nodes
     ///   - error: The error occurred in the network request, nil for no error.
     func getBundle(for node: Node, completion: @escaping(_ nodes: [Node]?, _ error: Error?) -> Void) {
-        
+
         let nodeLocation = node.location
-        
+
         let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: nodeLocation.mount.id)
-        
+
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
-        
+
         let parameters = [ParametersKeys.Path: nodeLocation.path]
-        
+
         networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
-            
+
             guard error == nil else {
                 completion(nil, error!)
                 return
             }
-            
+
             guard statusCode != 400 else {
                 let message = NSLocalizedString("Location is no longer available!", comment: "")
                 completion(nil, NetworkingError.wrongStatus(message))
                 return
             }
-            
+
             guard let dict = data as? [String: Any],
                 let nodesList = dict["files"] as? [[String: Any]] else {
                     completion(nil, JSONError.parse("Could not parse data"))
                     return
             }
-            
+
             let content = nodesList.flatMap { Node(JSON: $0, parentLocation: nodeLocation) }
-            
+
             completion(content, nil)
         }
     }
 
     // MARK: - Bookmarks
-    
+
     /// Gets the bookmarks saved by the user
     ///
     /// - Parameters:
@@ -405,7 +405,7 @@ final class DigiClient {
     ///   - locations: array of Locations type. If locations is nil than all bookmarks will be removed.
     ///   - completion: The block called after the server has responded
     ///   - error: The error returned
-    func setBookmarks(locations: [Location], completion: @escaping(_ error: Error?) -> Void) {
+    func setBookmarks(bookmarks: [Bookmark], completion: @escaping(_ error: Error?) -> Void) {
 
         let method = Methods.UserBookmarks
 
@@ -413,16 +413,16 @@ final class DigiClient {
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         var json: [String: Any] = [:]
-        var bookmarks: [[String: String]] = []
+        var bookmarksJSON: [[String: String]] = []
 
-        locations.forEach {
-            var bookmark: [String: String] = [:]
-            bookmark["path"] = $0.path
-            bookmark["mountId"] = $0.mount.id
-            bookmarks.append(bookmark)
+        for bookmark in bookmarks {
+            var bookmarkJSON: [String: String] = [:]
+            bookmarkJSON["path"] = bookmark.path
+            bookmarkJSON["mountId"] = bookmark.mountId
+            bookmarksJSON.append(bookmarkJSON)
         }
 
-        json["bookmarks"] = bookmarks
+        json["bookmarks"] = bookmarksJSON
 
         networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
             guard error == nil else {
@@ -444,15 +444,15 @@ final class DigiClient {
     ///   - location: Location of the bookmark
     ///   - completion: The block called after the server has responded
     ///   - error: The error returned
-    func addBookmark(location: Location, completion: @escaping(_ error: Error?) -> Void) {
+    func addBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
         let method = Methods.UserBookmarks
 
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         var json: [String: String] = [:]
-        json["path"] = location.path
-        json["mountId"] = location.mount.id
+        json["path"] = bookmark.path
+        json["mountId"] = bookmark.mountId
 
         networkTask(requestType: "POST", method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
             guard error == nil else {
@@ -474,15 +474,15 @@ final class DigiClient {
     ///   - location: Location of the bookmark
     ///   - completion: The block called after the server has responded
     ///   - error: The error returned
-    func removeBookmark(location: Location, completion: @escaping(_ error: Error?) -> Void) {
+    func removeBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
         let method = Methods.UserBookmarks
 
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         var parameters: [String: String] = [:]
-        parameters["mountId"] = location.mount.id
-        parameters["path"] = location.path
+        parameters["path"] = bookmark.path
+        parameters["mountId"] = bookmark.mountId
 
         networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { _, statusCode, error in
             guard error == nil else {
@@ -497,7 +497,7 @@ final class DigiClient {
             }
         }
     }
-    
+
     // MARK: - Files
 
     /// Starts the download of a file
@@ -744,7 +744,7 @@ final class DigiClient {
     }
 
     // MARK: - Links
-    
+
     /// Get the download/upload link for a location
     ///
     /// - Parameters:
@@ -961,7 +961,7 @@ final class DigiClient {
             }
         }
     }
-    
+
     /// Set reciever link alert status
     ///
     /// - Parameters:

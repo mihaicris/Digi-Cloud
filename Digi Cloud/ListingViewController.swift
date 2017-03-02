@@ -1115,6 +1115,43 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                 navController.modalPresentationStyle = .formSheet
                 self.present(navController, animated: true, completion: nil)
 
+            case .bookmark:
+
+                DigiClient.shared.getBookmarks(completion: { (bookmarks, error) in
+
+                    guard error == nil, let bookmarksArray = bookmarks else {
+                        print(error!.localizedDescription)
+                        return
+                    }
+
+                    let bookmark = Bookmark(name: node.name, mountId: node.location.mount.id, path: node.location.path)
+
+                    if bookmarksArray.contains(bookmark) {
+
+                        // Bookmark is set, then it is removed
+                        DigiClient.shared.removeBookmark(bookmark: bookmark, completion: { error in
+
+                            // TODO: Give user feedback
+                            guard error == nil else {
+                                print(error!.localizedDescription)
+                                return
+                            }
+                            print("Bookmark removed.")
+                        })
+                    } else {
+
+                        // Bookmark is not set, then it is added
+                        DigiClient.shared.addBookmark(bookmark: bookmark, completion: { error in
+                            // TODO: Give user feedback
+                            guard error == nil else {
+                                print(error!.localizedDescription)
+                                return
+                            }
+                            print("Bookmark added.")
+                        })
+                    }
+                })
+
             case .rename:
                 let controller = RenameViewController(node: node)
                 controller.onFinish = { (newName, needRefresh) in
