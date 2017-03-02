@@ -31,7 +31,7 @@ class SearchResultController: UITableViewController {
     private var mountNames: [String: UIColor] = [:]
 
     // MARK: - Initializers and Deinitializers
-    
+
     init(node: Node) {
         self.node = node
         super.init(style: .plain)
@@ -43,7 +43,7 @@ class SearchResultController: UITableViewController {
     }
 
     deinit { DEINITLog(self) }
-    
+
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

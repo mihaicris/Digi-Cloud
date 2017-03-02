@@ -15,9 +15,9 @@ class IntroductionViewController: UIViewController {
     var onFinish: (() -> Void)?
 
     // MARK: - Initializers and Deinitializers
-    
+
     deinit { DEINITLog(self) }
-    
+
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

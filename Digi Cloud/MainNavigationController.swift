@@ -11,7 +11,7 @@ import UIKit
 class MainNavigationController: UINavigationController {
 
     // MARK: - Properties
-    
+
     // Closure called when user has logged out.
     var onLogout: (() -> Void)?
 
@@ -24,7 +24,7 @@ class MainNavigationController: UINavigationController {
     var searchResultsControllerIndex: Int?
 
     // MARK: - Initializers and Deinitializers
-    
+
     deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties

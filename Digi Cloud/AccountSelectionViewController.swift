@@ -125,9 +125,9 @@ class AccountSelectionViewController: UIViewController,
     }()
 
     // MARK: - Initializers and Deinitializers
-    
+
     deinit { DEINITLog(self) }
-    
+
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
@@ -137,7 +137,7 @@ class AccountSelectionViewController: UIViewController,
         getAccountsFromKeychain()
         updateAccounts()
     }
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -335,7 +335,7 @@ class AccountSelectionViewController: UIViewController,
     private func updateAccounts() {
 
         let dispatchGroup = DispatchGroup()
-        
+
         for account in accounts {
             dispatchGroup.enter()
             dispatchGroup.enter()
@@ -343,17 +343,17 @@ class AccountSelectionViewController: UIViewController,
             account.fetchAccountInfo {
                 dispatchGroup.leave()
             }
-            
+
             account.fetchProfileImage {
                 dispatchGroup.leave()
             }
         }
-        
+
         dispatchGroup.notify(queue: DispatchQueue.main, execute: {
             self.accountsCollectionView.reloadData()
         })
     }
-    
+
     private func switchToAccount(_ account: Account) {
 
         spinner.startAnimating()

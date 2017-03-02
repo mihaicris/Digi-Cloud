@@ -186,7 +186,7 @@ final class ListingViewController: UITableViewController {
         DigiClient.shared.task?.cancel()
         super.viewDidDisappear(animated)
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return content.isEmpty ? 2 : content.count
     }
@@ -385,7 +385,6 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
     }
 
-    
     private func presentError() {
 
         self.busyIndicator.stopAnimating()
@@ -397,13 +396,13 @@ final class ListingViewController: UITableViewController {
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }
-    
+
     fileprivate func updateContent() {
 
         needRefresh = false
         isUpdating = true
         didReceivedNetworkError = false
-       
+
         DigiClient.shared.getBundle(for: node) { receivedContent, error in
 
             self.isUpdating = false
@@ -419,7 +418,7 @@ final class ListingViewController: UITableViewController {
                     self.content.removeAll()
                     self.tableView.reloadData()
                 default:
-                    
+
                     if self.tableView.isDragging {
                         return
                     }
@@ -479,10 +478,10 @@ final class ListingViewController: UITableViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.refreshControl?.endRefreshing()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                
+
                 if self.didReceivedNetworkError {
                    self.presentError()
-                    
+
                 } else {
                     self.updateDirectoryMessage()
                     self.tableView.reloadData()

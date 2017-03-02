@@ -182,11 +182,11 @@ struct Account {
 
         // Fetch Gravatar profileImages if exist
         DispatchQueue.global(qos: .background).async {
-            
+
             if let url = URL(string: "https://www.gravatar.com/avatar/\(self.username.md5())?s=400&d=404") {
-            
+
                 let cache = Cache()
-                
+
                 if let data = try? Data(contentsOf: url) {
                     // Save in cache profile image
                     cache.save(type: .profile, data: data, for: self.username)
@@ -194,7 +194,7 @@ struct Account {
                     // Delete cached profile image (if there is any profile image saved)
                     cache.clear(type: .profile, key: self.username)
                 }
-                
+
                 DispatchQueue.main.async {
                     completion()
                 }
@@ -208,18 +208,18 @@ struct Account {
     }
 
     func fetchAccountInfo(_ completion: @escaping () -> Void) {
-        
+
         if let token = try? readToken() {
-        
+
             DispatchQueue.global(qos: .background).async {
-            
+
                 DigiClient.shared.getUserInfo(for: token) { result, error in
-                
+
                     guard error == nil else {
                         print(error!.localizedDescription)
                         return
                     }
-                    
+
                     if let result = result {
 
                         UserDefaults.standard.set("\(result.firstName) \(result.lastName)", forKey: self.username)

@@ -56,12 +56,12 @@ class LocationsViewController: UITableViewController {
             self.getMounts()
         }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)
     }
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -161,7 +161,7 @@ class LocationsViewController: UITableViewController {
             } else {
                 self.tableView.reloadData()
             }
-            
+
             self.hasLoadedLocations = true
         }
     }
