@@ -475,7 +475,7 @@ final class ListingViewController: UITableViewController {
     private func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.refreshControl?.endRefreshing()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 
                 if self.didReceivedNetworkError {
                    self.presentError()

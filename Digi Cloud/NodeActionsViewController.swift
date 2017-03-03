@@ -65,8 +65,12 @@ final class NodeActionsViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
+        
+        let bookmarkTitle = self.node.bookmark == nil ? NSLocalizedString("Set Bookmark", comment: "")
+                                                      : NSLocalizedString("Remove Bookmark", comment: "")
+        
         let folderActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
-                             ActionCell(title: NSLocalizedString("Bookmark", comment: ""), action: .bookmark),
+                             ActionCell(title: bookmarkTitle, action: .bookmark),
                              ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
                              ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),
                              ActionCell(title: NSLocalizedString("Move", comment: ""), action: .move),
