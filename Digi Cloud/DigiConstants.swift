@@ -38,7 +38,7 @@ struct ParametersKeys {
 }
 
 struct DataJSONKeys {
-    static let folderName       = "name"
+    static let directoryName    = "name"
 }
 
 struct Methods {
@@ -52,7 +52,7 @@ struct Methods {
     static let FilesGet            = "/api/v2/mounts/{id}/files/get"
     static let FilesRename         = "/api/v2/mounts/{id}/files/rename"
     static let FilesRemove         = "/api/v2/mounts/{id}/files/remove"
-    static let FilesFolder         = "/api/v2/mounts/{id}/files/folder"
+    static let FilesDirectory      = "/api/v2/mounts/{id}/files/folder"
     static let FilesTree           = "/api/v2/mounts/{id}/files/tree"
     static let FilesCopy           =  "/api/v2/mounts/{id}/files/copy"
     static let FilesMove           = "/api/v2/mounts/{id}/files/move"

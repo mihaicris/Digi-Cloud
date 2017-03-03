@@ -546,7 +546,7 @@ final class DigiClient {
         }
     }
 
-    /// Deletes a node (file or folder)
+    /// Deletes a node (file or directory)
     ///
     /// - Parameters:
     ///   - location: Location of the node
@@ -569,17 +569,17 @@ final class DigiClient {
         }
     }
 
-    /// Create a node of type folder
+    /// Create a node of type directory
     ///
     /// - Parameters:
-    ///   - node: Node location in which the folder is created
-    ///   - name: Folder name
+    ///   - node: Node location in which the directory is created
+    ///   - name: directory name
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
     func createDirectory(in node: Node, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
-        // prepare the method string for create new folder
-        let method = Methods.FilesFolder.replacingOccurrences(of: "{id}", with: node.location.mount.id)
+        // prepare the method string for create new directory
+        let method = Methods.FilesDirectory.replacingOccurrences(of: "{id}", with: node.location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.PostHeaders
@@ -588,15 +588,15 @@ final class DigiClient {
         // prepare parameters
         let parameters = [ParametersKeys.Path: node.location.path]
 
-        // prepare new folder name in request body
-        let jsonBody = [DataJSONKeys.folderName: name]
+        // prepare new directory name in request body
+        let jsonBody = [DataJSONKeys.directoryName: name]
 
         networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
         }
     }
 
-    /// Search for files or folders
+    /// Search for files or directories
     ///
     /// - Parameters:
     ///   - parameters: search parameters
@@ -628,12 +628,12 @@ final class DigiClient {
         }
     }
 
-    /// Calculates information from Dictionary content (JSON folder tree)
+    /// Calculates information from Dictionary content (JSON directory tree)
     ///
-    /// - Parameter parent: parent folder
-    /// - Returns: return tuple with (size of child, number of files, number of folders)
-    private func calculateNodeInfo(_ parent: [String: Any]) -> FolderInfo {
-        var info = FolderInfo()
+    /// - Parameter parent: parent directory
+    /// - Returns: return tuple with (size of child, number of files, number of directories)
+    private func calculateNodeInfo(_ parent: [String: Any]) -> DirectoryInfo {
+        var info = DirectoryInfo()
         if let childType = parent["type"] as? String, childType == "file" {
             info.files += 1
             if let size = parent["size"] as? Int64 {
@@ -642,25 +642,25 @@ final class DigiClient {
             }
         }
         if let children = parent["children"] as? [[String: Any]] {
-            info.folders += 1
+            info.directories += 1
             for child in children {
                 let childInfo = calculateNodeInfo(child)
                 info.size += childInfo.size
                 info.files += childInfo.files
-                info.folders += childInfo.folders
+                info.directories += childInfo.directories
             }
         }
         return info
     }
 
-    /// Get information about a folder
+    /// Get information about a directory
     ///
     /// - Parameters:
     ///   - location: The location of which we get the information
     ///   - completion: The block called after the server has responded
-    ///   - info: Tuple containing size, number of files and number of folders
+    ///   - info: Tuple containing size, number of files and number of directories
     ///   - error: The error occurred in the network request, nil for no error.
-    func getDirectoryInfo(for node: Node, completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
+    func getDirectoryInfo(for node: Node, completion: @escaping(_ info: DirectoryInfo?, _ error: Error?) -> Void) {
 
         // CHeck if node is a directory
         guard node.type == "dir" else {
@@ -686,9 +686,9 @@ final class DigiClient {
             }
 
             var info = self.calculateNodeInfo(json)
-            info.folders -= 1
+            info.directories -= 1
 
-            // Subtracting 1 because the root folder is also counted
+            // Subtracting 1 because the root directory is also counted
             completion(info, nil)
         }
     }

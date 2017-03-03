@@ -23,8 +23,8 @@ final class FolderInfoViewController: UITableViewController {
     private var rightBarButton: UIBarButtonItem!
     private var deleteButton: UIButton!
     private var noElementsLabel = UILabel()
-    private var folderSizeLabel = UILabel()
-    private var folderInfo = FolderInfo() {
+    private var directorySizeLabel = UILabel()
+    private var directoryInfo = DirectoryInfo() {
         didSet {
             self.noElementsLabel = {
                 let label = UILabel()
@@ -33,28 +33,28 @@ final class FolderInfoViewController: UITableViewController {
                 label.numberOfLines = 2
 
                 let filesString: String
-                if folderInfo.files == 1 {
+                if directoryInfo.files == 1 {
                     filesString = NSLocalizedString("1 file\n", comment: "")
                 } else {
                     filesString = NSLocalizedString("%d files\n", comment: "")
                 }
 
                 let foldersString: String
-                if folderInfo.folders == 1 {
+                if directoryInfo.directories == 1 {
                     foldersString = NSLocalizedString("1 directory", comment: "")
                 } else {
                     foldersString = NSLocalizedString("%d directories", comment: "")
                 }
 
-                let text1 = String.localizedStringWithFormat(filesString, folderInfo.files)
-                let text2 = String.localizedStringWithFormat(foldersString, folderInfo.folders)
+                let text1 = String.localizedStringWithFormat(filesString, directoryInfo.files)
+                let text2 = String.localizedStringWithFormat(foldersString, directoryInfo.directories)
                 let attributedText = NSMutableAttributedString(string: text1 + text2,
                                                                attributes: [NSParagraphStyleAttributeName: paragraph])
                 label.attributedText = attributedText
 
                 return label
             }()
-            self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: folderInfo.size)
+            self.directorySizeLabel.text = self.sizeFormatter.string(fromByteCount: directoryInfo.size)
             self.tableView.reloadData()
         }
     }
@@ -145,9 +145,9 @@ final class FolderInfoViewController: UITableViewController {
             folderName.centerYAnchor.constraint(equalTo: folderIcon.centerYAnchor).isActive = true
         // Size
         case 1:
-            cell.contentView.addSubview(folderSizeLabel)
-            cell.contentView.addConstraints(with: "H:|-20-[v0]-20-|", views: folderSizeLabel)
-            folderSizeLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            cell.contentView.addSubview(directorySizeLabel)
+            cell.contentView.addConstraints(with: "H:|-20-[v0]-20-|", views: directorySizeLabel)
+            directorySizeLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
         case 2:
             cell.contentView.addSubview(noElementsLabel)
             cell.contentView.addConstraints(with: "H:|-20-[v0]-|", views: noElementsLabel)
@@ -197,7 +197,7 @@ final class FolderInfoViewController: UITableViewController {
                 return
             }
             if let info = info {
-                self.folderInfo = info
+                self.directoryInfo = info
             } else {
                 // TODO: Show information that folder was not correctly calculated.
             }

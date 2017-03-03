@@ -70,6 +70,7 @@
 		83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6F1D900F9700ACE008 /* FileCell.swift */; };
 		83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D711D900FA700ACE008 /* DirectoryCell.swift */; };
 		83F1FFD31E6979040079F56F /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1FFD21E6979040079F56F /* Enums.swift */; };
+		83F1FFD81E6980350079F56F /* DirectoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1FFD71E6980350079F56F /* DirectoryInfo.swift */; };
 		83F7EF001E369A7D0033F03D /* DigiCloudTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */; };
 		83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994511DD09B340023FB5D /* SortFolderViewController.swift */; };
 		83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994531DD0A1E90023FB5D /* ActionCell.swift */; };
@@ -157,6 +158,7 @@
 		83EF1D6F1D900F9700ACE008 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
 		83EF1D711D900FA700ACE008 /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryCell.swift; sourceTree = "<group>"; };
 		83F1FFD21E6979040079F56F /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		83F1FFD71E6980350079F56F /* DirectoryInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryInfo.swift; sourceTree = "<group>"; };
 		83F7EEFD1E369A7D0033F03D /* Digi Cloud Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Digi Cloud Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DigiCloudTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83F994511DD09B340023FB5D /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SortFolderViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -358,6 +360,7 @@
 				8328F8101E51FF2E00DE4453 /* DownloadLink.swift */,
 				836731B81E53DCD3001EA961 /* UploadLink.swift */,
 				8302319D1E559ECB001CDC00 /* Bookmark.swift */,
+				83F1FFD71E6980350079F56F /* DirectoryInfo.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 				830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */,
 				83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */,
 				833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */,
+				83F1FFD81E6980350079F56F /* DirectoryInfo.swift in Sources */,
 				836731B91E53DCD3001EA961 /* UploadLink.swift in Sources */,
 				8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */,
 				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
