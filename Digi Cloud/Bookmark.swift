@@ -33,6 +33,21 @@ extension Bookmark {
         self.mountId = mountId
         self.path = path
     }
+
+    init?(JSON: Any?, mountId: String) {
+        if JSON == nil { return nil }
+        guard let JSON = JSON as? [String: Any],
+            let name = JSON["name"] as? String,
+            let path = JSON["path"] as? String
+            else {
+                print("Couldnt parse JSON")
+                return nil
+        }
+
+        self.name = name
+        self.mountId = mountId
+        self.path = path
+    }
 }
 
 extension Bookmark: Equatable {

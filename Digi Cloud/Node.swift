@@ -12,6 +12,7 @@ struct Node: ContentItem {
 
     // MARK: - Properties
 
+    // via API
     var name: String
     let type: String
     let modified: TimeInterval
@@ -21,6 +22,9 @@ struct Node: ContentItem {
     let share: Mount?
     var downloadLink: DownloadLink?
     var uploadLink: UploadLink?
+    var bookmark: Bookmark?
+
+    //  via Constructor
     let parentLocation: Location
 }
 
@@ -47,6 +51,9 @@ extension Node {
         self.downloadLink = DownloadLink(JSON: JSON["link"])
         self.uploadLink = UploadLink(JSON: JSON["receiver"])
         self.parentLocation = parentLocation
+
+        self.bookmark = Bookmark(JSON: JSON["bookmark"], mountId: parentLocation.mount.id)
+
     }
 }
 

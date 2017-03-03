@@ -108,8 +108,9 @@ final class SearchResultController: UITableViewController {
         let item = filteredContent[indexPath.row]
 
         let resultNode = Node(name: item.name, type: item.type, modified: item.modified,
-                              size: item.size, contentType: item.contentType, hash: nil, share: nil,
-                              downloadLink: nil, uploadLink: nil, parentLocation: item.location.parentLocation)
+                              size: item.size, contentType: item.contentType, hash: nil,
+                              share: nil, downloadLink: nil, uploadLink: nil, bookmark: nil,
+                              parentLocation: item.location.parentLocation)
 
         let controller = item.type == "dir" ? ListingViewController(node: resultNode, action: .noAction) : ContentViewController(item: item)
 

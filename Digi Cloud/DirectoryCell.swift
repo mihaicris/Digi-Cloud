@@ -17,7 +17,7 @@ final class DirectoryCell: BaseListCell {
             setupSharedLabel()
         }
     }
-    
+
     var isBookmarked: Bool = false {
         didSet {
             setupBookmarkLabel()
@@ -36,18 +36,12 @@ final class DirectoryCell: BaseListCell {
         return l
     }()
 
-    let bookmarkLabel: UILabelWithPadding = {
-        let l = UILabelWithPadding(paddingTop: 4, paddingLeft: 15, paddingBottom: 1, paddingRight: 15)
-        l.text = "\u{f006}"
-        l.textColor = .white
-        l.font = UIFont.fontAwesome(size: 9)
-        l.backgroundColor = UIColor(red: 0.2, green: 0.5, blue: 0.1, alpha: 0.6)
-        l.textAlignment = .center
-        l.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
-        l.translatesAutoresizingMaskIntoConstraints = false
-        return l
+    let bookmarkImageView: UIImageView = {
+        let im = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
+        im.translatesAutoresizingMaskIntoConstraints = false
+        return im
     }()
-    
+
     var hasUploadLink: Bool = false
 
     // MARK: - Overridden Methods and Properties
@@ -92,17 +86,16 @@ final class DirectoryCell: BaseListCell {
             sharedLabel.removeFromSuperview()
         }
     }
-    
-    
+
     private func setupBookmarkLabel() {
         if isBookmarked {
-            contentView.addSubview(bookmarkLabel)
+            contentView.addSubview(bookmarkImageView)
             NSLayoutConstraint.activate([
-                bookmarkLabel.centerXAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
-                bookmarkLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor, constant: 5)
+                bookmarkImageView.centerXAnchor.constraint(equalTo: iconImageView.rightAnchor, constant: -5),
+                bookmarkImageView.topAnchor.constraint(equalTo: iconImageView.topAnchor, constant: 0)
             ])
         } else {
-            bookmarkLabel.removeFromSuperview()
+            bookmarkImageView.removeFromSuperview()
         }
     }
 }

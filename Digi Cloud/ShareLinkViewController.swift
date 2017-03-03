@@ -212,9 +212,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         case .upload:
             self.originalLinkHash = node.uploadLink?.hash ?? ""
         }
-        
+
         super.init(nibName: nil, bundle: nil)
-        
+
         INITLog(self)
     }
 
@@ -260,7 +260,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         return headerTitle
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)
@@ -523,7 +523,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func configureWaitingView(type: WaitingType, message: String) {
-        
+
         switch type {
         case .hidden:
             waitingView.isHidden = true
@@ -540,13 +540,13 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                     errorMessageVerticalConstraint?.constant = 0
                 }
             }
-            
+
             if let v = waitingView.viewWithTag(99) as? UILabel {
                 v.text = message
             }
         }
     }
-    
+
     private func hasInvalidCharacters(name: String) -> Bool {
         let charset = CharacterSet.init(charactersIn: name)
         return !charset.isDisjoint(with: CharacterSet.alphanumerics.inverted)
@@ -627,11 +627,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         hashTextField.text = self.originalLinkHash
         self.hashTextField.resignFirstResponder()
     }
-    
+
     @objc private func handleDelete() {
 
         configureWaitingView(type: .started, message: NSLocalizedString("Deleting Link", comment: ""))
-        
+
         DigiClient.shared.deleteLink(node: self.node, type: self.linkType) { (error) in
             guard error == nil else {
                 self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
@@ -801,7 +801,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func requestLink() {
-        
+
         configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
 
         DigiClient.shared.getLink(for: self.node, type: self.linkType) { (link, error) in

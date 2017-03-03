@@ -23,7 +23,8 @@ final class ListingViewController: UITableViewController {
     private var isUpdating: Bool = false
     private var isActionConfirmed: Bool = false
     fileprivate var content: [Node] = []
-    fileprivate var currentIndex: IndexPath!
+    private var bookmarks: [Bookmark] = []
+    fileprivate var selectedIndexPath: IndexPath!
     private var searchController: UISearchController!
     private var fileCellID = String()
     private var folderCellID = String()
@@ -211,13 +212,14 @@ final class ListingViewController: UITableViewController {
             }
 
             cell.delegate = self
-            cell.hasButton = action == .noAction
-            cell.isShared = item.share != nil
-            cell.isBookmarked = true
-            cell.hasDownloadLink = item.downloadLink != nil
-            cell.hasUploadLink = item.uploadLink != nil
 
             cell.nameLabel.text = item.name
+
+            cell.hasButton = action == .noAction
+            cell.isShared = item.share != nil
+            cell.hasDownloadLink = item.downloadLink != nil
+            cell.hasUploadLink = item.uploadLink != nil
+            cell.isBookmarked = item.bookmark != nil
 
             let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
 
@@ -497,7 +499,7 @@ final class ListingViewController: UITableViewController {
     }
 
     fileprivate func animateActionButton(active: Bool) {
-        guard let actionsButton = (tableView.cellForRow(at: currentIndex) as? BaseListCell)?.actionsButton else {
+        guard let actionsButton = (tableView.cellForRow(at: selectedIndexPath) as? BaseListCell)?.actionsButton else {
             return
         }
         let transform = active ? CGAffineTransform.init(rotationAngle: CGFloat(Double.pi)) : CGAffineTransform.identity
@@ -691,7 +693,8 @@ final class ListingViewController: UITableViewController {
                 }
 
                 let newNode = Node(name: folderName, type: "dir", modified: 0, size: 0, contentType: "",
-                                   hash: nil, share: nil, downloadLink: nil, uploadLink: nil, parentLocation: self.node.location)
+                                   hash: nil, share: nil, downloadLink: nil, uploadLink: nil, bookmark: nil,
+                                   parentLocation: self.node.location)
 
                 // Set needRefresh in this list
                 self.needRefresh = true
@@ -1114,7 +1117,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
         let completionBlock = {
 
-            let node: Node = self.content[self.currentIndex.row]
+            let node: Node = self.content[self.selectedIndexPath.row]
 
             switch action {
 
@@ -1124,40 +1127,34 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
             case .bookmark:
 
-                DigiClient.shared.getBookmarks(completion: { (bookmarks, error) in
+                if let bookmark = node.bookmark {
 
-                    guard error == nil, let bookmarksArray = bookmarks else {
-                        print(error!.localizedDescription)
-                        return
-                    }
+                    // Bookmark is set, removing it:
+                    DigiClient.shared.removeBookmark(bookmark: bookmark, completion: { error in
 
+                        guard error == nil else {
+                            print(error!.localizedDescription)
+                            return
+                        }
+                        self.content[self.selectedIndexPath.row].bookmark = nil
+                        self.tableView.reloadRows(at: [self.selectedIndexPath], with: .none)
+                    })
+                } else {
+
+                    // Bookmark is not set, adding it:                    
                     let bookmark = Bookmark(name: node.name, mountId: node.location.mount.id, path: node.location.path)
 
-                    if bookmarksArray.contains(bookmark) {
+                    DigiClient.shared.addBookmark(bookmark: bookmark, completion: { error in
+                        guard error == nil else {
+                            print(error!.localizedDescription)
+                            return
+                        }
 
-                        // Bookmark is set, then it is removed
-                        DigiClient.shared.removeBookmark(bookmark: bookmark, completion: { error in
-
-                            // TODO: Give user feedback
-                            guard error == nil else {
-                                print(error!.localizedDescription)
-                                return
-                            }
-                            print("Bookmark removed.")
-                        })
-                    } else {
-
-                        // Bookmark is not set, then it is added
-                        DigiClient.shared.addBookmark(bookmark: bookmark, completion: { error in
-                            // TODO: Give user feedback
-                            guard error == nil else {
-                                print(error!.localizedDescription)
-                                return
-                            }
-                            print("Bookmark added.")
-                        })
-                    }
-                })
+                        let newBookmark = Bookmark(name: node.name, mountId: node.location.mount.id, path: node.location.path)
+                        self.content[self.selectedIndexPath.row].bookmark = newBookmark
+                        self.tableView.reloadRows(at: [self.selectedIndexPath], with: .none)
+                    })
+                }
 
             case .rename:
                 let controller = RenameViewController(node: node)
@@ -1165,9 +1162,9 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                     // dismiss RenameViewController
                     self.dismiss(animated: true) {
                         if newName != nil {
-                            self.content[self.currentIndex.row].name = newName!
+                            self.content[self.selectedIndexPath.row].name = newName!
 
-                            self.tableView.reloadRows(at: [self.currentIndex], with: .middle)
+                            self.tableView.reloadRows(at: [self.selectedIndexPath], with: .middle)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                                 self.updateContent()
                             }
@@ -1193,7 +1190,7 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                     controller.delegate = self
 
                     // position alert on the same row with the file
-                    var sourceView = self.tableView.cellForRow(at: self.currentIndex)!.contentView
+                    var sourceView = self.tableView.cellForRow(at: self.selectedIndexPath)!.contentView
                     for view in sourceView.subviews {
                         if view.tag == 1 {
                             sourceView = view.subviews[0]
@@ -1212,12 +1209,12 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                     // dismiss FolderViewController
                     self.dismiss(animated: true) {
                         if success {
-                            self.content.remove(at: self.currentIndex.row)
+                            self.content.remove(at: self.selectedIndexPath.row)
                             if self.content.count == 0 {
                                 self.updateDirectoryMessage()
                                 self.tableView.reloadData()
                             } else {
-                                self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                                self.tableView.deleteRows(at: [self.selectedIndexPath], with: .left)
                             }
                         } else {
                             if needRefresh {
@@ -1244,13 +1241,13 @@ extension ListingViewController: BaseListCellDelegate {
         let buttonPosition = sourceView.convert(CGPoint.zero, to: self.tableView)
         guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
 
-        self.currentIndex = indexPath
+        self.selectedIndexPath = indexPath
         self.animateActionButton(active: true)
 
         let controller = NodeActionsViewController(node: self.content[indexPath.row])
         controller.delegate = self
 
-        var sourceView = tableView.cellForRow(at: currentIndex)!.contentView
+        var sourceView = tableView.cellForRow(at: selectedIndexPath)!.contentView
         for view in sourceView.subviews {
             if view.tag == 1 {
                 sourceView = view.subviews[0]
@@ -1269,7 +1266,7 @@ extension ListingViewController: DeleteViewControllerDelegate {
 
         let completionBlock = {
 
-            let nodeToDelete = self.content[self.currentIndex.row]
+            let nodeToDelete = self.content[self.selectedIndexPath.row]
             DigiClient.shared.delete(node: nodeToDelete) { statusCode, error in
                 // TODO: Stop spinner
                 guard error == nil else {
@@ -1285,12 +1282,12 @@ extension ListingViewController: DeleteViewControllerDelegate {
                 if let code = statusCode {
                     switch code {
                     case 200:
-                        self.content.remove(at: self.currentIndex.row)
+                        self.content.remove(at: self.selectedIndexPath.row)
                         if self.content.isEmpty {
                             self.updateDirectoryMessage()
                             self.tableView.reloadData()
                         } else {
-                            self.tableView.deleteRows(at: [self.currentIndex], with: .left)
+                            self.tableView.deleteRows(at: [self.selectedIndexPath], with: .left)
                         }
                     case 400:
                         self.updateContent()

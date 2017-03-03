@@ -33,7 +33,7 @@ final class DigiClient {
     func renewSession() {
         session?.invalidateAndCancel()
         let config = URLSessionConfiguration.default
-        
+
         #if DEBUGCONTROLLERS
             config.timeoutIntervalForRequest = 3
             config.timeoutIntervalForResource = 3
@@ -41,7 +41,7 @@ final class DigiClient {
             config.timeoutIntervalForRequest = 30
             config.timeoutIntervalForResource = 30
         #endif
-        
+
         config.allowsCellularAccess = AppSettings.allowsCellularAccess
         session = URLSession(configuration: config)
     }
