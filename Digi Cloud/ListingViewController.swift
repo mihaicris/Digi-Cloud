@@ -72,18 +72,6 @@ final class ListingViewController: UITableViewController {
         return sv
     }()
 
-    private var sortBarButton: UIBarButtonItem!
-
-    private lazy var moreActionsBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
-        return b
-    }()
-
-    private lazy var searchBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
-        return b
-    }()
-
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
@@ -141,12 +129,8 @@ final class ListingViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        setupSearchController()
         setupViews()
-        if node.name == "" {
-            self.title = node.location.mount.name
-        } else {
-            self.title = node.name
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -227,13 +211,13 @@ final class ListingViewController: UITableViewController {
 
             if cell.hasDownloadLink {
                 // http://fontawesome.io/icon/cloud-upload/
-                let attributedString = NSAttributedString(string: "  \u{f0ee}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                let attributedString = NSAttributedString(string: "  \u{f0aa}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
             if cell.hasUploadLink {
                 // http://fontawesome.io/icon/cloud-download/
-                let attributedString = NSAttributedString(string: "  \u{f01a}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                let attributedString = NSAttributedString(string: "  \u{f0ab}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
@@ -260,7 +244,7 @@ final class ListingViewController: UITableViewController {
 
             if cell.hasDownloadLink {
                 // http://fontawesome.io/icon/cloud-upload/
-                let attributedString = NSAttributedString(string: "  \u{f0ee}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                let attributedString = NSAttributedString(string: "  \u{f0aa}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
@@ -330,7 +314,6 @@ final class ListingViewController: UITableViewController {
 
         self.fileCellID = "FileCell"
         self.folderCellID = "DirectoryCell"
-        setupSearchController()
         definesPresentationContext = true
         tableView.allowsMultipleSelectionDuringEditing = true
 
@@ -343,7 +326,9 @@ final class ListingViewController: UITableViewController {
     }
 
     private func setupViews() {
+        
         switch self.action {
+
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
 
@@ -362,9 +347,21 @@ final class ListingViewController: UITableViewController {
             copyMoveButton.isEnabled = true
 
             self.toolbarItems = [createFolderBarButton, flexibleBarButton, copyMoveButton]
+
         default:
+            
             self.toolbarItems = [deleteInEditModeButton, flexibleBarButton, copyInEditModeButton, flexibleBarButton, moveInEditModeButton]
         }
+        
+        if node.name == "" {
+            self.title = node.location.mount.name
+        } else {
+            self.title = node.name
+        }
+    }
+    
+    @objc private func handleShowBookmarks() {
+        
     }
 
     private func setupSearchController() {
@@ -530,9 +527,13 @@ final class ListingViewController: UITableViewController {
             case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "") + (isAscending ? " ↑" : " ↓")
             case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "") + (isAscending ? " ↑" : " ↓")
             }
-            sortBarButton      = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
-
-            rightBarButtonItems.append(contentsOf: [moreActionsBarButton, sortBarButton, searchBarButton])
+            
+            let moreActionsBarButton = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
+            let sortBarButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
+            let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
+            let bookmarksBarButton = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarks))
+            
+            rightBarButtonItems.append(contentsOf: [moreActionsBarButton, sortBarButton, searchBarButton, bookmarksBarButton])
         }
 
         navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
