@@ -17,6 +17,12 @@ final class DirectoryCell: BaseListCell {
             setupSharedLabel()
         }
     }
+    
+    var isBookmarked: Bool = false {
+        didSet {
+            setupBookmarkLabel()
+        }
+    }
 
     let sharedLabel: UILabelWithPadding = {
         let l = UILabelWithPadding(paddingTop: 2, paddingLeft: 20, paddingBottom: 2, paddingRight: 20)
@@ -30,6 +36,18 @@ final class DirectoryCell: BaseListCell {
         return l
     }()
 
+    let bookmarkLabel: UILabelWithPadding = {
+        let l = UILabelWithPadding(paddingTop: 4, paddingLeft: 15, paddingBottom: 1, paddingRight: 15)
+        l.text = "\u{f006}"
+        l.textColor = .white
+        l.font = UIFont.fontAwesome(size: 9)
+        l.backgroundColor = UIColor(red: 0.2, green: 0.5, blue: 0.1, alpha: 0.6)
+        l.textAlignment = .center
+        l.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
+    }()
+    
     var hasUploadLink: Bool = false
 
     // MARK: - Overridden Methods and Properties
@@ -62,16 +80,29 @@ final class DirectoryCell: BaseListCell {
 
     // MARK: - Helper Functions
 
-    func setupSharedLabel() {
+    private func setupSharedLabel() {
 
         if isShared {
             contentView.addSubview(sharedLabel)
             NSLayoutConstraint.activate([
-                sharedLabel.centerXAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-                sharedLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -5)
+                sharedLabel.centerXAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
+                sharedLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor, constant: 15)
             ])
         } else {
             sharedLabel.removeFromSuperview()
+        }
+    }
+    
+    
+    private func setupBookmarkLabel() {
+        if isBookmarked {
+            contentView.addSubview(bookmarkLabel)
+            NSLayoutConstraint.activate([
+                bookmarkLabel.centerXAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
+                bookmarkLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor, constant: 5)
+            ])
+        } else {
+            bookmarkLabel.removeFromSuperview()
         }
     }
 }

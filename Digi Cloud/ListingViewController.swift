@@ -178,13 +178,8 @@ final class ListingViewController: UITableViewController {
         if tableView.isEditing {
             cancelEditMode()
         }
-
-        super.viewWillDisappear(animated)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
-        super.viewDidDisappear(animated)
+        super.viewWillDisappear(animated)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -218,6 +213,7 @@ final class ListingViewController: UITableViewController {
             cell.delegate = self
             cell.hasButton = action == .noAction
             cell.isShared = item.share != nil
+            cell.isBookmarked = true
             cell.hasDownloadLink = item.downloadLink != nil
             cell.hasUploadLink = item.uploadLink != nil
 
