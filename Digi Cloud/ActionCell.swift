@@ -42,10 +42,6 @@ final class ActionCell: UITableViewCell {
             color = .darkGray
         case .delete:
             color = .red
-        case .sendDownloadLink:
-            addActionIcon(fontAwesomeCode: "\u{f0ee}")
-        case .sendUploadLink:
-            addActionIcon(fontAwesomeCode: "\u{f01a}")
         default:
             break
         }
@@ -64,24 +60,6 @@ final class ActionCell: UITableViewCell {
         contentView.addSubview(switchButton)
         contentView.addConstraints(with: "H:[v0]-10-|", views: switchButton)
         switchButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-    }
-
-    private func addActionIcon(fontAwesomeCode: Character) {
-        let iconLabel: UILabel = {
-            let l = UILabel()
-            l.translatesAutoresizingMaskIntoConstraints = false
-            l.attributedText = NSAttributedString(string: String(fontAwesomeCode),
-                                                  attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 16),
-                                                               NSForegroundColorAttributeName: UIColor.lightGray])
-            return l
-        }()
-
-        self.contentView.addSubview(iconLabel)
-
-        NSLayoutConstraint.activate([
-            iconLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            iconLabel.centerXAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.rightAnchor, constant: -4)
-        ])
     }
 
     @objc private func handleSwitchValueChanged() {
