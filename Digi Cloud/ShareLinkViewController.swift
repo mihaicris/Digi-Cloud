@@ -170,7 +170,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = NSLocalizedString("Preparing Link", comment: "")
         label.textColor = .gray
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 14)
@@ -213,8 +212,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         case .upload:
             self.originalLinkHash = node.uploadLink?.hash ?? ""
         }
-
+        
         super.init(nibName: nil, bundle: nil)
+        
+        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -258,6 +259,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         }
 
         return headerTitle
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
     }
 
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
@@ -516,6 +522,31 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         self.view.addGestureRecognizer(tgr)
     }
 
+    private func configureWaitingView(type: WaitingType, message: String) {
+        
+        switch type {
+        case .hidden:
+            waitingView.isHidden = true
+            self.navigationController?.setToolbarHidden(false, animated: false)
+        case .started, .stopped:
+            waitingView.isHidden = false
+            self.navigationController?.setToolbarHidden(true, animated: false)
+            if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView {
+                if type == .started {
+                    v.startAnimating()
+                    errorMessageVerticalConstraint?.constant = 40
+                } else {
+                    v.stopAnimating()
+                    errorMessageVerticalConstraint?.constant = 0
+                }
+            }
+            
+            if let v = waitingView.viewWithTag(99) as? UILabel {
+                v.text = message
+            }
+        }
+    }
+    
     private func hasInvalidCharacters(name: String) -> Bool {
         let charset = CharacterSet.init(charactersIn: name)
         return !charset.isDisjoint(with: CharacterSet.alphanumerics.inverted)
@@ -596,18 +627,18 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         hashTextField.text = self.originalLinkHash
         self.hashTextField.resignFirstResponder()
     }
-
+    
     @objc private func handleDelete() {
 
+        configureWaitingView(type: .started, message: NSLocalizedString("Deleting Link", comment: ""))
+        
         DigiClient.shared.deleteLink(node: self.node, type: self.linkType) { (error) in
             guard error == nil else {
-                print("Error at deletion of the link.")
+                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
                 return
             }
-
             self.onFinish?()
         }
-
     }
 
     @objc private func handleEnablePassword(_ sender: UISwitch) {
@@ -770,27 +801,18 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func requestLink() {
+        
+        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
 
         DigiClient.shared.getLink(for: self.node, type: self.linkType) { (link, error) in
 
             guard error == nil else {
-
-                if let constraint = self.errorMessageVerticalConstraint {
-                    constraint.constant = 0
-                }
-
-                if let v = self.waitingView.viewWithTag(55) as? UIActivityIndicatorView {
-                    v.stopAnimating()
-                }
-
-                if let v = self.waitingView.viewWithTag(99) as? UILabel {
-                    v.text = NSLocalizedString("There was an error communicating with the network.", comment: "")
-                }
+                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
                 return
             }
 
-            self.navigationController?.setToolbarHidden(false, animated: false)
             self.node.updateNode(with: link)
+            self.configureWaitingView(type: .hidden, message: "")
         }
     }
 
@@ -823,7 +845,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             validityLabel.text = NSLocalizedString("Link has no expiration date", comment: "")
         }
 
-        waitingView.removeFromSuperview()
+        waitingView.isHidden = true
     }
 
     private func startSpinning() {
