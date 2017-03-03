@@ -8,12 +8,6 @@
 
 import UIKit
 
-enum MoreActions: Int {
-    case createDirectory
-    case selectionMode
-    case sendUploadLink
-}
-
 final class MoreActionsViewController: UITableViewController {
 
     // MARK: - Properties

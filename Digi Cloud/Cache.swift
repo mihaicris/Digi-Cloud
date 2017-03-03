@@ -9,11 +9,6 @@
 import Foundation
 import UIKit.UIImage
 
-enum CacheType {
-    case file
-    case profile
-}
-
 final class Cache {
 
     func load(type: CacheType, key: String) -> Data? {

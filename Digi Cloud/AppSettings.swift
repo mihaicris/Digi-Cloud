@@ -8,13 +8,6 @@
 
 import UIKit
 
-enum SortMethodType: Int {
-    case byName = 1
-    case byDate
-    case bySize
-    case byContentType
-}
-
 struct AppSettings {
 
     // MARK: - Properties

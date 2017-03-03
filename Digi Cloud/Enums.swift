@@ -1,0 +1,66 @@
+//
+//  Enums.swift
+//  Digi Cloud
+//
+//  Created by Mihai Cristescu on 03/03/2017.
+//  Copyright © 2017 Mihai Cristescu. All rights reserved.
+//
+
+enum NetworkingError: Error {
+    case get(String)
+    case post(String)
+    case del(String)
+    case wrongStatus(String)
+    case data(String)
+}
+
+enum JSONError: Error {
+    case parse(String)
+}
+enum Authentication: Error {
+    case login(String)
+    case revoke(String)
+}
+
+enum LinkType: String {
+    case download = "links"
+    case upload = "receivers"
+}
+
+enum MoreActions: Int {
+    case createDirectory
+    case selectionMode
+    case sendUploadLink
+}
+
+enum ActionType: Int {
+    case noAction
+    case makeOffline
+    case bookmark
+    case rename
+    case copy
+    case move
+    case delete
+    case folderInfo
+    case share
+    case sendDownloadLink
+    case sendUploadLink
+}
+
+enum SortMethodType: Int {
+    case byName = 1
+    case byDate
+    case bySize
+    case byContentType
+}
+
+enum CacheType {
+    case file
+    case profile
+}
+
+enum WaitingType {
+    case started
+    case stopped
+    case hidden
+}

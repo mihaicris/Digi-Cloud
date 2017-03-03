@@ -20,5 +20,4 @@ extension UserDefaults {
         case sortAscending
         case allowsCellularAccess
     }
-
 }

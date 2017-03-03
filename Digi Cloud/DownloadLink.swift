@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum LinkType: String {
-    case download = "links"
-    case upload = "receivers"
-}
-
 struct DownloadLink: Link {
 
     // MARK: - Properties

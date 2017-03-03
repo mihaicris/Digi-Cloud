@@ -10,27 +10,6 @@ import UIKit
 
 // Singleton class for DIGI Client
 
-enum NetworkingError: Error {
-    case get(String)
-    case post(String)
-    case del(String)
-    case wrongStatus(String)
-    case data(String)
-}
-enum JSONError: Error {
-    case parse(String)
-}
-enum Authentication: Error {
-    case login(String)
-    case revoke(String)
-}
-
-struct FolderInfo {
-    var size: Int64 = 0
-    var files: Int = 0
-    var folders: Int = 0
-}
-
 final class DigiClient {
 
     // MARK: - Properties

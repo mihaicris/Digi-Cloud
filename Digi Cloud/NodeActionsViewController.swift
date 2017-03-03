@@ -8,20 +8,6 @@
 
 import UIKit
 
-enum ActionType: Int {
-    case noAction
-    case makeOffline
-    case bookmark
-    case rename
-    case copy
-    case move
-    case delete
-    case folderInfo
-    case share
-    case sendDownloadLink
-    case sendUploadLink
-}
-
 final class NodeActionsViewController: UITableViewController {
 
     // MARK: - Properties
