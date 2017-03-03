@@ -518,18 +518,9 @@ final class ListingViewController: UITableViewController {
         if tableView.isEditing {
             rightBarButtonItems.append(cancelInEditModeButton)
         } else {
-            var buttonTitle: String
-            let isAscending = AppSettings.sortAscending
-
-            switch AppSettings.sortMethod {
-            case .byName:        buttonTitle = NSLocalizedString("Name", comment: "") + (isAscending ? " ↑" : " ↓")
-            case .byDate:        buttonTitle = NSLocalizedString("Date", comment: "") + (isAscending ? " ↑" : " ↓")
-            case .bySize:        buttonTitle = NSLocalizedString("Size", comment: "") + (isAscending ? " ↑" : " ↓")
-            case .byContentType: buttonTitle = NSLocalizedString("Type", comment: "") + (isAscending ? " ↑" : " ↓")
-            }
             
-            let moreActionsBarButton = UIBarButtonItem(title: "⚬⚬⚬", style: .plain, target: self, action: #selector(handleShowMoreActions))
-            let sortBarButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleSortSelect))
+            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .plain, target: self, action: #selector(handleShowMoreActions))
+            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .plain, target: self, action: #selector(handleSortSelect))
             let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
             let bookmarksBarButton = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarks))
             
@@ -640,13 +631,9 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleSortSelect() {
         let controller = SortFolderViewController()
-        controller.onFinish = { [unowned self](dismiss) in
-            if dismiss {
-                self.dismiss(animated: true, completion: nil)
-            }
+        controller.onFinish = { [unowned self] in
             self.sortContent()
             self.tableView.reloadData()
-            self.updateNavigationBarRightButtonItems()
         }
         controller.modalPresentationStyle = .popover
         guard let buttonView = navigationItem.rightBarButtonItems?[1].value(forKey: "view") as? UIView else { return }

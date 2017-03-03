@@ -12,7 +12,7 @@ final class SortFolderViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var onFinish: ((_ dismiss: Bool) -> Void)?
+    var onFinish: (() -> Void)?
     private var contextMenuSortActions: [String] = []
 
     // MARK: - Initializers and Deinitializers
@@ -82,7 +82,7 @@ final class SortFolderViewController: UITableViewController {
                     AppSettings.sortMethod = SortMethodType(rawValue: tag)!
                 }
                 tableView.reloadData()
-                self.onFinish?(true)
+                self.onFinish?()
             }
         }
     }
@@ -140,7 +140,7 @@ extension SortFolderViewController: ActionCellDelegate {
     func onSwitchValueChanged(button: UISwitch, value: Bool) {
         if button.tag == 0 {
             AppSettings.showsFoldersFirst = value
-            self.onFinish?(false)
+            self.onFinish?()
         }
     }
 }
