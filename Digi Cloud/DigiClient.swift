@@ -60,7 +60,7 @@ final class DigiClient {
     ///   - data: The data of the network response
     ///   - response: The status code of the network response
     ///   - error: The error occurred in the network request, nil for no error.
-    func networkTask(requestType: String, method: String, headers: [String: String]?, json: [String: Any]?, parameters: [String: String]?,
+    func networkTask(requestType: RequestType, method: String, headers: [String: String]?, json: [String: Any]?, parameters: [String: String]?,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
         #if DEBUG
@@ -70,7 +70,7 @@ final class DigiClient {
         /* 1. Build the URL, Configure the request */
         let url = self.getURL(method: method, parameters: parameters)
 
-        var request = self.getURLRequest(url: url, requestType: requestType, headers: headers)
+        var request = self.getURLRequest(url: url, requestType: requestType.rawValue, headers: headers)
 
         // add json object to request
         if let json = json {
@@ -202,7 +202,7 @@ final class DigiClient {
         let headers = DefaultHeaders.PostHeaders
         let jsonBody = ["password": password, "email": username]
 
-        networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: nil) { json, statusCode, error in
+        networkTask(requestType: .post, method: method, headers: headers, json: jsonBody, parameters: nil) { json, statusCode, error in
             guard error == nil else {
                 print(error!.localizedDescription)
                 completion(nil, error!)
@@ -230,7 +230,7 @@ final class DigiClient {
         let method = Methods.Token
         let headers: [String: String] = ["Accept": "*/*", HeadersKeys.Authorization: "Token \(token)"]
 
-        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
             guard error == nil else {
                 completion(nil, Authentication.revoke("There was an error at revoke token API request."))
                 return
@@ -253,7 +253,7 @@ final class DigiClient {
         let method = Methods.User
         let headers: [String: String] = ["Accept": "*/*", HeadersKeys.Authorization: "Token \(token)"]
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { jsonData, statusCode, error in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { jsonData, statusCode, error in
 
             guard error == nil else {
                 completion(nil, error)
@@ -289,7 +289,7 @@ final class DigiClient {
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { data, _, error in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { data, _, error in
 
             guard error == nil else {
                 completion(nil, error!)
@@ -328,7 +328,7 @@ final class DigiClient {
 
         let parameters = [ParametersKeys.Path: nodeLocation.path]
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
 
             guard error == nil else {
                 completion(nil, error!)
@@ -368,7 +368,7 @@ final class DigiClient {
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: nil) { json, _, error in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { json, _, error in
             guard error == nil else {
                 completion(nil, error!)
                 return
@@ -410,7 +410,7 @@ final class DigiClient {
 
         json["bookmarks"] = bookmarksJSON
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
             guard error == nil else {
                 completion(error!)
                 return
@@ -440,7 +440,7 @@ final class DigiClient {
         json["path"] = bookmark.path
         json["mountId"] = bookmark.mountId
 
-        networkTask(requestType: "POST", method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
+        networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
             guard error == nil else {
                 completion(error!)
                 return
@@ -470,7 +470,7 @@ final class DigiClient {
         parameters["path"] = bookmark.path
         parameters["mountId"] = bookmark.mountId
 
-        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { _, statusCode, error in
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: parameters) { _, statusCode, error in
             guard error == nil else {
                 completion(error!)
                 return
@@ -541,7 +541,7 @@ final class DigiClient {
         // prepare new name in request body
         let jsonBody = ["name": name]
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
+        networkTask(requestType: .put, method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
         }
     }
@@ -564,7 +564,7 @@ final class DigiClient {
         // prepare parameters (node path to be renamed
         let parameters = [ParametersKeys.Path: node.location.path]
 
-        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
         }
     }
@@ -591,7 +591,7 @@ final class DigiClient {
         // prepare new directory name in request body
         let jsonBody = [DataJSONKeys.directoryName: name]
 
-        networkTask(requestType: "POST", method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
+        networkTask(requestType: .post, method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
         }
     }
@@ -609,7 +609,7 @@ final class DigiClient {
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
             if let error = error {
                 completion(nil, error)
                 return
@@ -675,7 +675,7 @@ final class DigiClient {
 
         let parameters = [ParametersKeys.Path: node.location.path]
 
-        networkTask(requestType: "GET", method: method, headers: headers, json: nil, parameters: parameters) { (json, _, error) in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { (json, _, error) in
             if let error = error {
                 completion(nil, error)
                 return
@@ -724,7 +724,7 @@ final class DigiClient {
 
         let json: [String: String] = ["toMountId": to.mount.id, "toPath": to.path]
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: parameters) { (_, statusCode, error) in
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
         }
     }
@@ -750,7 +750,7 @@ final class DigiClient {
 
         let json = ["path": node.location.path]
 
-        networkTask(requestType: "POST", method: method, headers: headers, json: json, parameters: nil) { json, _, error in
+        networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { json, _, error in
 
             if let error = error {
                 completion(nil, error)
@@ -800,7 +800,7 @@ final class DigiClient {
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
+        networkTask(requestType: .put, method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
 
             if let error = error {
                 completion(nil, error)
@@ -855,7 +855,7 @@ final class DigiClient {
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
 
             if let error = error {
                 completion(nil, error)
@@ -914,7 +914,7 @@ final class DigiClient {
 
         let json = ["hash": hash]
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
             if let error = error {
                 completion(nil, error)
@@ -974,7 +974,7 @@ final class DigiClient {
 
         let json = ["alert": alert]
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
             if let error = error {
                 completion(nil, error)
@@ -1028,7 +1028,7 @@ final class DigiClient {
             json["validTo"] = validTo * 1000
         }
 
-        networkTask(requestType: "PUT", method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
             if let error = error {
                 completion(nil, error)
@@ -1082,7 +1082,7 @@ final class DigiClient {
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: "DELETE", method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
 
             if let error = error {
                 completion(error)

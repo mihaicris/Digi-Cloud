@@ -6,6 +6,13 @@
 //  Copyright © 2017 Mihai Cristescu. All rights reserved.
 //
 
+enum RequestType: String {
+    case get = "GET"
+    case post = "POST"
+    case put = "PUT"
+    case delete = "DELETE"
+}
+
 enum NetworkingError: Error {
     case get(String)
     case post(String)
