@@ -71,3 +71,9 @@ enum WaitingType {
     case stopped
     case hidden
 }
+
+enum UserOperation {
+    case add
+    case updatePermissions
+    case remove
+}

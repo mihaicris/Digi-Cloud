@@ -352,6 +352,48 @@ final class DigiClient {
             completion(content, nil)
         }
     }
+    
+    
+    /// Add users to a mount
+    ///
+    /// - Parameters:
+    ///   - mount: A mount type
+    ///   - operation: An UserOperation type
+    ///   - user: An user type
+    func addUser(mount: Mount, operation: UserOperation, user: User) {
+        
+        var headers: [String: String] = [:]
+        var method: String
+        var json: [String: Any]? = [:]
+        
+        switch operation {
+            
+        case .add:
+            headers = DefaultHeaders.PostHeaders
+            method = Methods.UserAdd.replacingOccurrences(of: "{id}", with: mount.id)
+            
+        case .updatePermissions:
+            
+            headers = DefaultHeaders.PutHeaders
+            method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
+                .replacingOccurrences(of: "{userId}", with: user.id)
+            
+        case .remove:
+            
+            headers = DefaultHeaders.DelHeaders
+            method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
+                .replacingOccurrences(of: "{userId}", with: user.id)
+            json = nil
+        }
+        
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+        
+        print(headers)
+        print(method)
+        print(json ?? "Json is nil.")
+        
+        
+    }
 
     // MARK: - Bookmarks
 
