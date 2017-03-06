@@ -17,6 +17,7 @@ final class SearchCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
+    
     var nodeNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -24,6 +25,7 @@ final class SearchCell: UITableViewCell {
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
+    
     let nodeMountLabel: UILabelWithPadding = {
         let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
         label.textColor = .darkGray
@@ -33,8 +35,8 @@ final class SearchCell: UITableViewCell {
         label.clipsToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-
     }()
+    
     var nodePathLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +45,16 @@ final class SearchCell: UITableViewCell {
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
+    
+    var seeInDirectoryButton: UIButton = {
+        let b = UIButton(type: UIButtonType.system)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitle("\u{f115}", for: .normal)
+        b.setTitleColor(UIColor.lightGray, for: .normal)
+        b.titleLabel?.font = UIFont.fontAwesome(size: 18)
+        return b
+    }()
+    
     var mountBackgroundColor: UIColor?
 
     // MARK: - Initializers and Deinitializers
@@ -75,6 +87,7 @@ final class SearchCell: UITableViewCell {
         contentView.addSubview(nodeNameLabel)
         contentView.addSubview(nodeMountLabel)
         contentView.addSubview(nodePathLabel)
+        contentView.addSubview(seeInDirectoryButton)
         setupConstraints()
     }
 
@@ -86,15 +99,18 @@ final class SearchCell: UITableViewCell {
             nodeIcon.heightAnchor.constraint(equalToConstant: 26),
 
             nodeNameLabel.leadingAnchor.constraint(equalTo: nodeIcon.trailingAnchor, constant: 10),
-            nodeNameLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor),
+            nodeNameLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor, constant: -30),
             nodeNameLabel.topAnchor.constraint(equalTo: nodeIcon.topAnchor, constant: -7),
 
             nodeMountLabel.leadingAnchor.constraint(equalTo: nodeNameLabel.leadingAnchor),
             nodeMountLabel.topAnchor.constraint(equalTo: nodeNameLabel.bottomAnchor, constant: 2),
 
             nodePathLabel.leadingAnchor.constraint(equalTo: nodeMountLabel.trailingAnchor, constant: 2),
-            nodePathLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor),
-            nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor)
+            nodePathLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor, constant: -30),
+            nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor),
+            
+            seeInDirectoryButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            seeInDirectoryButton.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
         ])
     }
 }

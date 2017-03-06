@@ -16,23 +16,34 @@ import UIKit
 final class ListingViewController: UITableViewController {
 
     // MARK: - Properties
+
     var onFinish: (() -> Void)?
+
+    // Type of action made by controller
     fileprivate let action: ActionType
-    fileprivate var node: Node
+
+    // The root location in normal listing mode
+    fileprivate var location: Location
+
+    // When coping or moving files/directories, this property will hold the source location which is passed between
+    // controllers on navigation stack.
+    fileprivate var sourceLocations: [Location]?
+
     fileprivate var needRefresh: Bool = true
-    private var isUpdating: Bool = false
-    private var isActionConfirmed: Bool = false
     fileprivate var content: [Node] = []
-    private var bookmarks: [Bookmark] = []
     fileprivate var selectedIndexPath: IndexPath!
-    private var searchController: UISearchController!
-    private var fileCellID = String()
-    private var folderCellID = String()
-    private let dispatchGroup = DispatchGroup()
-    private var didReceivedNetworkError = false
-    private var didReceivedStatus400 = false
-    private var didReceivedStatus404 = false
-    private var didSucceedCopyOrMove = false
+    private     let searchResult: String?
+    private     var isUpdating: Bool = false
+    private     var isActionConfirmed: Bool = false
+    private     var searchController: UISearchController!
+    private     var fileCellID = String()
+    private     var folderCellID = String()
+    private     let dispatchGroup = DispatchGroup()
+    private     var didReceivedNetworkError = false
+    private     var didReceivedStatus400 = false
+    private     var didReceivedStatus404 = false
+    private     var didSucceedCopyOrMove = false
+    private     var searchResultWasHighlighted = false
 
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -111,9 +122,11 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node, action: ActionType) {
+    init(location: Location, action: ActionType, searchResult: String? = nil, sourceLocations: [Location]? = nil) {
+        self.location = location
         self.action = action
-        self.node = node
+        self.searchResult = searchResult
+        self.sourceLocations = sourceLocations
         super.init(style: .plain)
         INITLog(self)
     }
@@ -199,7 +212,7 @@ final class ListingViewController: UITableViewController {
 
             cell.nameLabel.text = item.name
 
-            cell.hasButton = action == .noAction
+            cell.hasButton = (action == .noAction || action == .showSearchResult)
             cell.isShared = item.share != nil
             cell.hasDownloadLink = item.downloadLink != nil
             cell.hasUploadLink = item.uploadLink != nil
@@ -232,7 +245,7 @@ final class ListingViewController: UITableViewController {
             }
 
             cell.delegate = self
-            cell.hasButton = action == .noAction
+            cell.hasButton = (action == .noAction || action == .showSearchResult)
             cell.hasDownloadLink = item.downloadLink != nil
 
             cell.nameLabel.text = item.name
@@ -271,11 +284,13 @@ final class ListingViewController: UITableViewController {
         refreshControl?.endRefreshing()
 
         let selectedNode = content[indexPath.row]
+        
+        let newLocation = self.location.appendingPathComponentFrom(node: selectedNode)
 
         if selectedNode.type == "dir" {
+            
             // This is a Folder
-
-            let controller = ListingViewController(node: selectedNode, action: self.action)
+            let controller = ListingViewController(location: newLocation, action: self.action, sourceLocations: self.sourceLocations)
 
             if self.action != .noAction {
 
@@ -290,12 +305,10 @@ final class ListingViewController: UITableViewController {
 
             // This is a file
 
-            if self.action != .noAction {
-                return
+            if self.action == .noAction || self.action == .showSearchResult {
+                let controller = ContentViewController(location: newLocation)
+                navigationController?.pushViewController(controller, animated: true)
             }
-
-            let controller = ContentViewController(item: selectedNode)
-            navigationController?.pushViewController(controller, animated: true)
         }
     }
 
@@ -349,14 +362,13 @@ final class ListingViewController: UITableViewController {
             self.toolbarItems = [createFolderBarButton, flexibleBarButton, copyMoveButton]
 
         default:
-            
             self.toolbarItems = [deleteInEditModeButton, flexibleBarButton, copyInEditModeButton, flexibleBarButton, moveInEditModeButton]
         }
-        
-        if node.name == "" {
-            self.title = node.location.mount.name
+
+        if self.location.path == "/" {
+            self.title = location.mount.name
         } else {
-            self.title = node.name
+            self.title = (location.path as NSString).lastPathComponent
         }
     }
     
@@ -366,7 +378,9 @@ final class ListingViewController: UITableViewController {
 
     private func setupSearchController() {
 
-        let src = SearchResultController(node: node)
+        // Pass the location of the current directory
+        let src = SearchResultController(location: self.location)
+        
         searchController = UISearchController(searchResultsController: src)
         searchController.delegate = self
         searchController.loadViewIfNeeded()
@@ -388,7 +402,7 @@ final class ListingViewController: UITableViewController {
         let message = NSLocalizedString("There was an error refreshing the location.", comment: "")
         let title = NSLocalizedString("Error", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }
 
@@ -398,7 +412,7 @@ final class ListingViewController: UITableViewController {
         isUpdating = true
         didReceivedNetworkError = false
 
-        DigiClient.shared.getBundle(for: node) { receivedContent, error in
+        DigiClient.shared.getBundle(for: self.location) { nodesResult, error in
 
             self.isUpdating = false
 
@@ -422,43 +436,83 @@ final class ListingViewController: UITableViewController {
                 return
             }
 
-            if var newContent = receivedContent {
-                switch self.action {
-                case .copy, .move:
-                    // Only in move action, the moved node is not shown in the list.
-                    guard let sourceNodes = (self.presentingViewController as? MainNavigationController)?.sourceNodes else {
-                        print("Couldn't get the source node.")
-                        return
+            var nodes = nodesResult ?? []
+            
+            switch self.action {
+                
+            case .copy, .move:
+
+                // Only in move action, the moved node should not appear in the list.
+                if self.action == .move {
+                    
+                    guard self.sourceLocations != nil else {
+                        
+                        #if DEBUG
+                            print("sourceLocations is nill")
+                            fatalError()
+                        #endif
+                        
+                        break
                     }
-                    if self.action == .move {
-                        newContent = newContent.filter {
-                            return (!sourceNodes.contains($0) || $0.type == "file")
+                    
+                    let sourceNames = self.sourceLocations!.map { return ($0.path as NSString).lastPathComponent }
+
+                    nodes = nodes.filter { node in
+                        return !sourceNames.contains { source in
+                            return node.name == source
                         }
                     }
-                    // While copy and move, we sort by name with folders shown first.
-                    newContent.sort {
-                        return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
-                    }
-                    self.content = newContent
-                // In normal case (.noAction) we just sort the content with the method saved by the user.
-                default:
-                    self.content = newContent
-                    self.sortContent()
                 }
-
-                // In case the user pulled the table to refresh, reload table only if the user has finished dragging.
-                if self.refreshControl?.isRefreshing == true {
-                    if self.tableView.isDragging {
-                        return
-                    } else {
-                        self.updateDirectoryMessage()
-                        self.endRefreshAndReloadTable()
-                    }
+                
+                // While copy and move, we sort by name with folders shown first
+                self.content = nodes.sorted {
+                    return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
+                }
+                
+            default:
+                // In normal case (.noAction) we just sort the content with the method saved by the user.
+                self.content = nodes
+                self.sortContent()
+            }
+            
+            // In case the user pulled the table to refresh, reload table only if the user has finished dragging.
+            if self.refreshControl?.isRefreshing == true {
+                if self.tableView.isDragging {
+                    return
                 } else {
                     self.updateDirectoryMessage()
+                    self.endRefreshAndReloadTable()
+                }
+            } else {
+                self.updateDirectoryMessage()
+                
+                // The content update is made while normal navigating through folders, in this case simply reload the table.
+                self.tableView.reloadData()
+                self.highlightSearchResultIfNeeded()
+                
+            }
+            
+        }
+    }
+    
+    private func highlightSearchResultIfNeeded() {
+        
+        if let nameToHighlight = self.searchResult?.lowercased() {
+            
+            if !searchResultWasHighlighted {
+                
+                var indexFound = -1
+                
+                for (index, node) in self.content.enumerated() {
+                    if node.name.lowercased() == nameToHighlight {
+                        indexFound = index
+                        break
+                    }
+                }
 
-                    // The content update is made while normal navigating through folders, in this case simply reload the table.
-                    self.tableView.reloadData()
+                if indexFound != -1 {
+                    let indexPath = IndexPath(row: indexFound, section: 0)
+                    tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
                 }
             }
         }
@@ -656,13 +710,11 @@ final class ListingViewController: UITableViewController {
             switch selection {
             case .createDirectory:
                 self.handleCreateDirectory()
-                break
             case .selectionMode:
                 if self.content.isEmpty { return }
                 self.activateEditMode()
-                break
-            case .sendUploadLink:
-                self.showShareViewController(node: self.node)
+            case .share:
+                self.showShareViewController(linkLocation: self.location, isDirectory: true)
             }
         }
 
@@ -671,18 +723,16 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleCreateDirectory() {
 
-        let controller = CreateDirectoryViewController(node: self.node)
-        controller.onFinish = { [unowned self](folderName) in
+        let controller = CreateDirectoryViewController(parentLocation: self.location)
+        
+        controller.onFinish = { [unowned self] (folderName) in
 
             let completionBlock = {
+                
                 guard let folderName = folderName else {
                     // User cancelled the folder creation
                     return
                 }
-
-                let newNode = Node(name: folderName, type: "dir", modified: 0, size: 0, contentType: "",
-                                   hash: nil, share: nil, downloadLink: nil, uploadLink: nil, bookmark: nil,
-                                   parentLocation: self.node.location)
 
                 // Set needRefresh in this list
                 self.needRefresh = true
@@ -694,7 +744,8 @@ final class ListingViewController: UITableViewController {
                     }
                 }
 
-                let controller = ListingViewController(node: newNode, action: self.action)
+                let newLocation = self.location.appendingPathComponent(folderName, isDirectory: true)
+                let controller = ListingViewController(location: newLocation, action: self.action, sourceLocations: self.sourceLocations)
 
                 controller.onFinish = {[unowned self] in
                     self.onFinish?()
@@ -706,8 +757,10 @@ final class ListingViewController: UITableViewController {
             self.dismiss(animated: true, completion: completionBlock)
 
         }
+        
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .formSheet
+        
         present(navigationController, animated: true, completion: nil)
 
     }
@@ -757,18 +810,20 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    private func doCopyOrMove(node sourceNode: Node) {
+    private func doCopyOrMove(sourceLocation: Location) {
 
-        var destinationLocation = self.node.location.appendingPathComponent(sourceNode.name, isDirectory: sourceNode.type == "dir")
+        let sourceName = (sourceLocation.path as NSString).lastPathComponent
+        let isDirectory = sourceName.characters.last == "/"
+        let index = sourceName.getIndexBeforeExtension()
 
-        let index = sourceNode.name.getIndexBeforeExtension()
+        // Start with initial destination location.
+        var destinationLocation = self.location.appendingPathComponent(sourceName, isDirectory: isDirectory)
 
         if self.action == .copy {
-            var destinationName = sourceNode.name
+            var destinationName = sourceName
             var copyCount: Int = 0
             var wasRenamed = false
-            var wasFound: Bool
-
+            var wasFound = false
             repeat {
                 // reset before check of all nodes
                 wasFound = false
@@ -778,13 +833,12 @@ final class ListingViewController: UITableViewController {
                     if node.name == destinationName {
                         // set the flags
                         wasFound = true
-                        wasRenamed = true
 
                         // increment counter in the new file name
                         copyCount += 1
 
                         // reset name to original
-                        destinationName = sourceNode.name
+                        destinationName = sourceName
 
                         // Pad number (using Foundation Method)
                         let countString = String(format: " (%d)", copyCount)
@@ -793,20 +847,21 @@ final class ListingViewController: UITableViewController {
                         if index != nil {
                             destinationName.insert(contentsOf: countString.characters, at: index!)
                         } else {
-                            destinationName = sourceNode.name + countString
+                            destinationName = sourceName + countString
                         }
+
+                        wasRenamed = true
                     }
                 }
             } while (wasRenamed && wasFound)
 
             // change the file/folder name with incremented one
-
-            destinationLocation = self.node.location.appendingPathComponent(destinationName, isDirectory: sourceNode.type == "dir")
+            destinationLocation = self.location.appendingPathComponent(destinationName, isDirectory: isDirectory)
         }
 
         dispatchGroup.enter()
 
-        DigiClient.shared.copyOrMove(node: sourceNode, to: destinationLocation, action: self.action) { statusCode, error in
+        DigiClient.shared.copyOrMove(from: sourceLocation, to: destinationLocation, action: self.action) { statusCode, error in
 
             #if DEBUGCONTROLLERS
                 print("Task \(taskFinished) finished")
@@ -845,23 +900,30 @@ final class ListingViewController: UITableViewController {
 
         setBusyIndicatorView(true)
 
-        guard let sourceNodes = (self.presentingViewController as? MainNavigationController)?.sourceNodes else {
-            print("Couldn't get the source node name.")
+        guard self.sourceLocations != nil else {
+            print("Couldn't get the source locations to move/copy.")
+
+            defer {
+                #if DEBUG
+                    fatalError()
+                #endif
+            }
+
             return
         }
+
+        #if DEBUGCONTROLLERS
+                taskStarted = 0
+                taskFinished = 0
+        #endif
 
         didSucceedCopyOrMove = false
         didReceivedNetworkError = false
         didReceivedStatus400 = false
         didReceivedStatus404 = false
 
-        #if DEBUGCONTROLLERS
-            taskStarted = 0
-            taskFinished = 0
-        #endif
-
-        for sourceNode in sourceNodes {
-            doCopyOrMove(node: sourceNode)
+        for sourceLocation in self.sourceLocations! {
+            self.doCopyOrMove(sourceLocation: sourceLocation)
         }
 
         dispatchGroup.notify(queue: DispatchQueue.main) {
@@ -872,7 +934,7 @@ final class ListingViewController: UITableViewController {
                 let title = NSLocalizedString("Error", comment: "")
                 let message = NSLocalizedString("An error has occured while processing the request.", comment: "")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
                 return
             } else {
@@ -880,7 +942,7 @@ final class ListingViewController: UITableViewController {
                     let message = NSLocalizedString("An error has occured. Some elements already exists at the destination or the destination location no longer exists.", comment: "")
                     let title = NSLocalizedString("Error", comment: "")
                     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
                     self.present(alertController, animated: true, completion: nil)
                     return
                 } else {
@@ -888,7 +950,7 @@ final class ListingViewController: UITableViewController {
                         let message = NSLocalizedString("An error has occured. Some elements no longer exists.", comment: "")
                         let title = NSLocalizedString("Error", comment: "")
                         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                        alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
                             self.onFinish?()
                         }))
                         self.present(alertController, animated: true, completion: nil)
@@ -920,24 +982,25 @@ final class ListingViewController: UITableViewController {
         guard let chosenAction = ActionType(rawValue: sender.tag) else { return }
         guard let selectedItemsIndexPaths = tableView.indexPathsForSelectedRows else { return }
 
-        let nodes = selectedItemsIndexPaths.map { content[$0.row] }
+        let sourceLocations = selectedItemsIndexPaths.map { content[$0.row].location(in: self.location) }
 
         switch chosenAction {
         case .delete:
-            self.doDelete(nodes: nodes)
+            self.doDelete(locations: sourceLocations)
         case .copy, .move:
-            self.showViewControllerForCopyOrMove(action: chosenAction, nodes: nodes)
+            self.showViewControllerForCopyOrMove(action: chosenAction, sourceLocations: sourceLocations)
         default:
             break
         }
     }
 
-    private func doDelete(nodes: [Node]) {
+    private func doDelete(locations: [Location]) {
+        
         guard isActionConfirmed else {
 
             let string: String
-            if nodes.count == 1 {
-                if nodes.first!.type == "dir" {
+            if locations.count == 1 {
+                if locations.first!.path.characters.last == "/" {
                     string = NSLocalizedString("Are you sure you want to delete this directory?", comment: "")
                 } else {
                     string = NSLocalizedString("Are you sure you want to delete this file?", comment: "")
@@ -946,13 +1009,13 @@ final class ListingViewController: UITableViewController {
                 string = NSLocalizedString("Are you sure you want to delete %d items?", comment: "")
             }
 
-            let title = String.localizedStringWithFormat(string, nodes.count)
+            let title = String.localizedStringWithFormat(string, locations.count)
             let message = NSLocalizedString("This action is not reversible.", comment: "")
             let confirmationController = UIAlertController(title: title, message: message, preferredStyle: .alert)
 
             let deleteAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .destructive, handler: { _ in
                 self.isActionConfirmed = true
-                self.doDelete(nodes: nodes)
+                self.doDelete(locations: locations)
             })
 
             let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
@@ -972,18 +1035,21 @@ final class ListingViewController: UITableViewController {
 
         self.cancelEditMode()
 
-        nodes.forEach {
-
+        for location in locations {
             self.dispatchGroup.enter()
-
-            DigiClient.shared.delete(node: $0) { _, error in
+            
+            DigiClient.shared.deleteNode(at: location) { statusCode, error in
                 // TODO: Stop spinner
-                guard error == nil else {
+                guard error == nil, statusCode != nil else {
                     // TODO: Show message for error
                     print(error!.localizedDescription)
                     return
                 }
-                // TODO: Handle http status code
+                
+                if statusCode! != 200 {
+                    // TODO: Mark flag for fail to delete
+                    print("Could not delete an item.")
+                }
                 self.dispatchGroup.leave()
             }
         }
@@ -998,28 +1064,25 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    fileprivate func showViewControllerForCopyOrMove(action: ActionType, nodes: [Node]) {
+    private func updateTableState() {
 
-        func updateTableState() {
+        // Clear source locations
+        self.sourceLocations = nil
 
-            // Clear source nodes
-            (self.navigationController as? MainNavigationController)?.sourceNodes = nil
+        if self.needRefresh {
 
-            if self.needRefresh {
-
-                if self.tableView.isEditing {
-                    self.cancelEditMode()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                        self.updateContent()
-                    }
-                } else {
+            if self.tableView.isEditing {
+                self.cancelEditMode()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     self.updateContent()
                 }
+            } else {
+                self.updateContent()
             }
         }
+    }
 
-        // Save the source node in the MainNavigationController
-        (self.navigationController as? MainNavigationController)?.sourceNodes = nodes
+    fileprivate func showViewControllerForCopyOrMove(action: ActionType, sourceLocations: [Location]) {
 
         guard let stackControllers = self.navigationController?.viewControllers else {
             print("Couldn't get the previous navigation controllers!")
@@ -1032,33 +1095,31 @@ final class ListingViewController: UITableViewController {
 
             if controller is LocationsViewController {
 
-                let c = LocationsViewController(action: action)
+                let c = LocationsViewController(action: action, sourceLocations: sourceLocations)
                 c.title = NSLocalizedString("Locations", comment: "")
 
                 c.onFinish = { [unowned self] in
                     self.dismiss(animated: true) {
-                        updateTableState()
+                        self.updateTableState()
                     }
                 }
-
                 controllers.append(c)
                 continue
 
             } else {
 
-                let aNode = (controller as! ListingViewController).node
-                let c = ListingViewController(node: aNode, action: action)
+                let aLocation = (controller as! ListingViewController).location
+                
+                let c = ListingViewController(location: aLocation, action: action, sourceLocations: sourceLocations)
                 c.title = controller.title
 
                 c.onFinish = { [unowned self] in
                     self.dismiss(animated: true) {
-                        updateTableState()
+                        self.updateTableState()
                     }
                 }
-
                 controllers.append(c)
             }
-
         }
 
         let navController = UINavigationController(navigationBarClass: CustomNavBar.self, toolbarClass: nil)
@@ -1068,7 +1129,7 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    fileprivate func showShareViewController(node: Node) {
+    fileprivate func showShareViewController(linkLocation: Location, isDirectory: Bool) {
 
         let onFinish: () -> Void = { [unowned self] in
             self.dismiss(animated: true) {
@@ -1081,10 +1142,14 @@ final class ListingViewController: UITableViewController {
             }
         }
 
-        let controller = node.type == "dir"
-            ? ShareViewController(node: node, onFinish: onFinish)
-            : ShareLinkViewController(node: node, linkType: .download, onFinish: onFinish)
-
+        let controller: UIViewController
+        
+        if isDirectory {
+            controller = ShareViewController(location: linkLocation, onFinish: onFinish)
+        } else {
+            controller = ShareLinkViewController(location: linkLocation, linkType: .download, onFinish: onFinish)
+        }
+    
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .formSheet
         self.present(navController, animated: true, completion: nil)
@@ -1105,13 +1170,14 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
         let completionBlock = {
 
-            let node: Node = self.content[self.selectedIndexPath.row]
+            let node = self.content[self.selectedIndexPath.row]
+            let nodeLocation = node.location(in: self.location)
 
             switch action {
 
             case .share:
 
-                self.showShareViewController(node: node)
+                self.showShareViewController(linkLocation: nodeLocation, isDirectory: node.type == "dir")
 
             case .bookmark:
 
@@ -1130,7 +1196,9 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                 } else {
 
                     // Bookmark is not set, adding it:                    
-                    let bookmark = Bookmark(name: node.name, mountId: node.location.mount.id, path: node.location.path)
+                    let bookmark = Bookmark(name: node.name,
+                                            mountId: self.location.mount.id,
+                                            path: nodeLocation.path)
 
                     DigiClient.shared.addBookmark(bookmark: bookmark, completion: { error in
                         guard error == nil else {
@@ -1138,14 +1206,14 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                             return
                         }
 
-                        let newBookmark = Bookmark(name: node.name, mountId: node.location.mount.id, path: node.location.path)
-                        self.content[self.selectedIndexPath.row].bookmark = newBookmark
+                        self.content[self.selectedIndexPath.row].bookmark = bookmark
                         self.tableView.reloadRows(at: [self.selectedIndexPath], with: .none)
                     })
                 }
 
             case .rename:
-                let controller = RenameViewController(node: node)
+            
+                let controller = RenameViewController(nodeLocation: nodeLocation, node: node)
                 controller.onFinish = { (newName, needRefresh) in
                     // dismiss RenameViewController
                     self.dismiss(animated: true) {
@@ -1169,12 +1237,12 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
 
             case .copy, .move:
 
-                self.showViewControllerForCopyOrMove(action: action, nodes: [node])
+                self.showViewControllerForCopyOrMove(action: action, sourceLocations: [nodeLocation])
 
             case .delete:
 
                 if node.type == "file" {
-                    let controller = DeleteViewController(node: node)
+                    let controller = DeleteViewController(location: nodeLocation, isDirectory: false)
                     controller.delegate = self
 
                     // position alert on the same row with the file
@@ -1191,8 +1259,9 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
                 }
 
             case .folderInfo:
-                let controller = FolderInfoViewController(node: node)
-                controller.onFinish = { (success, needRefresh) in
+                
+                let controller = DirectoryInfoViewController(location: nodeLocation)
+                controller.onFinish = { success, needRefresh in
 
                     // dismiss FolderViewController
                     self.dismiss(animated: true) {
@@ -1253,16 +1322,17 @@ extension ListingViewController: DeleteViewControllerDelegate {
     func onConfirmDeletion() {
 
         let completionBlock = {
-
-            let nodeToDelete = self.content[self.selectedIndexPath.row]
-            DigiClient.shared.delete(node: nodeToDelete) { statusCode, error in
+            
+            let nodeLocation = self.content[self.selectedIndexPath.row].location(in: self.location)
+            
+            DigiClient.shared.deleteNode(at: nodeLocation) { statusCode, error in
                 // TODO: Stop spinner
                 guard error == nil else {
                     // TODO: Show message for error
                     let message = NSLocalizedString("There was an error while deleting.", comment: "")
                     let title = NSLocalizedString("Error", comment: "")
                     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
                     self.present(alertController, animated: true, completion: nil)
                     print(error!.localizedDescription)
                     return

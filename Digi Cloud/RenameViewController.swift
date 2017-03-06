@@ -13,7 +13,10 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     // MARK: - Properties
 
     var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
+    
+    private var nodeLocation: Location
     private var node: Node
+    
     private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     private var textField: UITextField!
@@ -28,7 +31,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             return l
     }()
 
-    private var needRefresh: Bool
+    private var needRefresh: Bool = false
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
@@ -41,9 +44,9 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node) {
+    init(nodeLocation: Location, node: Node) {
+        self.nodeLocation = nodeLocation
         self.node = node
-        self.needRefresh = false
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -262,9 +265,9 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         // get the new name, space trimmed
         let charSet = CharacterSet.whitespaces
         guard let newName = textField.text?.trimmingCharacters(in: charSet) else { return }
-
+        
         // network request for rename
-        DigiClient.shared.rename(node: self.node, with: newName) { (statusCode, error) in
+        DigiClient.shared.renameNode(at: self.nodeLocation, with: newName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error

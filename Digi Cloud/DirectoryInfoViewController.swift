@@ -1,5 +1,5 @@
 //
-//  FolderInfoViewController.swift
+//  DirectoryInfoViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 02/11/16.
@@ -8,12 +8,14 @@
 
 import UIKit
 
-final class FolderInfoViewController: UITableViewController {
+final class DirectoryInfoViewController: UITableViewController {
 
     // MARK: - Properties
 
     var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
-    fileprivate var node: Node
+    
+    fileprivate var location: Location
+    
     private let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.allowsNonnumericFormatting = false
@@ -61,8 +63,8 @@ final class FolderInfoViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node) {
-        self.node = node
+    init(location: Location) {
+        self.location = location
         super.init(style: .grouped)
     }
 
@@ -133,7 +135,7 @@ final class FolderInfoViewController: UITableViewController {
 
             let folderName: UILabel = {
                 let label = UILabel()
-                label.text = node.name
+                label.text = (self.location.path as NSString).lastPathComponent
                 return label
             }()
 
@@ -191,7 +193,7 @@ final class FolderInfoViewController: UITableViewController {
 
     private func updateFolderInfo() {
 
-        DigiClient.shared.getDirectoryInfo(for: self.node, completion: { (info, error) in
+        DigiClient.shared.getDirectoryInfo(at: self.location, completion: { (info, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
                 return
@@ -209,7 +211,7 @@ final class FolderInfoViewController: UITableViewController {
     }
 
     @objc private func handleDelete() {
-        let controller = DeleteViewController(node: node)
+        let controller = DeleteViewController(location: self.location, isDirectory: true)
         controller.delegate = self
         controller.modalPresentationStyle = .popover
         controller.popoverPresentationController?.permittedArrowDirections = .up
@@ -219,12 +221,12 @@ final class FolderInfoViewController: UITableViewController {
     }
 }
 
-extension FolderInfoViewController: DeleteViewControllerDelegate {
+extension DirectoryInfoViewController: DeleteViewControllerDelegate {
     func onConfirmDeletion() {
 
         let completion = {
 
-            DigiClient.shared.delete(node: self.node) { (statusCode, error) in
+            DigiClient.shared.deleteNode(at: self.location) { (statusCode, error) in
 
                 // TODO: Stop spinner
                 guard error == nil else {

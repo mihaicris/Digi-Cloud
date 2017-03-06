@@ -101,7 +101,7 @@ final class DigiClient {
                      
                     */
 
-                    let nserror = error as! NSError
+                    let nserror = error! as NSError
 
                     LogNSError(nserror)
 
@@ -315,18 +315,16 @@ final class DigiClient {
     /// - Parameters:
     ///   - location: The location to get the content
     ///   - completion: The block called after the server has responded
-    ///   - result: Returned content as an array of nodes
+    ///   - nodes: Returned content as an array of nodes
     ///   - error: The error occurred in the network request, nil for no error.
-    func getBundle(for node: Node, completion: @escaping(_ nodes: [Node]?, _ error: Error?) -> Void) {
+    func getBundle(for location: Location, completion: @escaping(_ nodes: [Node]?, _ error: Error?) -> Void) {
 
-        let nodeLocation = node.location
-
-        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: nodeLocation.mount.id)
+        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let parameters = [ParametersKeys.Path: nodeLocation.path]
+        let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
 
@@ -347,13 +345,12 @@ final class DigiClient {
                     return
             }
 
-            let content = nodesList.flatMap { Node(JSON: $0, parentLocation: nodeLocation) }
+            let content = nodesList.flatMap { Node(JSON: $0, mountId: location.mount.id) }
 
             completion(content, nil)
         }
     }
-    
-    
+        
     /// Add users to a mount
     ///
     /// - Parameters:
@@ -430,7 +427,7 @@ final class DigiClient {
     /// Set bookmarks
     ///
     /// - Parameters:
-    ///   - locations: array of Locations type. If locations is nil than all bookmarks will be removed.
+    ///   - bookmarks: array of Bookmark type. If Array is empty, all bookmarks will be removed.
     ///   - completion: The block called after the server has responded
     ///   - error: The error returned
     func setBookmarks(bookmarks: [Bookmark], completion: @escaping(_ error: Error?) -> Void) {
@@ -469,7 +466,7 @@ final class DigiClient {
     /// Add bookmark
     ///
     /// - Parameters:
-    ///   - location: Location of the bookmark
+    ///   - bookmark: Bookmark to add.
     ///   - completion: The block called after the server has responded
     ///   - error: The error returned
     func addBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
@@ -478,9 +475,7 @@ final class DigiClient {
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        var json: [String: String] = [:]
-        json["path"] = bookmark.path
-        json["mountId"] = bookmark.mountId
+        let json: [String: String] = ["path": bookmark.path, "mountId": bookmark.mountId]
 
         networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
             guard error == nil else {
@@ -499,7 +494,7 @@ final class DigiClient {
     /// Remove bookmark
     ///
     /// - Parameters:
-    ///   - location: Location of the bookmark
+    ///   - bookmark: Bookmark to remove.
     ///   - completion: The block called after the server has responded
     ///   - error: The error returned
     func removeBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
@@ -534,17 +529,17 @@ final class DigiClient {
     ///   - location: Location of the file
     ///   - delegate: The object delegate which will handle the events while and after downloading
     /// - Returns: The URL session for the download
-    func startDownloadFile(for node: ContentItem, delegate: AnyObject) -> URLSession {
+    func startDownloadFile(at location: Location, delegate: URLSessionDelegate) -> URLSession {
 
         // create the special session with custom delegate for download task
         let configuration = URLSessionConfiguration.default
-        let session = URLSession(configuration: configuration, delegate: delegate as? ContentViewController, delegateQueue: nil)
+        let session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
 
         // prepare the method string for download file by inserting the current mount
-        let method =  Methods.FilesGet.replacingOccurrences(of: "{id}", with: node.location.mount.id)
+        let method =  Methods.FilesGet.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare the query parameter path with the current File path
-        let parameters = [ParametersKeys.Path: node.location.path]
+        let parameters = [ParametersKeys.Path: location.path]
 
         // create url from method and parameters
         let url = DigiClient.shared.getURL(method: method, parameters: parameters)
@@ -569,16 +564,16 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func rename(node: Node, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func renameNode(at location: Location, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.FilesRename.replacingOccurrences(of: "{id}", with: node.location.mount.id)
+        let method = Methods.FilesRename.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        // prepare parameters (path of the node to be renamed
-        let parameters = [ParametersKeys.Path: node.location.path]
+        // prepare parameters
+        let parameters = [ParametersKeys.Path: location.path]
 
         // prepare new name in request body
         let jsonBody = ["name": name]
@@ -595,16 +590,16 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func delete(node: Node, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func deleteNode(at location: Location, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: node.location.mount.id)
+        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        // prepare parameters (node path to be renamed
-        let parameters = [ParametersKeys.Path: node.location.path]
+        // prepare parameters
+        let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
@@ -614,24 +609,24 @@ final class DigiClient {
     /// Create a node of type directory
     ///
     /// - Parameters:
-    ///   - node: Node location in which the directory is created
+    ///   - location: Location where the directory will be created
     ///   - name: directory name
     ///   - completion: The block called after the server has responded
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
-    func createDirectory(in node: Node, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func createDirectory(at location: Location, named: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for create new directory
-        let method = Methods.FilesDirectory.replacingOccurrences(of: "{id}", with: node.location.mount.id)
+        let method = Methods.FilesDirectory.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         // prepare headers
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
         // prepare parameters
-        let parameters = [ParametersKeys.Path: node.location.path]
+        let parameters = [ParametersKeys.Path: location.path]
 
         // prepare new directory name in request body
-        let jsonBody = [DataJSONKeys.directoryName: name]
+        let jsonBody = [DataJSONKeys.directoryName: named]
 
         networkTask(requestType: .post, method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
@@ -645,7 +640,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - results: An array containing the search hits.
     ///   - error: The error occurred in the network request, nil for no error.
-    func search(parameters: [String: String], completion: @escaping (_ nodeHits: [NodeHit]?, _ error: Error?) -> Void) {
+    func search(parameters: [String: String], completion: @escaping (_ nodeHits: [NodeHit]?, _ mountsDictionary: [String: Mount]?,  _ error: Error?) -> Void) {
         let method = Methods.Search
 
         var headers = DefaultHeaders.GetHeaders
@@ -653,27 +648,36 @@ final class DigiClient {
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
             if let error = error {
-                completion(nil, error)
+                completion(nil, nil, error)
                 return
             }
             guard let json = json as? [String: Any],
                 let hitsJSON = json["hits"] as? [[String: Any]],
-                let mountsJSON = json["mounts"] as? [String: Any]
-                else {
-                    completion(nil, JSONError.parse("Couldn't parse the json to get the hits and mounts from search results."))
+                let mountsJSON = json["mounts"] as? [String: Any] else {
+                    completion(nil, nil, JSONError.parse("Couldn't parse the json to get the hits and mounts from search results."))
                     return
             }
 
-            let results = hitsJSON.flatMap { NodeHit(hitsJSON: $0, mountsJSON: mountsJSON ) }
-
-            completion(results, nil)
+            let nodeHits = hitsJSON.flatMap { NodeHit(JSON: $0) }
+            
+            var mountsDictionary: [String: Mount] = [:]
+            
+            for (mountId, mountAny) in mountsJSON {
+                if let mount = Mount(JSON: mountAny) {
+                    mountsDictionary[mountId] = mount
+                } else {
+                    completion(nil, nil, JSONError.parse("Couldn't extract mount from results."))
+                    return
+                }
+            }
+            completion(nodeHits, mountsDictionary, nil)
         }
     }
 
     /// Calculates information from Dictionary content (JSON directory tree)
     ///
-    /// - Parameter parent: parent directory
-    /// - Returns: return tuple with (size of child, number of files, number of directories)
+    /// - Parameter parent: Parent directory
+    /// - Returns: Tuple with (size of child, number of files, number of directories)
     private func calculateNodeInfo(_ parent: [String: Any]) -> DirectoryInfo {
         var info = DirectoryInfo()
         if let childType = parent["type"] as? String, childType == "file" {
@@ -702,20 +706,14 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - info: Tuple containing size, number of files and number of directories
     ///   - error: The error occurred in the network request, nil for no error.
-    func getDirectoryInfo(for node: Node, completion: @escaping(_ info: DirectoryInfo?, _ error: Error?) -> Void) {
+    func getDirectoryInfo(at location: Location, completion: @escaping(_ info: DirectoryInfo?, _ error: Error?) -> Void) {
 
-        // CHeck if node is a directory
-        guard node.type == "dir" else {
-            completion(nil, NSError(domain: "Bad input", code: 400, userInfo: nil))
-            return
-        }
-
-        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: node.location.mount.id)
+        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.id)
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let parameters = [ParametersKeys.Path: node.location.path]
+        let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { (json, _, error) in
             if let error = error {
@@ -738,23 +736,21 @@ final class DigiClient {
     /// Send a request to DIGI API to copy or move a node
     ///
     /// - Parameters:
-    ///   - node:              Source node
-    ///   - to:                Destination location
+    ///   - fromLocation:      Source location
+    ///   - toLocation:        Destination location
     ///   - action:            Action Type, expected ActionType.move or ActionType.copy
     ///   - completion:        Function to handle the status code and error response
     ///   - statusCode:        Returned HTTP request Status Code
     ///   - error:             Networking error (nil if no error)
-    func copyOrMove(node: Node, to: Location, action: ActionType, completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+    func copyOrMove(from fromLocation: Location, to toLocation: Location, action: ActionType, completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
 
         var method: String
 
-        let nodeLocation = node.location
-
         switch action {
         case .copy:
-            method = Methods.FilesCopy.replacingOccurrences(of: "{id}", with: nodeLocation.mount.id)
+            method = Methods.FilesCopy.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
         case .move:
-            method = Methods.FilesMove.replacingOccurrences(of: "{id}", with: nodeLocation.mount.id)
+            method = Methods.FilesMove.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
         default:
             return
         }
@@ -762,9 +758,9 @@ final class DigiClient {
         var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let parameters = [ParametersKeys.Path: nodeLocation.path]
+        let parameters = [ParametersKeys.Path: fromLocation.path]
 
-        let json: [String: String] = ["toMountId": to.mount.id, "toPath": to.path]
+        let json: [String: String] = ["toMountId": toLocation.mount.id, "toPath": toLocation.path]
 
         networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: parameters) { (_, statusCode, error) in
             completion(statusCode, error)
@@ -776,21 +772,21 @@ final class DigiClient {
     /// Get the download/upload link for a location
     ///
     /// - Parameters:
-    ///   - node:        Source node
+    ///   - location:    Location to get a link
     ///   - type:        Link type (.download or .upload)
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func getLink(for node: Node, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void) {
+    func getLink(for location: Location, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void) {
 
         let method = Methods.Links
-            .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
+            .replacingOccurrences(of: "{mountId}", with: location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
 
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let json = ["path": node.location.path]
+        let json = ["path": location.path]
 
         networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { json, _, error in
 
@@ -820,22 +816,16 @@ final class DigiClient {
     /// Reset link (download/upload) password
     ///
     /// - Parameters:
-    ///   - node:        Source node
+    ///   - mount:       Mount of link
+    ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func setOrResetLinkPassword(node: Node, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
-
-        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-
-        guard linkId != "" else {
-            print("Invalid Node")
-            return
-        }
+    func setOrResetLinkPassword(mount: Mount, linkId: String, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkResetPassword
-            .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -875,22 +865,16 @@ final class DigiClient {
     /// Remove link (download/upload) password
     ///
     /// - Parameters:
-    ///   - node:        Source node
+    ///   - mount:       Mount of link
+    ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func removeLinkPassword(node: Node, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
-
-        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-
-        guard linkId != "" else {
-            print("Invalid Node")
-            return
-        }
+    func removeLinkPassword(mount: Mount, linkId: String, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkRemovePassword
-            .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -930,24 +914,18 @@ final class DigiClient {
     /// Set link (download/upload) custom short URL
     ///
     /// - Parameters:
-    ///   - node:        Source node
+    ///   - mount:       Mount of link
+    ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
     ///   - hash:        custom hash of the url "http://s.go.ro/hash"
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func setLinkCustomShortUrl(node: Node, type: LinkType, hash: String,
+    func setLinkCustomShortUrl(mount: Mount, linkId: String, type: LinkType, hash: String,
                                completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
-        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-
-        guard linkId != "" else {
-            print("Invalid Node")
-            return
-        }
-
         let method = Methods.LinkCustomURL
-            .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -994,27 +972,22 @@ final class DigiClient {
     ///
     /// - Parameters:
     ///   - alert:       true for email notifications
-    ///   - node:        Sourrce node
+    ///   - mount:       Mount of link
+    ///   - linkId:      Link id
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned UploadLink with alert property updated
     ///   - error:       Networking error (nil if no error)
-    func setReceiverAlert(_ alert: Bool, node: Node, completion: @escaping (_ receiver: UploadLink?, _ error: Error?) -> Void ) {
-
-        let linkId = node.uploadLink?.id ?? ""
-
-        guard linkId != "" else {
-            print("Invalid Node")
-            return
-        }
+    func setReceiverAlert(isOn: Bool, mount: Mount, linkId: String,
+                          completion: @escaping (_ receiver: UploadLink?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkSetAlert
-            .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.id)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        let json = ["alert": alert]
+        let json = ["alert": isOn]
 
         networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
@@ -1040,24 +1013,18 @@ final class DigiClient {
     /// Set link validity
     ///
     /// - Parameters:
-    ///   - node:        Source node
+    ///   - mount:       Mount of link
+    ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
     ///   - validTo:     timeIntervalSince1970 (seconds)
     ///   - completion:  Function to handle the status code and error response
     ///   - link:        Returned link with validity updated
     ///   - error:       Networking error (nil if no error)
-    func setLinkCustomValidity(node: Node, type: LinkType, validTo: TimeInterval?,
+    func setLinkCustomValidity(mount: Mount, linkId: String, type: LinkType, validTo: TimeInterval?,
                                completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
-        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-
-        guard linkId != "" else {
-            print("Invalid Node")
-            return
-        }
-
         let method = Methods.LinkValidity
-            .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -1103,21 +1070,15 @@ final class DigiClient {
     /// Delete link (download/upload) password
     ///
     /// - Parameters:
-    ///   - node:        Source node
+    ///   - mount:       Mount of link
+    ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
     ///   - completion:  Function to handle the status code and error response
     ///   - error:       Networking error (nil if no error)
-    func deleteLink(node: Node, type: LinkType, completion: @escaping (_ error: Error?) -> Void ) {
-
-        let linkId = type == .download ? node.downloadLink?.id ?? "" : node.uploadLink?.id ?? ""
-
-        guard linkId != "" else {
-            print("Invalid Node")
-            return
-        }
+    func deleteLink(mount: Mount, linkId: String, type: LinkType, completion: @escaping (_ error: Error?) -> Void ) {
 
         let method = Methods.LinkDelete
-            .replacingOccurrences(of: "{mountId}", with: node.location.mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 

@@ -13,12 +13,12 @@ final class SharePermissionsTableViewController: UIViewController {
     // MARK: - Properties
 
     var onFinish: (() -> Void)
-    let node: Node
+    let location: Location
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node, onFinish: @escaping() -> Void) {
-        self.node = node
+    init(location: Location, onFinish: @escaping () -> Void) {
+        self.location = location
         self.onFinish = onFinish
         super.init(nibName: nil, bundle: nil)
     }

@@ -13,7 +13,7 @@ final class ContentViewController: UIViewController {
 
     // MARK: - Properties
 
-    let item: ContentItem
+    let location: Location
     var fileURL: URL!
     var session: URLSession?
 
@@ -31,8 +31,8 @@ final class ContentViewController: UIViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(item: ContentItem) {
-        self.item = item
+    init(location: Location) {
+        self.location = location
         super.init(nibName: nil, bundle: nil)
         INITLog(self)
     }
@@ -47,20 +47,18 @@ final class ContentViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupViews()
 
-        self.title = item.name
-
+        self.title = (self.location.path as NSString).lastPathComponent
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
 
         // create destination file url
-        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(item.name)
+        let fileName = (self.location.path as NSString).lastPathComponent
+        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
 
         // TODO: - If the file has changed in the cloud, it should be redownloaded again.
         // Check if the hash of the file is the same with the hash saved locally 
@@ -71,7 +69,7 @@ final class ContentViewController: UIViewController {
             progressView.isHidden = false
 
             // Start downloading File
-            session = DigiClient.shared.startDownloadFile(for: item, delegate: self)
+            session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
 
         } else {
             loadFileContent()
@@ -120,8 +118,11 @@ extension ContentViewController: URLSessionDownloadDelegate {
         // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
         session.invalidateAndCancel()
 
+        // get the file name from current path
+        let fileName: String = (self.location.path as NSString).lastPathComponent
+        
         // create destination file url
-        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(item.name)
+        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
 
         // get the downloaded file from temp folder
         do {

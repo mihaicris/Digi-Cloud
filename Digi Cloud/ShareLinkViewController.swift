@@ -14,17 +14,17 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     var onFinish: (() -> Void)?
 
+    private let location: Location
     private let linkType: LinkType
-
-    private var node: Node {
+    private var link: Link! {
         didSet {
             if !isAnimatingReset {
-                self.updateValues()
+                updateValues()
             }
         }
     }
 
-    private var originalLinkHash: String
+    private var originalLinkHash: String!
     private var isSaving: Bool = false
     private var isAnimatingReset: Bool = false
 
@@ -200,19 +200,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node, linkType: LinkType, onFinish: @escaping () -> Void) {
-
-        self.node = node
+    init(location: Location, linkType: LinkType, onFinish: @escaping () -> Void) {
+        self.location = location
         self.linkType = linkType
         self.onFinish = onFinish
-
-        switch linkType {
-        case .download:
-            self.originalLinkHash = node.downloadLink?.hash ?? ""
-        case .upload:
-            self.originalLinkHash = node.uploadLink?.hash ?? ""
-        }
-
         super.init(nibName: nil, bundle: nil)
 
         INITLog(self)
@@ -238,7 +229,12 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         requestLink()
         super.viewWillAppear(true)
     }
-
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -259,27 +255,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         }
 
         return headerTitle
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
-    }
-
-    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-
-        guard section == 0 else { return "" }
-        var title: String = ""
-        var counter: Int = 0
-        if linkType == .download {
-            counter = self.node.downloadLink?.counter ?? 0
-            title += NSLocalizedString("Views: ", comment: "")
-        } else {
-            counter = self.node.uploadLink?.counter ?? 0
-            title += NSLocalizedString("Received: ", comment: "")
-        }
-        title += String(counter)
-        return title
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -325,7 +300,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 let label: UILabel = {
                     let l = UILabel()
                     l.translatesAutoresizingMaskIntoConstraints = false
-                    l.text = NSLocalizedString("Send email when receive files", comment: "")
+                    l.text = NSLocalizedString("Email notifcation", comment: "")
                     return l
                 }()
 
@@ -488,12 +463,12 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private func setupNavigationItems() {
 
         if linkType == .download {
-            self.title = NSLocalizedString("Send Link", comment: "")
+            title = NSLocalizedString("Send Link", comment: "")
         } else {
-            self.title = NSLocalizedString("Receive Files", comment: "")
+            title = NSLocalizedString("Receive Files", comment: "")
         }
 
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))
+        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .plain, target: self, action: #selector(handleDone))
         navigationItem.setRightBarButton(doneButton, animated: false)
     }
 
@@ -514,12 +489,12 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             return b
         }()
 
-        self.setToolbarItems([deleteButton, flexibleButton, sendButton], animated: false)
+        setToolbarItems([deleteButton, flexibleButton, sendButton], animated: false)
     }
 
     private func addViewTapGestureRecognizer() {
         let tgr = UITapGestureRecognizer(target: self, action: #selector(handleCancelChangeShortURL))
-        self.view.addGestureRecognizer(tgr)
+        view.addGestureRecognizer(tgr)
     }
 
     private func configureWaitingView(type: WaitingType, message: String) {
@@ -527,10 +502,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         switch type {
         case .hidden:
             waitingView.isHidden = true
-            self.navigationController?.setToolbarHidden(false, animated: false)
+            navigationController?.setToolbarHidden(false, animated: false)
         case .started, .stopped:
             waitingView.isHidden = false
-            self.navigationController?.setToolbarHidden(true, animated: false)
+            navigationController?.setToolbarHidden(true, animated: false)
             if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView {
                 if type == .started {
                     v.startAnimating()
@@ -546,7 +521,23 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             }
         }
     }
-
+    
+    private func requestLink() {
+        
+        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
+        
+        DigiClient.shared.getLink(for: location, type: linkType) { result, error in
+            
+            guard error == nil, result != nil else {
+                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
+                return
+            }
+            
+            self.link = result!
+            self.configureWaitingView(type: .hidden, message: "")
+        }
+    }
+    
     private func hasInvalidCharacters(name: String) -> Bool {
         let charset = CharacterSet.init(charactersIn: name)
         return !charset.isDisjoint(with: CharacterSet.alphanumerics.inverted)
@@ -557,13 +548,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     @objc private func handleSend() {
-
-        let alink: Link? = linkType == .download ? self.node.downloadLink : self.node.uploadLink
-
-        guard let link = alink else {
-            print("No valid link")
-            return
-        }
 
         let title = NSLocalizedString("Digi Storage file share", comment: "")
         var content: String
@@ -590,49 +574,55 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     @objc private func handleSaveShortURL() {
-
+        
         isSaving = true
-
+        
         guard let hash = hashTextField.text else {
             print("No hash")
             return
         }
-
-        DigiClient.shared.setLinkCustomShortUrl(node: self.node, type: self.linkType, hash: hash) { link, error in
-
+        
+        DigiClient.shared.setLinkCustomShortUrl(mount: location.mount, linkId: link.id, type: linkType, hash: hash) { result, error in
+            
             guard error == nil else {
-
+                
                 if let error = error as? NetworkingError {
                     if case NetworkingError.wrongStatus(_) = error {
                         let title = NSLocalizedString("Error", comment: "")
                         let message = NSLocalizedString("Sorry, this short URL is not available.", comment: "")
                         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                        let alertAction = UIAlertAction(title: "OK", style: .default, handler: { _ in self.isSaving = false })
+                        let alertAction = UIAlertAction(title: "Gata", style: .default, handler: { _ in self.isSaving = false })
                         alertController.addAction(alertAction)
                         self.present(alertController, animated: true, completion: nil)
                     }
                 } else {
                     print(error!.localizedDescription)
                 }
-
+                
                 return
             }
+            
+            guard result != nil else {
+                print("No valid link")
+                return
+            }
+            
             self.isSaving = false
             self.originalLinkHash = hash
-            self.node.updateNode(with: link)
+            self.link = result!
         }
     }
 
     @objc private func handleCancelChangeShortURL() {
-        hashTextField.text = self.originalLinkHash
-        self.hashTextField.resignFirstResponder()
+        hashTextField.text = originalLinkHash
+        hashTextField.resignFirstResponder()
     }
 
     @objc private func handleDelete() {
 
         configureWaitingView(type: .started, message: NSLocalizedString("Deleting Link", comment: ""))
 
-        DigiClient.shared.deleteLink(node: self.node, type: self.linkType) { (error) in
+        DigiClient.shared.deleteLink(mount: location.mount, linkId: link.id, type: linkType) { error in
             guard error == nil else {
                 self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
                 return
@@ -648,21 +638,21 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         startSpinning()
 
         if sender.isOn {
-            self.handleResetPassword()
+            handleResetPassword()
         } else {
-            DigiClient.shared.removeLinkPassword(node: self.node, type: linkType) { (link, error) in
+        
+            DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.id, type: linkType) { result, error in
 
-                guard error == nil else {
+                self.stopSpinning()
+                
+                guard error == nil, result != nil else {
                     self.stopSpinning()
                     sender.setOn(true, animated: true)
                     print(error!.localizedDescription)
                     return
                 }
 
-                self.node.updateNode(with: link)
-
-                self.stopSpinning()
-
+                self.link = result!
             }
         }
     }
@@ -672,15 +662,14 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         resetAllFields()
         startSpinning()
 
-        DigiClient.shared.setOrResetLinkPassword(node: self.node, type: linkType, completion: { (link, error) in
-
-            guard error == nil else {
-                self.stopSpinning()
+        DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.id, type: linkType, completion: { result, error in
+            guard error == nil, result != nil else {
+                
                 print(error!.localizedDescription)
                 return
             }
 
-            self.node.updateNode(with: link)
+            self.link = result!
             self.stopSpinning()
         })
     }
@@ -751,15 +740,15 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         resetAllFields()
 
-        DigiClient.shared.setReceiverAlert(sender.isOn, node: self.node) { link, error in
+        DigiClient.shared.setReceiverAlert(isOn: sender.isOn, mount: location.mount, linkId: link.id) { result, error in
 
-            guard error == nil else {
+            guard error == nil, result != nil else {
                 sender.setOn(!sender.isOn, animated: true)
                 print(error!.localizedDescription)
                 return
             }
-
-            self.node.updateNode(with: link)
+            
+            self.link = result!
         }
     }
 
@@ -777,18 +766,19 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     private func saveCustomValidationDate(validTo: TimeInterval?) {
 
-        self.spinner.startAnimating()
+        spinner.startAnimating()
 
-        DigiClient.shared.setLinkCustomValidity(node: self.node, type: linkType, validTo: validTo) { link, error in
+        DigiClient.shared.setLinkCustomValidity(mount: location.mount, linkId: link.id, type: linkType, validTo: validTo) { result, error in
 
             self.spinner.stopAnimating()
 
-            guard error == nil else {
+            guard error == nil, result != nil else {
                 print(error!.localizedDescription)
                 return
             }
+            
             self.resetAllFields()
-            self.node.updateNode(with: link)
+            self.link = result!
         }
     }
 
@@ -800,29 +790,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         validitySegmentedControl.isHidden = true
     }
 
-    private func requestLink() {
-
-        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
-
-        DigiClient.shared.getLink(for: self.node, type: self.linkType) { (link, error) in
-
-            guard error == nil else {
-                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
-                return
-            }
-
-            self.node.updateNode(with: link)
-            self.configureWaitingView(type: .hidden, message: "")
-        }
-    }
-
     private func updateValues() {
-
-        guard let link: Link = linkType == .download ? self.node.downloadLink : self.node.uploadLink else {
-            print("No valid link found.")
-            return
-        }
-
+        
+        originalLinkHash = link.hash
         hashTextField.resignFirstResponder()
         baseLinkLabel.text = String("\(link.host)/")
         hashTextField.text = link.hash

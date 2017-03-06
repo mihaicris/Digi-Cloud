@@ -15,6 +15,11 @@ final class LocationsViewController: UITableViewController {
     var onFinish: (() -> Void)?
 
     private var mounts: [Mount] = []
+
+    // When coping or moving files/directories, this property will hold the source location which is passed between
+    // controllers on navigation stack.
+    fileprivate var sourceLocations: [Location]?
+
     private let action: ActionType
     private var isUpdating: Bool = false
     private var hasLoadedLocations: Bool = false
@@ -29,8 +34,9 @@ final class LocationsViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(action: ActionType) {
+    init(action: ActionType, sourceLocations: [Location]? = nil) {
         self.action = action
+        self.sourceLocations = sourceLocations
         super.init(style: .grouped)
         INITLog(self)
     }
@@ -79,7 +85,16 @@ final class LocationsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        openMount(index: indexPath.row)
+        
+        let location = Location(mount: mounts[indexPath.row], path: "/")
+        let controller = ListingViewController(location: location, action: self.action, sourceLocations: self.sourceLocations)
+        
+        if self.action != .noAction {
+            controller.onFinish = { [unowned self] in
+                self.onFinish?()
+            }
+        }
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -145,7 +160,7 @@ final class LocationsViewController: UITableViewController {
                 let message = NSLocalizedString("There was an error refreshing the locations.", comment: "")
                 let title = NSLocalizedString("Error", comment: "")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
                 return
             }
@@ -164,18 +179,6 @@ final class LocationsViewController: UITableViewController {
 
             self.hasLoadedLocations = true
         }
-    }
-
-    private func openMount(index: Int) {
-
-        let controller = ListingViewController(node: mounts[index].rootNode, action: self.action )
-
-        if self.action != .noAction {
-            controller.onFinish = { [unowned self] in
-                self.onFinish?()
-            }
-        }
-        navigationController?.pushViewController(controller, animated: true)
     }
 
     private func endRefreshAndReloadTable() {

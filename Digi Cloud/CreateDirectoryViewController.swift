@@ -13,7 +13,7 @@ final class CreateDirectoryViewController: UITableViewController {
     // MARK: - Properties
 
     var onFinish: ((_ folderName: String?) -> Void)?
-    private var node: Node
+    private var parentLocation: Location
     private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     private var textField: UITextField!
@@ -21,8 +21,8 @@ final class CreateDirectoryViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node) {
-        self.node = node
+    init(parentLocation: Location) {
+        self.parentLocation = parentLocation
         super.init(style: .grouped)
         INITLog(self)
     }
@@ -142,13 +142,13 @@ final class CreateDirectoryViewController: UITableViewController {
         rightBarButton.isEnabled = false
 
         // network request for rename
-        DigiClient.shared.createDirectory(in: self.node, with: folderName) { (statusCode, error) in
+        DigiClient.shared.createDirectory(at: self.parentLocation, named: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 let title = NSLocalizedString("Error", comment: "")
                 let message = NSLocalizedString("There was an error creating the directory.", comment: "")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
 
                 DLog(object: error!.localizedDescription)

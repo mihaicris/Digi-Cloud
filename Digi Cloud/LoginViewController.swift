@@ -172,7 +172,7 @@ final class LoginViewController: UIViewController {
                                     message: NSLocalizedString("Please contact RCS RDS for password information.", comment: ""),
                              preferredStyle: UIAlertControllerStyle.alert)
 
-        let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
 
         alert.addAction(actionOK)
         self.present(alert, animated: false, completion: nil)
@@ -198,7 +198,7 @@ final class LoginViewController: UIViewController {
             let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
                                           message: NSLocalizedString("Please fill in the fields.", comment: ""),
                                           preferredStyle: UIAlertControllerStyle.alert)
-            let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+            let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
             alert.addAction(actionOK)
             self.present(alert, animated: false, completion: nil)
             return
@@ -215,7 +215,7 @@ final class LoginViewController: UIViewController {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
                                             message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: ""),
                                      preferredStyle: UIAlertControllerStyle.alert)
-                let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
                 alert.addAction(actionOK)
                 self.present(alert, animated: false, completion: nil)
                 return
@@ -229,7 +229,7 @@ final class LoginViewController: UIViewController {
                                             message: NSLocalizedString("Unauthorized access", comment: ""),
                                      preferredStyle: UIAlertControllerStyle.alert)
 
-                let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
                 alert.addAction(actionOK)
                 self.present(alert, animated: false, completion: nil)
                 return
@@ -256,7 +256,7 @@ final class LoginViewController: UIViewController {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
                                               message: NSLocalizedString("An error has occurred while saving the account.\nPlease try again later!", comment: ""),
                                               preferredStyle: UIAlertControllerStyle.alert)
-                let actionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
                 alert.addAction(actionOK)
                 self.present(alert, animated: false, completion: nil)
             }

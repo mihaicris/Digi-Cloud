@@ -313,7 +313,7 @@ Please try again later!" = "A avut loc o eroare.
 "Send Link" = "Trimite link de descărcare";
 
 /* No comment provided by engineer. */
-"Send email when receive files" = "Trimite email la primirea de fișiere";
+"Email notification" = "Notificare pe email";
 
 /* No comment provided by engineer. */
 "Server replied with Status Code: " = "Serverul a răspuns cu codul de stare: ";

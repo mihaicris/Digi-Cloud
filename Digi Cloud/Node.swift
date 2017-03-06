@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Node: ContentItem {
+struct Node {
 
     // MARK: - Properties
 
@@ -23,13 +23,10 @@ struct Node: ContentItem {
     var downloadLink: DownloadLink?
     var uploadLink: UploadLink?
     var bookmark: Bookmark?
-
-    //  via Constructor
-    let parentLocation: Location
 }
 
 extension Node {
-    init?(JSON: Any, parentLocation: Location) {
+    init?(JSON: Any, mountId: String? = nil) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
@@ -50,10 +47,10 @@ extension Node {
         self.share = Mount(JSON: JSON["mount"])
         self.downloadLink = DownloadLink(JSON: JSON["link"])
         self.uploadLink = UploadLink(JSON: JSON["receiver"])
-        self.parentLocation = parentLocation
-
-        self.bookmark = Bookmark(JSON: JSON["bookmark"], mountId: parentLocation.mount.id)
-
+        
+        if let mountId = mountId {
+            self.bookmark = Bookmark(JSON: JSON["bookmark"], mountId: mountId)
+        }
     }
 }
 
@@ -64,25 +61,16 @@ extension Node {
         return (name as NSString).pathExtension
     }
 
-    // Location of the Node
-    var location: Location {
+    // Location in given Mount
+    func location(in parentLocation: Location) -> Location {
 
-        let path: String
+        var path = parentLocation.path + name
 
-        if name == "" {
-            path = "/"
-        } else {
-            path = parentLocation.path + name + (type == "dir" ? "/" : "")
+        if type == "dir" {
+            path += "/"
         }
+        
         return Location(mount: parentLocation.mount, path: path )
-    }
-
-    mutating func updateNode(with link: Link?) {
-        if let link = link as? DownloadLink {
-            self.downloadLink = link
-        } else if let link = link as? UploadLink {
-            self.uploadLink = link
-        }
     }
 }
 
@@ -94,6 +82,6 @@ extension Node: Hashable {
 
 extension Node: Equatable {
     static func == (lhs: Node, rhs: Node) -> Bool {
-        return lhs.location == rhs.location
+        return lhs.name == rhs.name
     }
 }

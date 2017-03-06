@@ -12,14 +12,14 @@ final class ShareViewController: UITableViewController {
 
     // MARK: - Properties
 
-    let node: Node
+    let location: Location
 
     let onFinish: (() -> Void)
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node, onFinish: @escaping () -> Void) {
-        self.node = node
+    init(location: Location, onFinish: @escaping () -> Void) {
+        self.location = location
         self.onFinish = onFinish
         super.init(nibName: nil, bundle: nil)
     }
@@ -43,11 +43,11 @@ final class ShareViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return node.type == "dir" ? 3 : 1
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.bounds.height / CGFloat(node.type == "dir" ? 3 : 1)
+        return tableView.bounds.height / 3
 
     }
 
@@ -71,16 +71,17 @@ final class ShareViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        
         switch indexPath.row {
+            
         case 0:
-            let controller = ShareLinkViewController(node: self.node, linkType: .download, onFinish: self.onFinish)
+            let controller = ShareLinkViewController(location: self.location, linkType: .download, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
         case 1:
-            let controller = ShareLinkViewController(node: self.node, linkType: .upload, onFinish: self.onFinish)
+            let controller = ShareLinkViewController(location: self.location, linkType: .upload, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
         case 2:
-            let controller = SharePermissionsTableViewController(node: self.node, onFinish: self.onFinish)
+            let controller = SharePermissionsTableViewController(location: self.location, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
         default:
             fatalError("Wrong index received.")
@@ -103,18 +104,12 @@ final class ShareViewController: UITableViewController {
     }
 
     private func setupNavigationItems() {
-
-        if node.type == "dir" {
-            self.title = NSLocalizedString("Share Directory", comment: "")
-        } else {
-            self.title = NSLocalizedString("Share File", comment: "")
-        }
-
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))
-        navigationItem.setRightBarButton(doneButton, animated: false)
+        self.title = NSLocalizedString("Share Directory", comment: "")
+        let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.setRightBarButton(cancelButton, animated: false)
     }
 
-    @objc private func handleDone() {
+    @objc private func handleCancel() {
         onFinish()
     }
 

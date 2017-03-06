@@ -28,11 +28,14 @@ extension Location {
         return Location(mount: self.mount, path: parentPath)
     }
 
-    func appendingPathComponent(_ component: String, isDirectory: Bool) -> Location {
-
-        let newPath = path + component + (isDirectory ? "/" : "")
+    func appendingPathComponentFrom(node: Node) -> Location {
+        let newPath = path + node.name + (node.type == "dir" ? "/" : "")
         return Location(mount: mount, path: newPath)
-
+    }
+    
+    func appendingPathComponent(_ name: String, isDirectory: Bool) -> Location {
+        let newPath = path + name + (isDirectory ? "/" : "")
+        return Location(mount: mount, path: newPath)
     }
 }
 

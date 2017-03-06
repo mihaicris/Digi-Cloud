@@ -24,15 +24,6 @@ protocol Link {
     var validTo: TimeInterval? { get }
 }
 
-protocol ContentItem {
-    var name: String { get }
-    var location: Location { get }
-    var type: String { get }
-    var modified: TimeInterval { get }
-    var size: Int64 { get }
-    var contentType: String { get }
-}
-
 protocol NodeActionsViewControllerDelegate: class {
     func didSelectOption(action: ActionType)
 }

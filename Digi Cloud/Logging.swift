@@ -40,12 +40,26 @@ public func DEINITLog(_ object: AnyObject) {
 
 func LogNSError(_ nserror: NSError) {
     print("\n_____________________________________________________\n")
-    print("Domain: ", nserror.domain)
-    print("Code: ", nserror.code)
-    print("LocalizedDescription: ", nserror.localizedDescription, "\n")
-    print("LocalizedFailureReason: ", nserror.localizedFailureReason ?? "")
-    print("LocalizedRecoveryOption: ", nserror.localizedRecoveryOptions ?? "")
-    print("LocalizedRecoverySuggestion: ", nserror.localizedRecoverySuggestion ?? "", "\n")
-    for v in nserror.userInfo { print(v.0, ": ", v.1) }
+    print("Domain:\t\t\t\t\t\t", nserror.domain)
+    print("Code:\t\t\t\t\t\t", nserror.code)
+    print("LocalizedDescription:\t\t", nserror.localizedDescription)
+    for (i,v) in nserror.userInfo.enumerated() {
+        if i == 0 {
+            print("\(v.0):\t", "\(v.1)")
+        } else if i == 1 {
+            print("\(v.0):\t\t", "\(v.1)")
+        }
+    }
+    if let localizedFailureReason = nserror.localizedFailureReason {
+        print("Localized Failure Reason:\t", localizedFailureReason)
+    }
+
+    if let localizedRecoveryOptions = nserror.localizedRecoveryOptions {
+        print("Localized Recovery Options:\t", localizedRecoveryOptions)
+    }
+
+    if let localizedRecoverySuggestion = nserror.localizedRecoverySuggestion {
+        print("Localized Recovery Suggestion:\t", localizedRecoverySuggestion)
+    }
     print("_____________________________________________________\n")
 }

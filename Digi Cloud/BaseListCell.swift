@@ -59,16 +59,16 @@ class BaseListCell: UITableViewCell {
 
     // MARK: - Initializers and Deinitializers
 
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.setupViews()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - Overridden Methods and Properties
-
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.setupViews()
-    }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         actionsButton.alpha = editing ? 0 : 1
@@ -94,7 +94,7 @@ class BaseListCell: UITableViewCell {
             }
         }
     }
-
+ 
     // MARK: - Helper Functions
 
     func setupViews() {

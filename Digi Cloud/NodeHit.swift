@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct NodeHit: ContentItem {
+struct NodeHit {
 
     // MARK: - Properties
 
@@ -20,12 +20,11 @@ struct NodeHit: ContentItem {
     let modified: TimeInterval
     let size: Int64
     let contentType: String
-    let location: Location
 }
 
 extension NodeHit {
-    init?(hitsJSON: Any, mountsJSON: [String: Any] ) {
-        guard let JSON = hitsJSON as? [String: Any],
+    init?(JSON: Any) {
+        guard let JSON = JSON as? [String: Any],
             let mountId = JSON["mountId"] as? String,
             let path = JSON["path"] as? String,
             let score = JSON["score"] as? Double,
@@ -46,15 +45,6 @@ extension NodeHit {
         self.modified = modified
         self.size = size
         self.contentType = contentType
-
-        guard let mountJSON = mountsJSON[mountId] as? [String: Any],
-              let mountName = mountJSON["name"] as? String else {
-            print("Could not parse keys")
-            return nil
-        }
-
-        let mount = Mount(id: mountId, name: mountName)
-        self.location = Location(mount: mount, path: path)
     }
 }
 

@@ -37,7 +37,7 @@ enum LinkType: String {
 enum MoreActions: Int {
     case createDirectory
     case selectionMode
-    case sendUploadLink
+    case share
 }
 
 enum ActionType: Int {
@@ -52,6 +52,7 @@ enum ActionType: Int {
     case share
     case sendDownloadLink
     case sendUploadLink
+    case showSearchResult
 }
 
 enum SortMethodType: Int {

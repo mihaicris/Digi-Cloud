@@ -11,11 +11,13 @@ import UIKit
 final class SearchResultController: UITableViewController {
 
     // MARK: - Properties
+    
     var filteredContent: [NodeHit] = []
+    var filteredMountsDictionary: [String: Mount] = [:]
 
     weak var searchController: UISearchController?
 
-    private let node: Node
+    private let location: Location
 
     private var fileCellID: String = ""
 
@@ -32,8 +34,8 @@ final class SearchResultController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node) {
-        self.node = node
+    init(location: Location) {
+        self.location = location
         super.init(style: .plain)
         INITLog(self)
     }
@@ -61,8 +63,20 @@ final class SearchResultController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? SearchCell else {
             return UITableViewCell()
         }
+        
         let node = filteredContent[indexPath.row]
 
+        guard let nodeMountName = filteredMountsDictionary[node.mountId]?.name else {
+            return UITableViewCell()
+        }
+        
+        guard let searchedText = searchController?.searchBar.text else {
+            return UITableViewCell()
+        }
+        
+        cell.nodeMountLabel.text = nodeMountName
+        cell.nodePathLabel.text = node.path
+        
         if node.type == "dir" {
             cell.nodeIcon.image = UIImage(named: "FolderIcon")
             cell.nodeNameLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 16)
@@ -71,10 +85,8 @@ final class SearchResultController: UITableViewController {
             cell.nodeNameLabel.font = UIFont(name: "HelveticaNeue", size: 16)
         }
 
-        cell.nodeMountLabel.text = node.location.mount.name
-
-        if mountNames[node.location.mount.name] == nil {
-            mountNames[node.location.mount.name] = currentColor
+        if mountNames[nodeMountName] == nil {
+            mountNames[nodeMountName] = currentColor
             var hue: CGFloat = 0
             var saturation: CGFloat = 0
             var brightness: CGFloat = 0
@@ -82,15 +94,10 @@ final class SearchResultController: UITableViewController {
             _ = currentColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
             currentColor = UIColor.init(hue: hue + 0.15, saturation: saturation, brightness: brightness, alpha: alpha)
         }
-        cell.mountBackgroundColor = mountNames[node.location.mount.name]
-        cell.nodePathLabel.text = node.location.path
+        cell.mountBackgroundColor = mountNames[nodeMountName]
 
         let name = node.name
         let attributedText = NSMutableAttributedString(string: name)
-
-        guard let searchedText = searchController?.searchBar.text else {
-            return cell
-        }
 
         let nsString = NSString(string: name.lowercased())
         let nsRange = nsString.range(of: searchedText.lowercased())
@@ -99,22 +106,33 @@ final class SearchResultController: UITableViewController {
         attributedText.addAttributes([NSBackgroundColorAttributeName: backGrdColor], range: nsRange)
         cell.nodeNameLabel.attributedText = attributedText
 
+        // Identification of the button's row that tapped
+        cell.seeInDirectoryButton.tag = indexPath.row
+        cell.seeInDirectoryButton.addTarget(self, action: #selector(handleSeeItemInEnclosedDirectory(_:)), for: .touchUpInside)
+        
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        searchController?.searchBar.resignFirstResponder()
-        let item = filteredContent[indexPath.row]
+        
+        
+        let nodeHit = filteredContent[indexPath.row]
 
-        let resultNode = Node(name: item.name, type: item.type, modified: item.modified,
-                              size: item.size, contentType: item.contentType, hash: nil,
-                              share: nil, downloadLink: nil, uploadLink: nil, bookmark: nil,
-                              parentLocation: item.location.parentLocation)
+        guard let nodeHitMount = filteredMountsDictionary[nodeHit.mountId] else {
+            print("Could not select the mount from results.")
+            return
+        }
+        
+        let nodeHitLocation = Location(mount: nodeHitMount, path: nodeHit.path)
 
-        let controller = item.type == "dir" ? ListingViewController(node: resultNode, action: .noAction) : ContentViewController(item: item)
+        let controller = nodeHit.type == "dir"
+            ? ListingViewController(location: nodeHitLocation, action: .noAction)
+            : ContentViewController(location: nodeHitLocation)
 
         let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController
+        
+        searchController?.searchBar.resignFirstResponder()
         nav?.pushViewController(controller, animated: true)
     }
 
@@ -132,6 +150,28 @@ final class SearchResultController: UITableViewController {
         tableView.separatorStyle = .none
     }
 
+    @objc private func handleSeeItemInEnclosedDirectory(_ button: UIButton) {
+        
+        let nodeHit = filteredContent[button.tag]
+        
+        guard let nodeHitMount = filteredMountsDictionary[nodeHit.mountId] else {
+            print("Could not select the mount from results.")
+            return
+        }
+        
+        let parentDirectoryLocation = Location(mount: nodeHitMount, path: nodeHit.path).parentLocation
+
+        let controller = ListingViewController(location: parentDirectoryLocation,
+                                               action: .showSearchResult,
+                                               searchResult: nodeHit.name)
+        
+        let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController
+        
+        searchController?.searchBar.resignFirstResponder()
+        
+        nav?.pushViewController(controller, animated: true)
+    }
+    
     fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
 
         /* 
@@ -159,31 +199,35 @@ final class SearchResultController: UITableViewController {
         searchInCurrentMount = scope == 0 ? true  : false
 
         var parameters: [String: String] = [
-            ParametersKeys.QueryString: searchText,
+            ParametersKeys.QueryString: searchText
         ]
-
+        
         if scope == 0 {
-            parameters[ParametersKeys.MountID] = self.node.location.mount.id
-            parameters[ParametersKeys.Path] = self.node.location.path
+            parameters[ParametersKeys.MountID] = location.mount.id
+            parameters[ParametersKeys.Path] = location.path
         }
 
-        DigiClient.shared.search(parameters: parameters) { results, error in
+        // cancel search task in execution
+        DigiClient.shared.task?.cancel()
+        
+        DigiClient.shared.search(parameters: parameters) { nodeHitsResult, mountsDictionaryResult, error in
+            
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-            if var nodes = results {
-                nodes.sort {
-                    if $0.type == $1.type {
-                        return $0.score > $1.score
-                    } else {
-                        return $0.type < $1.type
-                    }
-                }
-                self.filteredContent = nodes
+            
+            self.filteredContent = nodeHitsResult ?? []
+            self.filteredMountsDictionary = mountsDictionaryResult ?? [:]
 
-                self.tableView.reloadData()
+            self.filteredContent.sort {
+                if $0.type == $1.type {
+                    return $0.score > $1.score
+                } else {
+                    return $0.type < $1.type
+                }
             }
+            self.tableView.reloadData()
         }
     }
 }

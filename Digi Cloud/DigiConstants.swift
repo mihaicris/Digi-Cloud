@@ -35,6 +35,7 @@ struct ParametersKeys {
     static let Path             = "path"
     static let MountID          = "mountId"
     static let QueryString      = "query"
+    static let Limit            = "limit"
 }
 
 struct DataJSONKeys {
