@@ -191,9 +191,10 @@
 		83454BEB1E5B3E6E005C85ED /* Sharing */ = {
 			isa = PBXGroup;
 			children = (
-				833F5DA61E68358B00EE3722 /* ShareViewController.swift */,
 				83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */,
 				833F5DA81E68372700EE3722 /* SharePermissionsViewController.swift */,
+				833F5DA61E68358B00EE3722 /* ShareViewController.swift */,
+				83D03F231E6DB12700BA617A /* Views */,
 			);
 			name = Sharing;
 			sourceTree = "<group>";
@@ -294,7 +295,6 @@
 				835405FE1D95175E00019D53 /* Application Delegate */,
 				835406021D95180F00019D53 /* Managers */,
 				83EF1D461D8FBDC400ACE008 /* Models */,
-				83F994461DD092870023FB5D /* Views */,
 				839BAE201D8BE00E00A43452 /* Controllers */,
 				83F1FFD11E6978D50079F56F /* Enums */,
 				835406031D952FD900019D53 /* Extensions */,
@@ -318,10 +318,12 @@
 			children = (
 				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
 				83F994471DD093700023FB5D /* Accounts */,
+				83D03F1B1E6DAF8300BA617A /* Bookmarks */,
 				83F9944E1DD094E20023FB5D /* Content */,
 				83F994491DD093A00023FB5D /* Introduction */,
 				83F9944B1DD093C90023FB5D /* Listing */,
 				839882E11E3257D20002C6E9 /* Main */,
+				83D03F211E6DB10000BA617A /* Rename */,
 				83A9BE191DFFDD9E003FD974 /* Search */,
 				83EC31451E29154F009E12B6 /* Settings */,
 				83454BEB1E5B3E6E005C85ED /* Sharing */,
@@ -333,6 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */,
+				83D03F221E6DB11A00BA617A /* Views */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -343,6 +346,80 @@
 				837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		83D03F1B1E6DAF8300BA617A /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				83D03F1F1E6DB0C900BA617A /* Views */,
+			);
+			name = Bookmarks;
+			sourceTree = "<group>";
+		};
+		83D03F1E1E6DB0B700BA617A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */,
+				83851E631E25345500C8AE52 /* AccountTableViewCell.swift */,
+				8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */,
+				83D281001D9D747A00D74661 /* LoginField.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		83D03F1F1E6DB0C900BA617A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		83D03F201E6DB0DC00BA617A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
+				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
+				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
+				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
+				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
+				83DB658C1DDF12C900A53440 /* LocationCell.swift */,
+				834181761E07FB1100F32A2F /* UILabelWithPadding.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		83D03F211E6DB10000BA617A /* Rename */ = {
+			isa = PBXGroup;
+			children = (
+				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
+				83D03F241E6DB15C00BA617A /* Views */,
+			);
+			name = Rename;
+			sourceTree = "<group>";
+		};
+		83D03F221E6DB11A00BA617A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				83164FEC1E03F473001048D7 /* SearchCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		83D03F231E6DB12700BA617A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */,
+				833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		83D03F241E6DB15C00BA617A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		83EC31451E29154F009E12B6 /* Settings */ = {
@@ -388,34 +465,13 @@
 			path = "Digi Cloud Tests";
 			sourceTree = "<group>";
 		};
-		83F994461DD092870023FB5D /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */,
-				83851E631E25345500C8AE52 /* AccountTableViewCell.swift */,
-				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
-				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
-				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
-				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
-				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
-				83DB658C1DDF12C900A53440 /* LocationCell.swift */,
-				8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */,
-				83D281001D9D747A00D74661 /* LoginField.swift */,
-				8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */,
-				83164FEC1E03F473001048D7 /* SearchCell.swift */,
-				834181761E07FB1100F32A2F /* UILabelWithPadding.swift */,
-				835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */,
-				833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
 		83F994471DD093700023FB5D /* Accounts */ = {
 			isa = PBXGroup;
 			children = (
 				8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */,
 				8370412A1D8B2264000EDBAE /* LoginViewController.swift */,
 				83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */,
+				83D03F1E1E6DB0B700BA617A /* Views */,
 			);
 			name = Accounts;
 			sourceTree = "<group>";
@@ -438,8 +494,8 @@
 				8370412B1D8B2264000EDBAE /* LocationsViewController.swift */,
 				83BF27C81E438AB30019B1F7 /* MoreActionsViewController.swift */,
 				83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */,
-				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
 				83F994511DD09B340023FB5D /* SortFolderViewController.swift */,
+				83D03F201E6DB0DC00BA617A /* Views */,
 			);
 			name = Listing;
 			sourceTree = "<group>";
