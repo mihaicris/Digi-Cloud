@@ -147,7 +147,7 @@ final class ListingViewController: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        if self.action == .noAction {
+        if [ActionType.noAction, ActionType.showSearchResult].contains(self.action) {
             updateNavigationBarRightButtonItems()
             tableView.tableHeaderView = nil
         }
@@ -212,7 +212,7 @@ final class ListingViewController: UITableViewController {
 
             cell.nameLabel.text = item.name
 
-            cell.hasButton = (action == .noAction || action == .showSearchResult)
+            cell.hasButton = [ActionType.noAction, ActionType.showSearchResult].contains(self.action)
             cell.isShared = item.share != nil
             cell.hasDownloadLink = item.downloadLink != nil
             cell.hasUploadLink = item.uploadLink != nil
@@ -245,7 +245,7 @@ final class ListingViewController: UITableViewController {
             }
 
             cell.delegate = self
-            cell.hasButton = (action == .noAction || action == .showSearchResult)
+            cell.hasButton = [ActionType.noAction, ActionType.showSearchResult].contains(self.action)
             cell.hasDownloadLink = item.downloadLink != nil
 
             cell.nameLabel.text = item.name
@@ -305,7 +305,7 @@ final class ListingViewController: UITableViewController {
 
             // This is a file
 
-            if self.action == .noAction || self.action == .showSearchResult {
+            if [ActionType.noAction, ActionType.showSearchResult].contains(self.action) {
                 let controller = ContentViewController(location: newLocation)
                 navigationController?.pushViewController(controller, animated: true)
             }
