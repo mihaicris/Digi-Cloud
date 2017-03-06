@@ -349,7 +349,7 @@ final class AccountSelectionViewController: UIViewController,
             }
         }
 
-        dispatchGroup.notify(queue: DispatchQueue.main, execute: {
+        dispatchGroup.notify(queue: .main, execute: {
             self.accountsCollectionView.reloadData()
         })
     }

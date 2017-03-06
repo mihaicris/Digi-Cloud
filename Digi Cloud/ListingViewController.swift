@@ -102,6 +102,11 @@ final class ListingViewController: UITableViewController {
         return b
     }()
 
+    private lazy var bookmarksBarButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarks))
+        return b
+    }()
+
     private lazy var deleteInEditModeButton: UIBarButtonItem = {
         let v = UIButton(type: UIButtonType.system)
         v.setTitle(NSLocalizedString("Delete", comment: ""), for: .normal)
@@ -345,8 +350,7 @@ final class ListingViewController: UITableViewController {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
 
-            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                                               style: .plain, target: self, action: #selector(handleDone))
+            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleDone))
 
             navigationItem.rightBarButtonItem = cancelButton
 
@@ -373,7 +377,28 @@ final class ListingViewController: UITableViewController {
     }
     
     @objc private func handleShowBookmarks() {
-        
+
+        let controller = BookmarksViewController()
+
+        controller.onFinish = { [weak self] in
+            self?.dismiss(animated: true) {
+                self?.updateContent()
+            }
+        }
+
+        controller.onSelect = { [weak self] location in
+            self?.dismiss(animated: true) {
+                let controller = ListingViewController(location: location, action: .noAction)
+                self?.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .popover
+        guard let buttonView = navigationItem.rightBarButtonItems?[3].value(forKey: "view") as? UIView else { return }
+        navController.popoverPresentationController?.sourceView = buttonView
+        navController.popoverPresentationController?.sourceRect = buttonView.bounds
+        present(navController, animated: true, completion: nil)
     }
 
     private func setupSearchController() {
@@ -576,7 +601,6 @@ final class ListingViewController: UITableViewController {
             let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .plain, target: self, action: #selector(handleShowMoreActions))
             let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .plain, target: self, action: #selector(handleSortSelect))
             let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
-            let bookmarksBarButton = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarks))
             
             rightBarButtonItems.append(contentsOf: [moreActionsBarButton, sortBarButton, searchBarButton, bookmarksBarButton])
         }
@@ -926,7 +950,7 @@ final class ListingViewController: UITableViewController {
             self.doCopyOrMove(sourceLocation: sourceLocation)
         }
 
-        dispatchGroup.notify(queue: DispatchQueue.main) {
+        dispatchGroup.notify(queue: .main) {
 
             self.setBusyIndicatorView(false)
 
@@ -1055,7 +1079,7 @@ final class ListingViewController: UITableViewController {
         }
 
         // After all deletions have finished...
-        dispatchGroup.notify(queue: DispatchQueue.main) {
+        dispatchGroup.notify(queue: .main) {
             self.setBusyIndicatorView(false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 self.updateContent()

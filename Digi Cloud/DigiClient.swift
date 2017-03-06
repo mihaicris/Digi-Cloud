@@ -310,6 +310,31 @@ final class DigiClient {
         }
     }
 
+    
+    /// Get Mount with Id
+    ///
+    /// - Parameters:
+    ///   - id: Mount Id
+    ///   - completion: The block called after the server has responded
+    ///   - mount: Returned Mount
+    ///   - error: The error occurred in the network request, nil for no error.    
+    func getMount(withId id: String, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
+        let method = Methods.MountDetails
+        
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+        
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { (json, _, error) in
+            guard error == nil else {
+                completion(nil, error!)
+                return
+            }
+        
+            let mount = Mount(JSON: json)
+            completion(mount, nil)
+        }
+    }
+    
     /// Gets the content of nodes of a location in the Cloud storage
     ///
     /// - Parameters:
