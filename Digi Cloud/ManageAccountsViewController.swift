@@ -27,17 +27,17 @@ final class ManageAccountsViewController: UITableViewController {
     }()
 
     lazy var editButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .plain, target: self, action: #selector(editAction))
+        let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .plain, target: self, action: #selector(handleEnterEditMode))
         return b
     }()
 
     lazy var deleteButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .plain, target: self, action: #selector(deleteAction))
+        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .plain, target: self, action: #selector(handleAskDeleteConfirmation))
         return b
     }()
 
     lazy var cancelButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelAction))
+        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancelEdit))
         return b
     }()
 
@@ -147,7 +147,7 @@ final class ManageAccountsViewController: UITableViewController {
     }
 
     private func updateButtonsToMatchTableState() {
-        if (self.tableView.isEditing) {
+        if self.tableView.isEditing {
             self.navigationItem.rightBarButtonItem = self.cancelButton
             self.updateDeleteButtonTitle()
             self.navigationItem.leftBarButtonItem = self.deleteButton
@@ -159,31 +159,33 @@ final class ManageAccountsViewController: UITableViewController {
     }
 
     private func updateDeleteButtonTitle() {
+        var newTitle = NSLocalizedString("Delete All", comment: "")
         if let selectedRows = self.tableView.indexPathsForSelectedRows {
             if selectedRows.count != accounts.count {
                 let titleFormatString = NSLocalizedString("Delete (%d)", comment: "")
-                self.deleteButton.title = String(format: titleFormatString, selectedRows.count)
-                return
+                newTitle = String(format: titleFormatString, selectedRows.count)
             }
         }
-        self.deleteButton.title = NSLocalizedString("Delete All", comment: "")
+        UIView.performWithoutAnimation {
+            self.deleteButton.title = newTitle
+        }
     }
 
-    @objc private func toggleEditMode() {
+    @objc private func handleToggleEditMode() {
         var button: UIBarButtonItem
         if tableView.isEditing {
             button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""),
                                      style: UIBarButtonItemStyle.plain,
                                      target: self,
-                                     action: #selector(toggleEditMode))
+                                     action: #selector(handleToggleEditMode))
         } else {
             button = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
                                      style: UIBarButtonItemStyle.plain,
                                      target: self,
-                                     action: #selector(toggleEditMode))
+                                     action: #selector(handleToggleEditMode))
         }
         navigationItem.setRightBarButton(button, animated: false)
-        tableView.isEditing = !tableView.isEditing
+        tableView.setEditing(!tableView.isEditing, animated: true)
     }
 
     @objc private func addAction() {
@@ -192,12 +194,12 @@ final class ManageAccountsViewController: UITableViewController {
         }
     }
 
-    @objc private func editAction() {
+    @objc private func handleEnterEditMode() {
         self.tableView.setEditing(true, animated: true)
         self.updateButtonsToMatchTableState()
     }
 
-    @objc private func deleteAction() {
+    @objc private func handleAskDeleteConfirmation() {
 
         var messageString: String
         if self.tableView.indexPathsForSelectedRows?.count == 1 {
@@ -222,8 +224,6 @@ final class ManageAccountsViewController: UITableViewController {
         alertController.addAction(okAction)
 
         present(alertController, animated: true, completion: nil)
-        return
-
     }
 
     @objc private func deleteConfirmed(_ action: UIAlertAction) {
@@ -271,7 +271,7 @@ final class ManageAccountsViewController: UITableViewController {
         controller.accountsCollectionView.reloadData()
     }
 
-    @objc private func cancelAction() {
+    @objc private func handleCancelEdit() {
         self.tableView.setEditing(false, animated: true)
         self.updateButtonsToMatchTableState()
     }
