@@ -1,5 +1,5 @@
 //
-//  BookmarksViewController.swift
+//  ManageBookmarksViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 06/03/2017.
@@ -8,20 +8,17 @@
 
 import UIKit
 
-final class BookmarksViewController: UITableViewController {
+final class ManageBookmarksViewController: UITableViewController {
 
     // MARK: - Properties
     
     private var mountsMapping: [String: Mount] = [:]
 
-    private var bookmarks: [Bookmark] = [] {
-        didSet {
-            tableView.reloadData()
-        }
-    }
+    private var bookmarks: [Bookmark] = []
     
     var onFinish: (() -> Void)?
     var onSelect: ((Location) -> Void)?
+    var onUpdate: (() -> Void)?
 
     private let dispatchGroup = DispatchGroup()
 
@@ -59,16 +56,14 @@ final class BookmarksViewController: UITableViewController {
         super.viewDidLoad()
         tableView.register(BookmarkViewCell.self, forCellReuseIdentifier: String(describing: BookmarkViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true
-        setupViews()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        self.preferredContentSize.height = 0.01
+        self.title = NSLocalizedString("Bookmarks", comment: "")
         getBookmarksAndMounts()
-        super.viewWillAppear(animated)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return 55.0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,7 +77,7 @@ final class BookmarksViewController: UITableViewController {
         
         if let mountName = mountsMapping[bookmarks[indexPath.row].mountId]?.name {
             cell.nameLabel.text = bookmarks[indexPath.row].name
-            cell.pathLabel.text = mountName + bookmarks[indexPath.row].path
+            cell.pathLabel.text = mountName + String(bookmarks[indexPath.row].path.characters.dropLast())
         }
         
         return cell
@@ -113,47 +108,45 @@ final class BookmarksViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-
+            deleteBookmarks(at: [indexPath])
         }
     }
     
     // MARK: - Helper Functions
-    
-    private func setupViews() {
-        preferredContentSize.height = 400
-        preferredContentSize.width = 550
-        title = NSLocalizedString("Bookmarks", comment: "")
-        
-        updateButtonsToMatchTableState()
-    }
 
     private func updateButtonsToMatchTableState() {
-        if (self.tableView.isEditing) {
+        if self.tableView.isEditing {
             self.navigationItem.rightBarButtonItem = self.cancelButton
             self.updateDeleteButtonTitle()
             self.navigationItem.leftBarButtonItem = self.deleteButton
         } else {
             // Not in editing mode.
-            self.navigationItem.rightBarButtonItem = self.editButton
+            if bookmarks.count != 0 {
+                self.navigationItem.rightBarButtonItem = self.editButton
+            }
             self.navigationItem.leftBarButtonItem = nil
         }
     }
     
     private func updateDeleteButtonTitle() {
+        var newTitle = NSLocalizedString("Delete All", comment: "")
         if let indexPathsForSelectedRows = self.tableView.indexPathsForSelectedRows {
             if indexPathsForSelectedRows.count != bookmarks.count {
                 let titleFormatString = NSLocalizedString("Delete (%d)", comment: "")
-                self.deleteButton.title = String(format: titleFormatString, indexPathsForSelectedRows.count)
-                return
+                newTitle =  String(format: titleFormatString, indexPathsForSelectedRows.count)
             }
         }
-        self.deleteButton.title = NSLocalizedString("Delete All", comment: "")
+        UIView.performWithoutAnimation {
+            self.deleteButton.title = newTitle
+        }
     }
 
     private func getBookmarksAndMounts() {
 
         var resultBookmarks: [Bookmark] = []
         var resultMounts: [Mount] = []
+        
+        var hasFetchedSuccessfully = true
         
         // Get the bookmarks
         dispatchGroup.enter()
@@ -163,6 +156,7 @@ final class BookmarksViewController: UITableViewController {
             self.dispatchGroup.leave()
             
             guard error == nil, result != nil else {
+                hasFetchedSuccessfully = false
                 LogNSError(error! as NSError)
                 return
             }
@@ -178,6 +172,7 @@ final class BookmarksViewController: UITableViewController {
             self.dispatchGroup.leave()
             
             guard error == nil, result != nil else {
+                hasFetchedSuccessfully = false
                 LogNSError(error! as NSError)
                 return
             }
@@ -187,15 +182,84 @@ final class BookmarksViewController: UITableViewController {
         
         // Create dictionary with mountId: Mount
         dispatchGroup.notify(queue: .main) {
-            for mount in resultMounts {
-                self.mountsMapping[mount.id] = mount
+
+            if hasFetchedSuccessfully {
+                
+                if resultBookmarks.count == 0 || resultMounts.count == 0 {
+                    self.title = NSLocalizedString("No bookmarks", comment: "")
+                    return
+                }
+                
+                for mount in resultMounts {
+                    self.mountsMapping[mount.id] = mount
+                }
+                self.bookmarks = resultBookmarks
+                self.tableView.reloadData()
+                self.updateButtonsToMatchTableState()
+                self.preferredContentSize.height = 450
+            } else {
+                self.title = NSLocalizedString("Error on fetching bookmarks", comment: "")
             }
-            // Must be the last line because its didSet needs the mounts to be set in advance.
-            self.bookmarks = resultBookmarks
         }
     }
-
-    private func removeBookmarks(at indexPaths: [IndexPath]) {}
+    
+    private func deleteBookmarks(at indexPaths: [IndexPath]) {
+        
+        var newBookmarks = bookmarks
+        
+        for indexPath in indexPaths.reversed() {
+            newBookmarks.remove(at: indexPath.row)
+        }
+        
+        // TODO: Start Activity Indicator
+        
+        DigiClient.shared.setBookmarks(bookmarks: newBookmarks) { error in
+            
+            // TODO: Stop Activity Indicator
+            guard error == nil else {
+                
+                // TODO: Show error to user
+                LogNSError(error! as NSError)
+                return
+            }
+            
+            // Success:
+            self.bookmarks = newBookmarks
+            self.tableView.deleteRows(at: indexPaths, with: .fade)
+            
+            if self.bookmarks.count == 0 {
+                // Dismiss
+                self.onFinish?()
+            } else {
+                // Update main list
+                self.onUpdate?()
+                
+                if self.tableView.isEditing {
+                    self.handleToogleEditMode()
+                    self.updateButtonsToMatchTableState()
+                }
+            }
+        }
+    }
+    
+    @objc private func handleDeleteSelectedBookmarks(_ action: UIAlertAction) {
+        
+        var indexPaths: [IndexPath] = []
+        
+        if let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows {
+            
+            // Some or all rows selected
+            indexPaths = indexPathsForSelectedRows
+        
+        } else {
+            
+            // No rows selected, means all rows.
+            for (index, _ ) in bookmarks.enumerated() {
+                indexPaths.append(IndexPath(row: index, section: 0))
+            }
+        }
+        deleteBookmarks(at: indexPaths)
+    }
 
     @objc private func handleToogleEditMode() {
         var button: UIBarButtonItem
@@ -211,7 +275,7 @@ final class BookmarksViewController: UITableViewController {
                                      action: #selector(handleToogleEditMode))
         }
         navigationItem.setRightBarButton(button, animated: false)
-        tableView.isEditing = !tableView.isEditing
+        tableView.setEditing(!tableView.isEditing, animated: true)
     }
 
     @objc private func handleEnterEditMode() {
@@ -242,13 +306,8 @@ final class BookmarksViewController: UITableViewController {
         
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
-        
         present(alertController, animated: true, completion: nil)
-        return
-        
     }
-
-    @objc private func handleDeleteSelectedBookmarks(_ action: UIAlertAction) {}
     
     @objc private func handleCancelEdit() {
         self.tableView.setEditing(false, animated: true)

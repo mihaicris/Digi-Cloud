@@ -58,7 +58,7 @@
 		83C7D1081E23A9B700E3D508 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D1061E23A9B700E3D508 /* Account.swift */; };
 		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
 		83CE7A001DE45D77002212A9 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE79FF1DE45D77002212A9 /* Location.swift */; };
-		83D03F271E6DB3FA00BA617A /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F261E6DB3FA00BA617A /* BookmarksViewController.swift */; };
+		83D03F271E6DB3FA00BA617A /* ManageBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */; };
 		83D03F291E6DB5BB00BA617A /* BookmarkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */; };
 		83D281011D9D747A00D74661 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* LoginField.swift */; };
 		83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF221DE59ED300987E1A /* ListingViewController.swift */; };
@@ -151,7 +151,7 @@
 		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DirectoryInfoViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83CE79FF1DE45D77002212A9 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		83D03F261E6DB3FA00BA617A /* BookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksViewController.swift; sourceTree = "<group>"; };
+		83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageBookmarksViewController.swift; sourceTree = "<group>"; };
 		83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkViewCell.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
 		83DADF221DE59ED300987E1A /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListingViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -355,8 +355,8 @@
 		83D03F1B1E6DAF8300BA617A /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */,
 				83D03F1F1E6DB0C900BA617A /* Views */,
-				83D03F261E6DB3FA00BA617A /* BookmarksViewController.swift */,
 			);
 			name = Bookmarks;
 			sourceTree = "<group>";
@@ -656,7 +656,7 @@
 				83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */,
 				83F5E1661E6B1EE4004EFE72 /* ContentViewController.swift in Sources */,
 				83C7D1081E23A9B700E3D508 /* Account.swift in Sources */,
-				83D03F271E6DB3FA00BA617A /* BookmarksViewController.swift in Sources */,
+				83D03F271E6DB3FA00BA617A /* ManageBookmarksViewController.swift in Sources */,
 				83164FED1E03F473001048D7 /* SearchCell.swift in Sources */,
 				83EF1D481D8FBDDA00ACE008 /* Node.swift in Sources */,
 				834AEEB51E6B354F00C16B75 /* RenameViewController.swift in Sources */,

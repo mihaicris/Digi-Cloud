@@ -378,12 +378,16 @@ final class ListingViewController: UITableViewController {
     
     @objc private func handleShowBookmarks() {
 
-        let controller = BookmarksViewController()
+        let controller = ManageBookmarksViewController()
 
         controller.onFinish = { [weak self] in
             self?.dismiss(animated: true) {
                 self?.updateContent()
             }
+        }
+        
+        controller.onUpdate = { [weak self] in
+            self?.updateContent()
         }
 
         controller.onSelect = { [weak self] location in
