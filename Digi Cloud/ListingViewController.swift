@@ -213,7 +213,9 @@ final class ListingViewController: UITableViewController {
                 return UITableViewCell()
             }
 
-            cell.delegate = self
+            cell.actionsButton.addTarget(self, action: #selector(handleShowActionController(_:)), for: .touchUpInside)
+            cell.actionsButton.tag = indexPath.row
+
 
             cell.nameLabel.text = item.name
 
@@ -249,7 +251,8 @@ final class ListingViewController: UITableViewController {
                 return UITableViewCell()
             }
 
-            cell.delegate = self
+            cell.actionsButton.addTarget(self, action: #selector(handleShowActionController(_:)), for: .touchUpInside)
+            cell.actionsButton.tag = indexPath.row
             cell.hasButton = [ActionType.noAction, ActionType.showSearchResult].contains(self.action)
             cell.hasDownloadLink = item.downloadLink != nil
 
@@ -1109,6 +1112,21 @@ final class ListingViewController: UITableViewController {
             }
         }
     }
+    
+    @objc private func handleShowActionController(_ sender: UIButton) {
+        
+        self.selectedIndexPath = IndexPath(row: sender.tag, section: 0)
+        self.animateActionButton(active: true)
+        
+        let controller = NodeActionsViewController(node: self.content[sender.tag])
+        controller.delegate = self
+        
+        controller.modalPresentationStyle = .popover
+        controller.popoverPresentationController?.sourceView = sender
+        controller.popoverPresentationController?.sourceRect = sender.bounds
+        controller.popoverPresentationController?.delegate = self
+        present(controller, animated: true, completion: nil)
+    }
 
     fileprivate func showViewControllerForCopyOrMove(action: ActionType, sourceLocations: [Location]) {
 
@@ -1318,31 +1336,6 @@ extension ListingViewController: NodeActionsViewControllerDelegate {
         }
 
         dismiss(animated: true, completion: completionBlock)
-    }
-}
-
-extension ListingViewController: BaseListCellDelegate {
-    func showActionController(for sourceView: UIView) {
-        let buttonPosition = sourceView.convert(CGPoint.zero, to: self.tableView)
-        guard let indexPath = tableView.indexPathForRow(at: buttonPosition) else { return }
-
-        self.selectedIndexPath = indexPath
-        self.animateActionButton(active: true)
-
-        let controller = NodeActionsViewController(node: self.content[indexPath.row])
-        controller.delegate = self
-
-        var sourceView = tableView.cellForRow(at: selectedIndexPath)!.contentView
-        for view in sourceView.subviews {
-            if view.tag == 1 {
-                sourceView = view.subviews[0]
-            }
-        }
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = sourceView
-        controller.popoverPresentationController?.sourceRect = sourceView.bounds
-        controller.popoverPresentationController?.delegate = self
-        present(controller, animated: true, completion: nil)
     }
 }
 

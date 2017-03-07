@@ -28,10 +28,6 @@ protocol NodeActionsViewControllerDelegate: class {
     func didSelectOption(action: ActionType)
 }
 
-protocol BaseListCellDelegate: class {
-    func showActionController(for sourceView: UIView)
-}
-
 protocol DeleteViewControllerDelegate: class {
     func onConfirmDeletion()
 }

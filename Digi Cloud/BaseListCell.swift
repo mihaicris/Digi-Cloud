@@ -20,16 +20,13 @@ class BaseListCell: UITableViewCell {
 
     var hasDownloadLink: Bool = false
 
-    weak var delegate: BaseListCellDelegate?
-
-    lazy var actionsButton: UIButton = {
+    var actionsButton: UIButton = {
         let button = UIButton(type: UIButtonType.system)
         button.setTitle("⋯", for: .normal)
         button.tag = 1
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         button.contentHorizontalAlignment = .center
         button.setTitleColor(UIColor.darkGray, for: .normal)
-        button.addTarget(self, action: #selector(handleAction), for: .touchUpInside)
         return button
     }()
 
@@ -138,9 +135,5 @@ class BaseListCell: UITableViewCell {
             rightPaddingButtonConstraint?.constant = -20
         }
         layoutSubviews()
-    }
-
-    @objc private func handleAction() {
-        delegate?.showActionController(for: actionsButton)
     }
 }
