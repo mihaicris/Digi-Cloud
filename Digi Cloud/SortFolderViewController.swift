@@ -12,8 +12,8 @@ final class SortFolderViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var onFinish: (() -> Void)?
-    private var contextMenuSortActions: [String] = []
+    var onSelection: (() -> Void)?
+    private var sortingActions: [String] = []
 
     // MARK: - Initializers and Deinitializers
 
@@ -31,7 +31,7 @@ final class SortFolderViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setInitialActionNames()
+        setupActions()
         setupViews()
     }
 
@@ -42,62 +42,66 @@ final class SortFolderViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contextMenuSortActions.count
+        return sortingActions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let sortMethodRow = indexPath.row
 
         // check if user selected the same sort method
-        if  sortMethodRow == AppSettings.sortMethod.rawValue {
-            contextMenuSortActions[sortMethodRow] += AppSettings.sortAscending ? "   ↑" : "   ↓"
+        if  indexPath.row == AppSettings.sortMethod.rawValue {
+            sortingActions[indexPath.row] += AppSettings.sortAscending ? "   ↑" : "   ↓"
         }
 
-        guard let action = ActionType(rawValue: sortMethodRow) else { return UITableViewCell() }
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.text = sortingActions[indexPath.row]
 
-        let cell = ActionCell(title: contextMenuSortActions[sortMethodRow], action: action)
-        if sortMethodRow == 0 {
-            cell.delegate = self
+        if indexPath.row == 0 {
+
             cell.selectionStyle = .none
+            cell.textLabel?.textColor = UIColor.darkGray
+
+            let switchButton = UISwitch()
+            switchButton.addTarget(self, action: #selector(handleOnSwitchValueChanged(_:)), for: .valueChanged)
+            switchButton.translatesAutoresizingMaskIntoConstraints = false
+
             if AppSettings.sortMethod == .bySize || AppSettings.sortMethod == .byContentType {
-                cell.switchButton.isOn = true
-                cell.switchButton.isEnabled = false
+                switchButton.isOn = true
+                switchButton.isEnabled = false
             } else {
-                cell.switchButton!.isOn = AppSettings.showsFoldersFirst
+                switchButton.isOn = AppSettings.showsFoldersFirst
             }
+
+            cell.contentView.addSubview(switchButton)
+
+            NSLayoutConstraint.activate([
+                switchButton.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor),
+                switchButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
+
+        } else {
+            cell.textLabel?.textColor = .defaultColor
         }
+
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? ActionCell {
-            let tag = cell.tag
-            if tag != 0 {
-                setInitialActionNames()
-                if tag == AppSettings.sortMethod.rawValue {
-                    // user changed the sort direction for the same method
-                    AppSettings.sortAscending = !AppSettings.sortAscending
-                } else {
-                    // user changed the sort method
-                    AppSettings.sortMethod = SortMethodType(rawValue: tag)!
-                }
-                tableView.reloadData()
-                self.onFinish?()
+
+        if indexPath.row != 0 {
+            setupActions()
+            if indexPath.row == AppSettings.sortMethod.rawValue {
+                // user changed the sort direction for the same method
+                AppSettings.sortAscending = !AppSettings.sortAscending
+            } else {
+                // user changed the sort method
+                AppSettings.sortMethod = SortMethodType(rawValue: indexPath.row)!
             }
+            tableView.reloadData()
+            onSelection?()
         }
     }
 
     // MARK: - Helper Functions
-
-    private func setInitialActionNames() {
-        contextMenuSortActions = [
-            NSLocalizedString("Directories first", comment: ""),
-            NSLocalizedString("Sort by Name", comment: ""),
-            NSLocalizedString("Sort by Date", comment: ""),
-            NSLocalizedString("Sort by Size", comment: ""),
-            NSLocalizedString("Sort by Type", comment: "")
-        ]
-    }
 
     private func setupViews() {
 
@@ -134,13 +138,20 @@ final class SortFolderViewController: UITableViewController {
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
-}
 
-extension SortFolderViewController: ActionCellDelegate {
-    func onSwitchValueChanged(button: UISwitch, value: Bool) {
-        if button.tag == 0 {
-            AppSettings.showsFoldersFirst = value
-            self.onFinish?()
-        }
+    private func setupActions() {
+        sortingActions = [
+            NSLocalizedString("Directories first", comment: ""),
+            NSLocalizedString("Sort by Name", comment: ""),
+            NSLocalizedString("Sort by Date", comment: ""),
+            NSLocalizedString("Sort by Size", comment: ""),
+            NSLocalizedString("Sort by Type", comment: "")
+        ]
     }
+
+    @objc private func handleOnSwitchValueChanged(_ sender: UISwitch) {
+        AppSettings.showsFoldersFirst = sender.isOn
+        self.onSelection?()
+    }
+
 }

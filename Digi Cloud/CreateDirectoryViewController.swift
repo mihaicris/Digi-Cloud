@@ -12,7 +12,8 @@ final class CreateDirectoryViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var onFinish: ((_ folderName: String?) -> Void)?
+    var onFinish: ((String) -> Void)?
+
     private var parentLocation: Location
     private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
@@ -124,8 +125,7 @@ final class CreateDirectoryViewController: UITableViewController {
     }
 
     @objc private func handleCancel() {
-        textField.resignFirstResponder()
-        onFinish?(nil)
+        self.dismiss(animated: true, completion: nil)
     }
 
     @objc fileprivate func handleCreateFolder() {
@@ -159,7 +159,9 @@ final class CreateDirectoryViewController: UITableViewController {
                 switch code {
                 case 200:
                     // Rename successfully completed
-                    self.onFinish?(folderName)
+                    self.dismiss(animated: true) {
+                        self.onFinish?(folderName)
+                    }
                 case 400:
                     // Bad request ( Folder already exists, invalid file name?)
                     // show message and wait for a new name or cancel action

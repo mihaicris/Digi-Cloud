@@ -11,7 +11,7 @@ import UIKit
 final class SearchResultController: UITableViewController {
 
     // MARK: - Properties
-    
+
     var filteredContent: [NodeHit] = []
     var filteredMountsDictionary: [String: Mount] = [:]
 
@@ -63,20 +63,20 @@ final class SearchResultController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? SearchCell else {
             return UITableViewCell()
         }
-        
+
         let node = filteredContent[indexPath.row]
 
         guard let nodeMountName = filteredMountsDictionary[node.mountId]?.name else {
             return UITableViewCell()
         }
-        
+
         guard let searchedText = searchController?.searchBar.text else {
             return UITableViewCell()
         }
-        
+
         cell.nodeMountLabel.text = nodeMountName
         cell.nodePathLabel.text = node.path
-        
+
         if node.type == "dir" {
             cell.nodeIcon.image = UIImage(named: "FolderIcon")
             cell.nodeNameLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 16)
@@ -109,21 +109,20 @@ final class SearchResultController: UITableViewController {
         // Identification of the button's row that tapped
         cell.seeInDirectoryButton.tag = indexPath.row
         cell.seeInDirectoryButton.addTarget(self, action: #selector(handleSeeItemInEnclosedDirectory(_:)), for: .touchUpInside)
-        
+
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        
-        
+
         let nodeHit = filteredContent[indexPath.row]
 
         guard let nodeHitMount = filteredMountsDictionary[nodeHit.mountId] else {
             print("Could not select the mount from results.")
             return
         }
-        
+
         let nodeHitLocation = Location(mount: nodeHitMount, path: nodeHit.path)
 
         let controller = nodeHit.type == "dir"
@@ -131,7 +130,7 @@ final class SearchResultController: UITableViewController {
             : ContentViewController(location: nodeHitLocation)
 
         let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController
-        
+
         searchController?.searchBar.resignFirstResponder()
         nav?.pushViewController(controller, animated: true)
     }
@@ -151,27 +150,27 @@ final class SearchResultController: UITableViewController {
     }
 
     @objc private func handleSeeItemInEnclosedDirectory(_ button: UIButton) {
-        
+
         let nodeHit = filteredContent[button.tag]
-        
+
         guard let nodeHitMount = filteredMountsDictionary[nodeHit.mountId] else {
             print("Could not select the mount from results.")
             return
         }
-        
+
         let parentDirectoryLocation = Location(mount: nodeHitMount, path: nodeHit.path).parentLocation
 
         let controller = ListingViewController(location: parentDirectoryLocation,
                                                action: .showSearchResult,
                                                searchResult: nodeHit.name)
-        
+
         let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController
-        
+
         searchController?.searchBar.resignFirstResponder()
-        
+
         nav?.pushViewController(controller, animated: true)
     }
-    
+
     fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
 
         /* 
@@ -201,7 +200,7 @@ final class SearchResultController: UITableViewController {
         var parameters: [String: String] = [
             ParametersKeys.QueryString: searchText
         ]
-        
+
         if scope == 0 {
             parameters[ParametersKeys.MountID] = location.mount.id
             parameters[ParametersKeys.Path] = location.path
@@ -209,14 +208,14 @@ final class SearchResultController: UITableViewController {
 
         // cancel search task in execution
         DigiClient.shared.task?.cancel()
-        
+
         DigiClient.shared.search(parameters: parameters) { nodeHitsResult, mountsDictionaryResult, error in
-            
+
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-            
+
             self.filteredContent = nodeHitsResult ?? []
             self.filteredMountsDictionary = mountsDictionaryResult ?? [:]
 

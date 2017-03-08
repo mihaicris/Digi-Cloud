@@ -47,7 +47,7 @@ extension Node {
         self.share = Mount(JSON: JSON["mount"])
         self.downloadLink = DownloadLink(JSON: JSON["link"])
         self.uploadLink = UploadLink(JSON: JSON["receiver"])
-        
+
         if let mountId = mountId {
             self.bookmark = Bookmark(JSON: JSON["bookmark"], mountId: mountId)
         }
@@ -69,7 +69,7 @@ extension Node {
         if type == "dir" {
             path += "/"
         }
-        
+
         return Location(mount: parentLocation.mount, path: path )
     }
 }

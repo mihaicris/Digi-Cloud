@@ -23,15 +23,3 @@ protocol Link {
     var validFrom: TimeInterval? { get }
     var validTo: TimeInterval? { get }
 }
-
-protocol NodeActionsViewControllerDelegate: class {
-    func didSelectOption(action: ActionType)
-}
-
-protocol DeleteViewControllerDelegate: class {
-    func onConfirmDeletion()
-}
-
-protocol ActionCellDelegate: class {
-    func onSwitchValueChanged(button: UISwitch, value: Bool)
-}

@@ -283,23 +283,20 @@ final class AccountSelectionViewController: UIViewController,
         let controller = LoginViewController()
         controller.modalPresentationStyle = .formSheet
 
-        controller.onCancel = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
-        }
-
         controller.onSuccess = { [weak self] account in
-            self?.dismiss(animated: true) {
-                self?.getAccountsFromKeychain()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self?.switchToAccount(account)
 
-                }
+            self?.getAccountsFromKeychain()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self?.switchToAccount(account)
+
             }
         }
         present(controller, animated: true, completion: nil)
     }
 
     @objc private func handleManageAccounts() {
+
         let controller = ManageAccountsViewController(controller: self, accounts: accounts)
 
         controller.onAddAccount = { [weak self] in
@@ -308,7 +305,6 @@ final class AccountSelectionViewController: UIViewController,
 
         controller.onFinish = { [weak self] in
             self?.getAccountsFromKeychain()
-            self?.dismiss(animated: true, completion: nil)
         }
 
         let navController = UINavigationController(rootViewController: controller)

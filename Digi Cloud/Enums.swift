@@ -34,24 +34,20 @@ enum LinkType: String {
     case upload = "receivers"
 }
 
-enum MoreAction: Int {
-    case createDirectory
-    case selectionMode
-    case share
-}
-
 enum ActionType: Int {
-    case noAction
-    case makeOffline
     case bookmark
-    case rename
     case copy
-    case move
+    case createDirectory
     case delete
     case folderInfo
-    case share
+    case makeOffline
+    case move
+    case noAction
+    case rename
+    case selectionMode
     case sendDownloadLink
     case sendUploadLink
+    case share
     case showSearchResult
 }
 

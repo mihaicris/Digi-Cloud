@@ -120,7 +120,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
 
         // get the file name from current path
         let fileName: String = (self.location.path as NSString).lastPathComponent
-        
+
         // create destination file url
         self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
 

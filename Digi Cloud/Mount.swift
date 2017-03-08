@@ -55,7 +55,7 @@ extension Mount {
         } else {
             return nil
         }
-        
+
         self.id = id
         self.name = name
         self.type = type

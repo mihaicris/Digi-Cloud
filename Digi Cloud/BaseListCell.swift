@@ -24,7 +24,7 @@ class BaseListCell: UITableViewCell {
         let button = UIButton(type: UIButtonType.system)
         button.setTitle("⋯", for: .normal)
         button.tag = 1
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.contentHorizontalAlignment = .center
         button.setTitleColor(UIColor.darkGray, for: .normal)
         return button
@@ -60,7 +60,7 @@ class BaseListCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupViews()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -91,7 +91,7 @@ class BaseListCell: UITableViewCell {
             }
         }
     }
- 
+
     // MARK: - Helper Functions
 
     func setupViews() {

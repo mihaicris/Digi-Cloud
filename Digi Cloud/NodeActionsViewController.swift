@@ -12,17 +12,17 @@ final class NodeActionsViewController: UITableViewController {
 
     // MARK: - Properties
 
-    weak var delegate: NodeActionsViewControllerDelegate?
+    var onSelect: ((ActionType) -> Void)?
 
-    private var node: Node
+    private var location: Location
+    private let node: Node
 
-    private var contextMenuFileActions: [ActionCell] = []
-
-    private var contextMenuFolderActions: [ActionCell] = []
+    private var permittedActions: [ActionType] = []
 
     // MARK: - Initializers and Deinitializers
 
-    init(node: Node) {
+    init(location: Location, node: Node) {
+        self.location = location
         self.node = node
         super.init(style: .plain)
         INITLog(self)
@@ -39,6 +39,7 @@ final class NodeActionsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        setupPermittedActions()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -48,44 +49,59 @@ final class NodeActionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return node.type == "dir" ? contextMenuFolderActions.count : contextMenuFileActions.count
+        return permittedActions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return node.type == "dir" ? contextMenuFolderActions[indexPath.row] : contextMenuFileActions[indexPath.row]
+
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.textColor = UIColor.defaultColor
+
+        switch permittedActions[indexPath.row] {
+
+        case .share:
+            cell.textLabel?.text = NSLocalizedString("Share", comment: "")
+
+        case .sendDownloadLink:
+            cell.textLabel?.text = NSLocalizedString("Send Link", comment: "")
+
+        case .makeOffline:
+            cell.textLabel?.text = NSLocalizedString("Make available offline", comment: "")
+
+        case .bookmark:
+            cell.textLabel?.text = self.node.bookmark == nil
+                ? NSLocalizedString("Set Bookmark", comment: "") : NSLocalizedString("Remove Bookmark", comment: "")
+
+        case .rename:
+            cell.textLabel?.text = NSLocalizedString("Rename", comment: "")
+
+        case .copy:
+            cell.textLabel?.text = NSLocalizedString("Copy", comment: "")
+
+        case .move:
+            cell.textLabel?.text = NSLocalizedString("Move", comment: "")
+
+        case .delete:
+            cell.textLabel?.text = NSLocalizedString("Delete", comment: "")
+            cell.textLabel?.textColor = .red
+
+        case .folderInfo:
+            cell.textLabel?.text = NSLocalizedString("Directory information", comment: "")
+
+        default:
+            fatalError()
+        }
+
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let tag = tableView.cellForRow(at: indexPath)?.tag,
-            let action = ActionType(rawValue: tag) {
-            self.delegate?.didSelectOption(action: action)
-        }
+        onSelect?(permittedActions[indexPath.row])
     }
 
     // MARK: - Helper Functions
 
     private func setupViews() {
-        
-        let bookmarkTitle = self.node.bookmark == nil ? NSLocalizedString("Set Bookmark", comment: "")
-                                                      : NSLocalizedString("Remove Bookmark", comment: "")
-        
-        let folderActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
-                             ActionCell(title: bookmarkTitle, action: .bookmark),
-                             ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
-                             ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),
-                             ActionCell(title: NSLocalizedString("Move", comment: ""), action: .move),
-                             ActionCell(title: NSLocalizedString("Directory information", comment: ""), action: .folderInfo)]
-
-        contextMenuFolderActions.append(contentsOf: folderActions)
-
-        let fileActions = [ActionCell(title: NSLocalizedString("Share", comment: ""), action: .share),
-                           ActionCell(title: NSLocalizedString("Make available offline", comment: ""), action: .makeOffline),
-                           ActionCell(title: NSLocalizedString("Rename", comment: ""), action: .rename),
-                           ActionCell(title: NSLocalizedString("Copy", comment: ""), action: .copy),
-                           ActionCell(title: NSLocalizedString("Move", comment: ""), action: .move),
-                           ActionCell(title: NSLocalizedString("Delete", comment: ""), action: .delete)]
-
-        contextMenuFileActions.append(contentsOf: fileActions)
 
         let headerView: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
@@ -131,4 +147,47 @@ final class NodeActionsViewController: UITableViewController {
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
+
+    private func setupPermittedActions() {
+
+        // order of elements in important for UI.
+
+        if node.type == "dir" {
+
+            if location.mount.permissions.create_link || location.mount.permissions.create_receiver
+                || location.mount.permissions.mount {
+                permittedActions.append(.share)
+            }
+
+        } else {
+            if location.mount.permissions.create_link {
+                permittedActions.append(.sendDownloadLink)
+            }
+        }
+
+        if node.type == "dir" {
+            permittedActions.append(.bookmark)
+        } else {
+            permittedActions.append(.makeOffline)
+        }
+
+        if location.mount.canWrite {
+            permittedActions.append(contentsOf: [.rename])
+        }
+
+        permittedActions.append(.copy) // possible in Read mode only
+
+        if location.mount.canWrite {
+            permittedActions.append(contentsOf: [.move])
+        }
+
+        if node.type == "dir" {
+            permittedActions.append(.folderInfo)
+        } else {
+            if location.mount.canWrite {
+                permittedActions.append(.delete)
+            }
+        }
+    }
+
 }

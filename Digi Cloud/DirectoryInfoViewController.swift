@@ -12,20 +12,22 @@ final class DirectoryInfoViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var onFinish: ((_ success: Bool, _ needRefresh: Bool) -> Void)?
-    
+    var onFinish: (() -> Void)?
+
     fileprivate var location: Location
-    
+
     private let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.allowsNonnumericFormatting = false
         f.countStyle = .binary
         return f
     }()
+
     private var rightBarButton: UIBarButtonItem!
     private var deleteButton: UIButton!
     private var noElementsLabel = UILabel()
     private var directorySizeLabel = UILabel()
+
     private var directoryInfo = DirectoryInfo() {
         didSet {
             self.noElementsLabel = {
@@ -83,7 +85,8 @@ final class DirectoryInfoViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return location.mount.canWrite ? 4 : 3
+
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -182,7 +185,6 @@ final class DirectoryInfoViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
-        tableView.isScrollEnabled = false
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
                                          style: .plain,
                                          target: self,
@@ -207,54 +209,22 @@ final class DirectoryInfoViewController: UITableViewController {
     }
 
     @objc private func handleDone() {
-        onFinish?(false, false)
+        self.dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleDelete() {
-        let controller = DeleteViewController(location: self.location, isDirectory: true)
-        controller.delegate = self
+        let controller = DeleteViewController(isDirectory: true)
+
+        controller.onSelection = { [weak self] in
+            self?.dismiss(animated: true) {
+                self?.onFinish?()
+            }
+        }
+
         controller.modalPresentationStyle = .popover
         controller.popoverPresentationController?.permittedArrowDirections = .up
         controller.popoverPresentationController?.sourceView = deleteButton
         controller.popoverPresentationController?.sourceRect = deleteButton.bounds
         present(controller, animated: true, completion: nil)
-    }
-}
-
-extension DirectoryInfoViewController: DeleteViewControllerDelegate {
-    func onConfirmDeletion() {
-
-        let completion = {
-
-            DigiClient.shared.deleteNode(at: self.location) { (statusCode, error) in
-
-                // TODO: Stop spinner
-                guard error == nil else {
-                    // TODO: Show message for error
-                    print(error!.localizedDescription)
-                    return
-                }
-                if let code = statusCode {
-                    switch code {
-                    case 200:
-                        // Delete successfully completed
-                        self.onFinish?(true, true)
-                    case 400:
-                        // TODO: Alert Bad Request
-                        self.onFinish?(false, true)
-                    case 404:
-                        // File not found, folder will be refreshed
-                        self.onFinish?(false, true)
-                    default :
-                        // TODO: Alert Status Code server
-                        self.onFinish?(false, false)
-                        return
-                    }
-                }
-            }
-        }
-
-        // Dismiss DeleteAlertViewController
-        dismiss(animated: true, completion: completion)
     }
 }

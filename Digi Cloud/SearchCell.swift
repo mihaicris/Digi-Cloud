@@ -17,7 +17,7 @@ final class SearchCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
+
     var nodeNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -25,7 +25,7 @@ final class SearchCell: UITableViewCell {
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
-    
+
     let nodeMountLabel: UILabelWithPadding = {
         let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
         label.textColor = .darkGray
@@ -36,7 +36,7 @@ final class SearchCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     var nodePathLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +45,7 @@ final class SearchCell: UITableViewCell {
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
-    
+
     var seeInDirectoryButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -54,7 +54,7 @@ final class SearchCell: UITableViewCell {
         b.titleLabel?.font = UIFont.fontAwesome(size: 18)
         return b
     }()
-    
+
     var mountBackgroundColor: UIColor?
 
     // MARK: - Initializers and Deinitializers
@@ -108,7 +108,7 @@ final class SearchCell: UITableViewCell {
             nodePathLabel.leadingAnchor.constraint(equalTo: nodeMountLabel.trailingAnchor, constant: 2),
             nodePathLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor, constant: -30),
             nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor),
-            
+
             seeInDirectoryButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             seeInDirectoryButton.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
         ])

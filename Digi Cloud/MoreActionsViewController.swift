@@ -12,18 +12,18 @@ final class MoreActionsViewController: UITableViewController {
 
     // MARK: - Properties
 
-    var onFinish: ((MoreAction) -> Void)?
-    
+    var onSelect: ((ActionType) -> Void)?
+
     private let location: Location
-    private var moreActions: [MoreAction] = []
+    private var moreActions: [ActionType] = []
 
     // MARK: - Initializers and Deinitializers
-    
+
     init(location: Location) {
         self.location = location
         super.init(style: .plain)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -49,23 +49,22 @@ final class MoreActionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         switch moreActions[indexPath.row] {
-            
+
         case .createDirectory:
             return createCell(title: NSLocalizedString("Create Directory", comment: ""), color: .defaultColor)
         case .selectionMode:
             return createCell(title: NSLocalizedString("Select Mode", comment: ""), color: .defaultColor)
         case .share:
             return createCell(title: NSLocalizedString("Share", comment: ""), color: .defaultColor)
+        default:
+            fatalError()
         }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        guard let selection = MoreAction(rawValue: indexPath.row) else { return }
-
-        onFinish?(selection)
+        onSelect?(moreActions[indexPath.row])
     }
 
     // MARK: - Helper Functions
@@ -113,16 +112,19 @@ final class MoreActionsViewController: UITableViewController {
         cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
         return cell
     }
-    
+
     private func setupActions() {
-        
-        moreActions.append(MoreAction.createDirectory)
-        moreActions.append(MoreAction.selectionMode)
-        
+
         if location.mount.permissions.create_link
             || location.mount.permissions.create_receiver
             || location.mount.permissions.mount {
-            moreActions.append(MoreAction.share)
+            moreActions.append(.share)
         }
+
+        if location.mount.canWrite {
+            moreActions.append(.createDirectory)
+        }
+
+        moreActions.append(.selectionMode)
     }
 }

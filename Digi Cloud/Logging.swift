@@ -43,7 +43,7 @@ func LogNSError(_ nserror: NSError) {
     print("Domain:\t\t\t\t\t\t", nserror.domain)
     print("Code:\t\t\t\t\t\t", nserror.code)
     print("LocalizedDescription:\t\t", nserror.localizedDescription)
-    for (i,v) in nserror.userInfo.enumerated() {
+    for (i, v) in nserror.userInfo.enumerated() {
         if i == 0 {
             print("\(v.0):\t", "\(v.1)")
         } else if i == 1 {

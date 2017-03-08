@@ -229,12 +229,12 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         requestLink()
         super.viewWillAppear(true)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -521,30 +521,32 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             }
         }
     }
-    
+
     private func requestLink() {
-        
+
         configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
-        
+
         DigiClient.shared.getLink(for: location, type: linkType) { result, error in
-            
+
             guard error == nil, result != nil else {
                 self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
                 return
             }
-            
+
             self.link = result!
             self.configureWaitingView(type: .hidden, message: "")
         }
     }
-    
+
     private func hasInvalidCharacters(name: String) -> Bool {
         let charset = CharacterSet.init(charactersIn: name)
         return !charset.isDisjoint(with: CharacterSet.alphanumerics.inverted)
     }
 
     @objc private func handleDone() {
-        onFinish?()
+        dismiss(animated: true) {
+            self.onFinish?()
+        }
     }
 
     @objc private func handleSend() {
@@ -574,18 +576,18 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     @objc private func handleSaveShortURL() {
-        
+
         isSaving = true
-        
+
         guard let hash = hashTextField.text else {
             print("No hash")
             return
         }
-        
+
         DigiClient.shared.setLinkCustomShortUrl(mount: location.mount, linkId: link.id, type: linkType, hash: hash) { result, error in
-            
+
             guard error == nil else {
-                
+
                 if let error = error as? NetworkingError {
                     if case NetworkingError.wrongStatus(_) = error {
                         let title = NSLocalizedString("Error", comment: "")
@@ -598,15 +600,15 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 } else {
                     print(error!.localizedDescription)
                 }
-                
+
                 return
             }
-            
+
             guard result != nil else {
                 print("No valid link")
                 return
             }
-            
+
             self.isSaving = false
             self.originalLinkHash = hash
             self.link = result!
@@ -627,7 +629,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
                 return
             }
-            self.onFinish?()
+            self.dismiss(animated: true) {
+                self.onFinish?()
+            }
         }
     }
 
@@ -640,11 +644,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         if sender.isOn {
             handleResetPassword()
         } else {
-        
+
             DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.id, type: linkType) { result, error in
 
                 self.stopSpinning()
-                
+
                 guard error == nil, result != nil else {
                     self.stopSpinning()
                     sender.setOn(true, animated: true)
@@ -664,7 +668,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.id, type: linkType, completion: { result, error in
             guard error == nil, result != nil else {
-                
+
                 print(error!.localizedDescription)
                 return
             }
@@ -747,7 +751,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 print(error!.localizedDescription)
                 return
             }
-            
+
             self.link = result!
         }
     }
@@ -776,7 +780,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 print(error!.localizedDescription)
                 return
             }
-            
+
             self.resetAllFields()
             self.link = result!
         }
@@ -791,7 +795,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func updateValues() {
-        
+
         originalLinkHash = link.hash
         hashTextField.resignFirstResponder()
         baseLinkLabel.text = String("\(link.host)/")
@@ -829,7 +833,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         isAnimatingReset = false
     }
 
-    func spinWithOptions(options: UIViewAnimationOptions) {
+    private func spinWithOptions(options: UIViewAnimationOptions) {
         UIView.animate(withDuration: 0.5, delay: 0, options: options, animations: { () -> Void in
             let val: CGFloat = CGFloat(Double.pi)
             self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)

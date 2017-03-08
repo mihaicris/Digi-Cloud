@@ -77,7 +77,6 @@
 		83F5E1661E6B1EE4004EFE72 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
 		83F7EF001E369A7D0033F03D /* DigiCloudTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */; };
 		83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994511DD09B340023FB5D /* SortFolderViewController.swift */; };
-		83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994531DD0A1E90023FB5D /* ActionCell.swift */; };
 		E5832D392FF98C031D43515B /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5832C4125BB550AC54A5C59 /* FlowController.swift */; };
 /* End PBXBuildFile section */
 
@@ -170,7 +169,6 @@
 		83F7EEFD1E369A7D0033F03D /* Digi Cloud Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Digi Cloud Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DigiCloudTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83F994511DD09B340023FB5D /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SortFolderViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83F994531DD0A1E90023FB5D /* ActionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionCell.swift; sourceTree = "<group>"; };
 		E5832C4125BB550AC54A5C59 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,6 +193,7 @@
 		8306C8841E701D9600F8041C /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */,
 				83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */,
 				83BF27C81E438AB30019B1F7 /* MoreActionsViewController.swift */,
 				8306C8871E701E2F00F8041C /* Create */,
@@ -420,7 +419,6 @@
 		83D03F201E6DB0DC00BA617A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				83F994531DD0A1E90023FB5D /* ActionCell.swift */,
 				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
 				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
 				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
@@ -530,7 +528,6 @@
 		83F9944B1DD093C90023FB5D /* Listing */ = {
 			isa = PBXGroup;
 			children = (
-				83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */,
 				83DADF221DE59ED300987E1A /* ListingViewController.swift */,
 				8370412B1D8B2264000EDBAE /* LocationsViewController.swift */,
 				83D03F201E6DB0DC00BA617A /* Views */,
@@ -707,7 +704,6 @@
 				8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */,
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */,
-				83F994541DD0A1E90023FB5D /* ActionCell.swift in Sources */,
 				834AEEB81E6B3F9700C16B75 /* DirectoryInfoViewController.swift in Sources */,
 				833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */,
 				83F1FFD81E6980350079F56F /* DirectoryInfo.swift in Sources */,

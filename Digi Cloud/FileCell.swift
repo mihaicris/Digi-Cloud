@@ -15,13 +15,6 @@ final class FileCell: BaseListCell {
     override var hasButton: Bool {
         didSet {
             super.setupActionsButton()
-
-            // In copy or move view controller it is not an active cell
-            if !hasButton {
-                isUserInteractionEnabled = false
-                nameLabel.isEnabled = false
-                detailsLabel.isEnabled = false
-            }
         }
     }
 

@@ -7,7 +7,7 @@
 //
 
 struct Permissions {
-    
+
     // MARK: - Properties
     let read: Bool
     let owner: Bool
@@ -33,7 +33,7 @@ extension Permissions {
                 print("Couldnt parse Permissions JSON.")
                 return nil
         }
-        
+
         self.read = read
         self.owner = owner
         self.mount = mount

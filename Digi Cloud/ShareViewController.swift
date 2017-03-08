@@ -55,7 +55,7 @@ final class ShareViewController: UITableViewController {
 
         let cell = ShareTableViewCell()
         cell.selectionStyle = .none
-        
+
         switch sharingActions[indexPath.row] {
         case .sendDownloadLink:
             cell.nameLabel.text = NSLocalizedString("Send Link", comment: "")
@@ -66,26 +66,26 @@ final class ShareViewController: UITableViewController {
         default:
             break
         }
-        
+
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         switch sharingActions[indexPath.row] {
-            
+
         case .sendDownloadLink:
             let controller = ShareLinkViewController(location: self.location, linkType: .download, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
-            
+
         case .sendUploadLink:
             let controller = ShareLinkViewController(location: self.location, linkType: .upload, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
-            
+
         case .share:
             let controller = SharePermissionsTableViewController(location: self.location, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
-            
+
         default:
             break
         }
@@ -116,21 +116,21 @@ final class ShareViewController: UITableViewController {
         if location.mount.permissions.create_link {
             sharingActions.append(ActionType.sendDownloadLink)
         }
-        
+
         if location.mount.permissions.create_receiver {
             sharingActions.append(ActionType.sendUploadLink)
         }
-        
+
         if location.mount.permissions.mount {
             sharingActions.append(ActionType.share)
         }
-        
+
         // At least 1 action should be true
         assert(sharingActions.count > 0, "At least on permission should be granted for sharing in this point.")
     }
-    
+
     @objc private func handleCancel() {
-        onFinish()
+        dismiss(animated: true, completion: nil)
     }
 
 }

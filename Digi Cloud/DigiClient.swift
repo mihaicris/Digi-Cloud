@@ -239,7 +239,7 @@ final class DigiClient {
         }
     }
 
-    // MARK: - User Info
+    // MARK: - Settings
 
     /// Gets the user information
     ///
@@ -276,6 +276,22 @@ final class DigiClient {
         }
     }
 
+    func getUserNotifications() {
+        // TODO: Implement
+    }
+
+    func setUserNotifications() {
+        // TODO: Implement
+    }
+
+    func getSecurity() {
+        // TODO: Implement
+    }
+
+    func setSecurity() {
+        // TODO: Implement
+    }
+
     // MARK: - Mounts
 
     /// Gets the locations in the Cloud storage
@@ -309,7 +325,7 @@ final class DigiClient {
 
         }
     }
-    
+
     /// Get Mount with Id
     ///
     /// - Parameters:
@@ -319,21 +335,21 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.    
     func getMount(withId id: String, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
         let method = Methods.MountDetails
-        
+
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
-        
+
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { (json, _, error) in
             guard error == nil else {
                 completion(nil, error!)
                 return
             }
-        
+
             let mount = Mount(JSON: json)
             completion(mount, nil)
         }
     }
-    
+
     /// Gets the content of nodes of a location in the Cloud storage
     ///
     /// - Parameters:
@@ -374,7 +390,7 @@ final class DigiClient {
             completion(content, nil)
         }
     }
-        
+
     /// Add users to a mount
     ///
     /// - Parameters:
@@ -382,38 +398,37 @@ final class DigiClient {
     ///   - operation: An UserOperation type
     ///   - user: An user type
     func addUser(mount: Mount, operation: UserOperation, user: User) {
-        
+
         var headers: [String: String] = [:]
         var method: String
         var json: [String: Any]? = [:]
-        
+
         switch operation {
-            
+
         case .add:
             headers = DefaultHeaders.PostHeaders
             method = Methods.UserAdd.replacingOccurrences(of: "{id}", with: mount.id)
-            
+
         case .updatePermissions:
-            
+
             headers = DefaultHeaders.PutHeaders
             method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
                 .replacingOccurrences(of: "{userId}", with: user.id)
-            
+
         case .remove:
-            
+
             headers = DefaultHeaders.DelHeaders
             method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
                 .replacingOccurrences(of: "{userId}", with: user.id)
             json = nil
         }
-        
+
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
-        
+
         print(headers)
         print(method)
         print(json ?? "Json is nil.")
-        
-        
+
     }
 
     // MARK: - Bookmarks
@@ -664,7 +679,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - results: An array containing the search hits.
     ///   - error: The error occurred in the network request, nil for no error.
-    func search(parameters: [String: String], completion: @escaping (_ nodeHits: [NodeHit]?, _ mountsDictionary: [String: Mount]?,  _ error: Error?) -> Void) {
+    func search(parameters: [String: String], completion: @escaping (_ nodeHits: [NodeHit]?, _ mountsDictionary: [String: Mount]?, _ error: Error?) -> Void) {
         let method = Methods.Search
 
         var headers = DefaultHeaders.GetHeaders
@@ -683,9 +698,9 @@ final class DigiClient {
             }
 
             let nodeHits = hitsJSON.flatMap { NodeHit(JSON: $0) }
-            
+
             var mountsDictionary: [String: Mount] = [:]
-            
+
             for (mountId, mountAny) in mountsJSON {
                 if let mount = Mount(JSON: mountAny) {
                     mountsDictionary[mountId] = mount

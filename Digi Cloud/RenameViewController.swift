@@ -12,11 +12,11 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
     // MARK: - Properties
 
-    var onFinish: ((_ newName: String?, _ needRefresh: Bool) -> Void)?
-    
+    var onRename: ((String) -> Void)?
+
     private var nodeLocation: Location
     private var node: Node
-    
+
     private var leftBarButton: UIBarButtonItem!
     fileprivate var rightBarButton: UIBarButtonItem!
     private var textField: UITextField!
@@ -249,8 +249,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     @objc private func handleCancel() {
-        textField.resignFirstResponder()
-        onFinish?(nil, needRefresh)
+        dismiss(animated: true, completion: nil)
     }
 
     @objc fileprivate func handleRename() {
@@ -265,7 +264,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         // get the new name, space trimmed
         let charSet = CharacterSet.whitespaces
         guard let newName = textField.text?.trimmingCharacters(in: charSet) else { return }
-        
+
         // network request for rename
         DigiClient.shared.renameNode(at: self.nodeLocation, with: newName) { (statusCode, error) in
             // TODO: Stop spinner
@@ -278,18 +277,23 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
                 switch code {
                 case 200:
                     // Rename successfully completed
-                    self.onFinish?(newName, true)
+                    self.dismiss(animated: true) {
+                        self.onRename?(newName)
+                    }
+
                 case 400:
                     // Bad request ( Node already exists, invalid file name?)
                     // show message and wait for a new name or cancel action
                     let message = NSLocalizedString("This name already exists. Please choose a different one.", comment: "")
                     self.setMessage(onScreen: true, message)
+
                 case 404:
                     // Not Found (Node do not exists anymore), folder will refresh
                     let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "")
                     self.needRefresh = true
                     self.leftBarButton.title = NSLocalizedString("Done", comment: "")
                     self.setMessage(onScreen: true, message)
+
                 default :
                     let message = NSLocalizedString("Server replied with Status Code: ", comment: "")
                     self.needRefresh = true

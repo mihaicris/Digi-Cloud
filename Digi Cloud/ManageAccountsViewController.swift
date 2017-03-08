@@ -100,7 +100,9 @@ final class ManageAccountsViewController: UITableViewController {
 
             // If no accounts are stored in the model, the manage window is dismissed
             if accounts.isEmpty {
-                self.onFinish?()
+                self.dismiss(animated: true) {
+                    self.onFinish?()
+                }
             }
         }
     }
@@ -261,9 +263,12 @@ final class ManageAccountsViewController: UITableViewController {
                 FileManager.createProfileImagesCacheDirectory()
 
                 // Dimiss the Login controller after all accounts have been removed
-                self.onFinish?()
+                self.dismiss(animated: true) {
+                    self.onFinish?()
+                }
             }
         }
+
         self.tableView.setEditing(false, animated: true)
         self.updateButtonsToMatchTableState()
 

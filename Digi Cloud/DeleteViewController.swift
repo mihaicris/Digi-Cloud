@@ -12,14 +12,13 @@ final class DeleteViewController: UITableViewController {
 
     // MARK: - Properties
 
-    private var location: Location
+    var onSelection: ( () -> Void)?
+
     private let isDirectory: Bool
-    weak var delegate: DeleteViewControllerDelegate?
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, isDirectory: Bool) {
-        self.location = location
+    init(isDirectory: Bool) {
         self.isDirectory = isDirectory
         super.init(nibName: nil, bundle: nil)
     }
@@ -47,11 +46,23 @@ final class DeleteViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return createCell(title: NSLocalizedString("Delete", comment: ""), color: .red)
+
+        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+
+        cell.selectionStyle = .blue
+        cell.textLabel?.textAlignment = .center
+        cell.textLabel?.textColor = .red
+        cell.textLabel?.text = NSLocalizedString("Delete", comment: "")
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
+
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.onConfirmDeletion()
+
+        dismiss(animated: true) {
+            self.onSelection?()
+        }
     }
 
     // MARK: - Helper Functions
@@ -95,12 +106,4 @@ final class DeleteViewController: UITableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 
-    private func createCell(title: String, color: UIColor) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
-        cell.textLabel?.textAlignment = .center
-        cell.textLabel?.textColor = color
-        cell.textLabel?.text = title
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
-        return cell
-    }
 }

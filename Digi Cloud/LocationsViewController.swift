@@ -85,13 +85,13 @@ final class LocationsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         let location = Location(mount: mounts[indexPath.row], path: "/")
         let controller = ListingViewController(location: location, action: self.action, sourceLocations: self.sourceLocations)
-        
+
         if self.action != .noAction {
-            controller.onFinish = { [unowned self] in
-                self.onFinish?()
+            controller.onFinish = { [weak self] in
+                self?.onFinish?()
             }
         }
         navigationController?.pushViewController(controller, animated: true)

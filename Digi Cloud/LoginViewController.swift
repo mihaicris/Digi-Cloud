@@ -14,8 +14,6 @@ final class LoginViewController: UIViewController {
 
     var onSuccess: ((Account) -> Void)?
 
-    var onCancel: (() -> Void)?
-
     private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
         spinner.translatesAutoresizingMaskIntoConstraints = false
@@ -180,9 +178,7 @@ final class LoginViewController: UIViewController {
     }
 
     @objc private func handleCancel() {
-        usernameTextField.resignFirstResponder()
-        passwordTextField.resignFirstResponder()
-        self.onCancel?()
+        dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleLogin() {
@@ -247,8 +243,9 @@ final class LoginViewController: UIViewController {
                     // Save profile image view from Gravatar if exists.
                     account.fetchProfileImage {
 
-                        // Dismiss the login screen
-                        self.onSuccess?(account)
+                        self.dismiss(animated: true) {
+                            self.onSuccess?(account)
+                        }
                     }
                 }
 

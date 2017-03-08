@@ -135,7 +135,7 @@ final class SettingsViewController: UITableViewController {
 
         case 2:
             // USER
-            cell.textLabel?.text = NSLocalizedString("Logout", comment: "")
+            cell.textLabel?.text = NSLocalizedString("Switch User", comment: "")
             cell.textLabel?.textColor = .defaultColor
             cell.contentView.addSubview(confirmButton)
 
@@ -207,15 +207,18 @@ final class SettingsViewController: UITableViewController {
 
         if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
             AppSettings.loggedAccount = nil
-            dismiss(animated: true, completion: {
+
+            dismiss(animated: true) {
+
                 if let controller = navController.visibleViewController as? LocationsViewController {
                     controller.activityIndicator.startAnimating()
                 }
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     navController.viewControllers = []
                     navController.onLogout?()
                 }
-            })
+            }
         }
     }
 
