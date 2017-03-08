@@ -86,31 +86,31 @@ final class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Directory", comment: ""), style: .plain, target: self, action: #selector(handleCreateDirectory))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Directory", comment: ""), style: .plain, target: self, action: #selector(handleShowCreateDirectoryViewController))
         return b
     }()
 
     private lazy var copyInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .plain, target: self, action: #selector(handleMultipleItemsEdit(_:)))
+        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .plain, target: self, action: #selector(handleExecuteMultipleItemsEditAction(_:)))
         b.tag = ActionType.copy.rawValue
         return b
     }()
 
     private lazy var moveInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .plain, target: self, action: #selector(handleMultipleItemsEdit(_:)))
+        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .plain, target: self, action: #selector(handleExecuteMultipleItemsEditAction(_:)))
         b.tag = ActionType.move.rawValue
         return b
     }()
 
     private lazy var bookmarksBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarks))
+        let b = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarksViewController))
         return b
     }()
 
     private lazy var deleteInEditModeButton: UIBarButtonItem = {
         let v = UIButton(type: UIButtonType.system)
         v.setTitle(NSLocalizedString("Delete", comment: ""), for: .normal)
-        v.addTarget(self, action: #selector(handleMultipleItemsEdit(_:)), for: .touchUpInside)
+        v.addTarget(self, action: #selector(handleExecuteMultipleItemsEditAction(_:)), for: .touchUpInside)
         v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
         v.setTitleColor(.red, for: .normal)
         v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
@@ -339,7 +339,7 @@ final class ListingViewController: UITableViewController {
         tableView.allowsMultipleSelectionDuringEditing = true
 
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
+        refreshControl?.addTarget(self, action: #selector(handleUpdateContentOnPullToRefreshGesture), for: UIControlEvents.valueChanged)
         tableView.register(FileCell.self, forCellReuseIdentifier: fileCellID)
         tableView.register(DirectoryCell.self, forCellReuseIdentifier: folderCellID)
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -353,7 +353,7 @@ final class ListingViewController: UITableViewController {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
 
-            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleDone))
+            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancelCopyOrMoveAction))
 
             navigationItem.rightBarButtonItem = cancelButton
 
@@ -363,7 +363,7 @@ final class ListingViewController: UITableViewController {
                 NSLocalizedString("Save copy", comment: "") :
                 NSLocalizedString("Move", comment: "")
 
-            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMove))
+            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleExecuteCopyOrMoveAction))
             copyMoveButton.isEnabled = true
 
             self.toolbarItems = [createFolderBarButton, flexibleBarButton, copyMoveButton]
@@ -379,7 +379,7 @@ final class ListingViewController: UITableViewController {
         }
     }
     
-    @objc private func handleShowBookmarks() {
+    @objc private func handleShowBookmarksViewController() {
 
         let controller = ManageBookmarksViewController()
 
@@ -605,9 +605,9 @@ final class ListingViewController: UITableViewController {
             rightBarButtonItems.append(cancelInEditModeButton)
         } else {
             
-            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .plain, target: self, action: #selector(handleShowMoreActions))
-            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .plain, target: self, action: #selector(handleSortSelect))
-            let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
+            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .plain, target: self, action: #selector(handleShowMoreActionsViewController))
+            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .plain, target: self, action: #selector(handleShowSortingSelectionViewController))
+            let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleShowSearchViewCntroller))
             
             rightBarButtonItems.append(contentsOf: [moreActionsBarButton, sortBarButton, searchBarButton, bookmarksBarButton])
         }
@@ -714,7 +714,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc private func handleSortSelect() {
+    @objc private func handleShowSortingSelectionViewController() {
         let controller = SortFolderViewController()
         controller.onFinish = { [unowned self] in
             self.sortContent()
@@ -727,7 +727,7 @@ final class ListingViewController: UITableViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc private func handleShowMoreActions() {
+    @objc private func handleShowMoreActionsViewController() {
         let controller = MoreActionsViewController(style: .plain)
 
         controller.modalPresentationStyle = .popover
@@ -740,7 +740,7 @@ final class ListingViewController: UITableViewController {
 
             switch selection {
             case .createDirectory:
-                self.handleCreateDirectory()
+                self.handleShowCreateDirectoryViewController()
             case .selectionMode:
                 if self.content.isEmpty { return }
                 self.activateEditMode()
@@ -752,7 +752,7 @@ final class ListingViewController: UITableViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc private func handleCreateDirectory() {
+    @objc private func handleShowCreateDirectoryViewController() {
 
         let controller = CreateDirectoryViewController(parentLocation: self.location)
         
@@ -796,11 +796,11 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    @objc private func handleDone() {
+    @objc private func handleCancelCopyOrMoveAction() {
         self.onFinish?()
     }
 
-    @objc private func handleRefresh() {
+    @objc private func handleUpdateContentOnPullToRefreshGesture() {
         if self.isUpdating {
             self.refreshControl?.endRefreshing()
             return
@@ -808,7 +808,7 @@ final class ListingViewController: UITableViewController {
         self.updateContent()
     }
 
-    @objc private func handleSearch() {
+    @objc private func handleShowSearchViewCntroller() {
         guard let nav = self.navigationController as? MainNavigationController else {
             print("Could not get the MainNavigationController")
             return
@@ -927,7 +927,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc private func handleCopyOrMove() {
+    @objc private func handleExecuteCopyOrMoveAction() {
 
         setBusyIndicatorView(true)
 
@@ -1008,7 +1008,7 @@ final class ListingViewController: UITableViewController {
         updateNavigationBarRightButtonItems()
     }
 
-    @objc private func handleMultipleItemsEdit(_ sender: UIBarButtonItem) {
+    @objc private func handleExecuteMultipleItemsEditAction(_ sender: UIBarButtonItem) {
 
         guard let chosenAction = ActionType(rawValue: sender.tag) else { return }
         guard let selectedItemsIndexPaths = tableView.indexPathsForSelectedRows else { return }
@@ -1017,7 +1017,7 @@ final class ListingViewController: UITableViewController {
 
         switch chosenAction {
         case .delete:
-            self.doDelete(locations: sourceLocations)
+            self.showDeleteConfirmationDialog(locations: sourceLocations)
         case .copy, .move:
             self.showViewControllerForCopyOrMove(action: chosenAction, sourceLocations: sourceLocations)
         default:
@@ -1025,7 +1025,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    private func doDelete(locations: [Location]) {
+    private func showDeleteConfirmationDialog(locations: [Location]) {
         
         guard isActionConfirmed else {
 
@@ -1046,7 +1046,7 @@ final class ListingViewController: UITableViewController {
 
             let deleteAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .destructive, handler: { _ in
                 self.isActionConfirmed = true
-                self.doDelete(locations: locations)
+                self.showDeleteConfirmationDialog(locations: locations)
             })
 
             let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
