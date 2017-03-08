@@ -10,6 +10,7 @@ struct User {
     let id: String
     let name: String
     let email: String
+    let permissions: Permissions
 }
 
 extension User {
@@ -18,10 +19,18 @@ extension User {
         guard let JSON = JSON as? [String: Any],
             let id = JSON["id"] as? String,
             let name = JSON["name"] as? String,
-            let email = JSON["email"] as? String else {
+            let email = JSON["email"] as? String
+            else {
                 print("Error at parsing of User JSON.")
                 return nil
         }
+
+        if let permissions = Permissions(JSON: JSON["permissions"]) {
+            self.permissions = permissions
+        } else {
+            return nil
+        }
+
         self.id = id
         self.name = name
         self.email = email
@@ -30,8 +39,9 @@ extension User {
 
 extension User: CustomStringConvertible {
     var description: String {
-        return  "Id:\t\t\t\(id)\n"
-                + "Name:\t\t\(name)\n"
-                + "Email:\t\t\(email)\n"
+        return  "Id:\t\t\t\t\(id)\n"
+                + "Name:\t\t\t\(name)\n"
+                + "Email:\t\t\t\(email)\n"
+                + "Permissions: \(permissions)"
     }
 }

@@ -44,7 +44,7 @@ extension UploadLink {
             let hasPassword = JSON["hasPassword"] as? Bool,
             let alert = JSON["alert"] as? Bool
             else {
-                print("Couldnt parse JSON")
+                print("Couldnt parse UploadLink JSON.")
                 return nil
         }
 

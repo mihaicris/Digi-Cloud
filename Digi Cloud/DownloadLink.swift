@@ -44,7 +44,7 @@ extension DownloadLink {
             let hasPassword = JSON["hasPassword"] as? Bool,
             let passwordRequired = JSON["passwordRequired"] as? Bool
             else {
-                print("Couldnt parse JSON")
+                print("Couldnt parse DownloadLink JSON.")
                 return nil
         }
 

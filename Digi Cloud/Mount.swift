@@ -19,8 +19,8 @@ struct Mount {
     let owner: User
     let users: [User]
     let isShared: Bool
-    let spaceTotal: Int
-    let spaceUsed: Int
+    let spaceTotal: Int?
+    let spaceUsed: Int?
     let canWrite: Bool
     let canUpload: Bool
     let overQuota: Bool
@@ -30,16 +30,14 @@ struct Mount {
 extension Mount {
     init?(JSON: Any?) {
         if JSON == nil { return nil }
+
         guard let JSON = JSON as? [String: Any],
             let id = JSON["id"] as? String,
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
             let origin = JSON["origin"] as? String,
-            let owner = User(JSON: JSON["owner"] as? [String: Any]),
             let usersJSON = JSON["users"] as? [Any],
             let isShared = JSON["isShared"] as? Bool,
-            let spaceTotal = JSON["spaceTotal"] as? Int,
-            let spaceUsed = JSON["spaceUsed"] as? Int,
             let canWrite = JSON["canWrite"] as? Bool,
             let canUpload = JSON["canUpload"] as? Bool,
             let overQuota = JSON["overQuota"] as? Bool,
@@ -48,16 +46,21 @@ extension Mount {
                 print("Couldnt parse Mount JSON")
                 return nil
         }
+
+        if let owner = User(JSON: JSON["owner"]) {
+            self.owner = owner
+        } else {
+            return nil
+        }
         
         self.id = id
         self.name = name
         self.type = type
         self.origin = origin
-        self.owner = owner
         self.users = usersJSON.flatMap { User(JSON: $0) }
         self.isShared = isShared
-        self.spaceTotal = spaceTotal
-        self.spaceUsed = spaceUsed
+        self.spaceTotal = JSON["spaceTotal"] as? Int
+        self.spaceUsed = JSON["spaceUsed"] as? Int
         self.canWrite = canWrite
         self.canUpload = canUpload
         self.overQuota = overQuota
