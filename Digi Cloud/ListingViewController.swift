@@ -103,7 +103,8 @@ final class ListingViewController: UITableViewController {
     }()
 
     private lazy var bookmarksBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarksViewController))
+        let b = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarksViewController(_:)))
+        b.tag = 3
         return b
     }()
 
@@ -379,8 +380,12 @@ final class ListingViewController: UITableViewController {
         }
     }
     
-    @objc private func handleShowBookmarksViewController() {
+    @objc private func handleShowBookmarksViewController(_ sender: UIBarButtonItem) {
 
+        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 3 else {
+            return
+        }
+        
         let controller = ManageBookmarksViewController()
 
         controller.onFinish = { [weak self] in
@@ -402,7 +407,6 @@ final class ListingViewController: UITableViewController {
 
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .popover
-        guard let buttonView = navigationItem.rightBarButtonItems?[3].value(forKey: "view") as? UIView else { return }
         navController.popoverPresentationController?.sourceView = buttonView
         navController.popoverPresentationController?.sourceRect = buttonView.bounds
         present(navController, animated: true, completion: nil)
@@ -605,11 +609,20 @@ final class ListingViewController: UITableViewController {
             rightBarButtonItems.append(cancelInEditModeButton)
         } else {
             
-            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .plain, target: self, action: #selector(handleShowMoreActionsViewController))
-            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .plain, target: self, action: #selector(handleShowSortingSelectionViewController))
-            let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleShowSearchViewCntroller))
+            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .plain, target: self, action: #selector(handleShowMoreActionsViewController(_:)))
+            moreActionsBarButton.tag = 0
             
-            rightBarButtonItems.append(contentsOf: [moreActionsBarButton, sortBarButton, searchBarButton, bookmarksBarButton])
+            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .plain, target: self, action: #selector(handleShowSortingSelectionViewController(_:)))
+            sortBarButton.tag = 1
+            
+            let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleShowSearchViewController(_:)))
+            searchBarButton.tag = 2
+            
+            if location.mount.permissions.write {
+                rightBarButtonItems.append(moreActionsBarButton)
+            }
+            
+            rightBarButtonItems.append(contentsOf: [sortBarButton, searchBarButton, bookmarksBarButton])
         }
 
         navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
@@ -714,30 +727,35 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc private func handleShowSortingSelectionViewController() {
+    @objc private func handleShowSortingSelectionViewController(_ sender: UIBarButtonItem) {
+        
+        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 1 else {
+            return
+        }
+        
         let controller = SortFolderViewController()
+        
         controller.onFinish = { [unowned self] in
             self.sortContent()
             self.tableView.reloadData()
         }
         controller.modalPresentationStyle = .popover
-        guard let buttonView = navigationItem.rightBarButtonItems?[1].value(forKey: "view") as? UIView else { return }
         controller.popoverPresentationController?.sourceView = buttonView
         controller.popoverPresentationController?.sourceRect = buttonView.bounds
         present(controller, animated: true, completion: nil)
     }
 
-    @objc private func handleShowMoreActionsViewController() {
-        let controller = MoreActionsViewController(style: .plain)
-
-        controller.modalPresentationStyle = .popover
-        guard let buttonView = navigationItem.rightBarButtonItems?[0].value(forKey: "view") as? UIView else { return }
-        controller.popoverPresentationController?.sourceView = buttonView
-        controller.popoverPresentationController?.sourceRect = buttonView.bounds
+    @objc private func handleShowMoreActionsViewController(_ sender: UIBarButtonItem) {
+        
+        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 0 else {
+            return
+        }
+        
+        let controller = MoreActionsViewController(location: self.location)
 
         controller.onFinish = { [unowned self] selection in
             self.dismiss(animated: true, completion: nil)
-
+            
             switch selection {
             case .createDirectory:
                 self.handleShowCreateDirectoryViewController()
@@ -748,7 +766,10 @@ final class ListingViewController: UITableViewController {
                 self.showShareViewController(linkLocation: self.location, isDirectory: true)
             }
         }
-
+        
+        controller.modalPresentationStyle = .popover
+        controller.popoverPresentationController?.sourceView = buttonView
+        controller.popoverPresentationController?.sourceRect = buttonView.bounds
         present(controller, animated: true, completion: nil)
     }
 
@@ -808,7 +829,8 @@ final class ListingViewController: UITableViewController {
         self.updateContent()
     }
 
-    @objc private func handleShowSearchViewCntroller() {
+    @objc private func handleShowSearchViewController(_ sender: UIBarButtonItem) {
+        
         guard let nav = self.navigationController as? MainNavigationController else {
             print("Could not get the MainNavigationController")
             return
@@ -822,6 +844,7 @@ final class ListingViewController: UITableViewController {
         } else {
             nav.searchResultsControllerIndex = nav.viewControllers.count - 1
             self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
+        
             if self.tableView.tableHeaderView == nil {
                 searchController.searchBar.sizeToFit()
                 self.tableView.tableHeaderView = searchController.searchBar

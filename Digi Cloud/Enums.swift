@@ -34,7 +34,7 @@ enum LinkType: String {
     case upload = "receivers"
 }
 
-enum MoreActions: Int {
+enum MoreAction: Int {
     case createDirectory
     case selectionMode
     case share

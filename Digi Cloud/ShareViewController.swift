@@ -13,6 +13,7 @@ final class ShareViewController: UITableViewController {
     // MARK: - Properties
 
     let location: Location
+    var sharingActions: [ActionType] = []
 
     let onFinish: (() -> Void)
 
@@ -31,11 +32,11 @@ final class ShareViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-
         self.edgesForExtendedLayout = UIRectEdge.bottom
         setupTableView()
         setupViews()
         setupNavigationItems()
+        setupActions()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -43,48 +44,50 @@ final class ShareViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return sharingActions.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.bounds.height / 3
-
+        return tableView.bounds.height / CGFloat(sharingActions.count)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = ShareTableViewCell()
         cell.selectionStyle = .none
-
-        switch indexPath.row {
-        case 0:
+        
+        switch sharingActions[indexPath.row] {
+        case .sendDownloadLink:
             cell.nameLabel.text = NSLocalizedString("Send Link", comment: "")
-        case 1:
+        case .sendUploadLink:
             cell.nameLabel.text = NSLocalizedString("Receive Files", comment: "")
-        case 2:
+        case .share:
             cell.nameLabel.text = NSLocalizedString("Share in Digi Storage", comment: "")
         default:
-            fatalError("Wrong cell index received")
+            break
         }
-
+        
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        switch indexPath.row {
+        switch sharingActions[indexPath.row] {
             
-        case 0:
+        case .sendDownloadLink:
             let controller = ShareLinkViewController(location: self.location, linkType: .download, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
-        case 1:
+            
+        case .sendUploadLink:
             let controller = ShareLinkViewController(location: self.location, linkType: .upload, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
-        case 2:
+            
+        case .share:
             let controller = SharePermissionsTableViewController(location: self.location, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
+            
         default:
-            fatalError("Wrong index received.")
+            break
         }
     }
 
@@ -109,6 +112,23 @@ final class ShareViewController: UITableViewController {
         navigationItem.setRightBarButton(cancelButton, animated: false)
     }
 
+    private func setupActions() {
+        if location.mount.permissions.create_link {
+            sharingActions.append(ActionType.sendDownloadLink)
+        }
+        
+        if location.mount.permissions.create_receiver {
+            sharingActions.append(ActionType.sendUploadLink)
+        }
+        
+        if location.mount.permissions.mount {
+            sharingActions.append(ActionType.share)
+        }
+        
+        // At least 1 action should be true
+        assert(sharingActions.count > 0, "At least on permission should be granted for sharing in this point.")
+    }
+    
     @objc private func handleCancel() {
         onFinish()
     }

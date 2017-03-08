@@ -19,6 +19,7 @@ struct Mount {
     let owner: User
     let users: [User]
     let isShared: Bool
+    let permissions: Permissions
     let spaceTotal: Int?
     let spaceUsed: Int?
     let canWrite: Bool
@@ -47,8 +48,10 @@ extension Mount {
                 return nil
         }
 
-        if let owner = User(JSON: JSON["owner"]) {
+        if let owner = User(JSON: JSON["owner"]),
+            let permissions = Permissions(JSON: JSON["permissions"]) {
             self.owner = owner
+            self.permissions = permissions
         } else {
             return nil
         }
