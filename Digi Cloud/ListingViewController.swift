@@ -620,6 +620,13 @@ final class ListingViewController: UITableViewController {
             }
         }
     }
+    
+    private func activateEditMode() {
+        tableView.setEditing(true, animated: true)
+        navigationController?.setToolbarHidden(false, animated: true)
+        updateNavigationBarRightButtonItems()
+        updateToolBarButtonItemsToMatchTableState()
+    }
 
     private func sortByName() {
         if AppSettings.showsFoldersFirst {
@@ -1075,7 +1082,6 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    // TODO: Make one single DELETE execute function like in copy / move?
     private func executeDeletion(at location: Location, index: Int) {
 
         // TODO: REfactor with user feedback
@@ -1205,13 +1211,6 @@ final class ListingViewController: UITableViewController {
                 }
             }
         }
-    }
-
-    private func activateEditMode() {
-        tableView.setEditing(true, animated: true)
-        navigationController?.setToolbarHidden(false, animated: true)
-        updateNavigationBarRightButtonItems()
-        updateToolBarButtonItemsToMatchTableState()
     }
 
     private func executeDeletionInSelectionMode(locations: [Location]) {
