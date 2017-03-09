@@ -231,6 +231,8 @@ final class LocationsViewController: UITableViewController {
     }
 
     @objc private func handleDone() {
-        self.onFinish?()
+        dismiss(animated: true) {
+            self.onFinish?()
+        }
     }
 }
