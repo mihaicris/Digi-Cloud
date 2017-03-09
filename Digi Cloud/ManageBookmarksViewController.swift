@@ -102,7 +102,9 @@ final class ManageBookmarksViewController: UITableViewController {
 
             let location = Location(mount: mount, path: bookmark.path)
 
-            onSelect?(location)
+            dismiss(animated: true) {
+                self.onSelect?(location)
+            }
         }
     }
 

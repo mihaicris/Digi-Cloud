@@ -748,10 +748,8 @@ final class ListingViewController: UITableViewController {
         }
 
         controller.onSelect = { [weak self] location in
-            self?.dismiss(animated: true) {
-                let controller = ListingViewController(location: location, action: .noAction)
-                self?.navigationController?.pushViewController(controller, animated: true)
-            }
+            let controller = ListingViewController(location: location, action: .noAction)
+            self?.navigationController?.pushViewController(controller, animated: true)
         }
 
         let navController = UINavigationController(rootViewController: controller)

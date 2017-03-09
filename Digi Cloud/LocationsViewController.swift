@@ -120,14 +120,18 @@ final class LocationsViewController: UITableViewController {
 
         // Create navigation elements when coping or moving
 
+        let bookmarkButton = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarksViewController(_:)))
+
+        navigationItem.setRightBarButton(bookmarkButton, animated: false)
+
         if action == .copy || action == .move {
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
             let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
                                               style: .plain,
                                               target: self,
                                               action: #selector(handleDone))
-
             navigationItem.setRightBarButton(rightButton, animated: false)
+
         } else {
             let settingsButton = UIBarButtonItem(image: UIImage(named: "Settings-Icon"), style: .plain, target: self, action: #selector(handleShowSettings))
             self.navigationItem.setLeftBarButton(settingsButton, animated: false)
@@ -203,6 +207,26 @@ final class LocationsViewController: UITableViewController {
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .popover
         navController.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
+        present(navController, animated: true, completion: nil)
+    }
+
+    @objc private func handleShowBookmarksViewController(_ sender: UIBarButtonItem) {
+
+        guard let buttonView = sender.value(forKey: "view") as? UIView else {
+            return
+        }
+
+        let controller = ManageBookmarksViewController()
+
+        controller.onSelect = { [weak self] location in
+            let controller = ListingViewController(location: location, action: .noAction)
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .popover
+        navController.popoverPresentationController?.sourceView = buttonView
+        navController.popoverPresentationController?.sourceRect = buttonView.bounds
         present(navController, animated: true, completion: nil)
     }
 
