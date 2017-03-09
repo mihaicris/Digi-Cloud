@@ -15,12 +15,15 @@ final class MoreActionsViewController: UITableViewController {
     var onSelect: ((ActionType) -> Void)?
 
     private let location: Location
+    private let node: Node
+
     private var moreActions: [ActionType] = []
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location) {
+    init(location: Location, node: Node) {
         self.location = location
+        self.node = node
         super.init(style: .plain)
     }
 
@@ -52,12 +55,21 @@ final class MoreActionsViewController: UITableViewController {
 
         switch moreActions[indexPath.row] {
 
+        case .bookmark:
+            let title = self.node.bookmark == nil
+                ? NSLocalizedString("Set Bookmark", comment: "")
+                : NSLocalizedString("Remove Bookmark", comment: "")
+            return createCell(title: title, color: .defaultColor)
+
         case .createDirectory:
             return createCell(title: NSLocalizedString("Create Directory", comment: ""), color: .defaultColor)
+
         case .selectionMode:
             return createCell(title: NSLocalizedString("Select Mode", comment: ""), color: .defaultColor)
+
         case .share:
             return createCell(title: NSLocalizedString("Share", comment: ""), color: .defaultColor)
+
         default:
             fatalError()
         }
@@ -114,6 +126,8 @@ final class MoreActionsViewController: UITableViewController {
     }
 
     private func setupActions() {
+
+        moreActions.append(.bookmark)
 
         if location.mount.permissions.create_link
             || location.mount.permissions.create_receiver

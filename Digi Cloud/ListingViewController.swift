@@ -20,32 +20,34 @@ final class ListingViewController: UITableViewController {
     var onFinish: (() -> Void)?
 
     // Type of action made by controller
-    fileprivate let action: ActionType
+    private let action: ActionType
 
-    // The root location in normal listing mode
-    fileprivate var location: Location
+    // The current location in normal listing mode
+    private var location: Location
+
+    // The current node in normal listing mode
+    private var node: Node?
 
     // When coping or moving files/directories, this property will hold the source location which is passed between
     // controllers on navigation stack.
-    fileprivate var sourceLocations: [Location]?
+    private var sourceLocations: [Location]?
 
-    fileprivate var needRefresh: Bool = true
-    fileprivate var content: [Node] = []
-    private     let searchResult: String?
-    private     var isUpdating: Bool = false
-    private     var isActionConfirmed: Bool = false
-    private     var searchController: UISearchController!
-    private     var fileCellID = String()
-    private     var folderCellID = String()
+    private var needRefresh: Bool = true
+    private var content: [Node] = []
+    private let searchResult: String?
+    private var isUpdating: Bool = false
+    private var isActionConfirmed: Bool = false
+    private var searchController: UISearchController!
+    private var fileCellID = String()
+    private var folderCellID = String()
+    private let dispatchGroup = DispatchGroup()
 
-    private     let dispatchGroup = DispatchGroup()
+    private var didReceivedNetworkError = false
+    private var didReceivedStatus400 = false
+    private var didReceivedStatus404 = false
+    private var didSucceedCopyOrMove = false
 
-    private     var didReceivedNetworkError = false
-    private     var didReceivedStatus400 = false
-    private     var didReceivedStatus404 = false
-    private     var didSucceedCopyOrMove = false
-
-    private     var searchResultWasHighlighted = false
+    private var searchResultWasHighlighted = false
 
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -429,13 +431,13 @@ final class ListingViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
 
-    fileprivate func updateContent() {
+    private func updateContent() {
 
         needRefresh = false
         isUpdating = true
         didReceivedNetworkError = false
 
-        DigiClient.shared.getBundle(for: self.location) { nodesResult, error in
+        DigiClient.shared.getBundle(for: self.location) { nodesResult, rootNode, error in
 
             self.isUpdating = false
 
@@ -460,6 +462,7 @@ final class ListingViewController: UITableViewController {
             }
 
             let nodes: [Node] = nodesResult ?? []
+            self.node = rootNode
 
             if self.action == .copy || self.action == .move {
 
@@ -515,7 +518,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func updateLocationContentMessage() {
+    private func updateLocationContentMessage() {
         busyIndicator.stopAnimating()
         emptyFolderLabel.text = NSLocalizedString("Directory is Empty", comment: "")
     }
@@ -546,7 +549,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func animateActionButton(_ button: UIButton) {
+    private func animateActionButton(_ button: UIButton) {
 
         var transform: CGAffineTransform
 
@@ -720,6 +723,14 @@ final class ListingViewController: UITableViewController {
         }
     }
 
+    private func setNeedsRefreshInPrevious() {
+        if let viewControllers = self.navigationController?.viewControllers {
+            if let previousVC = viewControllers[viewControllers.count-2] as? ListingViewController {
+                previousVC.needRefresh = true
+            }
+        }
+    }
+
     @objc private func handleShowBookmarksViewController(_ sender: UIBarButtonItem) {
 
         guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 3 else {
@@ -770,17 +781,26 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleShowMoreActionsViewController(_ sender: UIBarButtonItem) {
 
+        guard let rootNode = self.node else {
+            print("No valid root node fetched in updateContent.")
+            return
+        }
+
         guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 0 else {
             return
         }
 
-        let controller = MoreActionsViewController(location: self.location)
+        let controller = MoreActionsViewController(location: self.location, node: rootNode)
 
         controller.onSelect = { [unowned self] selection in
 
             self.dismiss(animated: true, completion: nil)
 
             switch selection {
+
+            case .bookmark:
+                self.setNeedsRefreshInPrevious()
+                self.executeToogleBookmark(location: self.location, node: rootNode)
 
             case .createDirectory:
                 self.handleShowCreateDirectoryViewController()
@@ -1022,36 +1042,41 @@ final class ListingViewController: UITableViewController {
 
     // MARK: - Action Execution
 
-    private func executeToogleBookmark(location: Location, node: Node, index: Int) {
+    private func executeToogleBookmark(location: Location, node: Node, index: Int? = nil) {
 
-        let indexPath = IndexPath(row: index, section: 0)
+        func updateBookmarkIcon(bookmark: Bookmark?) {
+            if let index = index {
+                let indexPath = IndexPath(row: index, section: 0)
+                self.content[indexPath.row].bookmark = bookmark
+                self.tableView.reloadRows(at: [indexPath], with: .none)
+            } else {
+                self.node?.bookmark = bookmark
+            }
+        }
 
         if let bookmark = node.bookmark {
 
             // Bookmark is set, removing it:
-            DigiClient.shared.removeBookmark(bookmark: bookmark, completion: { error in
+            DigiClient.shared.removeBookmark(bookmark: bookmark) { error in
 
                 guard error == nil else {
                     print(error!.localizedDescription)
                     return
                 }
-                self.content[index].bookmark = nil
-                self.tableView.reloadRows(at: [indexPath], with: .none)
-            })
+                updateBookmarkIcon(bookmark: nil)
+            }
         } else {
 
             // Bookmark is not set, adding it:
             let bookmark = Bookmark(name: node.name, mountId: location.mount.id, path: location.path)
 
-            DigiClient.shared.addBookmark(bookmark: bookmark, completion: { error in
+            DigiClient.shared.addBookmark(bookmark: bookmark) { error in
                 guard error == nil else {
                     print(error!.localizedDescription)
                     return
                 }
-
-                self.content[index].bookmark = bookmark
-                self.tableView.reloadRows(at: [indexPath], with: .none)
-            })
+                updateBookmarkIcon(bookmark: bookmark)
+            }
         }
     }
 
@@ -1312,7 +1337,7 @@ final class ListingViewController: UITableViewController {
         self.present(controller, animated: true, completion: nil)
     }
 
-    fileprivate func showCopyOrMoveViewController(action: ActionType, sourceLocations: [Location]) {
+    private func showCopyOrMoveViewController(action: ActionType, sourceLocations: [Location]) {
 
         guard let stackControllers = self.navigationController?.viewControllers else {
             print("Couldn't get the previous navigation controllers!")
@@ -1357,7 +1382,7 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    fileprivate func showShareViewController(location: Location, isDirectory: Bool) {
+    private func showShareViewController(location: Location, isDirectory: Bool) {
 
         let onFinish = { [weak self] in
 

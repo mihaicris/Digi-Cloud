@@ -14,7 +14,7 @@ final class DirectoryInfoViewController: UITableViewController {
 
     var onFinish: (() -> Void)?
 
-    fileprivate var location: Location
+    private var location: Location
 
     private let sizeFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()

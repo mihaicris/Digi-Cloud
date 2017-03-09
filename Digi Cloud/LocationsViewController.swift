@@ -18,7 +18,7 @@ final class LocationsViewController: UITableViewController {
 
     // When coping or moving files/directories, this property will hold the source location which is passed between
     // controllers on navigation stack.
-    fileprivate var sourceLocations: [Location]?
+    private var sourceLocations: [Location]?
 
     private let action: ActionType
     private var isUpdating: Bool = false

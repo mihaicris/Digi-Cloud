@@ -357,7 +357,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - nodes: Returned content as an array of nodes
     ///   - error: The error occurred in the network request, nil for no error.
-    func getBundle(for location: Location, completion: @escaping(_ nodes: [Node]?, _ error: Error?) -> Void) {
+    func getBundle(for location: Location, completion: @escaping(_ nodes: [Node]?, _ rootNode: Node?, _ error: Error?) -> Void) {
 
         let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.id)
 
@@ -369,25 +369,27 @@ final class DigiClient {
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
 
             guard error == nil else {
-                completion(nil, error!)
+                completion(nil, nil, error!)
                 return
             }
 
             guard statusCode != 400 else {
                 let message = NSLocalizedString("Location is no longer available!", comment: "")
-                completion(nil, NetworkingError.wrongStatus(message))
+                completion(nil, nil, NetworkingError.wrongStatus(message))
                 return
             }
 
             guard let dict = data as? [String: Any],
-                let nodesList = dict["files"] as? [[String: Any]] else {
-                    completion(nil, JSONError.parse("Could not parse data"))
+                let nodesListJSON = dict["files"] as? [[String: Any]],
+                let rootNodeJSON = dict["file"] else {
+                    completion(nil, nil, JSONError.parse("Could not parse data"))
                     return
             }
 
-            let content = nodesList.flatMap { Node(JSON: $0, mountId: location.mount.id) }
+            let content = nodesListJSON.flatMap { Node(JSON: $0, mountId: location.mount.id) }
+            let rootNode = Node(JSON: rootNodeJSON, mountId: location.mount.id)
 
-            completion(content, nil)
+            completion(content, rootNode, nil)
         }
     }
 
