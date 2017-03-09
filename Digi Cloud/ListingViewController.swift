@@ -153,7 +153,7 @@ final class ListingViewController: UITableViewController {
         super.viewDidLoad()
         setupTableView()
         setupSearchController()
-        setupViews()
+        setupNavigationBarRightButtonItems()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -368,7 +368,7 @@ final class ListingViewController: UITableViewController {
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
 
-    private func setupViews() {
+    private func setupNavigationBarRightButtonItems() {
 
         switch self.action {
 
@@ -388,7 +388,7 @@ final class ListingViewController: UITableViewController {
             let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMoveAction))
             copyMoveButton.isEnabled = true
 
-            self.toolbarItems = [createFolderBarButton, flexibleBarButton, copyMoveButton]
+            self.toolbarItems = [createFolderBarButton, flexibleBarButton, bookmarksBarButton, flexibleBarButton, copyMoveButton]
 
         default:
             self.toolbarItems = [deleteInEditModeButton, flexibleBarButton, copyInEditModeButton, flexibleBarButton, moveInEditModeButton]
@@ -738,6 +738,8 @@ final class ListingViewController: UITableViewController {
         }
 
         let controller = ManageBookmarksViewController()
+        let controllerAction = self.action
+        let controllerSourceLocations = self.sourceLocations
 
         controller.onFinish = { [weak self] in
             self?.updateContent()
@@ -748,7 +750,7 @@ final class ListingViewController: UITableViewController {
         }
 
         controller.onSelect = { [weak self] location in
-            let controller = ListingViewController(location: location, action: .noAction)
+            let controller = ListingViewController(location: location, action: controllerAction, sourceLocations: controllerSourceLocations)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
 
@@ -892,8 +894,6 @@ final class ListingViewController: UITableViewController {
 
         controller.onSelect = { [unowned self] action in
 
-            let completion = {
-
                 switch action {
 
                 case .bookmark:
@@ -922,9 +922,6 @@ final class ListingViewController: UITableViewController {
                 default:
                     fatalError()
                 }
-            }
-
-            self.dismiss(animated: true, completion: completion)
         }
 
         controller.modalPresentationStyle = .popover

@@ -96,7 +96,9 @@ final class NodeActionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        onSelect?(permittedActions[indexPath.row])
+        dismiss(animated: false) {
+            self.onSelect?(self.permittedActions[indexPath.row])
+        }
     }
 
     // MARK: - Helper Functions
