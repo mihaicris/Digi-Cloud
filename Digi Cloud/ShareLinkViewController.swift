@@ -835,7 +835,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     private func spinWithOptions(options: UIViewAnimationOptions) {
         UIView.animate(withDuration: 0.5, delay: 0, options: options, animations: { () -> Void in
-            let val: CGFloat = CGFloat(Double.pi)
+            let val = CGFloat(Double.pi)
             self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
         }) { (finished: Bool) -> Void in
             if(finished) {
