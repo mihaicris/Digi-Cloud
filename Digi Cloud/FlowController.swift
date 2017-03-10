@@ -32,9 +32,9 @@ final class FlowController {
         var controller: UIViewController
 
         if AppSettings.hasRunBefore {
-            if AppSettings.shouldReplayIntro {
-                controller = self.createIntroController()
-            } else {
+//            if AppSettings.shouldReplayIntro {
+//                controller = self.createIntroController()
+//            } else {
                 if let username = AppSettings.loggedAccount {
                     let loggedAccount = Account(username: username)
                     do {
@@ -47,10 +47,12 @@ final class FlowController {
                 } else {
                     controller = self.createAccountSelectionController()
                 }
-            }
+//            }
         } else {
             AppSettings.clearKeychainItems()
-            controller = self.createIntroController()
+            AppSettings.setDefaultAppSettings() // Move this in IntroController.
+//            controller = self.createIntroController()
+            controller = self.createAccountSelectionController()
         }
         return controller
     }

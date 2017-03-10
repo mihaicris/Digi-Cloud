@@ -25,7 +25,7 @@ final class IntroductionViewController: UIViewController {
         view.backgroundColor = .magenta
         setupViews()
 
-        AppSettings.setDefaultAppSettings()
+//        AppSettings.setDefaultAppSettings()
     }
 
     override func viewDidAppear(_ animated: Bool) {
