@@ -28,7 +28,6 @@ final class SearchCell: UITableViewCell {
 
     let nodeMountLabel: UILabelWithPadding = {
         let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
-        label.textColor = .darkGray
         label.font = UIFont(name: "HelveticaNeue", size: 11)
         label.textColor = .white
         label.layer.cornerRadius = 4
