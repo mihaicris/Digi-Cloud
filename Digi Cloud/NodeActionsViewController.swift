@@ -89,9 +89,11 @@ final class NodeActionsViewController: UITableViewController {
             cell.textLabel?.text = NSLocalizedString("Directory information", comment: "")
 
         default:
-            fatalError()
+            #if DEBUG
+                fatalError("Wrong permitted action.")
+            #endif
+            break
         }
-
         return cell
     }
 

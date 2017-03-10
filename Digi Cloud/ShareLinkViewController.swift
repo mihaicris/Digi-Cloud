@@ -251,7 +251,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         case 2:
             headerTitle = NSLocalizedString("VALIDITY", comment: "")
         default:
-            fatalError("Wrong section index")
+            #if DEBUG
+                fatalError("Wrong section index")
+            #endif
+            break
         }
 
         return headerTitle
@@ -358,7 +361,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             ])
 
         default:
-            fatalError("Wrong section index")
+            #if DEBUG
+                fatalError("Wrong section index")
+            #endif
+            break
         }
 
         return cell

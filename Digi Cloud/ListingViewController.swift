@@ -820,7 +820,9 @@ final class ListingViewController: UITableViewController {
                 self.showShareViewController(location: self.location, isDirectory: true)
 
             default:
-                fatalError()
+                #if DEBUG
+                    fatalError("Wrong More Action Selection")
+                #endif
             }
         }
 
@@ -927,7 +929,9 @@ final class ListingViewController: UITableViewController {
                     self.showShareViewController(location: nodeLocation, isDirectory: node.type == "dir")
 
                 default:
-                    fatalError()
+                    #if DEBUG
+                        fatalError("Wrong Action Selection")
+                    #endif
                 }
         }
 
@@ -965,14 +969,11 @@ final class ListingViewController: UITableViewController {
         setBusyIndicatorView(true)
 
         guard self.sourceLocations != nil else {
-            print("Couldn't get the source locations to move/copy.")
-
             defer {
                 #if DEBUG
-                    fatalError()
+                    fatalError("Couldn't get the source locations to move/copy.")
                 #endif
             }
-
             return
         }
 
