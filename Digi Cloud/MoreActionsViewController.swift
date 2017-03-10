@@ -71,9 +71,7 @@ final class MoreActionsViewController: UITableViewController {
             return createCell(title: NSLocalizedString("Share", comment: ""), color: .defaultColor)
 
         default:
-            #if DEBUG
-                fatalError("Wrong selection.")
-            #endif
+            return UITableViewCell()
         }
     }
 

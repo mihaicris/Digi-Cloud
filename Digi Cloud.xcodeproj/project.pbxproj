@@ -56,6 +56,7 @@
 		83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D39A1E13DCF4005258B3 /* Localizable.strings */; };
 		83BF27C91E438AB30019B1F7 /* MoreActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BF27C81E438AB30019B1F7 /* MoreActionsViewController.swift */; };
 		83C7D1081E23A9B700E3D508 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D1061E23A9B700E3D508 /* Account.swift */; };
+		83C887831E7312E500C72050 /* MountUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C887821E7312E500C72050 /* MountUserCell.swift */; };
 		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
 		83CE7A001DE45D77002212A9 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE79FF1DE45D77002212A9 /* Location.swift */; };
 		83D03F271E6DB3FA00BA617A /* ManageBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */; };
@@ -147,6 +148,7 @@
 		83B6D3991E13DCF4005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		83BF27C81E438AB30019B1F7 /* MoreActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MoreActionsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83C7D1061E23A9B700E3D508 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		83C887821E7312E500C72050 /* MountUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MountUserCell.swift; sourceTree = "<group>"; };
 		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DirectoryInfoViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83CE79FF1DE45D77002212A9 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 			children = (
 				835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */,
 				833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */,
+				83C887821E7312E500C72050 /* MountUserCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -699,6 +702,7 @@
 				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
 				833F5DA91E68372700EE3722 /* ShareMountViewController.swift in Sources */,
 				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
+				83C887831E7312E500C72050 /* MountUserCell.swift in Sources */,
 				834AEEB91E6B43BE00C16B75 /* SearchResultController.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
 				8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */,
