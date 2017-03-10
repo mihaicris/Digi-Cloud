@@ -302,10 +302,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
             let mountNameLabel: UILabelWithPadding = {
                 let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
-                l.font = UIFont(name: "HelveticaNeue", size: 14)
+                l.font = UIFont(name: "HelveticaNeue", size: 12)
                 l.adjustsFontSizeToFitWidth = true
-                l.textColor = .white
-                l.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                l.textColor = .darkGray
+                l.backgroundColor = UIColor.black.withAlphaComponent(0.1)
                 l.text = location.mount.name
                 l.layer.cornerRadius = 4
                 l.clipsToBounds = true
@@ -319,7 +319,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 l.textColor = .darkGray
                 l.text = location.path.hasSuffix("/") ? String(location.path.characters.dropLast()) : location.path
                 l.numberOfLines = 2
-                l.font = UIFont(name: "HelveticaNeue", size: 14)
+                l.font = UIFont(name: "HelveticaNeue", size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
                 return l
             }()
@@ -507,6 +507,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .plain, target: self, action: #selector(handleDone))
         navigationItem.setRightBarButton(doneButton, animated: false)
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .plain, target: nil, action: nil)
     }
 
     private func setupToolBarItems() {

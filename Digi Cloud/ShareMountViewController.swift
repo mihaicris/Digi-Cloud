@@ -62,13 +62,11 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     }()
 
     private lazy var tableViewForMembers: UITableView = {
-        let t = UITableView(frame: CGRect.zero, style: .grouped)
+        let t = UITableView(frame: CGRect.zero, style: .plain)
         t.translatesAutoresizingMaskIntoConstraints = false
         t.alwaysBounceVertical = true
         t.delegate = self
         t.dataSource = self
-        t.bounces = false
-        t.tag = 10
         t.register(MountUserCell.self, forCellReuseIdentifier: String(describing: MountUserCell.self))
         return t
     }()
@@ -138,16 +136,20 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        navigationController?.isToolbarHidden = false
         setupViews()
+        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
         setupNavigationItems()
         setupToolBarItems()
-        navigationController?.isToolbarHidden = false
-        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share", comment: ""))
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        users = node.share?.users ?? []
+        if node.share?.isShared == true {
+            users = node.share?.users ?? []
+        } else {
+            users = []
+        }
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -156,7 +158,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         if tableView.tag == 5 {
             headerTitle = NSLocalizedString("LOCATION", comment: "")
-
         }
 
         return headerTitle
@@ -169,18 +170,12 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         } else {
             return 0.01
         }
-
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.tag == 5 {
             return 1
         } else {
-            if users.count > 0 {
-                membersLabel.isHidden = false
-            } else {
-                membersLabel.isHidden = true
-            }
             return users.count
         }
     }
@@ -195,10 +190,10 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             let mountNameLabel: UILabelWithPadding = {
                 let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
-                l.font = UIFont(name: "HelveticaNeue", size: 14)
+                l.font = UIFont(name: "HelveticaNeue", size: 12)
                 l.adjustsFontSizeToFitWidth = true
-                l.textColor = .white
-                l.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                l.textColor = .darkGray
+                l.backgroundColor = UIColor.black.withAlphaComponent(0.1)
                 l.text = location.mount.name
                 l.layer.cornerRadius = 4
                 l.clipsToBounds = true
@@ -212,7 +207,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 l.textColor = .darkGray
                 l.text = location.path.hasSuffix("/") ? String(location.path.characters.dropLast()) : location.path
                 l.numberOfLines = 2
-                l.font = UIFont(name: "HelveticaNeue", size: 14)
+                l.font = UIFont(name: "HelveticaNeue", size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
                 return l
             }()
@@ -282,7 +277,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             headerView.rightAnchor.constraint(equalTo: view.rightAnchor),
 
             tableViewForLocation.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            tableViewForLocation.heightAnchor.constraint(equalToConstant: 120),
+            tableViewForLocation.heightAnchor.constraint(equalToConstant: 115),
             tableViewForLocation.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableViewForLocation.rightAnchor.constraint(equalTo: view.rightAnchor),
 
@@ -293,7 +288,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             tableViewForMembers.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewForMembers.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableViewForMembers.rightAnchor.constraint(equalTo: view.rightAnchor)
-
         ])
     }
 
@@ -326,7 +320,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         var toolBarItems = [flexibleButton, addMemberButton]
 
-        if node.share != nil {
+        if node.share?.isShared == true {
             toolBarItems.insert(removeShareButton, at: 0)
         }
 
@@ -365,15 +359,12 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             return
         }
 
-        // TODO: Start activity indicator
+        configureWaitingView(type: .started, message: NSLocalizedString("Removing share...", comment: ""))
 
         DigiClient.shared.deleteMount(mount) { error in
 
-            // TODO: Stop activity indicator
-
             guard error == nil else {
-                // TODO: Show Error to User
-
+                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error while removing the share.", comment: ""))
                 return
             }
 
