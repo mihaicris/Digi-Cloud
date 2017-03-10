@@ -10,6 +10,23 @@ import UIKit
 
 final class AccountTableViewCell: UITableViewCell {
 
+    var account: Account? {
+        didSet {
+            guard let username = account?.username, let name = UserDefaults.standard.string(forKey: username) else {
+                return
+            }
+            self.accountNameLabel.text = name
+            self.accountUsernameLabel.text = username
+            let cache = Cache()
+            if let data = cache.load(type: .profile, key: username) {
+                self.profileImageView.image = UIImage(data: data)
+            } else {
+                self.profileImageView.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
+            }
+
+        }
+    }
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -55,7 +72,7 @@ final class AccountTableViewCell: UITableViewCell {
             profileImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
             profileImageView.widthAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
             accountNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -8),
-            accountNameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 15),
+            accountNameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8),
             accountNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
             accountUsernameLabel.topAnchor.constraint(equalTo: accountNameLabel.bottomAnchor, constant: 2),
             accountUsernameLabel.leftAnchor.constraint(equalTo: accountNameLabel.leftAnchor),
@@ -63,20 +80,4 @@ final class AccountTableViewCell: UITableViewCell {
         ])
     }
 
-    var account: Account? {
-        didSet {
-            guard let username = account?.username, let name = UserDefaults.standard.string(forKey: username) else {
-                return
-            }
-            self.accountNameLabel.text = name
-            self.accountUsernameLabel.text = username
-            let cache = Cache()
-            if let data = cache.load(type: .profile, key: username) {
-                self.profileImageView.image = UIImage(data: data)
-            } else {
-                self.profileImageView.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
-            }
-
-        }
-    }
 }
