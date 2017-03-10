@@ -1,5 +1,5 @@
 //
-//  ShareInDigiTableViewController.swift
+//  ShareMountViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 02/03/2017.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SharePermissionsTableViewController: UIViewController {
+final class ShareMountViewController: UIViewController {
 
     // MARK: - Properties
 

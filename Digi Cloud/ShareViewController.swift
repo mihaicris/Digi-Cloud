@@ -83,7 +83,7 @@ final class ShareViewController: UITableViewController {
             self.navigationController?.pushViewController(controller, animated: true)
 
         case .share:
-            let controller = SharePermissionsTableViewController(location: self.location, onFinish: self.onFinish)
+            let controller = ShareMountViewController(location: self.location, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
 
         default:

@@ -19,7 +19,7 @@
 		8328F80F1E51EA7E00DE4453 /* NodeHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F80E1E51EA7E00DE4453 /* NodeHit.swift */; };
 		8328F8111E51FF2E00DE4453 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F8101E51FF2E00DE4453 /* DownloadLink.swift */; };
 		8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */; };
-		833F5DA91E68372700EE3722 /* SharePermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DA81E68372700EE3722 /* SharePermissionsViewController.swift */; };
+		833F5DA91E68372700EE3722 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DA81E68372700EE3722 /* ShareMountViewController.swift */; };
 		833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */; };
 		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
 		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
@@ -108,7 +108,7 @@
 		8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameUtilitiesButton.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = RenameViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		833F5DA61E68358B00EE3722 /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ShareViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		833F5DA81E68372700EE3722 /* SharePermissionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharePermissionsViewController.swift; sourceTree = "<group>"; };
+		833F5DA81E68372700EE3722 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareMountViewController.swift; sourceTree = "<group>"; };
 		833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareTableViewCell.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
@@ -232,9 +232,9 @@
 		83454BEB1E5B3E6E005C85ED /* Sharing */ = {
 			isa = PBXGroup;
 			children = (
-				83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */,
-				833F5DA81E68372700EE3722 /* SharePermissionsViewController.swift */,
 				833F5DA61E68358B00EE3722 /* ShareViewController.swift */,
+				83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */,
+				833F5DA81E68372700EE3722 /* ShareMountViewController.swift */,
 				83D03F231E6DB12700BA617A /* Views */,
 			);
 			name = Sharing;
@@ -697,7 +697,7 @@
 				83E5DB421E607EF30093634E /* UIFont+DigiCloud.swift in Sources */,
 				83EBA7D01E6ABF4900BB8675 /* User.swift in Sources */,
 				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
-				833F5DA91E68372700EE3722 /* SharePermissionsViewController.swift in Sources */,
+				833F5DA91E68372700EE3722 /* ShareMountViewController.swift in Sources */,
 				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
 				834AEEB91E6B43BE00C16B75 /* SearchResultController.swift in Sources */,
 				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
