@@ -36,12 +36,3 @@ extension User {
         self.email = email
     }
 }
-
-extension User: CustomStringConvertible {
-    var description: String {
-        return  "Id:\t\t\t\t\(id)\n"
-                + "Name:\t\t\t\(name)\n"
-                + "Email:\t\t\t\(email)\n"
-                + "Permissions: \(permissions)"
-    }
-}
