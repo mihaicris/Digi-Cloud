@@ -620,7 +620,7 @@ final class ListingViewController: UITableViewController {
             }
         }
     }
-    
+
     private func activateEditMode() {
         tableView.setEditing(true, animated: true)
         navigationController?.setToolbarHidden(false, animated: true)
@@ -817,7 +817,7 @@ final class ListingViewController: UITableViewController {
                 self.activateEditMode()
 
             case .share:
-                self.showShareViewController(location: self.location, isDirectory: true)
+                self.showShareViewController(location: self.location, node: rootNode)
 
             default:
                 #if DEBUG
@@ -923,10 +923,10 @@ final class ListingViewController: UITableViewController {
                     self.showRenameViewController(location: nodeLocation, node: node, index: nodeIndex)
 
                 case .sendDownloadLink:
-                    self.showShareViewController(location: nodeLocation, isDirectory: false)
+                    self.showShareViewController(location: nodeLocation, node: node)
 
                 case .share:
-                    self.showShareViewController(location: nodeLocation, isDirectory: node.type == "dir")
+                    self.showShareViewController(location: nodeLocation, node: node)
 
                 default:
                     #if DEBUG
@@ -1377,7 +1377,7 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    private func showShareViewController(location: Location, isDirectory: Bool) {
+    private func showShareViewController(location: Location, node: Node) {
 
         let onFinish = { [weak self] in
 
@@ -1392,8 +1392,8 @@ final class ListingViewController: UITableViewController {
 
         let controller: UIViewController
 
-        if isDirectory {
-            controller = ShareViewController(location: location, onFinish: onFinish)
+        if node.type == "dir" {
+            controller = ShareViewController(location: location, node: node, onFinish: onFinish)
         } else {
             controller = ShareLinkViewController(location: location, linkType: .download, onFinish: onFinish)
         }

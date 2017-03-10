@@ -14,6 +14,13 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     var onFinish: (() -> Void)?
 
+    private enum Sections {
+        case location
+        case link
+        case password
+        case validity
+    }
+
     private let location: Location
     private let linkType: LinkType
     private var link: Link! {
@@ -23,6 +30,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             }
         }
     }
+
+    private var sections: [Sections] = []
 
     private var originalLinkHash: String!
     private var isSaving: Bool = false
@@ -153,7 +162,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return sc
     }()
 
-    var errorMessageVerticalConstraint: NSLayoutConstraint?
+    private var errorMessageVerticalConstraint: NSLayoutConstraint?
 
     private lazy var waitingView: UIView = {
 
@@ -236,36 +245,51 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return sections.count
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 
         let headerTitle: String
 
-        switch section {
-        case 0:
+        switch sections[section] {
+        case .location:
+            headerTitle = NSLocalizedString("LOCATION", comment: "")
+        case .link:
             headerTitle = NSLocalizedString("LINK", comment: "")
-        case 1:
+        case .password:
             headerTitle = NSLocalizedString("PASSWORD", comment: "")
-        case 2:
+        case .validity:
             headerTitle = NSLocalizedString("VALIDITY", comment: "")
-        default:
-            #if DEBUG
-                fatalError("Wrong section index")
-            #endif
-            break
         }
-
         return headerTitle
     }
 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 35
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return linkType == .upload && section == 0 ? 2 : 1
+
+        switch sections[section] {
+        case .location:
+            return 1
+        case .link:
+            return linkType == .upload ? 2 : 1
+        case .password:
+            return 1
+        case .validity:
+            return 1
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return validityDateAndTimePicker.isHidden == false  && indexPath.section == 2 ? 150 : UITableViewAutomaticDimension
+
+        if sections[indexPath.section] == .validity && validityDateAndTimePicker.isHidden == false {
+            return 150
+        } else {
+            return UITableViewAutomaticDimension
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -273,9 +297,45 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         let cell = UITableViewCell()
         cell.selectionStyle = .none
 
-        switch indexPath.section {
-        case 0:
-            // LINK
+        switch sections[indexPath.section] {
+        case .location:
+
+            let mountNameLabel: UILabelWithPadding = {
+                let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
+                l.font = UIFont(name: "HelveticaNeue", size: 14)
+                l.adjustsFontSizeToFitWidth = true
+                l.textColor = .white
+                l.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                l.text = location.mount.name
+                l.layer.cornerRadius = 4
+                l.clipsToBounds = true
+                l.translatesAutoresizingMaskIntoConstraints = false
+                return l
+            }()
+
+            let locationPathLabel: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.textColor = .darkGray
+                l.text = location.path.hasSuffix("/") ? String(location.path.characters.dropLast()) : location.path
+                l.numberOfLines = 2
+                l.font = UIFont(name: "HelveticaNeue", size: 14)
+                l.lineBreakMode = .byTruncatingMiddle
+                return l
+            }()
+
+            cell.contentView.addSubview(mountNameLabel)
+            cell.contentView.addSubview(locationPathLabel)
+
+            NSLayoutConstraint.activate([
+                locationPathLabel.leadingAnchor.constraint(equalTo: mountNameLabel.trailingAnchor, constant: 2),
+                locationPathLabel.trailingAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.trailingAnchor),
+                locationPathLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+
+                mountNameLabel.leadingAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leadingAnchor),
+                mountNameLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
+
+        case .link:
 
             if indexPath.row == 0 {
                 cell.contentView.addSubview(baseLinkLabel)
@@ -293,17 +353,15 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                     hashTextField.leadingAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.trailingAnchor, constant: 2),
                     hashTextField.trailingAnchor.constraint(equalTo: saveHashButton.leadingAnchor, constant: -8),
                     hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                    hashTextField.heightAnchor.constraint(equalToConstant: 30)
-                ])
+                    hashTextField.heightAnchor.constraint(equalToConstant: 30)])
 
                 hashTextField.setContentHuggingPriority(249, for: .horizontal)
 
             } else if linkType == .upload {
-
                 let label: UILabel = {
                     let l = UILabel()
                     l.translatesAutoresizingMaskIntoConstraints = false
-                    l.text = NSLocalizedString("Email notifcation", comment: "")
+                    l.text = NSLocalizedString("Email on receiving files", comment: "")
                     return l
                 }()
 
@@ -317,9 +375,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                     uploadNotificationSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
                     ])
             }
-
-        case 1:
-            // PASSWORD
+        case .password:
 
             cell.contentView.addSubview(passwordLabel)
             cell.contentView.addSubview(passwordResetButton)
@@ -331,11 +387,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 passwordResetButton.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 90),
                 passwordResetButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 enablePasswordSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
-                enablePasswordSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-            ])
+                enablePasswordSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
 
-        case 2:
-            // VALIDITY
+        case .validity:
 
             cell.contentView.addSubview(validityLabel)
             cell.contentView.addSubview(changeValidityButton)
@@ -357,14 +411,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 validityDateAndTimePicker.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 validityDateAndTimePicker.heightAnchor.constraint(equalTo: cell.contentView.heightAnchor),
                 saveCustomDateButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
-                saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-            ])
-
-        default:
-            #if DEBUG
-                fatalError("Wrong section index")
-            #endif
-            break
+                saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
         }
 
         return cell
@@ -436,33 +483,17 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             waitingView.leftAnchor.constraint(equalTo: view.leftAnchor),
             waitingView.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
+
+        sections = [.location, .link, .password, .validity]
     }
 
     private func setupTableViewHeaderView() {
 
         let frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 85)
         let headerView = UIImageView(frame: frame)
-        headerView.image = #imageLiteral(resourceName: "shareBackground")
+
+        headerView.image = linkType == .download ? #imageLiteral(resourceName: "share_download_link_background") : #imageLiteral(resourceName: "share_upload_link_background")
         headerView.contentMode = .scaleAspectFit
-
-        let code: String = (linkType == .download ) ? "\u{f0ee}" : "\u{f01a}"
-
-        let iconLabel: UILabel = {
-            let l = UILabel()
-            l.translatesAutoresizingMaskIntoConstraints = false
-            l.attributedText = NSAttributedString(string: String(code),
-                                                  attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 58),
-                                                               NSForegroundColorAttributeName: UIColor.defaultColor.withAlphaComponent(0.3)])
-            return l
-        }()
-
-        headerView.addSubview(iconLabel)
-
-        NSLayoutConstraint.activate([
-            iconLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
-            iconLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
-        ])
-
         tableView.tableHeaderView = headerView
     }
 
@@ -711,6 +742,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         case 4:
             validitySegmentedControl.isHidden = true
             setDateAndTimePickerViewVisible(true)
+            tableView.selectRow(at: IndexPath(row: 0, section: 3), animated: true, scrollPosition: .bottom)
             return
         default:
             return

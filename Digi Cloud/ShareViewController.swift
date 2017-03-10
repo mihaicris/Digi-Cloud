@@ -13,14 +13,16 @@ final class ShareViewController: UITableViewController {
     // MARK: - Properties
 
     let location: Location
+    let node: Node
     var sharingActions: [ActionType] = []
 
     let onFinish: (() -> Void)
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, onFinish: @escaping () -> Void) {
+    init(location: Location, node: Node, onFinish: @escaping () -> Void) {
         self.location = location
+        self.node = node
         self.onFinish = onFinish
         super.init(nibName: nil, bundle: nil)
     }
@@ -83,9 +85,8 @@ final class ShareViewController: UITableViewController {
             self.navigationController?.pushViewController(controller, animated: true)
 
         case .share:
-            let controller = ShareMountViewController(location: self.location, onFinish: self.onFinish)
+            let controller = ShareMountViewController(location: self.location, node: self.node, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
-
         default:
             break
         }
