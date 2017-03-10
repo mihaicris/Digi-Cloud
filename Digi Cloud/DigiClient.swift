@@ -60,7 +60,12 @@ final class DigiClient {
     ///   - data: The data of the network response
     ///   - response: The status code of the network response
     ///   - error: The error occurred in the network request, nil for no error.
-    func networkTask(requestType: RequestType, method: String, headers: [String: String]?, json: [String: Any]?, parameters: [String: String]?,
+    func networkTask(requestType: RequestType,
+                     method: String,
+                     headers: [String: String]?,
+                     json: [String: Any]?,
+                     parameters: [String: String]?,
+                     withoutSerialization: Bool = false,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
         #if DEBUG
@@ -118,12 +123,6 @@ final class DigiClient {
                     return
                 }
 
-                // Did we get a successful status code?
-                if statusCode < 200 || statusCode > 299 {
-                    completion(nil, statusCode, nil)
-                    return
-                }
-
                 /* GUARD: Was there any data returned? */
                 guard let data = data else {
                     completion(nil, statusCode, NetworkingError.data("No data was returned by the request!"))
@@ -131,6 +130,11 @@ final class DigiClient {
                 }
 
                 guard data.count > 0 else {
+                    completion(data, statusCode, nil)
+                    return
+                }
+
+                if withoutSerialization {
                     completion(data, statusCode, nil)
                     return
                 }
@@ -260,7 +264,7 @@ final class DigiClient {
                 return
             }
 
-            guard statusCode != nil && statusCode == 200 else {
+            guard statusCode == 200 else {
                 completion(nil, NetworkingError.wrongStatus("Wrong status \(statusCode!) while receiving user info request."))
                 return
             }
@@ -274,6 +278,35 @@ final class DigiClient {
 
             completion((firstName, lastName), nil)
         }
+    }
+
+    func getUserProfileImage(for user: User, completion: @escaping(_ image: UIImage?, _ error: Error?) -> Void) {
+
+        let method = Methods.UserProfileImage.replacingOccurrences(of: "{userId}", with: user.id)
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil, withoutSerialization: true) { data, statusCode, error in
+
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, NetworkingError.wrongStatus("Wrong status \(statusCode!) while receiving user profile image."))
+                return
+            }
+
+            if let data = data as? Data,
+                let image = UIImage(data: data) {
+                completion(image, nil)
+            } else {
+                completion(nil, ConversionError.data("Could not retrieve the profile image for user with email \(user.email)"))
+            }
+
+        }
+
     }
 
     func getUserNotifications() {
@@ -333,8 +366,8 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - mount: Returned Mount
     ///   - error: The error occurred in the network request, nil for no error.    
-    func getMount(withId id: String, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
-        let method = Methods.MountDetails
+    func getMountDetails(forId id: String, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
+        let method = Methods.MountEdit
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
@@ -347,6 +380,35 @@ final class DigiClient {
 
             let mount = Mount(JSON: json)
             completion(mount, nil)
+        }
+    }
+
+    /// Delete a mount
+    ///
+    /// - Parameters:
+    ///   - mount: Mount to be deleted
+    ///   - completion: The block called after the server has responded
+    ///   - error: The error occurred in the network request, nil for no error.
+    func deleteMount(_ mount: Mount, completion: @escaping (_ error: Error?) -> Void) {
+
+        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
+
+        var headers = DefaultHeaders.DelHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { (_, statusCode, error) in
+
+            guard error == nil else {
+                completion(error!)
+                return
+            }
+
+            guard statusCode == 204 else {
+                completion(NetworkingError.wrongStatus("Error for Mount Deletion: The Status code is different than 204."))
+                return
+            }
+
+            completion(nil)
         }
     }
 
@@ -399,7 +461,7 @@ final class DigiClient {
     ///   - mount: A mount type
     ///   - operation: An UserOperation type
     ///   - user: An user type
-    func addUser(mount: Mount, operation: UserOperation, user: User) {
+    func addMountUser(mount: Mount, operation: UserOperation, user: User) {
 
         var headers: [String: String] = [:]
         var method: String

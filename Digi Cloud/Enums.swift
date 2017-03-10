@@ -24,9 +24,14 @@ enum NetworkingError: Error {
 enum JSONError: Error {
     case parse(String)
 }
+
 enum Authentication: Error {
     case login(String)
     case revoke(String)
+}
+
+enum ConversionError: Error {
+    case data(String)
 }
 
 enum LinkType: String {

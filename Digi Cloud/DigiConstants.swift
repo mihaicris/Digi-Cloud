@@ -45,10 +45,11 @@ struct DataJSONKeys {
 struct Methods {
     static let Token               = "/token"
     static let User                = "/api/v2/user"
+    static let UserProfileImage    = "/content/api/v2/users/{userId}/profile-picture"
     static let UserPassword        = "/api/v2/user/password"
     static let UserBookmarks       = "/api/v2/user/bookmarks"
     static let Mounts              = "/api/v2/mounts"
-    static let MountDetails        = "/api/v2/mounts/{id}"
+    static let MountEdit           = "/api/v2/mounts/{id}"
     static let Bundle              = "/api/v2/mounts/{id}/bundle"
     static let UserAdd             = "/api/v2/mounts/{id}/users"
     static let UserChange          = "/api/v2/mounts/{mountId}/users/{userId}"
@@ -72,5 +73,5 @@ struct Methods {
 
 struct CacheFolders {
     static let Profiles  = "ProfileImages"
-    static let Files    = "Files"
+    static let Files     = "Files"
 }
