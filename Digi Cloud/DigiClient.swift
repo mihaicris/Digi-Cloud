@@ -461,7 +461,7 @@ final class DigiClient {
     ///   - mount: A mount type
     ///   - operation: An UserOperation type
     ///   - user: An user type
-    func addMountUser(mount: Mount, operation: UserOperation, user: User) {
+    func updateMountUser(_ user: User, for mount: Mount, with operation: UserOperation) {
 
         var headers: [String: String] = [:]
         var method: String
