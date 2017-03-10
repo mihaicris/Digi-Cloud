@@ -170,6 +170,9 @@ final class LocationsViewController: UITableViewController {
             }
 
             self.mounts = mountsList ?? []
+            self.mounts = self.mounts.filter {
+                $0.type != "export"
+            }
 
             if self.refreshControl?.isRefreshing == true {
                 if self.tableView.isDragging {
