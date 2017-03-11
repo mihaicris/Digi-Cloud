@@ -13,7 +13,7 @@ final class ShareViewController: UITableViewController {
     // MARK: - Properties
 
     let location: Location
-    let node: Node
+    var node: Node
     var sharingActions: [ActionType] = []
 
     let onFinish: (() -> Void)
@@ -131,7 +131,9 @@ final class ShareViewController: UITableViewController {
     }
 
     @objc private func handleCancel() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            self.onFinish()
+        }
     }
 
 }

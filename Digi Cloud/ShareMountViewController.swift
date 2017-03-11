@@ -75,9 +75,16 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("MEMBERS", comment: "")
-        l.font = UIFont(name: "Helvetica", size: 13)
+        l.font = UIFont(name: "HelveticaNeue", size: 13)
         l.textColor = UIColor(red: 0.43, green: 0.43, blue: 0.45, alpha: 1.0)
         return l
+    }()
+
+    private lazy var addMemberButton: UIButton = {
+        let b = UIButton(type: UIButtonType.contactAdd)
+        b.addTarget(self, action: #selector(handleAddMember), for: .touchUpInside)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        return b
     }()
 
     private var errorMessageVerticalConstraint: NSLayoutConstraint?
@@ -85,6 +92,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     private lazy var waitingView: UIView = {
 
         let v = UIView()
+
+        v.isHidden = true
 
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -138,17 +147,18 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     override func viewDidLoad() {
         navigationController?.isToolbarHidden = false
         setupViews()
-        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
         setupNavigationItems()
         setupToolBarItems()
+        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
         if node.share?.isShared == true {
             users = node.share?.users ?? []
         } else {
-            users = []
+            makeSubmount()
         }
     }
 
@@ -263,6 +273,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         view.addSubview(tableViewForLocation)
         view.addSubview(tableViewForMembers)
         view.addSubview(membersLabel)
+        view.addSubview(addMemberButton)
         view.addSubview(waitingView)
 
         NSLayoutConstraint.activate([
@@ -284,6 +295,9 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             membersLabel.bottomAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor, constant: -10),
             membersLabel.leadingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.leadingAnchor),
 
+            addMemberButton.centerYAnchor.constraint(equalTo: membersLabel.centerYAnchor),
+            addMemberButton.trailingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.trailingAnchor),
+
             tableViewForMembers.topAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor),
             tableViewForMembers.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewForMembers.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -302,14 +316,12 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func setupToolBarItems() {
 
-        let addMemberButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(handleAddMember))
-
         let flexibleButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
         let removeShareButton: UIBarButtonItem = {
             let v = UIButton(type: UIButtonType.system)
             v.setTitle(NSLocalizedString("Remove Share", comment: ""), for: .normal)
-            v.addTarget(self, action: #selector(handleRemoveShare), for: .touchUpInside)
+            v.addTarget(self, action: #selector(handleRemoveMount), for: .touchUpInside)
             v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
             v.setTitleColor(.red, for: .normal)
             v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
@@ -318,13 +330,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             return b
         }()
 
-        var toolBarItems = [flexibleButton, addMemberButton]
-
-        if node.share?.isShared == true {
-            toolBarItems.insert(removeShareButton, at: 0)
-        }
-
-        setToolbarItems(toolBarItems, animated: false)
+        setToolbarItems([flexibleButton, removeShareButton, flexibleButton], animated: false)
     }
 
     private func configureWaitingView(type: WaitingType, message: String) {
@@ -352,7 +358,45 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         }
     }
 
-    @objc private func handleRemoveShare() {
+    private func makeSubmount() {
+
+        DigiClient.shared.createSubmount(at: location, withName: node.name) { mount, error in
+
+            guard error == nil else {
+
+                var errorMessage = NSLocalizedString("There was an error at mount creation.", comment: "")
+
+                switch error! {
+
+                case NetworkingError.wrongStatus(let message):
+                    errorMessage = message
+                default:
+                    break
+                }
+
+                self.configureWaitingView(type: .stopped, message: errorMessage)
+
+                return
+            }
+
+            if let mount = mount {
+                self.users = mount.users
+                self.updateMountInPreviousController(mount)
+            }
+        }
+    }
+
+    private func updateMountInPreviousController(_ mount: Mount) {
+        if let viewControllers = navigationController?.viewControllers {
+            let count = viewControllers.count
+            if count > 0 {
+
+                (viewControllers[count-2] as? ShareViewController)?.node.share = mount
+            }
+        }
+    }
+
+    @objc private func handleRemoveMount() {
 
         guard let mount = node.share else {
             print("No valid mount in node for deletion.")
@@ -380,7 +424,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         }
     }
 
-    @objc func handleAddMember() {
+    @objc private func handleAddMember() {
 
     }
 

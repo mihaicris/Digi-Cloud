@@ -19,7 +19,7 @@ struct Node {
     let size: Int64
     let contentType: String
     let hash: String?
-    let share: Mount?
+    var share: Mount?
     var downloadLink: DownloadLink?
     var uploadLink: UploadLink?
     var bookmark: Bookmark?

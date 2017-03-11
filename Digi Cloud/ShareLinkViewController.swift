@@ -170,6 +170,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         let v = UIView()
 
+        v.isHidden = true
+
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
 

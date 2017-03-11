@@ -50,6 +50,7 @@ struct Methods {
     static let UserBookmarks       = "/api/v2/user/bookmarks"
     static let Mounts              = "/api/v2/mounts"
     static let MountEdit           = "/api/v2/mounts/{id}"
+    static let MountCreate         = "/api/v2/mounts/{id}/submounts"
     static let Bundle              = "/api/v2/mounts/{id}/bundle"
     static let UserAdd             = "/api/v2/mounts/{id}/users"
     static let UserChange          = "/api/v2/mounts/{mountId}/users/{userId}"

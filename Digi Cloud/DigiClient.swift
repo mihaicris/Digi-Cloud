@@ -366,19 +366,57 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - mount: Returned Mount
     ///   - error: The error occurred in the network request, nil for no error.    
-    func getMountDetails(forId id: String, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
-        let method = Methods.MountEdit
+    func getMountDetails(for mount: Mount, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
+        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
 
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { (json, _, error) in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { (json, statusCode, error) in
             guard error == nil else {
                 completion(nil, error!)
                 return
             }
 
-            let mount = Mount(JSON: json)
+            guard statusCode == 200 else {
+                completion(nil, NetworkingError.wrongStatus("Status code different than 200 for mount details."))
+                return
+            }
+
+            guard let mount = Mount(JSON: json) else {
+                completion(nil, JSONError.parse("Error parsing Mount JSON."))
+                return
+            }
+
+            completion(mount, nil)
+        }
+    }
+
+    func createSubmount(at location: Location, withName: String, completion: @escaping( _ mount: Mount?, _ error: Error?) -> Void) {
+        let method = Methods.MountCreate.replacingOccurrences(of: "{id}", with: location.mount.id)
+
+        var headers = DefaultHeaders.PostHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
+
+        let json: [String: String] = ["path": location.path, "name": withName]
+
+        networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
+
+            guard error == nil else {
+                completion(nil, error!)
+                return
+            }
+
+            guard statusCode == 201 else {
+                completion(nil, NetworkingError.wrongStatus("Status code different than 201 for creating submount."))
+                return
+            }
+
+            guard let mount = Mount(JSON: json) else {
+                completion(nil, JSONError.parse("Error parsing Mount JSON."))
+                return
+            }
+
             completion(mount, nil)
         }
     }
