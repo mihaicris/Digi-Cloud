@@ -16,7 +16,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private let location: Location
 
-    private let node: Node
+    private var node: Node
 
     private var mappingProfileImages: [String: UIImage] = [:]
 
@@ -55,6 +55,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let t = UITableView(frame: CGRect.zero, style: .grouped)
         t.translatesAutoresizingMaskIntoConstraints = false
         t.alwaysBounceVertical = false
+        t.bounces = false
         t.delegate = self
         t.dataSource = self
         t.tag = 5
@@ -148,12 +149,13 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         navigationController?.isToolbarHidden = false
         setupViews()
         setupNavigationItems()
-        setupToolBarItems()
         configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        setupToolBarItems()
 
         if node.share?.isShared == true {
             users = node.share?.users ?? []
@@ -380,13 +382,15 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             if let mount = mount {
-                self.users = mount.users
-                self.updateMountInPreviousController(mount)
+                self.saveMount(mount)
             }
         }
     }
 
-    private func updateMountInPreviousController(_ mount: Mount) {
+    private func saveMount(_ mount: Mount) {
+        node.share = mount
+        users = node.share?.users ?? []
+
         if let viewControllers = navigationController?.viewControllers {
             let count = viewControllers.count
             if count > 0 {
@@ -427,5 +431,4 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     @objc private func handleAddMember() {
 
     }
-
 }
