@@ -164,6 +164,8 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     private var errorMessageVerticalConstraint: NSLayoutConstraint?
 
+    private var rightTextFieldConstraintDefault, rightTextFieldConstraintInEditMode: NSLayoutConstraint?
+
     private lazy var waitingView: UIView = {
 
         let v = UIView()
@@ -342,6 +344,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 cell.contentView.addSubview(hashTextField)
                 cell.contentView.addSubview(saveHashButton)
 
+                rightTextFieldConstraintDefault = hashTextField.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor)
+                rightTextFieldConstraintInEditMode = hashTextField.trailingAnchor.constraint(equalTo: saveHashButton.leadingAnchor, constant: -8)
+
                 NSLayoutConstraint.activate([
                     baseLinkLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     baseLinkLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
@@ -351,7 +356,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                     saveHashButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
 
                     hashTextField.leadingAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.trailingAnchor, constant: 2),
-                    hashTextField.trailingAnchor.constraint(equalTo: saveHashButton.leadingAnchor, constant: -8),
+                    rightTextFieldConstraintDefault!,
                     hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     hashTextField.heightAnchor.constraint(equalToConstant: 30)])
 
@@ -372,8 +377,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                     label.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
                     label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     uploadNotificationSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
-                    uploadNotificationSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-                    ])
+                    uploadNotificationSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
             }
         case .password:
 
@@ -431,6 +435,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     func textFieldDidEndEditing(_ textField: UITextField) {
         saveHashButton.isHidden = true
         textField.backgroundColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1.0)
+        setTextFieldConstraintInEditMode(active: false)
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -448,10 +453,18 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         if newHash.characters.count == 0 || newHash == originalLinkHash || hasInvalidCharacters(name: newHash) {
             saveHashButton.isHidden = true
+            setTextFieldConstraintInEditMode(active: false)
         } else {
             saveHashButton.isHidden = false
+            setTextFieldConstraintInEditMode(active: true)
         }
         return true
+    }
+
+    private func setTextFieldConstraintInEditMode(active: Bool) {
+        rightTextFieldConstraintDefault!.isActive = !active
+        rightTextFieldConstraintInEditMode!.isActive = active
+        self.hashTextField.superview!.layoutIfNeeded()
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
