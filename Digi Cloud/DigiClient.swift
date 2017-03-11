@@ -499,26 +499,31 @@ final class DigiClient {
     ///   - mount: A mount type
     ///   - operation: An UserOperation type
     ///   - user: An user type
-    func updateMountUser(_ user: User, for mount: Mount, with operation: UserOperation) {
+    func updateMount(mount: Mount, operation: MountUserUpdateOperation, user: User,
+                     completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
 
-        var headers: [String: String] = [:]
+        var requestType: RequestType
+        var headers: [String: String]
+
         var method: String
         var json: [String: Any]? = [:]
-
         switch operation {
 
         case .add:
+            requestType = .post
             headers = DefaultHeaders.PostHeaders
             method = Methods.UserAdd.replacingOccurrences(of: "{id}", with: mount.id)
+            json?["email"] = user.email
+            json?["permissions"] = user.permissions.json
 
         case .updatePermissions:
-
+            requestType = .put
             headers = DefaultHeaders.PutHeaders
             method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
                 .replacingOccurrences(of: "{userId}", with: user.id)
 
         case .remove:
-
+            requestType = .delete
             headers = DefaultHeaders.DelHeaders
             method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
                 .replacingOccurrences(of: "{userId}", with: user.id)
@@ -527,9 +532,25 @@ final class DigiClient {
 
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        print(headers)
-        print(method)
-        print(json ?? "Json is nil.")
+        networkTask(requestType: requestType, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
+
+            guard error == nil else {
+                completion(nil, NetworkingError.data("Eroare"))
+                return
+            }
+
+            guard statusCode == 201 else {
+                completion(nil, NetworkingError.wrongStatus("Status code is different than 201."))
+                return
+            }
+
+            guard let user = User(JSON: json) else {
+                completion(nil, JSONError.parse("Error parsing User JSON."))
+                return
+            }
+
+            completion(user, nil)
+        }
 
     }
 

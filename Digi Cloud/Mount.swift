@@ -19,7 +19,7 @@ struct Mount {
     let root: [String: String]?
     let online: Bool
     let owner: User
-    let users: [User]
+    var users: [User]
     let isShared: Bool
     let permissions: Permissions
     let spaceTotal: Int?

@@ -14,6 +14,7 @@ struct User {
 }
 
 extension User {
+
     init?(JSON: Any?) {
         if JSON == nil { return nil }
         guard let JSON = JSON as? [String: Any],

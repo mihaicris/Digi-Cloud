@@ -74,7 +74,7 @@ enum WaitingType {
     case hidden
 }
 
-enum UserOperation {
+enum MountUserUpdateOperation {
     case add
     case updatePermissions
     case remove

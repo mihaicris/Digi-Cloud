@@ -400,6 +400,19 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         }
     }
 
+    private func saveUser(_ user: User) {
+        node.share?.users.append(user)
+        users = node.share?.users ?? []
+
+        if let viewControllers = navigationController?.viewControllers {
+            let count = viewControllers.count
+            if count > 0 {
+
+                (viewControllers[count-2] as? ShareViewController)?.node.share?.users.append(user)
+            }
+        }
+    }
+
     @objc private func handleRemoveMount() {
 
         guard let mount = node.share else {
@@ -430,5 +443,29 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     @objc private func handleAddMember() {
 
+        guard let mount = node.share else {
+            print("No valid mount in node for edit.")
+            return
+        }
+
+        configureWaitingView(type: .started, message: "Adding user...")
+
+        let permissions = Permissions()
+        let user = User(id: "", name: "", email: "mcristesc@yahoo.com", permissions: permissions)
+
+        DigiClient.shared.updateMount(mount: mount, operation: .add, user: user) { user, error in
+            guard error == nil else {
+
+                self.configureWaitingView(type: .stopped, message: "Error on adding user.")
+                return
+            }
+
+            if let user = user {
+                self.configureWaitingView(type: .hidden, message: "")
+
+                self.saveUser(user)
+            }
+
+        }
     }
 }
