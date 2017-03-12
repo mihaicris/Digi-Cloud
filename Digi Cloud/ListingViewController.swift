@@ -676,12 +676,6 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    fileprivate func resetSearchViewControllerIndex() {
-        if let nav = navigationController as? MainNavigationController {
-            nav.searchResultsControllerIndex = nil
-        }
-    }
-
     private func setBusyIndicatorView(_ visible: Bool) {
         guard let navControllerView = navigationController?.view else {
             return
@@ -1417,11 +1411,10 @@ extension ListingViewController: UISearchControllerDelegate {
     }
 
     func willDismissSearchController(_ searchController: UISearchController) {
-        guard let src = searchController.searchResultsController as? SearchResultController else {
-            return
+
+        if let nav = navigationController as? MainNavigationController {
+            nav.searchResultsControllerIndex = nil
         }
-        self.resetSearchViewControllerIndex()
-        src.filteredContent.removeAll()
-        src.tableView.reloadData()
+        tableView.tableHeaderView = nil
     }
 }
