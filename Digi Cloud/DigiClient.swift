@@ -539,19 +539,25 @@ final class DigiClient {
                 return
             }
 
-            guard statusCode == 201 else {
-                completion(nil, NetworkingError.wrongStatus("Status code is different than 201."))
+            guard statusCode != nil, CountableRange(200...299).contains(statusCode!) else {
+                completion(nil, NetworkingError.wrongStatus("Status code is not valid."))
                 return
             }
 
-            guard let user = User(JSON: json) else {
-                completion(nil, JSONError.parse("Error parsing User JSON."))
-                return
-            }
+            switch operation {
+            case .add:
+                    fallthrough
+            case .updatePermissions:
+                    guard let user = User(JSON: json) else {
+                        completion(nil, JSONError.parse("Error parsing User JSON."))
+                        return
+                    }
 
-            completion(user, nil)
+                completion(user, nil)
+            case .remove:
+                completion(nil, nil)
+            }
         }
-
     }
 
     // MARK: - Bookmarks

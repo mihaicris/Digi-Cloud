@@ -9,8 +9,8 @@
 struct User {
     let id: String
     let name: String
-    let email: String
-    let permissions: Permissions
+    var email: String
+    var permissions: Permissions
 }
 
 extension User {

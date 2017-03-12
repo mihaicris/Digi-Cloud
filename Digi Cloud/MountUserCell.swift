@@ -27,7 +27,7 @@ class MountUserCell: UITableViewCell {
                         permissionsLabel.backgroundColor = UIColor.magenta.withAlphaComponent(0.4)
                     } else {
                         permissionsLabel.text = NSLocalizedString("READ", comment: "")
-                        permissionsLabel.backgroundColor = UIColor.gray.withAlphaComponent(0.4)
+                        permissionsLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.4)
                     }
                 }
             }

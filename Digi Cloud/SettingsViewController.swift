@@ -145,7 +145,7 @@ final class SettingsViewController: UITableViewController {
                 confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
                 confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
                 confirmButtonHorizontalConstraint
-                ])
+            ])
 
         default:
             return UITableViewCell()

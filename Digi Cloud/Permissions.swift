@@ -11,11 +11,11 @@ struct Permissions {
     // MARK: - Properties
     let read: Bool
     let owner: Bool
-    let mount: Bool
-    let create_receiver: Bool
-    let comment: Bool
-    let write: Bool
-    let create_link: Bool
+    var mount: Bool
+    var create_receiver: Bool
+    var comment: Bool
+    var write: Bool
+    var create_link: Bool
 }
 
 extension Permissions {

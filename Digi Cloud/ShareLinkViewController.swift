@@ -162,7 +162,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return sc
     }()
 
-    private var errorMessageVerticalConstraint: NSLayoutConstraint?
+    private var errorMessageVerticalConstraint: NSLayoutConstraint!
 
     private var rightTextFieldConstraintDefault, rightTextFieldConstraintInEditMode: NSLayoutConstraint?
 
@@ -199,7 +199,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             spinner.centerYAnchor.constraint(equalTo: v.centerYAnchor),
             label.centerXAnchor.constraint(equalTo: v.centerXAnchor),
             label.widthAnchor.constraint(equalTo: v.widthAnchor, multiplier: 0.8),
-            self.errorMessageVerticalConstraint!
+            self.errorMessageVerticalConstraint
         ])
 
         return v
@@ -562,10 +562,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView {
                 if type == .started {
                     v.startAnimating()
-                    errorMessageVerticalConstraint?.constant = 40
+                    errorMessageVerticalConstraint.constant = 40
                 } else {
                     v.stopAnimating()
-                    errorMessageVerticalConstraint?.constant = 0
+                    errorMessageVerticalConstraint.constant = 0
                 }
             }
 
