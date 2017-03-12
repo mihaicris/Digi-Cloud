@@ -54,8 +54,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     private lazy var tableViewForLocation: UITableView = {
         let t = UITableView(frame: CGRect.zero, style: .grouped)
         t.translatesAutoresizingMaskIntoConstraints = false
-        t.alwaysBounceVertical = false
-        t.bounces = false
+        t.isUserInteractionEnabled = false
         t.delegate = self
         t.dataSource = self
         t.tag = 5
@@ -83,7 +82,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private lazy var addMemberButton: UIButton = {
         let b = UIButton(type: UIButtonType.contactAdd)
-        b.addTarget(self, action: #selector(handleAddMember), for: .touchUpInside)
+        b.addTarget(self, action: #selector(showAddMemberView), for: .touchUpInside)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
@@ -128,6 +127,15 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         return v
     }()
 
+    private let addViewTopConstraint: NSLayoutConstraint?
+
+    private let addView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = .lightGray
+        return v
+    }()
+
     // MARK: - Initializers and Deinitializers
 
     init(location: Location, node: Node, onFinish: @escaping () -> Void) {
@@ -149,7 +157,12 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         navigationController?.isToolbarHidden = false
         setupViews()
         setupNavigationItems()
-        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
+
+        if node.share?.isShared == true {
+            configureWaitingView(type: .started, message: NSLocalizedString("Loading members...", comment: ""))
+        } else {
+            configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -194,6 +207,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
+        // LOCATION Table
         if tableView.tag == 5 {
 
             let cell = UITableViewCell()
@@ -239,11 +253,23 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         } else {
 
+            // MEMBERS TABLE
             guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MountUserCell.self), for: indexPath) as? MountUserCell else {
                 return UITableViewCell()
             }
+
+            let user = users[indexPath.row]
             cell.selectionStyle = .none
-            cell.user = users[indexPath.row]
+
+            if let owner = node.share?.owner {
+                if owner == user {
+                    cell.isOwner = true
+                } else {
+                    cell.accessoryType = .disclosureIndicator
+                }
+            }
+
+            cell.user = user
 
             if let image = mappingProfileImages[users[indexPath.row].id] {
                 cell.profileImageView.image = image
@@ -332,7 +358,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             return b
         }()
 
-        setToolbarItems([flexibleButton, removeShareButton, flexibleButton], animated: false)
+        setToolbarItems([flexibleButton, removeShareButton], animated: false)
     }
 
     private func configureWaitingView(type: WaitingType, message: String) {
@@ -394,15 +420,22 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         if let viewControllers = navigationController?.viewControllers {
             let count = viewControllers.count
             if count > 0 {
-
                 (viewControllers[count-2] as? ShareViewController)?.node.share = mount
             }
         }
     }
 
-    private func saveUser(_ user: User) {
-        node.share?.users.append(user)
-        users = node.share?.users ?? []
+    private func updateUser(_ user: User) {
+
+        if let index = users.index(of: user) {
+            users[index] = user
+        } else {
+            users.append(user)
+        }
+
+        users.append(User(id: "1", name: "John Smith", email: "john.smith@apple.com", permissions: Permissions.init(mount: true)))
+
+        node.share?.users = users
 
         if let viewControllers = navigationController?.viewControllers {
             let count = viewControllers.count
@@ -411,6 +444,10 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 (viewControllers[count-2] as? ShareViewController)?.node.share?.users.append(user)
             }
         }
+    }
+
+    private func showAddMemberView() {
+
     }
 
     @objc private func handleRemoveMount() {
@@ -441,7 +478,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         }
     }
 
-    @objc private func handleAddMember() {
+    @objc private func handleAddUser() {
 
         guard let mount = node.share else {
             print("No valid mount in node for edit.")
@@ -454,6 +491,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let user = User(id: "", name: "", email: "mcristesc@yahoo.com", permissions: permissions)
 
         DigiClient.shared.updateMount(mount: mount, operation: .add, user: user) { user, error in
+
             guard error == nil else {
 
                 self.configureWaitingView(type: .stopped, message: "Error on adding user.")
@@ -462,10 +500,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             if let user = user {
                 self.configureWaitingView(type: .hidden, message: "")
-
-                self.saveUser(user)
+                self.updateUser(user)
             }
-
         }
     }
 }

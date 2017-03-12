@@ -37,3 +37,10 @@ extension User {
         self.email = email
     }
 }
+
+extension User: Equatable {
+    static func ==(lhs: User, rhs: User) -> Bool {
+        return lhs.email == rhs.email
+    }
+
+}

@@ -67,4 +67,8 @@ extension Permissions {
         ]
     }
 
+    var isExtended: Bool {
+        return mount || create_receiver || comment || write || create_link
+    }
+
 }
