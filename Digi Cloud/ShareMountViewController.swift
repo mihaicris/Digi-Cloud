@@ -72,27 +72,49 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         let v = UIView()
 
-        v.isHidden = true
+        v.isHidden = false
 
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
 
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.hidesWhenStopped = true
-        spinner.tag = 55
-        spinner.startAnimating()
+        let spinner: UIActivityIndicatorView = {
+            let s = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            s.translatesAutoresizingMaskIntoConstraints = false
+            s.hidesWhenStopped = true
+            s.tag = 55
+            s.startAnimating()
+            return s
+        }()
 
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .gray
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.tag = 99
-        label.numberOfLines = 0
+        let okButton: UIButton = {
+            let b = UIButton(type: UIButtonType.system)
+            b.translatesAutoresizingMaskIntoConstraints = false
+            b.setTitle(NSLocalizedString("OK", comment: ""), for: UIControlState.normal)
+            b.setTitleColor(.white, for: .normal)
+            b.layer.cornerRadius = 10
+            b.contentEdgeInsets = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
+            b.sizeToFit()
+            b.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.9, alpha: 1)
+            b.tag = 11
+            b.isHidden = false
+            b.addTarget(self, action: #selector(handleHideWaitingView), for: .touchUpInside)
+            return b
+        }()
+
+        let label: UILabel = {
+            let l = UILabel()
+            l.translatesAutoresizingMaskIntoConstraints = false
+            l.textColor = .gray
+            l.textAlignment = .center
+            l.font = UIFont.systemFont(ofSize: 14)
+            l.tag = 99
+            l.numberOfLines = 0
+            return l
+        }()
 
         v.addSubview(spinner)
         v.addSubview(label)
+        v.addSubview(okButton)
 
         self.errorMessageVerticalConstraint = label.centerYAnchor.constraint(equalTo: v.centerYAnchor, constant: 40)
 
@@ -101,7 +123,10 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             spinner.centerYAnchor.constraint(equalTo: v.centerYAnchor),
             label.centerXAnchor.constraint(equalTo: v.centerXAnchor),
             label.widthAnchor.constraint(equalTo: v.widthAnchor, multiplier: 0.8),
-            self.errorMessageVerticalConstraint! ])
+            self.errorMessageVerticalConstraint!,
+            okButton.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+            okButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40)
+        ])
 
         return v
     }()
@@ -297,7 +322,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            removeUser(users[indexPath.row])
+            removeUser(at: indexPath)
         }
     }
 
@@ -386,12 +411,15 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         case .started, .stopped:
             waitingView.isHidden = false
             navigationController?.setToolbarHidden(true, animated: false)
-            if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView {
+            if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView,
+                let b = waitingView.viewWithTag(11) as? UIButton {
                 if type == .started {
                     v.startAnimating()
                     errorMessageVerticalConstraint?.constant = 40
+                    b.isHidden = true
                 } else {
                     v.stopAnimating()
+                    b.isHidden = false
                     errorMessageVerticalConstraint?.constant = 0
                 }
             }
@@ -481,31 +509,27 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         }
     }
 
-    private func removeUser(_ user: User) {
+    private func removeUser(at indexPath: IndexPath) {
 
         guard let mount = node.share else {
             print("No valid mount for user addition.")
             return
         }
 
-        configureWaitingView(type: .started, message: "Removing user...")
+        let user = users[indexPath.row]
 
         DigiClient.shared.updateMount(mount: mount, operation: .remove, user: user) { _, error in
 
             guard error == nil else {
-                self.configureWaitingView(type: .started, message: "There was an error while removing the member.")
+                self.configureWaitingView(type: .stopped, message: "There was an error while removing the member.")
                 return
             }
 
-            // remove user from model
-            self.users = self.users.filter({
-                $0.id != user.id
-            })
+            self.users.remove(at: indexPath.row)
+            self.updateUsersInMainShareController()
 
-            // Reload table
-            self.tableViewForUsers.reloadData()
-            self.configureWaitingView(type: .hidden, message: "")
-
+            // Remove from tableView
+            self.tableViewForUsers.deleteRows(at: [indexPath], with: .automatic)
         }
     }
 
@@ -525,15 +549,17 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         // Update the node mount users
         node.share?.users = self.users
 
-        // Update in previous controller on navigation stack
+        self.updateUsersInMainShareController()
+    }
 
-        if let viewControllers = navigationController?.viewControllers {
-            let count = viewControllers.count
-            if count > 0 {
+    private func updateUsersInMainShareController() {
 
-                (viewControllers[count-2] as? ShareViewController)?.node.share?.users = self.users
+        // Update mount in main share ontroller on navigation stack
+
+        if let viewControllers = navigationController?.viewControllers,
+            let shareViewController = viewControllers.first as? ShareViewController {
+                shareViewController.node.share?.users = self.users
             }
-        }
     }
 
     @objc private func showAddMemberView() {
@@ -572,6 +598,10 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 self.onFinish?()
             }
         }
+    }
+
+    @objc func handleHideWaitingView(_ sender: UIButton) {
+        self.configureWaitingView(type: .hidden, message: "")
     }
 
     @objc private func handleDone() {

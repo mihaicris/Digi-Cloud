@@ -218,24 +218,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
     @objc private func handleTextFieldChange() {
         if let email = usernameTextField.text {
-
             self.user.email = email
-/*
-            if newName.isEmpty {
-                setRenameButtonActive(false)
-            } else if hasInvalidCharacters(name: newName) {
-                let message = NSLocalizedString("Characters \\ / : ? < > \" | are not allowed.", comment: "")
-                setMessage(onScreen: true, message)
-                setRenameButtonActive(false)
-            } else if node.name.lowercased() == newName.lowercased() {
-                let message = NSLocalizedString("Name is the same.", comment: "")
-                setMessage(onScreen: true, message)
-                setRenameButtonActive(false)
-            } else {
-                setMessage(onScreen: false)
-                setRenameButtonActive(true)
-            }
-*/
         }
     }
 }
