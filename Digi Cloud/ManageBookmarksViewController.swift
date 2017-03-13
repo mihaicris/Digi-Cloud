@@ -57,7 +57,6 @@ final class ManageBookmarksViewController: UITableViewController {
         tableView.register(BookmarkViewCell.self, forCellReuseIdentifier: String(describing: BookmarkViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
-        self.preferredContentSize.height = 0.01
         self.title = NSLocalizedString("Bookmarks", comment: "")
         getBookmarksAndMounts()
     }
@@ -198,7 +197,6 @@ final class ManageBookmarksViewController: UITableViewController {
                 self.bookmarks = resultBookmarks
                 self.tableView.reloadData()
                 self.updateButtonsToMatchTableState()
-                self.preferredContentSize.height = 450
             } else {
                 self.title = NSLocalizedString("Error on fetching bookmarks", comment: "")
             }

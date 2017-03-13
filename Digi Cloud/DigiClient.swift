@@ -486,10 +486,10 @@ final class DigiClient {
                     return
             }
 
-            let content = nodesListJSON.flatMap { Node(JSON: $0, mountId: location.mount.id) }
-            let rootNode = Node(JSON: rootNodeJSON, mountId: location.mount.id)
+            let nodes = nodesListJSON.flatMap { Node(JSON: $0) }
+            let rootNode = Node(JSON: rootNodeJSON)
 
-            completion(content, rootNode, nil)
+            completion(nodes, rootNode, nil)
         }
     }
 

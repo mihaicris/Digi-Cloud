@@ -12,7 +12,6 @@ struct Node {
 
     // MARK: - Properties
 
-    // via API
     var name: String
     let type: String
     let modified: TimeInterval
@@ -26,7 +25,7 @@ struct Node {
 }
 
 extension Node {
-    init?(JSON: Any, mountId: String? = nil) {
+    init?(JSON: Any /*, mountId: String? = nil */) {
         guard let JSON = JSON as? [String: Any],
             let name = JSON["name"] as? String,
             let type = JSON["type"] as? String,
@@ -47,10 +46,6 @@ extension Node {
         self.mount = Mount(JSON: JSON["mount"])
         self.link = DownloadLink(JSON: JSON["link"])
         self.receiver = UploadLink(JSON: JSON["receiver"])
-
-        if let mountId = mountId {
-            self.bookmark = Bookmark(JSON: JSON["bookmark"], mountId: mountId)
-        }
     }
 }
 
