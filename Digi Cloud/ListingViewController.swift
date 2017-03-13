@@ -155,7 +155,8 @@ final class ListingViewController: UITableViewController {
         super.viewDidLoad()
         setupTableView()
         setupSearchController()
-        setupNavigationBarRightButtonItems()
+        updateNavigationBarItems()
+        setupToolBarButtonItems()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -370,7 +371,13 @@ final class ListingViewController: UITableViewController {
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
 
-    private func setupNavigationBarRightButtonItems() {
+    private func updateNavigationBarItems() {
+
+        if self.rootLocation.path == "/" {
+            self.title = rootLocation.mount.name
+        } else {
+            self.title = (rootLocation.path as NSString).lastPathComponent
+        }
 
         switch self.action {
 
@@ -380,6 +387,17 @@ final class ListingViewController: UITableViewController {
             let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancelCopyOrMoveAction))
 
             navigationItem.rightBarButtonItem = cancelButton
+
+        default:
+            break
+        }
+    }
+
+    private func setupToolBarButtonItems() {
+
+        switch self.action {
+
+        case .copy, .move:
 
             navigationController?.isToolbarHidden = false
 
@@ -394,12 +412,6 @@ final class ListingViewController: UITableViewController {
 
         default:
             self.toolbarItems = [deleteInEditModeButton, flexibleBarButton, copyInEditModeButton, flexibleBarButton, moveInEditModeButton]
-        }
-
-        if self.rootLocation.path == "/" {
-            self.title = rootLocation.mount.name
-        } else {
-            self.title = (rootLocation.path as NSString).lastPathComponent
         }
     }
 
@@ -439,7 +451,7 @@ final class ListingViewController: UITableViewController {
         isUpdating = true
         didReceivedNetworkError = false
 
-        DigiClient.shared.getBundle(for: self.rootLocation) { nodesResult, rootNode, error in
+        DigiClient.shared.getBundle(for: self.rootLocation) { nodesResult, rootNodeResult, error in
 
             self.isUpdating = false
 
@@ -463,8 +475,17 @@ final class ListingViewController: UITableViewController {
                 return
             }
 
-            let nodes: [Node] = nodesResult ?? []
-            self.rootNode = rootNode
+            guard nodesResult != nil, rootNodeResult != nil else {
+
+                print("Error at receiving content.")
+                self.presentError()
+
+                return
+            }
+
+            let nodes: [Node] = nodesResult!
+            self.rootNode = rootNodeResult!
+            self.rootLocation.mount = self.rootNode!.mount!
 
             if self.action == .copy || self.action == .move {
 
@@ -793,11 +814,9 @@ final class ListingViewController: UITableViewController {
             return
         }
 
-        let controller = MoreActionsViewController(location: self.rootLocation, node: rootNode)
+        let controller = MoreActionsViewController(location: rootLocation, node: rootNode)
 
         controller.onSelect = { [unowned self] selection in
-
-            self.dismiss(animated: true, completion: nil)
 
             switch selection {
 

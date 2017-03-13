@@ -12,7 +12,7 @@ struct Location {
 
     // MARK: - Properties
 
-    let mount: Mount
+    var mount: Mount
     let path: String
 }
 

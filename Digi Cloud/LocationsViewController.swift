@@ -22,7 +22,6 @@ final class LocationsViewController: UITableViewController {
 
     private let action: ActionType
     private var isUpdating: Bool = false
-    private var hasLoadedLocations: Bool = false
 
     let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
@@ -58,9 +57,7 @@ final class LocationsViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if !hasLoadedLocations {
-            self.getMounts()
-        }
+        self.getMounts()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -152,7 +149,6 @@ final class LocationsViewController: UITableViewController {
     private func getMounts() {
 
         isUpdating = true
-        hasLoadedLocations = false
 
         DigiClient.shared.getMounts { mountsList, error in
 
@@ -183,8 +179,6 @@ final class LocationsViewController: UITableViewController {
             } else {
                 self.tableView.reloadData()
             }
-
-            self.hasLoadedLocations = true
         }
     }
 

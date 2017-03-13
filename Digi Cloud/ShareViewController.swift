@@ -12,12 +12,10 @@ final class ShareViewController: UITableViewController {
 
     // MARK: - Properties
 
-    let location: Location
-    var node: Node {
-        didSet {
-            setupActions()
-        }
-    }
+    var location: Location
+
+    var node: Node
+
     var sharingActions: [ActionType] = [] {
         didSet {
             tableView.reloadData()

@@ -76,7 +76,10 @@ final class MoreActionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        onSelect?(moreActions[indexPath.row])
+
+        self.dismiss(animated: true) {
+            self.onSelect?(self.moreActions[indexPath.row])
+        }
     }
 
     // MARK: - Helper Functions

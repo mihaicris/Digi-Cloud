@@ -22,10 +22,10 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             if let mount = submount {
                 getUserProfileImages(for: mount.users)
 
-                // Update mount in main share ontroller on navigation stack
+                // Update mount in main share controller on navigation stack
                 if let viewControllers = navigationController?.viewControllers,
                     let shareViewController = viewControllers.first as? ShareViewController {
-                    shareViewController.node.mount = mount
+                    shareViewController.location.mount = mount
                     shareViewController.setupActions()
                 }
             }
