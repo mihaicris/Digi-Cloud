@@ -25,7 +25,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 // Update mount in main share ontroller on navigation stack
                 if let viewControllers = navigationController?.viewControllers,
                     let shareViewController = viewControllers.first as? ShareViewController {
-                    shareViewController.node.share = mount
+                    shareViewController.node.mount = mount
                     shareViewController.setupActions()
                 }
             }

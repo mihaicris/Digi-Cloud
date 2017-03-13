@@ -18,7 +18,7 @@ class BaseListCell: UITableViewCell {
         }
     }
 
-    var hasDownloadLink: Bool = false
+    var hasLink: Bool = false
 
     var actionsButton: UIButton = {
         let button = UIButton(type: UIButtonType.system)

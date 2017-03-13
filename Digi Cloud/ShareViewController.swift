@@ -93,7 +93,7 @@ final class ShareViewController: UITableViewController {
             self.navigationController?.pushViewController(controller, animated: true)
 
         case .share:
-            let controller = ShareMountViewController(location: self.location, submount: self.node.share, onFinish: self.onFinish)
+            let controller = ShareMountViewController(location: self.location, submount: self.node.mount, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
         default:
             break

@@ -127,13 +127,11 @@ final class MoreActionsViewController: UITableViewController {
 
     private func setupActions() {
 
-        moreActions.append(.bookmark)
-
-        if location.mount.permissions.create_link
-            || location.mount.permissions.create_receiver
-            || location.mount.permissions.mount {
+        if location.mount.permissions.create_link || location.mount.permissions.create_receiver || location.mount.permissions.mount {
             moreActions.append(.share)
         }
+
+        moreActions.append(.bookmark)
 
         if location.mount.canWrite {
             moreActions.append(.createDirectory)

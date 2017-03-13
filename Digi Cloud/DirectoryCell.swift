@@ -12,6 +12,8 @@ final class DirectoryCell: BaseListCell {
 
     // MARK: - Properties
 
+    var hasReceiver: Bool = false
+
     var isShared: Bool = false {
         didSet {
             setupSharedLabel()
@@ -41,8 +43,6 @@ final class DirectoryCell: BaseListCell {
         im.translatesAutoresizingMaskIntoConstraints = false
         return im
     }()
-
-    var hasUploadLink: Bool = false
 
     // MARK: - Overridden Methods and Properties
 

@@ -19,9 +19,9 @@ struct Node {
     let size: Int64
     let contentType: String
     let hash: String?
-    var share: Mount?
-    var downloadLink: DownloadLink?
-    var uploadLink: UploadLink?
+    var mount: Mount?
+    var link: DownloadLink?
+    var receiver: UploadLink?
     var bookmark: Bookmark?
 }
 
@@ -44,9 +44,9 @@ extension Node {
         self.size = size
         self.contentType = contentType
         self.hash = JSON["hash"] as? String
-        self.share = Mount(JSON: JSON["mount"])
-        self.downloadLink = DownloadLink(JSON: JSON["link"])
-        self.uploadLink = UploadLink(JSON: JSON["receiver"])
+        self.mount = Mount(JSON: JSON["mount"])
+        self.link = DownloadLink(JSON: JSON["link"])
+        self.receiver = UploadLink(JSON: JSON["receiver"])
 
         if let mountId = mountId {
             self.bookmark = Bookmark(JSON: JSON["bookmark"], mountId: mountId)

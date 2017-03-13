@@ -158,36 +158,41 @@ final class NodeActionsViewController: UITableViewController {
 
         if node.type == "dir" {
 
-            if location.mount.permissions.create_link || location.mount.permissions.create_receiver
-                || location.mount.permissions.mount {
+            if location.mount.permissions.create_link || location.mount.permissions.create_receiver || location.mount.permissions.mount {
                 permittedActions.append(.share)
             }
 
+            permittedActions.append(.bookmark)
+
+            if location.mount.canWrite {
+                permittedActions.append(.rename)
+            }
+
+            permittedActions.append(.copy)
+
+            if location.mount.canWrite {
+                permittedActions.append(.move)
+            }
+
+            permittedActions.append(.folderInfo)
+
         } else {
+
             if location.mount.permissions.create_link {
                 permittedActions.append(.sendDownloadLink)
+                permittedActions.append(.makeOffline)
             }
-        }
 
-        if node.type == "dir" {
-            permittedActions.append(.bookmark)
-        } else {
-            permittedActions.append(.makeOffline)
-        }
+            if location.mount.canWrite {
+                permittedActions.append(.rename)
+            }
 
-        if location.mount.canWrite {
-            permittedActions.append(contentsOf: [.rename])
-        }
+            permittedActions.append(.copy)
 
-        permittedActions.append(.copy) // possible in Read mode only
+            if location.mount.canWrite {
+                permittedActions.append(.move)
+            }
 
-        if location.mount.canWrite {
-            permittedActions.append(contentsOf: [.move])
-        }
-
-        if node.type == "dir" {
-            permittedActions.append(.folderInfo)
-        } else {
             if location.mount.canWrite {
                 permittedActions.append(.delete)
             }

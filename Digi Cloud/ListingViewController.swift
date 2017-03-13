@@ -26,14 +26,16 @@ final class ListingViewController: UITableViewController {
     private var location: Location
 
     // The current node in normal listing mode
-    private var node: Node?
+    private var rootNode: Node?
+
+    // The content of the rootnode
+    private var nodes: [Node] = []
 
     // When coping or moving files/directories, this property will hold the source location which is passed between
     // controllers on navigation stack.
     private var sourceLocations: [Location]?
 
     private var needRefresh: Bool = true
-    private var content: [Node] = []
     private let searchResult: String?
     private var isUpdating: Bool = false
     private var isActionConfirmed: Bool = false
@@ -162,7 +164,7 @@ final class ListingViewController: UITableViewController {
             tableView.tableHeaderView = nil
         }
         if needRefresh {
-            content.removeAll()
+            nodes.removeAll()
             busyIndicator.startAnimating()
             emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "")
             tableView.reloadData()
@@ -191,11 +193,11 @@ final class ListingViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return content.isEmpty ? 2 : content.count
+        return nodes.isEmpty ? 2 : nodes.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if content.isEmpty {
+        if nodes.isEmpty {
 
             let cell = UITableViewCell()
             cell.isUserInteractionEnabled = false
@@ -210,7 +212,7 @@ final class ListingViewController: UITableViewController {
             return cell
         }
 
-        let item = content[indexPath.row]
+        let item = nodes[indexPath.row]
 
         if item.type == "dir" {
 
@@ -235,22 +237,22 @@ final class ListingViewController: UITableViewController {
             cell.nameLabel.text = item.name
 
             cell.hasButton = [ActionType.noAction, ActionType.showSearchResult].contains(self.action)
-            cell.isShared = item.share != nil
-            cell.hasDownloadLink = item.downloadLink != nil
-            cell.hasUploadLink = item.uploadLink != nil
+            cell.isShared = item.mount != nil
+            cell.hasLink = item.link != nil
+            cell.hasReceiver = item.receiver != nil
             cell.isBookmarked = item.bookmark != nil
 
             let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
 
             let detailAttributtedString = NSMutableAttributedString(string: modifiedDateString)
 
-            if cell.hasDownloadLink {
+            if cell.hasLink {
                 // http://fontawesome.io/icon/cloud-upload/
                 let attributedString = NSAttributedString(string: "  \u{f0aa}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
-            if cell.hasUploadLink {
+            if cell.hasReceiver {
                 // http://fontawesome.io/icon/cloud-download/
                 let attributedString = NSAttributedString(string: "  \u{f0ab}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
@@ -277,7 +279,7 @@ final class ListingViewController: UITableViewController {
                 cell.detailsLabel.isEnabled = false
             }
 
-            cell.hasDownloadLink = item.downloadLink != nil
+            cell.hasLink = item.link != nil
             cell.nameLabel.text = item.name
 
             let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
@@ -285,7 +287,7 @@ final class ListingViewController: UITableViewController {
 
             let detailAttributtedString = NSMutableAttributedString(string: sizeString + "・" + modifiedDateString)
 
-            if cell.hasDownloadLink {
+            if cell.hasLink {
                 // http://fontawesome.io/icon/cloud-upload/
                 let attributedString = NSAttributedString(string: "  \u{f0aa}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
@@ -313,7 +315,7 @@ final class ListingViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
         refreshControl?.endRefreshing()
 
-        let selectedNode = content[indexPath.row]
+        let selectedNode = nodes[indexPath.row]
 
         let newLocation = self.location.appendingPathComponentFrom(node: selectedNode)
 
@@ -449,7 +451,7 @@ final class ListingViewController: UITableViewController {
 
                 case NetworkingError.wrongStatus(let message):
                     self.emptyFolderLabel.text = message
-                    self.content.removeAll()
+                    self.nodes.removeAll()
                     self.tableView.reloadData()
                 default:
 
@@ -462,18 +464,18 @@ final class ListingViewController: UITableViewController {
             }
 
             let nodes: [Node] = nodesResult ?? []
-            self.node = rootNode
+            self.rootNode = rootNode
 
             if self.action == .copy || self.action == .move {
 
                 // While copy and move, we sort by name with folders shown first
-                self.content = nodes.sorted {
+                self.nodes = nodes.sorted {
                     return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type)
                 }
             } else {
 
                 // In normal case (.noAction) we just sort the content with the method saved by the user.
-                self.content = nodes
+                self.nodes = nodes
                 self.sortContent()
             }
 
@@ -503,7 +505,7 @@ final class ListingViewController: UITableViewController {
 
                 var indexFound = -1
 
-                for (index, node) in self.content.enumerated() {
+                for (index, node) in self.nodes.enumerated() {
                     if node.name.lowercased() == nameToHighlight {
                         indexFound = index
                         break
@@ -631,15 +633,15 @@ final class ListingViewController: UITableViewController {
     private func sortByName() {
         if AppSettings.showsFoldersFirst {
             if AppSettings.sortAscending {
-                self.content.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
+                self.nodes.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
             } else {
-                self.content.sort { return $0.type == $1.type ? ($0.name.lowercased() > $1.name.lowercased()) : ($0.type < $1.type) }
+                self.nodes.sort { return $0.type == $1.type ? ($0.name.lowercased() > $1.name.lowercased()) : ($0.type < $1.type) }
             }
         } else {
             if AppSettings.sortAscending {
-                self.content.sort { return $0.name.lowercased() < $1.name.lowercased() }
+                self.nodes.sort { return $0.name.lowercased() < $1.name.lowercased() }
             } else {
-                self.content.sort { return $0.name.lowercased() > $1.name.lowercased() }
+                self.nodes.sort { return $0.name.lowercased() > $1.name.lowercased() }
             }
         }
     }
@@ -647,32 +649,32 @@ final class ListingViewController: UITableViewController {
     private func sortByDate() {
         if AppSettings.showsFoldersFirst {
             if AppSettings.sortAscending {
-                self.content.sort { return $0.type == $1.type ? ($0.modified < $1.modified) : ($0.type < $1.type) }
+                self.nodes.sort { return $0.type == $1.type ? ($0.modified < $1.modified) : ($0.type < $1.type) }
             } else {
-                self.content.sort { return $0.type == $1.type ? ($0.modified > $1.modified) : ($0.type < $1.type) }
+                self.nodes.sort { return $0.type == $1.type ? ($0.modified > $1.modified) : ($0.type < $1.type) }
             }
         } else {
             if AppSettings.sortAscending {
-                self.content.sort { return $0.modified < $1.modified }
+                self.nodes.sort { return $0.modified < $1.modified }
             } else {
-                self.content.sort { return $0.modified > $1.modified }
+                self.nodes.sort { return $0.modified > $1.modified }
             }
         }
     }
 
     private func sortBySize() {
         if AppSettings.sortAscending {
-            self.content.sort { return $0.type == $1.type ? ($0.size < $1.size) : ($0.type < $1.type) }
+            self.nodes.sort { return $0.type == $1.type ? ($0.size < $1.size) : ($0.type < $1.type) }
         } else {
-            self.content.sort { return $0.type == $1.type ? ($0.size > $1.size) : ($0.type < $1.type) }
+            self.nodes.sort { return $0.type == $1.type ? ($0.size > $1.size) : ($0.type < $1.type) }
         }
     }
 
     private func sortByContentType() {
         if AppSettings.sortAscending {
-            self.content.sort { return $0.type == $1.type ? ($0.ext < $1.ext) : ($0.type < $1.type) }
+            self.nodes.sort { return $0.type == $1.type ? ($0.ext < $1.ext) : ($0.type < $1.type) }
         } else {
-            self.content.sort { return $0.type == $1.type ? ($0.ext > $1.ext) : ($0.type < $1.type) }
+            self.nodes.sort { return $0.type == $1.type ? ($0.ext > $1.ext) : ($0.type < $1.type) }
         }
     }
 
@@ -782,7 +784,7 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleShowMoreActionsViewController(_ sender: UIBarButtonItem) {
 
-        guard let rootNode = self.node else {
+        guard let rootNode = self.rootNode else {
             print("No valid root node fetched in updateContent.")
             return
         }
@@ -807,7 +809,7 @@ final class ListingViewController: UITableViewController {
                 self.handleShowCreateDirectoryViewController()
 
             case .selectionMode:
-                if self.content.isEmpty { return }
+                if self.nodes.isEmpty { return }
                 self.activateEditMode()
 
             case .share:
@@ -890,7 +892,7 @@ final class ListingViewController: UITableViewController {
         self.animateActionButton(sender)
 
         let nodeIndex = sender.tag
-        let node = self.content[nodeIndex]
+        let node = self.nodes[nodeIndex]
         let nodeLocation = node.location(in: self.location)
 
         let controller = NodeActionsViewController(location: nodeLocation, node: node)
@@ -946,7 +948,7 @@ final class ListingViewController: UITableViewController {
         guard let chosenAction = ActionType(rawValue: sender.tag) else { return }
         guard let selectedItemsIndexPaths = tableView.indexPathsForSelectedRows else { return }
 
-        let sourceLocations = selectedItemsIndexPaths.map { content[$0.row].location(in: self.location) }
+        let sourceLocations = selectedItemsIndexPaths.map { nodes[$0.row].location(in: self.location) }
 
         switch chosenAction {
         case .delete:
@@ -1044,10 +1046,10 @@ final class ListingViewController: UITableViewController {
         func updateBookmarkIcon(bookmark: Bookmark?) {
             if let index = index {
                 let indexPath = IndexPath(row: index, section: 0)
-                self.content[indexPath.row].bookmark = bookmark
+                self.nodes[indexPath.row].bookmark = bookmark
                 self.tableView.reloadRows(at: [indexPath], with: .none)
             } else {
-                self.node?.bookmark = bookmark
+                self.rootNode?.bookmark = bookmark
             }
         }
 
@@ -1096,8 +1098,8 @@ final class ListingViewController: UITableViewController {
                 case 200:
                     // Delete successfully completed
 
-                    self.content.remove(at: index)
-                    if self.content.isEmpty {
+                    self.nodes.remove(at: index)
+                    if self.nodes.isEmpty {
                         self.updateLocationContentMessage()
                     } else {
                         self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .left)
@@ -1141,7 +1143,7 @@ final class ListingViewController: UITableViewController {
                 wasFound = false
 
                 // check all nodes for the initial name or new name incremented
-                for node in self.content {
+                for node in self.nodes {
                     if node.name == destinationName {
                         // set the flags
                         wasFound = true
@@ -1283,7 +1285,7 @@ final class ListingViewController: UITableViewController {
         let controller = RenameViewController(nodeLocation: location, node: node)
 
         controller.onRename = { [weak self] name in
-            self?.content[index].name = name
+            self?.nodes[index].name = name
 
             self?.tableView.reloadRows(at: [IndexPath.init(row: index, section: 0)], with: .middle)
 
