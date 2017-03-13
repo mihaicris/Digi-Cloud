@@ -213,7 +213,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 l.font = UIFont(name: "HelveticaNeue", size: 12)
                 l.adjustsFontSizeToFitWidth = true
                 l.textColor = .darkGray
-                l.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+                l.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
                 l.text = location.mount.name
                 l.layer.cornerRadius = 4
                 l.clipsToBounds = true

@@ -20,14 +20,17 @@ class MountUserCell: UITableViewCell {
 
                 if isOwner {
                     permissionsLabel.text = NSLocalizedString("OWNER", comment: "")
+                    permissionsLabel.textColor = .white
                     permissionsLabel.backgroundColor = UIColor.blue.withAlphaComponent(0.6)
                 } else {
                     if user.permissions.isExtended {
                         permissionsLabel.text = NSLocalizedString("EXTENDED", comment: "")
-                        permissionsLabel.backgroundColor = UIColor.magenta.withAlphaComponent(0.4)
+                        permissionsLabel.textColor = .white
+                        permissionsLabel.backgroundColor = UIColor(red: 202/255, green: 187/255, blue: 250/255, alpha: 1.0)
                     } else {
                         permissionsLabel.text = NSLocalizedString("READ", comment: "")
-                        permissionsLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.4)
+                        permissionsLabel.textColor = .darkGray
+                        permissionsLabel.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
                     }
                 }
             }
@@ -63,7 +66,6 @@ class MountUserCell: UITableViewCell {
     let permissionsLabel: UILabelWithPadding = {
         let l = UILabelWithPadding(paddingTop: 2, paddingLeft: 4, paddingBottom: 2, paddingRight: 4)
         l.font = UIFont.systemFont(ofSize: 10)
-        l.textColor = .white
         l.layer.cornerRadius = 4
         l.clipsToBounds = true
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -106,7 +108,7 @@ class MountUserCell: UITableViewCell {
             emailLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
             emailLabel.rightAnchor.constraint(equalTo: nameLabel.rightAnchor),
 
-            permissionsLabel.leftAnchor.constraint(equalTo: self.rightAnchor, constant: -100),
+            permissionsLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
             permissionsLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
         ])
     }
