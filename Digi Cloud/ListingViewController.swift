@@ -23,7 +23,7 @@ final class ListingViewController: UITableViewController {
     private let action: ActionType
 
     // The current location in normal listing mode
-    private var location: Location
+    private var rootLocation: Location
 
     // The current node in normal listing mode
     private var rootNode: Node?
@@ -135,7 +135,7 @@ final class ListingViewController: UITableViewController {
     // MARK: - Initializers and Deinitializers
 
     init(location: Location, action: ActionType, searchResult: String? = nil, sourceLocations: [Location]? = nil) {
-        self.location = location
+        self.rootLocation = location
         self.action = action
         self.searchResult = searchResult
         self.sourceLocations = sourceLocations
@@ -223,7 +223,7 @@ final class ListingViewController: UITableViewController {
             // In copy or move mode you cannot copy or move a directory into itself.
             if self.action == .copy || self.action == .move {
                 if let sourceLocations = sourceLocations {
-                    if sourceLocations.contains(item.location(in: self.location)) {
+                    if sourceLocations.contains(item.location(in: self.rootLocation)) {
                         cell.isUserInteractionEnabled = false
                         cell.nameLabel.isEnabled = false
                         cell.detailsLabel.isEnabled = false
@@ -317,7 +317,7 @@ final class ListingViewController: UITableViewController {
 
         let selectedNode = nodes[indexPath.row]
 
-        let newLocation = self.location.appendingPathComponentFrom(node: selectedNode)
+        let newLocation = self.rootLocation.appendingPathComponentFrom(node: selectedNode)
 
         if selectedNode.type == "dir" {
 
@@ -396,17 +396,17 @@ final class ListingViewController: UITableViewController {
             self.toolbarItems = [deleteInEditModeButton, flexibleBarButton, copyInEditModeButton, flexibleBarButton, moveInEditModeButton]
         }
 
-        if self.location.path == "/" {
-            self.title = location.mount.name
+        if self.rootLocation.path == "/" {
+            self.title = rootLocation.mount.name
         } else {
-            self.title = (location.path as NSString).lastPathComponent
+            self.title = (rootLocation.path as NSString).lastPathComponent
         }
     }
 
     private func setupSearchController() {
 
         // Pass the location of the current directory
-        let src = SearchResultController(location: self.location)
+        let src = SearchResultController(location: self.rootLocation)
 
         searchController = UISearchController(searchResultsController: src)
         searchController.delegate = self
@@ -439,7 +439,7 @@ final class ListingViewController: UITableViewController {
         isUpdating = true
         didReceivedNetworkError = false
 
-        DigiClient.shared.getBundle(for: self.location) { nodesResult, rootNode, error in
+        DigiClient.shared.getBundle(for: self.rootLocation) { nodesResult, rootNode, error in
 
             self.isUpdating = false
 
@@ -594,7 +594,7 @@ final class ListingViewController: UITableViewController {
     private func updateToolBarButtonItemsToMatchTableState() {
         if tableView.indexPathsForSelectedRows != nil, toolbarItems != nil {
 
-            if location.mount.canWrite {
+            if rootLocation.mount.canWrite {
                 moveInEditModeButton.isEnabled = true
                 deleteInEditModeButton.isEnabled = true
             }
@@ -793,7 +793,7 @@ final class ListingViewController: UITableViewController {
             return
         }
 
-        let controller = MoreActionsViewController(location: self.location, node: rootNode)
+        let controller = MoreActionsViewController(location: self.rootLocation, node: rootNode)
 
         controller.onSelect = { [unowned self] selection in
 
@@ -803,7 +803,7 @@ final class ListingViewController: UITableViewController {
 
             case .bookmark:
                 self.setNeedsRefreshInPrevious()
-                self.executeToogleBookmark(location: self.location, node: rootNode)
+                self.executeToogleBookmark(location: self.rootLocation, node: rootNode)
 
             case .createDirectory:
                 self.handleShowCreateDirectoryViewController()
@@ -813,7 +813,7 @@ final class ListingViewController: UITableViewController {
                 self.activateEditMode()
 
             case .share:
-                self.showShareViewController(location: self.location, node: rootNode)
+                self.showShareViewController(location: self.rootLocation, node: rootNode)
 
             default:
                 #if DEBUG
@@ -854,7 +854,7 @@ final class ListingViewController: UITableViewController {
 
     @objc private func handleShowCreateDirectoryViewController() {
 
-        let controller = CreateDirectoryViewController(parentLocation: self.location)
+        let controller = CreateDirectoryViewController(parentLocation: self.rootLocation)
 
         controller.onFinish = { [unowned self] (folderName) in
 
@@ -868,7 +868,7 @@ final class ListingViewController: UITableViewController {
                 }
             }
 
-            let newLocation = self.location.appendingPathComponent(folderName, isDirectory: true)
+            let newLocation = self.rootLocation.appendingPathComponent(folderName, isDirectory: true)
 
             let controller = ListingViewController(location: newLocation, action: self.action, sourceLocations: self.sourceLocations)
 
@@ -893,7 +893,7 @@ final class ListingViewController: UITableViewController {
 
         let nodeIndex = sender.tag
         let node = self.nodes[nodeIndex]
-        let nodeLocation = node.location(in: self.location)
+        let nodeLocation = node.location(in: self.rootLocation)
 
         let controller = NodeActionsViewController(location: nodeLocation, node: node)
 
@@ -948,7 +948,7 @@ final class ListingViewController: UITableViewController {
         guard let chosenAction = ActionType(rawValue: sender.tag) else { return }
         guard let selectedItemsIndexPaths = tableView.indexPathsForSelectedRows else { return }
 
-        let sourceLocations = selectedItemsIndexPaths.map { nodes[$0.row].location(in: self.location) }
+        let sourceLocations = selectedItemsIndexPaths.map { nodes[$0.row].location(in: self.rootLocation) }
 
         switch chosenAction {
         case .delete:
@@ -1131,7 +1131,7 @@ final class ListingViewController: UITableViewController {
         let index = sourceName.getIndexBeforeExtension()
 
         // Start with initial destination location.
-        var destinationLocation = self.location.appendingPathComponent(sourceName, isDirectory: isDirectory)
+        var destinationLocation = self.rootLocation.appendingPathComponent(sourceName, isDirectory: isDirectory)
 
         if self.action == .copy {
             var destinationName = sourceName
@@ -1170,7 +1170,7 @@ final class ListingViewController: UITableViewController {
             } while (wasRenamed && wasFound)
 
             // change the file/folder name with incremented one
-            destinationLocation = self.location.appendingPathComponent(destinationName, isDirectory: isDirectory)
+            destinationLocation = self.rootLocation.appendingPathComponent(destinationName, isDirectory: isDirectory)
         }
 
         dispatchGroup.enter()
@@ -1354,7 +1354,7 @@ final class ListingViewController: UITableViewController {
 
             } else {
 
-                let aLocation = (controller as! ListingViewController).location
+                let aLocation = (controller as! ListingViewController).rootLocation
 
                 let c = ListingViewController(location: aLocation, action: action, sourceLocations: sourceLocations)
                 c.title = controller.title
