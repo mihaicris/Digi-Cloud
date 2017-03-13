@@ -13,8 +13,16 @@ final class ShareViewController: UITableViewController {
     // MARK: - Properties
 
     let location: Location
-    var node: Node
-    var sharingActions: [ActionType] = []
+    var node: Node {
+        didSet {
+            setupActions()
+        }
+    }
+    var sharingActions: [ActionType] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     let onFinish: (() -> Void)
 
@@ -85,7 +93,7 @@ final class ShareViewController: UITableViewController {
             self.navigationController?.pushViewController(controller, animated: true)
 
         case .share:
-            let controller = ShareMountViewController(location: self.location, node: self.node, onFinish: self.onFinish)
+            let controller = ShareMountViewController(location: self.location, submount: self.node.share, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
         default:
             break
@@ -113,21 +121,28 @@ final class ShareViewController: UITableViewController {
         navigationItem.setRightBarButton(cancelButton, animated: false)
     }
 
-    private func setupActions() {
+    func setupActions() {
+
+        var actions: [ActionType] = []
+
         if location.mount.permissions.create_link {
-            sharingActions.append(ActionType.sendDownloadLink)
+            actions.append(ActionType.sendDownloadLink)
         }
 
         if location.mount.permissions.create_receiver {
-            sharingActions.append(ActionType.sendUploadLink)
+            actions.append(ActionType.sendUploadLink)
         }
 
         if location.mount.permissions.mount {
-            sharingActions.append(ActionType.share)
+            actions.append(ActionType.share)
         }
 
-        // At least 1 action should be true
-        assert(sharingActions.count > 0, "At least on permission should be granted for sharing in this point.")
+        if actions.isEmpty {
+           handleCancel()
+        }
+
+        sharingActions = actions
+
     }
 
     @objc private func handleCancel() {

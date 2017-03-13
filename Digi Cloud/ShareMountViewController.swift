@@ -16,17 +16,31 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private let location: Location
 
-    private var node: Node
+    private var submount: Mount? {
+        didSet {
+
+            if let mount = submount {
+                getUserProfileImages(for: mount.users)
+
+                // Update mount in main share ontroller on navigation stack
+                if let viewControllers = navigationController?.viewControllers,
+                    let shareViewController = viewControllers.first as? ShareViewController {
+                    shareViewController.node.share = mount
+                    shareViewController.setupActions()
+                }
+            }
+        }
+    }
 
     private var mappingProfileImages: [String: UIImage] = [:]
 
     private var users: [User] = []
 
-    private var hasAppearedOnce = false
+    private let toolBarShouldAlwaisBeHidden: Bool
 
     enum TableViewType: Int {
         case location = 0
-        case members
+        case users
     }
 
     private lazy var tableViewForLocation: UITableView = {
@@ -45,12 +59,12 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         t.alwaysBounceVertical = true
         t.delegate = self
         t.dataSource = self
-        t.tag = TableViewType.members.rawValue
+        t.tag = TableViewType.users.rawValue
         t.register(MountUserCell.self, forCellReuseIdentifier: String(describing: MountUserCell.self))
         return t
     }()
 
-    let membersLabel: UILabel = {
+    let usersLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("MEMBERS", comment: "")
@@ -59,9 +73,9 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         return l
     }()
 
-    private lazy var addMemberButton: UIButton = {
+    private lazy var addUserButton: UIButton = {
         let b = UIButton(type: UIButtonType.contactAdd)
-        b.addTarget(self, action: #selector(showAddMemberView), for: .touchUpInside)
+        b.addTarget(self, action: #selector(showAddUserView), for: .touchUpInside)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
@@ -133,10 +147,11 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, node: Node, onFinish: @escaping () -> Void) {
+    init(location: Location, submount: Mount? = nil, onFinish: @escaping () -> Void) {
         self.location = location
-        self.node = node
+        self.submount = submount
         self.onFinish = onFinish
+        self.toolBarShouldAlwaisBeHidden = submount?.type == "device"
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -153,26 +168,23 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         setupNavigationItems()
         setupToolBarItems()
 
-        if node.share?.isShared == true {
-            configureWaitingView(type: .started, message: NSLocalizedString("Loading members...", comment: ""))
+        if submount == nil {
+            createMount()
         } else {
-            configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
+            refreshMount()
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if waitingView.isHidden {
+            self.navigationController?.isToolbarHidden = self.toolBarShouldAlwaisBeHidden
         }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        if hasAppearedOnce { return }
-
-        hasAppearedOnce = true
-
-        if let mount = node.share, mount.isShared == true {
-            getUserProfileImages(for: mount.users)
-
-        } else {
-            createMount()
-        }
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -186,7 +198,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         switch type {
         case .location:
             headerTitle = NSLocalizedString("LOCATION", comment: "")
-        case .members:
+        case .users:
             break
         }
         return headerTitle
@@ -201,7 +213,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         switch type {
         case .location:
             return 35
-        case .members:
+        case .users:
             return 0.01
         }
     }
@@ -215,7 +227,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         switch type {
         case .location:
             return 1
-        case .members:
+        case .users:
             return users.count
         }
     }
@@ -270,7 +282,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             return cell
 
-        case .members:
+        case .users:
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MountUserCell.self), for: indexPath) as? MountUserCell else {
                 return UITableViewCell()
@@ -279,7 +291,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             let user = users[indexPath.row]
             cell.selectionStyle = .none
 
-            if let owner = node.share?.owner {
+            if let owner = submount?.owner {
                 if owner == user {
                     cell.isOwner = true
                     cell.isUserInteractionEnabled = false
@@ -303,7 +315,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        guard let mount = node.share else {
+        guard let mount = submount else {
             print("No valid mount in node for editing.")
             return
         }
@@ -312,8 +324,9 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         let controller = AddMountUserViewController(mount: mount, user: user)
 
-        controller.onUpdatedUser = { [weak self] user in
-            self?.getUserProfileImages(for: [user], needsDismiss: true)
+        controller.onUpdatedUser = { [weak self] in
+            self?.refreshMount()
+            _ = self?.navigationController?.popViewController(animated: true)
         }
 
         navigationController?.pushViewController(controller, animated: true)
@@ -341,8 +354,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         view.addSubview(headerView)
         view.addSubview(tableViewForLocation)
         view.addSubview(tableViewForUsers)
-        view.addSubview(membersLabel)
-        view.addSubview(addMemberButton)
+        view.addSubview(usersLabel)
+        view.addSubview(addUserButton)
         view.addSubview(waitingView)
 
         NSLayoutConstraint.activate([
@@ -361,11 +374,11 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             tableViewForLocation.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableViewForLocation.rightAnchor.constraint(equalTo: view.rightAnchor),
 
-            membersLabel.bottomAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor, constant: -10),
-            membersLabel.leadingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.leadingAnchor),
+            usersLabel.bottomAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor, constant: -10),
+            usersLabel.leadingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.leadingAnchor),
 
-            addMemberButton.centerYAnchor.constraint(equalTo: membersLabel.centerYAnchor),
-            addMemberButton.trailingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.trailingAnchor),
+            addUserButton.centerYAnchor.constraint(equalTo: usersLabel.centerYAnchor),
+            addUserButton.trailingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.trailingAnchor),
 
             tableViewForUsers.topAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor),
             tableViewForUsers.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -407,9 +420,12 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         switch type {
         case .hidden:
             waitingView.isHidden = true
-            navigationController?.setToolbarHidden(false, animated: false)
+
+            navigationController?.setToolbarHidden(toolBarShouldAlwaisBeHidden, animated: false)
+
         case .started, .stopped:
             waitingView.isHidden = false
+
             navigationController?.setToolbarHidden(true, animated: false)
             if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView,
                 let b = waitingView.viewWithTag(11) as? UIButton {
@@ -432,7 +448,11 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func createMount() {
 
-        DigiClient.shared.createSubmount(at: location, withName: node.name) { mount, error in
+        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
+
+        let submountName = (location.path as NSString).lastPathComponent
+
+        DigiClient.shared.createSubmount(at: location, withName: submountName) { mount, error in
 
             guard error == nil else {
 
@@ -452,13 +472,33 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             if let mount = mount {
-                self.saveMount(mount)
+                self.submount = mount
                 self.getUserProfileImages(for: mount.users)
             }
         }
     }
 
-    private func getUserProfileImages(for someUsers: [User], needsDismiss: Bool = false) {
+    private func refreshMount() {
+
+        self.configureWaitingView(type: .started, message: "Loading Users...")
+
+        guard let mount = submount else {
+            return
+        }
+
+        DigiClient.shared.getMountDetails(for: mount) { updatedMount, error in
+            guard error == nil else {
+                return
+            }
+
+            if let updatedMount = updatedMount {
+
+                self.submount = updatedMount
+            }
+        }
+    }
+
+    private func getUserProfileImages(for someUsers: [User]) {
 
         let dispatchGroup = DispatchGroup()
 
@@ -471,7 +511,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             dispatchGroup.enter()
 
-            DigiClient.shared.getUserProfileImage(for: user, completion: { (image, error) in
+            DigiClient.shared.getUserProfileImage(for: user) { image, error in
 
                 dispatchGroup.leave()
 
@@ -482,36 +522,34 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 if let image = image {
                     self.mappingProfileImages[user.id] = image
                 }
-            })
+            }
         }
 
         dispatchGroup.notify(queue: .main) {
-            self.saveUsers(someUsers)
+            self.updateUsersModel(someUsers)
             self.tableViewForUsers.reloadData()
             self.configureWaitingView(type: .hidden, message: "")
 
-            if needsDismiss {
-                _ = self.navigationController?.popViewController(animated: true)
-            } else {
-                self.navigationController?.isToolbarHidden = false
-            }
         }
     }
 
-    private func saveMount(_ mount: Mount) {
-        node.share = mount
+    private func updateUsersModel(_ someUsers: [User]) {
 
-        if let viewControllers = navigationController?.viewControllers {
-            let count = viewControllers.count
-            if count > 0 {
-                (viewControllers[count-2] as? ShareViewController)?.node.share = mount
+        // if the user already exists in the users array replace it (maybe it has new permissions)
+        // otherwise add it to the array
+        for user in someUsers {
+
+            if let index = users.index(of: user) {
+                users[index] = user
+            } else {
+                users.append(user)
             }
         }
     }
 
     private func removeUser(at indexPath: IndexPath) {
 
-        guard let mount = node.share else {
+        guard let mount = submount else {
             print("No valid mount for user addition.")
             return
         }
@@ -526,53 +564,28 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             self.users.remove(at: indexPath.row)
-            self.updateUsersInMainShareController()
 
             // Remove from tableView
             self.tableViewForUsers.deleteRows(at: [indexPath], with: .automatic)
+
+            self.refreshMount()
         }
     }
 
-    private func saveUsers(_ someUsers: [User]) {
+    @objc private func showAddUserView() {
 
-        // if the user already exists in the users array replace it (maybe it has new permissions)
-        // otherwise add it to the array
-        for user in someUsers {
-
-            if let index = users.index(of: user) {
-                users[index] = user
-            } else {
-                users.append(user)
-            }
-        }
-
-        // Update the node mount users
-        node.share?.users = self.users
-
-        self.updateUsersInMainShareController()
-    }
-
-    private func updateUsersInMainShareController() {
-
-        // Update mount in main share ontroller on navigation stack
-
-        if let viewControllers = navigationController?.viewControllers,
-            let shareViewController = viewControllers.first as? ShareViewController {
-                shareViewController.node.share?.users = self.users
-            }
-    }
-
-    @objc private func showAddMemberView() {
-
-        guard let mount = node.share else {
+        guard let mount = submount else {
             print("No valid mount for user addition.")
             return
         }
 
         let controller = AddMountUserViewController(mount: mount)
 
-        controller.onUpdatedUser = { [weak self] user in
-            self?.getUserProfileImages(for: [user], needsDismiss: true)
+        controller.onUpdatedUser = { [weak self] in
+
+            self?.refreshMount()
+            _ = self?.navigationController?.popViewController(animated: true)
+
         }
 
         navigationController?.pushViewController(controller, animated: true)
@@ -580,7 +593,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     @objc private func handleRemoveMount() {
 
-        guard let mount = node.share else {
+        guard let mount = submount else {
             print("No valid mount in node for deletion.")
             return
         }

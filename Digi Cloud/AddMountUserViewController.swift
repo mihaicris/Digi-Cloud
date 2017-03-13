@@ -10,20 +10,19 @@ import UIKit
 
 class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
-    var onUpdatedUser: ((User) -> Void)?
+    var onUpdatedUser: (() -> Void)?
     var user: User
 
     let isUserEdited: Bool
 
     enum PermissionType: Int {
-        case read
         case write
         case create_link
         case create_reicever
         case mount
     }
 
-    let permissions: [PermissionType] = [.read, .write, .create_link, .create_reicever, .mount]
+    let permissions: [PermissionType]
 
     private let mount: Mount
 
@@ -37,7 +36,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
     private lazy var usernameTextField: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = NSLocalizedString("Name or email address", comment: "")
+        tf.placeholder = NSLocalizedString("Email address", comment: "")
         tf.clearButtonMode = .whileEditing
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
@@ -57,6 +56,15 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             isUserEdited = false
             self.user = User(id: "", name: "", email: "", permissions: Permissions())
         }
+
+        var perm: [PermissionType] = [.write, .create_link, .create_reicever]
+
+        // User can not manage a device type mount
+        if mount.type != "device" {
+            perm.append(.mount)
+        }
+
+        self.permissions = perm
 
         super.init(style: .grouped)
     }
@@ -120,7 +128,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
                 usernameTextField.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
                 usernameTextField.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor),
                 usernameTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-            ])
+                ])
 
             return cell
 
@@ -144,10 +152,6 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             var permissionAction: String
 
             switch permissions[indexPath.row] {
-            case .read:
-                permissionAction = NSLocalizedString("Can read", comment: "")
-                permissionSwitch.isOn = user.permissions.read
-                permissionSwitch.isEnabled = false
             case .write:
                 permissionAction = NSLocalizedString("Can modify", comment: "")
                 permissionSwitch.isOn = user.permissions.write
@@ -174,8 +178,6 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         }
 
         switch permissionType {
-        case .read:
-            break
         case .write:
             user.permissions.write = sender.isOn
         case .mount:
@@ -189,16 +191,11 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
     @objc private func handleSaveMember() {
 
+        usernameTextField.resignFirstResponder()
+
         guard let username = usernameTextField.text, username.characters.count > 3 else {
 
-            let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
-                                          message: NSLocalizedString("Please provide the username.", comment: ""),
-                                          preferredStyle: UIAlertControllerStyle.alert)
-            let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
-
-            alert.addAction(actionOK)
-
-            self.present(alert, animated: false, completion: nil)
+            self.showAlert(message: NSLocalizedString("Please provide the email address of the Digi Storage user.", comment: ""))
 
             return
         }
@@ -207,12 +204,13 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
             guard error == nil else {
 
+                self.showAlert(message: NSLocalizedString("The email address is not valid.", comment: ""))
+
                 return
             }
 
-            if let user = user {
-                self.onUpdatedUser?(user)
-            }
+            self.onUpdatedUser?()
+
         }
     }
 
@@ -221,4 +219,17 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             self.user.email = email
         }
     }
+
+    private func showAlert(message: String) {
+
+        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                      message: message,
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
+        alert.addAction(actionOK)
+        self.present(alert, animated: false) {
+            self.usernameTextField.becomeFirstResponder()
+        }
+    }
+
 }
