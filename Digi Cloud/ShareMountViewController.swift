@@ -22,7 +22,9 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private var users: [User] = []
 
-    private var toolBarIsAlwaisHidden: Bool = false
+    private var toolBarItems: [UIBarButtonItem] = []
+
+    private var isToolBarAlwaisHidden: Bool = false
 
     enum TableViewType: Int {
         case location = 0
@@ -144,34 +146,30 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     override func viewDidLoad() {
         setupViews()
         setupNavigationItems()
+        setupToolBarItems()
 
         if let mount = sharedNode.mount {
 
-            if mount.type == "import" || (mount.type == "device" && sharedNode.mountPath == "/") {
-
-                // This is a device mount, it cannot be deleted.
-                toolBarIsAlwaisHidden = true
-            } else {
-                setupToolBarItems()
+            if !mount.permissions.owner {
+                isToolBarAlwaisHidden = true
             }
 
             if mount.root == nil && sharedNode.mountPath != "/" {
-                // Node has no mount
                 createMount()
+
             } else {
                 refreshMount()
             }
         } else {
             createMount()
         }
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if waitingView.isHidden {
-            self.navigationController?.isToolbarHidden = self.toolBarIsAlwaisHidden
+            self.navigationController?.isToolbarHidden = self.isToolBarAlwaisHidden
         }
     }
 
@@ -420,9 +418,13 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             return b
         }()
 
-        if sharedNode.mount?.permissions.mount == true {
-            setToolbarItems([removeShareButton, flexibleButton, addUserButton], animated: false)
+        if sharedNode.mount?.type == "import" || (sharedNode.mount?.type == "device" && sharedNode.mountPath == "/") {
+            toolBarItems.append(contentsOf: [flexibleButton, addUserButton])
+        } else {
+            toolBarItems.append(contentsOf: [removeShareButton, flexibleButton, addUserButton])
         }
+
+        setToolbarItems(toolBarItems, animated: false)
 
     }
 
@@ -432,12 +434,13 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         case .hidden:
             waitingView.isHidden = true
 
-            navigationController?.setToolbarHidden(toolBarIsAlwaisHidden, animated: false)
+            navigationController?.isToolbarHidden = isToolBarAlwaisHidden
 
         case .started, .stopped:
             waitingView.isHidden = false
 
-            navigationController?.setToolbarHidden(true, animated: false)
+            navigationController?.isToolbarHidden = true
+
             if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView,
                 let b = waitingView.viewWithTag(11) as? UIButton {
                 if type == .started {
@@ -481,8 +484,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             if let mount = mount {
-                self.sharedNode.mount = mount
-                self.getUserProfileImages(for: mount.users)
+                self.processMount(mount)
             }
         }
     }
@@ -501,19 +503,25 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             if let mount = mount {
-                self.sharedNode.mount = mount
-
-                // Update mount in main share controller on navigation stack
-
-                if let viewControllers = self.navigationController?.viewControllers,
-                    let shareViewController = viewControllers.first as? ShareViewController {
-                    shareViewController.sharedNode.mount = mount
-                    shareViewController.setupActions()
-                }
-
-                self.getUserProfileImages(for: mount.users)
+                self.processMount(mount)
             }
         }
+    }
+
+    private func processMount(_ mount: Mount) {
+
+        self.sharedNode.mount = mount
+
+        // Update mount in main share controller on navigation stack
+
+        if let viewControllers = self.navigationController?.viewControllers,
+            let shareViewController = viewControllers.first as? ShareViewController {
+            shareViewController.sharedNode.mount = mount
+            shareViewController.setupActions()
+        }
+
+        self.getUserProfileImages(for: mount.users)
+
     }
 
     private func getUserProfileImages(for someUsers: [User]) {
@@ -585,7 +593,15 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             // Remove from tableView
             self.tableViewForUsers.deleteRows(at: [indexPath], with: .automatic)
 
-            self.refreshMount()
+            // if the user is not owner and it is the last user, it means user has left the share.
+
+            if AppSettings.loggedAccount == user.email {
+                self.dismiss(animated: true) {
+                    self.onFinish?()
+                }
+            } else {
+                self.refreshMount()
+            }
         }
     }
 
