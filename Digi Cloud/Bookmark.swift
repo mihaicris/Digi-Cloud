@@ -13,7 +13,7 @@ struct Bookmark {
     // MARK: - Properties
 
     let name: String
-    let mountId: String
+    var mountId: String
     let path: String
 }
 

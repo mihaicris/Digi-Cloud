@@ -28,6 +28,7 @@ struct Mount {
     let canUpload: Bool
     let overQuota: Bool
     let almostOverQuota: Bool
+    let userAdded: TimeInterval
 }
 
 extension Mount {
@@ -45,7 +46,8 @@ extension Mount {
             let canWrite = JSON["canWrite"] as? Bool,
             let canUpload = JSON["canUpload"] as? Bool,
             let overQuota = JSON["overQuota"] as? Bool,
-            let almostOverQuota = JSON["almostOverQuota"] as? Bool
+            let almostOverQuota = JSON["almostOverQuota"] as? Bool,
+            let userAdded = JSON["userAdded"] as? TimeInterval
             else {
                 print("Couldnt parse Mount JSON")
                 return nil
@@ -73,6 +75,7 @@ extension Mount {
         self.canUpload = canUpload
         self.overQuota = overQuota
         self.almostOverQuota = almostOverQuota
+        self.userAdded = userAdded
     }
 
     static func == (lhs: Mount, rhs: Mount) -> Bool {

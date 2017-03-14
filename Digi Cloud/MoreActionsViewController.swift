@@ -14,16 +14,14 @@ final class MoreActionsViewController: UITableViewController {
 
     var onSelect: ((ActionType) -> Void)?
 
-    private let location: Location
-    private let node: Node
+    private let rootNode: Node
 
     private var moreActions: [ActionType] = []
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, node: Node) {
-        self.location = location
-        self.node = node
+    init(rootNode: Node) {
+        self.rootNode = rootNode
         super.init(style: .plain)
     }
 
@@ -56,7 +54,7 @@ final class MoreActionsViewController: UITableViewController {
         switch moreActions[indexPath.row] {
 
         case .bookmark:
-            let title = self.node.bookmark == nil
+            let title = self.rootNode.bookmark == nil
                 ? NSLocalizedString("Set Bookmark", comment: "")
                 : NSLocalizedString("Remove Bookmark", comment: "")
             return createCell(title: title, color: .defaultColor)
@@ -69,6 +67,9 @@ final class MoreActionsViewController: UITableViewController {
 
         case .share:
             return createCell(title: NSLocalizedString("Share", comment: ""), color: .defaultColor)
+
+        case .shareInfoInReadMode:
+            return createCell(title: NSLocalizedString("Share Information", comment: ""), color: .defaultColor)
 
         default:
             return UITableViewCell()
@@ -130,16 +131,24 @@ final class MoreActionsViewController: UITableViewController {
 
     private func setupActions() {
 
-        if location.mount.permissions.create_link || location.mount.permissions.create_receiver || location.mount.permissions.mount {
+        guard let mount = rootNode.mount else {
+            print("NO MOUNT??")
+            fatalError()
+        }
+
+        if mount.permissions.create_link || mount.permissions.create_receiver || mount.permissions.mount {
             moreActions.append(.share)
+        } else {
+            moreActions.append(.shareInfoInReadMode)
         }
 
         moreActions.append(.bookmark)
 
-        if location.mount.canWrite {
+        if  mount.canWrite {
             moreActions.append(.createDirectory)
         }
 
         moreActions.append(.selectionMode)
+
     }
 }

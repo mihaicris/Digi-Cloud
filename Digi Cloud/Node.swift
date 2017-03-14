@@ -19,6 +19,7 @@ struct Node {
     let contentType: String
     let hash: String?
     var mount: Mount?
+    let mountPath: String?
     var link: DownloadLink?
     var receiver: UploadLink?
     var bookmark: Bookmark?
@@ -44,8 +45,10 @@ extension Node {
         self.contentType = contentType
         self.hash = JSON["hash"] as? String
         self.mount = Mount(JSON: JSON["mount"])
+        self.mountPath = JSON["mountPath"] as? String
         self.link = DownloadLink(JSON: JSON["link"])
         self.receiver = UploadLink(JSON: JSON["receiver"])
+        self.bookmark = Bookmark(JSON: JSON["bookmark"])
     }
 }
 

@@ -16,27 +16,13 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private let location: Location
 
-    private var submount: Mount? {
-        didSet {
-
-            if let mount = submount {
-                getUserProfileImages(for: mount.users)
-
-                // Update mount in main share controller on navigation stack
-                if let viewControllers = navigationController?.viewControllers,
-                    let shareViewController = viewControllers.first as? ShareViewController {
-                    shareViewController.location.mount = mount
-                    shareViewController.setupActions()
-                }
-            }
-        }
-    }
+    var sharedNode: Node
 
     private var mappingProfileImages: [String: UIImage] = [:]
 
     private var users: [User] = []
 
-    private let toolBarShouldAlwaisBeHidden: Bool
+    private var toolBarIsAlwaisHidden: Bool = false
 
     enum TableViewType: Int {
         case location = 0
@@ -71,13 +57,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         l.font = UIFont(name: "HelveticaNeue", size: 13)
         l.textColor = UIColor(red: 0.43, green: 0.43, blue: 0.45, alpha: 1.0)
         return l
-    }()
-
-    private lazy var addUserButton: UIButton = {
-        let b = UIButton(type: UIButtonType.contactAdd)
-        b.addTarget(self, action: #selector(showAddUserView), for: .touchUpInside)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        return b
     }()
 
     private var errorMessageVerticalConstraint: NSLayoutConstraint?
@@ -147,11 +126,10 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, submount: Mount? = nil, onFinish: @escaping () -> Void) {
+    init(location: Location, sharedNode: Node, onFinish: @escaping () -> Void) {
         self.location = location
-        self.submount = submount
+        self.sharedNode = sharedNode
         self.onFinish = onFinish
-        self.toolBarShouldAlwaisBeHidden = submount?.type == "device"
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -166,20 +144,34 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     override func viewDidLoad() {
         setupViews()
         setupNavigationItems()
-        setupToolBarItems()
 
-        if submount == nil {
-            createMount()
+        if let mount = sharedNode.mount {
+
+            if mount.type == "import" || (mount.type == "device" && sharedNode.mountPath == "/") {
+
+                // This is a device mount, it cannot be deleted.
+                toolBarIsAlwaisHidden = true
+            } else {
+                setupToolBarItems()
+            }
+
+            if mount.root == nil && sharedNode.mountPath != "/" {
+                // Node has no mount
+                createMount()
+            } else {
+                refreshMount()
+            }
         } else {
-            refreshMount()
+            createMount()
         }
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if waitingView.isHidden {
-            self.navigationController?.isToolbarHidden = self.toolBarShouldAlwaisBeHidden
+            self.navigationController?.isToolbarHidden = self.toolBarIsAlwaisHidden
         }
     }
 
@@ -262,7 +254,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
                 l.textColor = .darkGray
-                l.text = location.path.hasSuffix("/") ? String(location.path.characters.dropLast()) : location.path
+                l.text = String(location.path.characters.dropLast())
                 l.numberOfLines = 2
                 l.font = UIFont(name: "HelveticaNeue", size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
@@ -278,7 +270,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 locationPathLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
 
                 mountNameLabel.leadingAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leadingAnchor),
-                mountNameLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
+                mountNameLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
 
             return cell
 
@@ -289,14 +282,16 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             let user = users[indexPath.row]
-            cell.selectionStyle = .none
+                cell.selectionStyle = .none
 
-            if let owner = submount?.owner {
+            if let owner = sharedNode.mount?.owner {
                 if owner == user {
-                    cell.isOwner = true
                     cell.isUserInteractionEnabled = false
+                    cell.isOwner = true
                 } else {
-                    cell.accessoryType = .disclosureIndicator
+                    if  user.permissions.mount {
+                        cell.accessoryType = .disclosureIndicator
+                    }
                 }
             }
 
@@ -315,12 +310,17 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        guard let mount = submount else {
+        tableView.deselectRow(at: indexPath, animated: false)
+
+        guard let mount = sharedNode.mount else {
             print("No valid mount in node for editing.")
             return
         }
 
         let user = users[indexPath.row]
+
+        // Can not change permission for owner or if user has no share management permission.
+        guard mount.permissions.owner && !user.permissions.owner else { return }
 
         let controller = AddMountUserViewController(mount: mount, user: user)
 
@@ -355,7 +355,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         view.addSubview(tableViewForLocation)
         view.addSubview(tableViewForUsers)
         view.addSubview(usersLabel)
-        view.addSubview(addUserButton)
         view.addSubview(waitingView)
 
         NSLayoutConstraint.activate([
@@ -377,9 +376,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             usersLabel.bottomAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor, constant: -10),
             usersLabel.leadingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.leadingAnchor),
 
-            addUserButton.centerYAnchor.constraint(equalTo: usersLabel.centerYAnchor),
-            addUserButton.trailingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.trailingAnchor),
-
             tableViewForUsers.topAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor),
             tableViewForUsers.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewForUsers.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -400,6 +396,18 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         let flexibleButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
+        let addUserButton: UIBarButtonItem = {
+            let v = UIButton(type: UIButtonType.system)
+            v.setTitle(NSLocalizedString("Add member", comment: ""), for: .normal)
+            v.addTarget(self, action: #selector(showAddUserView), for: .touchUpInside)
+            v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
+            v.setTitleColor(UIColor.defaultColor, for: .normal)
+            v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+            v.sizeToFit()
+            let b = UIBarButtonItem(customView: v)
+            return b
+        }()
+
         let removeShareButton: UIBarButtonItem = {
             let v = UIButton(type: UIButtonType.system)
             v.setTitle(NSLocalizedString("Remove Share", comment: ""), for: .normal)
@@ -412,7 +420,10 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             return b
         }()
 
-        setToolbarItems([flexibleButton, removeShareButton], animated: false)
+        if sharedNode.mount?.permissions.mount == true {
+            setToolbarItems([removeShareButton, flexibleButton, addUserButton], animated: false)
+        }
+
     }
 
     private func configureWaitingView(type: WaitingType, message: String) {
@@ -421,7 +432,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         case .hidden:
             waitingView.isHidden = true
 
-            navigationController?.setToolbarHidden(toolBarShouldAlwaisBeHidden, animated: false)
+            navigationController?.setToolbarHidden(toolBarIsAlwaisHidden, animated: false)
 
         case .started, .stopped:
             waitingView.isHidden = false
@@ -450,9 +461,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
 
-        let submountName = (location.path as NSString).lastPathComponent
-
-        DigiClient.shared.createSubmount(at: location, withName: submountName) { mount, error in
+        DigiClient.shared.createSubmount(at: self.location, withName: sharedNode.name) { mount, error in
 
             guard error == nil else {
 
@@ -472,7 +481,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             if let mount = mount {
-                self.submount = mount
+                self.sharedNode.mount = mount
                 self.getUserProfileImages(for: mount.users)
             }
         }
@@ -482,18 +491,27 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         self.configureWaitingView(type: .started, message: "Loading Users...")
 
-        guard let mount = submount else {
+        guard let mount = sharedNode.mount else {
             return
         }
 
-        DigiClient.shared.getMountDetails(for: mount) { updatedMount, error in
+        DigiClient.shared.getMountDetails(for: mount) { mount, error in
             guard error == nil else {
                 return
             }
 
-            if let updatedMount = updatedMount {
+            if let mount = mount {
+                self.sharedNode.mount = mount
 
-                self.submount = updatedMount
+                // Update mount in main share controller on navigation stack
+
+                if let viewControllers = self.navigationController?.viewControllers,
+                    let shareViewController = viewControllers.first as? ShareViewController {
+                    shareViewController.sharedNode.mount = mount
+                    shareViewController.setupActions()
+                }
+
+                self.getUserProfileImages(for: mount.users)
             }
         }
     }
@@ -529,7 +547,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             self.updateUsersModel(someUsers)
             self.tableViewForUsers.reloadData()
             self.configureWaitingView(type: .hidden, message: "")
-
         }
     }
 
@@ -549,7 +566,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func removeUser(at indexPath: IndexPath) {
 
-        guard let mount = submount else {
+        guard let mount = sharedNode.mount else {
             print("No valid mount for user addition.")
             return
         }
@@ -574,7 +591,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     @objc private func showAddUserView() {
 
-        guard let mount = submount else {
+        guard let mount = sharedNode.mount else {
             print("No valid mount for user addition.")
             return
         }
@@ -593,7 +610,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     @objc private func handleRemoveMount() {
 
-        guard let mount = submount else {
+        guard let mount = sharedNode.mount else {
             print("No valid mount in node for deletion.")
             return
         }

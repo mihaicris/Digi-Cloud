@@ -238,6 +238,8 @@ final class ListingViewController: UITableViewController {
             cell.nameLabel.text = item.name
 
             cell.hasButton = [ActionType.noAction, ActionType.showSearchResult].contains(self.action)
+
+            // CHECK THIS!
             cell.isShared = item.mount != nil
             cell.hasLink = item.link != nil
             cell.hasReceiver = item.receiver != nil
@@ -485,7 +487,6 @@ final class ListingViewController: UITableViewController {
 
             let nodes: [Node] = nodesResult!
             self.rootNode = rootNodeResult!
-            self.rootLocation.mount = self.rootNode!.mount!
 
             if self.action == .copy || self.action == .move {
 
@@ -496,8 +497,13 @@ final class ListingViewController: UITableViewController {
             } else {
 
                 // In normal case (.noAction) we just sort the content with the method saved by the user.
+
                 self.nodes = nodes
                 self.sortContent()
+
+                // Update the mount in the rootLocation
+                self.rootLocation.mount = self.rootNode!.mount!
+
             }
 
             // In case the user pulled the table to refresh, reload table only if the user has finished dragging.
@@ -814,7 +820,7 @@ final class ListingViewController: UITableViewController {
             return
         }
 
-        let controller = MoreActionsViewController(location: rootLocation, node: rootNode)
+        let controller = MoreActionsViewController(/*location: rootLocation,*/ rootNode: rootNode)
 
         controller.onSelect = { [unowned self] selection in
 
@@ -832,7 +838,10 @@ final class ListingViewController: UITableViewController {
                 self.activateEditMode()
 
             case .share:
-                self.showShareViewController(location: self.rootLocation, node: rootNode)
+                self.showShareViewController(location: self.rootLocation, sharedNode: rootNode)
+
+            case .shareInfoInReadMode:
+                self.showShareInfoViewController(location: self.rootLocation, sharedNode: rootNode)
 
             default:
                 #if DEBUG
@@ -938,10 +947,10 @@ final class ListingViewController: UITableViewController {
                     self.showRenameViewController(location: nodeLocation, node: node, index: nodeIndex)
 
                 case .sendDownloadLink:
-                    self.showShareViewController(location: nodeLocation, node: node)
+                    self.showShareViewController(location: nodeLocation, sharedNode: node)
 
                 case .share:
-                    self.showShareViewController(location: nodeLocation, node: node)
+                    self.showShareViewController(location: nodeLocation, sharedNode: node)
 
                 default:
                     #if DEBUG
@@ -1072,7 +1081,9 @@ final class ListingViewController: UITableViewController {
             }
         }
 
-        if let bookmark = node.bookmark {
+        if var bookmark = node.bookmark {
+
+            bookmark.mountId = location.mount.id
 
             // Bookmark is set, removing it:
             DigiClient.shared.removeBookmark(bookmark: bookmark) { error in
@@ -1392,7 +1403,7 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    private func showShareViewController(location: Location, node: Node) {
+    private func showShareViewController(location: Location, sharedNode: Node) {
 
         let onFinish = { [weak self] in
 
@@ -1407,11 +1418,31 @@ final class ListingViewController: UITableViewController {
 
         let controller: UIViewController
 
-        if node.type == "dir" {
-            controller = ShareViewController(location: location, node: node, onFinish: onFinish)
+        if sharedNode.type == "dir" {
+            controller = ShareViewController(location: location, sharedNode: sharedNode, onFinish: onFinish)
         } else {
             controller = ShareLinkViewController(location: location, linkType: .download, onFinish: onFinish)
         }
+
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .formSheet
+        self.present(navController, animated: true, completion: nil)
+    }
+
+    private func showShareInfoViewController(location: Location, sharedNode: Node) {
+
+        let onFinish = { [weak self] in
+
+            self?.updateContent()
+
+            if let navController = self?.navigationController as? MainNavigationController {
+                for controller in navController.viewControllers {
+                    (controller as? ListingViewController)?.needRefresh = true
+                }
+            }
+        }
+
+        let controller = ShareMountViewController(location: location, sharedNode: sharedNode, onFinish: onFinish)
 
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .formSheet

@@ -14,7 +14,7 @@ final class ShareViewController: UITableViewController {
 
     var location: Location
 
-    var node: Node
+    var sharedNode: Node
 
     var sharingActions: [ActionType] = [] {
         didSet {
@@ -26,9 +26,9 @@ final class ShareViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, node: Node, onFinish: @escaping () -> Void) {
+    init(location: Location, sharedNode: Node, onFinish: @escaping () -> Void) {
         self.location = location
-        self.node = node
+        self.sharedNode = sharedNode
         self.onFinish = onFinish
         super.init(nibName: nil, bundle: nil)
     }
@@ -71,6 +71,8 @@ final class ShareViewController: UITableViewController {
             cell.nameLabel.text = NSLocalizedString("Receive Files", comment: "")
         case .share:
             cell.nameLabel.text = NSLocalizedString("Share in Digi Storage", comment: "")
+        case .shareInfoInReadMode:
+            cell.nameLabel.text = NSLocalizedString("Share Information", comment: "")
         default:
             break
         }
@@ -91,8 +93,13 @@ final class ShareViewController: UITableViewController {
             self.navigationController?.pushViewController(controller, animated: true)
 
         case .share:
-            let controller = ShareMountViewController(location: self.location, submount: self.node.mount, onFinish: self.onFinish)
+            let controller = ShareMountViewController(location: self.location, sharedNode: self.sharedNode, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
+
+        case .shareInfoInReadMode:
+            let controller = ShareMountViewController(location: self.location, sharedNode: self.sharedNode, onFinish: self.onFinish)
+            self.navigationController?.pushViewController(controller, animated: true)
+
         default:
             break
         }
@@ -124,19 +131,19 @@ final class ShareViewController: UITableViewController {
         var actions: [ActionType] = []
 
         if location.mount.permissions.create_link {
-            actions.append(ActionType.sendDownloadLink)
+            actions.append(.sendDownloadLink)
         }
 
         if location.mount.permissions.create_receiver {
-            actions.append(ActionType.sendUploadLink)
+            actions.append(.sendUploadLink)
         }
 
         if location.mount.permissions.mount {
-            actions.append(ActionType.share)
+            actions.append(.share)
         }
 
-        if actions.isEmpty {
-           handleCancel()
+        if !actions.contains(.share) {
+            actions.append(.shareInfoInReadMode)
         }
 
         sharingActions = actions
