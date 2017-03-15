@@ -22,7 +22,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         case mount
     }
 
-    let permissions: [PermissionType]
+    var permissions: [PermissionType] = []
 
     private let mount: Mount
 
@@ -46,7 +46,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         return tf
     }()
 
-    let writePermissionSwitch: UISwitch = {
+    let permissionWriteSwitch: UISwitch = {
         let sw = UISwitch()
         sw.translatesAutoresizingMaskIntoConstraints = false
         sw.tag = PermissionType.write.rawValue
@@ -54,7 +54,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         return sw
     }()
 
-    let downloadLinkPermissionSwitch: UISwitch = {
+    let permissionCreateLinkSwitch: UISwitch = {
         let sw = UISwitch()
         sw.translatesAutoresizingMaskIntoConstraints = false
         sw.tag = PermissionType.create_link.rawValue
@@ -62,7 +62,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         return sw
     }()
 
-    let receiveLinkPermissionSwitch: UISwitch = {
+    let permissionCreateReceiverSwitch: UISwitch = {
         let sw = UISwitch()
         sw.translatesAutoresizingMaskIntoConstraints = false
         sw.tag = PermissionType.create_reicever.rawValue
@@ -70,7 +70,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         return sw
     }()
 
-    let manageSharePermissionSwitch: UISwitch = {
+    let permissionManageShareSwitch: UISwitch = {
         let sw = UISwitch()
         sw.translatesAutoresizingMaskIntoConstraints = false
         sw.tag = PermissionType.mount.rawValue
@@ -89,9 +89,12 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             self.user = User(id: "", name: "", email: "", permissions: Permissions())
         }
 
-        self.permissions = [.write, .create_link, .create_reicever, .mount]
-
         super.init(style: .grouped)
+
+        self.permissions.append(contentsOf: mount.permissions.write ? [.write] : [])
+        self.permissions.append(contentsOf: mount.permissions.create_link ? [.create_link] : [])
+        self.permissions.append(contentsOf: mount.permissions.create_receiver ? [.create_reicever] : [])
+        self.permissions.append(contentsOf: mount.permissions.mount ? [.mount] : [])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -153,15 +156,13 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
                 usernameTextField.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
                 usernameTextField.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor),
                 usernameTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-                ])
+            ])
 
             return cell
 
         } else {
 
-            guard let permissionType = PermissionType(rawValue: indexPath.row) else {
-                return cell
-            }
+            let permissionType = permissions[indexPath.row]
 
             var aSwitch: UISwitch
             var permissionTitle: String
@@ -169,28 +170,25 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             switch permissionType {
 
             case .write:
-                aSwitch = writePermissionSwitch
+                aSwitch = permissionWriteSwitch
                 aSwitch.isOn = user.permissions.write
                 permissionTitle = NSLocalizedString("Can modify", comment: "")
 
-            case .mount:
-                aSwitch = manageSharePermissionSwitch
-                aSwitch.isOn = user.permissions.write ? user.permissions.mount : false
-                aSwitch.isEnabled = user.permissions.write ? true : false
-                aSwitch.onTintColor = UIColor(red: 0.40, green: 0.43, blue: 0.98, alpha: 1.0)
-                permissionTitle = NSLocalizedString("Can manage share", comment: "")
-
             case .create_link:
-                aSwitch = downloadLinkPermissionSwitch
-                aSwitch.isOn = user.permissions.write ? user.permissions.create_link : false
-                aSwitch.isEnabled = user.permissions.write ? true : false
+                aSwitch = permissionCreateLinkSwitch
+                aSwitch.isOn = user.permissions.create_link
                 permissionTitle = NSLocalizedString("Can create download links", comment: "")
 
             case .create_reicever:
-                aSwitch = receiveLinkPermissionSwitch
-                aSwitch.isOn = user.permissions.write ? user.permissions.create_receiver : false
-                aSwitch.isEnabled = user.permissions.write ? true : false
+                aSwitch = permissionCreateReceiverSwitch
+                aSwitch.isOn = user.permissions.create_receiver
                 permissionTitle = NSLocalizedString("Can create receive links", comment: "")
+
+            case .mount:
+                aSwitch = permissionManageShareSwitch
+                aSwitch.isOn = user.permissions.mount
+                aSwitch.onTintColor = UIColor(red: 0.40, green: 0.43, blue: 0.98, alpha: 1.0)
+                permissionTitle = NSLocalizedString("Can manage share", comment: "")
             }
 
             cell.textLabel?.text = permissionTitle
@@ -215,24 +213,6 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         switch permissionType {
         case .write:
             user.permissions.write = sender.isOn
-
-            // Remove the orther permission if Write is OFF
-
-            if sender.isOn {
-                [downloadLinkPermissionSwitch, receiveLinkPermissionSwitch, manageSharePermissionSwitch].forEach {
-                    $0.isEnabled = true
-                }
-            } else {
-                [downloadLinkPermissionSwitch, receiveLinkPermissionSwitch, manageSharePermissionSwitch].forEach {
-                    $0.isOn = false
-                    $0.isEnabled = false
-                }
-
-                user.permissions.create_link = sender.isOn
-                user.permissions.create_receiver = sender.isOn
-                user.permissions.mount = sender.isOn
-            }
-
         case .mount:
             user.permissions.mount = sender.isOn
         case .create_link:
@@ -253,18 +233,34 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             return
         }
 
-        DigiClient.shared.updateMount(mount: mount, operation: .add, user: user) { user, error in
+        if isUserEdited {
 
-            guard error == nil else {
+            DigiClient.shared.updateMount(mount: mount, operation: .updatePermissions, user: user, completion: { _, error in
 
-                self.showAlert(message: NSLocalizedString("The email address is not valid.", comment: ""))
+                guard error == nil else {
+                    self.showAlert(message: NSLocalizedString("Could not update member permissions.", comment: ""))
 
-                return
+                    return
+                }
+
+                self.onUpdatedUser?()
+            })
+
+        } else {
+            DigiClient.shared.updateMount(mount: mount, operation: .add, user: user) { newUser, error in
+
+                guard error == nil else {
+
+                    self.showAlert(message: NSLocalizedString("Could not add new member.", comment: ""))
+
+                    return
+                }
+                if newUser != nil {
+                    self.onUpdatedUser?()
+                }
             }
-
-            self.onUpdatedUser?()
-
         }
+
     }
 
     @objc private func handleTextFieldChange() {

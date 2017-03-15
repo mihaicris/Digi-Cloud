@@ -16,7 +16,7 @@ final class MoreActionsViewController: UITableViewController {
 
     private let rootNode: Node
 
-    private var moreActions: [ActionType] = []
+    private var actions: [ActionType] = []
 
     // MARK: - Initializers and Deinitializers
 
@@ -46,12 +46,12 @@ final class MoreActionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return moreActions.count
+        return actions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        switch moreActions[indexPath.row] {
+        switch actions[indexPath.row] {
 
         case .bookmark:
             let title = self.rootNode.bookmark == nil
@@ -65,10 +65,13 @@ final class MoreActionsViewController: UITableViewController {
         case .selectionMode:
             return createCell(title: NSLocalizedString("Select Mode", comment: ""), color: .defaultColor)
 
-        case .share:
+        case .makeNewShare:
             return createCell(title: NSLocalizedString("Share", comment: ""), color: .defaultColor)
 
-        case .shareInfoInReadMode:
+        case .manageShare:
+            return createCell(title: NSLocalizedString("Manage Share", comment: ""), color: .defaultColor)
+
+        case .shareInfo:
             return createCell(title: NSLocalizedString("Share Information", comment: ""), color: .defaultColor)
 
         default:
@@ -79,7 +82,7 @@ final class MoreActionsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         self.dismiss(animated: true) {
-            self.onSelect?(self.moreActions[indexPath.row])
+            self.onSelect?(self.actions[indexPath.row])
         }
     }
 
@@ -136,19 +139,29 @@ final class MoreActionsViewController: UITableViewController {
             fatalError()
         }
 
-        if mount.permissions.create_link || mount.permissions.create_receiver || mount.permissions.mount {
-            moreActions.append(.share)
+        if mount.type == "device" {
+            if mount.root == nil {
+                actions.append(.manageShare)
+            } else {
+                actions.append(.makeNewShare)
+            }
+        } else if mount.type == "export" {
+            actions.append(.manageShare)
         } else {
-            moreActions.append(.shareInfoInReadMode)
+            if mount.permissions.mount {
+                actions.append(.manageShare)
+            } else {
+                actions.append(.shareInfo)
+            }
         }
 
-        moreActions.append(.bookmark)
+        actions.append(.bookmark)
 
         if  mount.canWrite {
-            moreActions.append(.createDirectory)
+            actions.append(.createDirectory)
         }
 
-        moreActions.append(.selectionMode)
+        actions.append(.selectionMode)
 
     }
 }

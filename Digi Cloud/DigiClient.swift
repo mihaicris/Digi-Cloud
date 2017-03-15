@@ -521,6 +521,7 @@ final class DigiClient {
             headers = DefaultHeaders.PutHeaders
             method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
                 .replacingOccurrences(of: "{userId}", with: user.id)
+            json?["permissions"] = user.permissions.json
 
         case .remove:
             requestType = .delete
@@ -532,7 +533,12 @@ final class DigiClient {
 
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token!)"
 
-        networkTask(requestType: requestType, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
+        networkTask(requestType: requestType,
+                    method: method,
+                    headers: headers,
+                    json: json,
+                    parameters: nil,
+                    withoutSerialization: operation == .updatePermissions || operation == .remove) { json, statusCode, error in
 
             guard error == nil else {
                 completion(nil, NetworkingError.data("Eroare"))
@@ -546,14 +552,15 @@ final class DigiClient {
 
             switch operation {
             case .add:
-                    fallthrough
-            case .updatePermissions:
-                    guard let user = User(JSON: json) else {
-                        completion(nil, JSONError.parse("Error parsing User JSON."))
-                        return
-                    }
-
+                guard let user = User(JSON: json) else {
+                    completion(nil, JSONError.parse("Error parsing User JSON."))
+                    return
+                }
                 completion(user, nil)
+
+            case .updatePermissions:
+                completion(nil, nil)
+
             case .remove:
                 completion(nil, nil)
             }

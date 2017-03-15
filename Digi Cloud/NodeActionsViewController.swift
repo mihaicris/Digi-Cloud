@@ -17,7 +17,7 @@ final class NodeActionsViewController: UITableViewController {
     private var location: Location
     private let node: Node
 
-    private var permittedActions: [ActionType] = []
+    private var actions: [ActionType] = []
 
     // MARK: - Initializers and Deinitializers
 
@@ -49,7 +49,7 @@ final class NodeActionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return permittedActions.count
+        return actions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -57,10 +57,16 @@ final class NodeActionsViewController: UITableViewController {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.textLabel?.textColor = UIColor.defaultColor
 
-        switch permittedActions[indexPath.row] {
+        switch actions[indexPath.row] {
 
-        case .share:
+        case .makeNewShare:
             cell.textLabel?.text = NSLocalizedString("Share", comment: "")
+
+        case .manageShare:
+            cell.textLabel?.text = NSLocalizedString("Manage Share", comment: "")
+
+        case .shareInfo:
+            cell.textLabel?.text = NSLocalizedString("Share Information", comment: "")
 
         case .sendDownloadLink:
             cell.textLabel?.text = NSLocalizedString("Send Link", comment: "")
@@ -99,7 +105,7 @@ final class NodeActionsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismiss(animated: false) {
-            self.onSelect?(self.permittedActions[indexPath.row])
+            self.onSelect?(self.actions[indexPath.row])
         }
     }
 
@@ -158,43 +164,53 @@ final class NodeActionsViewController: UITableViewController {
 
         if node.type == "dir" {
 
-            if location.mount.permissions.create_link || location.mount.permissions.create_receiver || location.mount.permissions.mount {
-                permittedActions.append(.share)
+            if node.mount != nil {
+                if node.mount?.type == "export" {
+                    actions.append(.manageShare)
+                } else {
+
+                }
+            } else {
+                if location.mount.permissions.owner == true {
+                    actions.append(.makeNewShare)
+                }
             }
 
-            permittedActions.append(.bookmark)
+            actions.append(.bookmark)
 
             if location.mount.canWrite {
-                permittedActions.append(.rename)
+                actions.append(.rename)
             }
 
-            permittedActions.append(.copy)
+            actions.append(.copy)
 
+            // Keep order in menu
             if location.mount.canWrite {
-                permittedActions.append(.move)
+                actions.append(.move)
             }
 
-            permittedActions.append(.folderInfo)
+            actions.append(.folderInfo)
 
         } else {
 
             if location.mount.permissions.create_link {
-                permittedActions.append(.sendDownloadLink)
-                permittedActions.append(.makeOffline)
+                actions.append(.sendDownloadLink)
+                actions.append(.makeOffline)
             }
 
             if location.mount.canWrite {
-                permittedActions.append(.rename)
+                actions.append(.rename)
             }
 
-            permittedActions.append(.copy)
+            actions.append(.copy)
 
+            // Keep order in menu
             if location.mount.canWrite {
-                permittedActions.append(.move)
+                actions.append(.move)
             }
 
             if location.mount.canWrite {
-                permittedActions.append(.delete)
+                actions.append(.delete)
             }
         }
     }

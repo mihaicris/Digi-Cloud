@@ -501,9 +501,6 @@ final class ListingViewController: UITableViewController {
                 self.nodes = nodes
                 self.sortContent()
 
-                // Update the mount in the rootLocation
-                self.rootLocation.mount = self.rootNode!.mount!
-
             }
 
             // In case the user pulled the table to refresh, reload table only if the user has finished dragging.
@@ -820,7 +817,7 @@ final class ListingViewController: UITableViewController {
             return
         }
 
-        let controller = MoreActionsViewController(/*location: rootLocation,*/ rootNode: rootNode)
+        let controller = MoreActionsViewController(rootNode: rootNode)
 
         controller.onSelect = { [unowned self] selection in
 
@@ -837,10 +834,10 @@ final class ListingViewController: UITableViewController {
                 if self.nodes.isEmpty { return }
                 self.activateEditMode()
 
-            case .share:
+            case .manageShare, .makeNewShare:
                 self.showShareViewController(location: self.rootLocation, sharedNode: rootNode)
 
-            case .shareInfoInReadMode:
+            case .shareInfo:
                 self.showShareInfoViewController(location: self.rootLocation, sharedNode: rootNode)
 
             default:
@@ -949,7 +946,7 @@ final class ListingViewController: UITableViewController {
                 case .sendDownloadLink:
                     self.showShareViewController(location: nodeLocation, sharedNode: node)
 
-                case .share:
+                case .makeNewShare, .manageShare:
                     self.showShareViewController(location: nodeLocation, sharedNode: node)
 
                 default:

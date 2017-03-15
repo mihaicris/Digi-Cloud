@@ -22,8 +22,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private var users: [User] = []
 
-    private var toolBarItems: [UIBarButtonItem] = []
-
     private var isToolBarAlwaisHidden: Bool = false
 
     enum TableViewType: Int {
@@ -149,10 +147,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         setupToolBarItems()
 
         if let mount = sharedNode.mount {
-
-            if !mount.permissions.owner {
-                isToolBarAlwaisHidden = true
-            }
 
             if mount.root == nil && sharedNode.mountPath != "/" {
                 createMount()
@@ -317,8 +311,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         let user = users[indexPath.row]
 
-        // Can not change permission for owner or if user has no share management permission.
-        guard mount.permissions.owner && !user.permissions.owner else { return }
+        // Only owner can change permissions or user has mount management permission.
+        guard mount.permissions.owner || user.permissions.mount else { return }
 
         let controller = AddMountUserViewController(mount: mount, user: user)
 
@@ -392,6 +386,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func setupToolBarItems() {
 
+        var toolBarItems: [UIBarButtonItem] = []
+
         let flexibleButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
         let addUserButton: UIBarButtonItem = {
@@ -418,9 +414,22 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             return b
         }()
 
-        if sharedNode.mount?.type == "import" || (sharedNode.mount?.type == "device" && sharedNode.mountPath == "/") {
-            toolBarItems.append(contentsOf: [flexibleButton, addUserButton])
+        if let mount = sharedNode.mount {
+
+            // if no management mount permission, then hide alwais the toolbar which
+            // can contains remove share and / or add member buttons.
+            if !mount.permissions.mount {
+                isToolBarAlwaisHidden = true
+                return
+            }
+
+            if mount.type == "import" || (mount.type == "device" && sharedNode.mountPath == "/") {
+                toolBarItems.append(contentsOf: [flexibleButton, addUserButton])
+            } else {
+                toolBarItems.append(contentsOf: [removeShareButton, flexibleButton, addUserButton])
+            }
         } else {
+
             toolBarItems.append(contentsOf: [removeShareButton, flexibleButton, addUserButton])
         }
 

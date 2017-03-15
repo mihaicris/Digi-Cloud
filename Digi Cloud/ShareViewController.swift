@@ -69,9 +69,11 @@ final class ShareViewController: UITableViewController {
             cell.nameLabel.text = NSLocalizedString("Send Link", comment: "")
         case .sendUploadLink:
             cell.nameLabel.text = NSLocalizedString("Receive Files", comment: "")
-        case .share:
+        case .makeNewShare:
             cell.nameLabel.text = NSLocalizedString("Share in Digi Storage", comment: "")
-        case .shareInfoInReadMode:
+        case .manageShare:
+            cell.nameLabel.text = NSLocalizedString("Manage Share", comment: "")
+        case .shareInfo:
             cell.nameLabel.text = NSLocalizedString("Share Information", comment: "")
         default:
             break
@@ -92,11 +94,11 @@ final class ShareViewController: UITableViewController {
             let controller = ShareLinkViewController(location: self.location, linkType: .upload, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
 
-        case .share:
+        case .makeNewShare:
             let controller = ShareMountViewController(location: self.location, sharedNode: self.sharedNode, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
 
-        case .shareInfoInReadMode:
+        case .shareInfo:
             let controller = ShareMountViewController(location: self.location, sharedNode: self.sharedNode, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
 
@@ -139,11 +141,11 @@ final class ShareViewController: UITableViewController {
         }
 
         if location.mount.permissions.mount {
-            actions.append(.share)
+            actions.append(.makeNewShare)
         }
 
-        if !actions.contains(.share) {
-            actions.append(.shareInfoInReadMode)
+        if !actions.contains(.makeNewShare) {
+            actions.append(.shareInfo)
         }
 
         sharingActions = actions

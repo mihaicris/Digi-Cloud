@@ -52,8 +52,9 @@ enum ActionType: Int {
     case selectionMode
     case sendDownloadLink
     case sendUploadLink
-    case share
-    case shareInfoInReadMode
+    case makeNewShare
+    case shareInfo
+    case manageShare
     case showSearchResult
 }
 
