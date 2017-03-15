@@ -36,6 +36,24 @@ extension User {
         self.name = name
         self.email = email
     }
+
+    init?(infoJSON: Any?) {
+        if infoJSON == nil { return nil }
+        guard let JSON = infoJSON as? [String: Any],
+            let id = JSON["id"] as? String,
+            let firstName = JSON["firstName"] as? String,
+            let lastName = JSON["lastName"] as? String,
+            let email = JSON["email"] as? String
+            else {
+                print("Error at parsing of User infoJSON.")
+                return nil
+        }
+
+        self.id = id
+        self.name = "\(firstName) \(lastName)"
+        self.email = email
+        self.permissions = Permissions()
+    }
 }
 
 extension User: Equatable {

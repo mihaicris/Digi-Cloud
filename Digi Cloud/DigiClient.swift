@@ -250,9 +250,9 @@ final class DigiClient {
     /// - Parameters:
     ///   - token: autentication token for requested user
     ///   - completion: The block called after the server has responded
-    ///   - response: Returned tuple which contains the firstname and lastname of the user
+    ///   - user: Returned user (permissions should be neglected)
     ///   - error: The error occurred in the network request, nil for no error.
-    func getUserInfo(for token: String, completion: @escaping(_ response: (firstName: String, lastName: String)?, _ error: Error?) -> Void) {
+    func getUser(for token: String, completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
 
         let method = Methods.User
         let headers: [String: String] = ["Accept": "*/*", HeadersKeys.Authorization: "Token \(token)"]
@@ -269,14 +269,12 @@ final class DigiClient {
                 return
             }
 
-            guard let json = jsonData as? [String: String],
-                let firstName = json["firstName"],
-                let lastName = json["lastName"] else {
-                    completion(nil, JSONError.parse("Could not parse json response for user info request."))
-                    return
+            guard let user = User(infoJSON: jsonData) else {
+                completion(nil, JSONError.parse("Could not parse json response for user info request."))
+                return
             }
 
-            completion((firstName, lastName), nil)
+            completion(user, nil)
         }
     }
 

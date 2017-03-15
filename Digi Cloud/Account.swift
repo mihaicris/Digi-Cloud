@@ -213,16 +213,15 @@ struct Account {
 
             DispatchQueue.global(qos: .background).async {
 
-                DigiClient.shared.getUserInfo(for: token) { result, error in
+                DigiClient.shared.getUser(for: token) { user, error in
 
                     guard error == nil else {
                         print(error!.localizedDescription)
                         return
                     }
 
-                    if let result = result {
-
-                        UserDefaults.standard.set("\(result.firstName) \(result.lastName)", forKey: self.username)
+                    if let user = user {
+                        UserDefaults.standard.set(user.name, forKey: self.username)
                         UserDefaults.standard.synchronize()
 
                         DispatchQueue.main.async {
@@ -232,7 +231,7 @@ struct Account {
                 }
             }
         } else {
-            print("Could not retrieve a token from Keychain for revoking.")
+            print("Could not retrieve a token from Keychain for getting user info.")
         }
     }
 
