@@ -71,15 +71,6 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         return st
     }()
 
-    private let signUpLabel: UIButton = {
-        let b = UIButton(type: UIButtonType.system)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Sign Up for Digi Storage", comment: ""), for: .normal)
-        b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
-        return b
-    }()
-
     private let loginToAnotherAccountButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -272,7 +263,6 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         view.addSubview(collectionView)
         view.addSubview(spinner)
         view.addSubview(stackView)
-        stackView.addArrangedSubview(signUpLabel)
 
         NSLayoutConstraint.activate([
             logoBigLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
