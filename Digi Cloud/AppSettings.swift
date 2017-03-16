@@ -12,10 +12,6 @@ struct AppSettings {
 
     // MARK: - Properties
 
-    private init() {}
-
-    static let shared: AppSettings = AppSettings()
-
     static var tableViewRowHeight: CGFloat = 50
 
     static var hasRunBefore: Bool {
@@ -38,7 +34,7 @@ struct AppSettings {
         }
     }
 
-    static var loggedAccount: String? {
+    static var loggedUserID: String? {
         get {
             return UserDefaults.standard.string(forKey: UserDefaults.UserDefaultsKeys.userLogged.rawValue)
         }
@@ -88,6 +84,71 @@ struct AppSettings {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.allowsCellularAccess.rawValue)
             UserDefaults.standard.synchronize()
 
+        }
+    }
+
+    static func persistUserInfo(user: User) {
+        UserDefaults.standard.set(user.name, forKey: "name-\(user.id)")
+        UserDefaults.standard.set(user.email, forKey: "email-\(user.id)")
+        UserDefaults.standard.synchronize()
+    }
+
+    static func getPersistedUserInfo(userID: String) -> User? {
+        guard let name  = UserDefaults.standard.string(forKey: "name-\(userID)"),
+              let email = UserDefaults.standard.string(forKey: "email-\(userID)") else {
+            return nil
+        }
+        return User(id: userID, name: name, email: email, permissions: Permissions())
+    }
+
+    static func deletePersistedUserInfo(userID: String) {
+        UserDefaults.standard.set(nil, forKey: "name-\(userID)")
+        UserDefaults.standard.set(nil, forKey: "email-\(userID)")
+        UserDefaults.standard.synchronize()
+    }
+
+    static func saveUser(forToken token: String, completion: @escaping (User?, Error?) -> Void) {
+
+        DigiClient.shared.getUser(forToken: token) { userResult, error in
+
+            guard error == nil else {
+                completion(nil, NetworkingError.get("Couldn't get the user info."))
+                return
+            }
+
+            guard let user = userResult else {
+                completion(nil, JSONError.parse("Couldn't parce the User for token"))
+                return
+            }
+
+            let account = Account(userID: user.id)
+
+            do {
+                try account.save(token: token)
+            } catch {
+                fatalError("Couldn't write to KeyChain")
+            }
+
+            persistUserInfo(user: user)
+
+            DigiClient.shared.loggedAccount = account
+
+            DigiClient.shared.getUserProfileImage(for: user) { image, error in
+
+                guard error == nil else {
+                    return
+                }
+
+                let cache = Cache()
+
+                let key = user.id + ".png"
+
+                if let image = image, let data = UIImagePNGRepresentation(image) {
+                    cache.save(type: .profile, data: data, for: key)
+                }
+
+                completion(user, nil)
+            }
         }
     }
 

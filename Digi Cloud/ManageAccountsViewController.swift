@@ -14,7 +14,7 @@ final class ManageAccountsViewController: UITableViewController {
 
     let cellId: String = "cellId"
 
-    var accounts: [Account]
+    var users: [User] = []
 
     var onAddAccount: (() -> Void)?
     var onFinish: (() -> Void)?
@@ -43,9 +43,9 @@ final class ManageAccountsViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
-    init(controller: AccountSelectionViewController, accounts: [Account]) {
-        self.accounts = accounts
+    init(controller: AccountSelectionViewController) {
         self.controller = controller
+        self.users = controller.users
         super.init(style: UITableViewStyle.plain)
     }
 
@@ -69,14 +69,14 @@ final class ManageAccountsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return accounts.count
+        return users.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? AccountTableViewCell else {
             return UITableViewCell()
         }
-        cell.account = accounts[indexPath.item]
+        cell.user = users[indexPath.item]
         return cell
     }
 
@@ -96,14 +96,8 @@ final class ManageAccountsViewController: UITableViewController {
 
         if editingStyle == .delete {
 
-            self.wipeAccount(at: indexPath)
-
-            // If no accounts are stored in the model, the manage window is dismissed
-            if accounts.isEmpty {
-                self.dismiss(animated: true) {
-                    self.onFinish?()
-                }
-            }
+            self.wipeAccount(atIndexPath: indexPath)
+            self.dismissIfNoMoreUsers()
         }
     }
 
@@ -117,9 +111,20 @@ final class ManageAccountsViewController: UITableViewController {
         updateButtonsToMatchTableState()
     }
 
-    private func wipeAccount(at indexPath: IndexPath) {
+    private func dismissIfNoMoreUsers() {
+        // If no accounts are stored in the model, the manage window is dismissed
+        if users.isEmpty {
+            self.dismiss(animated: true) {
+                self.onFinish?()
+            }
+        }
+    }
 
-        let account = accounts[indexPath.row]
+    private func wipeAccount(atIndexPath indexPath: IndexPath) {
+
+        let user = users[indexPath.row]
+
+        let account = Account(userID: user.id)
 
         do {
             // Revoke the token
@@ -129,18 +134,22 @@ final class ManageAccountsViewController: UITableViewController {
             account.deleteProfileImageFromCache()
 
             // Delete the account info (name) from User defaults
-            UserDefaults.standard.removeObject(forKey: account.username)
+            AppSettings.deletePersistedUserInfo(userID: user.id)
 
             // Delete account token from Keychain
             try account.deleteItem()
 
-            // Delete account from the model
-            self.accounts.remove(at: indexPath.row)
-            controller.accounts.remove(at: indexPath.row)
+            // Delete user from the model
+            self.users.remove(at: indexPath.row)
 
-            // Delete account on screen
+            // Delete user from the parent controller model
+            controller.users.remove(at: indexPath.row)
+
+            // Delete user from manage users list table
             tableView.deleteRows(at: [indexPath], with: .fade)
-            controller.accountsCollectionView.deleteItems(at: [indexPath])
+
+            // Delete user from parent users list table
+            controller.collectionView.deleteItems(at: [indexPath])
 
         } catch {
             fatalError("Error while deleting account from Keychain.")
@@ -163,7 +172,7 @@ final class ManageAccountsViewController: UITableViewController {
     private func updateDeleteButtonTitle() {
         var newTitle = NSLocalizedString("Delete All", comment: "")
         if let selectedRows = self.tableView.indexPathsForSelectedRows {
-            if selectedRows.count != accounts.count {
+            if selectedRows.count != users.count {
                 let titleFormatString = NSLocalizedString("Delete (%d)", comment: "")
                 newTitle = String(format: titleFormatString, selectedRows.count)
             }
@@ -230,50 +239,43 @@ final class ManageAccountsViewController: UITableViewController {
 
     @objc private func deleteConfirmed(_ action: UIAlertAction) {
 
-        if let selectedRows = self.tableView.indexPathsForSelectedRows?.reversed(), selectedRows.count != accounts.count {
+        if let selectedRows = self.tableView.indexPathsForSelectedRows?.reversed(), selectedRows.count != users.count {
 
             self.tableView.beginUpdates()
 
             for selectedIndex in selectedRows {
-                wipeAccount(at: selectedIndex)
+                wipeAccount(atIndexPath: selectedIndex)
             }
 
             // Table view is animating the deletions
             self.tableView.endUpdates()
 
         } else {
+
+            self.tableView.beginUpdates()
+
             // Delete all accounts
-            for account in accounts {
-                do {
-                    // Revoke the token
-                    account.revokeToken()
+            for (index, _) in users.enumerated().reversed() {
 
-                    // Delete the account info (name) from User defaults
-                    UserDefaults.standard.removeObject(forKey: account.username)
+                let indexPath = IndexPath(row: index, section: 0)
 
-                    // Delete account token from Keychain
-                    try account.deleteItem()
-
-                } catch {
-                    fatalError("Error while deleting account from Keychain.")
-                }
-
-                // Delete all profile images
-                FileManager.deleteProfileImagesCacheDirectory()
-                FileManager.createProfileImagesCacheDirectory()
-
-                // Dimiss the Login controller after all accounts have been removed
-                self.dismiss(animated: true) {
-                    self.onFinish?()
-                }
+                wipeAccount(atIndexPath: indexPath)
             }
+
+            self.tableView.endUpdates()
+
+            assert(users.count == 0, "Not all users have been deleted!")
+
         }
 
         self.tableView.setEditing(false, animated: true)
         self.updateButtonsToMatchTableState()
 
-        controller.getAccountsFromKeychain()
-        controller.accountsCollectionView.reloadData()
+        controller.users = self.users
+        controller.updateViews()
+        controller.collectionView.reloadData()
+
+        dismissIfNoMoreUsers()
     }
 
     @objc private func handleCancelEdit() {

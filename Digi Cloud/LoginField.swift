@@ -43,6 +43,7 @@ final class LoginField: UITextField {
         spellCheckingType = .no
         translatesAutoresizingMaskIntoConstraints = false
         contentVerticalAlignment = .bottom
+        clearButtonMode = .whileEditing
 
         label.textColor = UIColor(colorLiteralRed: 184 / 255, green: 184 / 255, blue: 184 / 255, alpha: 1)
         label.font = UIFont(name: "Helvetica-Bold", size: 12)

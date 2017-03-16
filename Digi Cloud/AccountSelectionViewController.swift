@@ -9,7 +9,9 @@
 import UIKit
 
 final class AccountSelectionViewController: UIViewController,
-                                      UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+            UICollectionViewDelegate,
+            UICollectionViewDataSource,
+            UICollectionViewDelegateFlowLayout {
     // MARK: - Properties
 
     private let cellId = "Cell"
@@ -23,6 +25,7 @@ final class AccountSelectionViewController: UIViewController,
     var onSelect: (() -> Void)?
 
     var accounts: [Account] = []
+    var users: [User] = []
 
     private let spinner: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
@@ -32,7 +35,7 @@ final class AccountSelectionViewController: UIViewController,
         return ai
     }()
 
-    var accountsCollectionView: UICollectionView = {
+    var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -131,11 +134,40 @@ final class AccountSelectionViewController: UIViewController,
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-        accountsCollectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
+
+        collectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
+        getPersistedUsers()
         setupViews()
-        getAccountsFromKeychain()
-        updateAccounts()
+        updateViews()
+
+        super.viewDidLoad()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        updateUsers {
+            self.updateViews()
+        }
+    }
+
+    private func getPersistedUsers() {
+
+        users.removeAll()
+
+        do {
+            accounts = try Account.accountItems()
+        } catch {
+            fatalError("Error fetching accounts from Keychain - \(error)")
+        }
+
+        for account in accounts {
+            if let user = AppSettings.getPersistedUserInfo(userID: account.userID) {
+                users.append(user)
+            } else {
+                fatalError("Error fetching persisted user from UserDefaults")
+            }
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -144,13 +176,13 @@ final class AccountSelectionViewController: UIViewController,
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        if let layout = accountsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.invalidateLayout()
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return accounts.count
+        return users.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -158,18 +190,19 @@ final class AccountSelectionViewController: UIViewController,
             return UICollectionViewCell()
         }
         let cache = Cache()
-        let account = accounts[indexPath.item]
-        if let name = UserDefaults.standard.string(forKey: account.username) {
-            cell.accountNameLabel.text = name
-        } else {
-            cell.accountNameLabel.text = account.username
+
+        let user = users[indexPath.item]
+
+        if let user = AppSettings.getPersistedUserInfo(userID: user.id) {
+            cell.accountNameLabel.text = user.name
         }
 
-        if let data = cache.load(type: .profile, key: account.username) {
+        if let data = cache.load(type: .profile, key: user.id + ".png") {
             cell.profileImage.image = UIImage(data: data)
         } else {
             cell.profileImage.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
         }
+
         return cell
     }
 
@@ -223,15 +256,15 @@ final class AccountSelectionViewController: UIViewController,
         guard !isExecuting else { return }
         isExecuting = true
 
-        switchToAccount(accounts[indexPath.item])
+        switchToAccount(users[indexPath.item])
     }
 
     // MARK: - Helper Functions
 
     private func setupViews() {
 
-        accountsCollectionView.delegate = self
-        accountsCollectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
 
         setNeedsStatusBarAppearanceUpdate()
 
@@ -239,7 +272,7 @@ final class AccountSelectionViewController: UIViewController,
 
         view.addSubview(logoBigLabel)
         view.addSubview(noAccountsLabel)
-        view.addSubview(accountsCollectionView)
+        view.addSubview(collectionView)
         view.addSubview(spinner)
         view.addSubview(stackView)
         stackView.addArrangedSubview(signUpLabel)
@@ -247,57 +280,55 @@ final class AccountSelectionViewController: UIViewController,
         NSLayoutConstraint.activate([
             logoBigLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             NSLayoutConstraint(item: logoBigLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 0.15, constant: 0.0),
-            accountsCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            accountsCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            NSLayoutConstraint(item: accountsCollectionView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 0.7, constant: 0.0),
-            NSLayoutConstraint(item: accountsCollectionView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
-            spinner.centerXAnchor.constraint(equalTo: accountsCollectionView.centerXAnchor),
-            NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: accountsCollectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
+            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            NSLayoutConstraint(item: collectionView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 0.7, constant: 0.0),
+            NSLayoutConstraint(item: collectionView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
+            spinner.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
+            NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: collectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
             noAccountsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
             stackView.centerYAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.height * 0.035)
-            ])
+        ])
 
     }
 
-    private func updateViews() {
-        if accounts.count == 0 {
+    func updateViews() {
+
+        if users.count == 0 {
             loginToAnotherAccountButton.removeFromSuperview()
             manageAccountsButton.removeFromSuperview()
             stackView.insertArrangedSubview(addAccountButton, at: 0)
-            accountsCollectionView.isHidden = true
+            collectionView.isHidden = true
             noAccountsLabel.isHidden = false
         } else {
             addAccountButton.removeFromSuperview()
             stackView.insertArrangedSubview(loginToAnotherAccountButton, at: 0)
             stackView.insertArrangedSubview(manageAccountsButton, at: 0)
-            accountsCollectionView.isHidden = false
+            collectionView.isHidden = false
             noAccountsLabel.isHidden = true
             loginToAnotherAccountButton.isHidden = false
         }
-        self.accountsCollectionView.reloadData()
+
+        collectionView.reloadData()
     }
 
     @objc private func handleShowLogin() {
         let controller = LoginViewController()
         controller.modalPresentationStyle = .formSheet
 
-        controller.onSuccess = { [weak self] account in
-
-            self?.getAccountsFromKeychain()
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self?.switchToAccount(account)
-
-            }
+        controller.onSuccess = { [weak self] user in
+            self?.getPersistedUsers()
+            self?.updateViews()
         }
+
         present(controller, animated: true, completion: nil)
     }
 
     @objc private func handleManageAccounts() {
 
-        let controller = ManageAccountsViewController(controller: self, accounts: accounts)
+        let controller = ManageAccountsViewController(controller: self)
 
         controller.onAddAccount = { [weak self] in
             self?.handleShowLogin()
@@ -321,69 +352,99 @@ final class AccountSelectionViewController: UIViewController,
          */
         do {
             accounts = try Account.accountItems()
-            updateViews()
-
         } catch {
-            fatalError("Error fetching account items - \(error)")
+            fatalError("Error fetching account from Keychain - \(error)")
         }
+
+        updateUsers {
+            self.updateViews()
+        }
+
     }
 
-    private func updateAccounts() {
+    func updateUsers(completion: (() -> Void)?) {
+
+        var updateError = false
 
         let dispatchGroup = DispatchGroup()
 
+        self.users.removeAll()
+
         for account in accounts {
-            dispatchGroup.enter()
-            dispatchGroup.enter()
 
-            account.fetchAccountInfo {
-                dispatchGroup.leave()
-            }
+            do {
+                let token = try account.readToken()
 
-            account.fetchProfileImage {
-                dispatchGroup.leave()
+                dispatchGroup.enter()
+
+                AppSettings.saveUser(forToken: token) { user, error in
+
+                    dispatchGroup.leave()
+
+                    guard error == nil else {
+                        updateError = true
+                        return
+                    }
+
+                    if let user = user {
+                        self.users.append(user)
+                    }
+                }
+
+            } catch {
+                fatalError("Error fetching account from Keychain - \(error)")
             }
         }
 
         dispatchGroup.notify(queue: .main, execute: {
-            self.accountsCollectionView.reloadData()
+
+            if updateError {
+                // Shouwd we inform user about refresh failed?
+                // self.showError()
+            } else {
+                completion?()
+            }
         })
     }
 
-    private func switchToAccount(_ account: Account) {
+    private func showError() {
+        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                      message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: ""),
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
+        alert.addAction(actionOK)
+        self.present(alert, animated: false, completion: nil)
+    }
+
+    private func switchToAccount(_ user: User) {
 
         spinner.startAnimating()
 
-        do {
-            // save the Token for current session
-            DigiClient.shared.token = try account.readToken()
+        // Save in Userdefaults this user as logged in
+        AppSettings.loggedUserID = user.id
 
-            // Save in Userdefaults this user as logged in
-            AppSettings.loggedAccount = account.username
+        // save the Token for current session
+        DigiClient.shared.loggedAccount = Account(userID: user.id)
 
-            // Animate the selected account in the collection view
-            let indexPaths = accounts.enumerated().flatMap({ (offset, element) -> IndexPath? in
-                if element.username == account.username {
-                    return nil
-                }
-                return IndexPath(item: offset, section: 0)
-            })
+        // Animate the selected account in the collection view
+        let indexPaths = users.enumerated().flatMap({ (offset, element) -> IndexPath? in
+            if element.id == user.id {
+                return nil
+            }
+            return IndexPath(item: offset, section: 0)
+        })
 
-            accounts.removeAll()
-            accounts.append(account)
+        users.removeAll()
+        users.append(user)
 
-            accountsCollectionView.performBatchUpdates({
-                self.accountsCollectionView.deleteItems(at: indexPaths)
-            }, completion: { _ in
+        collectionView.performBatchUpdates({
+            self.collectionView.deleteItems(at: indexPaths)
+        }, completion: { _ in
 
-                // Show account locations
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                    self.onSelect?()
-                }
-            })
-
-        } catch {
-            fatalError("Cannot load the token from the Keychain.")
-        }
+            // Show account locations
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                self.onSelect?()
+            }
+        })
     }
 }

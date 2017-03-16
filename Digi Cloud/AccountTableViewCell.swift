@@ -10,20 +10,21 @@ import UIKit
 
 final class AccountTableViewCell: UITableViewCell {
 
-    var account: Account? {
+    var user: User? {
         didSet {
-            guard let username = account?.username, let name = UserDefaults.standard.string(forKey: username) else {
+            guard let id = user?.id,
+                  let name = user?.name,
+                  let username = user?.email else {
                 return
             }
             self.accountNameLabel.text = name
             self.accountUsernameLabel.text = username
             let cache = Cache()
-            if let data = cache.load(type: .profile, key: username) {
+            if let data = cache.load(type: .profile, key: "\(id).png") {
                 self.profileImageView.image = UIImage(data: data)
             } else {
                 self.profileImageView.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
             }
-
         }
     }
 
@@ -79,5 +80,4 @@ final class AccountTableViewCell: UITableViewCell {
             accountUsernameLabel.rightAnchor.constraint(equalTo: accountNameLabel.rightAnchor)
         ])
     }
-
 }

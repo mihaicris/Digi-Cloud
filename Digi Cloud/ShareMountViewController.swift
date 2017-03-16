@@ -12,7 +12,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     // MARK: - Properties
 
-    var onFinish: (() -> Void)?
+    var onFinish: ((_ exitMount: Bool) -> Void)?
 
     private let location: Location
 
@@ -126,7 +126,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, sharedNode: Node, onFinish: @escaping () -> Void) {
+    init(location: Location, sharedNode: Node, onFinish: @escaping (Bool) -> Void) {
         self.location = location
         self.sharedNode = sharedNode
         self.onFinish = onFinish
@@ -604,9 +604,9 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             // if the user is not owner and it is the last user, it means user has left the share.
 
-            if AppSettings.loggedAccount == user.email {
+            if DigiClient.shared.loggedAccount.userID == user.id {
                 self.dismiss(animated: true) {
-                    self.onFinish?()
+                    self.onFinish?(true)
                 }
             } else {
                 self.refreshMount()
@@ -650,7 +650,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             self.dismiss(animated: true) {
-                self.onFinish?()
+                self.onFinish?(false)
             }
         }
     }
@@ -661,7 +661,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     @objc private func handleDone() {
         dismiss(animated: true) {
-            self.onFinish?()
+            self.onFinish?(false)
         }
     }
 

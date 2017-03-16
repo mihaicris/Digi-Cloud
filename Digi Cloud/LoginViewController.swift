@@ -12,7 +12,7 @@ final class LoginViewController: UIViewController {
 
     // MARK: - Properties
 
-    var onSuccess: ((Account) -> Void)?
+    var onSuccess: ((User) -> Void)?
 
     private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
@@ -26,8 +26,8 @@ final class LoginViewController: UIViewController {
         field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "").uppercased()
 
         #if DEBUG
-        let dict = ProcessInfo.processInfo.environment
-        field.text = dict["USERNAME"] ?? ""
+            let dict = ProcessInfo.processInfo.environment
+            field.text = dict["USERNAME"] ?? ""
         #endif
 
         field.delegate = self
@@ -39,8 +39,8 @@ final class LoginViewController: UIViewController {
         field.textFieldName = NSLocalizedString("PASSWORD", comment: "").uppercased()
 
         #if DEBUG
-        let dict = ProcessInfo.processInfo.environment
-        field.text = dict["PASSWORD"] ?? ""
+            let dict = ProcessInfo.processInfo.environment
+            field.text = dict["PASSWORD"] ?? ""
         #endif
 
         field.isSecureTextEntry = true
@@ -121,7 +121,7 @@ final class LoginViewController: UIViewController {
             aText.append(NSAttributedString(string: "\n\n"))
             aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: ""),
                                             attributes: [NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 16)!,
-                                                        NSForegroundColorAttributeName: UIColor.white]))
+                                                         NSForegroundColorAttributeName: UIColor.white]))
             let aPar = NSMutableParagraphStyle()
             aPar.alignment = .center
             let range = NSRange(location: 0, length: aText.string.characters.count)
@@ -140,35 +140,35 @@ final class LoginViewController: UIViewController {
         view.addSubview(forgotPasswordButton)
 
         NSLayoutConstraint.activate([
-                cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
-                cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-                titleTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-                titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor),
-                titleTextView.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
-                usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30),
-                usernameTextField.widthAnchor.constraint(equalToConstant: 340),
-                usernameTextField.heightAnchor.constraint(equalToConstant: 50),
-                passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                passwordTextField.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 20),
-                passwordTextField.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
-                passwordTextField.heightAnchor.constraint(equalToConstant: 50),
-                loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30),
-                loginButton.widthAnchor.constraint(equalToConstant: 150),
-                loginButton.heightAnchor.constraint(equalToConstant: 40),
-                forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                forgotPasswordButton.centerYAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 30),
-                spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                spinner.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 30)
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+            cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
+            titleTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor),
+            titleTextView.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
+            usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30),
+            usernameTextField.widthAnchor.constraint(equalToConstant: 340),
+            usernameTextField.heightAnchor.constraint(equalToConstant: 50),
+            passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            passwordTextField.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 20),
+            passwordTextField.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 50),
+            loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30),
+            loginButton.widthAnchor.constraint(equalToConstant: 150),
+            loginButton.heightAnchor.constraint(equalToConstant: 40),
+            forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            forgotPasswordButton.centerYAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 30),
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 30)
         ])
     }
 
     @objc private func handleForgotPassword() {
         let alert = UIAlertController(title: NSLocalizedString("Information", comment: ""),
-                                    message: NSLocalizedString("Please contact RCS RDS for password information.", comment: ""),
-                             preferredStyle: UIAlertControllerStyle.alert)
+                                      message: NSLocalizedString("Please contact RCS RDS for password information.", comment: ""),
+                                      preferredStyle: UIAlertControllerStyle.alert)
 
         let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
 
@@ -187,17 +187,17 @@ final class LoginViewController: UIViewController {
         passwordTextField.resignFirstResponder()
 
         guard let username = usernameTextField.text?.lowercased(),
-              let password = passwordTextField.text,
-              username.characters.count > 0,
-              password.characters.count > 0
-        else {
-            let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
-                                          message: NSLocalizedString("Please fill in the fields.", comment: ""),
-                                          preferredStyle: UIAlertControllerStyle.alert)
-            let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
-            alert.addAction(actionOK)
-            self.present(alert, animated: false, completion: nil)
-            return
+            let password = passwordTextField.text,
+            username.characters.count > 0,
+            password.characters.count > 0
+            else {
+                let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                              message: NSLocalizedString("Please fill in the fields.", comment: ""),
+                                              preferredStyle: UIAlertControllerStyle.alert)
+                let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
+                alert.addAction(actionOK)
+                self.present(alert, animated: false, completion: nil)
+                return
         }
 
         spinner.startAnimating()
@@ -205,60 +205,45 @@ final class LoginViewController: UIViewController {
         DigiClient.shared.authenticate(username: username, password: password) { token, error in
 
             guard error == nil else {
-
                 self.spinner.stopAnimating()
-
-                let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
-                                            message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: ""),
-                                     preferredStyle: UIAlertControllerStyle.alert)
-                let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
-                alert.addAction(actionOK)
-                self.present(alert, animated: false, completion: nil)
+                self.showError()
                 return
             }
 
             guard let token = token else {
-
                 self.spinner.stopAnimating()
-
-                let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
-                                            message: NSLocalizedString("Unauthorized access", comment: ""),
-                                     preferredStyle: UIAlertControllerStyle.alert)
-
-                let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
-                alert.addAction(actionOK)
-                self.present(alert, animated: false, completion: nil)
+                self.showError()
                 return
             }
 
-            let account = Account(username: username)
-
-            do {
-                // Save the token in the Keychain
-                try account.save(token: token)
-
-                // Fetch user info (firstName, lastName)
-                account.fetchAccountInfo {
-
-                    // Save profile image view from Gravatar if exists.
-                    account.fetchProfileImage {
-
-                        self.dismiss(animated: true) {
-                            self.onSuccess?(account)
-                        }
-                    }
+            AppSettings.saveUser(forToken: token) { (user, error) in
+                guard error == nil else {
+                    self.spinner.stopAnimating()
+                    self.showError()
+                    return
                 }
 
-            } catch {
-                let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
-                                              message: NSLocalizedString("An error has occurred while saving the account.\nPlease try again later!", comment: ""),
-                                              preferredStyle: UIAlertControllerStyle.alert)
-                let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
-                alert.addAction(actionOK)
-                self.present(alert, animated: false, completion: nil)
+                if let user = user {
+                    self.dismiss(animated: true) {
+                        self.onSuccess?(user)
+                    }
+                } else {
+                    self.spinner.stopAnimating()
+                    self.showError()
+                }
             }
         }
     }
+
+    private func showError() {
+        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                      message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: ""),
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
+        alert.addAction(actionOK)
+        self.present(alert, animated: false, completion: nil)
+    }
+
 }
 
 extension LoginViewController: UITextFieldDelegate {

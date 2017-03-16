@@ -132,7 +132,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
                 self.loadFileContent()
             }
 
-        } catch let error {
+        } catch {
             print("Could not move file to disk: \(error.localizedDescription)")
         }
     }

@@ -22,11 +22,11 @@ final class ShareViewController: UITableViewController {
         }
     }
 
-    let onFinish: (() -> Void)
+    let onFinish: ((_ shouldExitMount: Bool) -> Void)
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, sharedNode: Node, onFinish: @escaping () -> Void) {
+    init(location: Location, sharedNode: Node, onFinish: @escaping (Bool) -> Void) {
         self.location = location
         self.sharedNode = sharedNode
         self.onFinish = onFinish
@@ -154,7 +154,7 @@ final class ShareViewController: UITableViewController {
 
     @objc private func handleCancel() {
         dismiss(animated: true) {
-            self.onFinish()
+            self.onFinish(false)
         }
     }
 

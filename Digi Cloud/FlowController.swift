@@ -35,15 +35,14 @@ final class FlowController {
 //            if AppSettings.shouldReplayIntro {
 //                controller = self.createIntroController()
 //            } else {
-                if let username = AppSettings.loggedAccount {
-                    let loggedAccount = Account(username: username)
-                    do {
-                        let token = try loggedAccount.readToken()
-                        DigiClient.shared.token = token
-                        controller = self.createMainNavigationController()
-                    } catch {
-                        controller = self.createAccountSelectionController()
-                    }
+                if let userID = AppSettings.loggedUserID {
+
+                    let account = Account(userID: userID)
+
+                    DigiClient.shared.loggedAccount = account
+
+                    controller = self.createMainNavigationController()
+
                 } else {
                     controller = self.createAccountSelectionController()
                 }

@@ -1402,13 +1402,18 @@ final class ListingViewController: UITableViewController {
 
     private func showShareViewController(location: Location, sharedNode: Node) {
 
-        let onFinish = { [weak self] in
-
-            self?.updateContent()
+        let onFinish = { [weak self] (shouldExitMount: Bool) in
 
             if let navController = self?.navigationController as? MainNavigationController {
-                for controller in navController.viewControllers {
-                    (controller as? ListingViewController)?.needRefresh = true
+                if shouldExitMount {
+                    navController.popToRootViewController(animated: true)
+                } else {
+
+                    self?.updateContent()
+
+                    for controller in navController.viewControllers {
+                        (controller as? ListingViewController)?.needRefresh = true
+                    }
                 }
             }
         }
@@ -1428,13 +1433,18 @@ final class ListingViewController: UITableViewController {
 
     private func showShareInfoViewController(location: Location, sharedNode: Node) {
 
-        let onFinish = { [weak self] in
-
-            self?.updateContent()
+        let onFinish = { [weak self] (shouldExitMount: Bool) in
 
             if let navController = self?.navigationController as? MainNavigationController {
-                for controller in navController.viewControllers {
-                    (controller as? ListingViewController)?.needRefresh = true
+                if shouldExitMount {
+                        navController.popToRootViewController(animated: true)
+                } else {
+
+                    self?.updateContent()
+
+                    for controller in navController.viewControllers {
+                        (controller as? ListingViewController)?.needRefresh = true
+                    }
                 }
             }
         }

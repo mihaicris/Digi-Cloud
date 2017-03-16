@@ -12,7 +12,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     // MARK: - Properties
 
-    var onFinish: (() -> Void)?
+    var onFinish: ((Bool) -> Void)?
 
     private enum Sections {
         case location
@@ -238,7 +238,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     // MARK: - Initializers and Deinitializers
 
-    init(location: Location, linkType: LinkType, onFinish: @escaping () -> Void) {
+    init(location: Location, linkType: LinkType, onFinish: @escaping (Bool) -> Void) {
         self.location = location
         self.linkType = linkType
         self.onFinish = onFinish
@@ -635,7 +635,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     @objc private func handleDone() {
         dismiss(animated: true) {
-            self.onFinish?()
+            self.onFinish?(false)
         }
     }
 
@@ -720,7 +720,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
             self.dismiss(animated: true) {
-                self.onFinish?()
+                self.onFinish?(false)
             }
         }
     }

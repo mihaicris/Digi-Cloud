@@ -206,7 +206,7 @@ final class SettingsViewController: UITableViewController {
         isExecuting = true
 
         if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
-            AppSettings.loggedAccount = nil
+            AppSettings.loggedUserID = nil
 
             dismiss(animated: true) {
 
