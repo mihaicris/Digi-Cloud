@@ -87,6 +87,10 @@ struct AppSettings {
         }
     }
 
+    static func tokenForAccount(account: Account) -> String {
+        return try! account.readToken()
+    }
+
     static func persistUserInfo(user: User) {
         UserDefaults.standard.set(user.name, forKey: "name-\(user.id)")
         UserDefaults.standard.set(user.email, forKey: "email-\(user.id)")

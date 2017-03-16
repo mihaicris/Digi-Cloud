@@ -8,10 +8,9 @@
 
 import UIKit
 
-final class AccountSelectionViewController: UIViewController,
-            UICollectionViewDelegate,
-            UICollectionViewDataSource,
-            UICollectionViewDelegateFlowLayout {
+final class AccountSelectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
+                                            UICollectionViewDelegateFlowLayout {
+
     // MARK: - Properties
 
     private let cellId = "Cell"
@@ -40,8 +39,6 @@ final class AccountSelectionViewController: UIViewController,
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.layer.cornerRadius = 25
-        cv.layer.masksToBounds = true
         cv.backgroundColor = UIColor.init(white: 0.0, alpha: 0.05)
         return cv
     }()
@@ -256,7 +253,7 @@ final class AccountSelectionViewController: UIViewController,
         guard !isExecuting else { return }
         isExecuting = true
 
-        switchToAccount(users[indexPath.item])
+        switchToAccount(indexPath)
     }
 
     // MARK: - Helper Functions
@@ -280,9 +277,9 @@ final class AccountSelectionViewController: UIViewController,
         NSLayoutConstraint.activate([
             logoBigLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             NSLayoutConstraint(item: logoBigLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 0.15, constant: 0.0),
-            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
             collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            NSLayoutConstraint(item: collectionView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 0.7, constant: 0.0),
             NSLayoutConstraint(item: collectionView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
             spinner.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
             NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: collectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
@@ -368,7 +365,7 @@ final class AccountSelectionViewController: UIViewController,
 
         let dispatchGroup = DispatchGroup()
 
-        self.users.removeAll()
+        var updatedUsers: [User] = []
 
         for account in accounts {
 
@@ -387,7 +384,7 @@ final class AccountSelectionViewController: UIViewController,
                     }
 
                     if let user = user {
-                        self.users.append(user)
+                        updatedUsers.append(user)
                     }
                 }
 
@@ -402,6 +399,7 @@ final class AccountSelectionViewController: UIViewController,
                 // Shouwd we inform user about refresh failed?
                 // self.showError()
             } else {
+                self.users = self.users.updating(from: updatedUsers)
                 completion?()
             }
         })
@@ -416,17 +414,11 @@ final class AccountSelectionViewController: UIViewController,
         self.present(alert, animated: false, completion: nil)
     }
 
-    private func switchToAccount(_ user: User) {
+    private func switchToAccount(_ userIndexPath: IndexPath) {
 
-        spinner.startAnimating()
+        let user = users[userIndexPath.item]
 
-        // Save in Userdefaults this user as logged in
-        AppSettings.loggedUserID = user.id
-
-        // save the Token for current session
-        DigiClient.shared.loggedAccount = Account(userID: user.id)
-
-        // Animate the selected account in the collection view
+        // get indexPaths of all users except the one selected
         let indexPaths = users.enumerated().flatMap({ (offset, element) -> IndexPath? in
             if element.id == user.id {
                 return nil
@@ -434,17 +426,86 @@ final class AccountSelectionViewController: UIViewController,
             return IndexPath(item: offset, section: 0)
         })
 
-        users.removeAll()
+        self.users.removeAll()
         users.append(user)
 
-        collectionView.performBatchUpdates({
+        let updatesClosure: () -> Void = {
             self.collectionView.deleteItems(at: indexPaths)
-        }, completion: { _ in
+        }
 
-            // Show account locations
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                self.onSelect?()
+        let completionClosure: (Bool) -> Void = { _ in
+
+            let indexPathOneElement = IndexPath(item: 0, section: 0)
+
+            if let cell = self.collectionView.cellForItem(at: indexPathOneElement) {
+
+                let animationClosure = { cell.transform = CGAffineTransform(scaleX: 1.4, y: 1.4) }
+
+                let animationCompletionClosure: (Bool) -> Void = { _ in
+
+                    self.spinner.startAnimating()
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        let account = Account(userID: user.id)
+
+                        // read token
+                        let token = try! account.readToken()
+
+                        // Try to access network
+                        DigiClient.shared.getUser(forToken: token) { _, error in
+
+                            guard error == nil else {
+
+                                self.spinner.stopAnimating()
+
+                                self.reverseAnimation {
+
+                                    self.getPersistedUsers()
+                                    self.setupViews()
+                                    self.updateViews()
+
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        self.isExecuting = false
+                                        self.showError()
+                                    }
+                                }
+                                return
+                            }
+
+                            // save the Token for current session
+                            DigiClient.shared.loggedAccount = account
+
+                            // Save in Userdefaults this user as logged in
+                            AppSettings.loggedUserID = user.id
+
+                            // Show account locations
+                            self.onSelect?()
+                        }
+                    }
+                }
+
+                UIView.animate(withDuration: 0.5, delay: 0,
+                               usingSpringWithDamping: 0.5,
+                               initialSpringVelocity: 1,
+                               options: UIViewAnimationOptions.curveEaseInOut,
+                               animations: animationClosure,
+                               completion: animationCompletionClosure)
             }
+        }
+
+        // Animate the selected account in the collection view
+        self.collectionView.performBatchUpdates(updatesClosure, completion: completionClosure)
+    }
+
+    private func reverseAnimation(completion: @escaping () -> Void) {
+        UIView.animate(withDuration: 0.2, animations: {
+
+            let indexPathOneElement = IndexPath(item: 0, section: 0)
+            if let cell = self.collectionView.cellForItem(at: indexPathOneElement) {
+                    cell.transform = CGAffineTransform.identity
+            }
+        }, completion: { _ in
+            completion()
         })
     }
 }
