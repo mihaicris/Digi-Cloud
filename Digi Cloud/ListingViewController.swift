@@ -1459,18 +1459,7 @@ final class ListingViewController: UITableViewController {
 
 extension ListingViewController: UISearchControllerDelegate {
 
-    func willPresentSearchController(_ searchController: UISearchController) {
-        DispatchQueue.main.async {
-            searchController.searchResultsController?.view.isHidden = false
-        }
-    }
-
-    func didPresentSearchController(_ searchController: UISearchController) {
-        searchController.searchResultsController?.view.isHidden = false
-    }
-
     func willDismissSearchController(_ searchController: UISearchController) {
-
         if let nav = navigationController as? MainNavigationController {
             nav.searchResultsControllerIndex = nil
         }
