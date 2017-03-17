@@ -67,7 +67,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         self.textField.becomeFirstResponder()
         super.viewDidAppear(animated)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)
@@ -124,26 +124,40 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
         let actionsContainerView: UIView = {
             let v = UIView()
-            v.layer.cornerRadius = 5
             v.translatesAutoresizingMaskIntoConstraints = false
             v.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 1.0, alpha: 1.0)
             return v
         }()
 
-        let convert_type_0_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace underscore with space", comment: ""),
+        let convert_type_0_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace underscores with spaces", comment: ""),
                                                           delegate: self,
                                                           selector: #selector(handleConvert(_:)),
                                                           tag: 0)
 
-        let convert_type_1_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace space with underscore", comment: ""),
+        let convert_type_1_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace spaces with underscores", comment: ""),
                                                           delegate: self,
                                                           selector: #selector(handleConvert(_:)),
                                                           tag: 1)
 
-        let convert_type_2_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to Sentence Case", comment: ""),
+        let convert_type_11_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace points with spaces", comment: ""),
+                                                          delegate: self,
+                                                          selector: #selector(handleConvert(_:)),
+                                                          tag: 11)
+
+        let convert_type_12_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace spaces with points", comment: ""),
+                                                           delegate: self,
+                                                           selector: #selector(handleConvert(_:)),
+                                                           tag: 12)
+
+        let convert_type_2_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to Title Case", comment: ""),
                                                           delegate: self,
                                                           selector: #selector(handleConvert(_:)),
                                                           tag: 2)
+
+        let convert_type_21_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to sentence", comment: ""),
+                                                           delegate: self,
+                                                           selector: #selector(handleConvert(_:)),
+                                                           tag: 21)
 
         let convert_type_3_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to lower case", comment: ""),
                                                           delegate: self,
@@ -156,7 +170,9 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
                                                           tag: 4)
 
         let actionButtonsStackview: UIStackView = {
-            let s = UIStackView(arrangedSubviews: [convert_type_0_Button, convert_type_1_Button, convert_type_2_Button,
+            let s = UIStackView(arrangedSubviews: [convert_type_0_Button, convert_type_1_Button,
+                                                   convert_type_11_Button, convert_type_12_Button,
+                                                   convert_type_2_Button, convert_type_21_Button,
                                                    convert_type_3_Button, convert_type_4_Button])
             s.translatesAutoresizingMaskIntoConstraints = false
             s.alignment = .fill
@@ -182,10 +198,10 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             messageLabel.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 100),
             messageLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
 
-            actionsContainerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-            actionsContainerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-            actionsContainerView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: 40),
-            actionsContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            actionsContainerView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            actionsContainerView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            actionsContainerView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: 20),
+            actionsContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             actionsListLabel.topAnchor.constraint(equalTo: actionsContainerView.topAnchor, constant: 10),
             actionsListLabel.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20),
@@ -335,8 +351,14 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         case 1:
             // Replace space with underscore
             textField.text = string.replacingOccurrences(of: " ", with: "_")
+        case 11:
+            // Replace points with spaces
+            textField.text = string.replacingOccurrences(of: ".", with: " ")
+        case 12:
+            // Replace spaces with points
+            textField.text = string.replacingOccurrences(of: " ", with: ".")
         case 2:
-            // Change to Sentence Case
+            // Change to Title Case
             let components = string.components(separatedBy: ".")
             if components.count > 1 {
                 let filename = components.dropLast().joined(separator: ".")
@@ -345,6 +367,10 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             } else {
                 textField.text = string.capitalized
             }
+
+        case 21:
+            // Sentence
+            textField.text = String(string.characters.first!).capitalized + String(string.characters.dropFirst())
         case 3:
             // Change to lower case
             textField.text = textField.text?.lowercased()
