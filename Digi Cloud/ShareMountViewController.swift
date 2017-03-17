@@ -54,7 +54,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("MEMBERS", comment: "")
-        l.font = UIFont(name: "HelveticaNeue", size: 13)
+        l.font = UIFont.HelveticaNeue(size: 13)
         l.textColor = UIColor(red: 0.43, green: 0.43, blue: 0.45, alpha: 1.0)
         return l
     }()
@@ -231,7 +231,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             let mountNameLabel: UILabelWithPadding = {
                 let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
-                l.font = UIFont(name: "HelveticaNeue", size: 12)
+                l.font = UIFont.HelveticaNeue(size: 12)
                 l.adjustsFontSizeToFitWidth = true
                 l.textColor = .darkGray
                 l.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
@@ -248,7 +248,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 l.textColor = .darkGray
                 l.text = String(location.path.characters.dropLast())
                 l.numberOfLines = 2
-                l.font = UIFont(name: "HelveticaNeue", size: 12)
+                l.font = UIFont.HelveticaNeue(size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
                 return l
             }()

@@ -49,6 +49,7 @@ final class DirectoryCell: BaseListCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         iconImageView.image = UIImage(named: "FolderIcon")
+        nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 15)
     }
 
     required init?(coder aDecoder: NSCoder) {

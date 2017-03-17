@@ -49,14 +49,14 @@ final class AccountTableViewCell: UITableViewCell {
     let accountNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont(name: "HelveticaNeue", size: 16)
+        l.font = UIFont.HelveticaNeue(size: 16)
         return l
     }()
 
     let accountUsernameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont(name: "HelveticaNeue", size: 12)
+        l.font = UIFont.HelveticaNeue(size: 12)
         l.textColor = .darkGray
         return l
     }()

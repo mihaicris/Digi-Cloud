@@ -23,7 +23,7 @@ final class ShareTableViewCell: UITableViewCell {
     var nameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont(name: "HelveticaNeue", size: 16)
+        l.font = UIFont.HelveticaNeue(size: 16)
         l.textColor = UIColor.defaultColor
         l.lineBreakMode = .byTruncatingMiddle
         return l

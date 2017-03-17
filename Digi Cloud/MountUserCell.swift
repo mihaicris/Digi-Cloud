@@ -51,14 +51,14 @@ class MountUserCell: UITableViewCell {
     let nameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont(name: "HelveticaNeue", size: 16)
+        l.font = UIFont.HelveticaNeue(size: 16)
         return l
     }()
 
     let emailLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont(name: "HelveticaNeue", size: 11)
+        l.font = UIFont.HelveticaNeue(size: 11)
         l.textColor = .darkGray
         return l
     }()

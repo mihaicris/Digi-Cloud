@@ -79,10 +79,10 @@ final class SearchResultController: UITableViewController {
 
         if node.type == "dir" {
             cell.nodeIcon.image = UIImage(named: "FolderIcon")
-            cell.nodeNameLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 16)
+            cell.nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 16)
         } else {
             cell.nodeIcon.image = UIImage(named: "FileIcon")
-            cell.nodeNameLabel.font = UIFont(name: "HelveticaNeue", size: 16)
+            cell.nodeNameLabel.font = UIFont.HelveticaNeue(size: 16)
         }
 
         if mountNames[nodeMountName] == nil {

@@ -24,8 +24,6 @@ final class IntroductionViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .magenta
         setupViews()
-
-//        AppSettings.setDefaultAppSettings()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -47,7 +45,7 @@ final class IntroductionViewController: UIViewController {
             let l = UILabel()
             l.text = "Introduction"
             l.textColor = .white
-            l.font = UIFont(name: "Helvetica", size: 48)
+            l.font = UIFont.HelveticaNeue(size: 48)
             l.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
             l.sizeToFit()
             l.center = view.center

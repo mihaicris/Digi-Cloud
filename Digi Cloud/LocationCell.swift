@@ -14,7 +14,7 @@ final class LocationCell: UITableViewCell {
 
     let locationLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 30)
+        label.font = UIFont.HelveticaNeue(size: 30)
         return label
     }()
 

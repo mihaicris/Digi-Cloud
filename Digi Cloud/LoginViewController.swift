@@ -60,7 +60,7 @@ final class LoginViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle("✕", for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont(name: "Helvetica", size: 22)
+        b.titleLabel?.font = UIFont.HelveticaNeue(size: 22)
         b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
         return b
     }()
@@ -70,7 +70,7 @@ final class LoginViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Forgot password?", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
+        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
         return b
     }()
@@ -115,18 +115,24 @@ final class LoginViewController: UIViewController {
             tv.isScrollEnabled = false
             tv.translatesAutoresizingMaskIntoConstraints = false
 
+            // TODO: Change fonts?
             let aText = NSMutableAttributedString(string: NSLocalizedString("Hello!", comment: ""),
                                                   attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 28)!,
                                                                NSForegroundColorAttributeName: UIColor.white])
             aText.append(NSAttributedString(string: "\n\n"))
+
             aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: ""),
-                                            attributes: [NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 16)!,
+                                            attributes: [NSFontAttributeName: UIFont.HelveticaNeue(size: 16),
                                                          NSForegroundColorAttributeName: UIColor.white]))
+
             let aPar = NSMutableParagraphStyle()
             aPar.alignment = .center
+
             let range = NSRange(location: 0, length: aText.string.characters.count)
             aText.addAttributes([NSParagraphStyleAttributeName: aPar], range: range)
+
             tv.textContainerInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+
             tv.attributedText = aText
             return tv
         }()

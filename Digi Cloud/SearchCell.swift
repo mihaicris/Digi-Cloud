@@ -21,14 +21,13 @@ final class SearchCell: UITableViewCell {
     var nodeNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
 
     let nodeMountLabel: UILabelWithPadding = {
         let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
-        label.font = UIFont(name: "HelveticaNeue", size: 11)
+        label.font = UIFont.HelveticaNeue(size: 11)
         label.textColor = .white
         label.layer.cornerRadius = 4
         label.clipsToBounds = true
@@ -40,7 +39,7 @@ final class SearchCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .darkGray
-        label.font = UIFont(name: "HelveticaNeue", size: 11)
+        label.font = UIFont.HelveticaNeue(size: 11)
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()

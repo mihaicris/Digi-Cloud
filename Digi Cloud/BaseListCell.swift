@@ -37,10 +37,9 @@ class BaseListCell: UITableViewCell {
         return i
     }()
 
-    var nameLabel: UILabel = {
+    var nodeNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont(name: "HelveticaNeue", size: 15)
         l.lineBreakMode = .byTruncatingMiddle
         return l
     }()
@@ -48,7 +47,7 @@ class BaseListCell: UITableViewCell {
     var detailsLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont(name: "HelveticaNeue", size: 11)
+        l.font = UIFont.HelveticaNeue(size: 11)
         return l
     }()
 
@@ -80,12 +79,12 @@ class BaseListCell: UITableViewCell {
         if self.hasButton {
             if highlighted {
                 contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
-                nameLabel.textColor = .white
+                nodeNameLabel.textColor = .white
                 detailsLabel.textColor = UIColor.init(white: 0.8, alpha: 1)
                 actionsButton.setTitleColor(.white, for: .normal)
             } else {
                 contentView.backgroundColor = nil
-                nameLabel.textColor = .black
+                nodeNameLabel.textColor = .black
                 detailsLabel.textColor = .darkGray
                 actionsButton.setTitleColor(.darkGray, for: .normal)
             }
@@ -100,26 +99,26 @@ class BaseListCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
 
         contentView.addSubview(iconImageView)
-        contentView.addSubview(nameLabel)
+        contentView.addSubview(nodeNameLabel)
         contentView.addSubview(detailsLabel)
 
         NSLayoutConstraint.activate([
-            // Dimentional constraints
+                // Dimentional constraints
             iconImageView.widthAnchor.constraint(equalToConstant: 26),
-            iconImageView.heightAnchor.constraint(equalToConstant: 26),
+                iconImageView.heightAnchor.constraint(equalToConstant: 26),
 
-            // Horizontal constraints
+                // Horizontal constraints
             iconImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
-            nameLabel.leftAnchor.constraint(equalTo: iconImageView.rightAnchor, constant: 10),
-            detailsLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
+                nodeNameLabel.leftAnchor.constraint(equalTo: iconImageView.rightAnchor, constant: 10),
+                detailsLabel.leftAnchor.constraint(equalTo: nodeNameLabel.leftAnchor),
 
-            // Vertical constraints
+                // Vertical constraints
             iconImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1),
-            nameLabel.topAnchor.constraint(equalTo: iconImageView.topAnchor, constant: -3),
-            detailsLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2)
+                nodeNameLabel.topAnchor.constraint(equalTo: iconImageView.topAnchor, constant: -3),
+                detailsLabel.topAnchor.constraint(equalTo: nodeNameLabel.bottomAnchor, constant: 2)
             ])
 
-        rightPaddingButtonConstraint = nameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        rightPaddingButtonConstraint = nodeNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         rightPaddingButtonConstraint?.isActive = true
     }
 

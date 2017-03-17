@@ -226,7 +226,7 @@ final class ListingViewController: UITableViewController {
                 if let sourceLocations = sourceLocations {
                     if sourceLocations.contains(item.location(in: self.rootLocation)) {
                         cell.isUserInteractionEnabled = false
-                        cell.nameLabel.isEnabled = false
+                        cell.nodeNameLabel.isEnabled = false
                         cell.detailsLabel.isEnabled = false
                     }
                 }
@@ -235,7 +235,7 @@ final class ListingViewController: UITableViewController {
             cell.actionsButton.addTarget(self, action: #selector(handleShowNodeActionsController(_:)), for: .touchUpInside)
             cell.actionsButton.tag = indexPath.row
 
-            cell.nameLabel.text = item.name
+            cell.nodeNameLabel.text = item.name
 
             cell.hasButton = [ActionType.noAction, ActionType.showSearchResult].contains(self.action)
 
@@ -278,12 +278,12 @@ final class ListingViewController: UITableViewController {
             // In copy or move mode you cannot copy or move into a file.
             if self.action == .copy || self.action == .move {
                 cell.isUserInteractionEnabled = false
-                cell.nameLabel.isEnabled = false
+                cell.nodeNameLabel.isEnabled = false
                 cell.detailsLabel.isEnabled = false
             }
 
             cell.hasLink = item.link != nil
-            cell.nameLabel.text = item.name
+            cell.nodeNameLabel.text = item.name
 
             let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
             let sizeString = byteFormatter.string(fromByteCount: item.size)

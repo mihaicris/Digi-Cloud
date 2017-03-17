@@ -48,7 +48,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = UIColor(red: 161/255, green: 168/255, blue: 209/255, alpha: 1.0)
         l.text = NSLocalizedString("No accounts", comment: "")
-        l.font = UIFont(name: "HelveticaNeue-light", size: 30)
+        l.font = UIFont.HelveticaNeueLight(size: 30)
         return l
     }()
 
@@ -57,7 +57,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Add Account", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
+        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
         return b
     }()
@@ -76,7 +76,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Log in to Another Account", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
+        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
         return b
     }()
@@ -91,10 +91,13 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         let attributedText = NSMutableAttributedString(string: "Digi Cloud",
                                                        attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 48) as Any])
         let word = NSLocalizedString("for", comment: "")
+
         attributedText.append(NSAttributedString(string: "\n\(word)  ",
-            attributes: [NSFontAttributeName: UIFont(name: "Didot-Italic", size: 20) as Any]))
+                                                 attributes: [NSFontAttributeName: UIFont(name: "Didot-Italic", size: 20) as Any]))
+
         attributedText.append(NSAttributedString(string: "Digi Storage",
                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
+
         let nsString = NSString(string: attributedText.string)
         var nsRange = nsString.range(of: "Cloud")
         attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
@@ -110,7 +113,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Manage Accounts", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 14)
+        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleManageAccounts), for: .touchUpInside)
         return b
     }()
