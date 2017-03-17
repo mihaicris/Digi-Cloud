@@ -75,7 +75,7 @@ final class ManageBookmarksViewController: UITableViewController {
         }
 
         if let mountName = mountsMapping[bookmarks[indexPath.row].mountId]?.name {
-            cell.nameLabel.text = bookmarks[indexPath.row].name
+            cell.bookmarkNameLabel.text = bookmarks[indexPath.row].name
             cell.pathLabel.text = mountName + String(bookmarks[indexPath.row].path.characters.dropLast())
         }
 
@@ -186,15 +186,26 @@ final class ManageBookmarksViewController: UITableViewController {
 
             if hasFetchedSuccessfully {
 
-                if resultBookmarks.count == 0 || resultMounts.count == 0 {
-                    self.title = NSLocalizedString("No bookmarks", comment: "")
-                    return
+                let mountsIDs = resultMounts.map { $0.id }
+
+                for bookmark in resultBookmarks.enumerated().reversed() {
+
+                    if !mountsIDs.contains(bookmark.element.mountId) {
+                        resultBookmarks.remove(at: bookmark.offset)
+                    }
                 }
 
                 for mount in resultMounts {
                     self.mountsMapping[mount.id] = mount
                 }
+
                 self.bookmarks = resultBookmarks
+
+                if self.bookmarks.count == 0 {
+                    self.title = NSLocalizedString("No bookmarks", comment: "")
+                    return
+                }
+
                 self.tableView.reloadData()
                 self.updateButtonsToMatchTableState()
             } else {

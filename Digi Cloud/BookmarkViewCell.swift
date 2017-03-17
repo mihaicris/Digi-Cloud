@@ -19,7 +19,7 @@ final class BookmarkViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    let nameLabel: UILabel = {
+    let bookmarkNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont(name: "HelveticaNeue", size: 16)
@@ -35,18 +35,18 @@ final class BookmarkViewCell: UITableViewCell {
     }()
 
     private func setupViews() {
-        contentView.addSubview(nameLabel)
+        contentView.addSubview(bookmarkNameLabel)
         contentView.addSubview(pathLabel)
         setupConstraints()
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            nameLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
-            nameLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
-            nameLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
-            pathLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
-            pathLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2)
+            bookmarkNameLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
+            bookmarkNameLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
+            bookmarkNameLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+            pathLabel.leftAnchor.constraint(equalTo: bookmarkNameLabel.leftAnchor),
+            pathLabel.topAnchor.constraint(equalTo: bookmarkNameLabel.bottomAnchor, constant: 2)
         ])
     }
 }
