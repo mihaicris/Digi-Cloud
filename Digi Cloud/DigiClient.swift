@@ -196,7 +196,7 @@ final class DigiClient {
     ///   - headers: Additional http headers to include in the URL request
     /// - Returns: The new URL Request
     private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = requestType
         request.allHTTPHeaderFields = headers
@@ -214,7 +214,7 @@ final class DigiClient {
     ///   - token: Authentication token provided by the API server
     ///   - error: The error occurred in the network request, nil for no error.
     func authenticate(username: String, password: String, completion: @escaping(_ token: String?, _ error: Error?) -> Void) {
-       
+
         let method = Methods.Token
         let headers = DefaultHeaders.PostHeaders
         let jsonBody = ["password": password, "email": username]
@@ -245,7 +245,7 @@ final class DigiClient {
     ///   - statusCode: The statusCode of the http request
     ///   - error: The error occurred in the network request, nil for no error.
     func revokeAuthentication(for token: String, completion: @escaping( _ error: Error?) -> Void) {
-        
+
         let method = Methods.Token
         let headers: [String: String] = ["Accept": "*/*", HeadersKeys.Authorization: "Token \(token)"]
 
@@ -330,7 +330,7 @@ final class DigiClient {
     }
 
     func updateUserInfo(for token: String, firstName: String, lastName: String, completion: @escaping(Error?) -> Void) {
-        
+
         let method = Methods.User
         var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
@@ -454,7 +454,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - error: The error returned
     func addBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
-        
+
         let method = Methods.UserBookmarks
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
@@ -484,7 +484,7 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - error: The error returned
     func removeBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
-        
+
         let method = Methods.UserBookmarks
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
@@ -518,7 +518,7 @@ final class DigiClient {
     ///   - mounts: Returned content as an array of locations
     ///   - error: The error occurred in the network request, nil for no error.
     func getMounts(completion: @escaping(_ mounts: [Mount]?, _ error: Error?) -> Void) {
-        
+
         let method = Methods.Mounts
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
@@ -556,7 +556,7 @@ final class DigiClient {
     ///   - mount: Returned Mount
     ///   - error: The error occurred in the network request, nil for no error.
     func createSubmount(at location: Location, withName: String, completion: @escaping( _ mount: Mount?, _ error: Error?) -> Void) {
-        
+
         let method = Methods.MountCreate.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
@@ -592,7 +592,7 @@ final class DigiClient {
     ///   - mount: Returned Mount
     ///   - error: The error occurred in the network request, nil for no error.
     func getMountDetails(for mount: Mount, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
-        
+
         let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
@@ -1371,7 +1371,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func search(parameters: [String: String],
                 completion: @escaping (_ nodeHits: [NodeHit]?, _ mountsDictionary: [String: Mount]?, _ error: Error?) -> Void) {
-        
+
         let method = Methods.Search
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"

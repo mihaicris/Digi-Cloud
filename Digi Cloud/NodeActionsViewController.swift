@@ -37,9 +37,9 @@ final class NodeActionsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupViews()
         setupPermittedActions()
+        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -47,7 +47,7 @@ final class NodeActionsViewController: UITableViewController {
         self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return actions.count
     }

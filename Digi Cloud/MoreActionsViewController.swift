@@ -34,9 +34,9 @@ final class MoreActionsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupViews()
         setupActions()
+        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -44,7 +44,7 @@ final class MoreActionsViewController: UITableViewController {
         preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return actions.count
     }

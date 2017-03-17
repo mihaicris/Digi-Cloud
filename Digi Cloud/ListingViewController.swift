@@ -152,11 +152,11 @@ final class ListingViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupTableView()
         setupSearchController()
         updateNavigationBarItems()
         setupToolBarButtonItems()
+        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -174,10 +174,10 @@ final class ListingViewController: UITableViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         if needRefresh {
             self.updateContent()
         }
+        super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

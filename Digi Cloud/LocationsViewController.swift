@@ -49,15 +49,15 @@ final class LocationsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupNavigationBar()
         setupActivityIndicatorView()
         setupTableView()
+        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         self.getMounts()
+        super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

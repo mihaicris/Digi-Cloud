@@ -59,15 +59,18 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupViews()
+        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        self.textField.becomeFirstResponder()
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            self.textField.becomeFirstResponder()
-        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
     }
 
     // MARK: - TableView Delegate

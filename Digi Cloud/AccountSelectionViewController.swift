@@ -135,11 +135,10 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
         updateUsers {
             self.updateViews()
         }
+        super.viewDidAppear(animated)
     }
 
     private func getPersistedUsers() {

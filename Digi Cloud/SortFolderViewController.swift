@@ -30,9 +30,9 @@ final class SortFolderViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupActions()
         setupViews()
+        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {

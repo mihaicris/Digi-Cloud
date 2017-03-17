@@ -53,12 +53,17 @@ final class ManageBookmarksViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         tableView.register(BookmarkViewCell.self, forCellReuseIdentifier: String(describing: BookmarkViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
         self.title = NSLocalizedString("Bookmarks", comment: "")
         getBookmarksAndMounts()
+        super.viewDidLoad()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

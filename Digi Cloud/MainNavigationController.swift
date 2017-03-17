@@ -26,9 +26,9 @@ final class MainNavigationController: UINavigationController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         view.backgroundColor = .white
         let controller = LocationsViewController(action: .noAction)
         pushViewController(controller, animated: false)
+        super.viewDidLoad()
     }
 }

@@ -90,13 +90,13 @@ final class LoginViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupViews()
+        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         usernameTextField.becomeFirstResponder()
+        super.viewDidAppear(animated)
     }
 
     // MARK: - Helper Functions

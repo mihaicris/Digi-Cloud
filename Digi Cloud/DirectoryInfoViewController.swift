@@ -79,9 +79,14 @@ final class DirectoryInfoViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupViews()
         updateFolderInfo()
+        super.viewDidLoad()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {

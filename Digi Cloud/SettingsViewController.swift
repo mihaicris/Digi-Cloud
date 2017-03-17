@@ -42,8 +42,8 @@ final class SettingsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         title = NSLocalizedString("Settings", comment: "")
+        super.viewDidLoad()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {

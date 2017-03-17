@@ -49,9 +49,9 @@ final class SearchResultController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         self.edgesForExtendedLayout = .bottom
         setupTableView()
+        super.viewDidLoad()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -45,10 +45,12 @@ final class ShareViewController: UITableViewController {
         setupViews()
         setupNavigationItems()
         setupActions()
+        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setToolbarHidden(true, animated: false)
+        super.viewWillAppear(animated)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

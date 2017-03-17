@@ -46,12 +46,14 @@ final class ContentViewController: UIViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+        
         setupViews()
 
         self.title = (self.location.path as NSString).lastPathComponent
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
+        
+        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -74,13 +76,14 @@ final class ContentViewController: UIViewController {
         } else {
             loadFileContent()
         }
-
+        super.viewWillAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
 
         // Close session and delegate
         session?.invalidateAndCancel()
+        super.viewWillDisappear(animated)
     }
 
     // MARK: - Helper Functions

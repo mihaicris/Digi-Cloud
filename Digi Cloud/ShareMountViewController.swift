@@ -145,31 +145,28 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         setupViews()
         setupNavigationItems()
         setupToolBarItems()
-
+        configureWaitingView(type: .started, message: NSLocalizedString("Please wait...", comment: ""))
+        
         if let mount = sharedNode.mount {
-
+            
             if mount.root == nil && sharedNode.mountPath != "/" {
                 createMount()
-
+                
             } else {
                 refreshMount()
             }
         } else {
             createMount()
         }
+        
+        super.viewDidLoad()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        if waitingView.isHidden {
-            self.navigationController?.isToolbarHidden = self.isToolBarAlwaisHidden
-        }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 
@@ -471,7 +468,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func createMount() {
 
-        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Share...", comment: ""))
 
         DigiClient.shared.createSubmount(at: self.location, withName: sharedNode.name) { mount, error in
 
@@ -499,8 +495,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     }
 
     private func refreshMount() {
-
-        self.configureWaitingView(type: .started, message: "Loading Users...")
 
         guard let mount = sharedNode.mount else {
             return
@@ -594,6 +588,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             guard error == nil else {
                 self.configureWaitingView(type: .stopped, message: "There was an error while removing the member.")
+                self.tableViewForUsers.isEditing = false
                 return
             }
 

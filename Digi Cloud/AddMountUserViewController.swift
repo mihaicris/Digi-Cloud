@@ -102,27 +102,32 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-
+        
         title = NSLocalizedString("Add member", comment: "")
 
         let saveMemberButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(handleSaveMember))
 
         navigationItem.rightBarButtonItem = saveMemberButton
         navigationController?.isToolbarHidden = true
+        
+        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        self.usernameTextField.becomeFirstResponder()
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            self.usernameTextField.becomeFirstResponder()
-        }
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         navigationController?.isToolbarHidden = false
+        super.viewDidDisappear(animated)
     }
-
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

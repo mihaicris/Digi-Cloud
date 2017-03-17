@@ -261,11 +261,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         setupNavigationItems()
         setupToolBarItems()
         addViewTapGestureRecognizer()
+        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
         requestLink()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        super.viewDidLoad()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -605,12 +603,13 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     private func requestLink() {
 
-        configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
-
         DigiClient.shared.getLink(for: location, type: linkType) { result, error in
 
             guard error == nil, result != nil else {
-                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
+                
+                let message = NSLocalizedString("There was an error, please try again later.", comment: "")
+                self.configureWaitingView(type: .stopped, message: message)
+
                 return
             }
 

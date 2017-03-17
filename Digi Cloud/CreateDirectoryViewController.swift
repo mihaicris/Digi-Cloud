@@ -37,15 +37,18 @@ final class CreateDirectoryViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupViews()
+        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        self.textField.becomeFirstResponder()
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            self.textField.becomeFirstResponder()
-        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        DigiClient.shared.task?.cancel()
+        super.viewWillDisappear(animated)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
