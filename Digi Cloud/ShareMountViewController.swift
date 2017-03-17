@@ -517,6 +517,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func processMount(_ mount: Mount) {
         self.sharedNode.mount = mount
+        self.setupToolBarItems()
         self.getUserProfileImages(for: mount.users)
     }
 
