@@ -75,9 +75,14 @@ final class LoginViewController: UIViewController {
         return b
     }()
 
+    private var usernameYConstraint: NSLayoutConstraint!
+
     // MARK: - Initializers and Deinitializers
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        DEINITLog(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
@@ -91,6 +96,12 @@ final class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         setupViews()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow(_:)),
+                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide(_:)),
+                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+
         super.viewDidLoad()
     }
 
@@ -145,17 +156,20 @@ final class LoginViewController: UIViewController {
         view.addSubview(spinner)
         view.addSubview(forgotPasswordButton)
 
+        usernameYConstraint = usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
+
         NSLayoutConstraint.activate([
             cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
             cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-            titleTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor),
+            titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor, constant: -30),
             titleTextView.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
             usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30),
             usernameTextField.widthAnchor.constraint(equalToConstant: 340),
             usernameTextField.heightAnchor.constraint(equalToConstant: 50),
+
+            usernameYConstraint,
+
             passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             passwordTextField.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 20),
             passwordTextField.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
@@ -181,6 +195,19 @@ final class LoginViewController: UIViewController {
         alert.addAction(actionOK)
         self.present(alert, animated: false, completion: nil)
         return
+    }
+
+    @objc func handleKeyboardWillShow(_ notification: Notification) {
+        if UIScreen.main.bounds.width > UIScreen.main.bounds.height {
+            usernameYConstraint.constant = -140
+        }
+    }
+
+    @objc func handleKeyboardWillHide(_ notification: Notification) {
+
+        if UIScreen.main.bounds.width > UIScreen.main.bounds.height {
+            usernameYConstraint.constant = -30
+        }
     }
 
     @objc private func handleCancel() {
