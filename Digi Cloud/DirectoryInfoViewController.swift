@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DirectoryInfoViewController: UITableViewController {
+final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: - Properties
 
@@ -21,6 +21,14 @@ final class DirectoryInfoViewController: UITableViewController {
         f.allowsNonnumericFormatting = false
         f.countStyle = .binary
         return f
+    }()
+
+    private lazy var tableView: UITableView = {
+        let t = UITableView(frame: CGRect.zero, style: .grouped)
+        t.translatesAutoresizingMaskIntoConstraints = false
+        t.delegate = self
+        t.dataSource = self
+        return t
     }()
 
     private var rightBarButton: UIBarButtonItem!
@@ -63,11 +71,76 @@ final class DirectoryInfoViewController: UITableViewController {
         }
     }
 
+    private var errorMessageVerticalConstraint: NSLayoutConstraint?
+
+    private lazy var waitingView: UIView = {
+
+        let v = UIView()
+
+        v.isHidden = false
+
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+
+        let spinner: UIActivityIndicatorView = {
+            let s = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            s.translatesAutoresizingMaskIntoConstraints = false
+            s.hidesWhenStopped = true
+            s.tag = 55
+            s.startAnimating()
+            return s
+        }()
+
+        let okButton: UIButton = {
+            let b = UIButton(type: UIButtonType.system)
+            b.translatesAutoresizingMaskIntoConstraints = false
+            b.setTitle(NSLocalizedString("OK", comment: ""), for: UIControlState.normal)
+            b.setTitleColor(.white, for: .normal)
+            b.layer.cornerRadius = 10
+            b.contentEdgeInsets = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
+            b.sizeToFit()
+            b.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.9, alpha: 1)
+            b.tag = 11
+            b.isHidden = false
+            b.addTarget(self, action: #selector(handleHideWaitingView), for: .touchUpInside)
+            return b
+        }()
+
+        let label: UILabel = {
+            let l = UILabel()
+            l.translatesAutoresizingMaskIntoConstraints = false
+            l.textColor = .gray
+            l.textAlignment = .center
+            l.font = UIFont.systemFont(ofSize: 14)
+            l.tag = 99
+            l.numberOfLines = 0
+            return l
+        }()
+
+        v.addSubview(spinner)
+        v.addSubview(label)
+        v.addSubview(okButton)
+
+        self.errorMessageVerticalConstraint = label.centerYAnchor.constraint(equalTo: v.centerYAnchor, constant: 40)
+
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: v.centerYAnchor),
+            label.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+            label.widthAnchor.constraint(equalTo: v.widthAnchor, multiplier: 0.8),
+            self.errorMessageVerticalConstraint!,
+            okButton.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+            okButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40)
+            ])
+
+        return v
+    }()
+
     // MARK: - Initializers and Deinitializers
 
     init(location: Location) {
         self.location = location
-        super.init(style: .grouped)
+        super.init(nibName: nil, bundle: nil)
     }
 
     deinit { DEINITLog(self) }
@@ -80,25 +153,28 @@ final class DirectoryInfoViewController: UITableViewController {
 
     override func viewDidLoad() {
         setupViews()
+
+        configureWaitingView(type: .started, message: NSLocalizedString("Please wait...", comment: ""))
+
         updateFolderInfo()
         super.viewDidLoad()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return location.mount.canWrite ? 4 : 3
 
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:     return NSLocalizedString("Name", comment: "")
         case 1:     return NSLocalizedString("Size", comment: "")
@@ -107,7 +183,7 @@ final class DirectoryInfoViewController: UITableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {
         case 2:     return NSLocalizedString("Note: Including subfolders", comment: "")
         case 3:     return NSLocalizedString("This action is not reversible.", comment: "")
@@ -115,21 +191,21 @@ final class DirectoryInfoViewController: UITableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 2:     return 70
         default:    return UITableViewAutomaticDimension
         }
     }
 
-    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+    func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         // for last section with the Button Delete
         if section == 3 {
             (view as? UITableViewHeaderFooterView)?.textLabel?.textAlignment = .center
         }
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.selectionStyle = .none
         switch indexPath.section {
@@ -190,6 +266,23 @@ final class DirectoryInfoViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
+
+        view.addSubview(tableView)
+        view.addSubview(waitingView)
+
+        NSLayoutConstraint.activate([
+
+            waitingView.topAnchor.constraint(equalTo: view.topAnchor),
+            waitingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            waitingView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            waitingView.rightAnchor.constraint(equalTo: view.rightAnchor),
+
+            tableView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
                                          style: .plain,
                                          target: self,
@@ -202,15 +295,63 @@ final class DirectoryInfoViewController: UITableViewController {
 
         DigiClient.shared.getDirectoryInfo(at: self.location, completion: { (info, error) in
             guard error == nil else {
-                print(error!.localizedDescription)
+
+                var errorMessage: String
+
+                switch error! {
+                    case NetworkingError.internetOffline(let message),
+                         NetworkingError.requestTimedOut(let message):
+                    errorMessage = message
+                default:
+                    errorMessage = NSLocalizedString("There was an error while calculating the directory size.", comment: "")
+                }
+
+                self.configureWaitingView(type: .stopped, message: errorMessage)
+
                 return
             }
             if let info = info {
                 self.directoryInfo = info
+                self.configureWaitingView(type: .hidden, message: "")
             } else {
-                // TODO: Show information that folder was not correctly calculated.
+                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error while calculating the directory size.", comment: ""))
+
             }
         })
+    }
+
+    private func configureWaitingView(type: WaitingType, message: String) {
+
+        switch type {
+        case .hidden:
+            waitingView.isHidden = true
+
+        case .started, .stopped:
+            waitingView.isHidden = false
+
+            navigationController?.isToolbarHidden = true
+
+            if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView,
+                let b = waitingView.viewWithTag(11) as? UIButton {
+                if type == .started {
+                    v.startAnimating()
+                    errorMessageVerticalConstraint?.constant = 40
+                    b.isHidden = true
+                } else {
+                    v.stopAnimating()
+                    b.isHidden = false
+                    errorMessageVerticalConstraint?.constant = 0
+                }
+            }
+
+            if let v = waitingView.viewWithTag(99) as? UILabel {
+                v.text = message
+            }
+        }
+    }
+
+    @objc func handleHideWaitingView(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleDone() {
