@@ -92,7 +92,7 @@ final class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Directory", comment: ""), style: .plain, target: self, action: #selector(handleShowCreateDirectoryViewController))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Directory", comment: ""), style: .plain, target: self, action: #selector(showCreateDirectoryViewController))
         return b
     }()
 
@@ -435,12 +435,11 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
     }
 
-    private func presentError() {
+    private func presentError(message: String) {
 
         self.busyIndicator.stopAnimating()
         self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
 
-        let message = NSLocalizedString("There was an error refreshing the location.", comment: "")
         let title = NSLocalizedString("Error", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
@@ -463,25 +462,25 @@ final class ListingViewController: UITableViewController {
 
                 switch error! {
 
-                case NetworkingError.wrongStatus(let message):
-                    self.emptyFolderLabel.text = message
+                case NetworkingError.internetOffline(let message), NetworkingError.requestTimedOut(let message):
+                    self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
                     self.nodes.removeAll()
                     self.tableView.reloadData()
-                default:
 
                     if self.tableView.isDragging {
                         return
                     }
-                    self.presentError()
+
+                    self.presentError(message: message)
+
+                default:
+                    break
                 }
                 return
             }
 
             guard nodesResult != nil, rootNodeResult != nil else {
-
                 print("Error at receiving content.")
-                self.presentError()
-
                 return
             }
 
@@ -555,7 +554,7 @@ final class ListingViewController: UITableViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 
                 if self.didReceivedNetworkError {
-                   self.presentError()
+                    self.presentError(message: NSLocalizedString("There was an error while updating the content.", comment: ""))
 
                 } else {
                     self.updateLocationContentMessage()
@@ -778,6 +777,15 @@ final class ListingViewController: UITableViewController {
 
         controller.onSelect = { [weak self] location in
             let controller = ListingViewController(location: location, action: controllerAction, sourceLocations: controllerSourceLocations)
+
+            if self?.action != .noAction {
+
+                // It makes sens only if this is a copy or move controller
+                controller.onFinish = { [weak self] in
+                    self?.onFinish?()
+                }
+            }
+
             self?.navigationController?.pushViewController(controller, animated: true)
         }
 
@@ -817,7 +825,7 @@ final class ListingViewController: UITableViewController {
             return
         }
 
-        let controller = MoreActionsViewController(rootNode: rootNode)
+        let controller = MoreActionsViewController(rootNode: rootNode, childs: self.nodes.count)
 
         controller.onSelect = { [unowned self] selection in
 
@@ -828,22 +836,20 @@ final class ListingViewController: UITableViewController {
                 self.executeToogleBookmark(location: self.rootLocation, node: rootNode)
 
             case .createDirectory:
-                self.handleShowCreateDirectoryViewController()
+                self.showCreateDirectoryViewController()
 
             case .selectionMode:
                 if self.nodes.isEmpty { return }
                 self.activateEditMode()
 
-            case .manageShare, .makeNewShare:
-                self.showShareViewController(location: self.rootLocation, sharedNode: rootNode)
-
-            case .shareInfo:
-                self.showShareInfoViewController(location: self.rootLocation, sharedNode: rootNode)
+            case .manageShare, .makeNewShare, .shareInfo:
+                self.showShareMountViewController(location: self.rootLocation, sharedNode: rootNode)
 
             default:
                 #if DEBUG
                     fatalError("Wrong More Action Selection")
                 #endif
+                break
             }
         }
 
@@ -877,7 +883,7 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc private func handleShowCreateDirectoryViewController() {
+    @objc private func showCreateDirectoryViewController() {
 
         let controller = CreateDirectoryViewController(parentLocation: self.rootLocation)
 
@@ -935,24 +941,26 @@ final class ListingViewController: UITableViewController {
                 case .delete:
                     self.showDeleteViewController(location: nodeLocation, sourceView: sender, index: nodeIndex)
 
-                case .folderInfo:
-                    self.showDirectoryInformationInfoViewController(location: nodeLocation, index: nodeIndex)
-
-                case .makeOffline: break
+                case .directoryInfo:
+                    self.showDirectoryInfoViewController(location: nodeLocation, index: nodeIndex)
 
                 case .rename:
                     self.showRenameViewController(location: nodeLocation, node: node, index: nodeIndex)
 
                 case .sendDownloadLink:
-                    self.showShareViewController(location: nodeLocation, sharedNode: node)
+                    self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .download)
+
+                case .sendUploadLink:
+                    self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .upload)
 
                 case .makeNewShare, .manageShare:
-                    self.showShareViewController(location: nodeLocation, sharedNode: node)
+                    self.showShareMountViewController(location: nodeLocation, sharedNode: node)
 
                 default:
                     #if DEBUG
                         fatalError("Wrong Action Selection")
                     #endif
+                    break
                 }
         }
 
@@ -1328,7 +1336,7 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    private func showDirectoryInformationInfoViewController(location: Location, index: Int) {
+    private func showDirectoryInfoViewController(location: Location, index: Int) {
 
         let controller = DirectoryInfoViewController(location: location)
 
@@ -1400,7 +1408,26 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    private func showShareViewController(location: Location, sharedNode: Node) {
+    private func showLinkViewController(location: Location, sharedNode: Node, linkType: LinkType) {
+
+        let onFinish = { [weak self] (shouldExitMount: Bool) in
+
+            if let navController = self?.navigationController as? MainNavigationController {
+                self?.updateContent()
+
+                for controller in navController.viewControllers {
+                    (controller as? ListingViewController)?.needRefresh = true
+                }
+            }
+        }
+
+        let controller = ShareLinkViewController(location: location, linkType: linkType, onFinish: onFinish)
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .formSheet
+        self.present(navController, animated: true, completion: nil)
+    }
+
+    private func showShareMountViewController(location: Location, sharedNode: Node) {
 
         let onFinish = { [weak self] (shouldExitMount: Bool) in
 
@@ -1418,39 +1445,7 @@ final class ListingViewController: UITableViewController {
             }
         }
 
-        let controller: UIViewController
-
-        if sharedNode.type == "dir" {
-            controller = ShareViewController(location: location, sharedNode: sharedNode, onFinish: onFinish)
-        } else {
-            controller = ShareLinkViewController(location: location, linkType: .download, onFinish: onFinish)
-        }
-
-        let navController = UINavigationController(rootViewController: controller)
-        navController.modalPresentationStyle = .formSheet
-        self.present(navController, animated: true, completion: nil)
-    }
-
-    private func showShareInfoViewController(location: Location, sharedNode: Node) {
-
-        let onFinish = { [weak self] (shouldExitMount: Bool) in
-
-            if let navController = self?.navigationController as? MainNavigationController {
-                if shouldExitMount {
-                        navController.popToRootViewController(animated: true)
-                } else {
-
-                    self?.updateContent()
-
-                    for controller in navController.viewControllers {
-                        (controller as? ListingViewController)?.needRefresh = true
-                    }
-                }
-            }
-        }
-
         let controller = ShareMountViewController(location: location, sharedNode: sharedNode, onFinish: onFinish)
-
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .formSheet
         self.present(navController, animated: true, completion: nil)

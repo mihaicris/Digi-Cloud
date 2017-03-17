@@ -56,7 +56,7 @@ enum ActionType: Int {
     case copy
     case createDirectory
     case delete
-    case folderInfo
+    case directoryInfo
     case makeOffline
     case move
     case noAction

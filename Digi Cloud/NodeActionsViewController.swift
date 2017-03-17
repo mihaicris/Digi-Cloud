@@ -47,7 +47,7 @@ final class NodeActionsViewController: UITableViewController {
         self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return actions.count
     }
@@ -66,17 +66,21 @@ final class NodeActionsViewController: UITableViewController {
             cell.textLabel?.text = NSLocalizedString("Manage Share", comment: "")
 
         case .shareInfo:
-            cell.textLabel?.text = NSLocalizedString("Share Information", comment: "")
+            cell.textLabel?.text = NSLocalizedString("See Share Members", comment: "")
 
         case .sendDownloadLink:
             cell.textLabel?.text = NSLocalizedString("Send Link", comment: "")
+
+        case .sendUploadLink:
+            cell.textLabel?.text = NSLocalizedString("Receive Files", comment: "")
 
         case .makeOffline:
             cell.textLabel?.text = NSLocalizedString("Make available offline", comment: "")
 
         case .bookmark:
             cell.textLabel?.text = self.node.bookmark == nil
-                ? NSLocalizedString("Set Bookmark", comment: "") : NSLocalizedString("Remove Bookmark", comment: "")
+                ? NSLocalizedString("Set Bookmark", comment: "")
+                : NSLocalizedString("Remove Bookmark", comment: "")
 
         case .rename:
             cell.textLabel?.text = NSLocalizedString("Rename", comment: "")
@@ -91,13 +95,10 @@ final class NodeActionsViewController: UITableViewController {
             cell.textLabel?.text = NSLocalizedString("Delete", comment: "")
             cell.textLabel?.textColor = .red
 
-        case .folderInfo:
+        case .directoryInfo:
             cell.textLabel?.text = NSLocalizedString("Directory information", comment: "")
 
         default:
-            #if DEBUG
-                fatalError("Wrong permitted action.")
-            #endif
             break
         }
         return cell
@@ -164,11 +165,17 @@ final class NodeActionsViewController: UITableViewController {
 
         if node.type == "dir" {
 
+            if location.mount.permissions.create_link {
+                actions.append(.sendDownloadLink)
+            }
+
+            if location.mount.permissions.create_receiver {
+                actions.append(.sendUploadLink)
+            }
+
             if node.mount != nil {
                 if node.mount?.type == "export" {
                     actions.append(.manageShare)
-                } else {
-
                 }
             } else {
                 if location.mount.permissions.owner == true {
@@ -189,13 +196,13 @@ final class NodeActionsViewController: UITableViewController {
                 actions.append(.move)
             }
 
-            actions.append(.folderInfo)
+            actions.append(.directoryInfo)
 
         } else {
 
             if location.mount.permissions.create_link {
                 actions.append(.sendDownloadLink)
-                actions.append(.makeOffline)
+//                actions.append(.makeOffline)
             }
 
             if location.mount.canWrite {

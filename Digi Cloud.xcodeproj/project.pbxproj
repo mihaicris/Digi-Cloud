@@ -44,7 +44,6 @@
 		837E53F71E4CDF2B00D8A5AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */; };
 		83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */; };
 		83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E631E25345500C8AE52 /* AccountTableViewCell.swift */; };
-		838672B41E6C9D64000BBE41 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DA61E68358B00EE3722 /* ShareViewController.swift */; };
 		838672B51E6C9D67000BBE41 /* ShareLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */; };
 		838A70031E7ACC11006F420F /* Collection+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838A70021E7ACC11006F420F /* Collection+DigiCloud.swift */; };
 		8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */; };
@@ -683,7 +682,6 @@
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
 				8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */,
 				83F1FFD31E6979040079F56F /* Enums.swift in Sources */,
-				838672B41E6C9D64000BBE41 /* ShareViewController.swift in Sources */,
 				838A70031E7ACC11006F420F /* Collection+DigiCloud.swift in Sources */,
 				83A8356D1E2E6A1500F347BD /* UIApplication+DigiCloud.swift in Sources */,
 				8302319E1E559ECB001CDC00 /* Bookmark.swift in Sources */,

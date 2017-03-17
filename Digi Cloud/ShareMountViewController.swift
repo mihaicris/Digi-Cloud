@@ -516,19 +516,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     }
 
     private func processMount(_ mount: Mount) {
-
         self.sharedNode.mount = mount
-
-        // Update mount in main share controller on navigation stack
-
-        if let viewControllers = self.navigationController?.viewControllers,
-            let shareViewController = viewControllers.first as? ShareViewController {
-            shareViewController.sharedNode.mount = mount
-            shareViewController.setupActions()
-        }
-
         self.getUserProfileImages(for: mount.users)
-
     }
 
     private func getUserProfileImages(for someUsers: [User]) {

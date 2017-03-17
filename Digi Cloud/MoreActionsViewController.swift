@@ -18,10 +18,13 @@ final class MoreActionsViewController: UITableViewController {
 
     private var actions: [ActionType] = []
 
+    private let childs: Int
+
     // MARK: - Initializers and Deinitializers
 
-    init(rootNode: Node) {
+    init(rootNode: Node, childs: Int) {
         self.rootNode = rootNode
+        self.childs = childs
         super.init(style: .plain)
     }
 
@@ -44,39 +47,42 @@ final class MoreActionsViewController: UITableViewController {
         preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return actions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.textColor = UIColor.defaultColor
+
         switch actions[indexPath.row] {
 
-        case .bookmark:
-            let title = self.rootNode.bookmark == nil
-                ? NSLocalizedString("Set Bookmark", comment: "")
-                : NSLocalizedString("Remove Bookmark", comment: "")
-            return createCell(title: title, color: .defaultColor)
-
-        case .createDirectory:
-            return createCell(title: NSLocalizedString("Create Directory", comment: ""), color: .defaultColor)
-
-        case .selectionMode:
-            return createCell(title: NSLocalizedString("Select Mode", comment: ""), color: .defaultColor)
-
         case .makeNewShare:
-            return createCell(title: NSLocalizedString("Share", comment: ""), color: .defaultColor)
+            cell.textLabel?.text = NSLocalizedString("Share", comment: "")
 
         case .manageShare:
-            return createCell(title: NSLocalizedString("Manage Share", comment: ""), color: .defaultColor)
+            cell.textLabel?.text = NSLocalizedString("Manage Share", comment: "")
 
         case .shareInfo:
-            return createCell(title: NSLocalizedString("Share Information", comment: ""), color: .defaultColor)
+            cell.textLabel?.text = NSLocalizedString("See Share Members", comment: "")
+
+        case .bookmark:
+            cell.textLabel?.text = self.rootNode.bookmark == nil
+                ? NSLocalizedString("Set Bookmark", comment: "")
+                : NSLocalizedString("Remove Bookmark", comment: "")
+
+        case .createDirectory:
+            cell.textLabel?.text = NSLocalizedString("Create Directory", comment: "")
+
+        case .selectionMode:
+            cell.textLabel?.text = NSLocalizedString("Select Mode", comment: "")
 
         default:
-            return UITableViewCell()
+            break
         }
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -123,15 +129,6 @@ final class MoreActionsViewController: UITableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 
-    private func createCell(title: String, color: UIColor) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.textAlignment = .left
-        cell.textLabel?.textColor = color
-        cell.textLabel?.text = title
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
-        return cell
-    }
-
     private func setupActions() {
 
         guard let mount = rootNode.mount else {
@@ -157,11 +154,12 @@ final class MoreActionsViewController: UITableViewController {
 
         actions.append(.bookmark)
 
-        if  mount.canWrite {
+        if mount.canWrite {
             actions.append(.createDirectory)
         }
 
-        actions.append(.selectionMode)
-
+        if childs > 1 {
+            actions.append(.selectionMode)
+        }
     }
 }
