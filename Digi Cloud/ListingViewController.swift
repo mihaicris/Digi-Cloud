@@ -529,9 +529,9 @@ final class ListingViewController: UITableViewController {
 
                 var indexFound = -1
 
-                for (index, node) in self.nodes.enumerated() {
-                    if node.name.lowercased() == nameToHighlight {
-                        indexFound = index
+                for nodeItem in self.nodes.enumerated() {
+                    if nodeItem.element.name.lowercased() == nameToHighlight {
+                        indexFound = nodeItem.offset
                         break
                     }
                 }
