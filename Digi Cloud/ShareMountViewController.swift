@@ -608,8 +608,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 self.dismiss(animated: true) {
                     self.onFinish?(true)
                 }
-            } else {
-                self.refreshMount()
             }
         }
     }
