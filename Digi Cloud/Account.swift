@@ -186,16 +186,15 @@ struct Account {
     func revokeToken() {
         if let token = try? readToken() {
             DispatchQueue.global(qos: .background).async {
-                DigiClient.shared.revokeAuthentication(for: token, completion: { statusCode, error in
-                    if error != nil {
-                        print(error!.localizedDescription)
-                    } else if let statusCode = statusCode, statusCode != 204 {
-                        print("Status code [API Request -> revoke Token]: \(statusCode) [❗️Warning❗️]")
+                DigiClient.shared.revokeAuthentication(for: token, completion: { error in
+                    guard error == nil else {
+                        print("Warning, network error for revoking.")
+                        return
                     }
                 })
             }
         } else {
-            print("Could not retrieve a token from Keychain for revoking.")
+            print("Token doesn't exist in the Keychain to be revoked.")
         }
     }
 }

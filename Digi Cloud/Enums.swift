@@ -6,32 +6,44 @@
 //  Copyright © 2017 Mihai Cristescu. All rights reserved.
 //
 
-enum RequestType: String {
-    case get = "GET"
-    case post = "POST"
-    case put = "PUT"
-    case delete = "DELETE"
-}
+// ---------Errors ----------------
 
 enum NetworkingError: Error {
+    case requestTimedOut(String)
+    case requestWasCancelled(String)
+    case internetOffline(String)
     case get(String)
-    case post(String)
     case del(String)
     case wrongStatus(String)
     case data(String)
+
+}
+
+enum ResponseError: Error {
+    case notFound
+    case other
 }
 
 enum JSONError: Error {
     case parse(String)
 }
 
-enum Authentication: Error {
-    case login(String)
-    case revoke(String)
+enum AuthenticationError: Error {
+    case login
+    case revoke
 }
 
 enum ConversionError: Error {
     case data(String)
+}
+
+// ---------------------------------
+
+enum RequestType: String {
+    case get = "GET"
+    case post = "POST"
+    case put = "PUT"
+    case delete = "DELETE"
 }
 
 enum LinkType: String {

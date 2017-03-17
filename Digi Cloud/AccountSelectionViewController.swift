@@ -398,12 +398,27 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         })
     }
 
-    private func showError() {
+    private func showError(message: String) {
+
         let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
-                                      message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: ""),
+                                      message: message,
                                       preferredStyle: UIAlertControllerStyle.alert)
-        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
+
+        let completion = { (alert: UIAlertAction) in
+
+            self.reverseAnimation {
+                self.getPersistedUsers()
+                self.setupViews()
+                self.updateViews()
+                self.isExecuting = false
+
+            }
+        }
+
+        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: completion)
+
         alert.addAction(actionOK)
+
         self.present(alert, animated: false, completion: nil)
     }
 
@@ -438,7 +453,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
                     self.spinner.startAnimating()
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.async {
                         let account = Account(userID: user.id)
 
                         // read token
@@ -451,17 +466,26 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
                                 self.spinner.stopAnimating()
 
-                                self.reverseAnimation {
+                                var message: String
 
-                                    self.getPersistedUsers()
-                                    self.setupViews()
-                                    self.updateViews()
+                                switch error! {
 
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                        self.isExecuting = false
-                                        self.showError()
-                                    }
+                                case NetworkingError.internetOffline(let errorMessage), NetworkingError.requestTimedOut(let errorMessage):
+                                    message = errorMessage
+                                    break
+
+                                case AuthenticationError.login:
+                                    message = NSLocalizedString("Your session has expired, please log in again.", comment: "")
+                                    try! account.deleteItem()
+                                default:
+                                    message = NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "")
+                                    break
                                 }
+
+                                DispatchQueue.main.async {
+                                    self.showError(message: message)
+                                }
+
                                 return
                             }
 
@@ -491,7 +515,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     }
 
     private func reverseAnimation(completion: @escaping () -> Void) {
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
 
             let indexPathOneElement = IndexPath(item: 0, section: 0)
             if let cell = self.collectionView.cellForItem(at: indexPathOneElement) {

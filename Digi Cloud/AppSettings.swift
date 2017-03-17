@@ -116,12 +116,12 @@ struct AppSettings {
         DigiClient.shared.getUser(forToken: token) { userResult, error in
 
             guard error == nil else {
-                completion(nil, NetworkingError.get("Couldn't get the user info."))
+                completion(nil, error)
                 return
             }
 
             guard let user = userResult else {
-                completion(nil, JSONError.parse("Couldn't parce the User for token"))
+                completion(nil, error)
                 return
             }
 

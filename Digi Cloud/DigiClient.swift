@@ -38,7 +38,7 @@ final class DigiClient {
         session?.invalidateAndCancel()
         let config = URLSessionConfiguration.default
 
-        #if DEBUGCONTROLLERS
+        #if DEBUG
             config.timeoutIntervalForRequest = 3
             config.timeoutIntervalForResource = 3
         #else
@@ -105,19 +105,26 @@ final class DigiClient {
                     /* TODO: Implement error codes:
                     
                     -999  = Task was cancelled
-                    -1001 = Timed out
+                    -1001 = The request timed out.
                     -1009 = The internet connection appears to be offline
                      
                     */
 
                     let nserror = error! as NSError
-
                     LogNSError(nserror)
 
-                    if nserror.code == -999 /* Cancelled */ { return }
+                    switch nserror.code {
 
-                    completion(nil, nil, NetworkingError.get("There was an error with your request:\n\(nserror.localizedDescription)"))
-
+                        case -999:
+                            // Don't call completion if request was cancelled.
+                            break
+                        case -1001:
+                            completion(nil, nil, NetworkingError.requestTimedOut(NSLocalizedString("The request timed out.", comment: "")))
+                        case -1009:
+                            completion(nil, nil, NetworkingError.internetOffline(NSLocalizedString("The internet appears to be offline", comment: "")))
+                    default:
+                        completion(nil, nil, error)
+                    }
                     return
                 }
 
@@ -189,6 +196,7 @@ final class DigiClient {
     ///   - headers: Additional http headers to include in the URL request
     /// - Returns: The new URL Request
     private func getURLRequest(url: URL, requestType: String, headers: [String: String]?) -> URLRequest {
+        
         var request = URLRequest(url: url)
         request.httpMethod = requestType
         request.allHTTPHeaderFields = headers
@@ -206,23 +214,25 @@ final class DigiClient {
     ///   - token: Authentication token provided by the API server
     ///   - error: The error occurred in the network request, nil for no error.
     func authenticate(username: String, password: String, completion: @escaping(_ token: String?, _ error: Error?) -> Void) {
+       
         let method = Methods.Token
         let headers = DefaultHeaders.PostHeaders
         let jsonBody = ["password": password, "email": username]
 
         networkTask(requestType: .post, method: method, headers: headers, json: jsonBody, parameters: nil) { json, statusCode, error in
+
             guard error == nil else {
-                print(error!.localizedDescription)
-                completion(nil, error!)
+                completion(nil, error)
                 return
             }
+
             if statusCode == 200 {
                 if let json = json as? [String: String] {
                     let token  = json["token"]
                     completion(token, nil)
                 }
             } else {
-                completion(nil, nil)
+                completion(nil, AuthenticationError.login)
             }
         }
     }
@@ -234,16 +244,24 @@ final class DigiClient {
     ///   - completion: The block called after the server has responded
     ///   - statusCode: The statusCode of the http request
     ///   - error: The error occurred in the network request, nil for no error.
-    func revokeAuthentication(for token: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+    func revokeAuthentication(for token: String, completion: @escaping( _ error: Error?) -> Void) {
+        
         let method = Methods.Token
         let headers: [String: String] = ["Accept": "*/*", HeadersKeys.Authorization: "Token \(token)"]
 
         networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
+
             guard error == nil else {
-                completion(nil, Authentication.revoke("There was an error at revoke token API request."))
+                completion(error)
                 return
             }
-            completion(statusCode, nil)
+
+            guard statusCode == 204 else {
+                completion(AuthenticationError.revoke)
+                return
+            }
+
+            completion(nil)
         }
     }
 
@@ -269,12 +287,12 @@ final class DigiClient {
             }
 
             guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Wrong status \(statusCode!) while receiving user info request."))
+                completion(nil, AuthenticationError.login)
                 return
             }
 
             guard let user = User(infoJSON: jsonData) else {
-                completion(nil, JSONError.parse("Could not parse json response for user info request."))
+                completion(nil, JSONError.parse("Error parsing USER with JSON data: \(jsonData)"))
                 return
             }
 
@@ -296,7 +314,7 @@ final class DigiClient {
             }
 
             guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Wrong status \(statusCode!) while receiving user profile image."))
+                completion(nil, ResponseError.notFound)
                 return
             }
 
@@ -309,6 +327,30 @@ final class DigiClient {
 
         }
 
+    }
+
+    func updateUserInfo(for token: String, firstName: String, lastName: String, completion: @escaping(Error?) -> Void) {
+        
+        let method = Methods.User
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        let jsonObject = ["lastName": lastName, "firstName": firstName]
+
+        networkTask(requestType: .put, method: method, headers: headers, json: jsonObject, parameters: nil) { _, statusCode, error in
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 204 else {
+                completion(ResponseError.notFound)
+                return
+            }
+
+            completion(nil)
+        }
     }
 
     func getUserNotifications() {
@@ -327,6 +369,146 @@ final class DigiClient {
         // TODO: Implement
     }
 
+    // MARK: - Bookmarks
+
+    /// Gets the bookmarks saved by the user
+    ///
+    /// - Parameters:
+    ///   - completion: The block called after the server has responded
+    ///   - bookmarks: Returned content as an array of bookmarks
+    ///   - error: The error occurred in the network request, nil for no error.
+    func getBookmarks(completion: @escaping(_ bookmarks: [Bookmark]?, _ error: Error?) -> Void) {
+
+        let method = Methods.UserBookmarks
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
+
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, ResponseError.notFound)
+                return
+            }
+
+            guard let dict = json as? [String: Any],
+                let bookmarkJSONArray = dict["bookmarks"] as? [[String: Any]] else {
+                    completion(nil, JSONError.parse("Could not parse bookmarks response"))
+                    return
+            }
+
+            let bookmarks = bookmarkJSONArray.flatMap { Bookmark(JSON: $0) }
+
+            completion(bookmarks, nil)
+        }
+    }
+
+    /// Set bookmarks
+    ///
+    /// - Parameters:
+    ///   - bookmarks: array of Bookmark type. If Array is empty, all bookmarks will be removed.
+    ///   - completion: The block called after the server has responded
+    ///   - error: The error returned
+    func setBookmarks(bookmarks: [Bookmark], completion: @escaping(_ error: Error?) -> Void) {
+
+        let method = Methods.UserBookmarks
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        var json: [String: Any] = [:]
+        var bookmarksJSON: [[String: String]] = []
+
+        for bookmark in bookmarks {
+            var bookmarkJSON: [String: String] = [:]
+            bookmarkJSON["path"] = bookmark.path
+            bookmarkJSON["mountId"] = bookmark.mountId
+            bookmarksJSON.append(bookmarkJSON)
+        }
+
+        json["bookmarks"] = bookmarksJSON
+
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 204 else {
+                completion(ResponseError.notFound)
+                return
+            }
+
+            completion(nil)
+        }
+    }
+
+    /// Add bookmark
+    ///
+    /// - Parameters:
+    ///   - bookmark: Bookmark to add.
+    ///   - completion: The block called after the server has responded
+    ///   - error: The error returned
+    func addBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
+        
+        let method = Methods.UserBookmarks
+        var headers = DefaultHeaders.PostHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        let json: [String: String] = ["path": bookmark.path, "mountId": bookmark.mountId]
+
+        networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 201 else {
+                completion(ResponseError.notFound)
+                return
+            }
+
+            completion(nil)
+        }
+    }
+
+    /// Remove bookmark
+    ///
+    /// - Parameters:
+    ///   - bookmark: Bookmark to remove.
+    ///   - completion: The block called after the server has responded
+    ///   - error: The error returned
+    func removeBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
+        
+        let method = Methods.UserBookmarks
+        var headers = DefaultHeaders.DelHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        var parameters: [String: String] = [:]
+        parameters["path"] = bookmark.path
+        parameters["mountId"] = bookmark.mountId
+
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: parameters) { _, statusCode, error in
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 204 else {
+                completion(ResponseError.notFound)
+                return
+            }
+
+            completion(nil)
+        }
+    }
+
     // MARK: - Mounts
 
     /// Gets the locations in the Cloud storage
@@ -336,67 +518,46 @@ final class DigiClient {
     ///   - mounts: Returned content as an array of locations
     ///   - error: The error occurred in the network request, nil for no error.
     func getMounts(completion: @escaping(_ mounts: [Mount]?, _ error: Error?) -> Void) {
+        
         let method = Methods.Mounts
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
 
-        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { data, _, error in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { data, statusCode, error in
 
             guard error == nil else {
-                completion(nil, error!)
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, ResponseError.notFound)
                 return
             }
 
             guard let dict = data as? [String: Any],
                 let mountsList = dict["mounts"] as? [Any]
                 else {
-                    completion(nil, JSONError.parse("Could not parse JSON"))
+                    completion(nil, JSONError.parse("Could not parse JSON data for Mounts"))
                     return
             }
 
             let mounts = mountsList.flatMap { Mount(JSON: $0) }
-
             completion(mounts, nil)
-
         }
     }
 
-    /// Get Mount with Id
+    /// Create submount
     ///
     /// - Parameters:
-    ///   - id: Mount Id
-    ///   - completion: The block called after the server has responded
+    ///   - location: Root Location of the mount
+    ///   - withName: Mount name
+    ///   - completion: completion with new mount information
     ///   - mount: Returned Mount
-    ///   - error: The error occurred in the network request, nil for no error.    
-    func getMountDetails(for mount: Mount, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
-        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
-
-        var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { (json, statusCode, error) in
-            guard error == nil else {
-                completion(nil, error!)
-                return
-            }
-
-            guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Status code different than 200 for mount details."))
-                return
-            }
-
-            guard let mount = Mount(JSON: json) else {
-                completion(nil, JSONError.parse("Error parsing Mount JSON."))
-                return
-            }
-
-            completion(mount, nil)
-        }
-    }
-
+    ///   - error: The error occurred in the network request, nil for no error.
     func createSubmount(at location: Location, withName: String, completion: @escaping( _ mount: Mount?, _ error: Error?) -> Void) {
+        
         let method = Methods.MountCreate.replacingOccurrences(of: "{id}", with: location.mount.id)
-
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
 
@@ -405,12 +566,12 @@ final class DigiClient {
         networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
             guard error == nil else {
-                completion(nil, error!)
+                completion(nil, error)
                 return
             }
 
             guard statusCode == 201 else {
-                completion(nil, NetworkingError.wrongStatus("Status code different than 201 for creating submount."))
+                completion(nil, ResponseError.notFound)
                 return
             }
 
@@ -423,28 +584,57 @@ final class DigiClient {
         }
     }
 
-    /// Delete a mount
+    /// Get Mount Details
     ///
     /// - Parameters:
-    ///   - mount: Mount to be deleted
+    ///   - id: Mount Id
     ///   - completion: The block called after the server has responded
+    ///   - mount: Returned Mount
     ///   - error: The error occurred in the network request, nil for no error.
-    func deleteMount(_ mount: Mount, completion: @escaping (_ error: Error?) -> Void) {
-
+    func getMountDetails(for mount: Mount, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
+        
         let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
-
-        var headers = DefaultHeaders.DelHeaders
+        var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
 
-        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { (_, statusCode, error) in
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { (json, statusCode, error) in
 
             guard error == nil else {
-                completion(error!)
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, ResponseError.notFound)
+                return
+            }
+
+            guard let mount = Mount(JSON: json) else {
+                completion(nil, JSONError.parse("Error parsing Mount JSON."))
+                return
+            }
+
+            completion(mount, nil)
+        }
+    }
+
+    func editMount(for mount: Mount, newName: String, completion: @escaping(_ error: Error?) -> Void) {
+
+        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        let json = ["name": newName]
+
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { (json, statusCode, error) in
+
+            guard error == nil else {
+                completion(error)
                 return
             }
 
             guard statusCode == 204 else {
-                completion(NetworkingError.wrongStatus("Error for Mount Deletion: The Status code is different than 204."))
+                completion(ResponseError.notFound)
                 return
             }
 
@@ -452,50 +642,7 @@ final class DigiClient {
         }
     }
 
-    /// Gets the content of nodes of a location in the Cloud storage
-    ///
-    /// - Parameters:
-    ///   - location: The location to get the content
-    ///   - completion: The block called after the server has responded
-    ///   - nodes: Returned content as an array of nodes
-    ///   - error: The error occurred in the network request, nil for no error.
-    func getBundle(for location: Location, completion: @escaping(_ nodes: [Node]?, _ rootNode: Node?, _ error: Error?) -> Void) {
-
-        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.id)
-
-        var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        let parameters = [ParametersKeys.Path: location.path]
-
-        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
-
-            guard error == nil else {
-                completion(nil, nil, error!)
-                return
-            }
-
-            guard statusCode != 400 else {
-                let message = NSLocalizedString("Location is no longer available!", comment: "")
-                completion(nil, nil, NetworkingError.wrongStatus(message))
-                return
-            }
-
-            guard let dict = data as? [String: Any],
-                let nodesListJSON = dict["files"] as? [[String: Any]],
-                let rootNodeJSON = dict["file"] else {
-                    completion(nil, nil, JSONError.parse("Could not parse data"))
-                    return
-            }
-
-            let nodes = nodesListJSON.flatMap { Node(JSON: $0) }
-            let rootNode = Node(JSON: rootNodeJSON)
-
-            completion(nodes, rootNode, nil)
-        }
-    }
-
-    /// Add users to a mount
+    /// Mount operations
     ///
     /// - Parameters:
     ///   - mount: A mount type
@@ -543,162 +690,92 @@ final class DigiClient {
                     withoutSerialization: operation == .updatePermissions || operation == .remove) { json, statusCode, error in
 
             guard error == nil else {
-                completion(nil, NetworkingError.data("Eroare"))
-                return
-            }
-
-            guard statusCode != nil, CountableRange(200...299).contains(statusCode!) else {
-                completion(nil, NetworkingError.wrongStatus("Status code is not valid."))
+                completion(nil, error)
                 return
             }
 
             switch operation {
+
             case .add:
+                guard statusCode == 201 else {
+                    completion(nil, ResponseError.notFound)
+                    return
+                }
+
                 guard let user = User(JSON: json) else {
                     completion(nil, JSONError.parse("Error parsing User JSON."))
                     return
                 }
                 completion(user, nil)
 
-            case .updatePermissions:
-                completion(nil, nil)
+            case .updatePermissions, .remove:
+                guard statusCode == 204 else {
+                    completion(nil, ResponseError.notFound)
+                    return
+                }
 
-            case .remove:
                 completion(nil, nil)
             }
         }
     }
 
-    // MARK: - Bookmarks
-
-    /// Gets the bookmarks saved by the user
+    /// Delete a mount
     ///
     /// - Parameters:
+    ///   - mount: Mount to be deleted
     ///   - completion: The block called after the server has responded
-    ///   - bookmarks: Returned content as an array of bookmarks
     ///   - error: The error occurred in the network request, nil for no error.
-    func getBookmarks(completion: @escaping(_ bookmarks: [Bookmark]?, _ error: Error?) -> Void) {
+    func deleteMount(_ mount: Mount, completion: @escaping (_ error: Error?) -> Void) {
 
-        let method = Methods.UserBookmarks
-
-        var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { json, _, error in
-            guard error == nil else {
-                completion(nil, error!)
-                return
-            }
-
-            guard let dict = json as? [String: Any],
-                let bookmarkJSONArray = dict["bookmarks"] as? [[String: Any]] else {
-                completion(nil, JSONError.parse("Could not parse bookmarks response"))
-                return
-            }
-
-            let bookmarks = bookmarkJSONArray.flatMap { Bookmark(JSON: $0) }
-            completion(bookmarks, nil)
-        }
-    }
-
-    /// Set bookmarks
-    ///
-    /// - Parameters:
-    ///   - bookmarks: array of Bookmark type. If Array is empty, all bookmarks will be removed.
-    ///   - completion: The block called after the server has responded
-    ///   - error: The error returned
-    func setBookmarks(bookmarks: [Bookmark], completion: @escaping(_ error: Error?) -> Void) {
-
-        let method = Methods.UserBookmarks
-
-        var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        var json: [String: Any] = [:]
-        var bookmarksJSON: [[String: String]] = []
-
-        for bookmark in bookmarks {
-            var bookmarkJSON: [String: String] = [:]
-            bookmarkJSON["path"] = bookmark.path
-            bookmarkJSON["mountId"] = bookmark.mountId
-            bookmarksJSON.append(bookmarkJSON)
-        }
-
-        json["bookmarks"] = bookmarksJSON
-
-        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
-            guard error == nil else {
-                completion(error!)
-                return
-            }
-
-            if statusCode == 204 {
-                completion(nil)
-            } else {
-                completion(NetworkingError.wrongStatus("Status Code is different than 204."))
-            }
-        }
-    }
-
-    /// Add bookmark
-    ///
-    /// - Parameters:
-    ///   - bookmark: Bookmark to add.
-    ///   - completion: The block called after the server has responded
-    ///   - error: The error returned
-    func addBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
-        let method = Methods.UserBookmarks
-
-        var headers = DefaultHeaders.PostHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        let json: [String: String] = ["path": bookmark.path, "mountId": bookmark.mountId]
-
-        networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
-            guard error == nil else {
-                completion(error!)
-                return
-            }
-
-            if statusCode == 201 {
-                completion(nil)
-            } else {
-                completion(NetworkingError.wrongStatus("Status Code is different than 204."))
-            }
-        }
-    }
-
-    /// Remove bookmark
-    ///
-    /// - Parameters:
-    ///   - bookmark: Bookmark to remove.
-    ///   - completion: The block called after the server has responded
-    ///   - error: The error returned
-    func removeBookmark(bookmark: Bookmark, completion: @escaping(_ error: Error?) -> Void) {
-        let method = Methods.UserBookmarks
-
+        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
 
-        var parameters: [String: String] = [:]
-        parameters["path"] = bookmark.path
-        parameters["mountId"] = bookmark.mountId
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { (_, statusCode, error) in
 
-        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: parameters) { _, statusCode, error in
             guard error == nil else {
-                completion(error!)
+                completion(error)
                 return
             }
 
-            if statusCode == 204 {
-                completion(nil)
-            } else {
-                completion(NetworkingError.wrongStatus("Status Code is different than 204."))
+            guard statusCode == 204 else {
+                completion(ResponseError.notFound)
+                return
             }
+
+            completion(nil)
         }
     }
 
     // MARK: - Files
+
+    /// Create a node of type directory
+    ///
+    /// - Parameters:
+    ///   - location: Location where the directory will be created
+    ///   - name: directory name
+    ///   - completion: The block called after the server has responded
+    ///   - statusCode: Returned network request status code
+    ///   - error: The error occurred in the network request, nil for no error.
+    func createDirectory(at location: Location, named: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
+
+        let method = Methods.FilesDirectory.replacingOccurrences(of: "{id}", with: location.mount.id)
+        var headers = DefaultHeaders.PostHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        let parameters = [ParametersKeys.Path: location.path]
+        let jsonBody = [DataJSONKeys.directoryName: named]
+
+        networkTask(requestType: .post, method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
+
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            // Handle various statusCodes here
+            completion(statusCode, nil)
+        }
+    }
 
     /// Starts the download of a file
     ///
@@ -733,6 +810,47 @@ final class DigiClient {
         return session
     }
 
+    /// Send a request to DIGI API to copy or move a node
+    ///
+    /// - Parameters:
+    ///   - fromLocation:      Source location
+    ///   - toLocation:        Destination location
+    ///   - action:            Action Type, expected ActionType.move or ActionType.copy
+    ///   - completion:        Function to handle the status code and error response
+    ///   - statusCode:        Returned HTTP request Status Code
+    ///   - error:             Networking error (nil if no error)
+    func copyOrMove(from fromLocation: Location, to toLocation: Location, action: ActionType, completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
+
+        var method: String
+
+        switch action {
+        case .copy:
+            method = Methods.FilesCopy.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
+        case .move:
+            method = Methods.FilesMove.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
+        default:
+            return
+        }
+
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        let parameters = [ParametersKeys.Path: fromLocation.path]
+
+        let json: [String: String] = ["toMountId": toLocation.mount.id, "toPath": toLocation.path]
+
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: parameters) { (_, statusCode, error) in
+
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            // Handle various statusCodes here
+            completion(statusCode, nil)
+        }
+    }
+
     /// Renames a node
     ///
     /// - Parameters:
@@ -756,7 +874,14 @@ final class DigiClient {
         let jsonBody = ["name": name]
 
         networkTask(requestType: .put, method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
-            completion(statusCode, error)
+
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            // Handle various statusCodes here
+            completion(statusCode, nil)
         }
     }
 
@@ -768,86 +893,21 @@ final class DigiClient {
     ///   - statusCode: Returned network request status code
     ///   - error: The error occurred in the network request, nil for no error.
     func deleteNode(at location: Location, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
-        // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: location.mount.id)
 
-        // prepare headers
+        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        // prepare parameters
         let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
-            completion(statusCode, error)
-        }
-    }
 
-    /// Create a node of type directory
-    ///
-    /// - Parameters:
-    ///   - location: Location where the directory will be created
-    ///   - name: directory name
-    ///   - completion: The block called after the server has responded
-    ///   - statusCode: Returned network request status code
-    ///   - error: The error occurred in the network request, nil for no error.
-    func createDirectory(at location: Location, named: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
-        // prepare the method string for create new directory
-        let method = Methods.FilesDirectory.replacingOccurrences(of: "{id}", with: location.mount.id)
-
-        // prepare headers
-        var headers = DefaultHeaders.PostHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        // prepare parameters
-        let parameters = [ParametersKeys.Path: location.path]
-
-        // prepare new directory name in request body
-        let jsonBody = [DataJSONKeys.directoryName: named]
-
-        networkTask(requestType: .post, method: method, headers: headers, json: jsonBody, parameters: parameters) { (_, statusCode, error) in
-            completion(statusCode, error)
-        }
-    }
-
-    /// Search for files or directories
-    ///
-    /// - Parameters:
-    ///   - parameters: search parameters
-    ///   - completion: The block called after the server has responded
-    ///   - results: An array containing the search hits.
-    ///   - error: The error occurred in the network request, nil for no error.
-    func search(parameters: [String: String], completion: @escaping (_ nodeHits: [NodeHit]?, _ mountsDictionary: [String: Mount]?, _ error: Error?) -> Void) {
-        let method = Methods.Search
-
-        var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { json, _, error in
-            if let error = error {
-                completion(nil, nil, error)
+            guard error == nil else {
+                completion(nil, error)
                 return
             }
-            guard let json = json as? [String: Any],
-                let hitsJSON = json["hits"] as? [[String: Any]],
-                let mountsJSON = json["mounts"] as? [String: Any] else {
-                    completion(nil, nil, JSONError.parse("Couldn't parse the json to get the hits and mounts from search results."))
-                    return
-            }
 
-            let nodeHits = hitsJSON.flatMap { NodeHit(JSON: $0) }
-
-            var mountsDictionary: [String: Mount] = [:]
-
-            for (mountId, mountAny) in mountsJSON {
-                if let mount = Mount(JSON: mountAny) {
-                    mountsDictionary[mountId] = mount
-                } else {
-                    completion(nil, nil, JSONError.parse("Couldn't extract mount from results."))
-                    return
-                }
-            }
-            completion(nodeHits, mountsDictionary, nil)
+            // Handle various statusCodes here
+            completion(statusCode, nil)
         }
     }
 
@@ -886,61 +946,33 @@ final class DigiClient {
     func getDirectoryInfo(at location: Location, completion: @escaping(_ info: DirectoryInfo?, _ error: Error?) -> Void) {
 
         let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.id)
-
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
         let parameters = [ParametersKeys.Path: location.path]
 
-        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { (json, _, error) in
-            if let error = error {
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { (json, statusCode, error) in
+
+            guard error == nil else {
                 completion(nil, error)
                 return
             }
+
+            guard statusCode == 200 else {
+                completion(nil, ResponseError.notFound)
+                return
+            }
+
             guard let json = json as? [String: Any] else {
-                completion(nil, nil)
+                completion(nil, JSONError.parse("Could not parse the File Tree JSON data."))
                 return
             }
 
             var info = self.calculateNodeInfo(json)
-            info.directories -= 1
 
             // Subtracting 1 because the root directory is also counted
+            info.directories -= 1
+
             completion(info, nil)
-        }
-    }
-
-    /// Send a request to DIGI API to copy or move a node
-    ///
-    /// - Parameters:
-    ///   - fromLocation:      Source location
-    ///   - toLocation:        Destination location
-    ///   - action:            Action Type, expected ActionType.move or ActionType.copy
-    ///   - completion:        Function to handle the status code and error response
-    ///   - statusCode:        Returned HTTP request Status Code
-    ///   - error:             Networking error (nil if no error)
-    func copyOrMove(from fromLocation: Location, to toLocation: Location, action: ActionType, completion: @escaping (_ statusCode: Int?, _ error: Error?) -> Void) {
-
-        var method: String
-
-        switch action {
-        case .copy:
-            method = Methods.FilesCopy.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
-        case .move:
-            method = Methods.FilesMove.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
-        default:
-            return
-        }
-
-        var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
-        let parameters = [ParametersKeys.Path: fromLocation.path]
-
-        let json: [String: String] = ["toMountId": toLocation.mount.id, "toPath": toLocation.path]
-
-        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: parameters) { (_, statusCode, error) in
-            completion(statusCode, error)
         }
     }
 
@@ -959,30 +991,94 @@ final class DigiClient {
         let method = Methods.Links
             .replacingOccurrences(of: "{mountId}", with: location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
-
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
-
         let json = ["path": location.path]
 
-        networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { json, _, error in
+        networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
             if let error = error {
                 completion(nil, error)
                 return
             }
 
+            guard statusCode == 200 || statusCode == 201 else {
+                completion(nil, ResponseError.other)
+                return
+            }
+
             switch type {
             case .download:
                 guard let link = DownloadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    completion(nil, JSONError.parse("Could not parce the JSON data for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
                 guard let receiver = UploadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    completion(nil, JSONError.parse("Could not parce the JSON data for Receiver."))
+                    return
+                }
+                completion(receiver, nil)
+            }
+        }
+    }
+
+    func listLinks() {
+        // TODO: Implement
+    }
+
+    func linkDetails() {
+        // TODO: Implement
+    }
+
+    /// Set link (download/upload) custom short URL
+    ///
+    /// - Parameters:
+    ///   - mount:       Mount of link
+    ///   - linkId:      Link id
+    ///   - type:        Link type (.download or .upload)
+    ///   - hash:        custom hash of the url "http://s.go.ro/hash"
+    ///   - completion:  Function to handle the status code and error response
+    ///   - link:        Returned Link
+    ///   - error:       Networking error (nil if no error)
+    func setLinkCustomShortUrl(mount: Mount, linkId: String, type: LinkType, hash: String,
+                               completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
+
+        let method = Methods.LinkCustomURL
+            .replacingOccurrences(of: "{mountId}", with: mount.id)
+            .replacingOccurrences(of: "{linkType}", with: type.rawValue)
+            .replacingOccurrences(of: "{linkId}", with: linkId)
+
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        let json = ["hash": hash]
+
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
+
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, ResponseError.other)
+                return
+            }
+
+            switch type {
+            case .download:
+                guard let link = DownloadLink(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON for Link."))
+                    return
+                }
+                completion(link, nil)
+
+            case .upload:
+                guard let receiver = UploadLink(JSON: json) else {
+                    completion(nil, JSONError.parse("Could not parce the JSON for receiver."))
                     return
                 }
                 completion(receiver, nil)
@@ -1011,27 +1107,27 @@ final class DigiClient {
 
         networkTask(requestType: .put, method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
 
-            if let error = error {
+            guard error == nil else {
                 completion(nil, error)
                 return
             }
 
             guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Status is different than 200!"))
+                completion(nil, ResponseError.other)
                 return
             }
 
             switch type {
             case .download:
                 guard let link = DownloadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    completion(nil, JSONError.parse("Could not parce the JSON for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
                 guard let receiver = UploadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    completion(nil, JSONError.parse("Could not parce the JSON for Receiver."))
                     return
                 }
                 completion(receiver, nil)
@@ -1060,27 +1156,27 @@ final class DigiClient {
 
         networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
 
-            if let error = error {
+            guard error == nil else {
                 completion(nil, error)
                 return
             }
 
             guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Status is different than 200!"))
+                completion(nil, ResponseError.other)
                 return
             }
 
             switch type {
             case .download:
                 guard let link = DownloadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    completion(nil, JSONError.parse("Could not parce the JSON for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
                 guard let receiver = UploadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    completion(nil, JSONError.parse("Could not parce the JSON for Receiver."))
                     return
                 }
                 completion(receiver, nil)
@@ -1088,60 +1184,37 @@ final class DigiClient {
         }
     }
 
-    /// Set link (download/upload) custom short URL
+    /// Delete link (download/upload) password
     ///
     /// - Parameters:
     ///   - mount:       Mount of link
     ///   - linkId:      Link id
     ///   - type:        Link type (.download or .upload)
-    ///   - hash:        custom hash of the url "http://s.go.ro/hash"
     ///   - completion:  Function to handle the status code and error response
-    ///   - link:        Returned Link
     ///   - error:       Networking error (nil if no error)
-    func setLinkCustomShortUrl(mount: Mount, linkId: String, type: LinkType, hash: String,
-                               completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
+    func deleteLink(mount: Mount, linkId: String, type: LinkType, completion: @escaping (_ error: Error?) -> Void ) {
 
-        let method = Methods.LinkCustomURL
+        let method = Methods.LinkDelete
             .replacingOccurrences(of: "{mountId}", with: mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
-        var headers = DefaultHeaders.PutHeaders
+        var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
 
-        let json = ["hash": hash]
+        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
 
-        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
-
-            if let error = error {
-                completion(nil, error)
+            guard error == nil else {
+                completion(error)
                 return
             }
 
-            if statusCode == 409 {
-                completion(nil, NetworkingError.wrongStatus("This shortURL already is alocated"))
-                return
-            }
-            guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Status is different than 200!"))
+            guard statusCode == 204 else {
+                completion(ResponseError.other)
                 return
             }
 
-            switch type {
-            case .download:
-                guard let link = DownloadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
-                    return
-                }
-                completion(link, nil)
-
-            case .upload:
-                guard let receiver = UploadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
-                    return
-                }
-                completion(receiver, nil)
-            }
+            completion(nil)
         }
     }
 
@@ -1168,18 +1241,18 @@ final class DigiClient {
 
         networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
-            if let error = error {
+            guard error == nil else {
                 completion(nil, error)
                 return
             }
 
             guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Status is different than 200!"))
+                completion(nil, ResponseError.other)
                 return
             }
 
             guard let receiver = UploadLink(JSON: json) else {
-                completion(nil, JSONError.parse("Could not parce the JSON"))
+                completion(nil, JSONError.parse("Could not parce the JSON for Receiver."))
                 return
             }
 
@@ -1216,27 +1289,27 @@ final class DigiClient {
 
         networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
 
-            if let error = error {
+            guard error == nil else {
                 completion(nil, error)
                 return
             }
 
             guard statusCode == 200 else {
-                completion(nil, NetworkingError.wrongStatus("Status is different than 200!"))
+                completion(nil, ResponseError.other)
                 return
             }
 
             switch type {
             case .download:
                 guard let link = DownloadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    completion(nil, JSONError.parse("Could not parce the JSON for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
                 guard let receiver = UploadLink(JSON: json) else {
-                    completion(nil, JSONError.parse("Could not parce the JSON"))
+                    completion(nil, JSONError.parse("Could not parce the JSON for Receiver."))
                     return
                 }
                 completion(receiver, nil)
@@ -1244,37 +1317,97 @@ final class DigiClient {
         }
     }
 
-    /// Delete link (download/upload) password
+    // MARK: - Bundle
+
+    /// Gets the content of nodes of a location in the Cloud storage
     ///
     /// - Parameters:
-    ///   - mount:       Mount of link
-    ///   - linkId:      Link id
-    ///   - type:        Link type (.download or .upload)
-    ///   - completion:  Function to handle the status code and error response
-    ///   - error:       Networking error (nil if no error)
-    func deleteLink(mount: Mount, linkId: String, type: LinkType, completion: @escaping (_ error: Error?) -> Void ) {
+    ///   - location: The location to get the content
+    ///   - completion: The block called after the server has responded
+    ///   - nodes: Returned content as an array of nodes
+    ///   - error: The error occurred in the network request, nil for no error.
+    func getBundle(for location: Location, completion: @escaping(_ nodes: [Node]?, _ rootNode: Node?, _ error: Error?) -> Void) {
 
-        let method = Methods.LinkDelete
-            .replacingOccurrences(of: "{mountId}", with: mount.id)
-            .replacingOccurrences(of: "{linkType}", with: type.rawValue)
-            .replacingOccurrences(of: "{linkId}", with: linkId)
-
-        var headers = DefaultHeaders.DelHeaders
+        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.id)
+        var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
 
-        networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
+        let parameters = [ParametersKeys.Path: location.path]
 
-            if let error = error {
-                completion(error)
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { data, statusCode, error in
+
+            guard error == nil else {
+                completion(nil, nil, error)
                 return
             }
 
-            guard statusCode == 204 else {
-                completion(NetworkingError.wrongStatus("Status is different than 204!"))
+            guard statusCode == 200 else {
+                completion(nil, nil, ResponseError.other)
                 return
             }
 
-            completion(nil)
+            guard let dict = data as? [String: Any],
+                let nodesListJSON = dict["files"] as? [[String: Any]],
+                let rootNodeJSON = dict["file"] else {
+                    completion(nil, nil, JSONError.parse("Could not parse data for Bundle"))
+                    return
+            }
+
+            let nodes = nodesListJSON.flatMap { Node(JSON: $0) }
+            let rootNode = Node(JSON: rootNodeJSON)
+
+            completion(nodes, rootNode, nil)
+        }
+    }
+
+    // MARK: - Search
+
+    /// Search for files or directories
+    ///
+    /// - Parameters:
+    ///   - parameters: search parameters
+    ///   - completion: The block called after the server has responded
+    ///   - results: An array containing the search hits.
+    ///   - error: The error occurred in the network request, nil for no error.
+    func search(parameters: [String: String],
+                completion: @escaping (_ nodeHits: [NodeHit]?, _ mountsDictionary: [String: Mount]?, _ error: Error?) -> Void) {
+        
+        let method = Methods.Search
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { json, statusCode, error in
+
+            guard error == nil else {
+                completion(nil, nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, nil, ResponseError.other)
+                return
+            }
+
+            guard let json = json as? [String: Any],
+                let hitsJSON = json["hits"] as? [[String: Any]],
+                let mountsJSON = json["mounts"] as? [String: Any] else {
+                    completion(nil, nil, JSONError.parse("Couldn't parse the json to get the hits and mounts from search results."))
+                    return
+            }
+
+            let nodeHits = hitsJSON.flatMap { NodeHit(JSON: $0) }
+
+            var mountsDictionary: [String: Mount] = [:]
+
+            for (mountId, mountAny) in mountsJSON {
+                if let mount = Mount(JSON: mountAny) {
+                    mountsDictionary[mountId] = mount
+                } else {
+                    completion(nil, nil, JSONError.parse("Couldn't extract mount from results."))
+                    return
+                }
+            }
+            completion(nodeHits, mountsDictionary, nil)
         }
     }
 }
