@@ -49,7 +49,7 @@ final class FlowController {
 //            }
         } else {
             AppSettings.clearKeychainItems()
-            AppSettings.setDefaultAppSettings() // Move this in IntroController.
+            AppSettings.setDefaultAppSettings()
 //            controller = self.createIntroController()
             controller = self.createAccountSelectionController()
         }
