@@ -166,6 +166,15 @@ final class LocationsViewController: UITableViewController {
             }
 
             self.mounts = mountsList ?? []
+
+            // Remove from list the mounts for which there isn't permission to write to.
+            // Only in copy / move action.
+            if self.action == .copy || self.action == .move {
+                self.mounts = self.mounts.filter {
+                    return $0.canWrite
+                }
+            }
+
             self.mounts = self.mounts.filter {
                 $0.type != "export"
             }
