@@ -45,7 +45,7 @@ final class CreateDirectoryViewController: UITableViewController {
         self.textField.becomeFirstResponder()
         super.viewDidAppear(animated)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)

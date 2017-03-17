@@ -60,7 +60,7 @@ final class ManageBookmarksViewController: UITableViewController {
         getBookmarksAndMounts()
         super.viewDidLoad()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)

@@ -606,7 +606,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         DigiClient.shared.getLink(for: location, type: linkType) { result, error in
 
             guard error == nil, result != nil else {
-                
+
                 let message = NSLocalizedString("There was an error, please try again later.", comment: "")
                 self.configureWaitingView(type: .stopped, message: message)
 

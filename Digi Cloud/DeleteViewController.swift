@@ -40,7 +40,7 @@ final class DeleteViewController: UITableViewController {
         self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)

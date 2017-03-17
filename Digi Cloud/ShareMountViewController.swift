@@ -146,27 +146,31 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         setupNavigationItems()
         setupToolBarItems()
         configureWaitingView(type: .started, message: NSLocalizedString("Please wait...", comment: ""))
-        
+
         if let mount = sharedNode.mount {
-            
+
             if mount.root == nil && sharedNode.mountPath != "/" {
                 createMount()
-                
+
             } else {
                 refreshMount()
             }
         } else {
             createMount()
         }
-        
+
         super.viewDidLoad()
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isToolbarHidden = false
+        super.viewWillAppear(animated)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         DigiClient.shared.task?.cancel()
         super.viewWillDisappear(animated)
     }
-
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 
@@ -314,6 +318,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let controller = AddMountUserViewController(mount: mount, user: user)
 
         controller.onUpdatedUser = { [weak self] in
+
             self?.refreshMount()
             _ = self?.navigationController?.popViewController(animated: true)
         }
@@ -468,7 +473,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func createMount() {
 
-
         DigiClient.shared.createSubmount(at: self.location, withName: sharedNode.name) { mount, error in
 
             guard error == nil else {
@@ -620,7 +624,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             self?.refreshMount()
             _ = self?.navigationController?.popViewController(animated: true)
-
         }
 
         navigationController?.pushViewController(controller, animated: true)
