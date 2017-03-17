@@ -157,7 +157,7 @@ final class LocationsViewController: UITableViewController {
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 self.endRefreshAndReloadTable()
-                let message = NSLocalizedString("There was an error refreshing the locations.", comment: "")
+                let message = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
                 let title = NSLocalizedString("Error", comment: "")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
