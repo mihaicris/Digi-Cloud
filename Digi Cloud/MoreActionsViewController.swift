@@ -147,7 +147,7 @@ final class MoreActionsViewController: UITableViewController {
             }
         } else if mount.type == "export" {
             actions.append(.manageShare)
-        } else {
+        } else if rootNode.mountPath == "/" {
             if mount.permissions.mount {
                 actions.append(.manageShare)
             } else {
