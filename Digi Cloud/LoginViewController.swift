@@ -204,8 +204,11 @@ final class LoginViewController: UIViewController {
     }
 
     @objc func handleKeyboardWillHide(_ notification: Notification) {
+        usernameYConstraint.constant = -30
+    }
 
-        if UIScreen.main.bounds.width > UIScreen.main.bounds.height {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
             usernameYConstraint.constant = -30
         }
     }
