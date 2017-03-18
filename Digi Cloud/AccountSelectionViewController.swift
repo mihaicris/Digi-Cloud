@@ -125,18 +125,16 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-
         collectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
         getPersistedUsers()
         setupViews()
-        updateViews()
-
+        configureViews()
         super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         updateUsers {
-            self.updateViews()
+            self.configureViews()
         }
         super.viewDidAppear(animated)
     }
@@ -179,13 +177,11 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? AccountCollectionCell else {
             return UICollectionViewCell()
         }
-        let cache = Cache()
 
         let user = users[indexPath.item]
+        cell.accountNameLabel.text = user.name
 
-        if let user = AppSettings.getPersistedUserInfo(userID: user.id) {
-            cell.accountNameLabel.text = user.name
-        }
+        let cache = Cache()
 
         if let data = cache.load(type: .profile, key: user.id + ".png") {
             cell.profileImage.image = UIImage(data: data)
@@ -196,11 +192,13 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: cellWidth, height: cellHeight)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
 
         guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
             return UIEdgeInsets.zero
@@ -268,13 +266,22 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         NSLayoutConstraint.activate([
             logoBigLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            NSLayoutConstraint(item: logoBigLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 0.15, constant: 0.0),
+
+            NSLayoutConstraint(item: logoBigLabel, attribute: .centerY, relatedBy: .equal,
+                               toItem: view, attribute: .bottom, multiplier: 0.15, constant: 0.0),
+
             collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
             collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            NSLayoutConstraint(item: collectionView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
+
+            NSLayoutConstraint(item: collectionView, attribute: .height, relatedBy: .equal,
+                               toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
+
             spinner.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
-            NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: collectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
+
+            NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal,
+                               toItem: collectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
+
             noAccountsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
@@ -283,7 +290,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
     }
 
-    func updateViews() {
+    func configureViews() {
 
         if users.count == 0 {
             loginToAnotherAccountButton.removeFromSuperview()
@@ -309,7 +316,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         controller.onSuccess = { [weak self] user in
             self?.getPersistedUsers()
-            self?.updateViews()
+            self?.configureViews()
         }
 
         present(controller, animated: true, completion: nil)
@@ -346,7 +353,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         }
 
         updateUsers {
-            self.updateViews()
+            self.configureViews()
         }
 
     }
@@ -361,31 +368,26 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         for account in accounts {
 
-            do {
-                let token = try account.readToken()
+            let token = try! account.readToken()
 
-                dispatchGroup.enter()
+            dispatchGroup.enter()
 
-                AppSettings.saveUser(forToken: token) { user, error in
+            AppSettings.saveUser(forToken: token) { user, error in
 
-                    dispatchGroup.leave()
+                dispatchGroup.leave()
 
-                    guard error == nil else {
-                        updateError = true
-                        return
-                    }
-
-                    if let user = user {
-                        updatedUsers.append(user)
-                    }
+                guard error == nil else {
+                    updateError = true
+                    return
                 }
 
-            } catch {
-                fatalError("Error fetching account from Keychain - \(error)")
+                if let user = user {
+                    updatedUsers.append(user)
+                }
             }
         }
 
-        dispatchGroup.notify(queue: .main, execute: {
+        dispatchGroup.notify(queue: .main) {
 
             if updateError {
                 // Shouwd we inform user about refresh failed?
@@ -394,7 +396,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                 self.users = self.users.updating(from: updatedUsers)
                 completion?()
             }
-        })
+        }
     }
 
     private func showError(message: String) {
@@ -403,18 +405,25 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                                       message: message,
                                       preferredStyle: UIAlertControllerStyle.alert)
 
-        let completion = { (alert: UIAlertAction) in
+        let completionActionOK: (UIAlertAction) -> Void = { _ in
 
-            self.reverseAnimation {
+            UIView.animate(withDuration: 0.5, animations: {
+
+                let indexPathOneElement = IndexPath(item: 0, section: 0)
+                if let cell = self.collectionView.cellForItem(at: indexPathOneElement) {
+                    cell.transform = CGAffineTransform.identity
+                }
+            }, completion: { _ in
                 self.getPersistedUsers()
                 self.setupViews()
-                self.updateViews()
+                self.configureViews()
                 self.isExecuting = false
-
-            }
+            })
         }
 
-        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: completion)
+        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""),
+                                     style: UIAlertActionStyle.default,
+                                     handler: completionActionOK)
 
         alert.addAction(actionOK)
 
@@ -469,7 +478,8 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
                                 switch error! {
 
-                                case NetworkingError.internetOffline(let errorMessage), NetworkingError.requestTimedOut(let errorMessage):
+                                case NetworkingError.internetOffline(let errorMessage),
+                                     NetworkingError.requestTimedOut(let errorMessage):
                                     message = errorMessage
                                     break
 
@@ -511,17 +521,5 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         // Animate the selected account in the collection view
         self.collectionView.performBatchUpdates(updatesClosure, completion: completionClosure)
-    }
-
-    private func reverseAnimation(completion: @escaping () -> Void) {
-        UIView.animate(withDuration: 0.5, animations: {
-
-            let indexPathOneElement = IndexPath(item: 0, section: 0)
-            if let cell = self.collectionView.cellForItem(at: indexPathOneElement) {
-                    cell.transform = CGAffineTransform.identity
-            }
-        }, completion: { _ in
-            completion()
-        })
     }
 }

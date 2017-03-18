@@ -272,7 +272,7 @@ final class ManageAccountsViewController: UITableViewController {
         self.updateButtonsToMatchTableState()
 
         controller.users = self.users
-        controller.updateViews()
+        controller.configureViews()
         controller.collectionView.reloadData()
 
         dismissIfNoMoreUsers()
