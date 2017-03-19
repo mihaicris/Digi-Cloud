@@ -54,6 +54,26 @@ struct AppSettings {
         }
     }
 
+    static var shouldPasswordDownloadLink: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.shouldPasswordDownloadLink.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.shouldPasswordDownloadLink.rawValue)
+            UserDefaults.standard.synchronize()
+        }
+    }
+
+    static var shouldPasswordReceiveLink: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.shouldPasswordReceiveLink.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.UserDefaultsKeys.shouldPasswordReceiveLink.rawValue)
+            UserDefaults.standard.synchronize()
+        }
+    }
+
     static var sortMethod: SortMethodType {
         get {
             let value = UserDefaults.standard.integer(forKey: UserDefaults.UserDefaultsKeys.sortMethod.rawValue)

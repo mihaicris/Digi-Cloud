@@ -504,6 +504,8 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                             // Save in Userdefaults this user as logged in
                             AppSettings.loggedUserID = user.id
 
+                            DigiClient.shared.getSecuritySettings()
+
                             // Show account locations
                             self.onSelect?()
                         }

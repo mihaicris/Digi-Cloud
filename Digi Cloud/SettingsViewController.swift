@@ -12,6 +12,7 @@ final class SettingsViewController: UITableViewController {
 
     enum SettingType {
         case user
+        case securitate
         case data
         case about
     }
@@ -20,7 +21,7 @@ final class SettingsViewController: UITableViewController {
 
     private var isExecuting = false
 
-    private var settings: [SettingType] = [.user, .data, .about]
+    private var settings: [SettingType] = [.user, .securitate, .data, .about]
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -51,6 +52,7 @@ final class SettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         title = NSLocalizedString("Settings", comment: "")
+        preferredContentSize = CGSize(width: 350, height: 700)
         super.viewDidLoad()
     }
 
@@ -62,6 +64,9 @@ final class SettingsViewController: UITableViewController {
 
         switch settings[section] {
         case .user:
+            return 1
+
+        case .securitate:
             return 1
 
         case .data:
@@ -76,13 +81,16 @@ final class SettingsViewController: UITableViewController {
 
         switch settings[section] {
         case .user:
-            return NSLocalizedString("USER", comment: "")
+            return NSLocalizedString("User", comment: "")
+
+        case .securitate:
+            return NSLocalizedString("Security", comment: "")
 
         case .data:
-            return NSLocalizedString("DATA", comment: "")
+            return NSLocalizedString("Data", comment: "")
 
         case .about:
-            return NSLocalizedString("ABOUT DIGI CLOUD", comment: "")
+            return NSLocalizedString("About DIGI Cloud", comment: "")
         }
     }
 
@@ -123,6 +131,11 @@ final class SettingsViewController: UITableViewController {
                 confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
                 confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
                 confirmButtonHorizontalConstraint])
+
+        case .securitate:
+
+            cell.textLabel?.text = NSLocalizedString("Links", comment: "")
+            cell.accessoryType = .disclosureIndicator
 
         case .data:
 
@@ -177,6 +190,10 @@ final class SettingsViewController: UITableViewController {
         switch settings[indexPath.section] {
         case .user:
             handleLogout(cell)
+
+        case .securitate:
+            let controller = SecuritySettingsTableViewController(style: .grouped)
+            navigationController?.pushViewController(controller, animated: true)
 
         case .data:
             if indexPath.row == 1 {

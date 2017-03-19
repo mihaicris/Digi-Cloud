@@ -47,6 +47,7 @@ struct Methods {
     static let User                = "/api/v2/user"
     static let UserProfileImage    = "/content/api/v2/users/{userId}/profile-picture"
     static let UserPassword        = "/api/v2/user/password"
+    static let UserSettingsSec     = "/api/v2/user/settings/security"
     static let UserBookmarks       = "/api/v2/user/bookmarks"
     static let Mounts              = "/api/v2/mounts"
     static let MountEdit           = "/api/v2/mounts/{id}"

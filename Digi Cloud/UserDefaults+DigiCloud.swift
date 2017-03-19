@@ -19,5 +19,7 @@ extension UserDefaults {
         case sortMethod
         case sortAscending
         case allowsCellularAccess
+        case shouldPasswordDownloadLink
+        case shouldPasswordReceiveLink
     }
 }

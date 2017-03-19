@@ -353,20 +353,55 @@ final class DigiClient {
         }
     }
 
-    func getUserNotifications() {
-        // TODO: Implement
+    func getSecuritySettings() {
+        let method = Methods.UserSettingsSec
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { jsonData, statusCode, error in
+
+            guard error == nil else {
+                return
+            }
+
+            guard statusCode == 200 else {
+                return
+            }
+
+            guard let jsonDict = jsonData as? [String: Any],
+                let downloadLinkAutoPassword  = jsonDict["downloadLinkAutoPassword"] as? Bool,
+                let uploadLinkAutoPassword      = jsonDict["uploadLinkAutoPassword"] as? Bool else {
+                    return
+            }
+
+            AppSettings.shouldPasswordDownloadLink = downloadLinkAutoPassword
+            AppSettings.shouldPasswordReceiveLink = uploadLinkAutoPassword
+        }
     }
 
-    func setUserNotifications() {
-        // TODO: Implement
-    }
+    func setSecuritySettings(shouldPasswordDownloadLink: Bool, shouldPasswordReceiveLink: Bool, completion: @escaping((Error?) -> Void)) {
+        let method = Methods.UserSettingsSec
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
 
-    func getSecurity() {
-        // TODO: Implement
-    }
+        let json: [String: Bool] = ["downloadLinkRequirePassword": false,
+                                    "downloadLinkAutoPassword": shouldPasswordDownloadLink,
+                                    "uploadLinkRequirePassword": false,
+                                    "uploadLinkAutoPassword": shouldPasswordReceiveLink]
 
-    func setSecurity() {
-        // TODO: Implement
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 204 else {
+                completion(ResponseError.other)
+                return
+            }
+            completion(nil)
+        }
     }
 
     // MARK: - Bookmarks
