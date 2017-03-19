@@ -21,6 +21,9 @@ final class SettingsViewController: UITableViewController {
 
     private var isExecuting = false
 
+    private var user: User!
+    private var profileImage: UIImage! = #imageLiteral(resourceName: "DefaultAccountProfileImage")
+
     private var settings: [SettingType] = [.user, .securitate, .data, .about]
 
     private let confirmButton: UIButton = {
@@ -53,7 +56,23 @@ final class SettingsViewController: UITableViewController {
     override func viewDidLoad() {
         title = NSLocalizedString("Settings", comment: "")
         preferredContentSize = CGSize(width: 350, height: 700)
+        fetchUserData()
+
         super.viewDidLoad()
+    }
+
+    private func fetchUserData() {
+
+        if let userID = AppSettings.loggedUserID {
+
+            self.user = AppSettings.getPersistedUserInfo(userID: userID)
+
+            let cache = Cache()
+
+            if let data = cache.load(type: .profile, key: userID + ".png") {
+                self.profileImage = UIImage(data: data)
+            }
+        }
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -64,7 +83,7 @@ final class SettingsViewController: UITableViewController {
 
         switch settings[section] {
         case .user:
-            return 1
+            return 2
 
         case .securitate:
             return 1
@@ -113,6 +132,16 @@ final class SettingsViewController: UITableViewController {
         }
     }
 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch settings[indexPath.section] {
+        case .user:
+            return indexPath.row == 0 ? 100 : UITableViewAutomaticDimension
+
+        default:
+            return UITableViewAutomaticDimension
+        }
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
@@ -121,16 +150,50 @@ final class SettingsViewController: UITableViewController {
         switch settings[indexPath.section] {
         case .user:
 
-            cell.textLabel?.text = NSLocalizedString("Switch User", comment: "")
-            cell.textLabel?.textColor = .defaultColor
-            cell.contentView.addSubview(confirmButton)
+            if indexPath.row == 0 {
 
-            confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
+                let profileImageView: UIImageView = {
+                    let iv = UIImageView()
+                    iv.translatesAutoresizingMaskIntoConstraints = false
+                    iv.layer.cornerRadius = 10
+                    iv.layer.masksToBounds = true
+                    iv.contentMode = .scaleAspectFill
+                    iv.image = self.profileImage
+                    return iv
+                }()
 
-            NSLayoutConstraint.activate([
-                confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-                confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
-                confirmButtonHorizontalConstraint])
+                let usernameLabel: UILabel = {
+                    let l = UILabel()
+                    l.translatesAutoresizingMaskIntoConstraints = false
+                    l.text = self.user.name
+                    l.font = UIFont.HelveticaNeueMedium(size: 18)
+                    return l
+                }()
+
+                cell.contentView.addSubview(profileImageView)
+                cell.contentView.addSubview(usernameLabel)
+
+                NSLayoutConstraint.activate([
+                    profileImageView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                    profileImageView.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
+                    profileImageView.heightAnchor.constraint(equalToConstant: 80),
+                    profileImageView.widthAnchor.constraint(equalToConstant: 80),
+
+                    usernameLabel.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor),
+                    usernameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 30)])
+
+            } else {
+                cell.textLabel?.text = NSLocalizedString("Switch User", comment: "")
+                cell.textLabel?.textColor = .defaultColor
+                cell.contentView.addSubview(confirmButton)
+
+                confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
+
+                NSLayoutConstraint.activate([
+                    confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
+                    confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
+                    confirmButtonHorizontalConstraint])
+            }
 
         case .securitate:
 
@@ -171,10 +234,10 @@ final class SettingsViewController: UITableViewController {
                 // App version
                 cell.textLabel?.text = NSLocalizedString("App Version", comment: "")
                 cell.detailTextLabel?.text = "\(UIApplication.Version)"
-//            case 1:
-//                // Rate the app
-//                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "")
-//                cell.textLabel?.textColor = .defaultColor
+                //            case 1:
+                //                // Rate the app
+                //                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "")
+            //                cell.textLabel?.textColor = .defaultColor
             default:
                 break
             }
@@ -189,7 +252,9 @@ final class SettingsViewController: UITableViewController {
 
         switch settings[indexPath.section] {
         case .user:
-            handleLogout(cell)
+            if indexPath.row == 1 {
+                handleLogout(cell)
+            }
 
         case .securitate:
             let controller = SecuritySettingsTableViewController(style: .grouped)
@@ -226,12 +291,12 @@ final class SettingsViewController: UITableViewController {
         confirmButtonHorizontalConstraint.isActive = true
 
         UIView.animate(withDuration: 0.4,
-                              delay: 0,
-             usingSpringWithDamping: 1,
-              initialSpringVelocity: 1,
-                            options: .curveEaseOut,
-                         animations: { cell.layoutIfNeeded() },
-                         completion: nil)
+                       delay: 0,
+                       usingSpringWithDamping: 1,
+                       initialSpringVelocity: 1,
+                       options: .curveEaseOut,
+                       animations: { cell.layoutIfNeeded() },
+                       completion: nil)
     }
 
     @objc private func handleLogoutConfirmed() {
