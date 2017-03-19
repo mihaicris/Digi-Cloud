@@ -99,7 +99,7 @@ final class LocationsViewController: UITableViewController {
             if self.isUpdating {
                 return
             }
-            self.endRefreshAndReloadTable()
+            self.endRefreshAndReloadTable(completion: nil)
         }
     }
 
@@ -155,13 +155,30 @@ final class LocationsViewController: UITableViewController {
             self.isUpdating = false
 
             guard error == nil else {
-                print("Error: \(error!.localizedDescription)")
-                self.endRefreshAndReloadTable()
-                let message = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
+
+                var message: String
+
+                switch error! {
+                case NetworkingError.internetOffline(let msg):
+                    message = msg
+                case NetworkingError.requestTimedOut(let msg):
+                    message = msg
+                default:
+                    message = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
+                }
+
                 let title = NSLocalizedString("Error", comment: "")
-                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
-                self.present(alertController, animated: true, completion: nil)
+
+                self.endRefreshAndReloadTable {
+                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""),
+                                                            style: .default,
+                                                            handler: nil))
+
+                    self.present(alertController, animated: true, completion: nil)
+                }
+
                 return
             }
 
@@ -183,7 +200,7 @@ final class LocationsViewController: UITableViewController {
                 if self.tableView.isDragging {
                     return
                 } else {
-                    self.endRefreshAndReloadTable()
+                    self.endRefreshAndReloadTable(completion: nil)
                 }
             } else {
                 self.tableView.reloadData()
@@ -191,11 +208,12 @@ final class LocationsViewController: UITableViewController {
         }
     }
 
-    private func endRefreshAndReloadTable() {
+    private func endRefreshAndReloadTable(completion: (() -> Void)?) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.refreshControl?.endRefreshing()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 self.tableView.reloadData()
+                completion?()
             }
         }
     }
