@@ -138,7 +138,11 @@ final class MoreActionsViewController: UITableViewController {
 
         if mount.type == "device" {
             if mount.root == nil && rootNode.mountPath == "/" {
-                actions.append(.manageShare)
+                if mount.users.count > 1 {
+                    actions.append(.manageShare)
+                } else {
+                    actions.append(.makeNewShare)
+                }
             } else {
                 actions.append(.makeNewShare)
             }
