@@ -80,8 +80,8 @@ final class DirectoryCell: BaseListCell {
         if isShared {
             contentView.addSubview(sharedLabel)
             NSLayoutConstraint.activate([
-                sharedLabel.centerXAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
-                sharedLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor, constant: 15)
+                sharedLabel.centerXAnchor.constraint(equalTo: contentView.leftAnchor, constant: 17),
+                sharedLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor, constant: 17)
             ])
         } else {
             sharedLabel.removeFromSuperview()
