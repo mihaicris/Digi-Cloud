@@ -10,9 +10,17 @@ import UIKit
 
 final class SettingsViewController: UITableViewController {
 
+    enum SettingType {
+        case user
+        case data
+        case about
+    }
+
     // MARK: - Properties
 
     private var isExecuting = false
+
+    private var settings: [SettingType] = [.user, .data, .about]
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -47,29 +55,41 @@ final class SettingsViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return settings.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case  0: return 2 // ABOUT THE APP
-        case  1: return 2 // DATA
-        case  2: return 1 // USER
-        default: return 0
+
+        switch settings[section] {
+        case .user:
+            return 1
+
+        case .data:
+            return 2
+
+        case .about:
+            return 1
         }
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:  return NSLocalizedString("ABOUT DIGI CLOUD", comment: "")
-        case 1:  return NSLocalizedString("DATA", comment: "")
-        case 2:  return NSLocalizedString("USER", comment: "")
-        default: return nil
+
+        switch settings[section] {
+        case .user:
+            return NSLocalizedString("USER", comment: "")
+
+        case .data:
+            return NSLocalizedString("DATA", comment: "")
+
+        case .about:
+            return NSLocalizedString("ABOUT DIGI CLOUD", comment: "")
         }
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if section == 1 {
+
+        switch settings[section] {
+        case .data:
             let str = NSLocalizedString("Currently using:", comment: "")
 
             var sizeString = NSLocalizedString("Error", comment: "")
@@ -80,7 +100,7 @@ final class SettingsViewController: UITableViewController {
 
             return "\(str) \(sizeString)"
 
-        } else {
+        default:
             return nil
         }
     }
@@ -90,24 +110,22 @@ final class SettingsViewController: UITableViewController {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
         cell.selectionStyle = .none
 
-        switch indexPath.section {
-        case 0:
-            // About the app
-            switch indexPath.row {
-            case 0:
-                // App version
-                cell.textLabel?.text = NSLocalizedString("App Version", comment: "")
-                cell.detailTextLabel?.text = "\(UIApplication.Version)"
-            case 1:
-                // Rate the app
-                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "")
-                cell.textLabel?.textColor = .defaultColor
-            default:
-                break
-            }
+        switch settings[indexPath.section] {
+        case .user:
 
-        case 1:
-            // Data
+            cell.textLabel?.text = NSLocalizedString("Switch User", comment: "")
+            cell.textLabel?.textColor = .defaultColor
+            cell.contentView.addSubview(confirmButton)
+
+            confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
+
+            NSLayoutConstraint.activate([
+                confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
+                confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
+                confirmButtonHorizontalConstraint])
+
+        case .data:
+
             switch indexPath.row {
             case 0:
                 // Allow celular
@@ -133,22 +151,20 @@ final class SettingsViewController: UITableViewController {
                 break
             }
 
-        case 2:
-            // USER
-            cell.textLabel?.text = NSLocalizedString("Switch User", comment: "")
-            cell.textLabel?.textColor = .defaultColor
-            cell.contentView.addSubview(confirmButton)
+        case .about:
 
-            confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
-
-            NSLayoutConstraint.activate([
-                confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-                confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
-                confirmButtonHorizontalConstraint
-            ])
-
-        default:
-            return UITableViewCell()
+            switch indexPath.row {
+            case 0:
+                // App version
+                cell.textLabel?.text = NSLocalizedString("App Version", comment: "")
+                cell.detailTextLabel?.text = "\(UIApplication.Version)"
+//            case 1:
+//                // Rate the app
+//                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "")
+//                cell.textLabel?.textColor = .defaultColor
+            default:
+                break
+            }
         }
 
         return cell
@@ -157,19 +173,20 @@ final class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        switch indexPath.section {
-        case 0:
-            if indexPath.row == 1 {
-                handleAppStoreReview()
-            }
-        case 1:
+
+        switch settings[indexPath.section] {
+        case .user:
+            handleLogout(cell)
+
+        case .data:
             if indexPath.row == 1 {
                 handleClearCache()
             }
-        case 2:
-            handleLogout(cell)
-        default:
-            break
+
+        case .about:
+            if indexPath.row == 1 {
+                handleAppStoreReview()
+            }
         }
     }
 
