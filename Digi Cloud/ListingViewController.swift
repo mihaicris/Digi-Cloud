@@ -849,7 +849,7 @@ final class ListingViewController: UITableViewController {
                 if self.nodes.isEmpty { return }
                 self.activateEditMode()
 
-            case .manageShare, .makeNewShare, .shareInfo:
+            case .manageShare, .makeShare, .shareInfo:
                 self.showShareMountViewController(location: self.rootLocation, sharedNode: rootNode)
 
             default:
@@ -960,7 +960,7 @@ final class ListingViewController: UITableViewController {
                 case .sendUploadLink:
                     self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .upload)
 
-                case .makeNewShare, .manageShare:
+                case .makeShare, .manageShare:
                     self.showShareMountViewController(location: nodeLocation, sharedNode: node)
 
                 default:

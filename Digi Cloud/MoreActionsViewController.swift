@@ -59,7 +59,7 @@ final class MoreActionsViewController: UITableViewController {
 
         switch actions[indexPath.row] {
 
-        case .makeNewShare:
+        case .makeShare:
             cell.textLabel?.text = NSLocalizedString("Share", comment: "")
 
         case .manageShare:
@@ -141,13 +141,13 @@ final class MoreActionsViewController: UITableViewController {
                 if mount.users.count > 1 {
                     actions.append(.manageShare)
                 } else {
-                    actions.append(.makeNewShare)
+                    actions.append(.makeShare)
                 }
-            } else {
-                actions.append(.makeNewShare)
             }
         } else if mount.type == "export" {
-            actions.append(.manageShare)
+            if rootNode.mountPath == "/" {
+                actions.append(.manageShare)
+            }
         } else if rootNode.mountPath == "/" {
             if mount.permissions.mount {
                 actions.append(.manageShare)

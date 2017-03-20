@@ -59,7 +59,7 @@ final class NodeActionsViewController: UITableViewController {
 
         switch actions[indexPath.row] {
 
-        case .makeNewShare:
+        case .makeShare:
             cell.textLabel?.text = NSLocalizedString("Share", comment: "")
 
         case .manageShare:
@@ -179,7 +179,7 @@ final class NodeActionsViewController: UITableViewController {
                 }
             } else {
                 if location.mount.permissions.owner == true {
-                    actions.append(.makeNewShare)
+                    actions.append(.makeShare)
                 }
             }
 

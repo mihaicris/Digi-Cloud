@@ -16,7 +16,7 @@ struct Mount {
     let name: String
     let type: String
     let origin: String
-    let root: [String: String]?
+    let root: RootMount?
     let online: Bool
     let owner: User
     var users: [User]
@@ -67,7 +67,7 @@ extension Mount {
         self.name = name
         self.type = type
         self.origin = origin
-        self.root = JSON["root"] as? [String: String]
+        self.root = RootMount(JSON: JSON["root"])
         self.online = online
         self.users = usersJSON.flatMap { User(JSON: $0) }
         self.isShared = isShared

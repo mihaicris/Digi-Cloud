@@ -121,7 +121,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             self.errorMessageVerticalConstraint!,
             okButton.centerXAnchor.constraint(equalTo: v.centerXAnchor),
             okButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40)
-        ])
+            ])
 
         return v
     }()
@@ -152,6 +152,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         if let mount = sharedNode.mount {
 
             if mount.root == nil && sharedNode.mountPath != "/" {
+
                 createMount()
 
             } else {
@@ -266,7 +267,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
                 mountNameLabel.leadingAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leadingAnchor),
                 mountNameLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-            ])
+                ])
 
             return cell
 
@@ -277,7 +278,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             let user = users[indexPath.row]
-                cell.selectionStyle = .none
+            cell.selectionStyle = .none
 
             if let owner = sharedNode.mount?.owner {
                 if owner == user {
@@ -376,7 +377,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             tableViewForUsers.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewForUsers.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableViewForUsers.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
+            ])
     }
 
     private func setupNavigationItems() {
@@ -638,7 +639,13 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             self.dismiss(animated: true) {
-                self.onFinish?(false)
+
+                if self.sharedNode.mountPath == "/" && self.sharedNode.mount?.type == "export" && self.sharedNode.name == "" {
+                    self.onFinish?(true)
+                } else {
+                    self.onFinish?(false)
+                }
+
             }
         }
     }

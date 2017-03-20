@@ -264,7 +264,7 @@ final class ManageAccountsViewController: UITableViewController {
 
             self.tableView.endUpdates()
 
-            assert(users.count == 0, "Not all users have been deleted!")
+            precondition(users.count == 0, "Not all users have been deleted!")
 
         }
 

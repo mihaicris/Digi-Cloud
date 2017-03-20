@@ -315,7 +315,19 @@ final class LocationsViewController: UITableViewController {
             return
         }
 
-        let location = Location(mount: cell.mount, path: "/")
+        guard let mount = cell.mount else {
+            return
+        }
+
+        var location: Location = Location(mount: cell.mount, path: "/")
+
+        if mount.type == "export" {
+            if let root = mount.root {
+                let originalPath = root.path
+                location = Location(mount: mainMounts.first!, path: originalPath)
+            }
+        }
+
         let controller = ListingViewController(location: location, action: self.action, sourceLocations: self.sourceLocations)
 
         if self.action != .noAction {

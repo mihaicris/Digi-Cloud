@@ -71,7 +71,7 @@ final class ShareViewController: UITableViewController {
             cell.nameLabel.text = NSLocalizedString("Send Link", comment: "")
         case .sendUploadLink:
             cell.nameLabel.text = NSLocalizedString("Receive Files", comment: "")
-        case .makeNewShare:
+        case .makeShare:
             cell.nameLabel.text = NSLocalizedString("Share in Digi Storage", comment: "")
         case .manageShare:
             cell.nameLabel.text = NSLocalizedString("Manage Share", comment: "")
@@ -96,7 +96,7 @@ final class ShareViewController: UITableViewController {
             let controller = ShareLinkViewController(location: self.location, linkType: .upload, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
 
-        case .makeNewShare:
+        case .makeShare:
             let controller = ShareMountViewController(location: self.location, sharedNode: self.sharedNode, onFinish: self.onFinish)
             self.navigationController?.pushViewController(controller, animated: true)
 
@@ -143,7 +143,7 @@ final class ShareViewController: UITableViewController {
         }
 
         if location.mount.permissions.mount {
-            actions.append(.makeNewShare)
+            actions.append(.makeShare)
         }
 
         if !actions.contains(.makeNewShare) {
