@@ -849,6 +849,35 @@ final class DigiClient {
 
     // MARK: - Files
 
+    func fileInfo(atLocation location: Location, completion: @escaping((Node?, Error?) -> Void)) {
+
+        let method = Methods.FilesInfo.replacingOccurrences(of: "{mountId}", with: location.mount.id)
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        let parameters = ["path": location.path]
+
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { (jsonData, statusCode, error) in
+
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, ResponseError.notFound)
+                return
+            }
+
+            guard let node = Node(JSON: jsonData) else {
+                completion(nil, JSONError.parse("Error parsing Node JSON."))
+                return
+            }
+
+            completion(node, nil)
+        }
+    }
+
     /// Create a node of type directory
     ///
     /// - Parameters:

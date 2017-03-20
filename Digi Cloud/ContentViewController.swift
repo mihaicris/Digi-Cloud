@@ -14,6 +14,7 @@ final class ContentViewController: UIViewController {
     // MARK: - Properties
 
     let location: Location
+
     var fileURL: URL!
     var session: URLSession?
 
@@ -57,6 +58,20 @@ final class ContentViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+
+        DigiClient.shared.fileInfo(atLocation: self.location) { (node, error) in
+
+            guard error == nil else {
+
+                return
+            }
+
+            if let node = node {
+
+                print(node.hash)
+            }
+
+        }
 
         // create destination file url
         let fileName = (self.location.path as NSString).lastPathComponent

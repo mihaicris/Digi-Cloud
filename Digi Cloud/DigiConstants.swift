@@ -56,6 +56,7 @@ struct Methods {
     static let Bundle              = "/api/v2/mounts/{id}/bundle"
     static let UserAdd             = "/api/v2/mounts/{id}/users"
     static let UserChange          = "/api/v2/mounts/{mountId}/users/{userId}"
+    static let FilesInfo           = "/api/v2/mounts/{mountId}/files/info"
     static let FilesList           = "/api/v2/mounts/{id}/files/list"
     static let FilesGet            = "/api/v2/mounts/{id}/files/get"
     static let FilesRename         = "/api/v2/mounts/{id}/files/rename"
