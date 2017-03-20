@@ -77,8 +77,12 @@ final class LocationsViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as? LocationCell else {
             return UITableViewCell()
         }
-        cell.locationLabel.text = mounts[indexPath.row].name
+        cell.mount = mounts[indexPath.row]
         return cell
+    }
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
