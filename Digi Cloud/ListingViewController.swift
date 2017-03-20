@@ -228,6 +228,10 @@ final class ListingViewController: UITableViewController {
                         cell.isUserInteractionEnabled = false
                         cell.nodeNameLabel.isEnabled = false
                         cell.detailsLabel.isEnabled = false
+                    } else {
+                        cell.isUserInteractionEnabled = true
+                        cell.nodeNameLabel.isEnabled = true
+                        cell.detailsLabel.isEnabled = true
                     }
                 }
             }
