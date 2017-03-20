@@ -13,11 +13,12 @@ final class AccountTableViewCell: UITableViewCell {
     var user: User? {
         didSet {
             guard let id = user?.id,
-                  let name = user?.name,
+                  let firstName = user?.firstName,
+                  let lastName = user?.lastName,
                   let username = user?.email else {
                 return
             }
-            self.accountNameLabel.text = name
+            self.accountNameLabel.text = "\(firstName) \(lastName)"
             self.accountUsernameLabel.text = username
             let cache = Cache()
             if let data = cache.load(type: .profile, key: "\(id).png") {

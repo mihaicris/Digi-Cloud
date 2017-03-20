@@ -112,17 +112,19 @@ struct AppSettings {
     }
 
     static func persistUserInfo(user: User) {
-        UserDefaults.standard.set(user.name, forKey: "name-\(user.id)")
+        UserDefaults.standard.set(user.firstName, forKey: "firstName-\(user.id)")
+        UserDefaults.standard.set(user.lastName, forKey: "lastName-\(user.id)")
         UserDefaults.standard.set(user.email, forKey: "email-\(user.id)")
         UserDefaults.standard.synchronize()
     }
 
     static func getPersistedUserInfo(userID: String) -> User? {
-        guard let name  = UserDefaults.standard.string(forKey: "name-\(userID)"),
+        guard let firstName  = UserDefaults.standard.string(forKey: "firstName-\(userID)"),
+              let lastName = UserDefaults.standard.string(forKey: "lastName-\(userID)"),
               let email = UserDefaults.standard.string(forKey: "email-\(userID)") else {
             return nil
         }
-        return User(id: userID, name: name, email: email, permissions: Permissions())
+        return User(id: userID, firstName: firstName, lastName: lastName, email: email, permissions: Permissions())
     }
 
     static func deletePersistedUserInfo(userID: String) {

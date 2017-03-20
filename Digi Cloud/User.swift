@@ -8,7 +8,8 @@
 
 struct User {
     let id: String
-    let name: String
+    let firstName: String
+    let lastName: String
     var email: String
     var permissions: Permissions
 }
@@ -33,7 +34,8 @@ extension User {
         }
 
         self.id = id
-        self.name = name
+        self.firstName = name
+        self.lastName = name
         self.email = email
     }
 
@@ -50,7 +52,8 @@ extension User {
         }
 
         self.id = id
-        self.name = "\(firstName) \(lastName)"
+        self.firstName = firstName
+        self.lastName = lastName
         self.email = email
         self.permissions = Permissions()
     }

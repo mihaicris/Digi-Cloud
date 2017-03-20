@@ -12,7 +12,7 @@ final class SettingsViewController: UITableViewController {
 
     enum SettingType {
         case user
-        case securitate
+        case security
         case data
         case about
     }
@@ -24,7 +24,7 @@ final class SettingsViewController: UITableViewController {
     private var user: User!
     private var profileImage: UIImage! = #imageLiteral(resourceName: "DefaultAccountProfileImage")
 
-    private var settings: [SettingType] = [.user, .securitate, .data, .about]
+    private var settings: [SettingType] = [.user, .data, .security, .about]
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -56,9 +56,13 @@ final class SettingsViewController: UITableViewController {
     override func viewDidLoad() {
         title = NSLocalizedString("Settings", comment: "")
         preferredContentSize = CGSize(width: 350, height: 700)
-        fetchUserData()
-
         super.viewDidLoad()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        fetchUserData()
+        tableView.reloadData()
+        super.viewWillAppear(animated)
     }
 
     private func fetchUserData() {
@@ -85,7 +89,7 @@ final class SettingsViewController: UITableViewController {
         case .user:
             return 2
 
-        case .securitate:
+        case .security:
             return 1
 
         case .data:
@@ -102,7 +106,7 @@ final class SettingsViewController: UITableViewController {
         case .user:
             return NSLocalizedString("User", comment: "")
 
-        case .securitate:
+        case .security:
             return NSLocalizedString("Security", comment: "")
 
         case .data:
@@ -113,29 +117,10 @@ final class SettingsViewController: UITableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-
-        switch settings[section] {
-        case .data:
-            let str = NSLocalizedString("Currently using:", comment: "")
-
-            var sizeString = NSLocalizedString("Error", comment: "")
-
-            if let size = FileManager.sizeOfFilesCacheDirectory() {
-                sizeString = byteFormatter.string(fromByteCount: Int64(size))
-            }
-
-            return "\(str) \(sizeString)"
-
-        default:
-            return nil
-        }
-    }
-
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch settings[indexPath.section] {
         case .user:
-            return indexPath.row == 0 ? 100 : UITableViewAutomaticDimension
+            return indexPath.row == 0 ? 80 : UITableViewAutomaticDimension
 
         default:
             return UITableViewAutomaticDimension
@@ -152,6 +137,8 @@ final class SettingsViewController: UITableViewController {
 
             if indexPath.row == 0 {
 
+                cell.accessoryType = .disclosureIndicator
+
                 let profileImageView: UIImageView = {
                     let iv = UIImageView()
                     iv.translatesAutoresizingMaskIntoConstraints = false
@@ -165,25 +152,38 @@ final class SettingsViewController: UITableViewController {
                 let usernameLabel: UILabel = {
                     let l = UILabel()
                     l.translatesAutoresizingMaskIntoConstraints = false
-                    l.text = self.user.name
-                    l.font = UIFont.HelveticaNeueMedium(size: 18)
+                    l.text = "\(user.firstName) \(user.lastName)"
+                    l.font = UIFont.HelveticaNeueMedium(size: 16)
+                    return l
+                }()
+
+                let userloginLabel: UILabel = {
+                    let l = UILabel()
+                    l.translatesAutoresizingMaskIntoConstraints = false
+                    l.text = self.user.email
+                    l.textColor = UIColor.gray
+                    l.font = UIFont.HelveticaNeue(size: 14)
                     return l
                 }()
 
                 cell.contentView.addSubview(profileImageView)
                 cell.contentView.addSubview(usernameLabel)
+                cell.contentView.addSubview(userloginLabel)
 
                 NSLayoutConstraint.activate([
                     profileImageView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     profileImageView.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
-                    profileImageView.heightAnchor.constraint(equalToConstant: 80),
-                    profileImageView.widthAnchor.constraint(equalToConstant: 80),
+                    profileImageView.heightAnchor.constraint(equalToConstant: 60),
+                    profileImageView.widthAnchor.constraint(equalToConstant: 60),
 
-                    usernameLabel.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor),
-                    usernameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 30)])
+                    userloginLabel.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor),
+                    userloginLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8),
+
+                    usernameLabel.bottomAnchor.constraint(equalTo: userloginLabel.topAnchor),
+                    usernameLabel.leftAnchor.constraint(equalTo: userloginLabel.leftAnchor)])
 
             } else {
-                cell.textLabel?.text = NSLocalizedString("Switch User", comment: "")
+                cell.textLabel?.text = NSLocalizedString("Switch Account", comment: "")
                 cell.textLabel?.textColor = .defaultColor
                 cell.contentView.addSubview(confirmButton)
 
@@ -195,16 +195,16 @@ final class SettingsViewController: UITableViewController {
                     confirmButtonHorizontalConstraint])
             }
 
-        case .securitate:
+        case .security:
 
-            cell.textLabel?.text = NSLocalizedString("Links", comment: "")
+            cell.textLabel?.text = NSLocalizedString("Links Password", comment: "")
             cell.accessoryType = .disclosureIndicator
 
         case .data:
 
             switch indexPath.row {
+
             case 0:
-                // Allow celular
                 cell.textLabel?.text = NSLocalizedString("Mobile Data", comment: "")
                 let mobileDataUISwitch: UISwitch = {
                     let s = UISwitch()
@@ -223,6 +223,19 @@ final class SettingsViewController: UITableViewController {
                 // Clean cache
                 cell.textLabel?.text = NSLocalizedString("Clear Cache", comment: "")
                 cell.textLabel?.textColor = .defaultColor
+
+                cell.detailTextLabel?.font = UIFont.HelveticaNeue(size: 14)
+
+                let str = NSLocalizedString("Currently:", comment: "")
+
+                var sizeString = NSLocalizedString("Error", comment: "")
+
+                if let size = FileManager.sizeOfFilesCacheDirectory() {
+                    sizeString = byteFormatter.string(fromByteCount: Int64(size))
+                }
+
+                cell.detailTextLabel?.text = "\(str) \(sizeString)"
+
             default:
                 break
             }
@@ -251,13 +264,17 @@ final class SettingsViewController: UITableViewController {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
 
         switch settings[indexPath.section] {
+
         case .user:
-            if indexPath.row == 1 {
+            if indexPath.row == 0 {
+                let controller = UserSettingsViewController(user: user)
+                navigationController?.pushViewController(controller, animated: true)
+            } else {
                 handleLogout(cell)
             }
 
-        case .securitate:
-            let controller = SecuritySettingsTableViewController(style: .grouped)
+        case .security:
+            let controller = SecuritySettingsViewController(style: .grouped)
             navigationController?.pushViewController(controller, animated: true)
 
         case .data:

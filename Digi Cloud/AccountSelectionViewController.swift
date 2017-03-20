@@ -179,7 +179,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         }
 
         let user = users[indexPath.item]
-        cell.accountNameLabel.text = user.name
+        cell.accountNameLabel.text = "\(user.firstName) \(user.lastName)"
 
         let cache = Cache()
 

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SecuritySettingsTableViewController: UITableViewController {
+class SecuritySettingsViewController: UITableViewController {
 
     enum SwitchType: Int {
         case download
@@ -102,6 +102,9 @@ class SecuritySettingsTableViewController: UITableViewController {
                 toogle(sw: switchType)
                 return
             }
+
+            AppSettings.shouldPasswordDownloadLink = self.downloadLinkSwitch.isOn
+            AppSettings.shouldPasswordReceiveLink = self.receiveLinkSwitch.isOn
         }
     }
 }

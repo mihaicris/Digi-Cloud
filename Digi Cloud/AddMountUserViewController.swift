@@ -86,7 +86,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             self.user = user
         } else {
             isUserEdited = false
-            self.user = User(id: "", name: "", email: "", permissions: Permissions())
+            self.user = User(id: "", firstName: "", lastName: "", email: "", permissions: Permissions())
         }
 
         super.init(style: .grouped)

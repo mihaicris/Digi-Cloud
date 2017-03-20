@@ -329,7 +329,7 @@ final class DigiClient {
 
     }
 
-    func updateUserInfo(for token: String, firstName: String, lastName: String, completion: @escaping(Error?) -> Void) {
+    func updateUserInfo(firstName: String, lastName: String, completion: @escaping(Error?) -> Void) {
 
         let method = Methods.User
         var headers = DefaultHeaders.PutHeaders

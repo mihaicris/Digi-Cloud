@@ -27,6 +27,7 @@
 		834AEEB71E6B39E500C16B75 /* CreateDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */; };
 		834AEEB81E6B3F9700C16B75 /* DirectoryInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */; };
 		834AEEB91E6B43BE00C16B75 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */; };
+		83506C011E7FAFF300E30C1E /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */; };
 		8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
 		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
 		835406051D952FFD00019D53 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */; };
@@ -63,7 +64,7 @@
 		83D03F271E6DB3FA00BA617A /* ManageBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */; };
 		83D03F291E6DB5BB00BA617A /* BookmarkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */; };
 		83D281011D9D747A00D74661 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* LoginField.swift */; };
-		83D5DCD91E7EE6EE004EEE58 /* SecuritySettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsTableViewController.swift */; };
+		83D5DCD91E7EE6EE004EEE58 /* SecuritySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */; };
 		83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF221DE59ED300987E1A /* ListingViewController.swift */; };
 		83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF241DE5C41E00987E1A /* CustomNavBar.swift */; };
 		83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DB658C1DDF12C900A53440 /* LocationCell.swift */; };
@@ -115,6 +116,7 @@
 		833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareTableViewCell.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingsViewController.swift; sourceTree = "<group>"; };
 		8350CDB41E6031030063227E /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
@@ -156,7 +158,7 @@
 		83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageBookmarksViewController.swift; sourceTree = "<group>"; };
 		83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkViewCell.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
-		83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecuritySettingsTableViewController.swift; sourceTree = "<group>"; };
+		83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecuritySettingsViewController.swift; sourceTree = "<group>"; };
 		83DADF221DE59ED300987E1A /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListingViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83DADF241DE5C41E00987E1A /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
 		83DB658C1DDF12C900A53440 /* LocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
@@ -474,7 +476,8 @@
 			isa = PBXGroup;
 			children = (
 				83EC31461E2915A8009E12B6 /* SettingsViewController.swift */,
-				83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsTableViewController.swift */,
+				83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */,
+				83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -665,6 +668,7 @@
 				83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */,
 				8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */,
 				83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */,
+				83506C011E7FAFF300E30C1E /* UserSettingsViewController.swift in Sources */,
 				83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
 				83BF27C91E438AB30019B1F7 /* MoreActionsViewController.swift in Sources */,
@@ -678,7 +682,7 @@
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
 				83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */,
 				83562CAC1DB8C19B006FF04A /* NodeActionsViewController.swift in Sources */,
-				83D5DCD91E7EE6EE004EEE58 /* SecuritySettingsTableViewController.swift in Sources */,
+				83D5DCD91E7EE6EE004EEE58 /* SecuritySettingsViewController.swift in Sources */,
 				83D281011D9D747A00D74661 /* LoginField.swift in Sources */,
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
 				8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */,
