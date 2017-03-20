@@ -93,7 +93,8 @@ final class SettingsViewController: UITableViewController {
             return 1
 
         case .data:
-            return 2
+
+            return FileManager.sizeOfFilesCacheDirectory() == 0 ? 1 : 2
 
         case .about:
             return 1
@@ -230,9 +231,8 @@ final class SettingsViewController: UITableViewController {
 
                 var sizeString = NSLocalizedString("Error", comment: "")
 
-                if let size = FileManager.sizeOfFilesCacheDirectory() {
-                    sizeString = byteFormatter.string(fromByteCount: Int64(size))
-                }
+                let size = FileManager.sizeOfFilesCacheDirectory()
+                sizeString = byteFormatter.string(fromByteCount: Int64(size))
 
                 cell.detailTextLabel?.text = "\(str) \(sizeString)"
 
@@ -353,6 +353,6 @@ final class SettingsViewController: UITableViewController {
 
     private func handleClearCache() {
         FileManager.emptyFilesCache()
-        tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+        tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     }
 }
