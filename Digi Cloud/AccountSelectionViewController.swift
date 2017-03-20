@@ -13,7 +13,6 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
     // MARK: - Properties
 
-    private let cellId = "Cell"
     let cellWidth: CGFloat = 200
     let cellHeight: CGFloat = 100
     let spacingHoriz: CGFloat = 20
@@ -125,7 +124,8 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        collectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(AccountCollectionCell.self,
+                                forCellWithReuseIdentifier: String(describing: AccountCollectionCell.self))
         getPersistedUsers()
         setupViews()
         configureViews()
@@ -174,7 +174,8 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? AccountCollectionCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: AccountCollectionCell.self),
+                                                            for: indexPath) as? AccountCollectionCell else {
             return UICollectionViewCell()
         }
 

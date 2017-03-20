@@ -273,7 +273,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
         case .users:
 
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MountUserCell.self), for: indexPath) as? MountUserCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MountUserCell.self),
+                                                           for: indexPath) as? MountUserCell else {
                 return UITableViewCell()
             }
 

@@ -19,8 +19,6 @@ final class SearchResultController: UITableViewController {
 
     private let location: Location
 
-    private var fileCellID: String = ""
-
     private let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
         f.countStyle = .binary
@@ -60,7 +58,8 @@ final class SearchResultController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? SearchCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: SearchCell.self),
+                                                       for: indexPath) as? SearchCell else {
             return UITableViewCell()
         }
 
@@ -142,8 +141,7 @@ final class SearchResultController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupTableView() {
-        self.fileCellID = "SearchFileCell"
-        tableView.register(SearchCell.self, forCellReuseIdentifier: fileCellID)
+        tableView.register(SearchCell.self, forCellReuseIdentifier: String(describing: SearchCell.self))
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
         tableView.separatorStyle = .none

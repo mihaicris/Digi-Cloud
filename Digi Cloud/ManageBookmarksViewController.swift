@@ -75,7 +75,8 @@ final class ManageBookmarksViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BookmarkViewCell.self), for: indexPath) as? BookmarkViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BookmarkViewCell.self),
+                                                       for: indexPath) as? BookmarkViewCell else {
             return UITableViewCell()
         }
 

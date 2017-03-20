@@ -117,7 +117,8 @@ final class ShareViewController: UITableViewController {
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(ShareTableViewCell.self, forCellReuseIdentifier: "ShareTableViewCellId")
+        tableView.register(ShareTableViewCell.self,
+                           forCellReuseIdentifier: String(describing: ShareTableViewCell.self))
     }
 
     private func setupViews() {

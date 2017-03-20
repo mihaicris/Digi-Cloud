@@ -113,7 +113,6 @@ final class LocationsViewController: UITableViewController {
     }
 
     private func setupTableView() {
-        tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
         tableView.rowHeight = 78
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)

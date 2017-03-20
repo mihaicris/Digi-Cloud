@@ -12,8 +12,6 @@ final class ManageAccountsViewController: UITableViewController {
 
     // MARK: - Properties
 
-    let cellId: String = "cellId"
-
     var users: [User] = []
 
     var onAddAccount: (() -> Void)?
@@ -58,7 +56,7 @@ final class ManageAccountsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: String(describing: AccountTableViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true
         setupViews()
         super.viewDidLoad()
@@ -73,7 +71,8 @@ final class ManageAccountsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? AccountTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: AccountTableViewCell.self),
+                                                       for: indexPath) as? AccountTableViewCell else {
             return UITableViewCell()
         }
         cell.user = users[indexPath.item]

@@ -40,8 +40,7 @@ final class ListingViewController: UITableViewController {
     private var isUpdating: Bool = false
     private var isActionConfirmed: Bool = false
     private var searchController: UISearchController!
-    private var fileCellID = String()
-    private var folderCellID = String()
+
     private let dispatchGroup = DispatchGroup()
 
     private var didReceivedNetworkError = false
@@ -217,7 +216,8 @@ final class ListingViewController: UITableViewController {
 
         if item.type == "dir" {
 
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: folderCellID, for: indexPath) as? DirectoryCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DirectoryCell.self),
+                                                           for: indexPath) as? DirectoryCell else {
                 return UITableViewCell()
             }
 
@@ -271,7 +271,8 @@ final class ListingViewController: UITableViewController {
 
         } else {
 
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? FileCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FileCell.self),
+                                                           for: indexPath) as? FileCell else {
                 return UITableViewCell()
             }
 
@@ -364,15 +365,15 @@ final class ListingViewController: UITableViewController {
 
     private func setupTableView() {
 
-        self.fileCellID = "FileCell"
-        self.folderCellID = "DirectoryCell"
         definesPresentationContext = true
         tableView.allowsMultipleSelectionDuringEditing = true
 
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(handleUpdateContentOnPullToRefreshGesture), for: UIControlEvents.valueChanged)
-        tableView.register(FileCell.self, forCellReuseIdentifier: fileCellID)
-        tableView.register(DirectoryCell.self, forCellReuseIdentifier: folderCellID)
+
+        tableView.register(FileCell.self, forCellReuseIdentifier: String(describing: FileCell.self))
+        tableView.register(DirectoryCell.self, forCellReuseIdentifier: String(describing: DirectoryCell.self))
+
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
