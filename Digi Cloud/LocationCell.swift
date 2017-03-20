@@ -11,27 +11,26 @@ import UIKit
 final class LocationCell: UITableViewCell {
 
     // MARK: - Properties
-    
-    var mount: Mount? {
-        didSet {
-            if let mount = mount {
-                if mount.online {
-                    statusLabel.text = NSLocalizedString("ONLINE", comment: "")
-                    statusLabel.sizeToFit()
-                    statusLabel.backgroundColor = UIColor.green
-                } else {
-                    statusLabel.text = NSLocalizedString("OFFLINE", comment: "")
-                    statusLabel.sizeToFit()
-                    statusLabel.backgroundColor = UIColor.gray
-                }
-                ownerNameLabel.text = "\(mount.owner.firstName) \(mount.owner.lastName)"
 
-                if var spaceUsed = mount.spaceUsed, var spaceTotal = mount.spaceTotal {
-                    spaceUsed = spaceUsed / 1024
-                    spaceTotal = spaceTotal / 1024
-                    spaceUsedValueLabel.text = "\(spaceUsed) / \(spaceTotal)"
-                }
+    var mount: Mount! {
+        didSet {
+
+            locationNameLabel.text = mount.name
+            ownerNameLabel.text = "\(mount.owner.firstName) \(mount.owner.lastName)"
+
+            if mount.online {
+                statusLabel.textColor = UIColor(red: 0.0, green: 0.8, blue: 0.0, alpha: 1.0)
+            } else {
+                statusLabel.textColor = UIColor.gray
             }
+
+            if var spaceUsed = mount.spaceUsed, var spaceTotal = mount.spaceTotal {
+                spaceUsed = spaceUsed / 1024
+                spaceTotal = spaceTotal / 1024
+                spaceUsedValueLabel.text = "\(spaceUsed) / \(spaceTotal) GB"
+            }
+
+            setupViews()
         }
     }
 
@@ -42,41 +41,47 @@ final class LocationCell: UITableViewCell {
         return l
     }()
 
-    let ownerLabel: UILabel = {
-        let l = UILabel()
+    let ownerNameLabel: UILabelWithPadding = {
+        let l = UILabelWithPadding(paddingTop: 2, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = NSLocalizedString("OWNER", comment: "")
-        l.font = UIFont.HelveticaNeue(size: 18)
+        l.textColor = UIColor.white
+        l.backgroundColor = UIColor(red: 0.40, green: 0.43, blue: 0.98, alpha: 1.0)
+        l.font = UIFont.HelveticaNeue(size: 12)
+        l.layer.cornerRadius = 7
+        l.clipsToBounds = true
         return l
     }()
 
-    let ownerNameLabel: UILabel = {
+    let ownerLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 18)
+        l.font = UIFont.HelveticaNeue(size: 16)
+        l.text = NSLocalizedString("Owned by", comment: "")
         return l
     }()
 
     let spaceUsedLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = NSLocalizedString("SPACE USED", comment: "")
-        l.font = UIFont.HelveticaNeue(size: 18)
+        l.text = NSLocalizedString("Usage", comment: "")
+        l.font = UIFont.HelveticaNeue(size: 14)
         return l
     }()
 
     let spaceUsedValueLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeueLight(size: 23)
+        l.font = UIFont.HelveticaNeue(size: 16)
+        l.textColor = UIColor.defaultColor
         return l
     }()
 
-    let statusLabel: UILabelWithPadding = {
-        let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 1, paddingRight: 5)
+    let statusLabel: UILabel = {
+        let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.layer.cornerRadius = 4
-        l.clipsToBounds = true
+        l.text = "●"
+        l.font = UIFont.HelveticaNeue(size: 22)
+        l.textColor = UIColor.white
         return l
     }()
 
@@ -93,8 +98,16 @@ final class LocationCell: UITableViewCell {
 
         selectionStyle = .blue
         accessoryType = .disclosureIndicator
+    }
 
-        setupViews()
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        ownerNameLabel.backgroundColor = UIColor(red: 0.40, green: 0.43, blue: 0.98, alpha: 1.0)
+    }
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        ownerNameLabel.backgroundColor = UIColor(red: 0.40, green: 0.43, blue: 0.98, alpha: 1.0)
     }
 
     // MARK: - Helper Functions
@@ -102,34 +115,41 @@ final class LocationCell: UITableViewCell {
     private func setupViews() {
         contentView.addSubview(locationNameLabel)
         contentView.addSubview(statusLabel)
-        contentView.addSubview(ownerLabel)
-        contentView.addSubview(ownerNameLabel)
-        contentView.addSubview(spaceUsedLabel)
-        contentView.addSubview(spaceUsedValueLabel)
 
         NSLayoutConstraint.activate([
             locationNameLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
             locationNameLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
 
-            ownerLabel.leftAnchor.constraint(equalTo: locationNameLabel.leftAnchor),
-            ownerLabel.topAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 10),
-
-            ownerNameLabel.leftAnchor.constraint(equalTo: ownerLabel.leftAnchor),
-            ownerNameLabel.topAnchor.constraint(equalTo: ownerLabel.bottomAnchor),
-
-            statusLabel.firstBaselineAnchor.constraint(equalTo: locationNameLabel.firstBaselineAnchor),
-            statusLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
-
-            spaceUsedLabel.firstBaselineAnchor.constraint(equalTo: ownerLabel.firstBaselineAnchor),
-            spaceUsedLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
-
-            spaceUsedValueLabel.topAnchor.constraint(equalTo: spaceUsedLabel.bottomAnchor),
-            spaceUsedValueLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
-
+            statusLabel.centerYAnchor.constraint(equalTo: locationNameLabel.centerYAnchor),
+            statusLabel.leftAnchor.constraint(equalTo:locationNameLabel.rightAnchor, constant: 10),
         ])
 
+        if mount.type == "device" {
+            contentView.addSubview(spaceUsedLabel)
+            contentView.addSubview(spaceUsedValueLabel)
 
+            NSLayoutConstraint.activate([
 
+                spaceUsedLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
+                spaceUsedLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 25),
 
+                spaceUsedValueLabel.firstBaselineAnchor.constraint(equalTo: spaceUsedLabel.firstBaselineAnchor),
+                spaceUsedValueLabel.leftAnchor.constraint(equalTo: spaceUsedLabel.rightAnchor, constant: 10),
+            ])
+        }
+
+        if mount.type == "import" || mount.type == "export" {
+
+            contentView.addSubview(ownerLabel)
+            contentView.addSubview(ownerNameLabel)
+
+            NSLayoutConstraint.activate([
+                ownerLabel.leftAnchor.constraint(equalTo: locationNameLabel.leftAnchor),
+                ownerLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 25),
+
+                ownerNameLabel.leftAnchor.constraint(equalTo: ownerLabel.rightAnchor, constant: 10),
+                ownerNameLabel.centerYAnchor.constraint(equalTo: ownerLabel.centerYAnchor)
+            ])
+        }
     }
 }
