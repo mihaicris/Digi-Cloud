@@ -12,7 +12,7 @@ final class LocationsViewController: UITableViewController {
 
     // MARK: - Properties
 
-    enum SectionType: Int {
+    enum SectionType {
         case main
         case connections
         case imports
@@ -21,32 +21,12 @@ final class LocationsViewController: UITableViewController {
 
     var onFinish: (() -> Void)?
 
-    private var mainMounts: [Mount] = [] {
-        didSet {
-            if !mainMounts.isEmpty { sections.append(.main) }
-        }
-    }
-
-    private var connectionMounts: [Mount] = [] {
-        didSet {
-            if !connectionMounts.isEmpty { sections.append(.connections) }
-
-        }
-    }
-
-    private var importMounts: [Mount] = [] {
-        didSet {
-            if !importMounts.isEmpty { sections.append(.imports) }
-        }
-    }
-
-    private var exportMounts: [Mount] = [] {
-        didSet {
-            if !exportMounts.isEmpty { sections.append(.exports) }
-        }
-    }
-
     private var sections: [SectionType] = []
+
+    private var mainMounts: [Mount] = []
+    private var connectionMounts: [Mount] = []
+    private var importMounts: [Mount] = []
+    private var exportMounts: [Mount] = []
 
     // When coping or moving files/directories, this property will hold the source location which is passed between
     // controllers on navigation stack.
@@ -54,6 +34,8 @@ final class LocationsViewController: UITableViewController {
 
     private let action: ActionType
     private var isUpdating: Bool = false
+
+    private var didReceivedNetworkError = false
 
     let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
@@ -140,9 +122,18 @@ final class LocationsViewController: UITableViewController {
         refreshControl?.addTarget(self, action: #selector(handleRefreshLocations), for: UIControlEvents.valueChanged)
     }
 
+    private func presentError(message: String) {
+
+        let title = NSLocalizedString("Error", comment: "")
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+
     private func getMounts() {
 
         isUpdating = true
+        didReceivedNetworkError = false
 
         DigiClient.shared.getMounts { mountsList, error in
 
@@ -161,17 +152,7 @@ final class LocationsViewController: UITableViewController {
                     message = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
                 }
 
-                let title = NSLocalizedString("Error", comment: "")
-
-                self.endRefreshAndReloadTable {
-                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""),
-                            style: .default,
-                            handler: nil))
-
-                    self.present(alertController, animated: true, completion: nil)
-                }
+                self.presentError(message: message)
 
                 return
             }
@@ -190,11 +171,16 @@ final class LocationsViewController: UITableViewController {
             self.importMounts     = mounts.filter { $0.type == "import" }
             self.exportMounts     = mounts.filter { $0.type == "export" }
 
+            if !self.mainMounts.isEmpty { self.sections.append(.main)        }
+            if !self.connectionMounts.isEmpty { self.sections.append(.connections) }
+            if !self.importMounts.isEmpty { self.sections.append(.imports)     }
+            if !self.exportMounts.isEmpty { self.sections.append(.exports)     }
+
             if self.refreshControl?.isRefreshing == true {
                 if self.tableView.isDragging {
                     return
                 } else {
-                    self.endRefreshAndReloadTable(completion: nil)
+                    self.endRefreshAndReloadTable()
                 }
             } else {
                 self.tableView.reloadData()
@@ -202,12 +188,20 @@ final class LocationsViewController: UITableViewController {
         }
     }
 
-    private func endRefreshAndReloadTable(completion: (() -> Void)?) {
+    private func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+
             self.refreshControl?.endRefreshing()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                self.tableView.reloadData()
-                completion?()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+
+                if self.didReceivedNetworkError {
+                    self.presentError(message: NSLocalizedString("There was an error while updating the content.", comment: ""))
+
+                } else {
+                    self.tableView.reloadData()
+                }
+
             }
         }
     }
@@ -260,30 +254,10 @@ final class LocationsViewController: UITableViewController {
         return sections.count
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        guard let sectionType = SectionType(rawValue: section) else {
-            return 0
-        }
-
-        switch sectionType {
-        case .main:
-            return mainMounts.count
-        case .connections:
-            return connectionMounts.count
-        case .imports:
-            return importMounts.count
-        case .exports:
-            return exportMounts.count
-        }
-    }
-
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let sectionType = SectionType(rawValue: section) else {
-            return nil
-        }
 
-        switch sectionType {
+        switch sections[section] {
+
         case .main:
             return mainMounts.isEmpty       ? nil : NSLocalizedString("Main storage", comment: "")
         case .connections:
@@ -295,18 +269,28 @@ final class LocationsViewController: UITableViewController {
         }
     }
 
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+        switch sections[section] {
+        case .main:
+            return mainMounts.count
+        case .connections:
+            return connectionMounts.count
+        case .imports:
+            return importMounts.count
+        case .exports:
+            return exportMounts.count
+        }
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as? LocationCell else {
-            return UITableViewCell()
-        }
-
-        guard let sectionType = SectionType(rawValue: indexPath.section) else {
-            return cell
-        }
+        let cell = LocationCell()
 
         var mount: Mount
-        switch sectionType {
+
+        switch sections[indexPath.section] {
+
         case .main:
             mount = mainMounts[indexPath.row]
         case .connections:
@@ -347,7 +331,7 @@ final class LocationsViewController: UITableViewController {
             if self.isUpdating {
                 return
             }
-            self.endRefreshAndReloadTable(completion: nil)
+            self.endRefreshAndReloadTable()
         }
     }
 }

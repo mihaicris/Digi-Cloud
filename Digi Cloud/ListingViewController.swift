@@ -460,22 +460,28 @@ final class ListingViewController: UITableViewController {
 
                 self.didReceivedNetworkError = true
 
+                var message: String
+
                 switch error! {
 
-                case NetworkingError.internetOffline(let message), NetworkingError.requestTimedOut(let message):
+                case NetworkingError.internetOffline(let msg), NetworkingError.requestTimedOut(let msg):
+
+                    message = msg
                     self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
                     self.nodes.removeAll()
+
                     self.tableView.reloadData()
 
                     if self.tableView.isDragging {
                         return
                     }
 
-                    self.presentError(message: message)
-
                 default:
-                    break
+                    message = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
                 }
+
+                self.presentError(message: message)
+
                 return
             }
 
@@ -550,7 +556,9 @@ final class ListingViewController: UITableViewController {
 
     private func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+
             self.refreshControl?.endRefreshing()
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 
                 if self.didReceivedNetworkError {
@@ -560,7 +568,6 @@ final class ListingViewController: UITableViewController {
                     self.updateLocationContentMessage()
                     self.tableView.reloadData()
                 }
-
             }
         }
     }
