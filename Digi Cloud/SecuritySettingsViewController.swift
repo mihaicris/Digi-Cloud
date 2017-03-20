@@ -60,7 +60,7 @@ class SecuritySettingsViewController: UITableViewController {
                 downloadLinkSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
                 downloadLinkSwitch.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor).isActive = true
 
-                cell.textLabel?.text = NSLocalizedString("Download Link", comment: "")
+                cell.textLabel?.text = NSLocalizedString("Download Links", comment: "")
                 downloadLinkSwitch.isOn = AppSettings.shouldPasswordDownloadLink
             } else {
 
@@ -69,7 +69,7 @@ class SecuritySettingsViewController: UITableViewController {
                 receiveLinkSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
                 receiveLinkSwitch.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor).isActive = true
 
-                cell.textLabel?.text = NSLocalizedString("Receive Link", comment: "")
+                cell.textLabel?.text = NSLocalizedString("Receive Links", comment: "")
                 receiveLinkSwitch.isOn = AppSettings.shouldPasswordReceiveLink
             }
 
