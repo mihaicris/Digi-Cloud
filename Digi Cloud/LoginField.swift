@@ -40,6 +40,7 @@ final class LoginField: UITextField {
         borderStyle = .roundedRect
         autocapitalizationType = .none
         autocorrectionType = .no
+        keyboardType = .emailAddress
         spellCheckingType = .no
         translatesAutoresizingMaskIntoConstraints = false
         contentVerticalAlignment = .bottom

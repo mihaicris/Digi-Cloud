@@ -40,6 +40,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         tf.clearButtonMode = .whileEditing
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
+        tf.keyboardType = .emailAddress
         tf.returnKeyType = .send
         tf.delegate = self
         tf.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
