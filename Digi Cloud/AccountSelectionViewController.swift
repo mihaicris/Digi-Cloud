@@ -455,7 +455,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
             if let cell = self.collectionView.cellForItem(at: indexPathOneElement) {
 
-                let animationClosure = { cell.transform = CGAffineTransform(scaleX: 1.4, y: 1.4) }
+                let animationClosure = { cell.transform = CGAffineTransform(scaleX: 1.2, y: 1.2) }
 
                 let animationCompletionClosure: (Bool) -> Void = { _ in
 
@@ -512,9 +512,9 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                     }
                 }
 
-                UIView.animate(withDuration: 0.5, delay: 0,
-                               usingSpringWithDamping: 0.5,
-                               initialSpringVelocity: 1,
+                UIView.animate(withDuration: 0.3, delay: 0,
+                               usingSpringWithDamping: 0.3,
+                               initialSpringVelocity: 0.5,
                                options: UIViewAnimationOptions.curveEaseInOut,
                                animations: animationClosure,
                                completion: animationCompletionClosure)
