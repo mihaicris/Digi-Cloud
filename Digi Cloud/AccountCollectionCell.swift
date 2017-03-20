@@ -14,7 +14,7 @@ final class AccountCollectionCell: UICollectionViewCell {
 
     let profileImage: UIImageView = {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 10
         iv.layer.masksToBounds = true

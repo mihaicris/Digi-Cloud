@@ -8,7 +8,10 @@
 
 import UIKit
 
-class UserSettingsViewController: UITableViewController, UITextFieldDelegate {
+class UserSettingsViewController: UITableViewController,
+                                  UITextFieldDelegate,
+                                  UIImagePickerControllerDelegate,
+                                  UINavigationControllerDelegate {
 
     lazy var firstNameTextField: UITextField = {
         let tf = UITextField()
@@ -88,43 +91,113 @@ class UserSettingsViewController: UITableViewController, UITextFieldDelegate {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
             return NSLocalizedString("User", comment: "")
         } else {
-            return nil
+            return NSLocalizedString("Profile picture", comment: "")
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        if section == 0 {
+            return 2
+        } else {
+            return 2
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.selectionStyle = .none
 
-        var currentTextField: UITextField
+        if indexPath.section == 0 {
 
-        if indexPath.row == 0 {
-            currentTextField = firstNameTextField
-            firstNameTextField.placeholder = NSLocalizedString("First Name", comment: "")
-            firstNameTextField.text = user.firstName
+            var currentTextField: UITextField
+
+            if indexPath.row == 0 {
+                currentTextField = firstNameTextField
+                firstNameTextField.placeholder = NSLocalizedString("First Name", comment: "")
+                firstNameTextField.text = user.firstName
+            } else {
+                currentTextField = lastNameTextField
+                lastNameTextField.placeholder = NSLocalizedString("Last Name", comment: "")
+                lastNameTextField.text = user.lastName
+            }
+
+            cell.contentView.addSubview(currentTextField)
+
+            currentTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            currentTextField.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor).isActive = true
+            currentTextField.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor).isActive = true
+        } else if indexPath.row == 1 {
+            cell.textLabel?.text = NSLocalizedString("Make picture", comment: "")
+            cell.textLabel?.textColor = .defaultColor
         } else {
-            currentTextField = lastNameTextField
-            lastNameTextField.placeholder = NSLocalizedString("Last Name", comment: "")
-            lastNameTextField.text = user.lastName
+            cell.textLabel?.text = NSLocalizedString("Select picture", comment: "")
+            cell.textLabel?.textColor = .defaultColor
         }
 
-        cell.contentView.addSubview(currentTextField)
-
-        currentTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
-        currentTextField.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor).isActive = true
-        currentTextField.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor).isActive = true
-
         return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+
+            let controller = UIImagePickerController()
+            controller.delegate = self
+            controller.allowsEditing = true
+
+            if indexPath.row == 0 {
+                controller.sourceType = .photoLibrary
+
+            } else {
+                controller.sourceType = .camera
+                controller.cameraCaptureMode = .photo
+                controller.cameraDevice = .front
+                controller.showsCameraControls = true
+
+            }
+
+            present(controller, animated: true, completion: nil)
+
+        }
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
+
+        var selectedImage: UIImage?
+
+        if let image = info["UIImagePickerControllerOriginalImage"] as? UIImage {
+                selectedImage = image
+        }
+
+        if let selectedImage = selectedImage {
+            if let data = UIImagePNGRepresentation(selectedImage) {
+
+                self.dismiss(animated: true) {
+                    DigiClient.shared.setUserProfileImage(data) { error in
+
+                        guard error == nil else {
+
+                            return
+                        }
+
+                        let cache = Cache()
+                        let key = self.user.id + ".png"
+
+                        cache.save(type: .profile, data: data, for: key)
+                        _ = self.navigationController?.popViewController(animated: true)
+                    }
+                }
+            }
+        }
     }
 }

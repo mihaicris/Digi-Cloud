@@ -284,6 +284,9 @@ Please try again later!" = "A avut loc o eroare.
 "Make available offline" = "Salvat permanent";
 
 /* No comment provided by engineer. */
+"Make picture" = "Folosește camera";
+
+/* No comment provided by engineer. */
 "Manage Accounts" = "Gestionare conturi";
 
 /* No comment provided by engineer. */
@@ -353,6 +356,9 @@ Please try again later!" = "A avut loc o eroare.
 "Preparing Link" = "Se pregătește link-ul";
 
 /* No comment provided by engineer. */
+"Profile picture" = "Poză de profil";
+
+/* No comment provided by engineer. */
 "READ" = "DOAR CITIRE";
 
 /* No comment provided by engineer. */
@@ -417,6 +423,9 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "Select Mode" = "Mod selecție";
+
+/* No comment provided by engineer. */
+"Select picture" = "Selectează o poză";
 
 /* No comment provided by engineer. */
 "Send Link" = "Trimite link";

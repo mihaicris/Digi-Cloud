@@ -39,8 +39,8 @@ final class DigiClient {
         let config = URLSessionConfiguration.default
 
         #if DEBUG
-            config.timeoutIntervalForRequest = 3
-            config.timeoutIntervalForResource = 3
+            config.timeoutIntervalForRequest = 10
+            config.timeoutIntervalForResource = 10
         #else
             config.timeoutIntervalForRequest = 30
             config.timeoutIntervalForResource = 30
@@ -67,8 +67,10 @@ final class DigiClient {
     func networkTask(requestType: RequestType,
                      method: String,
                      headers: [String: String]?,
-                     json: [String: Any]?,
+                     json: [String: Any]? = nil,
+                     data: Data? = nil,
                      parameters: [String: String]?,
+                     withoutRequestSerialization: Bool = false,
                      withoutSerialization: Bool = false,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
@@ -88,6 +90,8 @@ final class DigiClient {
             } catch {
                 completion(nil, nil, JSONError.parse("Could not convert json into data!"))
             }
+        } else if let data = data {
+            request.httpBody = data
         }
 
         /* 2. Make the request */
@@ -201,6 +205,37 @@ final class DigiClient {
         request.httpMethod = requestType
         request.allHTTPHeaderFields = headers
         return request
+    }
+
+    private func photoDataToFormData(data: Data, boundary: String, fileName: String) -> Data {
+        let fullData = NSMutableData()
+
+        // 1 - Boundary should start with --
+        let lineOne = "--" + boundary + "\r\n"
+        fullData.append(lineOne.data(using: .utf8, allowLossyConversion: false)!)
+
+        // 2
+
+        let lineTwo = "Content-Disposition: form-data; name=\"image\"; filename=\"" + fileName + "\"\r\n"
+        fullData.append(lineTwo.data(using: .utf8, allowLossyConversion: false)!)
+
+        // 3
+        let lineThree = "Content-Type: image/png\r\n\r\n"
+        fullData.append(lineThree.data(using: .utf8, allowLossyConversion: false)!)
+
+        // 4
+        fullData.append(data)
+
+        // 5
+        let lineFive = "\r\n"
+        fullData.append(lineFive.data(using: .utf8, allowLossyConversion: false)!)
+
+        // 6 - The end. Notice -- at the start and at the end
+        let lineSix = "--" + boundary + "--\r\n"
+        fullData.append(lineSix.data( using: .utf8, allowLossyConversion: false)!)
+
+        return fullData as Data
+
     }
 
     // MARK: - Authentication
@@ -327,6 +362,36 @@ final class DigiClient {
 
         }
 
+    }
+
+    func setUserProfileImage(_ data: Data, completion: @escaping(Error?) -> Void) {
+
+        let method = Methods.UserProfileImageSet
+        var headers = [HeadersKeys.Authorization: "Token \(DigiClient.shared.token)"]
+
+        let boundary = "----WebKitFormBoundary\(UUID().uuidString)"
+
+        let fullData = photoDataToFormData(data: data, boundary: boundary, fileName: "profile.png")
+
+        headers["Accept"] = "application/json"
+        headers["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
+        headers["Content-Length"] = String(fullData.count)
+
+        networkTask(requestType: .post, method: method, headers: headers,
+                    data: fullData, parameters: nil, withoutRequestSerialization: true) { data, statusCode, error in
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(ResponseError.notFound)
+                return
+            }
+
+            completion(nil)
+        }
     }
 
     func updateUserInfo(firstName: String, lastName: String, completion: @escaping(Error?) -> Void) {
