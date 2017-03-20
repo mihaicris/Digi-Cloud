@@ -146,9 +146,6 @@ Please try again later!" = "A avut loc o eroare.
 "Create Directory" = "Creează director";
 
 /* No comment provided by engineer. */
-"Currently:" = "Actual:";
-
-/* No comment provided by engineer. */
 "Custom" = "Personalizat";
 
 /* No comment provided by engineer. */
@@ -519,6 +516,9 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "This name already exists. Please choose a different one." = "Numele există deja. Alege unul diferit.";
+
+/* No comment provided by engineer. */
+"Total:" = "Total:";
 
 /* No comment provided by engineer. */
 "Usage" = "Utilizare";

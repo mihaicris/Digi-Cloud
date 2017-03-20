@@ -59,38 +59,7 @@ final class ContentViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
 
-        DigiClient.shared.fileInfo(atLocation: self.location) { (node, error) in
-
-            guard error == nil else {
-
-                return
-            }
-
-            if let node = node {
-
-                print(node.hash)
-            }
-
-        }
-
-        // create destination file url
-        let fileName = (self.location.path as NSString).lastPathComponent
-        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
-
-        // TODO: - If the file has changed in the cloud, it should be redownloaded again.
-        // Check if the hash of the file is the same with the hash saved locally 
-
-        if !FileManager.default.fileExists(atPath: fileURL.path) {
-
-            // Show progress view
-            progressView.isHidden = false
-
-            // Start downloading File
-            session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
-
-        } else {
-            loadFileContent()
-        }
+        fetchNode()
         super.viewWillAppear(animated)
     }
 
@@ -102,6 +71,57 @@ final class ContentViewController: UIViewController {
     }
 
     // MARK: - Helper Functions
+
+    private func fetchNode() {
+        DigiClient.shared.fileInfo(atLocation: self.location) { (node, error) in
+
+            guard error == nil else {
+
+                return
+            }
+
+            if let node = node, let hash = node.hash {
+
+                let fileName = node.name
+                var fileExtension = (fileName as NSString).pathExtension
+
+                // For WKWebView to try to open files without extension, we assume they are text.
+
+                if fileExtension.characters.isEmpty {
+                        fileExtension = "txt"
+                }
+
+                let key = "\(hash).\(fileExtension)"
+
+                self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(key)
+
+                if FileManager.default.fileExists(atPath: self.fileURL.path) {
+                    self.loadFileContent()
+                } else {
+                    self.downloadFile()
+                }
+            }
+        }
+    }
+
+    fileprivate func loadFileContent() {
+
+        // load file in the view
+        self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL)
+
+        // enable right bar button for exporting
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
+    }
+
+    private func downloadFile() {
+
+        // Show progress view
+        progressView.isHidden = false
+
+        // Start downloading File
+        session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
+
+    }
 
     func handleAction() {
         let controller = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
@@ -120,14 +140,6 @@ final class ContentViewController: UIViewController {
         view.addConstraints(with: "V:|-64-[v0(2)]", views: progressView)
     }
 
-    fileprivate func loadFileContent() {
-
-        // load file in the view
-        self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL)
-
-        // enable right bar button for exporting
-        self.navigationItem.rightBarButtonItem?.isEnabled = true
-    }
 }
 
 extension ContentViewController: URLSessionDownloadDelegate {
@@ -135,12 +147,6 @@ extension ContentViewController: URLSessionDownloadDelegate {
 
         // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
         session.invalidateAndCancel()
-
-        // get the file name from current path
-        let fileName: String = (self.location.path as NSString).lastPathComponent
-
-        // create destination file url
-        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(fileName)
 
         // get the downloaded file from temp folder
         do {

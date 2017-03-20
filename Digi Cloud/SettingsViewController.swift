@@ -227,7 +227,7 @@ final class SettingsViewController: UITableViewController {
 
                 cell.detailTextLabel?.font = UIFont.HelveticaNeue(size: 14)
 
-                let str = NSLocalizedString("Currently:", comment: "")
+                let str = NSLocalizedString("Total:", comment: "")
 
                 var sizeString = NSLocalizedString("Error", comment: "")
 
