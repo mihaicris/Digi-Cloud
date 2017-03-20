@@ -34,8 +34,20 @@ extension User {
         }
 
         self.id = id
-        self.firstName = name
-        self.lastName = name
+
+        let nameComponents = name.components(separatedBy: " ")
+
+        if nameComponents.count == 1 {
+            self.firstName = nameComponents.first!
+            self.lastName = ""
+        } else if nameComponents.count == 2 {
+            self.firstName = nameComponents.first!
+            self.lastName = nameComponents.last!
+        } else {
+           self.firstName = nameComponents.first!
+           self.lastName = nameComponents.dropFirst().joined(separator: " ")
+        }
+
         self.email = email
     }
 
