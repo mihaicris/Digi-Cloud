@@ -22,9 +22,6 @@
 "1 hour" = "1 oră";
 
 /* No comment provided by engineer. */
-"About DIGI Cloud" = "Despre DIGI Cloud";
-
-/* No comment provided by engineer. */
 "Accounts" = "Conturi";
 
 /* No comment provided by engineer. */
@@ -49,9 +46,6 @@
 "An error has occurred.
 Please try again later!" = "A avut loc o eroare.
 Încearcă mai târziu!";
-
-/* No comment provided by engineer. */
-"App Version" = "Versiune aplicație";
 
 /* No comment provided by engineer. */
 "Are you sure you want to delete %d items?" = "Sigur se șterg %d fișiere?";
@@ -378,9 +372,6 @@ Please try again later!" = "A avut loc o eroare.
 "READ" = "DOAR CITIRE";
 
 /* No comment provided by engineer. */
-"Rate the App" = "Dă o notă aplicației";
-
-/* No comment provided by engineer. */
 "Receive Files" = "Trimite link de primire";
 
 /* No comment provided by engineer. */
@@ -573,6 +564,9 @@ Please try again later!" = "A avut loc o eroare.
 "VALIDITY" = "VALABILITATE";
 
 /* No comment provided by engineer. */
+"Version" = "Versiune";
+
+/* No comment provided by engineer. */
 "Yes" = "Da";
 
 /* No comment provided by engineer. */
@@ -580,4 +574,9 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "for" = "pentru";
+
+/* No comment provided by engineer. */
+"© 2016-2017 Mihai Cristescu.
+ All rights reserved." = "© 2016-2017 Mihai Cristescu.
+Toate drepturile rezervate.";
 
