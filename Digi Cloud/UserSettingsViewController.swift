@@ -41,7 +41,9 @@ class UserSettingsViewController: UITableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         title = NSLocalizedString("User details", comment: "")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(handleSaveUserName))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""),
+                                                            style: .plain, target: self, action: #selector(handleSaveUserName))
     }
 
     @objc private func handleSaveUserName() {
