@@ -858,6 +858,12 @@ final class ListingViewController: UITableViewController {
             case .manageShare, .makeShare, .shareInfo:
                 self.showShareMountViewController(location: self.rootLocation, sharedNode: rootNode)
 
+            case .sendDownloadLink:
+                self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .download)
+
+            case .sendUploadLink:
+                self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .upload)
+
             default:
                 #if DEBUG
                     fatalError("Wrong More Action Selection")

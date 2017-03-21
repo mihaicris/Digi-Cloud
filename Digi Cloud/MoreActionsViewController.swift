@@ -59,6 +59,12 @@ final class MoreActionsViewController: UITableViewController {
 
         switch actions[indexPath.row] {
 
+        case .sendDownloadLink:
+            cell.textLabel?.text = NSLocalizedString("Send Link", comment: "")
+
+        case .sendUploadLink:
+            cell.textLabel?.text = NSLocalizedString("Receive Files", comment: "")
+
         case .makeShare:
             cell.textLabel?.text = NSLocalizedString("Share", comment: "")
 
@@ -134,6 +140,14 @@ final class MoreActionsViewController: UITableViewController {
         guard let mount = rootNode.mount else {
             print("NO MOUNT??")
             fatalError()
+        }
+
+        if mount.permissions.create_link {
+            actions.append(.sendDownloadLink)
+        }
+
+        if mount.permissions.create_receiver {
+            actions.append(.sendUploadLink)
         }
 
         if mount.type == "device" {
