@@ -113,7 +113,7 @@ final class LocationsViewController: UITableViewController {
     }
 
     private func setupTableView() {
-        tableView.rowHeight = 78
+        tableView.rowHeight = 80
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         tableView.cellLayoutMarginsFollowReadableWidth = false

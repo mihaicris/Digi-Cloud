@@ -34,10 +34,16 @@ final class LocationCell: UITableViewCell {
         }
     }
 
+    let leftView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
     let locationNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 30)
+        l.font = UIFont.HelveticaNeue(size: 24)
         return l
     }()
 
@@ -45,9 +51,8 @@ final class LocationCell: UITableViewCell {
         let l = UILabelWithPadding(paddingTop: 2, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = UIColor.white
-        l.backgroundColor = UIColor(red: 0.40, green: 0.43, blue: 0.98, alpha: 1.0)
         l.font = UIFont.HelveticaNeue(size: 12)
-        l.layer.cornerRadius = 7
+        l.layer.cornerRadius = 6
         l.clipsToBounds = true
         return l
     }()
@@ -55,7 +60,7 @@ final class LocationCell: UITableViewCell {
     let ownerLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 16)
+        l.font = UIFont.HelveticaNeue(size: 14)
         l.text = NSLocalizedString("Owned by", comment: "")
         return l
     }()
@@ -71,7 +76,7 @@ final class LocationCell: UITableViewCell {
     let spaceUsedValueLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 16)
+        l.font = UIFont.HelveticaNeue(size: 14)
         l.textColor = UIColor.defaultColor
         return l
     }()
@@ -80,7 +85,7 @@ final class LocationCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = "●"
-        l.font = UIFont.HelveticaNeue(size: 22)
+        l.font = UIFont.HelveticaNeue(size: 20)
         l.textColor = UIColor.white
         return l
     }()
@@ -102,12 +107,12 @@ final class LocationCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        ownerNameLabel.backgroundColor = UIColor(red: 0.40, green: 0.43, blue: 0.98, alpha: 1.0)
+        setBackgroundColors()
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        ownerNameLabel.backgroundColor = UIColor(red: 0.40, green: 0.43, blue: 0.98, alpha: 1.0)
+        setBackgroundColors()
     }
 
     // MARK: - Helper Functions
@@ -115,6 +120,9 @@ final class LocationCell: UITableViewCell {
     private func setupViews() {
         contentView.addSubview(locationNameLabel)
         contentView.addSubview(statusLabel)
+        contentView.addSubview(leftView)
+
+        setBackgroundColors()
 
         NSLayoutConstraint.activate([
             locationNameLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
@@ -122,6 +130,12 @@ final class LocationCell: UITableViewCell {
 
             statusLabel.centerYAnchor.constraint(equalTo: locationNameLabel.centerYAnchor),
             statusLabel.leftAnchor.constraint(equalTo:locationNameLabel.rightAnchor, constant: 10),
+
+            leftView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            leftView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            leftView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            leftView.widthAnchor.constraint(equalToConstant: 5)
+
         ])
 
         if mount.type == "device" {
@@ -131,11 +145,12 @@ final class LocationCell: UITableViewCell {
             NSLayoutConstraint.activate([
 
                 spaceUsedLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
-                spaceUsedLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 25),
+                spaceUsedLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 30),
 
                 spaceUsedValueLabel.firstBaselineAnchor.constraint(equalTo: spaceUsedLabel.firstBaselineAnchor),
                 spaceUsedValueLabel.leftAnchor.constraint(equalTo: spaceUsedLabel.rightAnchor, constant: 10),
             ])
+
         }
 
         if mount.type == "import" || mount.type == "export" {
@@ -145,11 +160,32 @@ final class LocationCell: UITableViewCell {
 
             NSLayoutConstraint.activate([
                 ownerLabel.leftAnchor.constraint(equalTo: locationNameLabel.leftAnchor),
-                ownerLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 25),
+                ownerLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 30),
 
-                ownerNameLabel.leftAnchor.constraint(equalTo: ownerLabel.rightAnchor, constant: 10),
+                ownerNameLabel.leftAnchor.constraint(equalTo: ownerLabel.rightAnchor, constant: 8),
                 ownerNameLabel.centerYAnchor.constraint(equalTo: ownerLabel.centerYAnchor)
             ])
+        }
+    }
+
+    private func setBackgroundColors() {
+
+        ownerNameLabel.backgroundColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0)
+
+        if mount.type == "device" && mount.isPrimary {
+            leftView.backgroundColor = UIColor(red: 0.8, green: 0.3, blue: 0.3, alpha: 1.0)
+        }
+
+        if mount.type == "device" && !mount.isPrimary {
+            leftView.backgroundColor = UIColor(red: 0.7, green: 0.5, blue: 0.1, alpha: 1.0)
+        }
+
+        if mount.type == "import" {
+            leftView.backgroundColor = UIColor(red: 0.1, green: 0.8, blue: 0.1, alpha: 1.0)
+        }
+
+        if mount.type == "export" {
+            leftView.backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.8, alpha: 1.0)
         }
     }
 }
