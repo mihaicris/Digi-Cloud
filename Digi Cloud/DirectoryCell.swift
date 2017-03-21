@@ -31,7 +31,7 @@ final class DirectoryCell: BaseListCell {
         l.text = NSLocalizedString("SHARED", comment: "")
         l.textColor = .white
         l.font = UIFont.boldSystemFont(ofSize: 8)
-        l.backgroundColor = UIColor.blue.withAlphaComponent(0.6)
+        l.backgroundColor = UIColor.shareMount
         l.textAlignment = .center
         l.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
         l.translatesAutoresizingMaskIntoConstraints = false

@@ -555,10 +555,10 @@ Please try again later!" = "A avut loc o eroare.
 "Total:" = "Total:";
 
 /* No comment provided by engineer. */
-"Uploaded %d time" = "Încărcat %d dată";
+"Uploaded %d time" = "Accesat %d dată";
 
 /* No comment provided by engineer. */
-"Uploaded %d times" = "Încărcăt de %d ori";
+"Uploaded %d times" = "Accesat de %d ori";
 
 /* No comment provided by engineer. */
 "Usage" = "Utilizare";
