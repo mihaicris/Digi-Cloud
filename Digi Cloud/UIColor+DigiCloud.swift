@@ -10,6 +10,10 @@ import UIKit.UIColor
 
 extension UIColor {
     static var defaultColor: UIColor {
-        return UIColor(colorLiteralRed: 6 / 255, green: 96 / 255, blue: 254 / 255, alpha: 1.0)
+        return UIColor(red: 6/255, green: 96/255, blue: 254/255, alpha: 1.0)
+    }
+
+    static var iconColor: UIColor {
+        return #colorLiteral(red: 0.09803921569, green: 0.3137254902, blue: 0.7450980392, alpha: 1)
     }
 }

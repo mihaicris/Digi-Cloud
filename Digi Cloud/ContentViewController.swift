@@ -66,6 +66,7 @@ final class ContentViewController: UIViewController {
     fileprivate let busyIndicator: UIActivityIndicatorView = {
         let i = UIActivityIndicatorView()
         i.hidesWhenStopped = true
+        i.startAnimating()
         i.activityIndicatorViewStyle = .gray
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
@@ -123,6 +124,10 @@ final class ContentViewController: UIViewController {
     }
 
     // MARK: - Helper Functions
+
+    private func setupViews() {
+        view.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+    }
 
     private func fetchNode() {
 
@@ -200,9 +205,15 @@ final class ContentViewController: UIViewController {
 
     private func downloadFile() {
 
-        // Show progress view
-        progressView.isHidden = false
-        busyIndicator.startAnimating()
+        view.addSubview(progressView)
+        view.addSubview(busyIndicator)
+        view.addConstraints(with: "H:|[v0]|", views: progressView)
+        view.addConstraints(with: "V:|-64-[v0(2)]", views: progressView)
+
+        NSLayoutConstraint.activate([
+            busyIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            busyIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
 
         // Start downloading File
         session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
@@ -224,21 +235,6 @@ final class ContentViewController: UIViewController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: completion))
         self.present(alertController, animated: true, completion: nil)
-    }
-
-    private func setupViews() {
-
-        view.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 1, alpha: 1.0)
-        view.addSubview(progressView)
-        view.addSubview(busyIndicator)
-        view.addConstraints(with: "H:|[v0]|", views: progressView)
-        view.addConstraints(with: "V:|-64-[v0(2)]", views: progressView)
-
-        NSLayoutConstraint.activate([
-            busyIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            busyIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-
     }
 
     fileprivate func handleFileNotOpen(isVisible: Bool) {
@@ -316,10 +312,11 @@ extension ContentViewController: URLSessionTaskDelegate {
     }
 
     fileprivate func removeProgressView() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.progressView.alpha = 0
 
-        }) { (_) in
+        UIView.animate(withDuration: 0.5, animations: {
+            self.progressView.alpha = 0.0
+
+        }) { _ in
             self.progressView.removeFromSuperview()
         }
     }

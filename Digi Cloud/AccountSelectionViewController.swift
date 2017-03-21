@@ -87,7 +87,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         l.textAlignment = .center
         l.numberOfLines = 3
         let color = UIColor.init(red: 48/255, green: 133/255, blue: 243/255, alpha: 1.0)
-        let attributedText = NSMutableAttributedString(string: "Digi Cloud",
+        let attributedText = NSMutableAttributedString(string: "Cloud",
                                                        attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 48) as Any])
         let word = NSLocalizedString("for", comment: "")
 
@@ -98,9 +98,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
 
         let nsString = NSString(string: attributedText.string)
-        var nsRange = nsString.range(of: "Cloud")
-        attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
-        nsRange = nsString.range(of: "Storage")
+        let nsRange = nsString.range(of: "Storage")
         attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
 
         l.attributedText = attributedText
@@ -273,7 +271,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         setNeedsStatusBarAppearanceUpdate()
 
-        view.backgroundColor = UIColor.init(red: 40/255, green: 78/255, blue: 65/255, alpha: 1.0)
+        view.backgroundColor = UIColor.iconColor
 
         view.addSubview(logoBigLabel)
         view.addSubview(noAccountsLabel)
