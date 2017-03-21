@@ -92,8 +92,6 @@ final class ContentViewController: UIViewController {
         self.title = (self.location.path as NSString).lastPathComponent
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
-        navigationController?.hidesBarsOnTap = true
-
         super.viewDidLoad()
     }
 
@@ -112,6 +110,7 @@ final class ContentViewController: UIViewController {
 
         // Close session and delegate
         session?.invalidateAndCancel()
+        navigationController?.hidesBarsOnTap = false
         super.viewWillDisappear(animated)
     }
 
@@ -359,11 +358,13 @@ extension ContentViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         removeProgressView()
+        navigationController?.hidesBarsOnTap = true
         self.navigationItem.rightBarButtonItem?.isEnabled = true
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         removeProgressView()
+        navigationController?.hidesBarsOnTap = false
         handleFileNotOpen(isVisible: true)
     }
 }
