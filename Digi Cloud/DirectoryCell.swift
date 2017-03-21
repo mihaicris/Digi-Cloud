@@ -39,9 +39,10 @@ final class DirectoryCell: BaseListCell {
     }()
 
     let bookmarkImageView: UIImageView = {
-        let im = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
-        im.translatesAutoresizingMaskIntoConstraints = false
-        return im
+        let iv = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
+        iv.contentMode = .scaleAspectFill
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
     }()
 
     // MARK: - Overridden Methods and Properties

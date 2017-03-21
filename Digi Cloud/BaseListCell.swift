@@ -31,10 +31,10 @@ class BaseListCell: UITableViewCell {
     }()
 
     var iconImageView: UIImageView = {
-        let i = UIImageView()
-        i.translatesAutoresizingMaskIntoConstraints = false
-        i.contentMode = .scaleAspectFit
-        return i
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFill
+        return iv
     }()
 
     var nodeNameLabel: UILabel = {

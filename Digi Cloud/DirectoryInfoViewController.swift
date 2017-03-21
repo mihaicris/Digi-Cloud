@@ -212,9 +212,9 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
         // Folder name
         case 0:
             let directoryIcon: UIImageView = {
-                let imageView = UIImageView(image: #imageLiteral(resourceName: "directory_icon"))
-                imageView.contentMode = .scaleAspectFit
-                return imageView
+                let iv = UIImageView(image: #imageLiteral(resourceName: "directory_icon"))
+                iv.contentMode = .scaleAspectFill
+                return iv
             }()
 
             let folderName: UILabel = {

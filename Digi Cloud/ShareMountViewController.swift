@@ -343,7 +343,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             let iv = UIImageView(frame: CGRect.zero)
             iv.translatesAutoresizingMaskIntoConstraints = false
             iv.image = #imageLiteral(resourceName: "share_digi_background")
-            iv.contentMode = .scaleAspectFit
+            iv.contentMode = .scaleAspectFill
             return iv
         }()
 

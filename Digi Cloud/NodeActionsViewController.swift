@@ -122,9 +122,9 @@ final class NodeActionsViewController: UITableViewController {
 
         let iconImage: UIImageView = {
             let image = node.type == "dir" ? #imageLiteral(resourceName: "directory_icon") : #imageLiteral(resourceName: "file_icon")
-            let imageView = UIImageView(image: image)
-            imageView.contentMode = .scaleAspectFit
-            return imageView
+            let iv = UIImageView(image: image)
+            iv.contentMode = .scaleAspectFill
+            return iv
         }()
 
         let elementName: UILabel = {

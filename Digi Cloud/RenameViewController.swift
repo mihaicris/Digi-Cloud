@@ -85,9 +85,9 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
         let imageIcon: UIImageView = {
             let image = node.type == "dir" ? #imageLiteral(resourceName: "directory_icon") : #imageLiteral(resourceName: "file_icon")
-            let imageView = UIImageView(image: image)
-            imageView.contentMode = .scaleAspectFit
-            return imageView
+            let iv = UIImageView(image: image)
+            iv.contentMode = .scaleAspectFill
+            return iv
         }()
 
         textField = UITextField()

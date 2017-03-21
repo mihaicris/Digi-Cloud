@@ -43,7 +43,7 @@ final class AccountTableViewCell: UITableViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 5
         iv.layer.masksToBounds = true
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         return iv
     }()
 

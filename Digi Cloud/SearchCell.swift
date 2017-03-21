@@ -12,17 +12,17 @@ final class SearchCell: UITableViewCell {
 
     // MARK: - Properties
     var nodeIcon: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        return imageView
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFill
+        return iv
     }()
 
     var nodeNameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.lineBreakMode = .byTruncatingMiddle
-        return label
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.lineBreakMode = .byTruncatingMiddle
+        return l
     }()
 
     let nodeMountLabel: UILabelWithPadding = {
@@ -36,12 +36,12 @@ final class SearchCell: UITableViewCell {
     }()
 
     var nodePathLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .darkGray
-        label.font = UIFont.HelveticaNeue(size: 11)
-        label.lineBreakMode = .byTruncatingMiddle
-        return label
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.textColor = .darkGray
+        l.font = UIFont.HelveticaNeue(size: 11)
+        l.lineBreakMode = .byTruncatingMiddle
+        return l
     }()
 
     var seeInDirectoryButton: UIButton = {
