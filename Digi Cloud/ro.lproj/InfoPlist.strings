@@ -4,7 +4,3 @@
 /* (No Commment) */
 "CFBundleShortVersionString" = "1.0";
 
-/* (No Commment) */
-"NSPhotoLibraryUsageDescription" = "Permisiunea este cerută atunci când utilizatorul alege să selecteze o poză de profil din dispozitiv.";
-
-"NSCameraUsageDescription" = "Permisiunea este cerută atunci când utilizatorul alege să folosească camera pentru a face o poză de profil.";

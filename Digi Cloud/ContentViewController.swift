@@ -39,6 +39,30 @@ final class ContentViewController: UIViewController {
         return iv
     }()
 
+    fileprivate let noPreviewImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "noPreview"))
+        iv.contentMode = .scaleAspectFit
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+
+    fileprivate let noPreviewLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = NSLocalizedString("No Preview Available", comment: "")
+        l.font = UIFont.HelveticaNeueMedium(size: 16)
+        return l
+    }()
+
+    fileprivate let noPreviewMessageLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = NSLocalizedString("This file type can't be viewed.", comment: "")
+        l.font = UIFont.HelveticaNeue(size: 14)
+        l.textColor = UIColor.gray
+        return l
+    }()
+
     fileprivate let busyIndicator: UIActivityIndicatorView = {
         let i = UIActivityIndicatorView()
         i.hidesWhenStopped = true
@@ -68,6 +92,8 @@ final class ContentViewController: UIViewController {
         self.title = (self.location.path as NSString).lastPathComponent
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
+        navigationController?.hidesBarsOnTap = true
+
         super.viewDidLoad()
     }
 
@@ -87,6 +113,14 @@ final class ContentViewController: UIViewController {
         // Close session and delegate
         session?.invalidateAndCancel()
         super.viewWillDisappear(animated)
+    }
+
+    override var prefersStatusBarHidden: Bool {
+        return navigationController?.isNavigationBarHidden == true
+    }
+
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return UIStatusBarAnimation.slide
     }
 
     // MARK: - Helper Functions
@@ -126,6 +160,11 @@ final class ContentViewController: UIViewController {
     }
 
     fileprivate func loadFileContent() {
+
+        // Add WKWebView
+        view.addSubview(webView)
+        view.addConstraints(with: "H:|[v0]|", views: webView)
+        view.addConstraints(with: "V:|[v0]|", views: webView)
 
         // load file in the view
         self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL)
@@ -168,7 +207,7 @@ final class ContentViewController: UIViewController {
 
     func handleAction() {
 
-        configureHand(isVisible: false)
+        handleFileNotOpen(isVisible: false)
 
         let controller = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
         controller.excludedActivityTypes = nil
@@ -185,20 +224,41 @@ final class ContentViewController: UIViewController {
     }
 
     private func setupViews() {
-        view.addSubview(webView)
+
+        view.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 1, alpha: 1.0)
         view.addSubview(progressView)
         view.addSubview(busyIndicator)
-        view.addConstraints(with: "H:|[v0]|", views: webView)
-        view.addConstraints(with: "V:|[v0]|", views: webView)
         view.addConstraints(with: "H:|[v0]|", views: progressView)
         view.addConstraints(with: "V:|-64-[v0(2)]", views: progressView)
-        busyIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        busyIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+
+        NSLayoutConstraint.activate([
+            busyIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            busyIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+
     }
 
-    fileprivate func configureHand(isVisible: Bool) {
+    fileprivate func handleFileNotOpen(isVisible: Bool) {
 
         if isVisible {
+
+            webView.removeFromSuperview()
+            view.addSubview(noPreviewImageView)
+            view.addSubview(noPreviewLabel)
+            view.addSubview(noPreviewMessageLabel)
+
+            NSLayoutConstraint.activate([
+
+                noPreviewImageView.bottomAnchor.constraint(equalTo: noPreviewLabel.topAnchor, constant: -20),
+                noPreviewImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+                noPreviewLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50),
+                noPreviewLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+                noPreviewMessageLabel.topAnchor.constraint(equalTo: noPreviewLabel.bottomAnchor, constant: 10),
+                noPreviewMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+
+            ])
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.view.addSubview(self.handImageView)
@@ -233,7 +293,6 @@ extension ContentViewController: URLSessionTaskDelegate {
 
             // Stop the spinner
             self.busyIndicator.stopAnimating()
-            self.progressView.isHidden = true
 
             guard error == nil else {
 
@@ -250,6 +309,15 @@ extension ContentViewController: URLSessionTaskDelegate {
 
             // Load the file in WKWebView
             self.loadFileContent()
+        }
+    }
+
+    fileprivate func removeProgressView() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.progressView.alpha = 0
+
+        }) { (_) in
+            self.progressView.removeFromSuperview()
         }
     }
 }
@@ -288,43 +356,14 @@ extension ContentViewController: URLSessionDownloadDelegate {
 }
 
 extension ContentViewController: WKNavigationDelegate {
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-
-        UIView.animate(withDuration: 0.5, animations: {
-            self.progressView.alpha = 0
-        })
-    }
-
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-
-        configureHand(isVisible: true)
-
-    }
-
-    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-     // TODO: 
-     // Show loading window after download
-    }
-
-    public func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-
-    }
-
-    public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-
+        removeProgressView()
         self.navigationItem.rightBarButtonItem?.isEnabled = true
     }
 
-    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        removeProgressView()
+        handleFileNotOpen(isVisible: true)
     }
-
-    public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge,
-                        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-    }
-
-    public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-
-    }
-
 }
