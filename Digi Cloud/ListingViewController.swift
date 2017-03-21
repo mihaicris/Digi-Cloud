@@ -48,6 +48,8 @@ final class ListingViewController: UITableViewController {
     private var didReceivedStatus404 = false
     private var didSucceedCopyOrMove = false
 
+    private var errorMessage = ""
+
     private var searchResultWasHighlighted = false
 
     private let dateFormatter: DateFormatter = {
@@ -174,7 +176,7 @@ final class ListingViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         if needRefresh {
-            self.updateContent()
+            self.getContent()
         }
         super.viewDidAppear(animated)
     }
@@ -443,16 +445,13 @@ final class ListingViewController: UITableViewController {
 
     private func presentError(message: String) {
 
-        self.busyIndicator.stopAnimating()
-        self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
-
         let title = NSLocalizedString("Error", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }
 
-    private func updateContent() {
+    private func getContent() {
 
         needRefresh = false
         isUpdating = true
@@ -466,27 +465,31 @@ final class ListingViewController: UITableViewController {
 
                 self.didReceivedNetworkError = true
 
-                var message: String
-
                 switch error! {
 
-                case NetworkingError.internetOffline(let msg), NetworkingError.requestTimedOut(let msg):
+                case NetworkingError.internetOffline(let msg):
+                    self.errorMessage = msg
 
-                    message = msg
-                    self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
-                    self.nodes.removeAll()
-
-                    self.tableView.reloadData()
-
-                    if self.tableView.isDragging {
-                        return
-                    }
+                case NetworkingError.requestTimedOut(let msg):
+                    self.errorMessage = msg
 
                 default:
-                    message = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
+                    self.errorMessage = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
                 }
 
-                self.presentError(message: message)
+                if self.tableView.isDragging {
+                    return
+                }
+
+                self.busyIndicator.stopAnimating()
+                self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
+
+                self.nodes.removeAll()
+                self.tableView.reloadData()
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.presentError(message: self.errorMessage)
+                }
 
                 return
             }
@@ -565,11 +568,10 @@ final class ListingViewController: UITableViewController {
 
             self.refreshControl?.endRefreshing()
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 
                 if self.didReceivedNetworkError {
-                    self.presentError(message: NSLocalizedString("There was an error while updating the content.", comment: ""))
-
+                    self.presentError(message: self.errorMessage)
                 } else {
                     self.updateLocationContentMessage()
                     self.tableView.reloadData()
@@ -651,10 +653,10 @@ final class ListingViewController: UITableViewController {
             if self.tableView.isEditing {
                 self.handleCancelEditMode()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    self.updateContent()
+                    self.getContent()
                 }
             } else {
-                self.updateContent()
+                self.getContent()
             }
         }
     }
@@ -781,11 +783,11 @@ final class ListingViewController: UITableViewController {
         let controllerSourceLocations = self.sourceLocations
 
         controller.onFinish = { [weak self] in
-            self?.updateContent()
+            self?.getContent()
         }
 
         controller.onUpdateNeeded = { [weak self] in
-            self?.updateContent()
+            self?.getContent()
         }
 
         controller.onSelect = { [weak self] location in
@@ -1077,7 +1079,7 @@ final class ListingViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
-        self.updateContent()
+        self.getContent()
     }
 
     // MARK: - Action Execution
@@ -1317,7 +1319,7 @@ final class ListingViewController: UITableViewController {
         dispatchGroup.notify(queue: .main) {
             self.setBusyIndicatorView(false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self.updateContent()
+                self.getContent()
             }
         }
 
@@ -1333,7 +1335,7 @@ final class ListingViewController: UITableViewController {
             self?.tableView.reloadRows(at: [IndexPath.init(row: index, section: 0)], with: .middle)
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                self?.updateContent()
+                self?.getContent()
             }
         }
 
@@ -1421,7 +1423,7 @@ final class ListingViewController: UITableViewController {
         let onFinish = { [weak self] (shouldExitMount: Bool) in
 
             if let navController = self?.navigationController as? MainNavigationController {
-                self?.updateContent()
+                self?.getContent()
 
                 for controller in navController.viewControllers {
                     (controller as? ListingViewController)?.needRefresh = true
@@ -1444,7 +1446,7 @@ final class ListingViewController: UITableViewController {
                     navController.popToRootViewController(animated: true)
                 } else {
 
-                    self?.updateContent()
+                    self?.getContent()
 
                     for controller in navController.viewControllers {
                         (controller as? ListingViewController)?.needRefresh = true

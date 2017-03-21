@@ -36,6 +36,7 @@ final class LocationsViewController: UITableViewController {
     private var isUpdating: Bool = false
 
     private var didReceivedNetworkError = false
+    private var errorMessage = ""
 
     let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
@@ -140,20 +141,27 @@ final class LocationsViewController: UITableViewController {
 
             guard error == nil else {
 
-                self.refreshControl?.endRefreshing()
-
-                var message: String
+                self.didReceivedNetworkError = true
 
                 switch error! {
+
                 case NetworkingError.internetOffline(let msg):
-                    message = msg
+                    self.errorMessage = msg
+
                 case NetworkingError.requestTimedOut(let msg):
-                    message = msg
+                    self.errorMessage = msg
+
                 default:
-                    message = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
+                    self.errorMessage = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
                 }
 
-                self.presentError(message: message)
+                if self.tableView.isDragging {
+                    return
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.presentError(message: self.errorMessage)
+                }
 
                 return
             }
@@ -194,10 +202,10 @@ final class LocationsViewController: UITableViewController {
 
             self.refreshControl?.endRefreshing()
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 
                 if self.didReceivedNetworkError {
-                    self.presentError(message: NSLocalizedString("There was an error while updating the content.", comment: ""))
+                    self.presentError(message: self.errorMessage)
 
                 } else {
                     self.tableView.reloadData()
