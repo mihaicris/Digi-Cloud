@@ -75,7 +75,14 @@ extension FileManager {
             guard let name = $0 as? String else { return }
 
             let path = url.appendingPathComponent(name).path
-            let attributes = try! self.default.attributesOfItem(atPath: path) as NSDictionary
+
+            guard let attributes = try? self.default.attributesOfItem(atPath: path) as NSDictionary else {
+                AppSettings.showErrorMessageAndCrash(
+                    title: NSLocalizedString("Error accessing files on device.", comment: ""),
+                    subtitle: NSLocalizedString("The app will now close", comment: "")
+                )
+                return
+            }
 
             size += attributes.fileSize()
         }

@@ -138,8 +138,8 @@ final class MoreActionsViewController: UITableViewController {
     private func setupActions() {
 
         guard let mount = rootNode.mount else {
-            print("NO MOUNT??")
-            fatalError()
+            dismiss(animated: false, completion: nil)
+            return
         }
 
         if mount.permissions.create_link {

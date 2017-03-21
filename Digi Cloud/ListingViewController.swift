@@ -865,9 +865,6 @@ final class ListingViewController: UITableViewController {
                 self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .upload)
 
             default:
-                #if DEBUG
-                    fatalError("Wrong More Action Selection")
-                #endif
                 break
             }
         }
@@ -976,9 +973,6 @@ final class ListingViewController: UITableViewController {
                     self.showShareMountViewController(location: nodeLocation, sharedNode: node)
 
                 default:
-                    #if DEBUG
-                        fatalError("Wrong Action Selection")
-                    #endif
                     break
                 }
         }
@@ -1017,11 +1011,6 @@ final class ListingViewController: UITableViewController {
         setBusyIndicatorView(true)
 
         guard self.sourceLocations != nil else {
-            defer {
-                #if DEBUG
-                    fatalError("Couldn't get the source locations to move/copy.")
-                #endif
-            }
             return
         }
 

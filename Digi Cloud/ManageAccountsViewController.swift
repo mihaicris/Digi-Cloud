@@ -125,33 +125,35 @@ final class ManageAccountsViewController: UITableViewController {
 
         let account = Account(userID: user.id)
 
+        // Revoke the token
+        account.revokeToken()
+
+        // Delete profile image from local storage
+        account.deleteProfileImageFromCache()
+
+        // Delete the account info (name) from User defaults
+        AppSettings.deletePersistedUserInfo(userID: user.id)
+
+        // Delete user from the model
+        self.users.remove(at: indexPath.row)
+
+        // Delete user from the parent controller model
+        controller.users.remove(at: indexPath.row)
+
+        // Delete user from manage users list table
+        tableView.deleteRows(at: [indexPath], with: .fade)
+
+        // Delete user from parent users list table
+        controller.collectionView.deleteItems(at: [indexPath])
+
         do {
-            // Revoke the token
-            account.revokeToken()
-
-            // Delete profile image from local storage
-            account.deleteProfileImageFromCache()
-
-            // Delete the account info (name) from User defaults
-            AppSettings.deletePersistedUserInfo(userID: user.id)
-
             // Delete account token from Keychain
             try account.deleteItem()
-
-            // Delete user from the model
-            self.users.remove(at: indexPath.row)
-
-            // Delete user from the parent controller model
-            controller.users.remove(at: indexPath.row)
-
-            // Delete user from manage users list table
-            tableView.deleteRows(at: [indexPath], with: .fade)
-
-            // Delete user from parent users list table
-            controller.collectionView.deleteItems(at: [indexPath])
-
         } catch {
-            fatalError("Error while deleting account from Keychain.")
+            AppSettings.showErrorMessageAndCrash(
+                title: NSLocalizedString("Error deleting account from Keychain", comment: ""),
+                subtitle: NSLocalizedString("The app will now close", comment: "")
+            )
         }
 
     }

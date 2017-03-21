@@ -21,7 +21,18 @@ final class DigiClient {
     var task: URLSessionDataTask?
 
     private var token: String {
-        return try! loggedAccount.readToken()
+
+        guard let token = try? loggedAccount.readToken() else {
+
+            AppSettings.showErrorMessageAndCrash(
+                title: NSLocalizedString("Error reading account from Keychain", comment: ""),
+                subtitle: NSLocalizedString("The app will now close", comment: "")
+            )
+            return ""
+        }
+
+        return token
+
     }
 
     var loggedAccount: Account!

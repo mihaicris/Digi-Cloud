@@ -133,6 +133,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     }
 
     override func viewDidAppear(_ animated: Bool) {
+
         updateUsers {
             self.configureViews()
         }
@@ -146,14 +147,29 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         do {
             accounts = try Account.accountItems()
         } catch {
-            fatalError("Error fetching accounts from Keychain - \(error)")
+            AppSettings.showErrorMessageAndCrash(
+                title: NSLocalizedString("Error fetching accounts from Keychain", comment: ""),
+                subtitle: NSLocalizedString("The app will now close", comment: "")
+            )
         }
 
         for account in accounts {
             if let user = AppSettings.getPersistedUserInfo(userID: account.userID) {
                 users.append(user)
             } else {
-                fatalError("Error fetching persisted user from UserDefaults")
+
+                account.revokeToken()
+
+                do {
+                    try account.deleteItem()
+                } catch {
+                    AppSettings.showErrorMessageAndCrash(
+                        title: NSLocalizedString("Error deleting account from Keychain", comment: ""),
+                        subtitle: NSLocalizedString("The app will now close", comment: "")
+                    )
+                }
+
+                users.removeLast()
             }
         }
     }
@@ -350,7 +366,10 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         do {
             accounts = try Account.accountItems()
         } catch {
-            fatalError("Error fetching account from Keychain - \(error)")
+            AppSettings.showErrorMessageAndCrash(
+                title: NSLocalizedString("Error fetching accounts from Keychain", comment: ""),
+                subtitle: NSLocalizedString("The app will now close", comment: "")
+            )
         }
 
         updateUsers {
@@ -369,7 +388,13 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         for account in accounts {
 
-            let token = try! account.readToken()
+            guard let token = try? account.readToken() else {
+                AppSettings.showErrorMessageAndCrash(
+                    title: NSLocalizedString("Error reading account from Keychain", comment: ""),
+                    subtitle: NSLocalizedString("The app will now close", comment: "")
+                )
+                return
+            }
 
             dispatchGroup.enter()
 
@@ -465,8 +490,13 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                     DispatchQueue.main.async {
                         let account = Account(userID: user.id)
 
-                        // read token
-                        let token = try! account.readToken()
+                        guard let token = try? account.readToken() else {
+                            AppSettings.showErrorMessageAndCrash(
+                                title: NSLocalizedString("Error reading account from Keychain", comment: ""),
+                                subtitle: NSLocalizedString("The app will now close", comment: "")
+                            )
+                            return
+                        }
 
                         // Try to access network
                         DigiClient.shared.getUser(forToken: token) { _, error in
@@ -486,7 +516,16 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
                                 case AuthenticationError.login:
                                     message = NSLocalizedString("Your session has expired, please log in again.", comment: "")
-                                    try! account.deleteItem()
+
+                                    do {
+                                        try account.deleteItem()
+                                    } catch {
+                                        AppSettings.showErrorMessageAndCrash(
+                                            title: NSLocalizedString("Error deleting account from Keychain", comment: ""),
+                                            subtitle: NSLocalizedString("The app will now close", comment: "")
+                                        )
+                                    }
+
                                 default:
                                     message = NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "")
                                     break
