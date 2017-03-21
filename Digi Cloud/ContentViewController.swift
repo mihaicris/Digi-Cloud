@@ -32,7 +32,14 @@ final class ContentViewController: UIViewController {
         return view
     }()
 
-    private let busyIndicator: UIActivityIndicatorView = {
+    fileprivate let handImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "hand"))
+        iv.contentMode = .scaleAspectFit
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+
+    fileprivate let busyIndicator: UIActivityIndicatorView = {
         let i = UIActivityIndicatorView()
         i.hidesWhenStopped = true
         i.activityIndicatorViewStyle = .gray
@@ -57,13 +64,10 @@ final class ContentViewController: UIViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-
         setupViews()
-
         self.title = (self.location.path as NSString).lastPathComponent
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
-
         super.viewDidLoad()
     }
 
@@ -163,6 +167,9 @@ final class ContentViewController: UIViewController {
     }
 
     func handleAction() {
+
+        configureHand(isVisible: false)
+
         let controller = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
         controller.excludedActivityTypes = nil
         controller.modalPresentationStyle = .popover
@@ -170,10 +177,7 @@ final class ContentViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    private func presentError(message: String, completion: @escaping (UIAlertAction) -> Void) {
-
-        self.busyIndicator.stopAnimating()
-
+    fileprivate func presentError(message: String, completion: @escaping (UIAlertAction) -> Void) {
         let title = NSLocalizedString("Error", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: completion))
@@ -192,42 +196,81 @@ final class ContentViewController: UIViewController {
         busyIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
 
-    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-    }
+    fileprivate func configureHand(isVisible: Bool) {
 
-    public func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-    }
+        if isVisible {
 
-    public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-    }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.view.addSubview(self.handImageView)
+                self.handImageView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor, constant: 110).isActive = true
+                self.handImageView.centerXAnchor.constraint(equalTo: self.view.layoutMarginsGuide.rightAnchor, constant: -50).isActive = true
 
-    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-    }
+                let initialPosition = self.handImageView.center
+                let endPosition = CGPoint(x: initialPosition.x + 20, y: initialPosition.y - 20)
 
-    public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-    }
+                UIView.animate(withDuration: 1.2,
+                               delay: 0.3,
+                               options: [.autoreverse, .repeat],
+                               animations: {
+                                    self.handImageView.center = endPosition
+                               },
+                               completion: nil)
+            }
 
-    public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        } else {
+            handImageView.removeFromSuperview()
+        }
     }
+}
 
+extension ContentViewController: URLSessionTaskDelegate {
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+
+        DispatchQueue.main.async {
+            // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
+            session.invalidateAndCancel()
+
+            // Stop the spinner
+            self.busyIndicator.stopAnimating()
+            self.progressView.isHidden = true
+
+            guard error == nil else {
+
+                if (error as! NSError).code != -999 {
+
+                    // If not cancelled
+                    self.presentError(message: error!.localizedDescription) { (_) in
+                        _ = self.navigationController?.popViewController(animated: true)
+                    }
+                }
+
+                return
+            }
+
+            // Load the file in WKWebView
+            self.loadFileContent()
+        }
+    }
 }
 
 extension ContentViewController: URLSessionDownloadDelegate {
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
 
-        // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
-        session.invalidateAndCancel()
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
 
         // get the downloaded file from temp folder
         do {
             try FileManager.default.moveItem(at: location, to: self.fileURL)
 
-            DispatchQueue.main.async {
-                self.loadFileContent()
-            }
-
         } catch {
-            print("Could not move file to disk: \(error.localizedDescription)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+
+                let message = NSLocalizedString("There was an error at saving the file. Try again later or reinstall the app.", comment: "")
+
+                self.presentError(message: message) { _ in
+                    _ = self.navigationController?.popViewController(animated: true)
+                }
+            }
         }
     }
 
@@ -253,9 +296,35 @@ extension ContentViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        // TODO: Show UIView for Export recommendation
-        print(error.localizedDescription)
-        self.progressView.alpha = 0
+
+        configureHand(isVisible: true)
+
+    }
+
+    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+     // TODO: 
+     // Show loading window after download
+    }
+
+    public func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+
+    }
+
+    public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+
         self.navigationItem.rightBarButtonItem?.isEnabled = true
     }
+
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+
+    }
+
+    public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge,
+                        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    }
+
+    public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+
+    }
+
 }
