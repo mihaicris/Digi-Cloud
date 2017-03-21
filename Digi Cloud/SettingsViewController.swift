@@ -14,7 +14,6 @@ final class SettingsViewController: UITableViewController {
         case user
         case security
         case data
-        case about
     }
 
     // MARK: - Properties
@@ -24,7 +23,7 @@ final class SettingsViewController: UITableViewController {
     private var user: User!
     private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
 
-    private var settings: [SettingType] = [.user, .data, .security, .about]
+    private var settings: [SettingType] = [.user, .security, .data]
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -56,6 +55,7 @@ final class SettingsViewController: UITableViewController {
     override func viewDidLoad() {
         title = NSLocalizedString("Settings", comment: "")
         preferredContentSize = CGSize(width: 350, height: 700)
+        setupViews()
         super.viewDidLoad()
     }
 
@@ -63,6 +63,61 @@ final class SettingsViewController: UITableViewController {
         fetchUserData()
         tableView.reloadData()
         super.viewWillAppear(animated)
+    }
+
+    private func setupViews() {
+
+        let tableFooterView: UIView = {
+            let v = UIView()
+            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 100)
+
+            let image = #imageLiteral(resourceName: "app_icon_transparent").withRenderingMode(.alwaysTemplate)
+            let imageView = UIImageView(image: image)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.contentMode = .scaleAspectFill
+
+            let versionLabel: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                let str = NSLocalizedString("Version", comment: "")
+                l.text = "\(str) \(UIApplication.Version)"
+                l.textColor = UIColor.gray
+                l.font = UIFont.HelveticaNeue(size: 11)
+                return l
+            }()
+
+            let copyrightLabel: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.text = NSLocalizedString("© 2016-2017 Mihai Cristescu.\n All rights reserved.", comment: "")
+                l.numberOfLines = 2
+                l.textAlignment = .center
+                l.font = UIFont.HelveticaNeue(size: 12)
+                return l
+            }()
+
+            v.addSubview(imageView)
+            v.addSubview(versionLabel)
+            v.addSubview(copyrightLabel)
+
+            NSLayoutConstraint.activate([
+                imageView.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+                imageView.topAnchor.constraint(equalTo: v.topAnchor, constant: 20),
+                imageView.widthAnchor.constraint(equalToConstant: 50),
+                imageView.heightAnchor.constraint(equalToConstant: 50),
+
+                versionLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+
+                copyrightLabel.topAnchor.constraint(equalTo: versionLabel.bottomAnchor, constant: 10),
+                copyrightLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
+            ])
+
+            return v
+        }()
+
+        tableView.tableFooterView = tableFooterView
+
     }
 
     private func fetchUserData() {
@@ -96,8 +151,6 @@ final class SettingsViewController: UITableViewController {
 
             return FileManager.sizeOfFilesCacheDirectory() == 0 ? 1 : 2
 
-        case .about:
-            return 1
         }
     }
 
@@ -112,9 +165,6 @@ final class SettingsViewController: UITableViewController {
 
         case .data:
             return NSLocalizedString("Data", comment: "")
-
-        case .about:
-            return NSLocalizedString("About DIGI Cloud", comment: "")
         }
     }
 
@@ -239,21 +289,6 @@ final class SettingsViewController: UITableViewController {
             default:
                 break
             }
-
-        case .about:
-
-            switch indexPath.row {
-            case 0:
-                // App version
-                cell.textLabel?.text = NSLocalizedString("App Version", comment: "")
-                cell.detailTextLabel?.text = "\(UIApplication.Version)"
-                //            case 1:
-                //                // Rate the app
-                //                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "")
-            //                cell.textLabel?.textColor = .defaultColor
-            default:
-                break
-            }
         }
 
         return cell
@@ -280,11 +315,6 @@ final class SettingsViewController: UITableViewController {
         case .data:
             if indexPath.row == 1 {
                 handleClearCache()
-            }
-
-        case .about:
-            if indexPath.row == 1 {
-                handleAppStoreReview()
             }
         }
     }
@@ -353,6 +383,6 @@ final class SettingsViewController: UITableViewController {
 
     private func handleClearCache() {
         FileManager.emptyFilesCache()
-        tableView.reloadSections(IndexSet(integer: 1), with: .fade)
+        tableView.reloadSections(IndexSet(integer: 2), with: .fade)
     }
 }

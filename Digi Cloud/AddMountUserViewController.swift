@@ -108,7 +108,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
         let saveMemberButton = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""),
                                                style: .plain, target: self, action: #selector(handleSaveMember))
-        
+
         navigationItem.rightBarButtonItem = saveMemberButton
         navigationController?.isToolbarHidden = true
 
