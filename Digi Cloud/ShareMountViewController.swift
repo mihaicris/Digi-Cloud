@@ -295,7 +295,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             if let image = mappingProfileImages[users[indexPath.row].id] {
                 cell.profileImageView.image = image
             } else {
-                cell.profileImageView.image = #imageLiteral(resourceName: "AccountIcon")
+                cell.profileImageView.image = #imageLiteral(resourceName: "account_icon")
             }
 
             return cell

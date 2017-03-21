@@ -20,7 +20,6 @@
 		8328F8111E51FF2E00DE4453 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F8101E51FF2E00DE4453 /* DownloadLink.swift */; };
 		8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */; };
 		833F5DA91E68372700EE3722 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DA81E68372700EE3722 /* ShareMountViewController.swift */; };
-		833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */; };
 		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
 		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
 		834AEEB51E6B354F00C16B75 /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
@@ -112,9 +111,7 @@
 		8328F8101E51FF2E00DE4453 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadLink.swift; sourceTree = "<group>"; };
 		8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameUtilitiesButton.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = RenameViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		833F5DA61E68358B00EE3722 /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ShareViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		833F5DA81E68372700EE3722 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareMountViewController.swift; sourceTree = "<group>"; };
-		833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareTableViewCell.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingsViewController.swift; sourceTree = "<group>"; };
@@ -240,7 +237,6 @@
 		83454BEB1E5B3E6E005C85ED /* Sharing */ = {
 			isa = PBXGroup;
 			children = (
-				833F5DA61E68358B00EE3722 /* ShareViewController.swift */,
 				83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */,
 				833F5DA81E68372700EE3722 /* ShareMountViewController.swift */,
 				83A932A11E75831100D9C318 /* AddMountUserViewController.swift */,
@@ -460,7 +456,6 @@
 			isa = PBXGroup;
 			children = (
 				835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */,
-				833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */,
 				83C887821E7312E500C72050 /* MountUserCell.swift */,
 			);
 			name = Views;
@@ -723,7 +718,6 @@
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */,
 				834AEEB81E6B3F9700C16B75 /* DirectoryInfoViewController.swift in Sources */,
-				833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */,
 				83F1FFD81E6980350079F56F /* DirectoryInfo.swift in Sources */,
 				836731B91E53DCD3001EA961 /* UploadLink.swift in Sources */,
 				834AEEB71E6B39E500C16B75 /* CreateDirectoryViewController.swift in Sources */,

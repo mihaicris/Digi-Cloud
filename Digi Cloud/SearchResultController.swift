@@ -77,10 +77,10 @@ final class SearchResultController: UITableViewController {
         cell.nodePathLabel.text = node.path
 
         if node.type == "dir" {
-            cell.nodeIcon.image = UIImage(named: "FolderIcon")
+            cell.nodeIcon.image = #imageLiteral(resourceName: "directory_icon")
             cell.nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 16)
         } else {
-            cell.nodeIcon.image = UIImage(named: "FileIcon")
+            cell.nodeIcon.image = #imageLiteral(resourceName: "file_icon")
             cell.nodeNameLabel.font = UIFont.HelveticaNeue(size: 16)
         }
 

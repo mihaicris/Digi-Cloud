@@ -211,8 +211,8 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
         switch indexPath.section {
         // Folder name
         case 0:
-            let folderIcon: UIImageView = {
-                let imageView = UIImageView(image: UIImage(named: "FolderIcon"))
+            let directoryIcon: UIImageView = {
+                let imageView = UIImageView(image: #imageLiteral(resourceName: "directory_icon"))
                 imageView.contentMode = .scaleAspectFit
                 return imageView
             }()
@@ -223,12 +223,12 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
                 return label
             }()
 
-            cell.contentView.addSubview(folderIcon)
+            cell.contentView.addSubview(directoryIcon)
             cell.contentView.addSubview(folderName)
-            cell.contentView.addConstraints(with: "H:|-20-[v0(26)]-12-[v1]-12-|", views: folderIcon, folderName)
-            cell.contentView.addConstraints(with: "V:[v0(26)]", views: folderIcon)
-            folderIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
-            folderName.centerYAnchor.constraint(equalTo: folderIcon.centerYAnchor).isActive = true
+            cell.contentView.addConstraints(with: "H:|-20-[v0(26)]-12-[v1]-12-|", views: directoryIcon, folderName)
+            cell.contentView.addConstraints(with: "V:[v0(26)]", views: directoryIcon)
+            directoryIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            folderName.centerYAnchor.constraint(equalTo: directoryIcon.centerYAnchor).isActive = true
         // Size
         case 1:
             cell.contentView.addSubview(directorySizeLabel)

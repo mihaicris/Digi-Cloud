@@ -48,7 +48,7 @@ final class DirectoryCell: BaseListCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        iconImageView.image = UIImage(named: "FolderIcon")
+        iconImageView.image = #imageLiteral(resourceName: "directory_icon")
         nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 15)
     }
 

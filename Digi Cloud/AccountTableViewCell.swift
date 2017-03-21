@@ -24,7 +24,7 @@ final class AccountTableViewCell: UITableViewCell {
             if let data = cache.load(type: .profile, key: "\(id).png") {
                 self.profileImageView.image = UIImage(data: data)
             } else {
-                self.profileImageView.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
+                self.profileImageView.image = #imageLiteral(resourceName: "default_profile_image")
             }
         }
     }

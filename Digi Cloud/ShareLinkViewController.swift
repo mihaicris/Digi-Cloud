@@ -105,7 +105,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private lazy var passwordResetButton: UIButton = {
         let b = UIButton(type: .system)
         b.tintColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1.0)
-        b.setImage(#imageLiteral(resourceName: "Refresh_icon").withRenderingMode(.alwaysTemplate), for: .normal)
+        b.setImage(#imageLiteral(resourceName: "refresh_icon").withRenderingMode(.alwaysTemplate), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.addTarget(self, action: #selector(handleResetPassword), for: .touchUpInside)
         return b

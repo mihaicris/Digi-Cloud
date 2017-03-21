@@ -40,7 +40,7 @@ final class ContentViewController: UIViewController {
     }()
 
     fileprivate let noPreviewImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "noPreview"))
+        let iv = UIImageView(image: #imageLiteral(resourceName: "no_preview"))
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -176,7 +176,7 @@ final class ContentViewController: UIViewController {
 
         let fileName = node.name
         var fileExtension = (fileName as NSString).pathExtension
-        
+
         guard let hash = node.hash else {
             return
         }

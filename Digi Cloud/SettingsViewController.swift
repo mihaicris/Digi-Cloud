@@ -22,7 +22,7 @@ final class SettingsViewController: UITableViewController {
     private var isExecuting = false
 
     private var user: User!
-    private var profileImage: UIImage! = #imageLiteral(resourceName: "DefaultAccountProfileImage")
+    private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
 
     private var settings: [SettingType] = [.user, .data, .security, .about]
 

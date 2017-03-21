@@ -203,7 +203,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         if let data = cache.load(type: .profile, key: user.id + ".png") {
             cell.profileImage.image = UIImage(data: data)
         } else {
-            cell.profileImage.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
+            cell.profileImage.image = #imageLiteral(resourceName: "default_profile_image")
         }
 
         return cell
