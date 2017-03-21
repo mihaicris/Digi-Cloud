@@ -495,6 +495,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func setTextFieldConstraintInEditMode(active: Bool) {
+
+        rightTextFieldConstraintDefault!.isActive = false
+        rightTextFieldConstraintInEditMode!.isActive = false
+
         rightTextFieldConstraintDefault!.isActive = !active
         rightTextFieldConstraintInEditMode!.isActive = active
         self.hashTextField.superview!.layoutIfNeeded()
