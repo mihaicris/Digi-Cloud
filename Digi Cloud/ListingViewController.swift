@@ -347,6 +347,7 @@ final class ListingViewController: UITableViewController {
 
             if [ActionType.noAction, ActionType.showSearchResult].contains(self.action) {
                 let controller = ContentViewController(location: newLocation)
+                controller.node = selectedNode
                 navigationController?.pushViewController(controller, animated: true)
             }
         }
