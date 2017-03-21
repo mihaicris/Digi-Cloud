@@ -127,6 +127,14 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return b
     }()
 
+    private let counterLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.HelveticaNeue(size: 14)
+        l.textColor = UIColor.white
+        return l
+    }()
+
     private let saveCustomDateButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -530,6 +538,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         let frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 85)
         let headerView = UIImageView(frame: frame)
 
+        headerView.addSubview(counterLabel)
+        counterLabel.rightAnchor.constraint(equalTo: counterLabel.superview!.layoutMarginsGuide.rightAnchor).isActive = true
+        counterLabel.bottomAnchor.constraint(equalTo: counterLabel.superview!.layoutMarginsGuide.bottomAnchor).isActive = true
+
         headerView.image = linkType == .download ? #imageLiteral(resourceName: "share_download_link_background") : #imageLiteral(resourceName: "share_upload_link_background")
         headerView.contentMode = .scaleAspectFit
         tableView.tableHeaderView = headerView
@@ -908,6 +920,26 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         } else {
             validityLabel.text = NSLocalizedString("Link has no expiration date", comment: "")
         }
+
+        var counterString: String
+
+        if linkType == .download {
+
+            if link.counter == 1 {
+                counterString = NSLocalizedString("Seen %d time", comment: "")
+            } else {
+                counterString = NSLocalizedString("Seen %d times", comment: "")
+            }
+
+        } else {
+            if link.counter == 1 {
+                counterString = NSLocalizedString("Uploaded %d time", comment: "")
+            } else {
+                counterString = NSLocalizedString("Uploaded %d times", comment: "")
+            }
+        }
+
+        counterLabel.text = String(format: counterString, link.counter)
 
         waitingView.isHidden = true
     }
