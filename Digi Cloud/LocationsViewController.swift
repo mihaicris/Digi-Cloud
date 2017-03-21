@@ -140,6 +140,8 @@ final class LocationsViewController: UITableViewController {
 
             guard error == nil else {
 
+                self.refreshControl?.endRefreshing()
+
                 var message: String
 
                 switch error! {
