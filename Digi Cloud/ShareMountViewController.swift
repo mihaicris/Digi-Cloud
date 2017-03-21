@@ -54,9 +54,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("MEMBERS", comment: "")
-        let cell = UITableViewHeaderFooterView()
-        let font = cell.textLabel?.font
-        l.font = UIFont(name: ".SFUIText", size: 13)!
+        l.font = UIFont(name: ".SFUIText", size: 12) ?? UIFont.HelveticaNeue(size: 12)
         l.textColor = UIColor(red: 0.43, green: 0.43, blue: 0.45, alpha: 1.0)
         return l
     }()

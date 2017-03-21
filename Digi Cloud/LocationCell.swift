@@ -13,24 +13,27 @@ final class LocationCell: UITableViewCell {
     // MARK: - Properties
 
     var mount: Mount! {
+        
         didSet {
-
-            locationNameLabel.text = mount.name
-            ownerNameLabel.text = "\(mount.owner.firstName) \(mount.owner.lastName)"
-
-            if mount.online {
-                statusLabel.textColor = UIColor(red: 0.0, green: 0.8, blue: 0.0, alpha: 1.0)
-            } else {
-                statusLabel.textColor = UIColor.gray
+            if let mount = mount {
+            
+                locationNameLabel.text = mount.name
+                ownerNameLabel.text = "\(mount.owner.firstName) \(mount.owner.lastName)"
+                
+                if mount.online {
+                    statusLabel.textColor = UIColor(red: 0.0, green: 0.8, blue: 0.0, alpha: 1.0)
+                } else {
+                    statusLabel.textColor = UIColor.gray
+                }
+                
+                if var spaceUsed = mount.spaceUsed, var spaceTotal = mount.spaceTotal {
+                    spaceUsed = spaceUsed / 1024
+                    spaceTotal = spaceTotal / 1024
+                    spaceUsedValueLabel.text = "\(spaceUsed) / \(spaceTotal) GB"
+                }
+                
+                setupViews()
             }
-
-            if var spaceUsed = mount.spaceUsed, var spaceTotal = mount.spaceTotal {
-                spaceUsed = spaceUsed / 1024
-                spaceTotal = spaceTotal / 1024
-                spaceUsedValueLabel.text = "\(spaceUsed) / \(spaceTotal) GB"
-            }
-
-            setupViews()
         }
     }
 

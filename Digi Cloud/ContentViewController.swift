@@ -176,6 +176,10 @@ final class ContentViewController: UIViewController {
 
         let fileName = node.name
         var fileExtension = (fileName as NSString).pathExtension
+        
+        guard let hash = node.hash else {
+            return
+        }
 
         // For WKWebView to try to open files without extension, we assume they are text.
 
@@ -183,7 +187,7 @@ final class ContentViewController: UIViewController {
             fileExtension = "txt"
         }
 
-        let key = "\(node.hash!).\(fileExtension)"
+        let key = "\(hash).\(fileExtension)"
 
         self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(key)
 
