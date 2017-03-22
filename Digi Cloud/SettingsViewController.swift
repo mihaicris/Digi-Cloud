@@ -64,7 +64,7 @@ final class SettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         title = NSLocalizedString("Settings", comment: "")
-        preferredContentSize = CGSize(width: 450, height: 580)
+        preferredContentSize = CGSize(width: 450, height: 620)
         setupViews()
         super.viewDidLoad()
     }
