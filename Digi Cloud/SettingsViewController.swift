@@ -89,8 +89,10 @@ final class SettingsViewController: UITableViewController {
             let versionLabel: UILabel = {
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
-                let str = NSLocalizedString("Version", comment: "")
-                l.text = "\(str) \(UIApplication.Version)"
+                l.textAlignment = .center
+                let str = "Digi Cloud\n" + NSLocalizedString("Version", comment: "")
+                l.text = "\(str) \(UIApplication.Version).\(UIApplication.Build)"
+                l.numberOfLines = 2
                 l.textColor = UIColor.gray
                 l.font = UIFont.HelveticaNeue(size: 11)
                 return l
@@ -130,11 +132,17 @@ final class SettingsViewController: UITableViewController {
     }
 
     private func fetchUserData() {
-        let cache = Cache()
-        let key = self.user.id + ".png"
 
-        if let data = cache.load(type: .profile, key: key) {
-            self.profileImage = UIImage(data: data)
+        if let user = AppSettings.userLogged {
+
+            self.user = user
+
+            let cache = Cache()
+            let key = self.user.id + ".png"
+
+            if let data = cache.load(type: .profile, key: key) {
+                self.profileImage = UIImage(data: data)
+            }
         }
     }
 

@@ -16,12 +16,18 @@ class UserSettingsViewController: UITableViewController,
     lazy var firstNameTextField: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.autocapitalizationType = .words
+        tf.autocorrectionType = .no
+        tf.clearButtonMode = .whileEditing
         tf.delegate = self
         return tf
     }()
 
     lazy var lastNameTextField: UITextField = {
         let tf = UITextField()
+        tf.autocapitalizationType = .words
+        tf.autocorrectionType = .no
+        tf.clearButtonMode = .whileEditing
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.delegate = self
         return tf
