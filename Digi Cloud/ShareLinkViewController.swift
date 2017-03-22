@@ -36,7 +36,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private var originalLinkHash: String!
     private var isSaving: Bool = false
     private var isAnimatingReset: Bool = false
-    private var shouldPop = true
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
@@ -631,7 +630,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
             self.link = result!
             self.configureWaitingView(type: .hidden)
-            self.shouldPop = false
         }
     }
 
@@ -641,11 +639,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     @objc func handleButtonOKPressed(_ sender: UIButton) {
-        if shouldPop {
-            _ = navigationController?.popViewController(animated: true)
-        } else {
-            configureWaitingView(type: .hidden)
-        }
+        dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleDone() {
