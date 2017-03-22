@@ -17,11 +17,13 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Permission is requested if the user has choosen to make a profile picture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Permission is requested if the user has choosen to select a profile picture from the device.</string>
 	<key>UIAppFonts</key>
@@ -38,8 +40,6 @@
 	<true/>
 	<key>UIStatusBarHidden~ipad</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Permission is requested if the user has choosen to make a profile picture.</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

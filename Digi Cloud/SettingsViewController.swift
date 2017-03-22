@@ -20,7 +20,8 @@ final class SettingsViewController: UITableViewController {
 
     private var isExecuting = false
 
-    private var user: User!
+    private var user: User
+
     private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
 
     private var settings: [SettingType] = [.user, .security, .data]
@@ -47,6 +48,15 @@ final class SettingsViewController: UITableViewController {
     private var confirmButtonHorizontalConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers and Deinitializers
+
+    init(user: User) {
+        self.user = user
+        super.init(style: .grouped)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     deinit { DEINITLog(self) }
 
@@ -117,20 +127,14 @@ final class SettingsViewController: UITableViewController {
         }()
 
         tableView.tableFooterView = tableFooterView
-
     }
 
     private func fetchUserData() {
+        let cache = Cache()
+        let key = self.user.id + ".png"
 
-        if let userID = AppSettings.loggedUserID {
-
-            self.user = AppSettings.getPersistedUserInfo(userID: userID)
-
-            let cache = Cache()
-
-            if let data = cache.load(type: .profile, key: userID + ".png") {
-                self.profileImage = UIImage(data: data)
-            }
+        if let data = cache.load(type: .profile, key: key) {
+            self.profileImage = UIImage(data: data)
         }
     }
 

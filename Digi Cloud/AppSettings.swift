@@ -44,6 +44,15 @@ class AppSettings {
         }
     }
 
+    static var userLogged: User? {
+        if let userID = loggedUserID {
+            if let user = getPersistedUserInfo(userID: userID) {
+                return user
+            }
+        }
+        return nil
+    }
+
     static var showsFoldersFirst: Bool {
         get {
             return UserDefaults.standard.bool(forKey: UserDefaults.UserDefaultsKeys.showsFoldersFirst.rawValue)

@@ -224,11 +224,16 @@ final class LocationsViewController: UITableViewController {
     }
 
     @objc private func handleShowSettings() {
-        let controller = SettingsViewController(style: .grouped)
-        let navController = UINavigationController(rootViewController: controller)
-        navController.modalPresentationStyle = .popover
-        navController.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
-        present(navController, animated: true, completion: nil)
+
+        if let user = AppSettings.userLogged {
+            let controller = SettingsViewController(user: user)
+
+            let navController = UINavigationController(rootViewController: controller)
+            navController.modalPresentationStyle = .popover
+            navController.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
+
+            present(navController, animated: true, completion: nil)
+        }
     }
 
     @objc private func handleShowBookmarksViewController(_ sender: UIBarButtonItem) {
