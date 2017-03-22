@@ -34,14 +34,14 @@ final class ContentViewController: UIViewController {
 
     fileprivate let handImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "hand"))
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
 
     fileprivate let noPreviewImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "no_preview"))
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()

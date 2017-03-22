@@ -83,10 +83,10 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         let cell = UITableViewCell()
         cell.selectionStyle = .none
 
-        let imageIcon: UIImageView = {
+        let nodeIcon: UIImageView = {
             let image = node.type == "dir" ? #imageLiteral(resourceName: "directory_icon") : #imageLiteral(resourceName: "file_icon")
             let iv = UIImageView(image: image)
-            iv.contentMode = .scaleAspectFill
+            iv.contentMode = .scaleAspectFit
             return iv
         }()
 
@@ -99,12 +99,12 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         textField.delegate = self
         textField.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
 
-        cell.contentView.addSubview(imageIcon)
+        cell.contentView.addSubview(nodeIcon)
         cell.contentView.addSubview(textField)
-        cell.contentView.addConstraints(with: "H:|-20-[v0(26)]-12-[v1]-12-|", views: imageIcon, textField)
-        cell.contentView.addConstraints(with: "V:[v0(26)]", views: imageIcon)
+        cell.contentView.addConstraints(with: "H:|-20-[v0(26)]-12-[v1]-12-|", views: nodeIcon, textField)
+        cell.contentView.addConstraints(with: "V:[v0(26)]", views: nodeIcon)
         cell.contentView.addConstraints(with: "V:|[v0]|", views: textField)
-        imageIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+        nodeIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
 
         return cell
     }

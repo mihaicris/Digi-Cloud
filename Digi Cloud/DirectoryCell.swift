@@ -40,7 +40,7 @@ final class DirectoryCell: BaseListCell {
 
     let bookmarkImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
