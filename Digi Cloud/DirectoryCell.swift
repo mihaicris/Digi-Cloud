@@ -63,9 +63,19 @@ final class DirectoryCell: BaseListCell {
         if self.isEditing { return }
 
         if highlighted {
-            sharedLabel.alpha = 0
+            sharedLabel.isHidden = true
         } else {
-            sharedLabel.alpha = 1
+            sharedLabel.isHidden = false
+        }
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        if selected {
+            sharedLabel.isHidden = true
+        } else {
+            sharedLabel.isHidden = false
         }
     }
 

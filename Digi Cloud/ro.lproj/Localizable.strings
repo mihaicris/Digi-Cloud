@@ -501,10 +501,13 @@ Please try again later!" = "A avut loc o eroare.
 "The request timed out." = "Solicitarea a expirat.";
 
 /* No comment provided by engineer. */
-"There was an error at mount creation." = "A avut loc o eroare la crearea partajării.";
+"There was an error at requesting share information." = "Eroare la primirea informațiilor despre partajare.";
 
 /* No comment provided by engineer. */
 "There was an error at saving the file. Try again later or reinstall the app." = "A avut loc o eroare la salvarea fișierului. Încearcă mai târziu sau reinstalați aplicația.";
+
+/* No comment provided by engineer. */
+"There was an error at share creation." = "Eroare la crearea partajării.";
 
 /* No comment provided by engineer. */
 "There was an error communicating with the network." = "A avut loc o eroare la comunicarea cu rețeaua.";
@@ -523,9 +526,6 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "There was an error while saving the user name." = "A avut loc o eroare la salvarea utilizatorului.";
-
-/* No comment provided by engineer. */
-"There was an error while updating the content." = "A avut loc o eroare la actualizarea conținutului.";
 
 /* No comment provided by engineer. */
 "There was an error, please try again later." = "A avut loc o eroare, încearcă mai târziu.";
