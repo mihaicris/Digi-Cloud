@@ -15,7 +15,7 @@ class MountUserCell: UITableViewCell {
     var user: User? {
         didSet {
             if let user = user {
-                nameLabel.text = user.name
+                nameLabel.text = "\(user.firstName) \(user.lastName)"
                 emailLabel.text = user.email
 
                 if isOwner {
@@ -44,7 +44,7 @@ class MountUserCell: UITableViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 7
         iv.layer.masksToBounds = true
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         return iv
     }()
 

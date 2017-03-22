@@ -40,6 +40,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
         tf.clearButtonMode = .whileEditing
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
+        tf.keyboardType = .emailAddress
         tf.returnKeyType = .send
         tf.delegate = self
         tf.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
@@ -86,7 +87,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             self.user = user
         } else {
             isUserEdited = false
-            self.user = User(id: "", name: "", email: "", permissions: Permissions())
+            self.user = User(id: "", firstName: "", lastName: "", email: "", permissions: Permissions())
         }
 
         super.init(style: .grouped)
@@ -105,7 +106,8 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
         title = NSLocalizedString("Add member", comment: "")
 
-        let saveMemberButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(handleSaveMember))
+        let saveMemberButton = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""),
+                                               style: .plain, target: self, action: #selector(handleSaveMember))
 
         navigationItem.rightBarButtonItem = saveMemberButton
         navigationController?.isToolbarHidden = true

@@ -10,9 +10,21 @@ import UIKit
 
 final class SettingsViewController: UITableViewController {
 
+    enum SettingType {
+        case user
+        case security
+        case data
+    }
+
     // MARK: - Properties
 
     private var isExecuting = false
+
+    private var user: User
+
+    private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
+
+    private var settings: [SettingType] = [.user, .security, .data]
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -37,51 +49,144 @@ final class SettingsViewController: UITableViewController {
 
     // MARK: - Initializers and Deinitializers
 
+    init(user: User) {
+        self.user = user
+        super.init(style: .grouped)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         title = NSLocalizedString("Settings", comment: "")
+        preferredContentSize = CGSize(width: 450, height: 620)
+        setupViews()
         super.viewDidLoad()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        fetchUserData()
+        tableView.reloadData()
+        super.viewWillAppear(animated)
+    }
+
+    private func setupViews() {
+
+        let tableFooterView: UIView = {
+            let v = UIView()
+            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 100)
+
+            let image = #imageLiteral(resourceName: "app_icon_transparent").withRenderingMode(.alwaysTemplate)
+            let imageView = UIImageView(image: image)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.contentMode = .scaleAspectFill
+
+            let versionLabel: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.textAlignment = .center
+                let str = "Digi Cloud\n" + NSLocalizedString("Version", comment: "")
+                l.text = "\(str) \(UIApplication.Version).\(UIApplication.Build)"
+                l.numberOfLines = 2
+                l.textColor = UIColor.gray
+                l.font = UIFont.HelveticaNeue(size: 11)
+                return l
+            }()
+
+            let copyrightLabel: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.text = NSLocalizedString("© 2016-2017 Mihai Cristescu.\n All rights reserved.", comment: "")
+                l.numberOfLines = 2
+                l.textAlignment = .center
+                l.font = UIFont.HelveticaNeue(size: 12)
+                return l
+            }()
+
+            v.addSubview(imageView)
+            v.addSubview(versionLabel)
+            v.addSubview(copyrightLabel)
+
+            NSLayoutConstraint.activate([
+                imageView.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+                imageView.topAnchor.constraint(equalTo: v.topAnchor, constant: 20),
+                imageView.widthAnchor.constraint(equalToConstant: 50),
+                imageView.heightAnchor.constraint(equalToConstant: 50),
+
+                versionLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+
+                copyrightLabel.topAnchor.constraint(equalTo: versionLabel.bottomAnchor, constant: 10),
+                copyrightLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
+            ])
+
+            return v
+        }()
+
+        tableView.tableFooterView = tableFooterView
+    }
+
+    private func fetchUserData() {
+
+        if let user = AppSettings.userLogged {
+
+            self.user = user
+
+            let cache = Cache()
+            let key = self.user.id + ".png"
+
+            if let data = cache.load(type: .profile, key: key) {
+                self.profileImage = UIImage(data: data)
+            }
+        }
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return settings.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case  0: return 2 // ABOUT THE APP
-        case  1: return 2 // DATA
-        case  2: return 1 // USER
-        default: return 0
+
+        switch settings[section] {
+        case .user:
+            return 2
+
+        case .security:
+            return 1
+
+        case .data:
+
+            return FileManager.sizeOfFilesCacheDirectory() == 0 ? 1 : 2
+
         }
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:  return NSLocalizedString("ABOUT DIGI CLOUD", comment: "")
-        case 1:  return NSLocalizedString("DATA", comment: "")
-        case 2:  return NSLocalizedString("USER", comment: "")
-        default: return nil
+
+        switch settings[section] {
+        case .user:
+            return NSLocalizedString("User", comment: "")
+
+        case .security:
+            return NSLocalizedString("Security", comment: "")
+
+        case .data:
+            return NSLocalizedString("Data", comment: "")
         }
     }
 
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if section == 1 {
-            let str = NSLocalizedString("Currently using:", comment: "")
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch settings[indexPath.section] {
+        case .user:
+            return indexPath.row == 0 ? 80 : UITableViewAutomaticDimension
 
-            var sizeString = NSLocalizedString("Error", comment: "")
-
-            if let size = FileManager.sizeOfFilesCacheDirectory() {
-                sizeString = byteFormatter.string(fromByteCount: Int64(size))
-            }
-
-            return "\(str) \(sizeString)"
-
-        } else {
-            return nil
+        default:
+            return UITableViewAutomaticDimension
         }
     }
 
@@ -90,27 +195,79 @@ final class SettingsViewController: UITableViewController {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
         cell.selectionStyle = .none
 
-        switch indexPath.section {
-        case 0:
-            // About the app
-            switch indexPath.row {
-            case 0:
-                // App version
-                cell.textLabel?.text = NSLocalizedString("App Version", comment: "")
-                cell.detailTextLabel?.text = "\(UIApplication.Version)"
-            case 1:
-                // Rate the app
-                cell.textLabel?.text = NSLocalizedString("Rate the App", comment: "")
+        switch settings[indexPath.section] {
+        case .user:
+
+            if indexPath.row == 0 {
+
+                cell.accessoryType = .disclosureIndicator
+
+                let profileImageView: UIImageView = {
+                    let iv = UIImageView()
+                    iv.translatesAutoresizingMaskIntoConstraints = false
+                    iv.layer.cornerRadius = 10
+                    iv.layer.masksToBounds = true
+                    iv.contentMode = .scaleAspectFill
+                    iv.image = self.profileImage
+                    return iv
+                }()
+
+                let usernameLabel: UILabel = {
+                    let l = UILabel()
+                    l.translatesAutoresizingMaskIntoConstraints = false
+                    l.text = "\(user.firstName) \(user.lastName)"
+                    l.font = UIFont.HelveticaNeueMedium(size: 16)
+                    return l
+                }()
+
+                let userloginLabel: UILabel = {
+                    let l = UILabel()
+                    l.translatesAutoresizingMaskIntoConstraints = false
+                    l.text = self.user.email
+                    l.textColor = UIColor.gray
+                    l.font = UIFont.HelveticaNeue(size: 14)
+                    return l
+                }()
+
+                cell.contentView.addSubview(profileImageView)
+                cell.contentView.addSubview(usernameLabel)
+                cell.contentView.addSubview(userloginLabel)
+
+                NSLayoutConstraint.activate([
+                    profileImageView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                    profileImageView.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
+                    profileImageView.heightAnchor.constraint(equalToConstant: 60),
+                    profileImageView.widthAnchor.constraint(equalToConstant: 60),
+
+                    userloginLabel.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor),
+                    userloginLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8),
+
+                    usernameLabel.bottomAnchor.constraint(equalTo: userloginLabel.topAnchor),
+                    usernameLabel.leftAnchor.constraint(equalTo: userloginLabel.leftAnchor)])
+
+            } else {
+                cell.textLabel?.text = NSLocalizedString("Switch Account", comment: "")
                 cell.textLabel?.textColor = .defaultColor
-            default:
-                break
+                cell.contentView.addSubview(confirmButton)
+
+                confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
+
+                NSLayoutConstraint.activate([
+                    confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
+                    confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
+                    confirmButtonHorizontalConstraint])
             }
 
-        case 1:
-            // Data
+        case .security:
+
+            cell.textLabel?.text = NSLocalizedString("Links Password", comment: "")
+            cell.accessoryType = .disclosureIndicator
+
+        case .data:
+
             switch indexPath.row {
+
             case 0:
-                // Allow celular
                 cell.textLabel?.text = NSLocalizedString("Mobile Data", comment: "")
                 let mobileDataUISwitch: UISwitch = {
                     let s = UISwitch()
@@ -129,26 +286,21 @@ final class SettingsViewController: UITableViewController {
                 // Clean cache
                 cell.textLabel?.text = NSLocalizedString("Clear Cache", comment: "")
                 cell.textLabel?.textColor = .defaultColor
+
+                cell.detailTextLabel?.font = UIFont.HelveticaNeue(size: 14)
+
+                let str = NSLocalizedString("Total:", comment: "")
+
+                var sizeString = NSLocalizedString("Error", comment: "")
+
+                let size = FileManager.sizeOfFilesCacheDirectory()
+                sizeString = byteFormatter.string(fromByteCount: Int64(size))
+
+                cell.detailTextLabel?.text = "\(str) \(sizeString)"
+
             default:
                 break
             }
-
-        case 2:
-            // USER
-            cell.textLabel?.text = NSLocalizedString("Switch User", comment: "")
-            cell.textLabel?.textColor = .defaultColor
-            cell.contentView.addSubview(confirmButton)
-
-            confirmButtonHorizontalConstraint = confirmButton.leftAnchor.constraint(equalTo: cell.contentView.rightAnchor)
-
-            NSLayoutConstraint.activate([
-                confirmButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-                confirmButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
-                confirmButtonHorizontalConstraint
-            ])
-
-        default:
-            return UITableViewCell()
         }
 
         return cell
@@ -157,19 +309,25 @@ final class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        switch indexPath.section {
-        case 0:
-            if indexPath.row == 1 {
-                handleAppStoreReview()
+
+        switch settings[indexPath.section] {
+
+        case .user:
+            if indexPath.row == 0 {
+                let controller = UserSettingsViewController(user: user)
+                navigationController?.pushViewController(controller, animated: true)
+            } else {
+                handleLogout(cell)
             }
-        case 1:
+
+        case .security:
+            let controller = SecuritySettingsViewController(style: .grouped)
+            navigationController?.pushViewController(controller, animated: true)
+
+        case .data:
             if indexPath.row == 1 {
                 handleClearCache()
             }
-        case 2:
-            handleLogout(cell)
-        default:
-            break
         }
     }
 
@@ -192,12 +350,12 @@ final class SettingsViewController: UITableViewController {
         confirmButtonHorizontalConstraint.isActive = true
 
         UIView.animate(withDuration: 0.4,
-                              delay: 0,
-             usingSpringWithDamping: 1,
-              initialSpringVelocity: 1,
-                            options: .curveEaseOut,
-                         animations: { cell.layoutIfNeeded() },
-                         completion: nil)
+                       delay: 0,
+                       usingSpringWithDamping: 1,
+                       initialSpringVelocity: 1,
+                       options: .curveEaseOut,
+                       animations: { cell.layoutIfNeeded() },
+                       completion: nil)
     }
 
     @objc private func handleLogoutConfirmed() {
@@ -237,6 +395,6 @@ final class SettingsViewController: UITableViewController {
 
     private func handleClearCache() {
         FileManager.emptyFilesCache()
-        tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+        tableView.reloadSections(IndexSet(integer: 2), with: .fade)
     }
 }

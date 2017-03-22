@@ -34,18 +34,19 @@ final class LoginField: UITextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        textColor = UIColor(colorLiteralRed: 80 / 255, green: 80 / 255, blue: 80 / 255, alpha: 1.0)
+        textColor = UIColor(red: 80 / 255, green: 80 / 255, blue: 80 / 255, alpha: 1.0)
         font = UIFont.HelveticaNeueMedium(size: 16)
         backgroundColor = .white
         borderStyle = .roundedRect
         autocapitalizationType = .none
         autocorrectionType = .no
+        keyboardType = .emailAddress
         spellCheckingType = .no
         translatesAutoresizingMaskIntoConstraints = false
         contentVerticalAlignment = .bottom
         clearButtonMode = .whileEditing
 
-        label.textColor = UIColor(colorLiteralRed: 184 / 255, green: 184 / 255, blue: 184 / 255, alpha: 1)
+        label.textColor = UIColor(red: 184 / 255, green: 184 / 255, blue: 184 / 255, alpha: 1)
         label.font = UIFont.HelveticaNeueMedium(size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = textFieldName ?? ""

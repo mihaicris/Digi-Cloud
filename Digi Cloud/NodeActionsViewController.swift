@@ -59,7 +59,7 @@ final class NodeActionsViewController: UITableViewController {
 
         switch actions[indexPath.row] {
 
-        case .makeNewShare:
+        case .makeShare:
             cell.textLabel?.text = NSLocalizedString("Share", comment: "")
 
         case .manageShare:
@@ -121,10 +121,10 @@ final class NodeActionsViewController: UITableViewController {
         }()
 
         let iconImage: UIImageView = {
-            let imageName = node.type == "dir" ? "FolderIcon" : "FileIcon"
-            let imageView = UIImageView(image: UIImage(named: imageName))
-            imageView.contentMode = .scaleAspectFit
-            return imageView
+            let image = node.type == "dir" ? #imageLiteral(resourceName: "directory_icon") : #imageLiteral(resourceName: "file_icon")
+            let iv = UIImageView(image: image)
+            iv.contentMode = .scaleAspectFit
+            return iv
         }()
 
         let elementName: UILabel = {
@@ -179,7 +179,7 @@ final class NodeActionsViewController: UITableViewController {
                 }
             } else {
                 if location.mount.permissions.owner == true {
-                    actions.append(.makeNewShare)
+                    actions.append(.makeShare)
                 }
             }
 

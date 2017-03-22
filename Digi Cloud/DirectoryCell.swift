@@ -31,7 +31,7 @@ final class DirectoryCell: BaseListCell {
         l.text = NSLocalizedString("SHARED", comment: "")
         l.textColor = .white
         l.font = UIFont.boldSystemFont(ofSize: 8)
-        l.backgroundColor = UIColor.blue.withAlphaComponent(0.6)
+        l.backgroundColor = UIColor.shareMount
         l.textAlignment = .center
         l.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -39,16 +39,17 @@ final class DirectoryCell: BaseListCell {
     }()
 
     let bookmarkImageView: UIImageView = {
-        let im = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
-        im.translatesAutoresizingMaskIntoConstraints = false
-        return im
+        let iv = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
+        iv.contentMode = .scaleAspectFit
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
     }()
 
     // MARK: - Overridden Methods and Properties
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        iconImageView.image = UIImage(named: "FolderIcon")
+        iconImageView.image = #imageLiteral(resourceName: "directory_icon")
         nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 15)
     }
 
@@ -62,9 +63,19 @@ final class DirectoryCell: BaseListCell {
         if self.isEditing { return }
 
         if highlighted {
-            sharedLabel.alpha = 0
+            sharedLabel.isHidden = true
         } else {
-            sharedLabel.alpha = 1
+            sharedLabel.isHidden = false
+        }
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        if selected {
+            sharedLabel.isHidden = true
+        } else {
+            sharedLabel.isHidden = false
         }
     }
 

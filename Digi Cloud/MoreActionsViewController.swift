@@ -59,7 +59,13 @@ final class MoreActionsViewController: UITableViewController {
 
         switch actions[indexPath.row] {
 
-        case .makeNewShare:
+        case .sendDownloadLink:
+            cell.textLabel?.text = NSLocalizedString("Send Link", comment: "")
+
+        case .sendUploadLink:
+            cell.textLabel?.text = NSLocalizedString("Receive Files", comment: "")
+
+        case .makeShare:
             cell.textLabel?.text = NSLocalizedString("Share", comment: "")
 
         case .manageShare:
@@ -132,8 +138,16 @@ final class MoreActionsViewController: UITableViewController {
     private func setupActions() {
 
         guard let mount = rootNode.mount else {
-            print("NO MOUNT??")
-            fatalError()
+            dismiss(animated: false, completion: nil)
+            return
+        }
+
+        if mount.permissions.create_link {
+            actions.append(.sendDownloadLink)
+        }
+
+        if mount.permissions.create_receiver {
+            actions.append(.sendUploadLink)
         }
 
         if mount.type == "device" {
@@ -141,13 +155,13 @@ final class MoreActionsViewController: UITableViewController {
                 if mount.users.count > 1 {
                     actions.append(.manageShare)
                 } else {
-                    actions.append(.makeNewShare)
+                    actions.append(.makeShare)
                 }
-            } else {
-                actions.append(.makeNewShare)
             }
         } else if mount.type == "export" {
-            actions.append(.manageShare)
+            if rootNode.mountPath == "/" {
+                actions.append(.manageShare)
+            }
         } else if rootNode.mountPath == "/" {
             if mount.permissions.mount {
                 actions.append(.manageShare)

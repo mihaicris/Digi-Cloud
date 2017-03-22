@@ -12,8 +12,6 @@ final class ManageAccountsViewController: UITableViewController {
 
     // MARK: - Properties
 
-    let cellId: String = "cellId"
-
     var users: [User] = []
 
     var onAddAccount: (() -> Void)?
@@ -58,7 +56,7 @@ final class ManageAccountsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: String(describing: AccountTableViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true
         setupViews()
         super.viewDidLoad()
@@ -73,7 +71,8 @@ final class ManageAccountsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? AccountTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: AccountTableViewCell.self),
+                                                       for: indexPath) as? AccountTableViewCell else {
             return UITableViewCell()
         }
         cell.user = users[indexPath.item]
@@ -126,33 +125,35 @@ final class ManageAccountsViewController: UITableViewController {
 
         let account = Account(userID: user.id)
 
+        // Revoke the token
+        account.revokeToken()
+
+        // Delete profile image from local storage
+        account.deleteProfileImageFromCache()
+
+        // Delete the account info (name) from User defaults
+        AppSettings.deletePersistedUserInfo(userID: user.id)
+
+        // Delete user from the model
+        self.users.remove(at: indexPath.row)
+
+        // Delete user from the parent controller model
+        controller.users.remove(at: indexPath.row)
+
+        // Delete user from manage users list table
+        tableView.deleteRows(at: [indexPath], with: .fade)
+
+        // Delete user from parent users list table
+        controller.collectionView.deleteItems(at: [indexPath])
+
         do {
-            // Revoke the token
-            account.revokeToken()
-
-            // Delete profile image from local storage
-            account.deleteProfileImageFromCache()
-
-            // Delete the account info (name) from User defaults
-            AppSettings.deletePersistedUserInfo(userID: user.id)
-
             // Delete account token from Keychain
             try account.deleteItem()
-
-            // Delete user from the model
-            self.users.remove(at: indexPath.row)
-
-            // Delete user from the parent controller model
-            controller.users.remove(at: indexPath.row)
-
-            // Delete user from manage users list table
-            tableView.deleteRows(at: [indexPath], with: .fade)
-
-            // Delete user from parent users list table
-            controller.collectionView.deleteItems(at: [indexPath])
-
         } catch {
-            fatalError("Error while deleting account from Keychain.")
+            AppSettings.showErrorMessageAndCrash(
+                title: NSLocalizedString("Error deleting account from Keychain", comment: ""),
+                subtitle: NSLocalizedString("The app will now close", comment: "")
+            )
         }
 
     }
@@ -264,7 +265,7 @@ final class ManageAccountsViewController: UITableViewController {
 
             self.tableView.endUpdates()
 
-            assert(users.count == 0, "Not all users have been deleted!")
+            precondition(users.count == 0, "Not all users have been deleted!")
 
         }
 

@@ -12,9 +12,21 @@ final class LocationsViewController: UITableViewController {
 
     // MARK: - Properties
 
+    enum SectionType {
+        case main
+        case connections
+        case imports
+        case exports
+    }
+
     var onFinish: (() -> Void)?
 
-    private var mounts: [Mount] = []
+    private var sections: [SectionType] = []
+
+    private var mainMounts: [Mount] = []
+    private var connectionMounts: [Mount] = []
+    private var importMounts: [Mount] = []
+    private var exportMounts: [Mount] = []
 
     // When coping or moving files/directories, this property will hold the source location which is passed between
     // controllers on navigation stack.
@@ -22,6 +34,9 @@ final class LocationsViewController: UITableViewController {
 
     private let action: ActionType
     private var isUpdating: Bool = false
+
+    private var didReceivedNetworkError = false
+    private var errorMessage = ""
 
     let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView()
@@ -65,51 +80,13 @@ final class LocationsViewController: UITableViewController {
         super.viewWillDisappear(animated)
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mounts.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as? LocationCell else {
-            return UITableViewCell()
-        }
-        cell.locationLabel.text = mounts[indexPath.row].name
-        return cell
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        let location = Location(mount: mounts[indexPath.row], path: "/")
-        let controller = ListingViewController(location: location, action: self.action, sourceLocations: self.sourceLocations)
-
-        if self.action != .noAction {
-            controller.onFinish = { [weak self] in
-                self?.onFinish?()
-            }
-        }
-        navigationController?.pushViewController(controller, animated: true)
-    }
-
-    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if refreshControl?.isRefreshing == true {
-            if self.isUpdating {
-                return
-            }
-            self.endRefreshAndReloadTable()
-        }
-    }
-
     // MARK: - Helper Functions
 
     private func setupActivityIndicatorView() {
         view.addSubview(activityIndicator)
         NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -44)
+                activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -44)
         ])
     }
 
@@ -124,21 +101,20 @@ final class LocationsViewController: UITableViewController {
         if action == .copy || action == .move {
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
             let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                                              style: .plain,
-                                              target: self,
-                                              action: #selector(handleDone))
+                    style: .plain,
+                    target: self,
+                    action: #selector(handleDone))
             navigationItem.setRightBarButton(rightButton, animated: false)
 
         } else {
-            let settingsButton = UIBarButtonItem(image: UIImage(named: "Settings-Icon"), style: .plain, target: self, action: #selector(handleShowSettings))
+            let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings_icon"), style: .plain, target: self, action: #selector(handleShowSettings))
             self.navigationItem.setLeftBarButton(settingsButton, animated: false)
         }
         self.title = NSLocalizedString("Locations", comment: "")
     }
 
     private func setupTableView() {
-        tableView.register(LocationCell.self, forCellReuseIdentifier: "LocationCell")
-        tableView.rowHeight = 78
+        tableView.rowHeight = 80
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -146,38 +122,68 @@ final class LocationsViewController: UITableViewController {
         refreshControl?.addTarget(self, action: #selector(handleRefreshLocations), for: UIControlEvents.valueChanged)
     }
 
+    private func presentError(message: String) {
+
+        let title = NSLocalizedString("Error", comment: "")
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+
     private func getMounts() {
 
         isUpdating = true
+        didReceivedNetworkError = false
 
         DigiClient.shared.getMounts { mountsList, error in
 
             self.isUpdating = false
 
             guard error == nil else {
-                print("Error: \(error!.localizedDescription)")
-                self.endRefreshAndReloadTable()
-                let message = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
-                let title = NSLocalizedString("Error", comment: "")
-                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
-                self.present(alertController, animated: true, completion: nil)
+
+                self.didReceivedNetworkError = true
+
+                switch error! {
+
+                case NetworkingError.internetOffline(let msg):
+                    self.errorMessage = msg
+
+                case NetworkingError.requestTimedOut(let msg):
+                    self.errorMessage = msg
+
+                default:
+                    self.errorMessage = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
+                }
+
+                if self.tableView.isDragging {
+                    return
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.presentError(message: self.errorMessage)
+                }
+
                 return
             }
 
-            self.mounts = mountsList ?? []
+            var mounts = mountsList ?? []
 
-            // Remove from list the mounts for which there isn't permission to write to.
-            // Only in copy / move action.
+            // Remove from list the mounts for which there isn't permission to write to (only in copy / move action). Or to our own export mounts....
             if self.action == .copy || self.action == .move {
-                self.mounts = self.mounts.filter {
-                    return $0.canWrite
-                }
+                mounts = mounts.filter { $0.canWrite && $0.type != "export" }
             }
 
-            self.mounts = self.mounts.filter {
-                $0.type != "export"
-            }
+            self.sections.removeAll()
+
+            self.mainMounts       = mounts.filter { $0.type == "device" && $0.isPrimary }
+            self.connectionMounts = mounts.filter { $0.type == "device" && !$0.isPrimary }
+            self.importMounts     = mounts.filter { $0.type == "import" }
+            self.exportMounts     = mounts.filter { $0.type == "export" }
+
+            if !self.mainMounts.isEmpty { self.sections.append(.main)        }
+            if !self.connectionMounts.isEmpty { self.sections.append(.connections) }
+            if !self.importMounts.isEmpty { self.sections.append(.imports)     }
+            if !self.exportMounts.isEmpty { self.sections.append(.exports)     }
 
             if self.refreshControl?.isRefreshing == true {
                 if self.tableView.isDragging {
@@ -193,9 +199,18 @@ final class LocationsViewController: UITableViewController {
 
     private func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+
             self.refreshControl?.endRefreshing()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                self.tableView.reloadData()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+
+                if self.didReceivedNetworkError {
+                    self.presentError(message: self.errorMessage)
+
+                } else {
+                    self.tableView.reloadData()
+                }
+
             }
         }
     }
@@ -209,11 +224,16 @@ final class LocationsViewController: UITableViewController {
     }
 
     @objc private func handleShowSettings() {
-        let controller = SettingsViewController(style: .grouped)
-        let navController = UINavigationController(rootViewController: controller)
-        navController.modalPresentationStyle = .popover
-        navController.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
-        present(navController, animated: true, completion: nil)
+
+        if let user = AppSettings.userLogged {
+            let controller = SettingsViewController(user: user)
+
+            let navController = UINavigationController(rootViewController: controller)
+            navController.modalPresentationStyle = .popover
+            navController.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
+
+            present(navController, animated: true, completion: nil)
+        }
     }
 
     @objc private func handleShowBookmarksViewController(_ sender: UIBarButtonItem) {
@@ -239,6 +259,105 @@ final class LocationsViewController: UITableViewController {
     @objc private func handleDone() {
         dismiss(animated: true) {
             self.onFinish?()
+        }
+    }
+
+    // MARK: TableView delegates
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return sections.count
+    }
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+
+        switch sections[section] {
+
+        case .main:
+            return mainMounts.isEmpty       ? nil : NSLocalizedString("Main storage", comment: "")
+        case .connections:
+            return connectionMounts.isEmpty ? nil : NSLocalizedString("Connections", comment: "")
+        case .imports:
+            return importMounts.isEmpty     ? nil : NSLocalizedString("Shared with you", comment: "")
+        case .exports:
+            return exportMounts.isEmpty     ? nil : NSLocalizedString("Shared by you", comment: "")
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+        switch sections[section] {
+        case .main:
+            return mainMounts.count
+        case .connections:
+            return connectionMounts.count
+        case .imports:
+            return importMounts.count
+        case .exports:
+            return exportMounts.count
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let cell = LocationCell()
+
+        var mount: Mount
+
+        switch sections[indexPath.section] {
+
+        case .main:
+            mount = mainMounts[indexPath.row]
+        case .connections:
+            mount = connectionMounts[indexPath.row]
+        case .imports:
+            mount = importMounts[indexPath.row]
+        case .exports:
+            mount = exportMounts[indexPath.row]
+        }
+
+        cell.mount = mount
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        guard let cell = tableView.cellForRow(at: indexPath) as? LocationCell else {
+            return
+        }
+
+        guard let mount = cell.mount else {
+            return
+        }
+
+        var location: Location = Location(mount: cell.mount, path: "/")
+
+        if mount.type == "export" {
+            if let root = mount.root {
+                let originalPath = root.path
+                location = Location(mount: mainMounts.first!, path: originalPath)
+            }
+        }
+
+        let controller = ListingViewController(location: location, action: self.action, sourceLocations: self.sourceLocations)
+
+        if self.action != .noAction {
+            controller.onFinish = { [weak self] in
+                self?.onFinish?()
+            }
+        }
+        navigationController?.pushViewController(controller, animated: true)
+    }
+
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if refreshControl?.isRefreshing == true {
+            if self.isUpdating {
+                return
+            }
+            self.endRefreshAndReloadTable()
         }
     }
 }

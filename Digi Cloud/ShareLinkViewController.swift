@@ -36,7 +36,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private var originalLinkHash: String!
     private var isSaving: Bool = false
     private var isAnimatingReset: Bool = false
-    private var shouldPop = true
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
@@ -105,7 +104,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private lazy var passwordResetButton: UIButton = {
         let b = UIButton(type: .system)
         b.tintColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1.0)
-        b.setImage(#imageLiteral(resourceName: "Refresh_icon").withRenderingMode(.alwaysTemplate), for: .normal)
+        b.setImage(#imageLiteral(resourceName: "refresh_icon").withRenderingMode(.alwaysTemplate), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.addTarget(self, action: #selector(handleResetPassword), for: .touchUpInside)
         return b
@@ -125,6 +124,14 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         b.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         b.addTarget(self, action: #selector(handleChangeValidity), for: .touchUpInside)
         return b
+    }()
+
+    private let counterLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.HelveticaNeue(size: 14)
+        l.textColor = UIColor.white
+        return l
     }()
 
     private let saveCustomDateButton: UIButton = {
@@ -487,6 +494,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func setTextFieldConstraintInEditMode(active: Bool) {
+
+        rightTextFieldConstraintDefault!.isActive = false
+        rightTextFieldConstraintInEditMode!.isActive = false
+
         rightTextFieldConstraintDefault!.isActive = !active
         rightTextFieldConstraintInEditMode!.isActive = active
         self.hashTextField.superview!.layoutIfNeeded()
@@ -529,6 +540,10 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         let frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 85)
         let headerView = UIImageView(frame: frame)
+
+        headerView.addSubview(counterLabel)
+        counterLabel.rightAnchor.constraint(equalTo: counterLabel.superview!.layoutMarginsGuide.rightAnchor).isActive = true
+        counterLabel.bottomAnchor.constraint(equalTo: counterLabel.superview!.layoutMarginsGuide.bottomAnchor).isActive = true
 
         headerView.image = linkType == .download ? #imageLiteral(resourceName: "share_download_link_background") : #imageLiteral(resourceName: "share_upload_link_background")
         headerView.contentMode = .scaleAspectFit
@@ -615,7 +630,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
             self.link = result!
             self.configureWaitingView(type: .hidden)
-            self.shouldPop = false
         }
     }
 
@@ -625,11 +639,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     @objc func handleButtonOKPressed(_ sender: UIButton) {
-        if shouldPop {
-            _ = navigationController?.popViewController(animated: true)
-        } else {
-            configureWaitingView(type: .hidden)
-        }
+        dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleDone() {
@@ -908,6 +918,26 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         } else {
             validityLabel.text = NSLocalizedString("Link has no expiration date", comment: "")
         }
+
+        var counterString: String
+
+        if linkType == .download {
+
+            if link.counter == 1 {
+                counterString = NSLocalizedString("Seen %d time", comment: "")
+            } else {
+                counterString = NSLocalizedString("Seen %d times", comment: "")
+            }
+
+        } else {
+            if link.counter == 1 {
+                counterString = NSLocalizedString("Uploaded %d time", comment: "")
+            } else {
+                counterString = NSLocalizedString("Uploaded %d times", comment: "")
+            }
+        }
+
+        counterLabel.text = String(format: counterString, link.counter)
 
         waitingView.isHidden = true
     }

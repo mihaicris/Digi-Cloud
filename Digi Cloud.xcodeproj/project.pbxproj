@@ -20,19 +20,20 @@
 		8328F8111E51FF2E00DE4453 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F8101E51FF2E00DE4453 /* DownloadLink.swift */; };
 		8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */; };
 		833F5DA91E68372700EE3722 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DA81E68372700EE3722 /* ShareMountViewController.swift */; };
-		833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */; };
 		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
 		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
 		834AEEB51E6B354F00C16B75 /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
 		834AEEB71E6B39E500C16B75 /* CreateDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */; };
 		834AEEB81E6B3F9700C16B75 /* DirectoryInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */; };
 		834AEEB91E6B43BE00C16B75 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */; };
+		83506C011E7FAFF300E30C1E /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */; };
 		8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
 		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
 		835406051D952FFD00019D53 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */; };
 		83562CAC1DB8C19B006FF04A /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */; };
 		83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAD1DB8D098006FF04A /* BaseListCell.swift */; };
 		835E71A81E5F1F2000C4E1B4 /* URLHashTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */; };
+		8362E9621E80319C005327E4 /* RootMount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8362E9611E80319C005327E4 /* RootMount.swift */; };
 		836731B91E53DCD3001EA961 /* UploadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836731B81E53DCD3001EA961 /* UploadLink.swift */; };
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
@@ -63,6 +64,7 @@
 		83D03F271E6DB3FA00BA617A /* ManageBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */; };
 		83D03F291E6DB5BB00BA617A /* BookmarkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */; };
 		83D281011D9D747A00D74661 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* LoginField.swift */; };
+		83D5DCD91E7EE6EE004EEE58 /* SecuritySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */; };
 		83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF221DE59ED300987E1A /* ListingViewController.swift */; };
 		83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF241DE5C41E00987E1A /* CustomNavBar.swift */; };
 		83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DB658C1DDF12C900A53440 /* LocationCell.swift */; };
@@ -109,11 +111,10 @@
 		8328F8101E51FF2E00DE4453 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadLink.swift; sourceTree = "<group>"; };
 		8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameUtilitiesButton.swift; sourceTree = "<group>"; };
 		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = RenameViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		833F5DA61E68358B00EE3722 /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ShareViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		833F5DA81E68372700EE3722 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareMountViewController.swift; sourceTree = "<group>"; };
-		833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareTableViewCell.swift; sourceTree = "<group>"; };
 		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
 		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingsViewController.swift; sourceTree = "<group>"; };
 		8350CDB41E6031030063227E /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
@@ -121,6 +122,7 @@
 		83562CAD1DB8D098006FF04A /* BaseListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BaseListCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		835982771E680EDC00AA18C9 /* Digi Cloud.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Digi Cloud.plist"; sourceTree = "<group>"; };
 		835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLHashTextField.swift; sourceTree = "<group>"; };
+		8362E9611E80319C005327E4 /* RootMount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootMount.swift; sourceTree = "<group>"; };
 		836731B81E53DCD3001EA961 /* UploadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadLink.swift; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -155,6 +157,7 @@
 		83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageBookmarksViewController.swift; sourceTree = "<group>"; };
 		83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkViewCell.swift; sourceTree = "<group>"; };
 		83D281001D9D747A00D74661 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
+		83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecuritySettingsViewController.swift; sourceTree = "<group>"; };
 		83DADF221DE59ED300987E1A /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListingViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		83DADF241DE5C41E00987E1A /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
 		83DB658C1DDF12C900A53440 /* LocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
@@ -234,7 +237,6 @@
 		83454BEB1E5B3E6E005C85ED /* Sharing */ = {
 			isa = PBXGroup;
 			children = (
-				833F5DA61E68358B00EE3722 /* ShareViewController.swift */,
 				83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */,
 				833F5DA81E68372700EE3722 /* ShareMountViewController.swift */,
 				83A932A11E75831100D9C318 /* AddMountUserViewController.swift */,
@@ -454,7 +456,6 @@
 			isa = PBXGroup;
 			children = (
 				835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */,
-				833F5DAA1E68432300EE3722 /* ShareTableViewCell.swift */,
 				83C887821E7312E500C72050 /* MountUserCell.swift */,
 			);
 			name = Views;
@@ -472,6 +473,8 @@
 			isa = PBXGroup;
 			children = (
 				83EC31461E2915A8009E12B6 /* SettingsViewController.swift */,
+				83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */,
+				83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -490,6 +493,7 @@
 				83F1FFD71E6980350079F56F /* DirectoryInfo.swift */,
 				83EBA7CD1E6AB8A700BB8675 /* Permissions.swift */,
 				83EBA7CF1E6ABF4900BB8675 /* User.swift */,
+				8362E9611E80319C005327E4 /* RootMount.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -662,6 +666,7 @@
 				83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */,
 				8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */,
 				83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */,
+				83506C011E7FAFF300E30C1E /* UserSettingsViewController.swift in Sources */,
 				83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */,
 				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
 				83BF27C91E438AB30019B1F7 /* MoreActionsViewController.swift in Sources */,
@@ -675,6 +680,7 @@
 				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
 				83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */,
 				83562CAC1DB8C19B006FF04A /* NodeActionsViewController.swift in Sources */,
+				83D5DCD91E7EE6EE004EEE58 /* SecuritySettingsViewController.swift in Sources */,
 				83D281011D9D747A00D74661 /* LoginField.swift in Sources */,
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
 				8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */,
@@ -712,10 +718,10 @@
 				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
 				830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */,
 				834AEEB81E6B3F9700C16B75 /* DirectoryInfoViewController.swift in Sources */,
-				833F5DAB1E68432300EE3722 /* ShareTableViewCell.swift in Sources */,
 				83F1FFD81E6980350079F56F /* DirectoryInfo.swift in Sources */,
 				836731B91E53DCD3001EA961 /* UploadLink.swift in Sources */,
 				834AEEB71E6B39E500C16B75 /* CreateDirectoryViewController.swift in Sources */,
+				8362E9621E80319C005327E4 /* RootMount.swift in Sources */,
 				8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */,
 				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
 				8328F8111E51FF2E00DE4453 /* DownloadLink.swift in Sources */,
@@ -825,7 +831,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "";
@@ -873,7 +879,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -965,7 +971,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
@@ -1055,7 +1061,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "";

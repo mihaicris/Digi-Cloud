@@ -40,14 +40,15 @@ final class ListingViewController: UITableViewController {
     private var isUpdating: Bool = false
     private var isActionConfirmed: Bool = false
     private var searchController: UISearchController!
-    private var fileCellID = String()
-    private var folderCellID = String()
+
     private let dispatchGroup = DispatchGroup()
 
     private var didReceivedNetworkError = false
     private var didReceivedStatus400 = false
     private var didReceivedStatus404 = false
     private var didSucceedCopyOrMove = false
+
+    private var errorMessage = ""
 
     private var searchResultWasHighlighted = false
 
@@ -175,7 +176,7 @@ final class ListingViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         if needRefresh {
-            self.updateContent()
+            self.getContent()
         }
         super.viewDidAppear(animated)
     }
@@ -217,7 +218,8 @@ final class ListingViewController: UITableViewController {
 
         if item.type == "dir" {
 
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: folderCellID, for: indexPath) as? DirectoryCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DirectoryCell.self),
+                                                           for: indexPath) as? DirectoryCell else {
                 return UITableViewCell()
             }
 
@@ -228,6 +230,10 @@ final class ListingViewController: UITableViewController {
                         cell.isUserInteractionEnabled = false
                         cell.nodeNameLabel.isEnabled = false
                         cell.detailsLabel.isEnabled = false
+                    } else {
+                        cell.isUserInteractionEnabled = true
+                        cell.nodeNameLabel.isEnabled = true
+                        cell.detailsLabel.isEnabled = true
                     }
                 }
             }
@@ -267,7 +273,8 @@ final class ListingViewController: UITableViewController {
 
         } else {
 
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: fileCellID, for: indexPath) as? FileCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FileCell.self),
+                                                           for: indexPath) as? FileCell else {
                 return UITableViewCell()
             }
 
@@ -342,6 +349,7 @@ final class ListingViewController: UITableViewController {
 
             if [ActionType.noAction, ActionType.showSearchResult].contains(self.action) {
                 let controller = ContentViewController(location: newLocation)
+                controller.node = selectedNode
                 navigationController?.pushViewController(controller, animated: true)
             }
         }
@@ -360,15 +368,15 @@ final class ListingViewController: UITableViewController {
 
     private func setupTableView() {
 
-        self.fileCellID = "FileCell"
-        self.folderCellID = "DirectoryCell"
         definesPresentationContext = true
         tableView.allowsMultipleSelectionDuringEditing = true
 
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(handleUpdateContentOnPullToRefreshGesture), for: UIControlEvents.valueChanged)
-        tableView.register(FileCell.self, forCellReuseIdentifier: fileCellID)
-        tableView.register(DirectoryCell.self, forCellReuseIdentifier: folderCellID)
+
+        tableView.register(FileCell.self, forCellReuseIdentifier: String(describing: FileCell.self))
+        tableView.register(DirectoryCell.self, forCellReuseIdentifier: String(describing: DirectoryCell.self))
+
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
@@ -437,16 +445,13 @@ final class ListingViewController: UITableViewController {
 
     private func presentError(message: String) {
 
-        self.busyIndicator.stopAnimating()
-        self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
-
         let title = NSLocalizedString("Error", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }
 
-    private func updateContent() {
+    private func getContent() {
 
         needRefresh = false
         isUpdating = true
@@ -462,20 +467,30 @@ final class ListingViewController: UITableViewController {
 
                 switch error! {
 
-                case NetworkingError.internetOffline(let message), NetworkingError.requestTimedOut(let message):
-                    self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
-                    self.nodes.removeAll()
-                    self.tableView.reloadData()
+                case NetworkingError.internetOffline(let msg):
+                    self.errorMessage = msg
 
-                    if self.tableView.isDragging {
-                        return
-                    }
-
-                    self.presentError(message: message)
+                case NetworkingError.requestTimedOut(let msg):
+                    self.errorMessage = msg
 
                 default:
-                    break
+                    self.errorMessage = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
                 }
+
+                if self.tableView.isDragging {
+                    return
+                }
+
+                self.busyIndicator.stopAnimating()
+                self.emptyFolderLabel.text = NSLocalizedString("The location is not available.", comment: "")
+
+                self.nodes.removeAll()
+                self.tableView.reloadData()
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.presentError(message: self.errorMessage)
+                }
+
                 return
             }
 
@@ -550,17 +565,17 @@ final class ListingViewController: UITableViewController {
 
     private func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+
             self.refreshControl?.endRefreshing()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 
                 if self.didReceivedNetworkError {
-                    self.presentError(message: NSLocalizedString("There was an error while updating the content.", comment: ""))
-
+                    self.presentError(message: self.errorMessage)
                 } else {
                     self.updateLocationContentMessage()
                     self.tableView.reloadData()
                 }
-
             }
         }
     }
@@ -638,10 +653,10 @@ final class ListingViewController: UITableViewController {
             if self.tableView.isEditing {
                 self.handleCancelEditMode()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    self.updateContent()
+                    self.getContent()
                 }
             } else {
-                self.updateContent()
+                self.getContent()
             }
         }
     }
@@ -768,11 +783,11 @@ final class ListingViewController: UITableViewController {
         let controllerSourceLocations = self.sourceLocations
 
         controller.onFinish = { [weak self] in
-            self?.updateContent()
+            self?.getContent()
         }
 
         controller.onUpdateNeeded = { [weak self] in
-            self?.updateContent()
+            self?.getContent()
         }
 
         controller.onSelect = { [weak self] location in
@@ -842,13 +857,16 @@ final class ListingViewController: UITableViewController {
                 if self.nodes.isEmpty { return }
                 self.activateEditMode()
 
-            case .manageShare, .makeNewShare, .shareInfo:
+            case .manageShare, .makeShare, .shareInfo:
                 self.showShareMountViewController(location: self.rootLocation, sharedNode: rootNode)
 
+            case .sendDownloadLink:
+                self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .download)
+
+            case .sendUploadLink:
+                self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .upload)
+
             default:
-                #if DEBUG
-                    fatalError("Wrong More Action Selection")
-                #endif
                 break
             }
         }
@@ -953,13 +971,10 @@ final class ListingViewController: UITableViewController {
                 case .sendUploadLink:
                     self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .upload)
 
-                case .makeNewShare, .manageShare:
+                case .makeShare, .manageShare:
                     self.showShareMountViewController(location: nodeLocation, sharedNode: node)
 
                 default:
-                    #if DEBUG
-                        fatalError("Wrong Action Selection")
-                    #endif
                     break
                 }
         }
@@ -998,11 +1013,6 @@ final class ListingViewController: UITableViewController {
         setBusyIndicatorView(true)
 
         guard self.sourceLocations != nil else {
-            defer {
-                #if DEBUG
-                    fatalError("Couldn't get the source locations to move/copy.")
-                #endif
-            }
             return
         }
 
@@ -1069,7 +1079,7 @@ final class ListingViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
-        self.updateContent()
+        self.getContent()
     }
 
     // MARK: - Action Execution
@@ -1309,7 +1319,7 @@ final class ListingViewController: UITableViewController {
         dispatchGroup.notify(queue: .main) {
             self.setBusyIndicatorView(false)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self.updateContent()
+                self.getContent()
             }
         }
 
@@ -1325,7 +1335,7 @@ final class ListingViewController: UITableViewController {
             self?.tableView.reloadRows(at: [IndexPath.init(row: index, section: 0)], with: .middle)
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                self?.updateContent()
+                self?.getContent()
             }
         }
 
@@ -1413,7 +1423,7 @@ final class ListingViewController: UITableViewController {
         let onFinish = { [weak self] (shouldExitMount: Bool) in
 
             if let navController = self?.navigationController as? MainNavigationController {
-                self?.updateContent()
+                self?.getContent()
 
                 for controller in navController.viewControllers {
                     (controller as? ListingViewController)?.needRefresh = true
@@ -1436,7 +1446,7 @@ final class ListingViewController: UITableViewController {
                     navController.popToRootViewController(animated: true)
                 } else {
 
-                    self?.updateContent()
+                    self?.getContent()
 
                     for controller in navController.viewControllers {
                         (controller as? ListingViewController)?.needRefresh = true

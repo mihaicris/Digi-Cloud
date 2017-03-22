@@ -24,6 +24,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private var isToolBarAlwaisHidden: Bool = false
 
+    private var controllerShouldBeDismissed = false
+
     enum TableViewType: Int {
         case location = 0
         case users
@@ -54,9 +56,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("MEMBERS", comment: "")
-        let cell = UITableViewHeaderFooterView()
-        let font = cell.textLabel?.font
-        l.font = UIFont(name: ".SFUIText", size: 13)!
+        l.font = UIFont(name: ".SFUIText", size: 12) ?? UIFont.HelveticaNeue(size: 12)
         l.textColor = UIColor(red: 0.43, green: 0.43, blue: 0.45, alpha: 1.0)
         return l
     }()
@@ -121,7 +121,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             self.errorMessageVerticalConstraint!,
             okButton.centerXAnchor.constraint(equalTo: v.centerXAnchor),
             okButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40)
-        ])
+            ])
 
         return v
     }()
@@ -152,6 +152,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         if let mount = sharedNode.mount {
 
             if mount.root == nil && sharedNode.mountPath != "/" {
+
                 createMount()
 
             } else {
@@ -266,18 +267,19 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
                 mountNameLabel.leadingAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leadingAnchor),
                 mountNameLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-            ])
+                ])
 
             return cell
 
         case .users:
 
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MountUserCell.self), for: indexPath) as? MountUserCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MountUserCell.self),
+                                                           for: indexPath) as? MountUserCell else {
                 return UITableViewCell()
             }
 
             let user = users[indexPath.row]
-                cell.selectionStyle = .none
+            cell.selectionStyle = .none
 
             if let owner = sharedNode.mount?.owner {
                 if owner == user {
@@ -295,7 +297,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             if let image = mappingProfileImages[users[indexPath.row].id] {
                 cell.profileImageView.image = image
             } else {
-                cell.profileImageView.image = #imageLiteral(resourceName: "AccountIcon")
+                cell.profileImageView.image = #imageLiteral(resourceName: "account_icon")
             }
 
             return cell
@@ -343,7 +345,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             let iv = UIImageView(frame: CGRect.zero)
             iv.translatesAutoresizingMaskIntoConstraints = false
             iv.image = #imageLiteral(resourceName: "share_digi_background")
-            iv.contentMode = .scaleAspectFit
+            iv.contentMode = .scaleAspectFill
             return iv
         }()
 
@@ -376,7 +378,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             tableViewForUsers.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewForUsers.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableViewForUsers.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
+            ])
     }
 
     private func setupNavigationItems() {
@@ -479,15 +481,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             guard error == nil else {
 
-                var errorMessage = NSLocalizedString("There was an error at mount creation.", comment: "")
-
-                switch error! {
-
-                case NetworkingError.wrongStatus(let message):
-                    errorMessage = message
-                default:
-                    break
-                }
+                let errorMessage = NSLocalizedString("There was an error at share creation.", comment: "")
 
                 self.configureWaitingView(type: .stopped, message: errorMessage)
 
@@ -502,12 +496,21 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func refreshMount() {
 
+        controllerShouldBeDismissed = false
+
         guard let mount = sharedNode.mount else {
             return
         }
 
         DigiClient.shared.getMountDetails(for: mount) { mount, error in
             guard error == nil else {
+
+                self.controllerShouldBeDismissed = true
+
+                let errorMessage = NSLocalizedString("There was an error at requesting share information.", comment: "")
+
+                self.configureWaitingView(type: .stopped, message: errorMessage)
+
                 return
             }
 
@@ -638,13 +641,24 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             }
 
             self.dismiss(animated: true) {
-                self.onFinish?(false)
+
+                if self.sharedNode.mountPath == "/" && self.sharedNode.mount?.type == "export" && self.sharedNode.name == "" {
+                    self.onFinish?(true)
+                } else {
+                    self.onFinish?(false)
+                }
+
             }
         }
     }
 
     @objc func handleHideWaitingView(_ sender: UIButton) {
-        self.configureWaitingView(type: .hidden, message: "")
+
+        if controllerShouldBeDismissed {
+            dismiss(animated: true, completion: nil)
+        } else {
+            self.configureWaitingView(type: .hidden, message: "")
+        }
     }
 
     @objc private func handleDone() {

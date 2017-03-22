@@ -3,8 +3,7 @@
 
 /* No comment provided by engineer. */
 "%d files
-" = "%d fișiere
-";
+" = "%d fișiere";
 
 /* No comment provided by engineer. */
 "1 Month" = "1 lună";
@@ -17,14 +16,10 @@
 
 /* No comment provided by engineer. */
 "1 file
-" = "1 fișier
-";
+" = "1 fișier";
 
 /* No comment provided by engineer. */
 "1 hour" = "1 oră";
-
-/* No comment provided by engineer. */
-"ABOUT DIGI CLOUD" = "DESPRE DIGI CLOUD";
 
 /* No comment provided by engineer. */
 "Accounts" = "Conturi";
@@ -39,6 +34,9 @@
 "An error has occured while processing the request." = "A avut loc o eroare la procesarea cererii.";
 
 /* No comment provided by engineer. */
+"An error has occured, please try again later." = "A avut loc o eroare, încearcă mai târziu.";
+
+/* No comment provided by engineer. */
 "An error has occured. Some elements already exists at the destination or the destination location no longer exists." = "A avut loc o eroare. Elemente există deja la destinație sau locația destinație nu mai este disponibilă.";
 
 /* No comment provided by engineer. */
@@ -50,10 +48,7 @@ Please try again later!" = "A avut loc o eroare.
 Încearcă mai târziu!";
 
 /* No comment provided by engineer. */
-"App Version" = "Versiune aplicație";
-
-/* No comment provided by engineer. */
-"Are you sure you want to delete %d items?" = "Sigur se șterg %d elemente?";
+"Are you sure you want to delete %d items?" = "Sigur se șterg %d fișiere?";
 
 /* No comment provided by engineer. */
 "Are you sure you want to delete this directory?" = "Sigur se șterge acest director?";
@@ -72,6 +67,9 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "Are you sure you want to remove this bookmark?" = "Sigur se șterge acest marcaj?";
+
+/* No comment provided by engineer. */
+"Auto Password Links" = "Parole automate pentru linkuri";
 
 /* No comment provided by engineer. */
 "Back" = "Înapoi";
@@ -98,16 +96,16 @@ Please try again later!" = "A avut loc o eroare.
 "Change" = "Schimbă";
 
 /* No comment provided by engineer. */
-"Change to Title Case" = "Schimbă în stil Titlu";
+"Change to Title Case" = "Schimbă în stil titlu";
 
 /* No comment provided by engineer. */
-"Change to UPPER CASE" = "Schimbă în litere MARI";
+"Change to UPPER CASE" = "Schimbă în litere mari";
 
 /* No comment provided by engineer. */
 "Change to lower case" = "Schimbă în litere mici";
 
 /* No comment provided by engineer. */
-"Change to sentence" = "Schimbă în stil Propoziție";
+"Change to sentence" = "Schimbă în stil propoziție";
 
 /* No comment provided by engineer. */
 "Characters \\ / : ? < > \" | are not allowed." = "Caracterele \\ / : ? < > \" | nu sunt permise.";
@@ -125,6 +123,9 @@ Please try again later!" = "A avut loc o eroare.
 "Confirm Deletion" = "Confirmare ștergere";
 
 /* No comment provided by engineer. */
+"Connections" = "Conexiuni";
+
+/* No comment provided by engineer. */
 "Copy" = "Copiază";
 
 /* No comment provided by engineer. */
@@ -140,13 +141,10 @@ Please try again later!" = "A avut loc o eroare.
 "Create Directory" = "Creează director";
 
 /* No comment provided by engineer. */
-"Currently using:" = "Memorie folosită:";
-
-/* No comment provided by engineer. */
 "Custom" = "Personalizat";
 
 /* No comment provided by engineer. */
-"DATA" = "DATE";
+"Data" = "Date";
 
 /* No comment provided by engineer. */
 "Delete" = "Șterge";
@@ -185,6 +183,9 @@ Please try again later!" = "A avut loc o eroare.
 "Done" = "Gata";
 
 /* No comment provided by engineer. */
+"Download Links" = "Linkuri de descărcare";
+
+/* No comment provided by engineer. */
 "EMAIL ADDRESS" = "ADRESĂ EMAIL";
 
 /* No comment provided by engineer. */
@@ -203,13 +204,31 @@ Please try again later!" = "A avut loc o eroare.
 "Error" = "Eroare";
 
 /* No comment provided by engineer. */
+"Error accessing files on device." = "Eroare la accesarea fișierelor.";
+
+/* No comment provided by engineer. */
+"Error deleting account from Keychain" = "Eroare la ștergerea contului din Keychain.";
+
+/* No comment provided by engineer. */
+"Error fetching accounts from Keychain" = "Eroare la citirea conturilor din Keychain.";
+
+/* No comment provided by engineer. */
 "Error on fetching bookmarks" = "Eroare la obținerea marcajelor";
+
+/* No comment provided by engineer. */
+"Error reading account from Keychain" = "Eroare la citirea contului din Keychain.";
+
+/* No comment provided by engineer. */
+"Error saving account to Keychain" = "Eroare la salvarea contului în Keychain.";
 
 /* No comment provided by engineer. */
 "Everywhere" = "Peste tot";
 
 /* No comment provided by engineer. */
 "File is no longer available. Directory will refresh." = "Fișierul nu mai este disponibil. Conținutul directorului se va actualiza.";
+
+/* No comment provided by engineer. */
+"First Name" = "Prenume";
 
 /* No comment provided by engineer. */
 "Folder Name" = "Nume director";
@@ -230,7 +249,7 @@ Please try again later!" = "A avut loc o eroare.
 "I am sending you a download link:" = "Îți trimit un link de descărcare:";
 
 /* No comment provided by engineer. */
-"I am sending you an upload link:" = "Îți trimit un link de încărcare:";
+"I am sending you an upload link:" = "Îți trimit un link de primire:";
 
 /* No comment provided by engineer. */
 "Information" = "Informații";
@@ -245,7 +264,13 @@ Please try again later!" = "A avut loc o eroare.
 "LOGIN" = "AUTENTIFICARE";
 
 /* No comment provided by engineer. */
+"Last Name" = "Nume";
+
+/* No comment provided by engineer. */
 "Link has no expiration date" = "Nu expiră niciodată";
+
+/* No comment provided by engineer. */
+"Links Password" = "Parole linkuri";
 
 /* No comment provided by engineer. */
 "Loading ..." = "Se încarcă ...";
@@ -260,7 +285,13 @@ Please try again later!" = "A avut loc o eroare.
 "MEMBERS" = "MEMBRII";
 
 /* No comment provided by engineer. */
+"Main storage" = "Locație principală";
+
+/* No comment provided by engineer. */
 "Make available offline" = "Salvat permanent";
+
+/* No comment provided by engineer. */
+"Make picture" = "Folosește camera";
 
 /* No comment provided by engineer. */
 "Manage Accounts" = "Gestionare conturi";
@@ -287,6 +318,9 @@ Please try again later!" = "A avut loc o eroare.
 "Name is the same." = "Numele este același.";
 
 /* No comment provided by engineer. */
+"No Preview Available" = "Vizualizarea nu este disponibilă.";
+
+/* No comment provided by engineer. */
 "No accounts" = "Niciun cont salvat";
 
 /* No comment provided by engineer. */
@@ -300,6 +334,9 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "OWNER" = "PROPRIETAR";
+
+/* No comment provided by engineer. */
+"Owned by" = "Deținut de";
 
 /* No comment provided by engineer. */
 "PASSWORD" = "PAROLĂ";
@@ -323,19 +360,22 @@ Please try again later!" = "A avut loc o eroare.
 "Please provide the email address of the Digi Storage user." = "Precizați adresa de email a utilizatorului Digi Storage.";
 
 /* No comment provided by engineer. */
-"Please wait..." = "Așteptați...";
+"Please wait..." = "Se așteaptă ...";
 
 /* No comment provided by engineer. */
 "Preparing Link" = "Se pregătește link-ul";
 
 /* No comment provided by engineer. */
+"Profile picture" = "Poză de profil";
+
+/* No comment provided by engineer. */
 "READ" = "DOAR CITIRE";
 
 /* No comment provided by engineer. */
-"Rate the App" = "Dă o notă aplicației";
+"Receive Files" = "Trimite link de primire";
 
 /* No comment provided by engineer. */
-"Receive Files" = "Trimite link de primire";
+"Receive Links" = "Linkuri de primire";
 
 /* No comment provided by engineer. */
 "Remove Bookmark" = "Șterge marcajul";
@@ -344,7 +384,7 @@ Please try again later!" = "A avut loc o eroare.
 "Remove Share" = "Sterge partajarea";
 
 /* No comment provided by engineer. */
-"Removing share..." = "Se șterge partajarea...";
+"Removing share..." = "Se șterge partajarea ...";
 
 /* No comment provided by engineer. */
 "Rename" = "Redenumește";
@@ -383,13 +423,25 @@ Please try again later!" = "A avut loc o eroare.
 "Search for files or directories" = "Caută fișiere sau directoare";
 
 /* No comment provided by engineer. */
+"Security" = "Securitate";
+
+/* No comment provided by engineer. */
 "See Share Members" = "Vezi membrii partajare";
+
+/* No comment provided by engineer. */
+"Seen %d time" = "Accesat %d dată";
+
+/* No comment provided by engineer. */
+"Seen %d times" = "Accesat de %d ori";
 
 /* No comment provided by engineer. */
 "Select Mode" = "Mod selecție";
 
 /* No comment provided by engineer. */
-"Send Link" = "Trimite link de descărcare";
+"Select picture" = "Selectează o poză";
+
+/* No comment provided by engineer. */
+"Send Link" = "Trimite link";
 
 /* No comment provided by engineer. */
 "Server replied with Status Code: " = "Serverul a răspuns cu codul de stare: ";
@@ -402,6 +454,12 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "Share" = "Partajează";
+
+/* No comment provided by engineer. */
+"Shared by you" = "Partajat de tine";
+
+/* No comment provided by engineer. */
+"Shared with you" = "Partajat cu tine";
 
 /* No comment provided by engineer. */
 "Size" = "Mărime";
@@ -425,7 +483,10 @@ Please try again later!" = "A avut loc o eroare.
 "Sort directory" = "Sortează directorul";
 
 /* No comment provided by engineer. */
-"Switch User" = "Schimbă utilizator";
+"Switch Account" = "Schimbă cont";
+
+/* No comment provided by engineer. */
+"The app will now close" = "Aplicația se va închide.";
 
 /* No comment provided by engineer. */
 "The internet appears to be offline." = "Internetul nu pare să fie accesibil.";
@@ -437,13 +498,19 @@ Please try again later!" = "A avut loc o eroare.
 "The location is not available." = "Locația nu este disponibilă.";
 
 /* No comment provided by engineer. */
-"The request timed out." = "Cererea s-a încheiat fără raspuns.";
+"The request timed out." = "Solicitarea a expirat.";
 
 /* No comment provided by engineer. */
-"There was an error at mount creation." = "A avut loc o eroare la crearea partajării.";
+"There was an error at requesting share information." = "Eroare la primirea informațiilor despre partajare.";
 
 /* No comment provided by engineer. */
-"There was an error communicating with the network." = "A apărut o eroare la comunicarea cu rețeaua.";
+"There was an error at saving the file. Try again later or reinstall the app." = "A avut loc o eroare la salvarea fișierului. Încearcă mai târziu sau reinstalați aplicația.";
+
+/* No comment provided by engineer. */
+"There was an error at share creation." = "Eroare la crearea partajării.";
+
+/* No comment provided by engineer. */
+"There was an error communicating with the network." = "A avut loc o eroare la comunicarea cu rețeaua.";
 
 /* No comment provided by engineer. */
 "There was an error creating the directory." = "A avut loc o eroare la crearea directorului.";
@@ -458,10 +525,10 @@ Please try again later!" = "A avut loc o eroare.
 "There was an error while removing the share." = "A avut loc o eroare la ștergerea partajării.";
 
 /* No comment provided by engineer. */
-"There was an error while updating the content." = "A avut loc o eroare la actualizarea conținutului.";
+"There was an error while saving the user name." = "A avut loc o eroare la salvarea utilizatorului.";
 
 /* No comment provided by engineer. */
-"There was an error, please try again later." = "A avut loc o eroare, încercați mai târziu.";
+"There was an error, please try again later." = "A avut loc o eroare, încearcă mai târziu.";
 
 /* No comment provided by engineer. */
 "This action is not reversible." = "Această acțiune nu este reversibilă.";
@@ -470,13 +537,34 @@ Please try again later!" = "A avut loc o eroare.
 "This directory" = "Acest director";
 
 /* No comment provided by engineer. */
+"This file type can't be viewed." = "Acest tip de fișier nu poate fi vizualizat.";
+
+/* No comment provided by engineer. */
 "This name already exists. Please choose a different one." = "Numele există deja. Alege unul diferit.";
 
 /* No comment provided by engineer. */
-"USER" = "UTILIZATOR";
+"Total:" = "Total:";
+
+/* No comment provided by engineer. */
+"Uploaded %d time" = "Accesat %d dată";
+
+/* No comment provided by engineer. */
+"Uploaded %d times" = "Accesat de %d ori";
+
+/* No comment provided by engineer. */
+"Usage" = "Utilizare";
+
+/* No comment provided by engineer. */
+"User" = "Utilizator";
+
+/* No comment provided by engineer. */
+"User details" = "Detailii utilizator";
 
 /* No comment provided by engineer. */
 "VALIDITY" = "VALABILITATE";
+
+/* No comment provided by engineer. */
+"Version" = "Versiune";
 
 /* No comment provided by engineer. */
 "Yes" = "Da";
@@ -486,4 +574,9 @@ Please try again later!" = "A avut loc o eroare.
 
 /* No comment provided by engineer. */
 "for" = "pentru";
+
+/* No comment provided by engineer. */
+"© 2016-2017 Mihai Cristescu.
+ All rights reserved." = "© 2016-2017 Mihai Cristescu.
+Toate drepturile rezervate.";
 

@@ -62,11 +62,11 @@ extension FileManager {
         try? self.default.removeItem(at: url)
     }
 
-    static func sizeOfDirectory(at url: URL) -> UInt64? {
+    static func sizeOfDirectory(at url: URL) -> UInt64 {
 
-        guard self.default.fileExists(atPath: url.path) else { return nil }
+        guard self.default.fileExists(atPath: url.path) else { return 0 }
 
-        guard let enumerator = self.default.enumerator(atPath: url.path) else { return nil }
+        guard let enumerator = self.default.enumerator(atPath: url.path) else { return 0 }
 
         var size: UInt64 = 0
 
@@ -75,7 +75,14 @@ extension FileManager {
             guard let name = $0 as? String else { return }
 
             let path = url.appendingPathComponent(name).path
-            let attributes = try! self.default.attributesOfItem(atPath: path) as NSDictionary
+
+            guard let attributes = try? self.default.attributesOfItem(atPath: path) as NSDictionary else {
+                AppSettings.showErrorMessageAndCrash(
+                    title: NSLocalizedString("Error accessing files on device.", comment: ""),
+                    subtitle: NSLocalizedString("The app will now close", comment: "")
+                )
+                return
+            }
 
             size += attributes.fileSize()
         }
@@ -84,7 +91,7 @@ extension FileManager {
 
     }
 
-    static func sizeOfFilesCacheDirectory() -> UInt64? {
+    static func sizeOfFilesCacheDirectory() -> UInt64 {
         return sizeOfDirectory(at: filesCacheDirectoryURL)
     }
 

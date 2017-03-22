@@ -13,7 +13,6 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
     // MARK: - Properties
 
-    private let cellId = "Cell"
     let cellWidth: CGFloat = 200
     let cellHeight: CGFloat = 100
     let spacingHoriz: CGFloat = 20
@@ -88,7 +87,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         l.textAlignment = .center
         l.numberOfLines = 3
         let color = UIColor.init(red: 48/255, green: 133/255, blue: 243/255, alpha: 1.0)
-        let attributedText = NSMutableAttributedString(string: "Digi Cloud",
+        let attributedText = NSMutableAttributedString(string: "Cloud",
                                                        attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 48) as Any])
         let word = NSLocalizedString("for", comment: "")
 
@@ -99,9 +98,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
 
         let nsString = NSString(string: attributedText.string)
-        var nsRange = nsString.range(of: "Cloud")
-        attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
-        nsRange = nsString.range(of: "Storage")
+        let nsRange = nsString.range(of: "Storage")
         attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
 
         l.attributedText = attributedText
@@ -125,7 +122,8 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        collectionView.register(AccountCollectionCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(AccountCollectionCell.self,
+                                forCellWithReuseIdentifier: String(describing: AccountCollectionCell.self))
         getPersistedUsers()
         setupViews()
         configureViews()
@@ -133,6 +131,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     }
 
     override func viewDidAppear(_ animated: Bool) {
+
         updateUsers {
             self.configureViews()
         }
@@ -146,14 +145,29 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         do {
             accounts = try Account.accountItems()
         } catch {
-            fatalError("Error fetching accounts from Keychain - \(error)")
+            AppSettings.showErrorMessageAndCrash(
+                title: NSLocalizedString("Error fetching accounts from Keychain", comment: ""),
+                subtitle: NSLocalizedString("The app will now close", comment: "")
+            )
         }
 
         for account in accounts {
             if let user = AppSettings.getPersistedUserInfo(userID: account.userID) {
                 users.append(user)
             } else {
-                fatalError("Error fetching persisted user from UserDefaults")
+
+                account.revokeToken()
+
+                do {
+                    try account.deleteItem()
+                } catch {
+                    AppSettings.showErrorMessageAndCrash(
+                        title: NSLocalizedString("Error deleting account from Keychain", comment: ""),
+                        subtitle: NSLocalizedString("The app will now close", comment: "")
+                    )
+                }
+
+                users.removeLast()
             }
         }
     }
@@ -174,19 +188,20 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? AccountCollectionCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: AccountCollectionCell.self),
+                                                            for: indexPath) as? AccountCollectionCell else {
             return UICollectionViewCell()
         }
 
         let user = users[indexPath.item]
-        cell.accountNameLabel.text = user.name
+        cell.accountNameLabel.text = "\(user.firstName) \(user.lastName)"
 
         let cache = Cache()
 
         if let data = cache.load(type: .profile, key: user.id + ".png") {
             cell.profileImage.image = UIImage(data: data)
         } else {
-            cell.profileImage.image = #imageLiteral(resourceName: "DefaultAccountProfileImage")
+            cell.profileImage.image = #imageLiteral(resourceName: "default_profile_image")
         }
 
         return cell
@@ -256,7 +271,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         setNeedsStatusBarAppearanceUpdate()
 
-        view.backgroundColor = UIColor.init(red: 40/255, green: 78/255, blue: 65/255, alpha: 1.0)
+        view.backgroundColor = UIColor.iconColor
 
         view.addSubview(logoBigLabel)
         view.addSubview(noAccountsLabel)
@@ -349,7 +364,10 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         do {
             accounts = try Account.accountItems()
         } catch {
-            fatalError("Error fetching account from Keychain - \(error)")
+            AppSettings.showErrorMessageAndCrash(
+                title: NSLocalizedString("Error fetching accounts from Keychain", comment: ""),
+                subtitle: NSLocalizedString("The app will now close", comment: "")
+            )
         }
 
         updateUsers {
@@ -368,7 +386,13 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         for account in accounts {
 
-            let token = try! account.readToken()
+            guard let token = try? account.readToken() else {
+                AppSettings.showErrorMessageAndCrash(
+                    title: NSLocalizedString("Error reading account from Keychain", comment: ""),
+                    subtitle: NSLocalizedString("The app will now close", comment: "")
+                )
+                return
+            }
 
             dispatchGroup.enter()
 
@@ -455,7 +479,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
             if let cell = self.collectionView.cellForItem(at: indexPathOneElement) {
 
-                let animationClosure = { cell.transform = CGAffineTransform(scaleX: 1.4, y: 1.4) }
+                let animationClosure = { cell.transform = CGAffineTransform(scaleX: 1.2, y: 1.2) }
 
                 let animationCompletionClosure: (Bool) -> Void = { _ in
 
@@ -464,8 +488,13 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                     DispatchQueue.main.async {
                         let account = Account(userID: user.id)
 
-                        // read token
-                        let token = try! account.readToken()
+                        guard let token = try? account.readToken() else {
+                            AppSettings.showErrorMessageAndCrash(
+                                title: NSLocalizedString("Error reading account from Keychain", comment: ""),
+                                subtitle: NSLocalizedString("The app will now close", comment: "")
+                            )
+                            return
+                        }
 
                         // Try to access network
                         DigiClient.shared.getUser(forToken: token) { _, error in
@@ -485,7 +514,16 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
                                 case AuthenticationError.login:
                                     message = NSLocalizedString("Your session has expired, please log in again.", comment: "")
-                                    try! account.deleteItem()
+
+                                    do {
+                                        try account.deleteItem()
+                                    } catch {
+                                        AppSettings.showErrorMessageAndCrash(
+                                            title: NSLocalizedString("Error deleting account from Keychain", comment: ""),
+                                            subtitle: NSLocalizedString("The app will now close", comment: "")
+                                        )
+                                    }
+
                                 default:
                                     message = NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "")
                                     break
@@ -504,15 +542,17 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                             // Save in Userdefaults this user as logged in
                             AppSettings.loggedUserID = user.id
 
+                            DigiClient.shared.getSecuritySettings()
+
                             // Show account locations
                             self.onSelect?()
                         }
                     }
                 }
 
-                UIView.animate(withDuration: 0.5, delay: 0,
-                               usingSpringWithDamping: 0.5,
-                               initialSpringVelocity: 1,
+                UIView.animate(withDuration: 0.3, delay: 0,
+                               usingSpringWithDamping: 0.3,
+                               initialSpringVelocity: 0.5,
                                options: UIViewAnimationOptions.curveEaseInOut,
                                animations: animationClosure,
                                completion: animationCompletionClosure)

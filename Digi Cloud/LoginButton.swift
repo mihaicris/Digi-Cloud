@@ -23,7 +23,7 @@ final class LoginButton: UIButton {
 
         titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         setTitleColor(.white, for: UIControlState.normal)
-        backgroundColor = UIColor(colorLiteralRed: 76 / 255, green: 76 / 255, blue: 165 / 255, alpha: 1.0)
+        backgroundColor = UIColor(red: 76 / 255, green: 76 / 255, blue: 165 / 255, alpha: 1.0)
         translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = 20
         layer.borderWidth = 0.9

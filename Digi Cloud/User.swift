@@ -8,7 +8,8 @@
 
 struct User {
     let id: String
-    let name: String
+    let firstName: String
+    let lastName: String
     var email: String
     var permissions: Permissions
 }
@@ -33,7 +34,20 @@ extension User {
         }
 
         self.id = id
-        self.name = name
+
+        let nameComponents = name.components(separatedBy: " ")
+
+        if nameComponents.count == 1 {
+            self.firstName = nameComponents.first!
+            self.lastName = ""
+        } else if nameComponents.count == 2 {
+            self.firstName = nameComponents.first!
+            self.lastName = nameComponents.last!
+        } else {
+           self.firstName = nameComponents.first!
+           self.lastName = nameComponents.dropFirst().joined(separator: " ")
+        }
+
         self.email = email
     }
 
@@ -50,7 +64,8 @@ extension User {
         }
 
         self.id = id
-        self.name = "\(firstName) \(lastName)"
+        self.firstName = firstName
+        self.lastName = lastName
         self.email = email
         self.permissions = Permissions()
     }

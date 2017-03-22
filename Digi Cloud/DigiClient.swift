@@ -21,7 +21,18 @@ final class DigiClient {
     var task: URLSessionDataTask?
 
     private var token: String {
-        return try! loggedAccount.readToken()
+
+        guard let token = try? loggedAccount.readToken() else {
+
+            AppSettings.showErrorMessageAndCrash(
+                title: NSLocalizedString("Error reading account from Keychain", comment: ""),
+                subtitle: NSLocalizedString("The app will now close", comment: "")
+            )
+            return ""
+        }
+
+        return token
+
     }
 
     var loggedAccount: Account!
@@ -39,11 +50,11 @@ final class DigiClient {
         let config = URLSessionConfiguration.default
 
         #if DEBUG
-            config.timeoutIntervalForRequest = 3
-            config.timeoutIntervalForResource = 3
+            config.timeoutIntervalForRequest = 10
+            config.timeoutIntervalForResource = 10
         #else
-            config.timeoutIntervalForRequest = 30
-            config.timeoutIntervalForResource = 30
+            config.timeoutIntervalForRequest = 60
+            config.timeoutIntervalForResource = 60
         #endif
 
         config.allowsCellularAccess = AppSettings.allowsCellularAccess
@@ -67,8 +78,10 @@ final class DigiClient {
     func networkTask(requestType: RequestType,
                      method: String,
                      headers: [String: String]?,
-                     json: [String: Any]?,
+                     json: [String: Any]? = nil,
+                     data: Data? = nil,
                      parameters: [String: String]?,
+                     withoutRequestSerialization: Bool = false,
                      withoutSerialization: Bool = false,
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
@@ -88,6 +101,8 @@ final class DigiClient {
             } catch {
                 completion(nil, nil, JSONError.parse("Could not convert json into data!"))
             }
+        } else if let data = data {
+            request.httpBody = data
         }
 
         /* 2. Make the request */
@@ -201,6 +216,37 @@ final class DigiClient {
         request.httpMethod = requestType
         request.allHTTPHeaderFields = headers
         return request
+    }
+
+    private func photoDataToFormData(data: Data, boundary: String, fileName: String) -> Data {
+        let fullData = NSMutableData()
+
+        // 1 - Boundary should start with --
+        let lineOne = "--" + boundary + "\r\n"
+        fullData.append(lineOne.data(using: .utf8, allowLossyConversion: false)!)
+
+        // 2
+
+        let lineTwo = "Content-Disposition: form-data; name=\"image\"; filename=\"" + fileName + "\"\r\n"
+        fullData.append(lineTwo.data(using: .utf8, allowLossyConversion: false)!)
+
+        // 3
+        let lineThree = "Content-Type: image/png\r\n\r\n"
+        fullData.append(lineThree.data(using: .utf8, allowLossyConversion: false)!)
+
+        // 4
+        fullData.append(data)
+
+        // 5
+        let lineFive = "\r\n"
+        fullData.append(lineFive.data(using: .utf8, allowLossyConversion: false)!)
+
+        // 6 - The end. Notice -- at the start and at the end
+        let lineSix = "--" + boundary + "--\r\n"
+        fullData.append(lineSix.data( using: .utf8, allowLossyConversion: false)!)
+
+        return fullData as Data
+
     }
 
     // MARK: - Authentication
@@ -329,7 +375,37 @@ final class DigiClient {
 
     }
 
-    func updateUserInfo(for token: String, firstName: String, lastName: String, completion: @escaping(Error?) -> Void) {
+    func setUserProfileImage(_ data: Data, completion: @escaping(Error?) -> Void) {
+
+        let method = Methods.UserProfileImageSet
+        var headers = [HeadersKeys.Authorization: "Token \(DigiClient.shared.token)"]
+
+        let boundary = "----WebKitFormBoundary\(UUID().uuidString)"
+
+        let fullData = photoDataToFormData(data: data, boundary: boundary, fileName: "profile.png")
+
+        headers["Accept"] = "application/json"
+        headers["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
+        headers["Content-Length"] = String(fullData.count)
+
+        networkTask(requestType: .post, method: method, headers: headers,
+                    data: fullData, parameters: nil, withoutRequestSerialization: true) { data, statusCode, error in
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(ResponseError.notFound)
+                return
+            }
+
+            completion(nil)
+        }
+    }
+
+    func updateUserInfo(firstName: String, lastName: String, completion: @escaping(Error?) -> Void) {
 
         let method = Methods.User
         var headers = DefaultHeaders.PutHeaders
@@ -353,20 +429,55 @@ final class DigiClient {
         }
     }
 
-    func getUserNotifications() {
-        // TODO: Implement
+    func getSecuritySettings() {
+        let method = Methods.UserSettingsSec
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { jsonData, statusCode, error in
+
+            guard error == nil else {
+                return
+            }
+
+            guard statusCode == 200 else {
+                return
+            }
+
+            guard let jsonDict = jsonData as? [String: Any],
+                let downloadLinkAutoPassword  = jsonDict["downloadLinkAutoPassword"] as? Bool,
+                let uploadLinkAutoPassword      = jsonDict["uploadLinkAutoPassword"] as? Bool else {
+                    return
+            }
+
+            AppSettings.shouldPasswordDownloadLink = downloadLinkAutoPassword
+            AppSettings.shouldPasswordReceiveLink = uploadLinkAutoPassword
+        }
     }
 
-    func setUserNotifications() {
-        // TODO: Implement
-    }
+    func setSecuritySettings(shouldPasswordDownloadLink: Bool, shouldPasswordReceiveLink: Bool, completion: @escaping((Error?) -> Void)) {
+        let method = Methods.UserSettingsSec
+        var headers = DefaultHeaders.PutHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
 
-    func getSecurity() {
-        // TODO: Implement
-    }
+        let json: [String: Bool] = ["downloadLinkRequirePassword": false,
+                                    "downloadLinkAutoPassword": shouldPasswordDownloadLink,
+                                    "uploadLinkRequirePassword": false,
+                                    "uploadLinkAutoPassword": shouldPasswordReceiveLink]
 
-    func setSecurity() {
-        // TODO: Implement
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { _, statusCode, error in
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            guard statusCode == 204 else {
+                completion(ResponseError.other)
+                return
+            }
+            completion(nil)
+        }
     }
 
     // MARK: - Bookmarks
@@ -748,6 +859,35 @@ final class DigiClient {
     }
 
     // MARK: - Files
+
+    func fileInfo(atLocation location: Location, completion: @escaping((Node?, Error?) -> Void)) {
+
+        let method = Methods.FilesInfo.replacingOccurrences(of: "{mountId}", with: location.mount.id)
+        var headers = DefaultHeaders.GetHeaders
+        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+
+        let parameters = ["path": location.path]
+
+        networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { (jsonData, statusCode, error) in
+
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            guard statusCode == 200 else {
+                completion(nil, ResponseError.notFound)
+                return
+            }
+
+            guard let node = Node(JSON: jsonData) else {
+                completion(nil, JSONError.parse("Error parsing Node JSON."))
+                return
+            }
+
+            completion(node, nil)
+        }
+    }
 
     /// Create a node of type directory
     ///

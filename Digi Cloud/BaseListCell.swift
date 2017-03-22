@@ -31,10 +31,10 @@ class BaseListCell: UITableViewCell {
     }()
 
     var iconImageView: UIImageView = {
-        let i = UIImageView()
-        i.translatesAutoresizingMaskIntoConstraints = false
-        i.contentMode = .scaleAspectFit
-        return i
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFit
+        return iv
     }()
 
     var nodeNameLabel: UILabel = {
@@ -78,7 +78,7 @@ class BaseListCell: UITableViewCell {
 
         if self.hasButton {
             if highlighted {
-                contentView.backgroundColor = UIColor(colorLiteralRed: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
+                contentView.backgroundColor = UIColor(red: 37 / 255, green: 116 / 255, blue: 255 / 255, alpha: 1.0)
                 nodeNameLabel.textColor = .white
                 detailsLabel.textColor = UIColor.init(white: 0.8, alpha: 1)
                 actionsButton.setTitleColor(.white, for: .normal)
