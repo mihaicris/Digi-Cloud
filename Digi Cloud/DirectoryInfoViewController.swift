@@ -213,7 +213,7 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
         case 0:
             let directoryIcon: UIImageView = {
                 let iv = UIImageView(image: #imageLiteral(resourceName: "directory_icon"))
-                iv.contentMode = .scaleAspectFill
+                iv.contentMode = .scaleAspectFit
                 return iv
             }()
 

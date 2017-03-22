@@ -24,6 +24,8 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private var isToolBarAlwaisHidden: Bool = false
 
+    private var controllerShouldBeDismissed = false
+
     enum TableViewType: Int {
         case location = 0
         case users
@@ -479,15 +481,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             guard error == nil else {
 
-                var errorMessage = NSLocalizedString("There was an error at mount creation.", comment: "")
-
-                switch error! {
-
-                case NetworkingError.wrongStatus(let message):
-                    errorMessage = message
-                default:
-                    break
-                }
+                let errorMessage = NSLocalizedString("There was an error at share creation.", comment: "")
 
                 self.configureWaitingView(type: .stopped, message: errorMessage)
 
@@ -502,12 +496,21 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private func refreshMount() {
 
+        controllerShouldBeDismissed = false
+
         guard let mount = sharedNode.mount else {
             return
         }
 
         DigiClient.shared.getMountDetails(for: mount) { mount, error in
             guard error == nil else {
+
+                self.controllerShouldBeDismissed = true
+
+                let errorMessage = NSLocalizedString("There was an error at requesting share information.", comment: "")
+
+                self.configureWaitingView(type: .stopped, message: errorMessage)
+
                 return
             }
 
@@ -650,7 +653,12 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     }
 
     @objc func handleHideWaitingView(_ sender: UIButton) {
-        self.configureWaitingView(type: .hidden, message: "")
+
+        if controllerShouldBeDismissed {
+            dismiss(animated: true, completion: nil)
+        } else {
+            self.configureWaitingView(type: .hidden, message: "")
+        }
     }
 
     @objc private func handleDone() {

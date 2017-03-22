@@ -40,7 +40,7 @@ final class DirectoryCell: BaseListCell {
 
     let bookmarkImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -63,9 +63,19 @@ final class DirectoryCell: BaseListCell {
         if self.isEditing { return }
 
         if highlighted {
-            sharedLabel.alpha = 0
+            sharedLabel.isHidden = true
         } else {
-            sharedLabel.alpha = 1
+            sharedLabel.isHidden = false
+        }
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        if selected {
+            sharedLabel.isHidden = true
+        } else {
+            sharedLabel.isHidden = false
         }
     }
 
