@@ -224,7 +224,7 @@ class AppSettings {
         sortAscending = true
 
         // Network settings
-        allowsCellularAccess = false
+        allowsCellularAccess = true
     }
 
     static func showErrorMessageAndCrash(title: String, subtitle: String) {
