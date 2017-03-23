@@ -9,7 +9,7 @@
 import UIKit
 
 final class AccountSelectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
-                                            UICollectionViewDelegateFlowLayout {
+UICollectionViewDelegateFlowLayout {
 
     // MARK: - Properties
 
@@ -92,7 +92,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
         let word = NSLocalizedString("for", comment: "")
 
         attributedText.append(NSAttributedString(string: "\n\(word)  ",
-                                                 attributes: [NSFontAttributeName: UIFont(name: "Didot-Italic", size: 20) as Any]))
+            attributes: [NSFontAttributeName: UIFont(name: "Didot-Italic", size: 20) as Any]))
 
         attributedText.append(NSAttributedString(string: "Digi Storage",
                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
@@ -190,7 +190,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: AccountCollectionCell.self),
                                                             for: indexPath) as? AccountCollectionCell else {
-            return UICollectionViewCell()
+                                                                return UICollectionViewCell()
         }
 
         let user = users[indexPath.item]
@@ -301,7 +301,7 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
             stackView.centerYAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.height * 0.035)
-        ])
+            ])
 
     }
 
@@ -427,10 +427,9 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
         let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
                                       message: message,
-                                      preferredStyle: UIAlertControllerStyle.alert)
+                                      preferredStyle: .alert)
 
-        let completionActionOK: (UIAlertAction) -> Void = { _ in
-
+        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { _ in
             UIView.animate(withDuration: 0.5, animations: {
 
                 let indexPathOneElement = IndexPath(item: 0, section: 0)
@@ -444,10 +443,6 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
                 self.isExecuting = false
             })
         }
-
-        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""),
-                                     style: UIAlertActionStyle.default,
-                                     handler: completionActionOK)
 
         alert.addAction(actionOK)
 
@@ -507,10 +502,31 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
                                 switch error! {
 
-                                case NetworkingError.internetOffline(let errorMessage),
-                                     NetworkingError.requestTimedOut(let errorMessage):
+                                case NetworkingError.internetOffline(let errorMessage), NetworkingError.requestTimedOut(let errorMessage):
+
                                     message = errorMessage
-                                    break
+
+                                    if !AppSettings.allowsCellularAccess {
+                                        let alert = UIAlertController(title: NSLocalizedString("Info", comment: ""),
+                                                                      message: NSLocalizedString("Would you like to use cellular data?", comment: ""),
+                                                                      preferredStyle: .alert)
+
+                                        let noAction = UIAlertAction(title: "No", style: .default) { _ in
+                                            self.showError(message: message)
+                                        }
+
+                                        let yesAction = UIAlertAction(title: "Yes", style: .default) { _ in
+                                            AppSettings.allowsCellularAccess = true
+                                            DigiClient.shared.renewSession()
+                                            self.switchToAccount(userIndexPath)
+                                        }
+
+                                        alert.addAction(noAction)
+                                        alert.addAction(yesAction)
+
+                                        self.present(alert, animated: true, completion: nil)
+                                        return
+                                    }
 
                                 case AuthenticationError.login:
                                     message = NSLocalizedString("Your session has expired, please log in again.", comment: "")
@@ -526,12 +542,9 @@ final class AccountSelectionViewController: UIViewController, UICollectionViewDe
 
                                 default:
                                     message = NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "")
-                                    break
                                 }
 
-                                DispatchQueue.main.async {
-                                    self.showError(message: message)
-                                }
+                                self.showError(message: message)
 
                                 return
                             }

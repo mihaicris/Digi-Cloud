@@ -240,22 +240,55 @@ final class LoginViewController: UIViewController {
 
         DigiClient.shared.authenticate(username: username, password: password) { token, error in
 
+            self.spinner.stopAnimating()
+
             guard error == nil else {
-                self.spinner.stopAnimating()
-                self.showError()
+
+                var message: String
+
+                switch error! {
+
+                case NetworkingError.internetOffline(let errorMessage), NetworkingError.requestTimedOut(let errorMessage):
+
+                    message = errorMessage
+
+                    if !AppSettings.allowsCellularAccess {
+
+                        let alert = UIAlertController(title: NSLocalizedString("Info", comment: ""),
+                                                      message: NSLocalizedString("Would you like to use cellular data?", comment: ""),
+                                                      preferredStyle: .alert)
+
+                        let noAction = UIAlertAction(title: "No", style: .default) { _ in
+                            self.showError(message: message)
+                        }
+
+                        let yesAction = UIAlertAction(title: "Yes", style: .default) { _ in
+                            AppSettings.allowsCellularAccess = true
+                            DigiClient.shared.renewSession()
+                            self.handleLogin()
+                        }
+
+                        alert.addAction(noAction)
+                        alert.addAction(yesAction)
+
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }
+
+                default:
+                    message = NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "")
+                }
+
+                self.showError(message: message)
+
                 return
             }
 
-            guard let token = token else {
-                self.spinner.stopAnimating()
-                self.showError()
-                return
-            }
-
-            AppSettings.saveUser(forToken: token) { (user, error) in
+            AppSettings.saveUser(forToken: token!) { (user, error) in
                 guard error == nil else {
-                    self.spinner.stopAnimating()
-                    self.showError()
+                    let message = NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "")
+
+                    self.showError(message: message)
                     return
                 }
 
@@ -264,18 +297,22 @@ final class LoginViewController: UIViewController {
                         self.onSuccess?(user)
                     }
                 } else {
-                    self.spinner.stopAnimating()
-                    self.showError()
+                    let message = NSLocalizedString("An error has occurred.\nPlease try again later!", comment: "")
+
+                    self.showError(message: message)
                 }
             }
         }
     }
 
-    private func showError() {
+    private func showError(message: String) {
+
         let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
-                                      message: NSLocalizedString("An error has occurred.\nPlease try again later!", comment: ""),
-                                      preferredStyle: UIAlertControllerStyle.alert)
-        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default, handler: nil)
+                                      message: message,
+                                      preferredStyle: .alert)
+
+        let actionOK = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil)
+
         alert.addAction(actionOK)
         self.present(alert, animated: false, completion: nil)
     }
