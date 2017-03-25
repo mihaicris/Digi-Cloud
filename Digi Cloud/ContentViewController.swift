@@ -295,7 +295,7 @@ extension ContentViewController: URLSessionTaskDelegate {
 
             guard error == nil else {
 
-                if (error as! NSError).code != -999 {
+                if (error! as NSError).code != -999 {
 
                     // If not cancelled
                     self.presentError(message: error!.localizedDescription) { (_) in

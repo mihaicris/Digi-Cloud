@@ -337,8 +337,8 @@ final class DigiClient {
                 return
             }
 
-            guard let user = User(infoJSON: jsonData) else {
-                completion(nil, JSONError.parse("Error parsing USER with JSON data: \(jsonData)"))
+            guard jsonData != nil, let user = User(infoJSON: jsonData) else {
+                completion(nil, JSONError.parse("Error parsing USER with JSON data: \(jsonData!)"))
                 return
             }
 
@@ -389,7 +389,7 @@ final class DigiClient {
         headers["Content-Length"] = String(fullData.count)
 
         networkTask(requestType: .post, method: method, headers: headers,
-                    data: fullData, parameters: nil, withoutRequestSerialization: true) { data, statusCode, error in
+                    data: fullData, parameters: nil, withoutRequestSerialization: true) { _, statusCode, error in
 
             guard error == nil else {
                 completion(error)
@@ -737,7 +737,7 @@ final class DigiClient {
 
         let json = ["name": newName]
 
-        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { (json, statusCode, error) in
+        networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: nil) { (_, statusCode, error) in
 
             guard error == nil else {
                 completion(error)
