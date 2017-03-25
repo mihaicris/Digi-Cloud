@@ -963,7 +963,7 @@ final class ListingViewController: UITableViewController {
                     self.showDirectoryInfoViewController(location: nodeLocation, index: nodeIndex)
 
                 case .rename:
-                    self.showRenameViewController(location: nodeLocation, node: node, index: nodeIndex)
+                    self.showRenameViewController(nodeLocation: nodeLocation, node: node, index: nodeIndex)
 
                 case .sendDownloadLink:
                     self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .download)
@@ -1325,9 +1325,9 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    private func showRenameViewController(location: Location, node: Node, index: Int) {
+    private func showRenameViewController(nodeLocation: Location, node: Node, index: Int) {
 
-        let controller = RenameViewController(nodeLocation: location, node: node)
+        let controller = RenameViewController(nodeLocation: nodeLocation, node: node)
 
         controller.onRename = { [weak self] name in
             self?.nodes[index].name = name

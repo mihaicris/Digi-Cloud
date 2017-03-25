@@ -286,6 +286,13 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
         // network request for rename
         DigiClient.shared.renameNode(at: self.nodeLocation, with: newName) { (statusCode, error) in
+
+            func exitRenameController() {
+                self.dismiss(animated: true) {
+                    self.onRename?(newName)
+                }
+            }
+
             // TODO: Stop spinner
             guard error == nil else {
                 // TODO: Show message for error
@@ -296,8 +303,18 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
                 switch code {
                 case 200:
                     // Rename successfully completed
-                    self.dismiss(animated: true) {
-                        self.onRename?(newName)
+
+                    if let nodeMount = self.node.mount {
+
+                        DigiClient.shared.editMount(for: nodeMount, newName: newName) { error in
+                            guard error == nil else {
+                                return
+                            }
+                            exitRenameController()
+                        }
+
+                    } else {
+                        exitRenameController()
                     }
 
                 case 400:
