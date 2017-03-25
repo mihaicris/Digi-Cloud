@@ -30,9 +30,7 @@ final class DigiClient {
             )
             return ""
         }
-
         return token
-
     }
 
     var loggedAccount: Account!
@@ -350,7 +348,7 @@ final class DigiClient {
 
         let method = Methods.UserProfileImage.replacingOccurrences(of: "{userId}", with: user.id)
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil, withoutSerialization: true) { data, statusCode, error in
 
@@ -378,7 +376,7 @@ final class DigiClient {
     func setUserProfileImage(_ data: Data, completion: @escaping(Error?) -> Void) {
 
         let method = Methods.UserProfileImageSet
-        var headers = [HeadersKeys.Authorization: "Token \(DigiClient.shared.token)"]
+        var headers = [HeadersKeys.Authorization: "Token \(token)"]
 
         let boundary = "----WebKitFormBoundary\(UUID().uuidString)"
 
@@ -409,7 +407,7 @@ final class DigiClient {
 
         let method = Methods.User
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let jsonObject = ["lastName": lastName, "firstName": firstName]
 
@@ -432,7 +430,7 @@ final class DigiClient {
     func getSecuritySettings() {
         let method = Methods.UserSettingsSec
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { jsonData, statusCode, error in
 
@@ -458,7 +456,7 @@ final class DigiClient {
     func setSecuritySettings(shouldPasswordDownloadLink: Bool, shouldPasswordReceiveLink: Bool, completion: @escaping((Error?) -> Void)) {
         let method = Methods.UserSettingsSec
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let json: [String: Bool] = ["downloadLinkRequirePassword": false,
                                     "downloadLinkAutoPassword": shouldPasswordDownloadLink,
@@ -492,7 +490,7 @@ final class DigiClient {
 
         let method = Methods.UserBookmarks
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
 
@@ -528,7 +526,7 @@ final class DigiClient {
 
         let method = Methods.UserBookmarks
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         var json: [String: Any] = [:]
         var bookmarksJSON: [[String: String]] = []
@@ -568,7 +566,7 @@ final class DigiClient {
 
         let method = Methods.UserBookmarks
         var headers = DefaultHeaders.PostHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let json: [String: String] = ["path": bookmark.path, "mountId": bookmark.mountId]
 
@@ -598,7 +596,7 @@ final class DigiClient {
 
         let method = Methods.UserBookmarks
         var headers = DefaultHeaders.DelHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         var parameters: [String: String] = [:]
         parameters["path"] = bookmark.path
@@ -632,7 +630,7 @@ final class DigiClient {
 
         let method = Methods.Mounts
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { data, statusCode, error in
 
@@ -670,7 +668,7 @@ final class DigiClient {
 
         let method = Methods.MountCreate.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.PostHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let json: [String: String] = ["path": location.path, "name": withName]
 
@@ -706,7 +704,7 @@ final class DigiClient {
 
         let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: nil) { (json, statusCode, error) in
 
@@ -733,7 +731,7 @@ final class DigiClient {
 
         let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let json = ["name": newName]
 
@@ -791,7 +789,7 @@ final class DigiClient {
             json = nil
         }
 
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: requestType,
                     method: method,
@@ -840,7 +838,7 @@ final class DigiClient {
 
         let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
         var headers = DefaultHeaders.DelHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { (_, statusCode, error) in
 
@@ -864,7 +862,7 @@ final class DigiClient {
 
         let method = Methods.FilesInfo.replacingOccurrences(of: "{mountId}", with: location.mount.id)
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let parameters = ["path": location.path]
 
@@ -901,7 +899,7 @@ final class DigiClient {
 
         let method = Methods.FilesDirectory.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.PostHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
         let parameters = [ParametersKeys.Path: location.path]
         let jsonBody = [DataJSONKeys.directoryName: named]
 
@@ -941,7 +939,7 @@ final class DigiClient {
         // create url request with the current token in the HTTP headers
         var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("Token " + DigiClient.shared.token, forHTTPHeaderField: "Authorization")
+        request.addValue("Token " + token, forHTTPHeaderField: "Authorization")
 
         // create and start download task
         let downloadTask = session.downloadTask(with: request)
@@ -973,7 +971,7 @@ final class DigiClient {
         }
 
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let parameters = [ParametersKeys.Path: fromLocation.path]
 
@@ -1005,7 +1003,7 @@ final class DigiClient {
 
         // prepare headers
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         // prepare parameters
         let parameters = [ParametersKeys.Path: location.path]
@@ -1036,7 +1034,7 @@ final class DigiClient {
 
         let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.DelHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
         let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: parameters) { (_, statusCode, error) in
@@ -1087,7 +1085,7 @@ final class DigiClient {
 
         let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
         let parameters = [ParametersKeys.Path: location.path]
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { (json, statusCode, error) in
@@ -1132,7 +1130,7 @@ final class DigiClient {
             .replacingOccurrences(of: "{mountId}", with: location.mount.id)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
         var headers = DefaultHeaders.PostHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
         let json = ["path": location.path]
 
         networkTask(requestType: .post, method: method, headers: headers, json: json, parameters: nil) { json, statusCode, error in
@@ -1192,7 +1190,7 @@ final class DigiClient {
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let json = ["hash": hash]
 
@@ -1243,7 +1241,7 @@ final class DigiClient {
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .put, method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
 
@@ -1292,7 +1290,7 @@ final class DigiClient {
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.DelHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { json, statusCode, error in
 
@@ -1340,7 +1338,7 @@ final class DigiClient {
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.DelHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .delete, method: method, headers: headers, json: nil, parameters: nil) { _, statusCode, error in
 
@@ -1375,7 +1373,7 @@ final class DigiClient {
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let json = ["alert": isOn]
 
@@ -1419,7 +1417,7 @@ final class DigiClient {
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.PutHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         var json: [String: Any] = ["validFrom": NSNull(), "validTo": NSNull()]
 
@@ -1470,7 +1468,7 @@ final class DigiClient {
 
         let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.id)
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         let parameters = [ParametersKeys.Path: location.path]
 
@@ -1514,7 +1512,7 @@ final class DigiClient {
 
         let method = Methods.Search
         var headers = DefaultHeaders.GetHeaders
-        headers[HeadersKeys.Authorization] = "Token \(DigiClient.shared.token)"
+        headers[HeadersKeys.Authorization] = "Token \(token)"
 
         networkTask(requestType: .get, method: method, headers: headers, json: nil, parameters: parameters) { json, statusCode, error in
 
