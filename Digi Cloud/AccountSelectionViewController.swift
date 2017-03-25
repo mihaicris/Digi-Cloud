@@ -155,9 +155,7 @@ UICollectionViewDelegateFlowLayout {
             if let user = AppSettings.getPersistedUserInfo(userID: account.userID) {
                 users.append(user)
             } else {
-
                 account.revokeToken()
-
                 do {
                     try account.deleteItem()
                 } catch {
@@ -166,8 +164,6 @@ UICollectionViewDelegateFlowLayout {
                         subtitle: NSLocalizedString("The app will now close", comment: "")
                     )
                 }
-
-                users.removeLast()
             }
         }
     }
