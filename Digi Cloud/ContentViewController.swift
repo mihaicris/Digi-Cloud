@@ -131,11 +131,7 @@ final class ContentViewController: UIViewController {
 
     private func fetchNode() {
 
-        self.busyIndicator.startAnimating()
-
         DigiClient.shared.fileInfo(atLocation: self.location) { (node, error) in
-
-            self.busyIndicator.stopAnimating()
 
             guard error == nil else {
 
