@@ -64,7 +64,7 @@ final class SettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         title = NSLocalizedString("Settings", comment: "")
-        preferredContentSize = CGSize(width: 450, height: 620)
+        preferredContentSize = CGSize(width: 350, height: 520)
         setupViews()
         super.viewDidLoad()
     }
@@ -81,44 +81,34 @@ final class SettingsViewController: UITableViewController {
             let v = UIView()
             v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 100)
 
-            let image = #imageLiteral(resourceName: "app_icon_transparent").withRenderingMode(.alwaysTemplate)
-            let imageView = UIImageView(image: image)
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.contentMode = .scaleAspectFill
-
             let versionLabel: UILabel = {
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
                 l.textAlignment = .center
                 let str = "Digi Cloud\n" + NSLocalizedString("Version", comment: "")
-                l.text = "\(str) \(UIApplication.Version).\(UIApplication.Build)"
+                l.text = "\(str) \(UIApplication.Version) (\(UIApplication.Build))"
                 l.numberOfLines = 2
                 l.textColor = UIColor.gray
-                l.font = UIFont.HelveticaNeue(size: 11)
+                l.font = UIFont.HelveticaNeue(size: 12)
                 return l
             }()
 
             let copyrightLabel: UILabel = {
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
-                l.text = NSLocalizedString("© 2016-2017 Mihai Cristescu.\n All rights reserved.", comment: "")
+                l.text = NSLocalizedString("©2017 Mihai Cristescu.\n All rights reserved.", comment: "")
                 l.numberOfLines = 2
                 l.textAlignment = .center
                 l.font = UIFont.HelveticaNeue(size: 12)
                 return l
             }()
 
-            v.addSubview(imageView)
             v.addSubview(versionLabel)
             v.addSubview(copyrightLabel)
 
             NSLayoutConstraint.activate([
-                imageView.centerXAnchor.constraint(equalTo: v.centerXAnchor),
-                imageView.topAnchor.constraint(equalTo: v.topAnchor, constant: 20),
-                imageView.widthAnchor.constraint(equalToConstant: 50),
-                imageView.heightAnchor.constraint(equalToConstant: 50),
 
-                versionLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+                versionLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 10),
                 versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor),
 
                 copyrightLabel.topAnchor.constraint(equalTo: versionLabel.bottomAnchor, constant: 10),

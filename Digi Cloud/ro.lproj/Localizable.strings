@@ -252,6 +252,9 @@ Please try again later!" = "A avut loc o eroare.
 "I am sending you an upload link:" = "Îți trimit un link de primire:";
 
 /* No comment provided by engineer. */
+"Info" = "Info";
+
+/* No comment provided by engineer. */
 "Information" = "Informații";
 
 /* No comment provided by engineer. */
@@ -567,6 +570,9 @@ Please try again later!" = "A avut loc o eroare.
 "Version" = "Versiune";
 
 /* No comment provided by engineer. */
+"Would you like to use cellular data?" = "Doriți să folosiți date celulare?";
+
+/* No comment provided by engineer. */
 "Yes" = "Da";
 
 /* No comment provided by engineer. */
@@ -576,7 +582,7 @@ Please try again later!" = "A avut loc o eroare.
 "for" = "pentru";
 
 /* No comment provided by engineer. */
-"© 2016-2017 Mihai Cristescu.
- All rights reserved." = "© 2016-2017 Mihai Cristescu.
+"©2017 Mihai Cristescu.
+ All rights reserved." = "©2017 Mihai Cristescu.
 Toate drepturile rezervate.";
 
