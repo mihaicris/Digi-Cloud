@@ -216,6 +216,9 @@ final class ListingViewController: UITableViewController {
 
         let item = nodes[indexPath.row]
 
+        let itemDate = Date(timeIntervalSince1970: item.modified / 1000)
+        let modifiedDateString = itemDate.timeAgoSyle
+
         if item.type == "dir" {
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DirectoryCell.self),
@@ -251,19 +254,19 @@ final class ListingViewController: UITableViewController {
             cell.hasReceiver = item.receiver != nil
             cell.isBookmarked = item.bookmark != nil
 
-            let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
-
             let detailAttributtedString = NSMutableAttributedString(string: modifiedDateString)
 
             if cell.hasLink {
                 // http://fontawesome.io/icon/cloud-upload/
-                let attributedString = NSAttributedString(string: "  \u{f0aa}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                let attributedString = NSAttributedString(string: "  \u{f0aa}",
+                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
             if cell.hasReceiver {
                 // http://fontawesome.io/icon/cloud-download/
-                let attributedString = NSAttributedString(string: "  \u{f0ab}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                let attributedString = NSAttributedString(string: "  \u{f0ab}",
+                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
@@ -292,14 +295,14 @@ final class ListingViewController: UITableViewController {
             cell.hasLink = item.link != nil
             cell.nodeNameLabel.text = item.name
 
-            let modifiedDateString = dateFormatter.string(from: Date(timeIntervalSince1970: item.modified / 1000))
             let sizeString = byteFormatter.string(fromByteCount: item.size)
 
             let detailAttributtedString = NSMutableAttributedString(string: sizeString + "・" + modifiedDateString)
 
             if cell.hasLink {
                 // http://fontawesome.io/icon/cloud-upload/
-                let attributedString = NSAttributedString(string: "  \u{f0aa}", attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                let attributedString = NSAttributedString(string: "  \u{f0aa}",
+                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
