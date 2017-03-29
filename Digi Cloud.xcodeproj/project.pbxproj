@@ -34,7 +34,6 @@
 		83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAD1DB8D098006FF04A /* BaseListCell.swift */; };
 		835E71A81E5F1F2000C4E1B4 /* URLHashTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */; };
 		8362E9621E80319C005327E4 /* RootMount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8362E9611E80319C005327E4 /* RootMount.swift */; };
-		8363FD191E894E460047CCB4 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8363FD181E894E460047CCB4 /* Info.plist */; };
 		836731B91E53DCD3001EA961 /* UploadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836731B81E53DCD3001EA961 /* UploadLink.swift */; };
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
@@ -568,6 +567,7 @@
 				8370410E1D8B1DED000EDBAE /* Sources */,
 				8370410F1D8B1DED000EDBAE /* Frameworks */,
 				837041101D8B1DED000EDBAE /* Resources */,
+				8363FD1A1E8960150047CCB4 /* Increase Build Number */,
 			);
 			buildRules = (
 			);
@@ -657,12 +657,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8363FD191E894E460047CCB4 /* Info.plist in Resources */,
 				837E53F71E4CDF2B00D8A5AA /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8363FD1A1E8960150047CCB4 /* Increase Build Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Increase Build Number";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#echo ${INFOPLIST_FILE}\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${INFOPLIST_FILE}\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8370410E1D8B1DED000EDBAE /* Sources */ = {
