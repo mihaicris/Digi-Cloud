@@ -7,83 +7,83 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8302319E1E559ECB001CDC00 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302319D1E559ECB001CDC00 /* Bookmark.swift */; };
-		830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830CCDD01E2FAA8A006E0846 /* String+DigiCloud.swift */; };
-		83164FED1E03F473001048D7 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83164FEC1E03F473001048D7 /* SearchCell.swift */; };
-		831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B9F581D992BD7003DAF42 /* DigiClient.swift */; };
-		8320C2511E1E2BD300413B36 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */; };
-		8320C2531E1E3B4900413B36 /* UIViewController+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2521E1E3B4900413B36 /* UIViewController+DigiCloud.swift */; };
-		8320C2551E1E3B6400413B36 /* UIView+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */; };
-		8320C2571E1E3B7800413B36 /* UserDefaults+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */; };
-		8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */; };
-		8328F80F1E51EA7E00DE4453 /* NodeHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F80E1E51EA7E00DE4453 /* NodeHit.swift */; };
-		8328F8111E51FF2E00DE4453 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328F8101E51FF2E00DE4453 /* DownloadLink.swift */; };
-		8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */; };
-		833F5DA91E68372700EE3722 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833F5DA81E68372700EE3722 /* ShareMountViewController.swift */; };
-		834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834181761E07FB1100F32A2F /* UILabelWithPadding.swift */; };
-		83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83419B291DCA077F0016215C /* AppSettings.swift */; };
-		834AEEB51E6B354F00C16B75 /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F146D1DBA76250047FBBE /* RenameViewController.swift */; };
-		834AEEB71E6B39E500C16B75 /* CreateDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */; };
-		834AEEB81E6B3F9700C16B75 /* DirectoryInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */; };
-		834AEEB91E6B43BE00C16B75 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */; };
-		83506C011E7FAFF300E30C1E /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */; };
+		8302F2D71E8D7006008BA834 /* DirectoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CB1E8D7006008BA834 /* DirectoryInfo.swift */; };
+		8302F2D81E8D7006008BA834 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CC1E8D7006008BA834 /* DownloadLink.swift */; };
+		8302F2D91E8D7006008BA834 /* NodeHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CD1E8D7006008BA834 /* NodeHit.swift */; };
+		8302F2DA1E8D7006008BA834 /* UploadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CE1E8D7006008BA834 /* UploadLink.swift */; };
+		8302F2DB1E8D7006008BA834 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CF1E8D7006008BA834 /* Permissions.swift */; };
+		8302F2DC1E8D7006008BA834 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D01E8D7006008BA834 /* Location.swift */; };
+		8302F2DD1E8D7006008BA834 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D11E8D7006008BA834 /* Bookmark.swift */; };
+		8302F2DE1E8D7006008BA834 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D21E8D7006008BA834 /* Account.swift */; };
+		8302F2DF1E8D7006008BA834 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D31E8D7006008BA834 /* Mount.swift */; };
+		8302F2E01E8D7006008BA834 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D41E8D7006008BA834 /* Node.swift */; };
+		8302F2E11E8D7006008BA834 /* RootMount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D51E8D7006008BA834 /* RootMount.swift */; };
+		8302F2E21E8D7006008BA834 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D61E8D7006008BA834 /* User.swift */; };
+		8302F2E71E8D735A008BA834 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2E41E8D735A008BA834 /* ManageAccountsViewController.swift */; };
+		8302F2E81E8D735A008BA834 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2E51E8D735A008BA834 /* AccountSelectionViewController.swift */; };
+		8302F2EA1E8D7372008BA834 /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2E91E8D7372008BA834 /* FlowController.swift */; };
+		8302F2F51E8D738D008BA834 /* String+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */; };
+		8302F2F61E8D738D008BA834 /* UIApplication+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EC1E8D738D008BA834 /* UIApplication+DigiCloud.swift */; };
+		8302F2F71E8D738D008BA834 /* UIViewController+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */; };
+		8302F2F81E8D738D008BA834 /* Collection+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */; };
+		8302F2F91E8D738D008BA834 /* UIView+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */; };
+		8302F2FA1E8D738D008BA834 /* UIFont+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F01E8D738D008BA834 /* UIFont+DigiCloud.swift */; };
+		8302F2FB1E8D738D008BA834 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F11E8D738D008BA834 /* FileManager+DigiCloud.swift */; };
+		8302F2FC1E8D738D008BA834 /* UIColor+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F21E8D738D008BA834 /* UIColor+DigiCloud.swift */; };
+		8302F2FD1E8D738D008BA834 /* UserDefaults+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F31E8D738D008BA834 /* UserDefaults+DigiCloud.swift */; };
+		8302F2FE1E8D738D008BA834 /* Date+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F41E8D738D008BA834 /* Date+DigiCloud.swift */; };
+		8302F3021E8D8BB3008BA834 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3001E8D8BB3008BA834 /* MainNavigationController.swift */; };
+		8302F3041E8D8BCF008BA834 /* ManageBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3031E8D8BCF008BA834 /* ManageBookmarksViewController.swift */; };
+		8302F3061E8D8BDF008BA834 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3051E8D8BDF008BA834 /* ContentViewController.swift */; };
+		8302F3081E8D8C10008BA834 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3071E8D8C10008BA834 /* IntroductionViewController.swift */; };
+		8302F30B1E8D8C23008BA834 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3091E8D8C23008BA834 /* LocationsViewController.swift */; };
+		8302F30C1E8D8C23008BA834 /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30A1E8D8C23008BA834 /* ListingViewController.swift */; };
+		8302F3171E8D8C7B008BA834 /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */; };
+		8302F3181E8D8C7B008BA834 /* CreateDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30E1E8D8C7B008BA834 /* CreateDirectoryViewController.swift */; };
+		8302F3191E8D8C7B008BA834 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */; };
+		8302F31A1E8D8C7B008BA834 /* AddMountUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */; };
+		8302F31B1E8D8C7B008BA834 /* MoreActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */; };
+		8302F31C1E8D8C7B008BA834 /* DirectoryInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3121E8D8C7B008BA834 /* DirectoryInfoViewController.swift */; };
+		8302F31D1E8D8C7B008BA834 /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */; };
+		8302F31E1E8D8C7B008BA834 /* ShareLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */; };
+		8302F31F1E8D8C7B008BA834 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */; };
+		8302F3201E8D8C7B008BA834 /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3161E8D8C7B008BA834 /* RenameViewController.swift */; };
+		8302F3221E8D8C9D008BA834 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3211E8D8C9D008BA834 /* SearchResultController.swift */; };
+		8302F3261E8D8CC9008BA834 /* SecuritySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3231E8D8CC9008BA834 /* SecuritySettingsViewController.swift */; };
+		8302F3271E8D8CC9008BA834 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3241E8D8CC9008BA834 /* UserSettingsViewController.swift */; };
+		8302F3281E8D8CC9008BA834 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */; };
+		8302F3391E8D8D5D008BA834 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32A1E8D8D5D008BA834 /* CustomNavBar.swift */; };
+		8302F33A1E8D8D5D008BA834 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32B1E8D8D5D008BA834 /* RenameUtilitiesButton.swift */; };
+		8302F33B1E8D8D5D008BA834 /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32C1E8D8D5D008BA834 /* UILabelWithPadding.swift */; };
+		8302F33C1E8D8D5D008BA834 /* URLHashTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32D1E8D8D5D008BA834 /* URLHashTextField.swift */; };
+		8302F33D1E8D8D5D008BA834 /* BookmarkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32E1E8D8D5D008BA834 /* BookmarkViewCell.swift */; };
+		8302F33E1E8D8D5D008BA834 /* AccountCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32F1E8D8D5D008BA834 /* AccountCollectionCell.swift */; };
+		8302F33F1E8D8D5D008BA834 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3301E8D8D5D008BA834 /* AccountTableViewCell.swift */; };
+		8302F3401E8D8D5D008BA834 /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3311E8D8D5D008BA834 /* BaseListCell.swift */; };
+		8302F3411E8D8D5D008BA834 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3321E8D8D5D008BA834 /* FileCell.swift */; };
+		8302F3421E8D8D5D008BA834 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3331E8D8D5D008BA834 /* LocationCell.swift */; };
+		8302F3431E8D8D5E008BA834 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3341E8D8D5D008BA834 /* LoginButton.swift */; };
+		8302F3441E8D8D5E008BA834 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3351E8D8D5D008BA834 /* LoginField.swift */; };
+		8302F3451E8D8D5E008BA834 /* MountUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3361E8D8D5D008BA834 /* MountUserCell.swift */; };
+		8302F3461E8D8D5E008BA834 /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3371E8D8D5D008BA834 /* DirectoryCell.swift */; };
+		8302F3471E8D8D5E008BA834 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3381E8D8D5D008BA834 /* SearchCell.swift */; };
+		8302F3491E8D8DBF008BA834 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3481E8D8DBF008BA834 /* LoginViewController.swift */; };
 		8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
 		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
-		835406051D952FFD00019D53 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */; };
-		83562CAC1DB8C19B006FF04A /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */; };
-		83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83562CAD1DB8D098006FF04A /* BaseListCell.swift */; };
-		835E71A81E5F1F2000C4E1B4 /* URLHashTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */; };
-		8362E9621E80319C005327E4 /* RootMount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8362E9611E80319C005327E4 /* RootMount.swift */; };
 		8363FD191E894E460047CCB4 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8363FD181E894E460047CCB4 /* Info.plist */; };
-		836731B91E53DCD3001EA961 /* UploadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836731B81E53DCD3001EA961 /* UploadLink.swift */; };
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
 		837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */; };
-		8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412A1D8B2264000EDBAE /* LoginViewController.swift */; };
-		8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8370412B1D8B2264000EDBAE /* LocationsViewController.swift */; };
-		8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */; };
-		8373DE041E321A690083D614 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8373DE031E321A690083D614 /* Cache.swift */; };
 		837E53F71E4CDF2B00D8A5AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837E53F91E4CDF2B00D8A5AA /* InfoPlist.strings */; };
-		83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */; };
-		83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83851E631E25345500C8AE52 /* AccountTableViewCell.swift */; };
-		838672B51E6C9D67000BBE41 /* ShareLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */; };
-		838A70031E7ACC11006F420F /* Collection+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838A70021E7ACC11006F420F /* Collection+DigiCloud.swift */; };
-		8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */; };
-		839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839A22E21DC11BA400758730 /* DeleteViewController.swift */; };
-		839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839BAE241D8BFD6500A43452 /* DigiConstants.swift */; };
-		83A03BF01E8C2D4900618B42 /* Date+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A03BEF1E8C2D4900618B42 /* Date+DigiCloud.swift */; };
-		83A8356D1E2E6A1500F347BD /* UIApplication+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A8356C1E2E6A1500F347BD /* UIApplication+DigiCloud.swift */; };
-		83A932A21E75831100D9C318 /* AddMountUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A932A11E75831100D9C318 /* AddMountUserViewController.swift */; };
-		83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B2DAF21DB66219000955B7 /* MainNavigationController.swift */; };
-		83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */; };
+		838C2E5C1E8E2E73000DC325 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C2E581E8E2E73000DC325 /* AppSettings.swift */; };
+		838C2E5D1E8E2E73000DC325 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C2E591E8E2E73000DC325 /* Cache.swift */; };
+		838C2E5E1E8E2E73000DC325 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C2E5A1E8E2E73000DC325 /* DigiClient.swift */; };
+		838C2E5F1E8E2E73000DC325 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C2E5B1E8E2E73000DC325 /* DigiConstants.swift */; };
 		83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D3951E13C781005258B3 /* InfoPlist.strings */; };
 		83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D39A1E13DCF4005258B3 /* Localizable.strings */; };
-		83BF27C91E438AB30019B1F7 /* MoreActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BF27C81E438AB30019B1F7 /* MoreActionsViewController.swift */; };
-		83C7D1081E23A9B700E3D508 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D1061E23A9B700E3D508 /* Account.swift */; };
-		83C887831E7312E500C72050 /* MountUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C887821E7312E500C72050 /* MountUserCell.swift */; };
 		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
-		83CE7A001DE45D77002212A9 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE79FF1DE45D77002212A9 /* Location.swift */; };
-		83D03F271E6DB3FA00BA617A /* ManageBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */; };
-		83D03F291E6DB5BB00BA617A /* BookmarkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */; };
-		83D281011D9D747A00D74661 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D281001D9D747A00D74661 /* LoginField.swift */; };
-		83D5DCD91E7EE6EE004EEE58 /* SecuritySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */; };
-		83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF221DE59ED300987E1A /* ListingViewController.swift */; };
-		83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DADF241DE5C41E00987E1A /* CustomNavBar.swift */; };
-		83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DB658C1DDF12C900A53440 /* LocationCell.swift */; };
-		83E5DB421E607EF30093634E /* UIFont+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E5DB411E607EF30093634E /* UIFont+DigiCloud.swift */; };
-		83EBA7CE1E6AB8A700BB8675 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBA7CD1E6AB8A700BB8675 /* Permissions.swift */; };
-		83EBA7D01E6ABF4900BB8675 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBA7CF1E6ABF4900BB8675 /* User.swift */; };
-		83EC31471E2915A8009E12B6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EC31461E2915A8009E12B6 /* SettingsViewController.swift */; };
-		83EF1D481D8FBDDA00ACE008 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D471D8FBDDA00ACE008 /* Node.swift */; };
-		83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6B1D8FE26400ACE008 /* Mount.swift */; };
-		83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D6F1D900F9700ACE008 /* FileCell.swift */; };
-		83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EF1D711D900FA700ACE008 /* DirectoryCell.swift */; };
 		83F1FFD31E6979040079F56F /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1FFD21E6979040079F56F /* Enums.swift */; };
-		83F1FFD81E6980350079F56F /* DirectoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1FFD71E6980350079F56F /* DirectoryInfo.swift */; };
-		83F5E1661E6B1EE4004EFE72 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321FC5A1D9568FE002D6413 /* ContentViewController.swift */; };
 		83F7EF001E369A7D0033F03D /* DigiCloudTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */; };
-		83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F994511DD09B340023FB5D /* SortFolderViewController.swift */; };
-		E5832D392FF98C031D43515B /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5832C4125BB550AC54A5C59 /* FlowController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,88 +97,88 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8302319D1E559ECB001CDC00 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		8302F2CB1E8D7006008BA834 /* DirectoryInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryInfo.swift; path = Model/DirectoryInfo.swift; sourceTree = "<group>"; };
+		8302F2CC1E8D7006008BA834 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadLink.swift; path = Model/DownloadLink.swift; sourceTree = "<group>"; };
+		8302F2CD1E8D7006008BA834 /* NodeHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeHit.swift; path = Model/NodeHit.swift; sourceTree = "<group>"; };
+		8302F2CE1E8D7006008BA834 /* UploadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadLink.swift; path = Model/UploadLink.swift; sourceTree = "<group>"; };
+		8302F2CF1E8D7006008BA834 /* Permissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Permissions.swift; path = Model/Permissions.swift; sourceTree = "<group>"; };
+		8302F2D01E8D7006008BA834 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Model/Location.swift; sourceTree = "<group>"; };
+		8302F2D11E8D7006008BA834 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bookmark.swift; path = Model/Bookmark.swift; sourceTree = "<group>"; };
+		8302F2D21E8D7006008BA834 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Account.swift; path = Model/Account.swift; sourceTree = "<group>"; };
+		8302F2D31E8D7006008BA834 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Mount.swift; path = Model/Mount.swift; sourceTree = "<group>"; };
+		8302F2D41E8D7006008BA834 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Node.swift; path = Model/Node.swift; sourceTree = "<group>"; };
+		8302F2D51E8D7006008BA834 /* RootMount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootMount.swift; path = Model/RootMount.swift; sourceTree = "<group>"; };
+		8302F2D61E8D7006008BA834 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Model/User.swift; sourceTree = "<group>"; };
+		8302F2E41E8D735A008BA834 /* ManageAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageAccountsViewController.swift; path = Controller/Accounts/ManageAccountsViewController.swift; sourceTree = "<group>"; };
+		8302F2E51E8D735A008BA834 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSelectionViewController.swift; path = Controller/Accounts/AccountSelectionViewController.swift; sourceTree = "<group>"; };
+		8302F2E91E8D7372008BA834 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FlowController.swift; path = Controller/FlowController.swift; sourceTree = "<group>"; };
+		8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+DigiCloud.swift"; path = "Extensions/String+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2EC1E8D738D008BA834 /* UIApplication+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIApplication+DigiCloud.swift"; path = "Extensions/UIApplication+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+DigiCloud.swift"; path = "Extensions/UIViewController+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Collection+DigiCloud.swift"; path = "Extensions/Collection+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+DigiCloud.swift"; path = "Extensions/UIView+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2F01E8D738D008BA834 /* UIFont+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIFont+DigiCloud.swift"; path = "Extensions/UIFont+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2F11E8D738D008BA834 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileManager+DigiCloud.swift"; path = "Extensions/FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2F21E8D738D008BA834 /* UIColor+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+DigiCloud.swift"; path = "Extensions/UIColor+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2F31E8D738D008BA834 /* UserDefaults+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UserDefaults+DigiCloud.swift"; path = "Extensions/UserDefaults+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2F41E8D738D008BA834 /* Date+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Date+DigiCloud.swift"; path = "Extensions/Date+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F3001E8D8BB3008BA834 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainNavigationController.swift; path = Controller/MainNavigationController.swift; sourceTree = "<group>"; };
+		8302F3031E8D8BCF008BA834 /* ManageBookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageBookmarksViewController.swift; path = Controller/Bookmarks/ManageBookmarksViewController.swift; sourceTree = "<group>"; };
+		8302F3051E8D8BDF008BA834 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentViewController.swift; path = Controller/ContentView/ContentViewController.swift; sourceTree = "<group>"; };
+		8302F3071E8D8C10008BA834 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntroductionViewController.swift; path = Controller/Introduction/IntroductionViewController.swift; sourceTree = "<group>"; };
+		8302F3091E8D8C23008BA834 /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationsViewController.swift; path = Controller/Listing/LocationsViewController.swift; sourceTree = "<group>"; };
+		8302F30A1E8D8C23008BA834 /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListingViewController.swift; path = Controller/Listing/ListingViewController.swift; sourceTree = "<group>"; };
+		8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SortFolderViewController.swift; path = Controller/Actions/SortFolderViewController.swift; sourceTree = "<group>"; };
+		8302F30E1E8D8C7B008BA834 /* CreateDirectoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateDirectoryViewController.swift; path = Controller/Actions/CreateDirectoryViewController.swift; sourceTree = "<group>"; };
+		8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteViewController.swift; path = Controller/Actions/DeleteViewController.swift; sourceTree = "<group>"; };
+		8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddMountUserViewController.swift; path = Controller/Actions/AddMountUserViewController.swift; sourceTree = "<group>"; };
+		8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoreActionsViewController.swift; path = Controller/Actions/MoreActionsViewController.swift; sourceTree = "<group>"; };
+		8302F3121E8D8C7B008BA834 /* DirectoryInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryInfoViewController.swift; path = Controller/Actions/DirectoryInfoViewController.swift; sourceTree = "<group>"; };
+		8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeActionsViewController.swift; path = Controller/Actions/NodeActionsViewController.swift; sourceTree = "<group>"; };
+		8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareLinkViewController.swift; path = Controller/Actions/ShareLinkViewController.swift; sourceTree = "<group>"; };
+		8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareMountViewController.swift; path = Controller/Actions/ShareMountViewController.swift; sourceTree = "<group>"; };
+		8302F3161E8D8C7B008BA834 /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RenameViewController.swift; path = Controller/Actions/RenameViewController.swift; sourceTree = "<group>"; };
+		8302F3211E8D8C9D008BA834 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchResultController.swift; path = Controller/Search/SearchResultController.swift; sourceTree = "<group>"; };
+		8302F3231E8D8CC9008BA834 /* SecuritySettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SecuritySettingsViewController.swift; path = Controller/Settings/SecuritySettingsViewController.swift; sourceTree = "<group>"; };
+		8302F3241E8D8CC9008BA834 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSettingsViewController.swift; path = Controller/Settings/UserSettingsViewController.swift; sourceTree = "<group>"; };
+		8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Controller/Settings/SettingsViewController.swift; sourceTree = "<group>"; };
+		8302F32A1E8D8D5D008BA834 /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavBar.swift; path = Controller/Views/CustomNavBar.swift; sourceTree = "<group>"; };
+		8302F32B1E8D8D5D008BA834 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RenameUtilitiesButton.swift; path = Controller/Views/RenameUtilitiesButton.swift; sourceTree = "<group>"; };
+		8302F32C1E8D8D5D008BA834 /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UILabelWithPadding.swift; path = Controller/Views/UILabelWithPadding.swift; sourceTree = "<group>"; };
+		8302F32D1E8D8D5D008BA834 /* URLHashTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLHashTextField.swift; path = Controller/Views/URLHashTextField.swift; sourceTree = "<group>"; };
+		8302F32E1E8D8D5D008BA834 /* BookmarkViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarkViewCell.swift; path = Controller/Views/BookmarkViewCell.swift; sourceTree = "<group>"; };
+		8302F32F1E8D8D5D008BA834 /* AccountCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountCollectionCell.swift; path = Controller/Views/AccountCollectionCell.swift; sourceTree = "<group>"; };
+		8302F3301E8D8D5D008BA834 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountTableViewCell.swift; path = Controller/Views/AccountTableViewCell.swift; sourceTree = "<group>"; };
+		8302F3311E8D8D5D008BA834 /* BaseListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseListCell.swift; path = Controller/Views/BaseListCell.swift; sourceTree = "<group>"; };
+		8302F3321E8D8D5D008BA834 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileCell.swift; path = Controller/Views/FileCell.swift; sourceTree = "<group>"; };
+		8302F3331E8D8D5D008BA834 /* LocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationCell.swift; path = Controller/Views/LocationCell.swift; sourceTree = "<group>"; };
+		8302F3341E8D8D5D008BA834 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginButton.swift; path = Controller/Views/LoginButton.swift; sourceTree = "<group>"; };
+		8302F3351E8D8D5D008BA834 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginField.swift; path = Controller/Views/LoginField.swift; sourceTree = "<group>"; };
+		8302F3361E8D8D5D008BA834 /* MountUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MountUserCell.swift; path = Controller/Views/MountUserCell.swift; sourceTree = "<group>"; };
+		8302F3371E8D8D5D008BA834 /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryCell.swift; path = Controller/Views/DirectoryCell.swift; sourceTree = "<group>"; };
+		8302F3381E8D8D5D008BA834 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchCell.swift; path = Controller/Views/SearchCell.swift; sourceTree = "<group>"; };
+		8302F3481E8D8DBF008BA834 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = Controller/Accounts/LoginViewController.swift; sourceTree = "<group>"; };
 		830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Digi Cloud-Bridging-Header.h"; sourceTree = "<group>"; };
-		830CCDD01E2FAA8A006E0846 /* String+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+DigiCloud.swift"; sourceTree = "<group>"; };
-		8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CreateDirectoryViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83164FEC1E03F473001048D7 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
-		831B9F581D992BD7003DAF42 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DigiClient.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = IntroductionViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		8320C2521E1E3B4900413B36 /* UIViewController+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+DigiCloud.swift"; sourceTree = "<group>"; };
-		8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+DigiCloud.swift"; sourceTree = "<group>"; };
-		8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+DigiCloud.swift"; sourceTree = "<group>"; };
-		8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+DigiCloud.swift"; sourceTree = "<group>"; };
-		8321FC5A1D9568FE002D6413 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ContentViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		8328F80E1E51EA7E00DE4453 /* NodeHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = NodeHit.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		8328F8101E51FF2E00DE4453 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadLink.swift; sourceTree = "<group>"; };
-		8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameUtilitiesButton.swift; sourceTree = "<group>"; };
-		832F146D1DBA76250047FBBE /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = RenameViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		833F5DA81E68372700EE3722 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareMountViewController.swift; sourceTree = "<group>"; };
-		834181761E07FB1100F32A2F /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
-		83419B291DCA077F0016215C /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
-		83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingsViewController.swift; sourceTree = "<group>"; };
 		8350CDB41E6031030063227E /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
-		835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
-		83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = NodeActionsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83562CAD1DB8D098006FF04A /* BaseListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BaseListCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		835982771E680EDC00AA18C9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLHashTextField.swift; sourceTree = "<group>"; };
-		8362E9611E80319C005327E4 /* RootMount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootMount.swift; sourceTree = "<group>"; };
 		8363FD181E894E460047CCB4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		836731B81E53DCD3001EA961 /* UploadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadLink.swift; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8370411C1D8B1DEE000EDBAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8370411F1D8B1DEE000EDBAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8370412A1D8B2264000EDBAE /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		8370412B1D8B2264000EDBAE /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocationsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
-		8373DE031E321A690083D614 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		837E53F81E4CDF2B00D8A5AA /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ManageAccountsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83851E631E25345500C8AE52 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
-		83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareLinkViewController.swift; sourceTree = "<group>"; };
-		838A70021E7ACC11006F420F /* Collection+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Collection+DigiCloud.swift"; sourceTree = "<group>"; };
-		8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AccountSelectionViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		839A22E21DC11BA400758730 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DeleteViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		839BAE241D8BFD6500A43452 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
-		83A03BEF1E8C2D4900618B42 /* Date+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+DigiCloud.swift"; sourceTree = "<group>"; };
-		83A8356C1E2E6A1500F347BD /* UIApplication+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+DigiCloud.swift"; sourceTree = "<group>"; };
-		83A932A11E75831100D9C318 /* AddMountUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMountUserViewController.swift; sourceTree = "<group>"; };
-		83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SearchResultController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83B2DAF21DB66219000955B7 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MainNavigationController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCollectionCell.swift; sourceTree = "<group>"; };
+		838C2E581E8E2E73000DC325 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppSettings.swift; path = Managers/AppSettings.swift; sourceTree = "<group>"; };
+		838C2E591E8E2E73000DC325 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cache.swift; path = Managers/Cache.swift; sourceTree = "<group>"; };
+		838C2E5A1E8E2E73000DC325 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DigiClient.swift; path = Managers/DigiClient.swift; sourceTree = "<group>"; };
+		838C2E5B1E8E2E73000DC325 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DigiConstants.swift; path = Managers/DigiConstants.swift; sourceTree = "<group>"; };
 		83B6D3881E13C045005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		83B6D3941E13C781005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		83B6D3991E13DCF4005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
-		83BF27C81E438AB30019B1F7 /* MoreActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MoreActionsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83C7D1061E23A9B700E3D508 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-		83C887821E7312E500C72050 /* MountUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MountUserCell.swift; sourceTree = "<group>"; };
 		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DirectoryInfoViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83CE79FF1DE45D77002212A9 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageBookmarksViewController.swift; sourceTree = "<group>"; };
-		83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkViewCell.swift; sourceTree = "<group>"; };
-		83D281001D9D747A00D74661 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
-		83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecuritySettingsViewController.swift; sourceTree = "<group>"; };
-		83DADF221DE59ED300987E1A /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListingViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83DADF241DE5C41E00987E1A /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
-		83DB658C1DDF12C900A53440 /* LocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
-		83E5DB411E607EF30093634E /* UIFont+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+DigiCloud.swift"; sourceTree = "<group>"; };
-		83EBA7CD1E6AB8A700BB8675 /* Permissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
-		83EBA7CF1E6ABF4900BB8675 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		83EC31461E2915A8009E12B6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SettingsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83EF1D471D8FBDDA00ACE008 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Node.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83EF1D6B1D8FE26400ACE008 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Mount.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83EF1D6F1D900F9700ACE008 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
-		83EF1D711D900FA700ACE008 /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryCell.swift; sourceTree = "<group>"; };
 		83F1FFD21E6979040079F56F /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
-		83F1FFD71E6980350079F56F /* DirectoryInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryInfo.swift; sourceTree = "<group>"; };
 		83F7EEFD1E369A7D0033F03D /* Digi Cloud Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Digi Cloud Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DigiCloudTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		83F994511DD09B340023FB5D /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SortFolderViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		E5832C4125BB550AC54A5C59 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,54 +199,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8302F3291E8D8D4F008BA834 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8302F32A1E8D8D5D008BA834 /* CustomNavBar.swift */,
+				8302F32B1E8D8D5D008BA834 /* RenameUtilitiesButton.swift */,
+				8302F32C1E8D8D5D008BA834 /* UILabelWithPadding.swift */,
+				8302F32D1E8D8D5D008BA834 /* URLHashTextField.swift */,
+				8302F32E1E8D8D5D008BA834 /* BookmarkViewCell.swift */,
+				8302F32F1E8D8D5D008BA834 /* AccountCollectionCell.swift */,
+				8302F3301E8D8D5D008BA834 /* AccountTableViewCell.swift */,
+				8302F3311E8D8D5D008BA834 /* BaseListCell.swift */,
+				8302F3321E8D8D5D008BA834 /* FileCell.swift */,
+				8302F3331E8D8D5D008BA834 /* LocationCell.swift */,
+				8302F3341E8D8D5D008BA834 /* LoginButton.swift */,
+				8302F3351E8D8D5D008BA834 /* LoginField.swift */,
+				8302F3361E8D8D5D008BA834 /* MountUserCell.swift */,
+				8302F3371E8D8D5D008BA834 /* DirectoryCell.swift */,
+				8302F3381E8D8D5D008BA834 /* SearchCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		8306C8841E701D9600F8041C /* Actions */ = {
 			isa = PBXGroup;
 			children = (
-				83CDFA2A1DD0BF8300BC1F57 /* DirectoryInfoViewController.swift */,
-				83562CAB1DB8C19B006FF04A /* NodeActionsViewController.swift */,
-				83BF27C81E438AB30019B1F7 /* MoreActionsViewController.swift */,
-				8306C8871E701E2F00F8041C /* Create */,
-				8306C8861E701E2200F8041C /* Delete */,
-				83D03F211E6DB10000BA617A /* Rename */,
-				83454BEB1E5B3E6E005C85ED /* Sharing */,
-				8306C8851E701DB200F8041C /* Sorting */,
+				8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */,
+				8302F30E1E8D8C7B008BA834 /* CreateDirectoryViewController.swift */,
+				8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */,
+				8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */,
+				8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */,
+				8302F3121E8D8C7B008BA834 /* DirectoryInfoViewController.swift */,
+				8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */,
+				8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */,
+				8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */,
+				8302F3161E8D8C7B008BA834 /* RenameViewController.swift */,
 			);
 			name = Actions;
-			sourceTree = "<group>";
-		};
-		8306C8851E701DB200F8041C /* Sorting */ = {
-			isa = PBXGroup;
-			children = (
-				83F994511DD09B340023FB5D /* SortFolderViewController.swift */,
-			);
-			name = Sorting;
-			sourceTree = "<group>";
-		};
-		8306C8861E701E2200F8041C /* Delete */ = {
-			isa = PBXGroup;
-			children = (
-				839A22E21DC11BA400758730 /* DeleteViewController.swift */,
-			);
-			name = Delete;
-			sourceTree = "<group>";
-		};
-		8306C8871E701E2F00F8041C /* Create */ = {
-			isa = PBXGroup;
-			children = (
-				8310C2781DC73456005DD1B9 /* CreateDirectoryViewController.swift */,
-			);
-			name = Create;
-			sourceTree = "<group>";
-		};
-		83454BEB1E5B3E6E005C85ED /* Sharing */ = {
-			isa = PBXGroup;
-			children = (
-				83873E571E5C3A6900D48E2A /* ShareLinkViewController.swift */,
-				833F5DA81E68372700EE3722 /* ShareMountViewController.swift */,
-				83A932A11E75831100D9C318 /* AddMountUserViewController.swift */,
-				83D03F231E6DB12700BA617A /* Views */,
-			);
-			name = Sharing;
 			sourceTree = "<group>";
 		};
 		8350CDAF1E602E7B0063227E /* Custom Fonts */ = {
@@ -298,10 +287,10 @@
 		835406021D95180F00019D53 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				83419B291DCA077F0016215C /* AppSettings.swift */,
-				8373DE031E321A690083D614 /* Cache.swift */,
-				831B9F581D992BD7003DAF42 /* DigiClient.swift */,
-				839BAE241D8BFD6500A43452 /* DigiConstants.swift */,
+				838C2E581E8E2E73000DC325 /* AppSettings.swift */,
+				838C2E591E8E2E73000DC325 /* Cache.swift */,
+				838C2E5A1E8E2E73000DC325 /* DigiClient.swift */,
+				838C2E5B1E8E2E73000DC325 /* DigiConstants.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -309,16 +298,16 @@
 		835406031D952FD900019D53 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				838A70021E7ACC11006F420F /* Collection+DigiCloud.swift */,
-				83A03BEF1E8C2D4900618B42 /* Date+DigiCloud.swift */,
-				835406041D952FFD00019D53 /* FileManager+DigiCloud.swift */,
-				830CCDD01E2FAA8A006E0846 /* String+DigiCloud.swift */,
-				83A8356C1E2E6A1500F347BD /* UIApplication+DigiCloud.swift */,
-				8320C2581E1E3BAB00413B36 /* UIColor+DigiCloud.swift */,
-				83E5DB411E607EF30093634E /* UIFont+DigiCloud.swift */,
-				8320C2541E1E3B6400413B36 /* UIView+DigiCloud.swift */,
-				8320C2521E1E3B4900413B36 /* UIViewController+DigiCloud.swift */,
-				8320C2561E1E3B7800413B36 /* UserDefaults+DigiCloud.swift */,
+				8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */,
+				8302F2EC1E8D738D008BA834 /* UIApplication+DigiCloud.swift */,
+				8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */,
+				8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */,
+				8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */,
+				8302F2F01E8D738D008BA834 /* UIFont+DigiCloud.swift */,
+				8302F2F11E8D738D008BA834 /* FileManager+DigiCloud.swift */,
+				8302F2F21E8D738D008BA834 /* UIColor+DigiCloud.swift */,
+				8302F2F31E8D738D008BA834 /* UserDefaults+DigiCloud.swift */,
+				8302F2F41E8D738D008BA834 /* Date+DigiCloud.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -345,11 +334,11 @@
 			isa = PBXGroup;
 			children = (
 				835405FE1D95175E00019D53 /* Application Delegate */,
-				835406021D95180F00019D53 /* Managers */,
-				83EF1D461D8FBDC400ACE008 /* Models */,
 				839BAE201D8BE00E00A43452 /* Controllers */,
 				83F1FFD11E6978D50079F56F /* Enums */,
 				835406031D952FD900019D53 /* Extensions */,
+				835406021D95180F00019D53 /* Managers */,
+				83EF1D461D8FBDC400ACE008 /* Models */,
 				835405FB1D94FCA900019D53 /* Protocols */,
 				835406011D9517BE00019D53 /* Resources */,
 				835406001D9517AB00019D53 /* Supporting Files */,
@@ -357,27 +346,20 @@
 			path = "Digi Cloud";
 			sourceTree = "<group>";
 		};
-		839882E11E3257D20002C6E9 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				83B2DAF21DB66219000955B7 /* MainNavigationController.swift */,
-			);
-			name = Main;
-			sourceTree = "<group>";
-		};
 		839BAE201D8BE00E00A43452 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E5832C4125BB550AC54A5C59 /* FlowController.swift */,
 				83F994471DD093700023FB5D /* Accounts */,
+				8306C8841E701D9600F8041C /* Actions */,
 				83D03F1B1E6DAF8300BA617A /* Bookmarks */,
-				83F9944E1DD094E20023FB5D /* Content */,
+				83F9944E1DD094E20023FB5D /* ContentView */,
+				8302F2E91E8D7372008BA834 /* FlowController.swift */,
 				83F994491DD093A00023FB5D /* Introduction */,
 				83F9944B1DD093C90023FB5D /* Listing */,
-				839882E11E3257D20002C6E9 /* Main */,
-				8306C8841E701D9600F8041C /* Actions */,
+				8302F3001E8D8BB3008BA834 /* MainNavigationController.swift */,
 				83A9BE191DFFDD9E003FD974 /* Search */,
 				83EC31451E29154F009E12B6 /* Settings */,
+				8302F3291E8D8D4F008BA834 /* Views */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -385,8 +367,7 @@
 		83A9BE191DFFDD9E003FD974 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				83A9BE1A1DFFDDDC003FD974 /* SearchResultController.swift */,
-				83D03F221E6DB11A00BA617A /* Views */,
+				8302F3211E8D8C9D008BA834 /* SearchResultController.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -403,84 +384,17 @@
 		83D03F1B1E6DAF8300BA617A /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				83D03F261E6DB3FA00BA617A /* ManageBookmarksViewController.swift */,
-				83D03F1F1E6DB0C900BA617A /* Views */,
+				8302F3031E8D8BCF008BA834 /* ManageBookmarksViewController.swift */,
 			);
 			name = Bookmarks;
-			sourceTree = "<group>";
-		};
-		83D03F1E1E6DB0B700BA617A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				83B6B3261E23FFCF00806B14 /* AccountCollectionCell.swift */,
-				83851E631E25345500C8AE52 /* AccountTableViewCell.swift */,
-				8373C1E21DA2F25E00A1BC45 /* LoginButton.swift */,
-				83D281001D9D747A00D74661 /* LoginField.swift */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
-		83D03F1F1E6DB0C900BA617A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				83D03F281E6DB5BB00BA617A /* BookmarkViewCell.swift */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
-		83D03F201E6DB0DC00BA617A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				83562CAD1DB8D098006FF04A /* BaseListCell.swift */,
-				83DADF241DE5C41E00987E1A /* CustomNavBar.swift */,
-				83EF1D711D900FA700ACE008 /* DirectoryCell.swift */,
-				83EF1D6F1D900F9700ACE008 /* FileCell.swift */,
-				83DB658C1DDF12C900A53440 /* LocationCell.swift */,
-				834181761E07FB1100F32A2F /* UILabelWithPadding.swift */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
-		83D03F211E6DB10000BA617A /* Rename */ = {
-			isa = PBXGroup;
-			children = (
-				832F146D1DBA76250047FBBE /* RenameViewController.swift */,
-				83D03F241E6DB15C00BA617A /* Views */,
-			);
-			name = Rename;
-			sourceTree = "<group>";
-		};
-		83D03F221E6DB11A00BA617A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				83164FEC1E03F473001048D7 /* SearchCell.swift */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
-		83D03F231E6DB12700BA617A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				835E71A71E5F1F2000C4E1B4 /* URLHashTextField.swift */,
-				83C887821E7312E500C72050 /* MountUserCell.swift */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
-		83D03F241E6DB15C00BA617A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				8329EE021E425887002EEDE8 /* RenameUtilitiesButton.swift */,
-			);
-			name = Views;
 			sourceTree = "<group>";
 		};
 		83EC31451E29154F009E12B6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				83EC31461E2915A8009E12B6 /* SettingsViewController.swift */,
-				83506C001E7FAFF300E30C1E /* UserSettingsViewController.swift */,
-				83D5DCD81E7EE6EE004EEE58 /* SecuritySettingsViewController.swift */,
+				8302F3231E8D8CC9008BA834 /* SecuritySettingsViewController.swift */,
+				8302F3241E8D8CC9008BA834 /* UserSettingsViewController.swift */,
+				8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -488,18 +402,18 @@
 		83EF1D461D8FBDC400ACE008 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				83C7D1061E23A9B700E3D508 /* Account.swift */,
-				83CE79FF1DE45D77002212A9 /* Location.swift */,
-				83EF1D6B1D8FE26400ACE008 /* Mount.swift */,
-				83EF1D471D8FBDDA00ACE008 /* Node.swift */,
-				8328F80E1E51EA7E00DE4453 /* NodeHit.swift */,
-				8328F8101E51FF2E00DE4453 /* DownloadLink.swift */,
-				836731B81E53DCD3001EA961 /* UploadLink.swift */,
-				8302319D1E559ECB001CDC00 /* Bookmark.swift */,
-				83F1FFD71E6980350079F56F /* DirectoryInfo.swift */,
-				83EBA7CD1E6AB8A700BB8675 /* Permissions.swift */,
-				83EBA7CF1E6ABF4900BB8675 /* User.swift */,
-				8362E9611E80319C005327E4 /* RootMount.swift */,
+				8302F2CB1E8D7006008BA834 /* DirectoryInfo.swift */,
+				8302F2CC1E8D7006008BA834 /* DownloadLink.swift */,
+				8302F2CD1E8D7006008BA834 /* NodeHit.swift */,
+				8302F2CE1E8D7006008BA834 /* UploadLink.swift */,
+				8302F2CF1E8D7006008BA834 /* Permissions.swift */,
+				8302F2D01E8D7006008BA834 /* Location.swift */,
+				8302F2D11E8D7006008BA834 /* Bookmark.swift */,
+				8302F2D21E8D7006008BA834 /* Account.swift */,
+				8302F2D31E8D7006008BA834 /* Mount.swift */,
+				8302F2D41E8D7006008BA834 /* Node.swift */,
+				8302F2D51E8D7006008BA834 /* RootMount.swift */,
+				8302F2D61E8D7006008BA834 /* User.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -524,10 +438,9 @@
 		83F994471DD093700023FB5D /* Accounts */ = {
 			isa = PBXGroup;
 			children = (
-				8395CA091E1C0A5400306F84 /* AccountSelectionViewController.swift */,
-				8370412A1D8B2264000EDBAE /* LoginViewController.swift */,
-				83851E611E2531F100C8AE52 /* ManageAccountsViewController.swift */,
-				83D03F1E1E6DB0B700BA617A /* Views */,
+				8302F3481E8D8DBF008BA834 /* LoginViewController.swift */,
+				8302F2E41E8D735A008BA834 /* ManageAccountsViewController.swift */,
+				8302F2E51E8D735A008BA834 /* AccountSelectionViewController.swift */,
 			);
 			name = Accounts;
 			sourceTree = "<group>";
@@ -535,7 +448,7 @@
 		83F994491DD093A00023FB5D /* Introduction */ = {
 			isa = PBXGroup;
 			children = (
-				8320C2501E1E2BD300413B36 /* IntroductionViewController.swift */,
+				8302F3071E8D8C10008BA834 /* IntroductionViewController.swift */,
 			);
 			name = Introduction;
 			sourceTree = "<group>";
@@ -543,19 +456,18 @@
 		83F9944B1DD093C90023FB5D /* Listing */ = {
 			isa = PBXGroup;
 			children = (
-				83DADF221DE59ED300987E1A /* ListingViewController.swift */,
-				8370412B1D8B2264000EDBAE /* LocationsViewController.swift */,
-				83D03F201E6DB0DC00BA617A /* Views */,
+				8302F3091E8D8C23008BA834 /* LocationsViewController.swift */,
+				8302F30A1E8D8C23008BA834 /* ListingViewController.swift */,
 			);
 			name = Listing;
 			sourceTree = "<group>";
 		};
-		83F9944E1DD094E20023FB5D /* Content */ = {
+		83F9944E1DD094E20023FB5D /* ContentView */ = {
 			isa = PBXGroup;
 			children = (
-				8321FC5A1D9568FE002D6413 /* ContentViewController.swift */,
+				8302F3051E8D8BDF008BA834 /* ContentViewController.swift */,
 			);
-			name = Content;
+			name = ContentView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -669,75 +581,75 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83A932A21E75831100D9C318 /* AddMountUserViewController.swift in Sources */,
-				83DADF251DE5C41E00987E1A /* CustomNavBar.swift in Sources */,
-				8370412E1D8B2264000EDBAE /* LocationsViewController.swift in Sources */,
-				83851E621E2531F100C8AE52 /* ManageAccountsViewController.swift in Sources */,
-				83506C011E7FAFF300E30C1E /* UserSettingsViewController.swift in Sources */,
-				83B6B3271E23FFCF00806B14 /* AccountCollectionCell.swift in Sources */,
-				83EF1D6C1D8FE26400ACE008 /* Mount.swift in Sources */,
-				83BF27C91E438AB30019B1F7 /* MoreActionsViewController.swift in Sources */,
-				8320C2531E1E3B4900413B36 /* UIViewController+DigiCloud.swift in Sources */,
-				83B2DAF31DB66219000955B7 /* MainNavigationController.swift in Sources */,
-				8373C1E31DA2F25E00A1BC45 /* LoginButton.swift in Sources */,
-				8320C2551E1E3B6400413B36 /* UIView+DigiCloud.swift in Sources */,
-				8320C2511E1E2BD300413B36 /* IntroductionViewController.swift in Sources */,
-				835E71A81E5F1F2000C4E1B4 /* URLHashTextField.swift in Sources */,
-				83EBA7CE1E6AB8A700BB8675 /* Permissions.swift in Sources */,
-				8370412D1D8B2264000EDBAE /* LoginViewController.swift in Sources */,
-				83DB658D1DDF12C900A53440 /* LocationCell.swift in Sources */,
-				83562CAC1DB8C19B006FF04A /* NodeActionsViewController.swift in Sources */,
-				83D5DCD91E7EE6EE004EEE58 /* SecuritySettingsViewController.swift in Sources */,
-				83D281011D9D747A00D74661 /* LoginField.swift in Sources */,
+				8302F2E71E8D735A008BA834 /* ManageAccountsViewController.swift in Sources */,
+				8302F2D71E8D7006008BA834 /* DirectoryInfo.swift in Sources */,
+				8302F2F91E8D738D008BA834 /* UIView+DigiCloud.swift in Sources */,
+				8302F3491E8D8DBF008BA834 /* LoginViewController.swift in Sources */,
+				8302F30C1E8D8C23008BA834 /* ListingViewController.swift in Sources */,
+				8302F2D91E8D7006008BA834 /* NodeHit.swift in Sources */,
+				8302F2FC1E8D738D008BA834 /* UIColor+DigiCloud.swift in Sources */,
+				8302F3081E8D8C10008BA834 /* IntroductionViewController.swift in Sources */,
+				8302F2F61E8D738D008BA834 /* UIApplication+DigiCloud.swift in Sources */,
+				8302F2DC1E8D7006008BA834 /* Location.swift in Sources */,
+				8302F3411E8D8D5D008BA834 /* FileCell.swift in Sources */,
+				8302F2FD1E8D738D008BA834 /* UserDefaults+DigiCloud.swift in Sources */,
+				8302F2DB1E8D7006008BA834 /* Permissions.swift in Sources */,
+				8302F3061E8D8BDF008BA834 /* ContentViewController.swift in Sources */,
+				8302F30B1E8D8C23008BA834 /* LocationsViewController.swift in Sources */,
+				838C2E5E1E8E2E73000DC325 /* DigiClient.swift in Sources */,
+				8302F3171E8D8C7B008BA834 /* SortFolderViewController.swift in Sources */,
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
-				8320C2591E1E3BAB00413B36 /* UIColor+DigiCloud.swift in Sources */,
 				83F1FFD31E6979040079F56F /* Enums.swift in Sources */,
-				838A70031E7ACC11006F420F /* Collection+DigiCloud.swift in Sources */,
-				83A8356D1E2E6A1500F347BD /* UIApplication+DigiCloud.swift in Sources */,
-				8302319E1E559ECB001CDC00 /* Bookmark.swift in Sources */,
-				83851E641E25345500C8AE52 /* AccountTableViewCell.swift in Sources */,
-				83EF1D701D900F9700ACE008 /* FileCell.swift in Sources */,
-				838672B51E6C9D67000BBE41 /* ShareLinkViewController.swift in Sources */,
-				83EC31471E2915A8009E12B6 /* SettingsViewController.swift in Sources */,
-				83419B2A1DCA077F0016215C /* AppSettings.swift in Sources */,
-				83EF1D721D900FA700ACE008 /* DirectoryCell.swift in Sources */,
-				83562CAE1DB8D098006FF04A /* BaseListCell.swift in Sources */,
-				83F5E1661E6B1EE4004EFE72 /* ContentViewController.swift in Sources */,
-				83C7D1081E23A9B700E3D508 /* Account.swift in Sources */,
-				83D03F271E6DB3FA00BA617A /* ManageBookmarksViewController.swift in Sources */,
-				83164FED1E03F473001048D7 /* SearchCell.swift in Sources */,
-				83EF1D481D8FBDDA00ACE008 /* Node.swift in Sources */,
-				834AEEB51E6B354F00C16B75 /* RenameViewController.swift in Sources */,
-				8320C2571E1E3B7800413B36 /* UserDefaults+DigiCloud.swift in Sources */,
-				835406051D952FFD00019D53 /* FileManager+DigiCloud.swift in Sources */,
-				83CE7A001DE45D77002212A9 /* Location.swift in Sources */,
+				8302F2DF1E8D7006008BA834 /* Mount.swift in Sources */,
+				8302F3261E8D8CC9008BA834 /* SecuritySettingsViewController.swift in Sources */,
+				8302F33D1E8D8D5D008BA834 /* BookmarkViewCell.swift in Sources */,
+				8302F3451E8D8D5E008BA834 /* MountUserCell.swift in Sources */,
+				8302F2E01E8D7006008BA834 /* Node.swift in Sources */,
+				8302F3201E8D8C7B008BA834 /* RenameViewController.swift in Sources */,
+				8302F3041E8D8BCF008BA834 /* ManageBookmarksViewController.swift in Sources */,
+				8302F3181E8D8C7B008BA834 /* CreateDirectoryViewController.swift in Sources */,
+				8302F2DD1E8D7006008BA834 /* Bookmark.swift in Sources */,
+				8302F31C1E8D8C7B008BA834 /* DirectoryInfoViewController.swift in Sources */,
+				8302F2F71E8D738D008BA834 /* UIViewController+DigiCloud.swift in Sources */,
+				8302F3281E8D8CC9008BA834 /* SettingsViewController.swift in Sources */,
+				8302F2FB1E8D738D008BA834 /* FileManager+DigiCloud.swift in Sources */,
+				8302F2DE1E8D7006008BA834 /* Account.swift in Sources */,
+				8302F2FE1E8D738D008BA834 /* Date+DigiCloud.swift in Sources */,
+				838C2E5F1E8E2E73000DC325 /* DigiConstants.swift in Sources */,
+				8302F3391E8D8D5D008BA834 /* CustomNavBar.swift in Sources */,
+				8302F3431E8D8D5E008BA834 /* LoginButton.swift in Sources */,
+				8302F33C1E8D8D5D008BA834 /* URLHashTextField.swift in Sources */,
+				8302F33F1E8D8D5D008BA834 /* AccountTableViewCell.swift in Sources */,
+				8302F2E81E8D735A008BA834 /* AccountSelectionViewController.swift in Sources */,
+				8302F3271E8D8CC9008BA834 /* UserSettingsViewController.swift in Sources */,
+				8302F3401E8D8D5D008BA834 /* BaseListCell.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
-				83A03BF01E8C2D4900618B42 /* Date+DigiCloud.swift in Sources */,
-				8328F80F1E51EA7E00DE4453 /* NodeHit.swift in Sources */,
-				83E5DB421E607EF30093634E /* UIFont+DigiCloud.swift in Sources */,
-				83EBA7D01E6ABF4900BB8675 /* User.swift in Sources */,
-				839A22E31DC11BA400758730 /* DeleteViewController.swift in Sources */,
-				833F5DA91E68372700EE3722 /* ShareMountViewController.swift in Sources */,
+				8302F2EA1E8D7372008BA834 /* FlowController.swift in Sources */,
+				8302F2E11E8D7006008BA834 /* RootMount.swift in Sources */,
 				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
-				83C887831E7312E500C72050 /* MountUserCell.swift in Sources */,
-				834AEEB91E6B43BE00C16B75 /* SearchResultController.swift in Sources */,
-				83F994521DD09B340023FB5D /* SortFolderViewController.swift in Sources */,
-				8329EE031E425887002EEDE8 /* RenameUtilitiesButton.swift in Sources */,
-				83DADF231DE59ED300987E1A /* ListingViewController.swift in Sources */,
-				830CCDD11E2FAA8A006E0846 /* String+DigiCloud.swift in Sources */,
-				834AEEB81E6B3F9700C16B75 /* DirectoryInfoViewController.swift in Sources */,
-				83F1FFD81E6980350079F56F /* DirectoryInfo.swift in Sources */,
-				836731B91E53DCD3001EA961 /* UploadLink.swift in Sources */,
-				834AEEB71E6B39E500C16B75 /* CreateDirectoryViewController.swift in Sources */,
-				8362E9621E80319C005327E4 /* RootMount.swift in Sources */,
-				8395CA0A1E1C0A5400306F84 /* AccountSelectionViewController.swift in Sources */,
-				831B9F591D992BD7003DAF42 /* DigiClient.swift in Sources */,
-				8328F8111E51FF2E00DE4453 /* DownloadLink.swift in Sources */,
-				834181771E07FB1100F32A2F /* UILabelWithPadding.swift in Sources */,
-				83D03F291E6DB5BB00BA617A /* BookmarkViewCell.swift in Sources */,
-				839BAE251D8BFD6500A43452 /* DigiConstants.swift in Sources */,
-				8373DE041E321A690083D614 /* Cache.swift in Sources */,
-				E5832D392FF98C031D43515B /* FlowController.swift in Sources */,
+				8302F31B1E8D8C7B008BA834 /* MoreActionsViewController.swift in Sources */,
+				8302F2DA1E8D7006008BA834 /* UploadLink.swift in Sources */,
+				8302F2FA1E8D738D008BA834 /* UIFont+DigiCloud.swift in Sources */,
+				8302F3021E8D8BB3008BA834 /* MainNavigationController.swift in Sources */,
+				8302F33E1E8D8D5D008BA834 /* AccountCollectionCell.swift in Sources */,
+				8302F3471E8D8D5E008BA834 /* SearchCell.swift in Sources */,
+				8302F2F81E8D738D008BA834 /* Collection+DigiCloud.swift in Sources */,
+				8302F3221E8D8C9D008BA834 /* SearchResultController.swift in Sources */,
+				8302F33B1E8D8D5D008BA834 /* UILabelWithPadding.swift in Sources */,
+				8302F3191E8D8C7B008BA834 /* DeleteViewController.swift in Sources */,
+				8302F33A1E8D8D5D008BA834 /* RenameUtilitiesButton.swift in Sources */,
+				838C2E5D1E8E2E73000DC325 /* Cache.swift in Sources */,
+				8302F31D1E8D8C7B008BA834 /* NodeActionsViewController.swift in Sources */,
+				8302F31E1E8D8C7B008BA834 /* ShareLinkViewController.swift in Sources */,
+				8302F31F1E8D8C7B008BA834 /* ShareMountViewController.swift in Sources */,
+				8302F31A1E8D8C7B008BA834 /* AddMountUserViewController.swift in Sources */,
+				8302F2F51E8D738D008BA834 /* String+DigiCloud.swift in Sources */,
+				8302F3441E8D8D5E008BA834 /* LoginField.swift in Sources */,
+				8302F3421E8D8D5D008BA834 /* LocationCell.swift in Sources */,
+				838C2E5C1E8E2E73000DC325 /* AppSettings.swift in Sources */,
+				8302F3461E8D8D5E008BA834 /* DirectoryCell.swift in Sources */,
+				8302F2D81E8D7006008BA834 /* DownloadLink.swift in Sources */,
+				8302F2E21E8D7006008BA834 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
