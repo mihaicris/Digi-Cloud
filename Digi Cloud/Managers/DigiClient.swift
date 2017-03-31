@@ -363,7 +363,7 @@ final class DigiClient {
             }
 
             if let data = data as? Data,
-                let image = UIImage(data: data) {
+                let image = UIImage(data: data, scale: UIScreen.main.scale) {
                 completion(image, nil)
             } else {
                 completion(nil, ConversionError.data("Could not retrieve the profile image for user with email \(user.email)"))

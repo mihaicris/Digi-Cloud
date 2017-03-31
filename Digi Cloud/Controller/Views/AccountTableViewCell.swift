@@ -22,7 +22,7 @@ final class AccountTableViewCell: UITableViewCell {
             self.accountUsernameLabel.text = username
             let cache = Cache()
             if let data = cache.load(type: .profile, key: "\(id).png") {
-                self.profileImageView.image = UIImage(data: data)
+                self.profileImageView.image = UIImage(data: data, scale: UIScreen.main.scale)
             } else {
                 self.profileImageView.image = #imageLiteral(resourceName: "default_profile_image")
             }

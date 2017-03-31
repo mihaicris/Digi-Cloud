@@ -195,7 +195,7 @@ UICollectionViewDelegateFlowLayout {
         let cache = Cache()
 
         if let data = cache.load(type: .profile, key: user.id + ".png") {
-            cell.profileImage.image = UIImage(data: data)
+            cell.profileImage.image = UIImage(data: data, scale: UIScreen.main.scale)
         } else {
             cell.profileImage.image = #imageLiteral(resourceName: "default_profile_image")
         }

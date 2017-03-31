@@ -131,7 +131,7 @@ final class SettingsViewController: UITableViewController {
             let key = self.user.id + ".png"
 
             if let data = cache.load(type: .profile, key: key) {
-                self.profileImage = UIImage(data: data)
+                self.profileImage = UIImage(data: data, scale: UIScreen.main.scale)
             }
         }
     }
