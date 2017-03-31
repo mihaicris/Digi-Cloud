@@ -190,7 +190,7 @@ final class ContentViewController: UIViewController {
 
         let key = "\(hash).\(fileExtension)"
 
-        self.fileURL = FileManager.filesCacheDirectoryURL.appendingPathComponent(key)
+        self.fileURL = FileManager.filesCacheFolderURL.appendingPathComponent(key)
 
         if FileManager.default.fileExists(atPath: self.fileURL.path) {
             self.loadFileContent()

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8302F2D71E8D7006008BA834 /* DirectoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CB1E8D7006008BA834 /* DirectoryInfo.swift */; };
+		8302F2D71E8D7006008BA834 /* FolderInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CB1E8D7006008BA834 /* FolderInfo.swift */; };
 		8302F2D81E8D7006008BA834 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CC1E8D7006008BA834 /* DownloadLink.swift */; };
 		8302F2D91E8D7006008BA834 /* NodeHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CD1E8D7006008BA834 /* NodeHit.swift */; };
 		8302F2DA1E8D7006008BA834 /* UploadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CE1E8D7006008BA834 /* UploadLink.swift */; };
@@ -39,11 +39,11 @@
 		8302F30B1E8D8C23008BA834 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3091E8D8C23008BA834 /* LocationsViewController.swift */; };
 		8302F30C1E8D8C23008BA834 /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30A1E8D8C23008BA834 /* ListingViewController.swift */; };
 		8302F3171E8D8C7B008BA834 /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */; };
-		8302F3181E8D8C7B008BA834 /* CreateDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30E1E8D8C7B008BA834 /* CreateDirectoryViewController.swift */; };
+		8302F3181E8D8C7B008BA834 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30E1E8D8C7B008BA834 /* CreateFolderViewController.swift */; };
 		8302F3191E8D8C7B008BA834 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */; };
 		8302F31A1E8D8C7B008BA834 /* AddMountUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */; };
 		8302F31B1E8D8C7B008BA834 /* MoreActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */; };
-		8302F31C1E8D8C7B008BA834 /* DirectoryInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3121E8D8C7B008BA834 /* DirectoryInfoViewController.swift */; };
+		8302F31C1E8D8C7B008BA834 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3121E8D8C7B008BA834 /* FolderInfoViewController.swift */; };
 		8302F31D1E8D8C7B008BA834 /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */; };
 		8302F31E1E8D8C7B008BA834 /* ShareLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */; };
 		8302F31F1E8D8C7B008BA834 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */; };
@@ -65,7 +65,7 @@
 		8302F3431E8D8D5E008BA834 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3341E8D8D5D008BA834 /* LoginButton.swift */; };
 		8302F3441E8D8D5E008BA834 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3351E8D8D5D008BA834 /* LoginField.swift */; };
 		8302F3451E8D8D5E008BA834 /* MountUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3361E8D8D5D008BA834 /* MountUserCell.swift */; };
-		8302F3461E8D8D5E008BA834 /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3371E8D8D5D008BA834 /* DirectoryCell.swift */; };
+		8302F3461E8D8D5E008BA834 /* FolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3371E8D8D5D008BA834 /* FolderCell.swift */; };
 		8302F3471E8D8D5E008BA834 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3381E8D8D5D008BA834 /* SearchCell.swift */; };
 		8302F3491E8D8DBF008BA834 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3481E8D8DBF008BA834 /* LoginViewController.swift */; };
 		8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
@@ -97,7 +97,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8302F2CB1E8D7006008BA834 /* DirectoryInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryInfo.swift; path = Model/DirectoryInfo.swift; sourceTree = "<group>"; };
+		8302F2CB1E8D7006008BA834 /* FolderInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderInfo.swift; path = Model/FolderInfo.swift; sourceTree = "<group>"; };
 		8302F2CC1E8D7006008BA834 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadLink.swift; path = Model/DownloadLink.swift; sourceTree = "<group>"; };
 		8302F2CD1E8D7006008BA834 /* NodeHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeHit.swift; path = Model/NodeHit.swift; sourceTree = "<group>"; };
 		8302F2CE1E8D7006008BA834 /* UploadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadLink.swift; path = Model/UploadLink.swift; sourceTree = "<group>"; };
@@ -129,11 +129,11 @@
 		8302F3091E8D8C23008BA834 /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationsViewController.swift; path = Controller/Listing/LocationsViewController.swift; sourceTree = "<group>"; };
 		8302F30A1E8D8C23008BA834 /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListingViewController.swift; path = Controller/Listing/ListingViewController.swift; sourceTree = "<group>"; };
 		8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SortFolderViewController.swift; path = Controller/Actions/SortFolderViewController.swift; sourceTree = "<group>"; };
-		8302F30E1E8D8C7B008BA834 /* CreateDirectoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateDirectoryViewController.swift; path = Controller/Actions/CreateDirectoryViewController.swift; sourceTree = "<group>"; };
+		8302F30E1E8D8C7B008BA834 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateFolderViewController.swift; path = Controller/Actions/CreateFolderViewController.swift; sourceTree = "<group>"; };
 		8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteViewController.swift; path = Controller/Actions/DeleteViewController.swift; sourceTree = "<group>"; };
 		8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddMountUserViewController.swift; path = Controller/Actions/AddMountUserViewController.swift; sourceTree = "<group>"; };
 		8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoreActionsViewController.swift; path = Controller/Actions/MoreActionsViewController.swift; sourceTree = "<group>"; };
-		8302F3121E8D8C7B008BA834 /* DirectoryInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryInfoViewController.swift; path = Controller/Actions/DirectoryInfoViewController.swift; sourceTree = "<group>"; };
+		8302F3121E8D8C7B008BA834 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderInfoViewController.swift; path = Controller/Actions/FolderInfoViewController.swift; sourceTree = "<group>"; };
 		8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeActionsViewController.swift; path = Controller/Actions/NodeActionsViewController.swift; sourceTree = "<group>"; };
 		8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareLinkViewController.swift; path = Controller/Actions/ShareLinkViewController.swift; sourceTree = "<group>"; };
 		8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareMountViewController.swift; path = Controller/Actions/ShareMountViewController.swift; sourceTree = "<group>"; };
@@ -155,7 +155,7 @@
 		8302F3341E8D8D5D008BA834 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginButton.swift; path = Controller/Views/LoginButton.swift; sourceTree = "<group>"; };
 		8302F3351E8D8D5D008BA834 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginField.swift; path = Controller/Views/LoginField.swift; sourceTree = "<group>"; };
 		8302F3361E8D8D5D008BA834 /* MountUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MountUserCell.swift; path = Controller/Views/MountUserCell.swift; sourceTree = "<group>"; };
-		8302F3371E8D8D5D008BA834 /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryCell.swift; path = Controller/Views/DirectoryCell.swift; sourceTree = "<group>"; };
+		8302F3371E8D8D5D008BA834 /* FolderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderCell.swift; path = Controller/Views/FolderCell.swift; sourceTree = "<group>"; };
 		8302F3381E8D8D5D008BA834 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchCell.swift; path = Controller/Views/SearchCell.swift; sourceTree = "<group>"; };
 		8302F3481E8D8DBF008BA834 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = Controller/Accounts/LoginViewController.swift; sourceTree = "<group>"; };
 		830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Digi Cloud-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -215,7 +215,7 @@
 				8302F3341E8D8D5D008BA834 /* LoginButton.swift */,
 				8302F3351E8D8D5D008BA834 /* LoginField.swift */,
 				8302F3361E8D8D5D008BA834 /* MountUserCell.swift */,
-				8302F3371E8D8D5D008BA834 /* DirectoryCell.swift */,
+				8302F3371E8D8D5D008BA834 /* FolderCell.swift */,
 				8302F3381E8D8D5D008BA834 /* SearchCell.swift */,
 			);
 			name = Views;
@@ -225,11 +225,11 @@
 			isa = PBXGroup;
 			children = (
 				8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */,
-				8302F30E1E8D8C7B008BA834 /* CreateDirectoryViewController.swift */,
+				8302F30E1E8D8C7B008BA834 /* CreateFolderViewController.swift */,
 				8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */,
 				8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */,
 				8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */,
-				8302F3121E8D8C7B008BA834 /* DirectoryInfoViewController.swift */,
+				8302F3121E8D8C7B008BA834 /* FolderInfoViewController.swift */,
 				8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */,
 				8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */,
 				8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */,
@@ -402,7 +402,7 @@
 		83EF1D461D8FBDC400ACE008 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8302F2CB1E8D7006008BA834 /* DirectoryInfo.swift */,
+				8302F2CB1E8D7006008BA834 /* FolderInfo.swift */,
 				8302F2CC1E8D7006008BA834 /* DownloadLink.swift */,
 				8302F2CD1E8D7006008BA834 /* NodeHit.swift */,
 				8302F2CE1E8D7006008BA834 /* UploadLink.swift */,
@@ -582,7 +582,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8302F2E71E8D735A008BA834 /* ManageAccountsViewController.swift in Sources */,
-				8302F2D71E8D7006008BA834 /* DirectoryInfo.swift in Sources */,
+				8302F2D71E8D7006008BA834 /* FolderInfo.swift in Sources */,
 				8302F2F91E8D738D008BA834 /* UIView+DigiCloud.swift in Sources */,
 				8302F3491E8D8DBF008BA834 /* LoginViewController.swift in Sources */,
 				8302F30C1E8D8C23008BA834 /* ListingViewController.swift in Sources */,
@@ -607,9 +607,9 @@
 				8302F2E01E8D7006008BA834 /* Node.swift in Sources */,
 				8302F3201E8D8C7B008BA834 /* RenameViewController.swift in Sources */,
 				8302F3041E8D8BCF008BA834 /* ManageBookmarksViewController.swift in Sources */,
-				8302F3181E8D8C7B008BA834 /* CreateDirectoryViewController.swift in Sources */,
+				8302F3181E8D8C7B008BA834 /* CreateFolderViewController.swift in Sources */,
 				8302F2DD1E8D7006008BA834 /* Bookmark.swift in Sources */,
-				8302F31C1E8D8C7B008BA834 /* DirectoryInfoViewController.swift in Sources */,
+				8302F31C1E8D8C7B008BA834 /* FolderInfoViewController.swift in Sources */,
 				8302F2F71E8D738D008BA834 /* UIViewController+DigiCloud.swift in Sources */,
 				8302F3281E8D8CC9008BA834 /* SettingsViewController.swift in Sources */,
 				8302F2FB1E8D738D008BA834 /* FileManager+DigiCloud.swift in Sources */,
@@ -647,7 +647,7 @@
 				8302F3441E8D8D5E008BA834 /* LoginField.swift in Sources */,
 				8302F3421E8D8D5D008BA834 /* LocationCell.swift in Sources */,
 				838C2E5C1E8E2E73000DC325 /* AppSettings.swift in Sources */,
-				8302F3461E8D8D5E008BA834 /* DirectoryCell.swift in Sources */,
+				8302F3461E8D8D5E008BA834 /* FolderCell.swift in Sources */,
 				8302F2D81E8D7006008BA834 /* DownloadLink.swift in Sources */,
 				8302F2E21E8D7006008BA834 /* User.swift in Sources */,
 			);

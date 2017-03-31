@@ -14,12 +14,12 @@ final class DeleteViewController: UITableViewController {
 
     var onSelection: ( () -> Void)?
 
-    private let isDirectory: Bool
+    private let isFolder: Bool
 
     // MARK: - Initializers and Deinitializers
 
-    init(isDirectory: Bool) {
-        self.isDirectory = isDirectory
+    init(isFolder: Bool) {
+        self.isFolder = isFolder
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -82,8 +82,8 @@ final class DeleteViewController: UITableViewController {
         let message: UILabel = {
             let label = UILabel()
             label.textAlignment = .center
-            if isDirectory {
-                label.text = NSLocalizedString("Are you sure you want to delete this directory?", comment: "")
+            if isFolder {
+                label.text = NSLocalizedString("Are you sure you want to delete this folder?", comment: "")
             } else {
                 label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "")
             }

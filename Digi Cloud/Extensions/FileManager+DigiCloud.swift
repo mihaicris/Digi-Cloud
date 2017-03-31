@@ -15,41 +15,41 @@ extension FileManager {
 
     }
 
-    static var profileImagesCacheDirectoryURL: URL {
+    static var profileImagesCacheFolderURL: URL {
         return documentsDir().appendingPathComponent(CacheFolders.Profiles)
     }
 
-    static var filesCacheDirectoryURL: URL {
+    static var filesCacheFolderURL: URL {
         return documentsDir().appendingPathComponent(CacheFolders.Files)
     }
 
-    static func createProfileImagesCacheDirectory() {
-        createDirectory(at: profileImagesCacheDirectoryURL)
+    static func createProfileImagesCacheFolder() {
+        createFolder(at: profileImagesCacheFolderURL)
     }
 
-    static func createFilesCacheDirectory() {
-        createDirectory(at: filesCacheDirectoryURL)
+    static func createFilesCacheFolder() {
+        createFolder(at: filesCacheFolderURL)
     }
 
-    static func deleteProfileImagesCacheDirectory() {
-        deleteDirectory(at: profileImagesCacheDirectoryURL)
+    static func deleteProfileImagesCacheFolder() {
+        deleteFolder(at: profileImagesCacheFolderURL)
     }
 
-    static func deleteFilesCacheDirectory() {
-        deleteDirectory(at: filesCacheDirectoryURL)
+    static func deleteFilesCacheFolder() {
+        deleteFolder(at: filesCacheFolderURL)
     }
 
     static func emptyProfileImagesCache() {
-        deleteFilesCacheDirectory()
-        createFilesCacheDirectory()
+        deleteFilesCacheFolder()
+        createFilesCacheFolder()
     }
 
     static func emptyFilesCache() {
-        deleteFilesCacheDirectory()
-        createFilesCacheDirectory()
+        deleteFilesCacheFolder()
+        createFilesCacheFolder()
     }
 
-    static func createDirectory(at url: URL) {
+    static func createFolder(at url: URL) {
         guard self.default.fileExists(atPath: url.path) == false else { return }
         do {
             try self.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
@@ -58,11 +58,11 @@ extension FileManager {
         }
     }
 
-    static func deleteDirectory(at url: URL) {
+    static func deleteFolder(at url: URL) {
         try? self.default.removeItem(at: url)
     }
 
-    static func sizeOfDirectory(at url: URL) -> UInt64 {
+    static func sizeOfFolder(at url: URL) -> UInt64 {
 
         guard self.default.fileExists(atPath: url.path) else { return 0 }
 
@@ -91,8 +91,8 @@ extension FileManager {
 
     }
 
-    static func sizeOfFilesCacheDirectory() -> UInt64 {
-        return sizeOfDirectory(at: filesCacheDirectoryURL)
+    static func sizeOfFilesCacheFolder() -> UInt64 {
+        return sizeOfFolder(at: filesCacheFolderURL)
     }
 
 }

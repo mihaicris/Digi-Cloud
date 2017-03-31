@@ -151,7 +151,7 @@ final class SettingsViewController: UITableViewController {
 
         case .data:
 
-            return FileManager.sizeOfFilesCacheDirectory() == 0 ? 1 : 2
+            return FileManager.sizeOfFilesCacheFolder() == 0 ? 1 : 2
 
         }
     }
@@ -283,7 +283,7 @@ final class SettingsViewController: UITableViewController {
 
                 var sizeString = NSLocalizedString("Error", comment: "")
 
-                let size = FileManager.sizeOfFilesCacheDirectory()
+                let size = FileManager.sizeOfFilesCacheFolder()
                 sizeString = byteFormatter.string(fromByteCount: Int64(size))
 
                 cell.detailTextLabel?.text = "\(str) \(sizeString)"

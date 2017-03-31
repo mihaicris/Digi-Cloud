@@ -1,5 +1,5 @@
 //
-//  DirectoryCell.swift
+//  FolderCell.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 19/09/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DirectoryCell: BaseListCell {
+final class FolderCell: BaseListCell {
 
     // MARK: - Properties
 
@@ -49,7 +49,7 @@ final class DirectoryCell: BaseListCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        iconImageView.image = #imageLiteral(resourceName: "directory_icon")
+        iconImageView.image = #imageLiteral(resourceName: "folder_icon")
         nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 15)
     }
 

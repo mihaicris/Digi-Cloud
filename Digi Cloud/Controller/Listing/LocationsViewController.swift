@@ -28,7 +28,7 @@ final class LocationsViewController: UITableViewController {
     private var importMounts: [Mount] = []
     private var exportMounts: [Mount] = []
 
-    // When coping or moving files/directories, this property will hold the source location which is passed between
+    // When coping or moving files/folders, this property will hold the source location which is passed between
     // controllers on navigation stack.
     private var sourceLocations: [Location]?
 

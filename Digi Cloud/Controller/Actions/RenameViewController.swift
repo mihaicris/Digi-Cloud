@@ -84,7 +84,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         cell.selectionStyle = .none
 
         let nodeIcon: UIImageView = {
-            let image = node.type == "dir" ? #imageLiteral(resourceName: "directory_icon") : #imageLiteral(resourceName: "file_icon")
+            let image = node.type == "dir" ? #imageLiteral(resourceName: "folder_icon") : #imageLiteral(resourceName: "file_icon")
             let iv = UIImageView(image: image)
             iv.contentMode = .scaleAspectFit
             return iv
@@ -228,7 +228,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         rightBarButton.isEnabled = false
 
         self.title = node.type == "dir" ?
-            NSLocalizedString("Rename Directory", comment: "") :
+            NSLocalizedString("Rename Folder", comment: "") :
             NSLocalizedString("Rename File", comment: "")
     }
 
@@ -325,7 +325,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
                 case 404:
                     // Not Found (Node do not exists anymore), folder will refresh
-                    let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "")
+                    let message = NSLocalizedString("File is no longer available. Folder will refresh.", comment: "")
                     self.needRefresh = true
                     self.leftBarButton.title = NSLocalizedString("Done", comment: "")
                     self.setMessage(onScreen: true, message)

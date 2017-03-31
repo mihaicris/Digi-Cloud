@@ -95,8 +95,8 @@ final class NodeActionsViewController: UITableViewController {
             cell.textLabel?.text = NSLocalizedString("Delete", comment: "")
             cell.textLabel?.textColor = .red
 
-        case .directoryInfo:
-            cell.textLabel?.text = NSLocalizedString("Directory information", comment: "")
+        case .folderInfo:
+            cell.textLabel?.text = NSLocalizedString("Folder information", comment: "")
 
         default:
             break
@@ -121,7 +121,7 @@ final class NodeActionsViewController: UITableViewController {
         }()
 
         let iconImage: UIImageView = {
-            let image = node.type == "dir" ? #imageLiteral(resourceName: "directory_icon") : #imageLiteral(resourceName: "file_icon")
+            let image = node.type == "dir" ? #imageLiteral(resourceName: "folder_icon") : #imageLiteral(resourceName: "file_icon")
             let iv = UIImageView(image: image)
             iv.contentMode = .scaleAspectFit
             return iv
@@ -196,7 +196,7 @@ final class NodeActionsViewController: UITableViewController {
                 actions.append(.move)
             }
 
-            actions.append(.directoryInfo)
+            actions.append(.folderInfo)
 
         } else {
 

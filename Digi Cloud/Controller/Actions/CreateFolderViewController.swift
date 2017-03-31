@@ -1,5 +1,5 @@
 //
-//  CreateDirectoryViewController.swift
+//  CreateFolderViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 31/10/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CreateDirectoryViewController: UITableViewController {
+final class CreateFolderViewController: UITableViewController {
 
     // MARK: - Properties
 
@@ -110,7 +110,7 @@ final class CreateDirectoryViewController: UITableViewController {
         // disable Create button
         rightBarButton.isEnabled = false
 
-        self.title = NSLocalizedString("Create Directory", comment: "")
+        self.title = NSLocalizedString("Create Folder", comment: "")
     }
 
     private func hasInvalidCharacters(name: String) -> Bool {
@@ -145,11 +145,11 @@ final class CreateDirectoryViewController: UITableViewController {
         rightBarButton.isEnabled = false
 
         // network request for rename
-        DigiClient.shared.createDirectory(at: self.parentLocation, named: folderName) { (statusCode, error) in
+        DigiClient.shared.createFolder(at: self.parentLocation, named: folderName) { (statusCode, error) in
             // TODO: Stop spinner
             guard error == nil else {
                 let title = NSLocalizedString("Error", comment: "")
-                let message = NSLocalizedString("There was an error creating the directory.", comment: "")
+                let message = NSLocalizedString("There was an error creating the folder.", comment: "")
                 let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
@@ -172,7 +172,7 @@ final class CreateDirectoryViewController: UITableViewController {
                     self.setMessage(onScreen: true, message)
                 case 404:
                     // Not Found (Folder do not exists anymore), folder will refresh
-                    let message = NSLocalizedString("File is no longer available. Directory will refresh.", comment: "")
+                    let message = NSLocalizedString("File is no longer available. Folder will refresh.", comment: "")
                     self.leftBarButton.title = NSLocalizedString("Done", comment: "")
                     self.setMessage(onScreen: true, message)
                 default :
@@ -199,7 +199,7 @@ final class CreateDirectoryViewController: UITableViewController {
     }
 }
 
-extension CreateDirectoryViewController: UITextFieldDelegate {
+extension CreateFolderViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         setMessage(onScreen: false)
     }

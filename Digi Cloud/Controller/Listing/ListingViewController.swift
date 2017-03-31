@@ -31,7 +31,7 @@ final class ListingViewController: UITableViewController {
     // The content of the rootnode
     private var nodes: [Node] = []
 
-    // When coping or moving files/directories, this property will hold the source location which is passed between
+    // When coping or moving files/folders, this property will hold the source location which is passed between
     // controllers on navigation stack.
     private var sourceLocations: [Location]?
 
@@ -93,7 +93,7 @@ final class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Directory", comment: ""), style: .plain, target: self, action: #selector(showCreateDirectoryViewController))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .plain, target: self, action: #selector(showCreateFolderViewController))
         return b
     }()
 
@@ -221,12 +221,12 @@ final class ListingViewController: UITableViewController {
 
         if item.type == "dir" {
 
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DirectoryCell.self),
-                                                           for: indexPath) as? DirectoryCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FolderCell.self),
+                                                           for: indexPath) as? FolderCell else {
                 return UITableViewCell()
             }
 
-            // In copy or move mode you cannot copy or move a directory into itself.
+            // In copy or move mode you cannot copy or move a folder into itself.
             if self.action == .copy || self.action == .move {
                 if let sourceLocations = sourceLocations {
                     if sourceLocations.contains(item.location(in: self.rootLocation)) {
@@ -378,7 +378,7 @@ final class ListingViewController: UITableViewController {
         refreshControl?.addTarget(self, action: #selector(handleUpdateContentOnPullToRefreshGesture), for: UIControlEvents.valueChanged)
 
         tableView.register(FileCell.self, forCellReuseIdentifier: String(describing: FileCell.self))
-        tableView.register(DirectoryCell.self, forCellReuseIdentifier: String(describing: DirectoryCell.self))
+        tableView.register(FolderCell.self, forCellReuseIdentifier: String(describing: FolderCell.self))
 
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
@@ -430,7 +430,7 @@ final class ListingViewController: UITableViewController {
 
     private func setupSearchController() {
 
-        // Pass the location of the current directory
+        // Pass the location of the current folder
         let src = SearchResultController(location: self.rootLocation)
 
         searchController = UISearchController(searchResultsController: src)
@@ -440,8 +440,8 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.delegate = src
         searchController.searchBar.autocorrectionType = .no
         searchController.searchBar.autocapitalizationType = .none
-        searchController.searchBar.placeholder = NSLocalizedString("Search for files or directories", comment: "")
-        searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This directory", comment: ""),
+        searchController.searchBar.placeholder = NSLocalizedString("Search for files or folders", comment: "")
+        searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This folder", comment: ""),
                                                         NSLocalizedString("Everywhere", comment: "")]
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
     }
@@ -563,7 +563,7 @@ final class ListingViewController: UITableViewController {
 
     private func updateLocationContentMessage() {
         busyIndicator.stopAnimating()
-        emptyFolderLabel.text = NSLocalizedString("Directory is Empty", comment: "")
+        emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "")
     }
 
     private func endRefreshAndReloadTable() {
@@ -853,8 +853,8 @@ final class ListingViewController: UITableViewController {
                 self.setNeedsRefreshInPrevious()
                 self.executeToogleBookmark(location: self.rootLocation, node: rootNode)
 
-            case .createDirectory:
-                self.showCreateDirectoryViewController()
+            case .createFolder:
+                self.showCreateFolderViewController()
 
             case .selectionMode:
                 if self.nodes.isEmpty { return }
@@ -904,9 +904,9 @@ final class ListingViewController: UITableViewController {
         }
     }
 
-    @objc private func showCreateDirectoryViewController() {
+    @objc private func showCreateFolderViewController() {
 
-        let controller = CreateDirectoryViewController(parentLocation: self.rootLocation)
+        let controller = CreateFolderViewController(parentLocation: self.rootLocation)
 
         controller.onFinish = { [unowned self] (folderName) in
 
@@ -920,7 +920,7 @@ final class ListingViewController: UITableViewController {
                 }
             }
 
-            let newLocation = self.rootLocation.appendingPathComponent(folderName, isDirectory: true)
+            let newLocation = self.rootLocation.appendingPathComponent(folderName, isFolder: true)
 
             let controller = ListingViewController(location: newLocation, action: self.action, sourceLocations: self.sourceLocations)
 
@@ -962,8 +962,8 @@ final class ListingViewController: UITableViewController {
                 case .delete:
                     self.showDeleteViewController(location: nodeLocation, sourceView: sender, index: nodeIndex)
 
-                case .directoryInfo:
-                    self.showDirectoryInfoViewController(location: nodeLocation, index: nodeIndex)
+                case .folderInfo:
+                    self.showFolderInfoViewController(location: nodeLocation, index: nodeIndex)
 
                 case .rename:
                     self.showRenameViewController(nodeLocation: nodeLocation, node: node, index: nodeIndex)
@@ -1175,11 +1175,11 @@ final class ListingViewController: UITableViewController {
     private func executeCopyOrMove(sourceLocation: Location) {
 
         let sourceName = (sourceLocation.path as NSString).lastPathComponent
-        let isDirectory = sourceName.characters.last == "/"
+        let isFolder = sourceName.characters.last == "/"
         let index = sourceName.getIndexBeforeExtension()
 
         // Start with initial destination location.
-        var destinationLocation = self.rootLocation.appendingPathComponent(sourceName, isDirectory: isDirectory)
+        var destinationLocation = self.rootLocation.appendingPathComponent(sourceName, isFolder: isFolder)
 
         if self.action == .copy {
             var destinationName = sourceName
@@ -1218,7 +1218,7 @@ final class ListingViewController: UITableViewController {
             } while (wasRenamed && wasFound)
 
             // change the file/folder name with incremented one
-            destinationLocation = self.rootLocation.appendingPathComponent(destinationName, isDirectory: isDirectory)
+            destinationLocation = self.rootLocation.appendingPathComponent(destinationName, isFolder: isFolder)
         }
 
         dispatchGroup.enter()
@@ -1265,7 +1265,7 @@ final class ListingViewController: UITableViewController {
             let string: String
             if locations.count == 1 {
                 if locations.first!.path.characters.last == "/" {
-                    string = NSLocalizedString("Are you sure you want to delete this directory?", comment: "")
+                    string = NSLocalizedString("Are you sure you want to delete this folder?", comment: "")
                 } else {
                     string = NSLocalizedString("Are you sure you want to delete this file?", comment: "")
                 }
@@ -1349,9 +1349,9 @@ final class ListingViewController: UITableViewController {
 
     }
 
-    private func showDirectoryInfoViewController(location: Location, index: Int) {
+    private func showFolderInfoViewController(location: Location, index: Int) {
 
-        let controller = DirectoryInfoViewController(location: location)
+        let controller = FolderInfoViewController(location: location)
 
         controller.onFinish = { [weak self] in
             self?.executeDeletion(at: location, index: index)
@@ -1364,7 +1364,7 @@ final class ListingViewController: UITableViewController {
 
     private func showDeleteViewController(location: Location, sourceView: UIView, index: Int) {
 
-        let controller = DeleteViewController(isDirectory: false)
+        let controller = DeleteViewController(isFolder: false)
 
         controller.onSelection = { [weak self] in
             self?.executeDeletion(at: location, index: index)

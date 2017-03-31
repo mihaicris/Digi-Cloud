@@ -79,8 +79,8 @@ final class MoreActionsViewController: UITableViewController {
                 ? NSLocalizedString("Set Bookmark", comment: "")
                 : NSLocalizedString("Remove Bookmark", comment: "")
 
-        case .createDirectory:
-            cell.textLabel?.text = NSLocalizedString("Create Directory", comment: "")
+        case .createFolder:
+            cell.textLabel?.text = NSLocalizedString("Create Folder", comment: "")
 
         case .selectionMode:
             cell.textLabel?.text = NSLocalizedString("Select Mode", comment: "")
@@ -173,7 +173,7 @@ final class MoreActionsViewController: UITableViewController {
         actions.append(.bookmark)
 
         if mount.canWrite {
-            actions.append(.createDirectory)
+            actions.append(.createFolder)
         }
 
         if childs > 1 {

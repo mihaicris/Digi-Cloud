@@ -113,7 +113,7 @@ final class SortFolderViewController: UITableViewController {
 
         let titleName: UILabel = {
             let label = UILabel()
-            label.text = NSLocalizedString("Sort directory", comment: "")
+            label.text = NSLocalizedString("Sort folder", comment: "")
             label.font = UIFont.systemFont(ofSize: 14)
             label.translatesAutoresizingMaskIntoConstraints = false
             return label
@@ -141,7 +141,7 @@ final class SortFolderViewController: UITableViewController {
 
     private func setupActions() {
         sortingActions = [
-            NSLocalizedString("Directories first", comment: ""),
+            NSLocalizedString("Folders first", comment: ""),
             NSLocalizedString("Sort by Name", comment: ""),
             NSLocalizedString("Sort by Date", comment: ""),
             NSLocalizedString("Sort by Size", comment: ""),

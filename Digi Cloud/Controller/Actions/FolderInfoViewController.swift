@@ -1,5 +1,5 @@
 //
-//  DirectoryInfoViewController.swift
+//  FolderInfoViewController.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 02/11/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class FolderInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: - Properties
 
@@ -34,9 +34,9 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
     private var rightBarButton: UIBarButtonItem!
     private var deleteButton: UIButton!
     private var noElementsLabel = UILabel()
-    private var directorySizeLabel = UILabel()
+    private var folderSizeLabel = UILabel()
 
-    private var directoryInfo = DirectoryInfo() {
+    private var folderInfo = FolderInfo() {
         didSet {
             self.noElementsLabel = {
                 let label = UILabel()
@@ -45,28 +45,28 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
                 label.numberOfLines = 2
 
                 let filesString: String
-                if directoryInfo.files == 1 {
+                if folderInfo.files == 1 {
                     filesString = NSLocalizedString("1 file\n", comment: "")
                 } else {
                     filesString = NSLocalizedString("%d files\n", comment: "")
                 }
 
                 let foldersString: String
-                if directoryInfo.directories == 1 {
-                    foldersString = NSLocalizedString("1 directory", comment: "")
+                if folderInfo.folders == 1 {
+                    foldersString = NSLocalizedString("1 folder", comment: "")
                 } else {
-                    foldersString = NSLocalizedString("%d directories", comment: "")
+                    foldersString = NSLocalizedString("%d folders", comment: "")
                 }
 
-                let text1 = String.localizedStringWithFormat(filesString, directoryInfo.files)
-                let text2 = String.localizedStringWithFormat(foldersString, directoryInfo.directories)
+                let text1 = String.localizedStringWithFormat(filesString, folderInfo.files)
+                let text2 = String.localizedStringWithFormat(foldersString, folderInfo.folders)
                 let attributedText = NSMutableAttributedString(string: text1 + text2,
                                                                attributes: [NSParagraphStyleAttributeName: paragraph])
                 label.attributedText = attributedText
 
                 return label
             }()
-            self.directorySizeLabel.text = self.sizeFormatter.string(fromByteCount: directoryInfo.size)
+            self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: folderInfo.size)
             self.tableView.reloadData()
         }
     }
@@ -178,7 +178,7 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
         switch section {
         case 0:     return NSLocalizedString("Name", comment: "")
         case 1:     return NSLocalizedString("Size", comment: "")
-        case 2:     return NSLocalizedString("Directory content", comment: "")
+        case 2:     return NSLocalizedString("Folder content", comment: "")
         default:    return ""
         }
     }
@@ -211,8 +211,8 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
         switch indexPath.section {
         // Folder name
         case 0:
-            let directoryIcon: UIImageView = {
-                let iv = UIImageView(image: #imageLiteral(resourceName: "directory_icon"))
+            let folderIcon: UIImageView = {
+                let iv = UIImageView(image: #imageLiteral(resourceName: "folder_icon"))
                 iv.contentMode = .scaleAspectFit
                 return iv
             }()
@@ -223,17 +223,17 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
                 return label
             }()
 
-            cell.contentView.addSubview(directoryIcon)
+            cell.contentView.addSubview(folderIcon)
             cell.contentView.addSubview(folderName)
-            cell.contentView.addConstraints(with: "H:|-20-[v0(26)]-12-[v1]-12-|", views: directoryIcon, folderName)
-            cell.contentView.addConstraints(with: "V:[v0(26)]", views: directoryIcon)
-            directoryIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
-            folderName.centerYAnchor.constraint(equalTo: directoryIcon.centerYAnchor).isActive = true
+            cell.contentView.addConstraints(with: "H:|-20-[v0(26)]-12-[v1]-12-|", views: folderIcon, folderName)
+            cell.contentView.addConstraints(with: "V:[v0(26)]", views: folderIcon)
+            folderIcon.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            folderName.centerYAnchor.constraint(equalTo: folderIcon.centerYAnchor).isActive = true
         // Size
         case 1:
-            cell.contentView.addSubview(directorySizeLabel)
-            cell.contentView.addConstraints(with: "H:|-20-[v0]-20-|", views: directorySizeLabel)
-            directorySizeLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            cell.contentView.addSubview(folderSizeLabel)
+            cell.contentView.addConstraints(with: "H:|-20-[v0]-20-|", views: folderSizeLabel)
+            folderSizeLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
         case 2:
             cell.contentView.addSubview(noElementsLabel)
             cell.contentView.addConstraints(with: "H:|-20-[v0]-|", views: noElementsLabel)
@@ -244,7 +244,7 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
             deleteButton.layer.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.05).cgColor
             deleteButton.layer.cornerRadius = 8
             deleteButton.layer.borderWidth = (1 / UIScreen.main.scale) * 1.2
-            deleteButton.setTitle(NSLocalizedString("Delete Directory", comment: ""), for: .normal)
+            deleteButton.setTitle(NSLocalizedString("Delete Folder", comment: ""), for: .normal)
             deleteButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 15, bottom: 7, right: 15)
             deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
             deleteButton.setTitleColor(.red, for: .normal)
@@ -288,12 +288,12 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
                                          target: self,
                                          action: #selector(handleDone))
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
-        self.title = NSLocalizedString("Directory information", comment: "")
+        self.title = NSLocalizedString("Folder information", comment: "")
     }
 
     private func updateFolderInfo() {
 
-        DigiClient.shared.getDirectoryInfo(at: self.location, completion: { (info, error) in
+        DigiClient.shared.getFolderInfo(at: self.location, completion: { (info, error) in
             guard error == nil else {
 
                 var errorMessage: String
@@ -303,7 +303,7 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
                          NetworkingError.requestTimedOut(let message):
                     errorMessage = message
                 default:
-                    errorMessage = NSLocalizedString("There was an error while calculating the directory size.", comment: "")
+                    errorMessage = NSLocalizedString("There was an error while calculating the folder size.", comment: "")
                 }
 
                 self.configureWaitingView(type: .stopped, message: errorMessage)
@@ -311,10 +311,10 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
                 return
             }
             if let info = info {
-                self.directoryInfo = info
+                self.folderInfo = info
                 self.configureWaitingView(type: .hidden, message: "")
             } else {
-                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error while calculating the directory size.", comment: ""))
+                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error while calculating the folder size.", comment: ""))
 
             }
         })
@@ -359,7 +359,7 @@ final class DirectoryInfoViewController: UIViewController, UITableViewDelegate, 
     }
 
     @objc private func handleDelete() {
-        let controller = DeleteViewController(isDirectory: true)
+        let controller = DeleteViewController(isFolder: true)
 
         controller.onSelection = { [weak self] in
             self?.dismiss(animated: true) {

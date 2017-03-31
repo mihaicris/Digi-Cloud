@@ -2,7 +2,7 @@
 "%d days ago" = "acum %d zile ";
 
 /* No comment provided by engineer. */
-"%d directories" = "%d directoare";
+"%d folders" = "%d directoare";
 
 /* No comment provided by engineer. */
 "%d files
@@ -36,7 +36,7 @@
 "1 day" = "1 zi";
 
 /* No comment provided by engineer. */
-"1 directory" = "1 director";
+"1 folder" = "1 director";
 
 /* No comment provided by engineer. */
 "1 file
@@ -75,7 +75,7 @@ Please try again later!" = "A avut loc o eroare.
 "Are you sure you want to delete %d items?" = "Sigur se șterg %d fișiere?";
 
 /* No comment provided by engineer. */
-"Are you sure you want to delete this directory?" = "Sigur se șterge acest director?";
+"Are you sure you want to delete this folder?" = "Sigur se șterge acest director?";
 
 /* No comment provided by engineer. */
 "Are you sure you want to delete this file?" = "Sigur se șterge acest fișier?";
@@ -162,7 +162,7 @@ Please try again later!" = "A avut loc o eroare.
 "Create" = "Creează";
 
 /* No comment provided by engineer. */
-"Create Directory" = "Creează director";
+"Create Folder" = "Creează director";
 
 /* No comment provided by engineer. */
 "Custom" = "Personalizat";
@@ -180,7 +180,7 @@ Please try again later!" = "A avut loc o eroare.
 "Delete All" = "Șterge toate";
 
 /* No comment provided by engineer. */
-"Delete Directory" = "Șterge directorul";
+"Delete Folder" = "Șterge directorul";
 
 /* No comment provided by engineer. */
 "Delete Link" = "Șterge Link";
@@ -192,16 +192,16 @@ Please try again later!" = "A avut loc o eroare.
 "Digi Storage file share" = "Partajare link";
 
 /* No comment provided by engineer. */
-"Directories first" = "Directoare la început";
+"Folders first" = "Directoare la început";
 
 /* No comment provided by engineer. */
-"Directory content" = "Conținut director";
+"Folder content" = "Conținut director";
 
 /* No comment provided by engineer. */
-"Directory information" = "Informații director";
+"Folder information" = "Informații director";
 
 /* No comment provided by engineer. */
-"Directory is Empty" = "Directorul este gol";
+"Folder is Empty" = "Directorul este gol";
 
 /* No comment provided by engineer. */
 "Done" = "Gata";
@@ -249,7 +249,7 @@ Please try again later!" = "A avut loc o eroare.
 "Everywhere" = "Peste tot";
 
 /* No comment provided by engineer. */
-"File is no longer available. Directory will refresh." = "Fișierul nu mai este disponibil. Conținutul directorului se va actualiza.";
+"File is no longer available. Folder will refresh." = "Fișierul nu mai este disponibil. Conținutul directorului se va actualiza.";
 
 /* No comment provided by engineer. */
 "First Name" = "Prenume";
@@ -417,7 +417,7 @@ Please try again later!" = "A avut loc o eroare.
 "Rename" = "Redenumește";
 
 /* No comment provided by engineer. */
-"Rename Directory" = "Redenumire director";
+"Rename Folder" = "Redenumire director";
 
 /* No comment provided by engineer. */
 "Rename File" = "Redenumire fișier";
@@ -447,7 +447,7 @@ Please try again later!" = "A avut loc o eroare.
 "Save copy" = "Salvează copie";
 
 /* No comment provided by engineer. */
-"Search for files or directories" = "Caută fișiere sau directoare";
+"Search for files or folders" = "Caută fișiere sau directoare";
 
 /* No comment provided by engineer. */
 "Security" = "Securitate";
@@ -507,7 +507,7 @@ Please try again later!" = "A avut loc o eroare.
 "Sort by Type" = "Sortează după tip";
 
 /* No comment provided by engineer. */
-"Sort directory" = "Sortează directorul";
+"Sort folder" = "Sortează directorul";
 
 /* No comment provided by engineer. */
 "Switch Account" = "Schimbă cont";
@@ -540,10 +540,10 @@ Please try again later!" = "A avut loc o eroare.
 "There was an error communicating with the network." = "A avut loc o eroare la comunicarea cu rețeaua.";
 
 /* No comment provided by engineer. */
-"There was an error creating the directory." = "A avut loc o eroare la crearea directorului.";
+"There was an error creating the folder." = "A avut loc o eroare la crearea directorului.";
 
 /* No comment provided by engineer. */
-"There was an error while calculating the directory size." = "A avut loc o eroare la calcularea mărimii directorului.";
+"There was an error while calculating the folder size." = "A avut loc o eroare la calcularea mărimii directorului.";
 
 /* No comment provided by engineer. */
 "There was an error while refreshing the locations." = "A avut loc o eroare la actualizarea locațiilor.";
@@ -561,7 +561,7 @@ Please try again later!" = "A avut loc o eroare.
 "This action is not reversible." = "Această acțiune nu este reversibilă.";
 
 /* No comment provided by engineer. */
-"This directory" = "Acest director";
+"This folder" = "Acest director";
 
 /* No comment provided by engineer. */
 "This file type can't be viewed." = "Acest tip de fișier nu poate fi vizualizat.";

@@ -1,5 +1,5 @@
 //
-//  DirectoryInfo.swift
+//  FolderInfo.swift
 //  Digi Cloud
 //
 //  Created by Mihai Cristescu on 03/03/2017.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct DirectoryInfo {
+struct FolderInfo {
     var size: Int64 = 0
     var files: Int = 0
-    var directories: Int = 0
+    var folders: Int = 0
 }

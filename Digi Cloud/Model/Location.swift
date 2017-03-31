@@ -33,8 +33,8 @@ extension Location {
         return Location(mount: mount, path: newPath)
     }
 
-    func appendingPathComponent(_ name: String, isDirectory: Bool) -> Location {
-        let newPath = path + name + (isDirectory ? "/" : "")
+    func appendingPathComponent(_ name: String, isFolder: Bool) -> Location {
+        let newPath = path + name + (isFolder ? "/" : "")
         return Location(mount: mount, path: newPath)
     }
 }

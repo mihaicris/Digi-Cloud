@@ -44,7 +44,7 @@ final class SearchCell: UITableViewCell {
         return l
     }()
 
-    var seeInDirectoryButton: UIButton = {
+    var seeInFolderButton: UIButton = {
         let b = UIButton(type: UIButtonType.system)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle("\u{f115}", for: .normal)
@@ -85,7 +85,7 @@ final class SearchCell: UITableViewCell {
         contentView.addSubview(nodeNameLabel)
         contentView.addSubview(nodeMountLabel)
         contentView.addSubview(nodePathLabel)
-        contentView.addSubview(seeInDirectoryButton)
+        contentView.addSubview(seeInFolderButton)
         setupConstraints()
     }
 
@@ -107,8 +107,8 @@ final class SearchCell: UITableViewCell {
             nodePathLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor, constant: -30),
             nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor),
 
-            seeInDirectoryButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            seeInDirectoryButton.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
+            seeInFolderButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            seeInFolderButton.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
         ])
     }
 }

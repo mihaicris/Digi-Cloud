@@ -77,7 +77,7 @@ final class SearchResultController: UITableViewController {
         cell.nodePathLabel.text = node.path
 
         if node.type == "dir" {
-            cell.nodeIcon.image = #imageLiteral(resourceName: "directory_icon")
+            cell.nodeIcon.image = #imageLiteral(resourceName: "folder_icon")
             cell.nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 16)
         } else {
             cell.nodeIcon.image = #imageLiteral(resourceName: "file_icon")
@@ -106,8 +106,8 @@ final class SearchResultController: UITableViewController {
         cell.nodeNameLabel.attributedText = attributedText
 
         // Identification of the button's row that tapped
-        cell.seeInDirectoryButton.tag = indexPath.row
-        cell.seeInDirectoryButton.addTarget(self, action: #selector(handleSeeItemInEnclosedDirectory(_:)), for: .touchUpInside)
+        cell.seeInFolderButton.tag = indexPath.row
+        cell.seeInFolderButton.addTarget(self, action: #selector(handleSeeItemInEnclosedFolder(_:)), for: .touchUpInside)
 
         return cell
     }
@@ -147,7 +147,7 @@ final class SearchResultController: UITableViewController {
         tableView.separatorStyle = .none
     }
 
-    @objc private func handleSeeItemInEnclosedDirectory(_ button: UIButton) {
+    @objc private func handleSeeItemInEnclosedFolder(_ button: UIButton) {
 
         let nodeHit = filteredContent[button.tag]
 
@@ -156,9 +156,9 @@ final class SearchResultController: UITableViewController {
             return
         }
 
-        let parentDirectoryLocation = Location(mount: nodeHitMount, path: nodeHit.path).parentLocation
+        let parentFolderLocation = Location(mount: nodeHitMount, path: nodeHit.path).parentLocation
 
-        let controller = ListingViewController(location: parentDirectoryLocation,
+        let controller = ListingViewController(location: parentFolderLocation,
                                                action: .showSearchResult,
                                                searchResult: nodeHit.name)
 
