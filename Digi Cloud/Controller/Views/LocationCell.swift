@@ -93,6 +93,17 @@ final class LocationCell: UITableViewCell {
         return l
     }()
 
+    let desktopLabel: UILabelWithPadding = {
+        let l = UILabelWithPadding(paddingTop: 3, paddingLeft: 5, paddingBottom: 3, paddingRight: 5)
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.HelveticaNeue(size: 12)
+        l.text = "DESKTOP"
+        l.layer.borderWidth = 1/UIScreen.main.scale
+        l.layer.borderColor = UIColor.black.cgColor
+        l.layer.cornerRadius = 5
+        return l
+    }()
+
     // MARK: - Initializers and Deinitializers
 
     required init?(coder aDecoder: NSCoder) {
@@ -110,12 +121,12 @@ final class LocationCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        setBackgroundColors()
+        setLeftViewBackgroundColor()
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        setBackgroundColors()
+        setLeftViewBackgroundColor()
     }
 
     // MARK: - Helper Functions
@@ -125,13 +136,13 @@ final class LocationCell: UITableViewCell {
         contentView.addSubview(statusLabel)
         contentView.addSubview(leftView)
 
-        setBackgroundColors()
+        setLeftViewBackgroundColor()
 
         NSLayoutConstraint.activate([
             locationNameLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
             locationNameLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
 
-            statusLabel.centerYAnchor.constraint(equalTo: locationNameLabel.centerYAnchor),
+            statusLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor),
             statusLabel.leftAnchor.constraint(equalTo:locationNameLabel.rightAnchor, constant: 10),
 
             leftView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -154,6 +165,15 @@ final class LocationCell: UITableViewCell {
                 spaceUsedValueLabel.leftAnchor.constraint(equalTo: spaceUsedLabel.rightAnchor, constant: 10),
             ])
 
+            if mount.type == "device" && mount.origin == "desktop" {
+                contentView.addSubview(desktopLabel)
+
+                NSLayoutConstraint.activate([
+                    desktopLabel.leftAnchor.constraint(equalTo: statusLabel.rightAnchor, constant: 10),
+                    desktopLabel.centerYAnchor.constraint(equalTo: statusLabel.centerYAnchor)
+                ])
+            }
+
         }
 
         if mount.type == "import" || mount.type == "export" {
@@ -169,9 +189,10 @@ final class LocationCell: UITableViewCell {
                 ownerNameLabel.centerYAnchor.constraint(equalTo: ownerLabel.centerYAnchor)
             ])
         }
+
     }
 
-    private func setBackgroundColors() {
+    private func setLeftViewBackgroundColor() {
 
         ownerNameLabel.backgroundColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0)
 

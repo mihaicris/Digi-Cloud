@@ -109,7 +109,7 @@ final class ContentViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
 
-        // Close session and delegate
+        // Close session
         session?.invalidateAndCancel()
         navigationController?.hidesBarsOnTap = false
         super.viewWillDisappear(animated)
@@ -126,7 +126,7 @@ final class ContentViewController: UIViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
-        view.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        view.backgroundColor = .white
     }
 
     private func fetchNode() {
@@ -178,23 +178,36 @@ final class ContentViewController: UIViewController {
         let fileName = node.name
         var fileExtension = (fileName as NSString).pathExtension
 
-        guard let hash = node.hash else {
-            return
-        }
-
         // For WKWebView to try to open files without extension, we assume they are text.
 
         if fileExtension.characters.isEmpty {
             fileExtension = "txt"
         }
 
-        let key = "\(hash).\(fileExtension)"
+        let key: String
+        if let hash = node.hash {
+            key = "\(hash).\(fileExtension)"
+        } else {
+            key = "TEMPORARY.\(fileExtension)"
+        }
 
         self.fileURL = FileManager.filesCacheFolderURL.appendingPathComponent(key)
 
-        if FileManager.default.fileExists(atPath: self.fileURL.path) {
-            self.loadFileContent()
+        if node.hash != nil {
+            if FileManager.default.fileExists(atPath: self.fileURL.path) {
+                self.loadFileContent()
+            } else {
+                self.downloadFile()
+            }
         } else {
+
+            if FileManager.default.fileExists(atPath: self.fileURL.path) {
+                do {
+                    try FileManager.default.removeItem(at: fileURL)
+                } catch {
+                    return
+                }
+            }
             self.downloadFile()
         }
     }
@@ -215,7 +228,7 @@ final class ContentViewController: UIViewController {
         session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
     }
 
-    func handleAction() {
+    @objc private func handleAction() {
 
         handleFileNotOpen(isVisible: false)
 
