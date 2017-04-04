@@ -349,14 +349,14 @@
 		839BAE201D8BE00E00A43452 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8302F2E91E8D7372008BA834 /* FlowController.swift */,
+				8302F3001E8D8BB3008BA834 /* MainNavigationController.swift */,
 				83F994471DD093700023FB5D /* Accounts */,
 				8306C8841E701D9600F8041C /* Actions */,
 				83D03F1B1E6DAF8300BA617A /* Bookmarks */,
 				83F9944E1DD094E20023FB5D /* ContentView */,
-				8302F2E91E8D7372008BA834 /* FlowController.swift */,
 				83F994491DD093A00023FB5D /* Introduction */,
 				83F9944B1DD093C90023FB5D /* Listing */,
-				8302F3001E8D8BB3008BA834 /* MainNavigationController.swift */,
 				83A9BE191DFFDD9E003FD974 /* Search */,
 				83EC31451E29154F009E12B6 /* Settings */,
 				8302F3291E8D8D4F008BA834 /* Views */,

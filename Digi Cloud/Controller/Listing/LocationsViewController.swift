@@ -333,12 +333,31 @@ final class LocationsViewController: UITableViewController {
             return
         }
 
+        if !mount.online {
+            presentError(message: NSLocalizedString("Device is offline.", comment: ""))
+            return
+        }
+
         var location: Location = Location(mount: cell.mount, path: "/")
 
         if mount.type == "export" {
-            if let root = mount.root {
-                let originalPath = root.path
-                location = Location(mount: mainMounts.first!, path: originalPath)
+            if let rootMount = mount.root {
+                let originalPath = rootMount.path
+
+                var substituteMount: Mount?
+
+                if mount.origin == "hosted" {
+                    if let index = mainMounts.index (where: { $0.id == rootMount.id }) {
+                        substituteMount = mainMounts[index]
+                    }
+                } else if mount.origin == "desktop" {
+                    if let index = connectionMounts.index (where: { $0.id == rootMount.id }) {
+                        substituteMount = connectionMounts[index]
+                    }
+                }
+                if let substituteMount = substituteMount {
+                    location = Location(mount: substituteMount, path: originalPath)
+                }
             }
         }
 
