@@ -70,7 +70,6 @@
 		8302F3491E8D8DBF008BA834 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3481E8D8DBF008BA834 /* LoginViewController.swift */; };
 		8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
 		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
-		8363FD191E894E460047CCB4 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8363FD181E894E460047CCB4 /* Info.plist */; };
 		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
 		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
 		837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */; };
@@ -163,7 +162,7 @@
 		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		835982771E680EDC00AA18C9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8363FD181E894E460047CCB4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		837041121D8B1DED000EDBAE /* Digi Cloud DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		837041121D8B1DED000EDBAE /* .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = .app; sourceTree = BUILT_PRODUCTS_DIR; };
 		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8370411C1D8B1DEE000EDBAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8370411F1D8B1DEE000EDBAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -324,7 +323,7 @@
 		837041131D8B1DED000EDBAE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				837041121D8B1DED000EDBAE /* Digi Cloud DEV.app */,
+				837041121D8B1DED000EDBAE /* .app */,
 				83F7EEFD1E369A7D0033F03D /* Digi Cloud Tests.xctest */,
 			);
 			name = Products;
@@ -487,7 +486,7 @@
 			);
 			name = "Digi Cloud";
 			productName = "Digi Cloud";
-			productReference = 837041121D8B1DED000EDBAE /* Digi Cloud DEV.app */;
+			productReference = 837041121D8B1DED000EDBAE /* .app */;
 			productType = "com.apple.product-type.application";
 		};
 		83F7EEFC1E369A7D0033F03D /* Digi Cloud Tests */ = {
@@ -569,7 +568,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8363FD191E894E460047CCB4 /* Info.plist in Resources */,
 				837E53F71E4CDF2B00D8A5AA /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -810,7 +808,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
-				BUNDLE_ID = ro.mihaicris.test.development;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -820,7 +817,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_NAME = "Digi Cloud DEV";
+				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
+				PRODUCT_NAME = "Digi Cloud";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -833,7 +831,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUNDLE_ID = ro.mihaicris.test;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -842,7 +839,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test;
+				PRODUCT_NAME = "Digi Cloud";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -906,7 +904,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
-				BUNDLE_ID = ro.mihaicris.test.development;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -916,7 +913,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
-				PRODUCT_NAME = "Digi Cloud DEV";
+				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
+				PRODUCT_NAME = "Digi Cloud";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -998,7 +996,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
-				BUNDLE_ID = ro.mihaicris.test.development;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1008,7 +1005,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_NAME = "Digi Cloud DEV";
+				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
+				PRODUCT_NAME = "Digi Cloud";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
