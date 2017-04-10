@@ -50,21 +50,19 @@ final class LocationCell: UITableViewCell {
         return l
     }()
 
-    let ownerNameLabel: UILabelWithPadding = {
-        let l = UILabelWithPadding(paddingTop: 2, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.textColor = UIColor.white
-        l.font = UIFont.HelveticaNeue(size: 12)
-        l.layer.cornerRadius = 6
-        l.clipsToBounds = true
-        return l
-    }()
-
     let ownerLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = NSLocalizedString("Owner", comment: "")
         l.font = UIFont.HelveticaNeue(size: 14)
-        l.text = NSLocalizedString("Owned by", comment: "")
+        return l
+    }()
+
+    let ownerNameLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.HelveticaNeue(size: 14)
+        l.textColor = UIColor.defaultColor
         return l
     }()
 
@@ -94,11 +92,11 @@ final class LocationCell: UITableViewCell {
     }()
 
     let desktopLabel: UILabelWithPadding = {
-        let l = UILabelWithPadding(paddingTop: 3, paddingLeft: 5, paddingBottom: 3, paddingRight: 5)
+        let l = UILabelWithPadding(paddingTop: 4, paddingLeft: 5, paddingBottom: 4, paddingRight: 5)
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 12)
+        l.font = UIFont.HelveticaNeueMedium(size: 12)
         l.text = "DESKTOP"
-        l.layer.borderWidth = 1/UIScreen.main.scale
+        l.layer.borderWidth = 0.6
         l.layer.borderColor = UIColor.black.cgColor
         l.layer.cornerRadius = 5
         return l
@@ -194,22 +192,20 @@ final class LocationCell: UITableViewCell {
 
     private func setLeftViewBackgroundColor() {
 
-        ownerNameLabel.backgroundColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0)
-
-        if mount.type == "device" && mount.isPrimary {
-            leftView.backgroundColor = UIColor(red: 0.8, green: 0.3, blue: 0.3, alpha: 1.0)
-        }
-
-        if mount.type == "device" && !mount.isPrimary {
-            leftView.backgroundColor = UIColor(red: 0.7, green: 0.5, blue: 0.1, alpha: 1.0)
+        if mount.type == "device" {
+            if mount.isPrimary {
+                leftView.backgroundColor = UIColor(red: 0.8, green: 0.3, blue: 0.3, alpha: 1.0)
+            } else {
+                leftView.backgroundColor = UIColor(red: 0.7, green: 0.5, blue: 0.1, alpha: 1.0)
+            }
         }
 
         if mount.type == "import" {
-            leftView.backgroundColor = UIColor(red: 0.1, green: 0.8, blue: 0.1, alpha: 1.0)
+            leftView.backgroundColor = UIColor(red: 0.0, green: 0.6, blue: 0.0, alpha: 1.0)
         }
 
         if mount.type == "export" {
-            leftView.backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.8, alpha: 1.0)
+            leftView.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
         }
     }
 }

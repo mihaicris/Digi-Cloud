@@ -325,6 +325,8 @@ final class LocationsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
+        tableView.deselectRow(at: indexPath, animated: false)
+
         guard let cell = tableView.cellForRow(at: indexPath) as? LocationCell else {
             return
         }

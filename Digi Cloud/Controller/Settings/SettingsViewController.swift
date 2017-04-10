@@ -64,7 +64,7 @@ final class SettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         title = NSLocalizedString("Settings", comment: "")
-        preferredContentSize = CGSize(width: 350, height: 520)
+        preferredContentSize = CGSize(width: 350, height: 490)
         setupViews()
         super.viewDidLoad()
     }
@@ -79,7 +79,7 @@ final class SettingsViewController: UITableViewController {
 
         let tableFooterView: UIView = {
             let v = UIView()
-            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 100)
+            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 70)
 
             let versionLabel: UILabel = {
                 let l = UILabel()
@@ -93,26 +93,11 @@ final class SettingsViewController: UITableViewController {
                 return l
             }()
 
-            let copyrightLabel: UILabel = {
-                let l = UILabel()
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.text = NSLocalizedString("©2017 Mihai Cristescu.\n All rights reserved.", comment: "")
-                l.numberOfLines = 2
-                l.textAlignment = .center
-                l.font = UIFont.HelveticaNeue(size: 12)
-                return l
-            }()
-
             v.addSubview(versionLabel)
-            v.addSubview(copyrightLabel)
 
             NSLayoutConstraint.activate([
-
                 versionLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 10),
-                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor),
-
-                copyrightLabel.topAnchor.constraint(equalTo: versionLabel.bottomAnchor, constant: 10),
-                copyrightLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
+                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
             ])
 
             return v
