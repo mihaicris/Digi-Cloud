@@ -86,7 +86,7 @@ final class SettingsViewController: UITableViewController {
                 l.translatesAutoresizingMaskIntoConstraints = false
                 l.textAlignment = .center
                 let str = "Digi Cloud\n" + NSLocalizedString("Version", comment: "")
-                l.text = "\(str) \(UIApplication.Version) (\(UIApplication.Build))"
+                l.text = "\(str) \(UIApplication.Version).\(UIApplication.Build)"
                 l.numberOfLines = 2
                 l.textColor = UIColor.gray
                 l.font = UIFont.HelveticaNeue(size: 12)

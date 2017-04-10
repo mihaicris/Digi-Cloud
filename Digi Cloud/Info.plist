@@ -18,14 +18,16 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.1</string>
+	<key>CFBundleVersion</key>
+	<string>0</string>
 	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<string>public.app-category.utilities</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Permission is requested if the user has choosen to make a profile picture.</string>
+	<string>Camera usage permission is needed when taking a picture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Permission is requested if the user has choosen to select a profile picture from the device.</string>
+	<string>Photo library access permission is needed when selecting a picture from the device.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fontawesome-webfont.ttf</string>
