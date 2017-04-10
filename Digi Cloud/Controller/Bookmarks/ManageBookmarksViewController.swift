@@ -37,6 +37,22 @@ final class ManageBookmarksViewController: UITableViewController {
         return b
     }()
 
+    let activityIndicator: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        ai.translatesAutoresizingMaskIntoConstraints = false
+        ai.startAnimating()
+        ai.hidesWhenStopped = true
+        return ai
+    }()
+
+    let messageLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.textColor = .lightGray
+        l.isHidden = true
+        return l
+    }()
+
     // MARK: - Initializers and Deinitializers
 
     init() {
@@ -57,6 +73,7 @@ final class ManageBookmarksViewController: UITableViewController {
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
         self.title = NSLocalizedString("Bookmarks", comment: "")
+        self.setupViews()
         getBookmarksAndMounts()
         super.viewDidLoad()
     }
@@ -120,6 +137,18 @@ final class ManageBookmarksViewController: UITableViewController {
     }
 
     // MARK: - Helper Functions
+
+    private func setupViews() {
+        view.addSubview(activityIndicator)
+        view.addSubview(messageLabel)
+
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40),
+            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40)
+        ])
+    }
 
     private func updateButtonsToMatchTableState() {
         if self.tableView.isEditing {
@@ -190,6 +219,8 @@ final class ManageBookmarksViewController: UITableViewController {
         // Create dictionary with mountId: Mount
         dispatchGroup.notify(queue: .main) {
 
+            self.activityIndicator.stopAnimating()
+
             if hasFetchedSuccessfully {
 
                 let mountsIDs = resultMounts.map { $0.id }
@@ -208,14 +239,16 @@ final class ManageBookmarksViewController: UITableViewController {
                 self.bookmarks = resultBookmarks
 
                 if self.bookmarks.count == 0 {
-                    self.title = NSLocalizedString("No bookmarks", comment: "")
+                    self.messageLabel.text = NSLocalizedString("No bookmarks", comment: "")
+                    self.messageLabel.isHidden = false
                     return
                 }
 
                 self.tableView.reloadData()
                 self.updateButtonsToMatchTableState()
             } else {
-                self.title = NSLocalizedString("Error on fetching bookmarks", comment: "")
+                self.messageLabel.text = NSLocalizedString("Error on fetching bookmarks", comment: "")
+                self.messageLabel.isHidden = false
             }
         }
     }
