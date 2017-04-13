@@ -54,9 +54,9 @@ enum LinkType: String {
 enum ActionType: Int {
     case bookmark
     case copy
-    case createDirectory
+    case createFolder
     case delete
-    case directoryInfo
+    case folderInfo
     case makeOffline
     case move
     case noAction

@@ -1,0 +1,7 @@
+lane :appstore do
+    scan
+    snapshot
+    frameit
+    sigh
+    deliver
+end
