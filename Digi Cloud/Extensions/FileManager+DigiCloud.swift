@@ -12,7 +12,6 @@ extension FileManager {
 
     static func documentsDir() -> URL {
         return self.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-
     }
 
     static var profileImagesCacheFolderURL: URL {

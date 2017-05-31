@@ -7,7 +7,6 @@
 */
 
 import Foundation
-import UIKit.UIImage
 
 struct Account {
     // MARK: Types

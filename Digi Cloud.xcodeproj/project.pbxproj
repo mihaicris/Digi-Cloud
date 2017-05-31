@@ -162,7 +162,7 @@
 		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		835982771E680EDC00AA18C9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8363FD181E894E460047CCB4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		837041121D8B1DED000EDBAE /* .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = .app; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8370411C1D8B1DEE000EDBAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8370411F1D8B1DEE000EDBAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -323,7 +323,7 @@
 		837041131D8B1DED000EDBAE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				837041121D8B1DED000EDBAE /* .app */,
+				837041121D8B1DED000EDBAE /* Digi Cloud.app */,
 				83F7EEFD1E369A7D0033F03D /* Digi Cloud Tests.xctest */,
 			);
 			name = Products;
@@ -486,7 +486,7 @@
 			);
 			name = "Digi Cloud";
 			productName = "Digi Cloud";
-			productReference = 837041121D8B1DED000EDBAE /* .app */;
+			productReference = 837041121D8B1DED000EDBAE /* Digi Cloud.app */;
 			productType = "com.apple.product-type.application";
 		};
 		83F7EEFC1E369A7D0033F03D /* Digi Cloud Tests */ = {
