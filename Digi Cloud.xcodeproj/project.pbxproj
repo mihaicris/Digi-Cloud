@@ -266,9 +266,6 @@
 			children = (
 				835982771E680EDC00AA18C9 /* Info.plist */,
 				830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */,
-				83CD0C651DE34C730078E5FC /* Logging.swift */,
-				83B6D3951E13C781005258B3 /* InfoPlist.strings */,
-				83B6D39A1E13DCF4005258B3 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -278,6 +275,8 @@
 			children = (
 				8350CDAF1E602E7B0063227E /* Custom Fonts */,
 				8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */,
+				83B6D3951E13C781005258B3 /* InfoPlist.strings */,
+				83B6D39A1E13DCF4005258B3 /* Localizable.strings */,
 				8370411C1D8B1DEE000EDBAE /* Assets.xcassets */,
 			);
 			name = Resources;
@@ -339,6 +338,7 @@
 				835406021D95180F00019D53 /* Managers */,
 				83EF1D461D8FBDC400ACE008 /* Models */,
 				835405FB1D94FCA900019D53 /* Protocols */,
+				83F824771EDF894E001A5A09 /* Utils */,
 				835406011D9517BE00019D53 /* Resources */,
 				835406001D9517AB00019D53 /* Supporting Files */,
 			);
@@ -432,6 +432,14 @@
 				83F7EEFF1E369A7D0033F03D /* DigiCloudTests.swift */,
 			);
 			path = "Digi Cloud Tests";
+			sourceTree = "<group>";
+		};
+		83F824771EDF894E001A5A09 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				83CD0C651DE34C730078E5FC /* Logging.swift */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 		83F994471DD093700023FB5D /* Accounts */ = {

@@ -3,7 +3,8 @@
 
 /* No comment provided by engineer. */
 "%d files
-" = "%d fișiere";
+" = "%d fișiere
+";
 
 /* No comment provided by engineer. */
 "%d folders" = "%d directoare";
@@ -37,7 +38,8 @@
 
 /* No comment provided by engineer. */
 "1 file
-" = "1 fișier";
+" = "1 fișier
+";
 
 /* No comment provided by engineer. */
 "1 folder" = "1 director";
@@ -49,16 +51,16 @@
 "Accounts" = "Conturi";
 
 /* No comment provided by engineer. */
-"Add Account" = "Adaugă un cont";
+"Add Account" = "Adăugați un cont";
 
 /* No comment provided by engineer. */
-"Add member" = "Adaugă membru";
+"Add member" = "Adăugați un membru";
 
 /* No comment provided by engineer. */
 "An error has occured while processing the request." = "A avut loc o eroare la procesarea cererii.";
 
 /* No comment provided by engineer. */
-"An error has occured, please try again later." = "A avut loc o eroare, încearcă mai târziu.";
+"An error has occured, please try again later." = "A avut loc o eroare, încercați mai târziu.";
 
 /* No comment provided by engineer. */
 "An error has occured. Some elements already exists at the destination or the destination location no longer exists." = "A avut loc o eroare. Elemente există deja la destinație sau locația destinație nu mai este disponibilă.";
@@ -84,13 +86,13 @@ Please try again later!" = "A avut loc o eroare.
 "Are you sure you want to remove these accounts?" = "Sigur se șterg aceste conturi?";
 
 /* No comment provided by engineer. */
-"Are you sure you want to remove these bookmarks?" = "Sigur se șterg aceste marcaje?";
+"Are you sure you want to remove these bookmarks?" = "Sigur se șterg aceste semne de carte?";
 
 /* No comment provided by engineer. */
 "Are you sure you want to remove this account?" = "Sigur se șterge acest cont?";
 
 /* No comment provided by engineer. */
-"Are you sure you want to remove this bookmark?" = "Sigur se șterge acest marcaj?";
+"Are you sure you want to remove this bookmark?" = "Sigur se șterge acest semn de carte?";
 
 /* No comment provided by engineer. */
 "Auto Password Links" = "Parole automate pentru linkuri";
@@ -99,7 +101,7 @@ Please try again later!" = "A avut loc o eroare.
 "Back" = "Înapoi";
 
 /* No comment provided by engineer. */
-"Bookmarks" = "Marcaje";
+"Bookmarks" = "Semne de carte";
 
 /* No comment provided by engineer. */
 "Can create download links" = "Poate crea link de descărcare";
@@ -114,34 +116,34 @@ Please try again later!" = "A avut loc o eroare.
 "Can modify" = "Poate modifica";
 
 /* No comment provided by engineer. */
-"Cancel" = "Renunță";
+"Cancel" = "Renunțați";
 
 /* No comment provided by engineer. */
-"Change" = "Schimbă";
+"Change" = "Schimbați";
 
 /* No comment provided by engineer. */
-"Change to Title Case" = "Schimbă în stil titlu";
+"Change to Title Case" = "Schimbați în stil titlu";
 
 /* No comment provided by engineer. */
-"Change to UPPER CASE" = "Schimbă în litere mari";
+"Change to UPPER CASE" = "Schimbați în litere mari";
 
 /* No comment provided by engineer. */
-"Change to lower case" = "Schimbă în litere mici";
+"Change to lower case" = "Schimbați în litere mici";
 
 /* No comment provided by engineer. */
-"Change to sentence" = "Schimbă în stil propoziție";
+"Change to sentence" = "Schimbați în stil propoziție";
 
 /* No comment provided by engineer. */
 "Characters \\ / : ? < > \" | are not allowed." = "Caracterele \\ / : ? < > \" | nu sunt permise.";
 
 /* No comment provided by engineer. */
-"Choose a destination" = "Alege o destinație";
+"Choose a destination" = "Alegeți o destinație";
 
 /* No comment provided by engineer. */
-"Clear Cache" = "Șterge fișierele temporare";
+"Clear Cache" = "Ștergeți fișierele temporare";
 
 /* No comment provided by engineer. */
-"Confirm" = "Confirmă";
+"Confirm" = "Confirmați";
 
 /* No comment provided by engineer. */
 "Confirm Deletion" = "Confirmare ștergere";
@@ -150,7 +152,7 @@ Please try again later!" = "A avut loc o eroare.
 "Connections" = "Conexiuni";
 
 /* No comment provided by engineer. */
-"Copy" = "Copiază";
+"Copy" = "Copiați";
 
 /* No comment provided by engineer. */
 "Could not add new member." = "Nu s-a putut adauga membrul.";
@@ -159,10 +161,10 @@ Please try again later!" = "A avut loc o eroare.
 "Could not update member permissions." = "Nu s-au putut actualiza permisiunile membrului.";
 
 /* No comment provided by engineer. */
-"Create" = "Creează";
+"Create" = "Creați";
 
 /* No comment provided by engineer. */
-"Create Folder" = "Creează director";
+"Create Folder" = "Creați un director";
 
 /* No comment provided by engineer. */
 "Custom" = "Personalizat";
@@ -171,22 +173,22 @@ Please try again later!" = "A avut loc o eroare.
 "Data" = "Date";
 
 /* No comment provided by engineer. */
-"Delete" = "Șterge";
+"Delete" = "Ștergeți";
 
 /* No comment provided by engineer. */
-"Delete (%d)" = "Șterge (%d)";
+"Delete (%d)" = "Ștergeți (%d)";
 
 /* No comment provided by engineer. */
-"Delete All" = "Șterge toate";
+"Delete All" = "Ștergeți tot";
 
 /* No comment provided by engineer. */
-"Delete Folder" = "Șterge directorul";
+"Delete Folder" = "Ștergeți directorul";
 
 /* No comment provided by engineer. */
-"Delete Link" = "Șterge Link";
+"Delete Link" = "Ștergeți linkul";
 
 /* No comment provided by engineer. */
-"Deleting Link" = "Se șterge link-ul";
+"Deleting Link" = "Se șterge linkul";
 
 /* No comment provided by engineer. */
 "Device is offline." = "Echipamentul este offline.";
@@ -207,7 +209,7 @@ Please try again later!" = "A avut loc o eroare.
 "EXTENDED" = "PERMISIUNI EXTINSE";
 
 /* No comment provided by engineer. */
-"Edit" = "Editare";
+"Edit" = "Editați";
 
 /* No comment provided by engineer. */
 "Email address" = "Adresă email";
@@ -228,7 +230,7 @@ Please try again later!" = "A avut loc o eroare.
 "Error fetching accounts from Keychain" = "Eroare la citirea conturilor din Keychain.";
 
 /* No comment provided by engineer. */
-"Error on fetching bookmarks" = "Eroare la obținerea marcajelor";
+"Error on fetching bookmarks" = "Eroare la obținerea semnelor de carte";
 
 /* No comment provided by engineer. */
 "Error reading account from Keychain" = "Eroare la citirea contului din Keychain.";
@@ -267,7 +269,7 @@ Please try again later!" = "A avut loc o eroare.
 "Forever" = "Niciodată";
 
 /* No comment provided by engineer. */
-"Forgot password?" = "Ai uitat parola?";
+"Forgot password?" = "Ați uitat parola?";
 
 /* No comment provided by engineer. */
 "Hello!" = "Salut!";
@@ -309,7 +311,7 @@ Please try again later!" = "A avut loc o eroare.
 "Locations" = "Locații";
 
 /* No comment provided by engineer. */
-"Log in to Another Account" = "Autentificare în alt cont";
+"Log in to Another Account" = "Autentificați-vă în alt cont";
 
 /* No comment provided by engineer. */
 "MEMBERS" = "MEMBRII";
@@ -321,13 +323,13 @@ Please try again later!" = "A avut loc o eroare.
 "Make available offline" = "Salvat permanent";
 
 /* No comment provided by engineer. */
-"Make picture" = "Folosește camera";
+"Make picture" = "Folosiți camera";
 
 /* No comment provided by engineer. */
-"Manage Accounts" = "Gestionare conturi";
+"Manage Accounts" = "Gestionați conturile";
 
 /* No comment provided by engineer. */
-"Manage Share" = "Administrează partajarea";
+"Manage Share" = "Administrați partajarea";
 
 /* No comment provided by engineer. */
 "Members" = "Membrii";
@@ -339,7 +341,7 @@ Please try again later!" = "A avut loc o eroare.
 "More actions" = "Mai multe acțiuni";
 
 /* No comment provided by engineer. */
-"Move" = "Mută";
+"Move" = "Mutați";
 
 /* No comment provided by engineer. */
 "Name" = "Nume";
@@ -354,7 +356,7 @@ Please try again later!" = "A avut loc o eroare.
 "No accounts" = "Niciun cont salvat";
 
 /* No comment provided by engineer. */
-"No bookmarks" = "Niciun marcaj";
+"No bookmarks" = "Niciun semn de carte";
 
 /* No comment provided by engineer. */
 "Note: Including subfolders" = "Notă: Inclusiv subdirectoare";
@@ -402,22 +404,22 @@ Please try again later!" = "A avut loc o eroare.
 "READ" = "DOAR CITIRE";
 
 /* No comment provided by engineer. */
-"Receive Files" = "Trimite link de primire";
+"Receive Files" = "Trimiteți link de primire";
 
 /* No comment provided by engineer. */
 "Receive Links" = "Linkuri de primire";
 
 /* No comment provided by engineer. */
-"Remove Bookmark" = "Șterge marcajul";
+"Remove Bookmark" = "Ștergeți semnul de carte";
 
 /* No comment provided by engineer. */
-"Remove Share" = "Sterge partajarea";
+"Remove Share" = "Ștergeți partajarea";
 
 /* No comment provided by engineer. */
 "Removing share..." = "Se șterge partajarea ...";
 
 /* No comment provided by engineer. */
-"Rename" = "Redenumește";
+"Rename" = "Redenumiți";
 
 /* No comment provided by engineer. */
 "Rename File" = "Redenumire fișier";
@@ -444,19 +446,19 @@ Please try again later!" = "A avut loc o eroare.
 "SHARED" = "PARTAJAT";
 
 /* No comment provided by engineer. */
-"Save" = "Salvează";
+"Save" = "Salvați";
 
 /* No comment provided by engineer. */
-"Save copy" = "Salvează copie";
+"Save copy" = "Salvați o copie";
 
 /* No comment provided by engineer. */
-"Search for files or folders" = "Caută fișiere sau directoare";
+"Search for files or folders" = "Căutați fișiere sau directoare";
 
 /* No comment provided by engineer. */
 "Security" = "Securitate";
 
 /* No comment provided by engineer. */
-"See Share Members" = "Vezi membrii partajare";
+"See Share Members" = "Vedeți membrii partajării";
 
 /* No comment provided by engineer. */
 "Seen %d time" = "Accesat %d dată";
@@ -468,22 +470,22 @@ Please try again later!" = "A avut loc o eroare.
 "Select Mode" = "Mod selecție";
 
 /* No comment provided by engineer. */
-"Select picture" = "Selectează o poză";
+"Select picture" = "Selectați o poză";
 
 /* No comment provided by engineer. */
-"Send Link" = "Trimite link";
+"Send Link" = "Trimiteți link";
 
 /* No comment provided by engineer. */
 "Server replied with Status Code: " = "Serverul a răspuns cu codul de stare: ";
 
 /* No comment provided by engineer. */
-"Set Bookmark" = "Adaugă marcaj";
+"Set Bookmark" = "Puneți semn de carte";
 
 /* No comment provided by engineer. */
 "Settings" = "Setări";
 
 /* No comment provided by engineer. */
-"Share" = "Partajează";
+"Share" = "Partajați";
 
 /* No comment provided by engineer. */
 "Shared by you" = "Partajat de tine";
@@ -498,22 +500,22 @@ Please try again later!" = "A avut loc o eroare.
 "Sorry, this short URL is not available." = "Din păcate acest link nu este disponibil.";
 
 /* No comment provided by engineer. */
-"Sort by Date" = "Sortează după dată";
+"Sort by Date" = "Sortați după dată";
 
 /* No comment provided by engineer. */
-"Sort by Name" = "Sortează după nume";
+"Sort by Name" = "Sortați după nume";
 
 /* No comment provided by engineer. */
-"Sort by Size" = "Sortează după mărime";
+"Sort by Size" = "Sortați după mărime";
 
 /* No comment provided by engineer. */
-"Sort by Type" = "Sortează după tip";
+"Sort by Type" = "Sortați după tip";
 
 /* No comment provided by engineer. */
-"Sort folder" = "Sortează directorul";
+"Sort folder" = "Sortați directorul";
 
 /* No comment provided by engineer. */
-"Switch Account" = "Schimbă cont";
+"Switch Account" = "Schimbați contul";
 
 /* No comment provided by engineer. */
 "The app will now close" = "Aplicația se va închide.";
@@ -570,7 +572,7 @@ Please try again later!" = "A avut loc o eroare.
 "This folder" = "Acest director";
 
 /* No comment provided by engineer. */
-"This name already exists. Please choose a different one." = "Numele există deja. Alege unul diferit.";
+"This name already exists. Please choose a different one." = "Numele există deja. Alegeți unul diferit.";
 
 /* No comment provided by engineer. */
 "Total:" = "Total:";
