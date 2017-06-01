@@ -450,7 +450,8 @@ UICollectionViewDelegateFlowLayout {
         let user = users[userIndexPath.item]
 
         // get indexPaths of all users except the one selected
-        let indexPaths = users.enumerated().flatMap({ (offset, element) -> IndexPath? in
+        let indexPaths = users.enumerated().flatMap({ (arg) -> IndexPath? in
+            let (offset, element) = arg
             if element.id == user.id {
                 return nil
             }
