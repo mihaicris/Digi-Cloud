@@ -114,7 +114,11 @@ class UserSettingsViewController: UITableViewController,
         if section == 0 {
             return 2
         } else {
-            return 2
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                return 2
+            } else {
+                return 1
+            }
         }
     }
 
@@ -141,14 +145,15 @@ class UserSettingsViewController: UITableViewController,
             currentTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
             currentTextField.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor).isActive = true
             currentTextField.rightAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.rightAnchor).isActive = true
-        } else if indexPath.row == 1 {
-            cell.textLabel?.text = NSLocalizedString("Make picture", comment: "")
-            cell.textLabel?.textColor = .defaultColor
         } else {
-            cell.textLabel?.text = NSLocalizedString("Select picture", comment: "")
-            cell.textLabel?.textColor = .defaultColor
+            if UIImagePickerController.isSourceTypeAvailable(.camera) && indexPath.row == 1 {
+                cell.textLabel?.text = NSLocalizedString("Make picture", comment: "")
+                cell.textLabel?.textColor = .defaultColor
+            } else {
+                cell.textLabel?.text = NSLocalizedString("Select picture", comment: "")
+                cell.textLabel?.textColor = .defaultColor
+            }
         }
-
         return cell
     }
 
@@ -159,19 +164,15 @@ class UserSettingsViewController: UITableViewController,
             controller.delegate = self
             controller.allowsEditing = true
 
-            if indexPath.row == 0 {
-                controller.sourceType = .photoLibrary
-
-            } else {
+            if UIImagePickerController.isSourceTypeAvailable(.camera) && indexPath.row == 1 {
                 controller.sourceType = .camera
                 controller.cameraCaptureMode = .photo
                 controller.cameraDevice = .front
                 controller.showsCameraControls = true
-
+            } else {
+                controller.sourceType = .photoLibrary
             }
-
             present(controller, animated: true, completion: nil)
-
         }
     }
 
