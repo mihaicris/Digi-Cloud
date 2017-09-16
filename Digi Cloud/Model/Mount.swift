@@ -33,30 +33,26 @@ struct Mount {
 }
 
 extension Mount {
-    init?(JSON: Any?) {
-        if JSON == nil { return nil }
+    init?(object: Any?) {
+        guard
+            let jsonDictionary = object as? [String: Any],
+            let id = jsonDictionary["id"] as? String,
+            let name = jsonDictionary["name"] as? String,
+            let type = jsonDictionary["type"] as? String,
+            let origin = jsonDictionary["origin"] as? String,
+            let online = jsonDictionary["online"] as? Bool,
+            let usersJSON = jsonDictionary["users"] as? [Any],
+            let isShared = jsonDictionary["isShared"] as? Bool,
+            let isPrimary = jsonDictionary["isPrimary"] as? Bool,
+            let canWrite = jsonDictionary["canWrite"] as? Bool,
+            let canUpload = jsonDictionary["canUpload"] as? Bool,
+            let overQuota = jsonDictionary["overQuota"] as? Bool,
+            let almostOverQuota = jsonDictionary["almostOverQuota"] as? Bool,
+            let userAdded = jsonDictionary["userAdded"] as? TimeInterval
+            else { return nil }
 
-        guard let JSON = JSON as? [String: Any],
-            let id = JSON["id"] as? String,
-            let name = JSON["name"] as? String,
-            let type = JSON["type"] as? String,
-            let origin = JSON["origin"] as? String,
-            let online = JSON["online"] as? Bool,
-            let usersJSON = JSON["users"] as? [Any],
-            let isShared = JSON["isShared"] as? Bool,
-            let isPrimary = JSON["isPrimary"] as? Bool,
-            let canWrite = JSON["canWrite"] as? Bool,
-            let canUpload = JSON["canUpload"] as? Bool,
-            let overQuota = JSON["overQuota"] as? Bool,
-            let almostOverQuota = JSON["almostOverQuota"] as? Bool,
-            let userAdded = JSON["userAdded"] as? TimeInterval
-            else {
-                print("Couldnt parse Mount JSON")
-                return nil
-        }
-
-        if let owner = User(JSON: JSON["owner"]),
-            let permissions = Permissions(JSON: JSON["permissions"]) {
+        if let owner = User(object: jsonDictionary["owner"]),
+            let permissions = Permissions(object: jsonDictionary["permissions"]) {
             self.owner = owner
             self.permissions = permissions
         } else {
@@ -67,12 +63,12 @@ extension Mount {
         self.name = name
         self.type = type
         self.origin = origin
-        self.root = RootMount(JSON: JSON["root"])
+        self.root = RootMount(object: jsonDictionary["root"])
         self.online = online
-        self.users = usersJSON.flatMap { User(JSON: $0) }
+        self.users = usersJSON.flatMap { User(object: $0) }
         self.isShared = isShared
-        self.spaceTotal = JSON["spaceTotal"] as? Int
-        self.spaceUsed = JSON["spaceUsed"] as? Int
+        self.spaceTotal = jsonDictionary["spaceTotal"] as? Int
+        self.spaceUsed = jsonDictionary["spaceUsed"] as? Int
         self.isPrimary = isPrimary
         self.canWrite = canWrite
         self.canUpload = canUpload

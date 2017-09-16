@@ -31,21 +31,17 @@ extension Permissions {
         self.create_link = create_link
     }
 
-    init?(JSON: Any?) {
-        if JSON == nil { return nil }
-        guard let JSON = JSON as? [String: Any],
-            let read = JSON["READ"] as? Bool,
-            let owner = JSON["OWNER"] as? Bool,
-            let mount = JSON["MOUNT"] as? Bool,
-            let create_receiver = JSON["CREATE_RECEIVER"] as? Bool,
-            let comment = JSON["COMMENT"] as? Bool,
-            let write = JSON["WRITE"] as? Bool,
-            let create_link = JSON["CREATE_LINK"] as? Bool
-            else {
-                print("Couldnt parse Permissions JSON.")
-                return nil
-        }
-
+    init?(object: Any?) {
+        guard
+            let jsonDictionary = object as? [String: Any],
+            let read = jsonDictionary["READ"] as? Bool,
+            let owner = jsonDictionary["OWNER"] as? Bool,
+            let mount = jsonDictionary["MOUNT"] as? Bool,
+            let create_receiver = jsonDictionary["CREATE_RECEIVER"] as? Bool,
+            let comment = jsonDictionary["COMMENT"] as? Bool,
+            let write = jsonDictionary["WRITE"] as? Bool,
+            let create_link = jsonDictionary["CREATE_LINK"] as? Bool
+            else { return nil }
         self.read = read
         self.owner = owner
         self.mount = mount

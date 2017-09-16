@@ -1,10 +1,10 @@
 /*
-    Copyright (C) 2016 Apple Inc. All Rights Reserved.
-    See LICENSE.txt for this sample’s licensing information
-    
-    Abstract:
-    A struct for accessing generic password keychain items.
-*/
+ Copyright (C) 2016 Apple Inc. All Rights Reserved.
+ See LICENSE.txt for this sample’s licensing information
+ 
+ Abstract:
+ A struct for accessing generic password keychain items.
+ */
 
 import Foundation
 
@@ -36,9 +36,9 @@ struct Account {
 
     func readToken() throws -> String {
         /*
-            Build a query to find the item that matches the service, account and
-            access group.
-        */
+         Build a query to find the item that matches the service, account and
+         access group.
+         */
         var query = Account.keychainQuery(account: userID)
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         query[kSecReturnAttributes as String] = kCFBooleanTrue
@@ -58,8 +58,8 @@ struct Account {
         guard let existingItem = queryResult as? [String : AnyObject],
             let passwordData = existingItem[kSecValueData as String] as? Data,
             let password = String(data: passwordData, encoding: String.Encoding.utf8)
-        else {
-            throw AccountError.unexpectedPasswordData
+            else {
+                throw AccountError.unexpectedPasswordData
         }
 
         return password
@@ -84,9 +84,9 @@ struct Account {
             guard status == noErr else { throw AccountError.unhandledError(status: status) }
         } catch AccountError.noPassword {
             /*
-                No password was found in the keychain. Create a dictionary to save
-                as a new keychain item.
-            */
+             No password was found in the keychain. Create a dictionary to save
+             as a new keychain item.
+             */
             var newItem = Account.keychainQuery(account: userID)
             newItem[kSecValueData as String] = encodedPassword as AnyObject?
 

@@ -18,17 +18,13 @@ struct RootMount {
 }
 
 extension RootMount {
-    init?(JSON: Any?) {
-        if JSON == nil { return nil }
-
-        guard let JSON = JSON as? [String: Any],
-            let id = JSON["id"] as? String,
-            let name = JSON["name"] as? String,
-            let path = JSON["path"] as? String else {
-                print("Couldnt parse Mount JSON")
-                return nil
-        }
-
+    init?(object: Any?) {
+        guard
+            let jsonDictionary = object as? [String: Any],
+            let id = jsonDictionary["id"] as? String,
+            let name = jsonDictionary["name"] as? String,
+            let path = jsonDictionary["path"] as? String
+            else { return nil }
         self.id = id
         self.name = name
         self.path = path

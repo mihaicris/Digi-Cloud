@@ -23,20 +23,18 @@ struct NodeHit {
 }
 
 extension NodeHit {
-    init?(JSON: Any) {
-        guard let JSON = JSON as? [String: Any],
-            let mountId = JSON["mountId"] as? String,
-            let path = JSON["path"] as? String,
-            let score = JSON["score"] as? Double,
-            let name = JSON["name"] as? String,
-            let type = JSON["type"] as? String,
-            let modified = JSON["modified"] as? TimeInterval,
-            let size = JSON["size"] as? Int64,
-            let contentType = JSON["contentType"] as? String
-            else {
-                print("Could not parse NodeHit JSON.")
-            return nil
-        }
+    init?(object: Any) {
+        guard
+            let jsonDictionary = object as? [String: Any],
+            let mountId = jsonDictionary["mountId"] as? String,
+            let path = jsonDictionary["path"] as? String,
+            let score = jsonDictionary["score"] as? Double,
+            let name = jsonDictionary["name"] as? String,
+            let type = jsonDictionary["type"] as? String,
+            let modified = jsonDictionary["modified"] as? TimeInterval,
+            let size = jsonDictionary["size"] as? Int64,
+            let contentType = jsonDictionary["contentType"] as? String
+            else { return nil }
         self.mountId = mountId
         self.path = path
         self.score = score
