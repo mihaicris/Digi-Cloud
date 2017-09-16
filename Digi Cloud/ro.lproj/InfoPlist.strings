@@ -1,9 +1,12 @@
-/* (No Commment) */
+/* (No Comment) */
 "CFBundleDisplayName" = "Digi Cloud";
 
-/* (No Commment) */
+/* (No Comment) */
 "CFBundleName" = "Digi Cloud";
 
-/* (No Commment) */
-"CFBundleShortVersionString" = "1.0";
+/* (No Comment) */
+"NSCameraUsageDescription" = "Permisiunea de a folosi camera foto este necesară pentru a face o poză pentru imaginea de profil.";
+
+/* (No Comment) */
+"NSPhotoLibraryUsageDescription" = "Permisiunea de acces la libraria de poze este necesară pentru a selecta o poză pentru imaginea de profil.";
 
