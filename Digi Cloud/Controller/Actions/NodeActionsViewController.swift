@@ -37,15 +37,15 @@ final class NodeActionsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupViews()
         setupPermittedActions()
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.preferredContentSize.width = 250
-        self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
+        self.preferredContentSize.height = tableView.contentSize.height - 1
+        self.preferredContentSize.width = 350
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -115,46 +115,68 @@ final class NodeActionsViewController: UITableViewController {
     private func setupViews() {
 
         let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
-            view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-            return view
+            let v = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
+            v.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+            return v
+        }()
+
+        let cancelButton: UIButton = {
+            let b = UIButton(type: .system)
+            b.translatesAutoresizingMaskIntoConstraints = false
+            b.setTitle(NSLocalizedString("Cancel", comment: ""), for: .normal)
+            b.setTitleColor(.defaultColor, for: .normal)
+            b.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
+            return b
         }()
 
         let iconImage: UIImageView = {
             let image = node.type == "dir" ? #imageLiteral(resourceName: "folder_icon") : #imageLiteral(resourceName: "file_icon")
             let iv = UIImageView(image: image)
             iv.contentMode = .scaleAspectFit
+            iv.translatesAutoresizingMaskIntoConstraints = false
             return iv
         }()
 
         let elementName: UILabel = {
-            let label = UILabel()
-            label.text = node.name
-            label.font = UIFont.systemFont(ofSize: 14)
-            return label
+            let l = UILabel()
+            l.translatesAutoresizingMaskIntoConstraints = false
+            l.text = node.name
+            l.font = UIFont.boldSystemFont(ofSize: 16)
+            return l
         }()
 
         let separator: UIView = {
-            let view = UIView()
-            view.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return view
+            let v = UIView()
+            v.translatesAutoresizingMaskIntoConstraints = false
+            v.backgroundColor = UIColor(white: 0.8, alpha: 1)
+            return v
         }()
 
         headerView.addSubview(iconImage)
         headerView.addSubview(elementName)
-
-        let offset = node.type == "dir" ? 22 : 20
-        headerView.addConstraints(with: "H:|-\(offset)-[v0(26)]-10-[v1]-10-|", views: iconImage, elementName)
-        headerView.addConstraints(with: "V:[v0(26)]", views: iconImage)
-        iconImage.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        elementName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-
+        headerView.addSubview(cancelButton)
         headerView.addSubview(separator)
-        headerView.addConstraints(with: "H:|[v0]|", views: separator)
-        headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+
+        let offset: CGFloat = node.type == "dir" ? 20 : 18
+
+        NSLayoutConstraint.activate([
+            iconImage.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: offset),
+            iconImage.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20),
+            iconImage.widthAnchor.constraint(equalToConstant: 26),
+            iconImage.heightAnchor.constraint(equalToConstant: 26),
+            cancelButton.rightAnchor.constraint(equalTo: headerView.layoutMarginsGuide.rightAnchor, constant: -10),
+            cancelButton.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20),
+            elementName.leftAnchor.constraint(equalTo: iconImage.rightAnchor, constant: 10),
+            elementName.rightAnchor.constraint(lessThanOrEqualTo: cancelButton.leftAnchor, constant: -10),
+            elementName.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20),
+            separator.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            separator.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            separator.heightAnchor.constraint(equalToConstant: 1 / UIScreen.main.scale)
+        ])
 
         tableView.isScrollEnabled = false
-        tableView.rowHeight = 50
+        tableView.rowHeight = AppSettings.tableViewRowHeight
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
@@ -202,7 +224,6 @@ final class NodeActionsViewController: UITableViewController {
 
             if location.mount.permissions.create_link {
                 actions.append(.sendDownloadLink)
-//                actions.append(.makeOffline)
             }
 
             if location.mount.canWrite {
@@ -220,6 +241,10 @@ final class NodeActionsViewController: UITableViewController {
                 actions.append(.delete)
             }
         }
+    }
+
+    @objc private func handleCancel() {
+        dismiss(animated: true, completion: nil)
     }
 
 }

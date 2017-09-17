@@ -22,6 +22,11 @@ final class ManageBookmarksViewController: UITableViewController {
 
     private let dispatchGroup = DispatchGroup()
 
+    lazy var closeButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .plain, target: self, action: #selector(handleDismiss))
+        return b
+    }()
+
     lazy var editButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .plain, target: self, action: #selector(handleEnterEditMode))
         return b
@@ -64,23 +69,25 @@ final class ManageBookmarksViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        DEINITLog(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         tableView.register(BookmarkViewCell.self, forCellReuseIdentifier: String(describing: BookmarkViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
         self.title = NSLocalizedString("Bookmarks", comment: "")
         self.setupViews()
-        getBookmarksAndMounts()
-        super.viewDidLoad()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.updateButtonsToMatchTableState()
+        getBookmarksAndMounts()
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -160,7 +167,7 @@ final class ManageBookmarksViewController: UITableViewController {
             if bookmarks.count != 0 {
                 self.navigationItem.rightBarButtonItem = self.editButton
             }
-            self.navigationItem.leftBarButtonItem = nil
+            self.navigationItem.leftBarButtonItem = self.closeButton
         }
     }
 
@@ -339,6 +346,7 @@ final class ManageBookmarksViewController: UITableViewController {
     @objc private func handleAskDeleteConfirmation() {
 
         var messageString: String
+
         if self.tableView.indexPathsForSelectedRows?.count == 1 {
             messageString = NSLocalizedString("Are you sure you want to remove this bookmark?", comment: "")
         } else {
@@ -367,4 +375,7 @@ final class ManageBookmarksViewController: UITableViewController {
         self.updateButtonsToMatchTableState()
     }
 
+    @objc private func handleDismiss() {
+        self.dismiss(animated: true, completion: nil)
+    }
 }

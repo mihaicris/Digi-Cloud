@@ -21,18 +21,17 @@ final class IntroductionViewController: UIViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .magenta
         setupViews()
-        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-
+        super.viewDidAppear(animated)
         // Exit the Intro screen after 2 seconds (temporary functionality)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.onFinish?()
         }
-        super.viewDidAppear(animated)
     }
 
     override var prefersStatusBarHidden: Bool {

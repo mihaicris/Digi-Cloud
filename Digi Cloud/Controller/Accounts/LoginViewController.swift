@@ -95,19 +95,25 @@ final class LoginViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupViews()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow(_:)),
-                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide(_:)),
-                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleKeyboardWillShow(_:)),
+            name: NSNotification.Name.UIKeyboardWillShow,
+            object: nil)
 
-        super.viewDidLoad()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleKeyboardWillHide(_:)),
+            name: NSNotification.Name.UIKeyboardWillHide,
+            object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        usernameTextField.becomeFirstResponder()
         super.viewDidAppear(animated)
+        usernameTextField.becomeFirstResponder()
     }
 
     // MARK: - Helper Functions
@@ -159,7 +165,7 @@ final class LoginViewController: UIViewController {
         usernameYConstraint = usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
 
         NSLayoutConstraint.activate([
-            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+            cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
             cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
             titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor, constant: -30),

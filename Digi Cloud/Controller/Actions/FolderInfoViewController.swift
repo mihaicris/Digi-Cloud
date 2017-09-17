@@ -152,17 +152,10 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        setupViews()
-
-        configureWaitingView(type: .started, message: NSLocalizedString("Please wait...", comment: ""))
-
-        updateFolderInfo()
         super.viewDidLoad()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        setupViews()
+        configureWaitingView(type: .started, message: NSLocalizedString("Please wait...", comment: ""))
+        updateFolderInfo()
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {

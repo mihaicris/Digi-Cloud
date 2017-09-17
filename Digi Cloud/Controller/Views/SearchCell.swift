@@ -91,24 +91,24 @@ final class SearchCell: UITableViewCell {
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            nodeIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            nodeIcon.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
             nodeIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -1),
             nodeIcon.widthAnchor.constraint(equalToConstant: 26),
             nodeIcon.heightAnchor.constraint(equalToConstant: 26),
 
-            nodeNameLabel.leadingAnchor.constraint(equalTo: nodeIcon.trailingAnchor, constant: 10),
-            nodeNameLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor, constant: -30),
+            nodeNameLabel.leftAnchor.constraint(equalTo: nodeIcon.rightAnchor, constant: 10),
+            nodeNameLabel.rightAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.rightAnchor, constant: -30),
             nodeNameLabel.topAnchor.constraint(equalTo: nodeIcon.topAnchor, constant: -7),
 
-            nodeMountLabel.leadingAnchor.constraint(equalTo: nodeNameLabel.leadingAnchor),
+            nodeMountLabel.leftAnchor.constraint(equalTo: nodeNameLabel.leftAnchor),
             nodeMountLabel.topAnchor.constraint(equalTo: nodeNameLabel.bottomAnchor, constant: 2),
 
-            nodePathLabel.leadingAnchor.constraint(equalTo: nodeMountLabel.trailingAnchor, constant: 2),
-            nodePathLabel.trailingAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.trailingAnchor, constant: -30),
+            nodePathLabel.leftAnchor.constraint(equalTo: nodeMountLabel.rightAnchor, constant: 2),
+            nodePathLabel.rightAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.rightAnchor, constant: -30),
             nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor),
 
             seeInFolderButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            seeInFolderButton.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
+            seeInFolderButton.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor)
         ])
     }
 }

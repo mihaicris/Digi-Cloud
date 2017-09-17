@@ -70,7 +70,7 @@ final class AccountTableViewCell: UITableViewCell {
 
         NSLayoutConstraint.activate([
             profileImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            profileImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
             profileImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
             profileImageView.widthAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
             accountNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -8),

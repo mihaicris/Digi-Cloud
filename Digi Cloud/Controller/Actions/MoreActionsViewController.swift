@@ -37,15 +37,15 @@ final class MoreActionsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupViews()
         setupActions()
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        preferredContentSize.width = 250
-        preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
+        preferredContentSize.height = tableView.contentSize.height - 1
+        preferredContentSize.width = 350
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -102,28 +102,43 @@ final class MoreActionsViewController: UITableViewController {
 
     private func setupViews() {
         let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
+            let view = UIView(frame: CGRect(x: 0, y: 0, width:400, height: AppSettings.tableViewRowHeight))
             view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
             return view
         }()
 
-        let message: UILabel = {
-            let label = UILabel()
-            label.textAlignment = .center
-            label.text = NSLocalizedString("More actions", comment: "")
-            label.font = UIFont.systemFont(ofSize: 14)
-            return label
+        let titleName: UILabel = {
+            let l = UILabel()
+            l.translatesAutoresizingMaskIntoConstraints = false
+            l.textAlignment = .center
+            l.text = NSLocalizedString("More actions", comment: "")
+            l.font = UIFont.boldSystemFont(ofSize: 16)
+            return l
+        }()
+
+        let cancelButton: UIButton = {
+            let b = UIButton(type: .system)
+            b.translatesAutoresizingMaskIntoConstraints = false
+            b.setTitle(NSLocalizedString("Cancel", comment: ""), for: .normal)
+            b.setTitleColor(.defaultColor, for: .normal)
+            b.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
+            return b
         }()
 
         let separator: UIView = {
-            let view = UIView()
-            view.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return view
+            let v = UIView()
+            v.backgroundColor = UIColor(white: 0.8, alpha: 1)
+            return v
         }()
 
-        headerView.addSubview(message)
-        headerView.addConstraints(with: "H:|-10-[v0]-10-|", views: message)
-        message.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        headerView.addSubview(titleName)
+        titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+        titleName.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
+
+        headerView.addSubview(cancelButton)
+        cancelButton.rightAnchor.constraint(equalTo: headerView.layoutMarginsGuide.rightAnchor, constant: -8).isActive = true
+        cancelButton.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
 
         headerView.addSubview(separator)
         headerView.addConstraints(with: "H:|[v0]|", views: separator)
@@ -179,5 +194,9 @@ final class MoreActionsViewController: UITableViewController {
         if childs > 1 {
             actions.append(.selectionMode)
         }
+    }
+
+    @objc private func handleCancel() {
+        dismiss(animated: true, completion: nil)
     }
 }

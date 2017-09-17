@@ -89,30 +89,27 @@ final class ContentViewController: UIViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupViews()
         self.title = (self.location.path as NSString).lastPathComponent
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-
+        super.viewWillAppear(animated)
         if let node = self.node {
             processFileURL(node: node)
         } else {
             fetchNode()
         }
-
-        super.viewWillAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-
+        super.viewWillDisappear(animated)
         // Close session
         session?.invalidateAndCancel()
         navigationController?.hidesBarsOnTap = false
-        super.viewWillDisappear(animated)
     }
 
     override var prefersStatusBarHidden: Bool {

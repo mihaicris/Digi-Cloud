@@ -263,6 +263,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupViews()
         setupTableViewHeaderView()
         setupNavigationItems()
@@ -270,12 +271,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         addViewTapGestureRecognizer()
         configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
         requestLink()
-        super.viewDidLoad()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -362,11 +357,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             cell.contentView.addSubview(locationPathLabel)
 
             NSLayoutConstraint.activate([
-                locationPathLabel.leadingAnchor.constraint(equalTo: mountNameLabel.trailingAnchor, constant: 2),
-                locationPathLabel.trailingAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.trailingAnchor),
+                locationPathLabel.leftAnchor.constraint(equalTo: mountNameLabel.rightAnchor, constant: 2),
+                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.rightAnchor),
                 locationPathLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
 
-                mountNameLabel.leadingAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leadingAnchor),
+                mountNameLabel.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
                 mountNameLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
 
         case .link:
@@ -376,18 +371,18 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 cell.contentView.addSubview(hashTextField)
                 cell.contentView.addSubview(saveHashButton)
 
-                rightTextFieldConstraintDefault = hashTextField.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor)
-                rightTextFieldConstraintInEditMode = hashTextField.trailingAnchor.constraint(equalTo: saveHashButton.leadingAnchor, constant: -8)
+                rightTextFieldConstraintDefault = hashTextField.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor)
+                rightTextFieldConstraintInEditMode = hashTextField.rightAnchor.constraint(equalTo: saveHashButton.leftAnchor, constant: -8)
 
                 NSLayoutConstraint.activate([
                     baseLinkLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                    baseLinkLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                    baseLinkLabel.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                     baseLinkLabel.heightAnchor.constraint(equalToConstant: 30),
 
                     saveHashButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                    saveHashButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                    saveHashButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
 
-                    hashTextField.leadingAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.trailingAnchor, constant: 2),
+                    hashTextField.leftAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.rightAnchor, constant: 2),
                     rightTextFieldConstraintDefault!,
                     hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     hashTextField.heightAnchor.constraint(equalToConstant: 30)])
@@ -406,9 +401,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 cell.contentView.addSubview(uploadNotificationSwitch)
 
                 NSLayoutConstraint.activate([
-                    label.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                    label.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                     label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                    uploadNotificationSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                    uploadNotificationSwitch.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                     uploadNotificationSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
             }
         case .password:
@@ -418,11 +413,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             cell.contentView.addSubview(enablePasswordSwitch)
 
             NSLayoutConstraint.activate([
-                passwordLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                passwordLabel.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                 passwordLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                passwordResetButton.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 90),
+                passwordResetButton.leftAnchor.constraint(equalTo: cell.contentView.leftAnchor, constant: 90),
                 passwordResetButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                enablePasswordSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                enablePasswordSwitch.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 enablePasswordSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
 
         case .validity:
@@ -435,18 +430,18 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             cell.contentView.addSubview(spinner)
 
             NSLayoutConstraint.activate([
-                validityLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validityLabel.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                 validityLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                changeValidityButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                changeValidityButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 changeValidityButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                validitySegmentedControl.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validitySegmentedControl.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                 validitySegmentedControl.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                spinner.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                spinner.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 spinner.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                validityDateAndTimePicker.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validityDateAndTimePicker.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                 validityDateAndTimePicker.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 validityDateAndTimePicker.heightAnchor.constraint(equalTo: cell.contentView.heightAnchor),
-                saveCustomDateButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                saveCustomDateButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
         }
 

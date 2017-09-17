@@ -37,18 +37,13 @@ final class CreateFolderViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        setupViews()
         super.viewDidLoad()
+        setupViews()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.textField.becomeFirstResponder()
         super.viewDidAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        self.textField.becomeFirstResponder()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -59,18 +59,13 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        setupViews()
         super.viewDidLoad()
+        setupViews()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.textField.becomeFirstResponder()
         super.viewDidAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        self.textField.becomeFirstResponder()
     }
 
     // MARK: - TableView Delegate
@@ -207,7 +202,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             actionsListLabel.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20),
 
             actionButtonsStackview.topAnchor.constraint(equalTo: actionsContainerView.topAnchor, constant: 40),
-            actionButtonsStackview.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20),
+            actionButtonsStackview.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20)
         ])
 
         tableView.isScrollEnabled = false

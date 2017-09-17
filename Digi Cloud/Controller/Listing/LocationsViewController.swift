@@ -64,20 +64,15 @@ final class LocationsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupNavigationBar()
         setupActivityIndicatorView()
         setupTableView()
-        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.getMounts()
         super.viewDidAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        self.getMounts()
     }
 
     // MARK: - Helper Functions

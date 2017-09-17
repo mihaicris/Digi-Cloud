@@ -32,18 +32,13 @@ final class DeleteViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        setupViews()
         super.viewDidLoad()
+        setupViews()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        self.preferredContentSize.height = tableView.contentSize.height - 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

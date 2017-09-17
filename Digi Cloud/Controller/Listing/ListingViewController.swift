@@ -153,14 +153,15 @@ final class ListingViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupTableView()
         setupSearchController()
         updateNavigationBarItems()
         setupToolBarButtonItems()
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if [ActionType.noAction, ActionType.showSearchResult].contains(self.action) {
             updateNavigationBarRightButtonItems()
             tableView.tableHeaderView = nil
@@ -171,17 +172,17 @@ final class ListingViewController: UITableViewController {
             emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "")
             tableView.reloadData()
         }
-        super.viewWillAppear(animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         if needRefresh {
             self.getContent()
         }
-        super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
 
         #if DEBUG
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -190,8 +191,6 @@ final class ListingViewController: UITableViewController {
         if tableView.isEditing {
             handleCancelEditMode()
         }
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

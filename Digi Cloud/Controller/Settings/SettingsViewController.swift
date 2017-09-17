@@ -26,6 +26,11 @@ final class SettingsViewController: UITableViewController {
 
     private var settings: [SettingType] = [.user, .security, .data]
 
+    lazy var closeButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .plain, target: self, action: #selector(handleDismiss))
+        return b
+    }()
+
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -63,16 +68,16 @@ final class SettingsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = NSLocalizedString("Settings", comment: "")
         preferredContentSize = CGSize(width: 350, height: 490)
         setupViews()
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchUserData()
         tableView.reloadData()
-        super.viewWillAppear(animated)
     }
 
     private func setupViews() {
@@ -104,6 +109,7 @@ final class SettingsViewController: UITableViewController {
         }()
 
         tableView.tableFooterView = tableFooterView
+        self.navigationItem.leftBarButtonItem = self.closeButton
     }
 
     private func fetchUserData() {
@@ -366,6 +372,10 @@ final class SettingsViewController: UITableViewController {
             guard let url = URL(string: urlstring) else { return }
             UIApplication.shared.openURL(url)
         }
+    }
+
+    @objc private func handleDismiss() {
+        self.dismiss(animated: true, completion: nil)
     }
 
     private func handleClearCache() {

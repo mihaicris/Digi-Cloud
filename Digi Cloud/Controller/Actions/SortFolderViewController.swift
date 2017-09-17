@@ -30,15 +30,15 @@ final class SortFolderViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupActions()
         setupViews()
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.preferredContentSize.height = tableView.contentSize.height - 1
-        self.preferredContentSize.width = 250
         super.viewWillAppear(animated)
+        self.preferredContentSize.height = tableView.contentSize.height - 1
+        self.preferredContentSize.width = 350
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -106,28 +106,42 @@ final class SortFolderViewController: UITableViewController {
     private func setupViews() {
 
         let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
             view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
             return view
         }()
 
         let titleName: UILabel = {
-            let label = UILabel()
-            label.text = NSLocalizedString("Sort folder", comment: "")
-            label.font = UIFont.systemFont(ofSize: 14)
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
+            let l = UILabel()
+            l.text = NSLocalizedString("Sort folder", comment: "")
+            l.font = UIFont.boldSystemFont(ofSize: 16)
+            l.translatesAutoresizingMaskIntoConstraints = false
+            return l
+        }()
+
+        let doneButton: UIButton = {
+            let b = UIButton(type: .system)
+            b.translatesAutoresizingMaskIntoConstraints = false
+            b.setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
+            b.setTitleColor(.defaultColor, for: .normal)
+            b.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
+            return b
         }()
 
         let separator: UIView = {
-            let view = UIView()
-            view.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return view
+            let v = UIView()
+            v.backgroundColor = UIColor(white: 0.8, alpha: 1)
+            return v
         }()
 
         headerView.addSubview(titleName)
         titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-        titleName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        titleName.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
+
+        headerView.addSubview(doneButton)
+        doneButton.rightAnchor.constraint(equalTo: headerView.layoutMarginsGuide.rightAnchor, constant: -8).isActive = true
+        doneButton.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
 
         headerView.addSubview(separator)
         headerView.addConstraints(with: "H:|[v0]|", views: separator)
@@ -147,6 +161,10 @@ final class SortFolderViewController: UITableViewController {
             NSLocalizedString("Sort by Size", comment: ""),
             NSLocalizedString("Sort by Type", comment: "")
         ]
+    }
+
+    @objc private func handleCancel() {
+        dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleOnSwitchValueChanged(_ sender: UISwitch) {

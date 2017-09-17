@@ -122,20 +122,19 @@ UICollectionViewDelegateFlowLayout {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         collectionView.register(AccountCollectionCell.self,
                                 forCellWithReuseIdentifier: String(describing: AccountCollectionCell.self))
         getPersistedUsers()
         setupViews()
         configureViews()
-        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-
+        super.viewDidAppear(animated)
         updateUsers {
             self.configureViews()
         }
-        super.viewDidAppear(animated)
     }
 
     private func getPersistedUsers() {
