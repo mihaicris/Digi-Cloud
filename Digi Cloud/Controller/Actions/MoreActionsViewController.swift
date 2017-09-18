@@ -44,7 +44,6 @@ final class MoreActionsViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        preferredContentSize.height = tableView.contentSize.height - 1
         preferredContentSize.width = 350
     }
 

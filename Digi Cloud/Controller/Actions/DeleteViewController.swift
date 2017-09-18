@@ -38,7 +38,6 @@ final class DeleteViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.preferredContentSize.height = tableView.contentSize.height - 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

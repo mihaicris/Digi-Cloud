@@ -37,7 +37,6 @@ final class SortFolderViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.preferredContentSize.height = tableView.contentSize.height - 1
         self.preferredContentSize.width = 350
     }
 
@@ -124,7 +123,7 @@ final class SortFolderViewController: UITableViewController {
             b.translatesAutoresizingMaskIntoConstraints = false
             b.setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
             b.setTitleColor(.defaultColor, for: .normal)
-            b.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
             b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
             return b
         }()

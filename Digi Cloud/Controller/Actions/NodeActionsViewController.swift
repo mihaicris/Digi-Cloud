@@ -44,7 +44,6 @@ final class NodeActionsViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.preferredContentSize.height = tableView.contentSize.height - 1
         self.preferredContentSize.width = 350
     }
 

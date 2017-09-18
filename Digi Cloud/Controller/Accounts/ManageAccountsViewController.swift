@@ -108,7 +108,6 @@ final class ManageAccountsViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
-        preferredContentSize.height = 400
         preferredContentSize.width = 350
         title = NSLocalizedString("Accounts", comment: "")
 
