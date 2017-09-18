@@ -258,14 +258,14 @@ final class ListingViewController: UITableViewController {
             if cell.hasLink {
                 // http://fontawesome.io/icon/cloud-upload/
                 let attributedString = NSAttributedString(string: "  \u{f0aa}",
-                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                                                          attributes: [NSAttributedStringKey.font: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
             if cell.hasReceiver {
                 // http://fontawesome.io/icon/cloud-download/
                 let attributedString = NSAttributedString(string: "  \u{f0ab}",
-                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                                                          attributes: [NSAttributedStringKey.font: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
@@ -301,7 +301,7 @@ final class ListingViewController: UITableViewController {
             if cell.hasLink {
                 // http://fontawesome.io/icon/cloud-upload/
                 let attributedString = NSAttributedString(string: "  \u{f0aa}",
-                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                                                          attributes: [NSAttributedStringKey.font: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 

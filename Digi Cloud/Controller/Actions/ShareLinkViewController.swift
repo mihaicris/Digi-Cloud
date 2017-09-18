@@ -164,7 +164,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             NSLocalizedString("Custom", comment: "")
         ])
         sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12)], for: .normal)
+        sc.setTitleTextAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12)], for: .normal)
         sc.addTarget(self, action: #selector(handleValiditySelectorValueChanged(_:)), for: .valueChanged)
         sc.isHidden = true
         return sc
@@ -387,7 +387,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                     hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     hashTextField.heightAnchor.constraint(equalToConstant: 30)])
 
-                hashTextField.setContentHuggingPriority(249, for: .horizontal)
+                hashTextField.setContentHuggingPriority(UILayoutPriority(rawValue: 249), for: .horizontal)
 
             } else if linkType == .upload {
                 let label: UILabel = {

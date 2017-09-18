@@ -128,19 +128,19 @@ final class LoginViewController: UIViewController {
 
             // TODO: Change fonts?
             let aText = NSMutableAttributedString(string: NSLocalizedString("Hello!", comment: ""),
-                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 26)!,
-                                                               NSForegroundColorAttributeName: UIColor.white])
+                                                  attributes: [NSAttributedStringKey.font: UIFont(name: "PingFangSC-Semibold", size: 26)!,
+                                                               NSAttributedStringKey.foregroundColor: UIColor.white])
             aText.append(NSAttributedString(string: "\n"))
 
             aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: ""),
-                                            attributes: [NSFontAttributeName: UIFont.HelveticaNeue(size: 16),
-                                                         NSForegroundColorAttributeName: UIColor.white]))
+                                            attributes: [NSAttributedStringKey.font: UIFont.HelveticaNeue(size: 16),
+                                                         NSAttributedStringKey.foregroundColor: UIColor.white]))
 
             let aPar = NSMutableParagraphStyle()
             aPar.alignment = .center
 
             let range = NSRange(location: 0, length: aText.string.characters.count)
-            aText.addAttributes([NSParagraphStyleAttributeName: aPar], range: range)
+            aText.addAttributes([NSAttributedStringKey.paragraphStyle: aPar], range: range)
 
             tv.textContainerInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
 

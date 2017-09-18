@@ -88,18 +88,18 @@ UICollectionViewDelegateFlowLayout {
         l.numberOfLines = 3
         let color = UIColor.init(red: 48/255, green: 133/255, blue: 243/255, alpha: 1.0)
         let attributedText = NSMutableAttributedString(string: "Cloud",
-                                                       attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 48) as Any])
+                                                       attributes: [NSAttributedStringKey.font: UIFont(name: "PingFangSC-Semibold", size: 48) as Any])
         let word = NSLocalizedString("for", comment: "")
 
         attributedText.append(NSAttributedString(string: "\n\(word)  ",
-            attributes: [NSFontAttributeName: UIFont(name: "Didot-Italic", size: 20) as Any]))
+            attributes: [NSAttributedStringKey.font: UIFont(name: "Didot-Italic", size: 20) as Any]))
 
         attributedText.append(NSAttributedString(string: "Digi Storage",
-                                                 attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
+                                                 attributes: [NSAttributedStringKey.font: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
 
         let nsString = NSString(string: attributedText.string)
         let nsRange = nsString.range(of: "Storage")
-        attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
+        attributedText.addAttributes([NSAttributedStringKey.foregroundColor: color], range: nsRange)
 
         l.attributedText = attributedText
         return l

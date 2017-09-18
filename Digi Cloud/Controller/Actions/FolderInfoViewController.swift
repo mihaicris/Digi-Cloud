@@ -61,7 +61,7 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
                 let text1 = String.localizedStringWithFormat(filesString, folderInfo.files)
                 let text2 = String.localizedStringWithFormat(foldersString, folderInfo.folders)
                 let attributedText = NSMutableAttributedString(string: text1 + text2,
-                                                               attributes: [NSParagraphStyleAttributeName: paragraph])
+                                                               attributes: [NSAttributedStringKey.paragraphStyle: paragraph])
                 label.attributedText = attributedText
 
                 return label
