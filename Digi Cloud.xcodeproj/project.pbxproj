@@ -23,7 +23,7 @@
 		8302F2E81E8D735A008BA834 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2E51E8D735A008BA834 /* AccountSelectionViewController.swift */; };
 		8302F2EA1E8D7372008BA834 /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2E91E8D7372008BA834 /* FlowController.swift */; };
 		8302F2F51E8D738D008BA834 /* String+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */; };
-		8302F2F61E8D738D008BA834 /* UIApplication+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EC1E8D738D008BA834 /* UIApplication+DigiCloud.swift */; };
+		8302F2F61E8D738D008BA834 /* Bundle+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EC1E8D738D008BA834 /* Bundle+DigiCloud.swift */; };
 		8302F2F71E8D738D008BA834 /* UIViewController+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */; };
 		8302F2F81E8D738D008BA834 /* Collection+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */; };
 		8302F2F91E8D738D008BA834 /* UIView+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */; };
@@ -112,7 +112,7 @@
 		8302F2E51E8D735A008BA834 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSelectionViewController.swift; path = Controller/Accounts/AccountSelectionViewController.swift; sourceTree = "<group>"; };
 		8302F2E91E8D7372008BA834 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FlowController.swift; path = Controller/FlowController.swift; sourceTree = "<group>"; };
 		8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+DigiCloud.swift"; path = "Extensions/String+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2EC1E8D738D008BA834 /* UIApplication+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIApplication+DigiCloud.swift"; path = "Extensions/UIApplication+DigiCloud.swift"; sourceTree = "<group>"; };
+		8302F2EC1E8D738D008BA834 /* Bundle+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Bundle+DigiCloud.swift"; path = "Extensions/Bundle+DigiCloud.swift"; sourceTree = "<group>"; };
 		8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+DigiCloud.swift"; path = "Extensions/UIViewController+DigiCloud.swift"; sourceTree = "<group>"; };
 		8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Collection+DigiCloud.swift"; path = "Extensions/Collection+DigiCloud.swift"; sourceTree = "<group>"; };
 		8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+DigiCloud.swift"; path = "Extensions/UIView+DigiCloud.swift"; sourceTree = "<group>"; };
@@ -297,7 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */,
-				8302F2EC1E8D738D008BA834 /* UIApplication+DigiCloud.swift */,
+				8302F2EC1E8D738D008BA834 /* Bundle+DigiCloud.swift */,
 				8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */,
 				8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */,
 				8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */,
@@ -595,7 +595,7 @@
 				8302F2D91E8D7006008BA834 /* NodeHit.swift in Sources */,
 				8302F2FC1E8D738D008BA834 /* UIColor+DigiCloud.swift in Sources */,
 				8302F3081E8D8C10008BA834 /* IntroductionViewController.swift in Sources */,
-				8302F2F61E8D738D008BA834 /* UIApplication+DigiCloud.swift in Sources */,
+				8302F2F61E8D738D008BA834 /* Bundle+DigiCloud.swift in Sources */,
 				8302F2DC1E8D7006008BA834 /* Location.swift in Sources */,
 				8302F3411E8D8D5D008BA834 /* FileCell.swift in Sources */,
 				8302F2FD1E8D738D008BA834 /* UserDefaults+DigiCloud.swift in Sources */,
