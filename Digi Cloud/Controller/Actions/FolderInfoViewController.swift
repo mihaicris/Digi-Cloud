@@ -277,7 +277,7 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
         ])
 
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
-                                         style: .plain,
+                                         style: .done,
                                          target: self,
                                          action: #selector(handleDone))
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)

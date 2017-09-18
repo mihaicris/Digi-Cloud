@@ -49,7 +49,7 @@ class UserSettingsViewController: UITableViewController,
         title = NSLocalizedString("User details", comment: "")
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""),
-                                                            style: .plain, target: self, action: #selector(handleSaveUserName))
+                                                            style: .done, target: self, action: #selector(handleSaveUserName))
     }
 
     @objc private func handleSaveUserName() {

@@ -27,7 +27,7 @@ final class SettingsViewController: UITableViewController {
     private var settings: [SettingType] = [.user, .security, .data]
 
     lazy var closeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .plain, target: self, action: #selector(handleDismiss))
+        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleDismiss))
         return b
     }()
 

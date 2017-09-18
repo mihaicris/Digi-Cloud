@@ -121,7 +121,7 @@ final class MoreActionsViewController: UITableViewController {
             b.translatesAutoresizingMaskIntoConstraints = false
             b.setTitle(NSLocalizedString("Cancel", comment: ""), for: .normal)
             b.setTitleColor(.defaultColor, for: .normal)
-            b.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
             b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
             return b
         }()

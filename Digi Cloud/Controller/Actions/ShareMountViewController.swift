@@ -374,9 +374,9 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     private func setupNavigationItems() {
 
         title = NSLocalizedString("Members", comment: "")
-        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .done, target: nil, action: nil)
 
-        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .plain, target: self, action: #selector(handleDone))
+        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(handleDone))
         navigationItem.setRightBarButton(doneButton, animated: false)
     }
 

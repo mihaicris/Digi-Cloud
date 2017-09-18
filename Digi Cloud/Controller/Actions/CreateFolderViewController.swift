@@ -90,12 +90,12 @@ final class CreateFolderViewController: UITableViewController {
         tableView.isScrollEnabled = false
 
         leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                                        style: .plain,
+                                        style: .done,
                                         target: self,
                                         action: #selector(handleCancel))
 
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Create", comment: ""),
-                                         style: .plain,
+                                         style: .done,
                                          target: self,
                                          action: #selector(handleCreateFolder))
 

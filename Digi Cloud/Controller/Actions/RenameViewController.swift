@@ -208,11 +208,11 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         tableView.isScrollEnabled = false
 
         leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                                        style: .plain,
+                                        style: .done,
                                         target: self,
                                         action: #selector(handleCancel))
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename", comment: ""),
-                                         style: .plain,
+                                         style: .done,
                                          target: self,
                                          action: #selector(handleRename))
 

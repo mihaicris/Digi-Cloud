@@ -93,18 +93,18 @@ final class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .plain, target: self, action: #selector(showCreateFolderViewController))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .done, target: self, action: #selector(showCreateFolderViewController))
         return b
     }()
 
     private lazy var copyInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .plain, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
+        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .done, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
         b.tag = ActionType.copy.rawValue
         return b
     }()
 
     private lazy var moveInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .plain, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
+        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .done, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
         b.tag = ActionType.move.rawValue
         return b
     }()
@@ -129,7 +129,7 @@ final class ListingViewController: UITableViewController {
     }()
 
     private lazy var cancelInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancelEditMode))
+        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEditMode))
         return b
     }()
 
@@ -396,7 +396,7 @@ final class ListingViewController: UITableViewController {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
 
-            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancelCopyOrMoveAction))
+            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelCopyOrMoveAction))
 
             navigationItem.rightBarButtonItem = cancelButton
 
@@ -417,7 +417,7 @@ final class ListingViewController: UITableViewController {
                 NSLocalizedString("Save copy", comment: "") :
                 NSLocalizedString("Move", comment: "")
 
-            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMoveAction))
+            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .done, target: self, action: #selector(handleCopyOrMoveAction))
             copyMoveButton.isEnabled = true
 
             self.toolbarItems = [createFolderBarButton, flexibleBarButton, bookmarksBarButton, flexibleBarButton, copyMoveButton]
@@ -615,10 +615,10 @@ final class ListingViewController: UITableViewController {
             rightBarButtonItems.append(cancelInEditModeButton)
         } else {
 
-            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .plain, target: self, action: #selector(handleShowMoreActionsViewController(_:)))
+            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .done, target: self, action: #selector(handleShowMoreActionsViewController(_:)))
             moreActionsBarButton.tag = 0
 
-            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .plain, target: self, action: #selector(handleShowSortingSelectionViewController(_:)))
+            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .done, target: self, action: #selector(handleShowSortingSelectionViewController(_:)))
             sortBarButton.tag = 1
 
             let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleShowSearchViewController(_:)))

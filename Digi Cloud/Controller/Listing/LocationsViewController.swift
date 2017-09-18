@@ -96,13 +96,13 @@ final class LocationsViewController: UITableViewController {
         if action == .copy || action == .move {
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
             let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                    style: .plain,
+                    style: .done,
                     target: self,
                     action: #selector(handleDone))
             navigationItem.setRightBarButton(rightButton, animated: false)
 
         } else {
-            let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings_icon"), style: .plain, target: self, action: #selector(handleShowSettings))
+            let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings_icon"), style: .done, target: self, action: #selector(handleShowSettings))
             self.navigationItem.setLeftBarButton(settingsButton, animated: false)
         }
         self.title = NSLocalizedString("Locations", comment: "")
