@@ -6,14 +6,23 @@
 //  Copyright © 2017 Mihai Cristescu. All rights reserved.
 //
 
-import UIKit.UIApplication
+import Foundation
 
-extension UIApplication {
-    class var Build: String {
-        return Bundle.main.infoDictionary?[kCFBundleVersionKey as String] as? String ?? ""
+extension Bundle {
+    
+    var versionNumber: String? {
+        return infoDictionary?["CFBundleShortVersionString"] as? String
     }
-
-    class var Version: String {
-        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    
+    var buildNumber: String? {
+        return infoDictionary?["CFBundleVersion"] as? String
     }
+    
+    var prettyVersionString: String {
+        let ver = versionNumber ?? NSLocalizedString("Unknown", comment: "")
+        let build = buildNumber ?? "0"
+        let format = NSLocalizedString("Digi Cloud\nVersion %@ (%@)", comment: "")
+        return  String.localizedStringWithFormat(format, ver, build)
+    }
+    
 }

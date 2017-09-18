@@ -88,11 +88,10 @@ final class SettingsViewController: UITableViewController {
 
             let versionLabel: UILabel = {
                 let l = UILabel()
+                l.numberOfLines = 0
                 l.translatesAutoresizingMaskIntoConstraints = false
                 l.textAlignment = .center
-                let versionFormat = NSLocalizedString("Digi Cloud\nVersion %@ (Build %@)", comment: "")
-                l.text = String(format: versionFormat, UIApplication.Version, UIApplication.Build)
-                l.numberOfLines = 2
+                l.text = Bundle.main.prettyVersionString
                 l.textColor = UIColor.gray
                 l.font = UIFont.HelveticaNeue(size: 12)
                 return l

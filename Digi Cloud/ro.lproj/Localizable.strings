@@ -137,6 +137,9 @@
 "Clear Cache" = "Ștergeți fișierele temporare";
 
 /* No comment provided by engineer. */
+"Close" = "Închideți";
+
+/* No comment provided by engineer. */
 "Confirm" = "Confirmați";
 
 /* No comment provided by engineer. */
@@ -188,7 +191,7 @@
 "Device is offline." = "Echipamentul este offline.";
 
 /* No comment provided by engineer. */
-"Digi Cloud\nVersion %@ (Build %@)" = "Digi Cloud\nVersiune %1$@ (compilare %2$@)";
+"Digi Cloud\nVersion %@ (%@)" = "Digi Cloud\nVersiune %1$@ (%2$@)";
 
 /* No comment provided by engineer. */
 "Digi Storage file share" = "Partajare link";
@@ -575,6 +578,9 @@
 "Total:" = "Total:";
 
 /* No comment provided by engineer. */
+"Unknown" = "Necunoscut";
+
+/* No comment provided by engineer. */
 "Uploaded %d time" = "Accesat %d dată";
 
 /* No comment provided by engineer. */
@@ -619,5 +625,3 @@
 /* No comment provided by engineer. */
 "yesterday" = "ieri";
 
-/* No comment provided by engineer. */
-"Close" = "Închideți";
