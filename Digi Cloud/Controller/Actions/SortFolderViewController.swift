@@ -106,7 +106,7 @@ final class SortFolderViewController: UITableViewController {
     private func setupViews() {
 
         let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight * 1.2))
             view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
             return view
         }()

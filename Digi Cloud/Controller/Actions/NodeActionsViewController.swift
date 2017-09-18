@@ -115,7 +115,7 @@ final class NodeActionsViewController: UITableViewController {
     private func setupViews() {
 
         let headerView: UIView = {
-            let v = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
+            let v = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight * 1.2))
             v.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
             return v
         }()
