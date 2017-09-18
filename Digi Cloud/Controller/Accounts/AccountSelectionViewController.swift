@@ -132,9 +132,7 @@ UICollectionViewDelegateFlowLayout {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        updateUsers {
-            self.configureViews()
-        }
+        getAccountsFromKeychain()
     }
 
     private func getPersistedUsers() {
@@ -338,10 +336,6 @@ UICollectionViewDelegateFlowLayout {
 
         controller.onAddAccount = { [weak self] in
             self?.handleShowLogin()
-        }
-
-        controller.onFinish = { [weak self] in
-            self?.getAccountsFromKeychain()
         }
 
         let navController = UINavigationController(rootViewController: controller)

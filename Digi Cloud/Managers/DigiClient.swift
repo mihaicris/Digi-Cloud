@@ -84,7 +84,9 @@ final class DigiClient {
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
         #if DEBUG
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            }
         #endif
 
         /* 1. Build the URL, Configure the request */

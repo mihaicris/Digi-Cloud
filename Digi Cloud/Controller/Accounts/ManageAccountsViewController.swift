@@ -94,8 +94,13 @@ final class ManageAccountsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 
         if editingStyle == .delete {
-
+            self.tableView.beginUpdates()
             self.wipeAccount(atIndexPath: indexPath)
+            self.tableView.endUpdates()
+            controller.users = self.users
+            controller.configureViews()
+            controller.collectionView.reloadData()
+
             self.dismissIfNoMoreUsers()
         }
     }

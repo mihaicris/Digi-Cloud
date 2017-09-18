@@ -75,7 +75,7 @@ final class LoginViewController: UIViewController {
         return b
     }()
 
-    private var usernameYConstraint: NSLayoutConstraint!
+    private var usernameTextFieldCenterYAnchorConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers and Deinitializers
 
@@ -96,19 +96,8 @@ final class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.registerForKeyboardNotifications()
         setupViews()
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleKeyboardWillShow(_:)),
-            name: NSNotification.Name.UIKeyboardWillShow,
-            object: nil)
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleKeyboardWillHide(_:)),
-            name: NSNotification.Name.UIKeyboardWillHide,
-            object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -117,6 +106,11 @@ final class LoginViewController: UIViewController {
     }
 
     // MARK: - Helper Functions
+
+    private func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil)
+    }
 
     private func setupViews() {
 
@@ -134,9 +128,9 @@ final class LoginViewController: UIViewController {
 
             // TODO: Change fonts?
             let aText = NSMutableAttributedString(string: NSLocalizedString("Hello!", comment: ""),
-                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 28)!,
+                                                  attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 26)!,
                                                                NSForegroundColorAttributeName: UIColor.white])
-            aText.append(NSAttributedString(string: "\n\n"))
+            aText.append(NSAttributedString(string: "\n"))
 
             aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: ""),
                                             attributes: [NSFontAttributeName: UIFont.HelveticaNeue(size: 16),
@@ -162,32 +156,37 @@ final class LoginViewController: UIViewController {
         view.addSubview(spinner)
         view.addSubview(forgotPasswordButton)
 
-        usernameYConstraint = usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
+        usernameTextFieldCenterYAnchorConstraint = usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
 
         NSLayoutConstraint.activate([
-            cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
-            cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-            titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor, constant: -30),
-            titleTextView.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
-            usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameTextField.widthAnchor.constraint(equalToConstant: 340),
-            usernameTextField.heightAnchor.constraint(equalToConstant: 50),
+            cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
+            cancelButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 10),
 
-            usernameYConstraint,
+            titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor, constant: -10),
+            titleTextView.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
+
+            usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            usernameTextField.leftAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.leftAnchor),
+            usernameTextField.rightAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.rightAnchor),
+            usernameTextField.heightAnchor.constraint(equalToConstant: 50),
+            usernameTextFieldCenterYAnchorConstraint,
 
             passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             passwordTextField.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 20),
             passwordTextField.widthAnchor.constraint(equalTo: usernameTextField.widthAnchor),
             passwordTextField.heightAnchor.constraint(equalToConstant: 50),
+
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30),
+            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20),
             loginButton.widthAnchor.constraint(equalToConstant: 150),
             loginButton.heightAnchor.constraint(equalToConstant: 40),
+
             forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            forgotPasswordButton.centerYAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 30),
+            forgotPasswordButton.centerYAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20),
+
             spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            spinner.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 30)
+            spinner.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 20)
         ])
     }
 
@@ -203,23 +202,58 @@ final class LoginViewController: UIViewController {
         return
     }
 
-    @objc func handleKeyboardWillShow(_ notification: Notification) {
-        if UIScreen.main.bounds.width > UIScreen.main.bounds.height {
-            usernameYConstraint.constant = -140
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let userinfo = notification.userInfo,
+            let keyboardFrameEnd = userinfo[UIKeyboardFrameEndUserInfoKey] as? CGRect,
+            let keyboardAnimationDuration = userinfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
+            let keyboardAnimationCurveRawValue = userinfo[UIKeyboardAnimationCurveUserInfoKey] as? Int,
+            let keyboardAnimationCurve = UIViewAnimationCurve(rawValue: keyboardAnimationCurveRawValue) else {
+                return
         }
+        self.view.layoutIfNeeded()
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(keyboardAnimationDuration)
+        UIView.setAnimationCurve(keyboardAnimationCurve)
+        UIView.setAnimationBeginsFromCurrentState(true)
+
+        if let mainWindow = UIApplication.shared.delegate?.window,
+            let mainView = mainWindow?.rootViewController?.view,
+            let superview = forgotPasswordButton.superview {
+
+            let forgotButtonFrame = superview.convert(forgotPasswordButton.frame, to: mainView)
+            let forgotButtonBottomY = forgotButtonFrame.origin.y + forgotButtonFrame.height
+
+            let difference = keyboardFrameEnd.origin.y - forgotButtonBottomY
+            print(difference)
+            if difference < 0 {
+                usernameTextFieldCenterYAnchorConstraint.constant = -40 + difference
+            }
+        }
+
+        self.view.layoutIfNeeded()
+        UIView.commitAnimations()
     }
 
-    @objc func handleKeyboardWillHide(_ notification: Notification) {
-        usernameYConstraint.constant = -30
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
-            usernameYConstraint.constant = -30
+    @objc func keyboardWillHide(notification: NSNotification) {
+        guard let userinfo = notification.userInfo,
+            let keyboardAnimationDuration = userinfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
+            let keyboardAnimationCurveRawValue = userinfo[UIKeyboardAnimationCurveUserInfoKey] as? Int,
+            let keyboardAnimationCurve = UIViewAnimationCurve(rawValue: keyboardAnimationCurveRawValue) else {
+                return
         }
+        self.view.layoutIfNeeded()
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(keyboardAnimationDuration)
+        UIView.setAnimationCurve(keyboardAnimationCurve)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        usernameTextFieldCenterYAnchorConstraint.constant = -30
+        self.view.layoutIfNeeded()
+        UIView.commitAnimations()
     }
 
     @objc private func handleCancel() {
+        usernameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
         dismiss(animated: true, completion: nil)
     }
 
