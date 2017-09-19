@@ -369,7 +369,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             tableViewForUsers.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewForUsers.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableViewForUsers.rightAnchor.constraint(equalTo: view.rightAnchor)
-            ])
+        ])
     }
 
     private func setupNavigationItems() {

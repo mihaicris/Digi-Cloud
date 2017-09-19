@@ -265,7 +265,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        setupTableViewHeaderView()
         setupNavigationItems()
         setupToolBarItems()
         addViewTapGestureRecognizer()
@@ -511,13 +510,32 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     private func setupViews() {
 
+        let headerView: UIImageView = {
+            let iv = UIImageView(frame: CGRect.zero)
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            iv.image = linkType == .download ? #imageLiteral(resourceName: "share_download_link_background") : #imageLiteral(resourceName: "share_upload_link_background")
+            iv.contentMode = .scaleAspectFill
+            return iv
+        }()
+
         tableView.alwaysBounceVertical = false
+
+        view.addSubview(headerView)
+        headerView.addSubview(counterLabel)
 
         view.addSubview(tableView)
         view.addSubview(waitingView)
 
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+
+            headerView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor),
+            headerView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            headerView.rightAnchor.constraint(equalTo: view.rightAnchor),
+
+            counterLabel.rightAnchor.constraint(equalTo: headerView.layoutMarginsGuide.rightAnchor),
+            counterLabel.bottomAnchor.constraint(equalTo: headerView.layoutMarginsGuide.bottomAnchor),
+
+            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
@@ -529,20 +547,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         ])
 
         sections = [.location, .link, .password, .validity]
-    }
-
-    private func setupTableViewHeaderView() {
-
-        let frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 85)
-        let headerView = UIImageView(frame: frame)
-
-        headerView.addSubview(counterLabel)
-        counterLabel.rightAnchor.constraint(equalTo: counterLabel.superview!.layoutMarginsGuide.rightAnchor).isActive = true
-        counterLabel.bottomAnchor.constraint(equalTo: counterLabel.superview!.layoutMarginsGuide.bottomAnchor).isActive = true
-
-        headerView.image = linkType == .download ? #imageLiteral(resourceName: "share_download_link_background") : #imageLiteral(resourceName: "share_upload_link_background")
-        headerView.contentMode = .scaleAspectFit
-        tableView.tableHeaderView = headerView
     }
 
     private func setupNavigationItems() {
