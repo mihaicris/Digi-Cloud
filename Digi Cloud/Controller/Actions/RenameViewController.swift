@@ -40,6 +40,8 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         t.rowHeight = AppSettings.textFieldRowHeight
         t.delegate = self
         t.dataSource = self
+        let gr = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        t.addGestureRecognizer(gr)
         return t
     }()
 
@@ -105,6 +107,14 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         return cell
     }
 
+    @objc private func dismissKeyboard() {
+        textField?.resignFirstResponder()
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
+
     // MARK: - Helper Functions
 
     private func setupViews() {
@@ -122,6 +132,8 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             let v = UIView()
             v.translatesAutoresizingMaskIntoConstraints = false
             v.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 1.0, alpha: 1.0)
+            let gr = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            v.addGestureRecognizer(gr)
             return v
         }()
 
@@ -206,7 +218,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             actionButtonsStackview.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20)
         ])
 
-        tableView.isScrollEnabled = false
+        tableView.isScrollEnabled = true
 
         leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
                                         style: .done,
