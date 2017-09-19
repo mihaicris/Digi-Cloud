@@ -22,23 +22,18 @@ final class ManageBookmarksViewController: UITableViewController {
 
     private let dispatchGroup = DispatchGroup()
 
-    lazy var closeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleDismiss))
-        return b
-    }()
-
-    lazy var editButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .done, target: self, action: #selector(handleEnterEditMode))
-        return b
-    }()
-
     lazy var deleteButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleAskDeleteConfirmation))
         return b
     }()
 
-    lazy var cancelButton: UIBarButtonItem = {
+    lazy var cancelEditButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEdit))
+        return b
+    }()
+
+    lazy var dismissButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleDismiss))
         return b
     }()
 
@@ -70,6 +65,7 @@ final class ManageBookmarksViewController: UITableViewController {
     }
 
     deinit {
+        NotificationCenter.default.removeObserver(self)
         DEINITLog(self)
     }
 
@@ -77,11 +73,17 @@ final class ManageBookmarksViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(BookmarkViewCell.self, forCellReuseIdentifier: String(describing: BookmarkViewCell.self))
-        tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        self.registerForNotificationCenter()
         self.title = NSLocalizedString("Bookmarks", comment: "")
         self.setupViews()
+    }
+
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDismiss),
+            name: .UIApplicationDidEnterBackground,
+            object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -146,6 +148,11 @@ final class ManageBookmarksViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
+
+        tableView.register(BookmarkViewCell.self, forCellReuseIdentifier: String(describing: BookmarkViewCell.self))
+        tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+
         view.addSubview(activityIndicator)
         view.addSubview(messageLabel)
 
@@ -159,15 +166,19 @@ final class ManageBookmarksViewController: UITableViewController {
 
     private func updateButtonsToMatchTableState() {
         if self.tableView.isEditing {
-            self.navigationItem.rightBarButtonItem = self.cancelButton
+            self.navigationItem.rightBarButtonItem = self.cancelEditButton
             self.updateDeleteButtonTitle()
             self.navigationItem.leftBarButtonItem = self.deleteButton
         } else {
             // Not in editing mode.
+            self.navigationItem.leftBarButtonItem = dismissButton
             if bookmarks.count != 0 {
-                self.navigationItem.rightBarButtonItem = self.editButton
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    title: NSLocalizedString("Edit", comment: ""),
+                    style: .done,
+                    target: self,
+                    action: #selector(handleEnterEditMode))
             }
-            self.navigationItem.leftBarButtonItem = self.closeButton
         }
     }
 
@@ -353,7 +364,7 @@ final class ManageBookmarksViewController: UITableViewController {
             messageString = NSLocalizedString("Are you sure you want to remove these bookmarks?", comment: "")
         }
 
-        let alertController = UIAlertController(title: NSLocalizedString("Confirm Deletion", comment: ""),
+        let alertController = UIAlertController(title: NSLocalizedString("Delete confirmation", comment: ""),
                                                 message: messageString,
                                                 preferredStyle: .alert)
 

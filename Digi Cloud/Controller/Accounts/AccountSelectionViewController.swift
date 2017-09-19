@@ -13,10 +13,18 @@ UICollectionViewDelegateFlowLayout {
 
     // MARK: - Properties
 
-    let cellWidth: CGFloat = 200
-    let cellHeight: CGFloat = 100
-    let spacingHoriz: CGFloat = 20
-    let spacingVert: CGFloat = 20
+    var cellWidth: CGFloat { return 200 * factor}
+    var cellHeight: CGFloat { return 100 * factor }
+    var spacingHoriz: CGFloat { return 100 * factor * 0.8 }
+    var spacingVert: CGFloat { return 100 * factor }
+
+    var factor: CGFloat {
+        if traitCollection.horizontalSizeClass == .compact && self.view.bounds.width < self.view.bounds.height {
+            return 0.7
+        } else {
+            return 1
+        }
+    }
 
     private var isExecuting = false
 
@@ -64,9 +72,7 @@ UICollectionViewDelegateFlowLayout {
     private let stackView: UIStackView = {
         let st = UIStackView()
         st.translatesAutoresizingMaskIntoConstraints = false
-        st.axis = .horizontal
         st.distribution = .fillEqually
-        st.spacing = 50
         return st
     }()
 
@@ -87,8 +93,8 @@ UICollectionViewDelegateFlowLayout {
         l.textAlignment = .center
         l.numberOfLines = 3
         let color = UIColor.init(red: 48/255, green: 133/255, blue: 243/255, alpha: 1.0)
-        let attributedText = NSMutableAttributedString(string: "Cloud",
-                                                       attributes: [NSAttributedStringKey.font: UIFont(name: "PingFangSC-Semibold", size: 48) as Any])
+        let attributedText = NSMutableAttributedString(string: "Digi Cloud",
+                                                       attributes: [NSAttributedStringKey.font: UIFont(name: "PingFangSC-Semibold", size: 34) as Any])
         let word = NSLocalizedString("for", comment: "")
 
         attributedText.append(NSAttributedString(string: "\n\(word)  ",
@@ -130,6 +136,11 @@ UICollectionViewDelegateFlowLayout {
         configureViews()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        changeStackViewAxis(for: self.view.bounds.size)
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         getAccountsFromKeychain()
@@ -169,8 +180,19 @@ UICollectionViewDelegateFlowLayout {
         return .lightContent
     }
 
+    private func changeStackViewAxis(for size: CGSize) {
+        if self.traitCollection.horizontalSizeClass == .compact && size.width < size.height {
+            self.stackView.axis = .vertical
+            self.stackView.spacing = 10
+        } else {
+            self.stackView.axis = .horizontal
+            self.stackView.spacing = 40
+        }
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        changeStackViewAxis(for: size)
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.invalidateLayout()
         }
@@ -243,7 +265,10 @@ UICollectionViewDelegateFlowLayout {
         bottomInset = topInset
         rightInset = leftInset
 
-        return UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        return UIEdgeInsets(top: topInset,
+                            left: leftInset,
+                            bottom: bottomInset,
+                            right: rightInset)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -274,27 +299,25 @@ UICollectionViewDelegateFlowLayout {
 
         NSLayoutConstraint.activate([
             logoBigLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
             NSLayoutConstraint(item: logoBigLabel, attribute: .centerY, relatedBy: .equal,
-                               toItem: view, attribute: .bottom, multiplier: 0.15, constant: 0.0),
+                               toItem: view, attribute: .bottom, multiplier: 0.13, constant: 0.0),
 
             collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
             collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-
             NSLayoutConstraint(item: collectionView, attribute: .height, relatedBy: .equal,
                                toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
 
             spinner.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
-
             NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal,
                                toItem: collectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
 
             noAccountsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
-            stackView.centerYAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.height * 0.035)
-            ])
+            stackView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10)
+        ])
 
     }
 

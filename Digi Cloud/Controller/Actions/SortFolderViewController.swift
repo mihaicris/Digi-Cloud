@@ -35,9 +35,10 @@ final class SortFolderViewController: UITableViewController {
         setupViews()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.preferredContentSize.width = 350
+        self.preferredContentSize.height = tableView.contentSize.height - 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -103,52 +104,50 @@ final class SortFolderViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
+        if navigationController != nil {
+            title = NSLocalizedString("Sort folder", comment: "")
 
-        let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight * 1.2))
-            view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-            return view
-        }()
+            let closeButton: UIBarButtonItem = {
+                let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
+                return b
+            }()
 
-        let titleName: UILabel = {
-            let l = UILabel()
-            l.text = NSLocalizedString("Sort folder", comment: "")
-            l.font = UIFont.boldSystemFont(ofSize: 16)
-            l.translatesAutoresizingMaskIntoConstraints = false
-            return l
-        }()
+            self.navigationItem.rightBarButtonItem = closeButton
 
-        let doneButton: UIButton = {
-            let b = UIButton(type: .system)
-            b.translatesAutoresizingMaskIntoConstraints = false
-            b.setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
-            b.setTitleColor(.defaultColor, for: .normal)
-            b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-            b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
-            return b
-        }()
+        } else {
 
-        let separator: UIView = {
-            let v = UIView()
-            v.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return v
-        }()
+            let headerView: UIView = {
+                let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
+                view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+                return view
+            }()
 
-        headerView.addSubview(titleName)
-        titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-        titleName.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
+            let titleName: UILabel = {
+                let l = UILabel()
+                l.text = NSLocalizedString("Sort folder", comment: "")
+                l.font = UIFont.boldSystemFont(ofSize: 16)
+                l.translatesAutoresizingMaskIntoConstraints = false
+                return l
+            }()
 
-        headerView.addSubview(doneButton)
-        doneButton.rightAnchor.constraint(equalTo: headerView.layoutMarginsGuide.rightAnchor, constant: -8).isActive = true
-        doneButton.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
+            let separator: UIView = {
+                let v = UIView()
+                v.backgroundColor = UIColor(white: 0.8, alpha: 1)
+                return v
+            }()
 
-        headerView.addSubview(separator)
-        headerView.addConstraints(with: "H:|[v0]|", views: separator)
-        headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+            headerView.addSubview(titleName)
+            titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+            titleName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
 
+            headerView.addSubview(separator)
+            headerView.addConstraints(with: "H:|[v0]|", views: separator)
+            headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+
+            tableView.tableHeaderView = headerView
+        }
         tableView.isScrollEnabled = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
-        tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 

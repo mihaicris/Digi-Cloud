@@ -19,17 +19,9 @@ final class SettingsViewController: UITableViewController {
     // MARK: - Properties
 
     private var isExecuting = false
-
     private var user: User
-
     private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
-
     private var settings: [SettingType] = [.user, .security, .data]
-
-    lazy var closeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleDismiss))
-        return b
-    }()
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -63,14 +55,15 @@ final class SettingsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Settings", comment: "")
-        preferredContentSize = CGSize(width: 350, height: 490)
+        self.registerForNotificationCenter()
         setupViews()
     }
 
@@ -78,52 +71,6 @@ final class SettingsViewController: UITableViewController {
         super.viewWillAppear(animated)
         fetchUserData()
         tableView.reloadData()
-    }
-
-    private func setupViews() {
-
-        let tableFooterView: UIView = {
-            let v = UIView()
-            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 70)
-
-            let versionLabel: UILabel = {
-                let l = UILabel()
-                l.numberOfLines = 0
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.textAlignment = .center
-                l.text = Bundle.main.prettyVersionString
-                l.textColor = UIColor.gray
-                l.font = UIFont.HelveticaNeue(size: 12)
-                return l
-            }()
-
-            v.addSubview(versionLabel)
-
-            NSLayoutConstraint.activate([
-                versionLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 10),
-                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
-            ])
-
-            return v
-        }()
-
-        tableView.tableFooterView = tableFooterView
-        self.navigationItem.leftBarButtonItem = self.closeButton
-    }
-
-    private func fetchUserData() {
-
-        if let user = AppSettings.userLogged {
-
-            self.user = user
-
-            let cache = Cache()
-            let key = self.user.id + ".png"
-
-            if let data = cache.load(type: .profile, key: key) {
-                self.profileImage = UIImage(data: data, scale: UIScreen.main.scale)
-            }
-        }
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -313,6 +260,75 @@ final class SettingsViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
+    private func setupViews() {
+
+        title = NSLocalizedString("Settings", comment: "")
+        preferredContentSize = CGSize(width: 350, height: 490)
+
+        if navigationController != nil {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""),
+                                                                    style: .done,
+                                                                    target: self,
+                                                                    action: #selector(handleDismiss))
+        }
+
+        let tableFooterView: UIView = {
+            let v = UIView()
+            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 70)
+
+            let versionLabel: UILabel = {
+                let l = UILabel()
+                l.numberOfLines = 0
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.textAlignment = .center
+                l.text = Bundle.main.prettyVersionString
+                l.textColor = UIColor.gray
+                l.font = UIFont.HelveticaNeue(size: 12)
+                return l
+            }()
+
+            v.addSubview(versionLabel)
+
+            NSLayoutConstraint.activate([
+                versionLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 10),
+                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
+            ])
+
+            return v
+        }()
+
+        tableView.tableFooterView = tableFooterView
+
+    }
+
+    private func fetchUserData() {
+
+        if let user = AppSettings.userLogged {
+
+            self.user = user
+
+            let cache = Cache()
+            let key = self.user.id + ".png"
+
+            if let data = cache.load(type: .profile, key: key) {
+                self.profileImage = UIImage(data: data, scale: UIScreen.main.scale)
+            }
+        }
+    }
+
+    private func handleClearCache() {
+        FileManager.emptyFilesCache()
+        tableView.reloadSections(IndexSet(integer: 2), with: .fade)
+    }
+
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDismiss),
+            name: .UIApplicationDidEnterBackground,
+            object: nil)
+    }
+
     @objc private func toggleAllowingCellularAccessSetting() {
         AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
         DigiClient.shared.renewSession()
@@ -377,8 +393,4 @@ final class SettingsViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
     }
 
-    private func handleClearCache() {
-        FileManager.emptyFilesCache()
-        tableView.reloadSections(IndexSet(integer: 2), with: .fade)
-    }
 }

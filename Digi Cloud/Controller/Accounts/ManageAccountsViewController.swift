@@ -51,14 +51,15 @@ final class ManageAccountsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: String(describing: AccountTableViewCell.self))
-        tableView.allowsMultipleSelectionDuringEditing = true
+        self.registerForNotificationCenter()
         setupViews()
     }
 
@@ -94,23 +95,31 @@ final class ManageAccountsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 
         if editingStyle == .delete {
-            self.tableView.beginUpdates()
             self.wipeAccount(atIndexPath: indexPath)
-            self.tableView.endUpdates()
             controller.users = self.users
             controller.configureViews()
             controller.collectionView.reloadData()
-
-            self.dismissIfNoMoreUsers()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.dismissIfNoMoreUsers()
+            }
         }
     }
 
     // MARK: - Helper Functions
 
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDismiss),
+            name: .UIApplicationDidEnterBackground,
+            object: nil)
+    }
+
     private func setupViews() {
         preferredContentSize.width = 350
         title = NSLocalizedString("Accounts", comment: "")
-
+        tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: String(describing: AccountTableViewCell.self))
+        tableView.allowsMultipleSelectionDuringEditing = true
         updateButtonsToMatchTableState()
     }
 
@@ -224,7 +233,7 @@ final class ManageAccountsViewController: UITableViewController {
             messageString = NSLocalizedString("Are you sure you want to remove these accounts?", comment: "")
         }
 
-        let alertController = UIAlertController(title: NSLocalizedString("Confirm Deletion", comment: ""),
+        let alertController = UIAlertController(title: NSLocalizedString("Delete confirmation", comment: ""),
                                                 message: messageString,
                                                 preferredStyle: .alert)
 
@@ -281,6 +290,10 @@ final class ManageAccountsViewController: UITableViewController {
         controller.collectionView.reloadData()
 
         dismissIfNoMoreUsers()
+    }
+
+    @objc private func handleDismiss() {
+        self.dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleCancelEdit() {

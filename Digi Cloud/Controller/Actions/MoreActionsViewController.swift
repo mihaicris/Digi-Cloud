@@ -44,7 +44,8 @@ final class MoreActionsViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        preferredContentSize.width = 350
+        self.preferredContentSize.width = 350
+        self.preferredContentSize.height = tableView.contentSize.height - 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -100,52 +101,54 @@ final class MoreActionsViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
-        let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width:400, height: AppSettings.tableViewRowHeight * 1.2))
-            view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-            return view
-        }()
 
-        let titleName: UILabel = {
-            let l = UILabel()
-            l.translatesAutoresizingMaskIntoConstraints = false
-            l.textAlignment = .center
-            l.text = NSLocalizedString("More actions", comment: "")
-            l.font = UIFont.boldSystemFont(ofSize: 16)
-            return l
-        }()
+        if navigationController != nil {
+            title = NSLocalizedString("More actions", comment: "")
 
-        let cancelButton: UIButton = {
-            let b = UIButton(type: .system)
-            b.translatesAutoresizingMaskIntoConstraints = false
-            b.setTitle(NSLocalizedString("Cancel", comment: ""), for: .normal)
-            b.setTitleColor(.defaultColor, for: .normal)
-            b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-            b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
-            return b
-        }()
+            let closeButton: UIBarButtonItem = {
+                let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
+                return b
+            }()
 
-        let separator: UIView = {
-            let v = UIView()
-            v.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return v
-        }()
+            self.navigationItem.rightBarButtonItem = closeButton
 
-        headerView.addSubview(titleName)
-        titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-        titleName.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
+        } else {
 
-        headerView.addSubview(cancelButton)
-        cancelButton.rightAnchor.constraint(equalTo: headerView.layoutMarginsGuide.rightAnchor, constant: -8).isActive = true
-        cancelButton.centerYAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
+            let headerView: UIView = {
+                let view = UIView(frame: CGRect(x: 0, y: 0, width:400, height: 40))
+                view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+                return view
+            }()
 
-        headerView.addSubview(separator)
-        headerView.addConstraints(with: "H:|[v0]|", views: separator)
-        headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+            let titleName: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.textAlignment = .center
+                l.text = NSLocalizedString("More actions", comment: "")
+                l.font = UIFont.boldSystemFont(ofSize: 16)
+                return l
+            }()
+
+            let separator: UIView = {
+                let v = UIView()
+                v.backgroundColor = UIColor(white: 0.8, alpha: 1)
+                return v
+            }()
+
+            headerView.addSubview(titleName)
+            titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+            titleName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+
+            headerView.addSubview(separator)
+            headerView.addConstraints(with: "H:|[v0]|", views: separator)
+            headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+
+            tableView.tableHeaderView = headerView
+
+        }
 
         tableView.isScrollEnabled = false
         tableView.rowHeight = 50
-        tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 

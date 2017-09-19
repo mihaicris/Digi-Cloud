@@ -825,10 +825,8 @@ final class ListingViewController: UITableViewController {
             self?.sortContent()
             self?.tableView.reloadData()
         }
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = buttonView
-        controller.popoverPresentationController?.sourceRect = buttonView.bounds
-        present(controller, animated: true, completion: nil)
+
+        presentController(controller, sender: buttonView)
     }
 
     @objc private func handleShowMoreActionsViewController(_ sender: UIBarButtonItem) {
@@ -873,10 +871,7 @@ final class ListingViewController: UITableViewController {
             }
         }
 
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = buttonView
-        controller.popoverPresentationController?.sourceRect = buttonView.bounds
-        present(controller, animated: true, completion: nil)
+        presentController(controller, sender: buttonView)
     }
 
     @objc private func handleShowSearchViewController(_ sender: UIBarButtonItem) {
@@ -938,6 +933,18 @@ final class ListingViewController: UITableViewController {
 
     }
 
+    fileprivate func presentController(_ controller: UIViewController, sender: UIView) {
+        if traitCollection.horizontalSizeClass == .regular {
+            controller.modalPresentationStyle = .popover
+            controller.popoverPresentationController?.sourceView = sender
+            controller.popoverPresentationController?.sourceRect = sender.bounds
+            present(controller, animated: true, completion: nil)
+        } else {
+            let navigationController = UINavigationController(rootViewController: controller)
+            present(navigationController, animated: true, completion: nil)
+        }
+    }
+
     @objc private func handleShowNodeActionsController(_ sender: UIButton) {
 
         self.animateActionButton(sender)
@@ -981,10 +988,7 @@ final class ListingViewController: UITableViewController {
                 }
         }
 
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = sender
-        controller.popoverPresentationController?.sourceRect = sender.bounds
-        present(controller, animated: true, completion: nil)
+        presentController(controller, sender: sender)
     }
 
     @objc private func handleCancelEditMode() {
@@ -1369,10 +1373,7 @@ final class ListingViewController: UITableViewController {
             self?.executeDeletion(at: location, index: index)
         }
 
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = sourceView
-        controller.popoverPresentationController?.sourceRect = sourceView.bounds
-        self.present(controller, animated: true, completion: nil)
+        presentController(controller, sender: sourceView)
     }
 
     private func showCopyOrMoveViewController(action: ActionType, sourceLocations: [Location]) {

@@ -143,9 +143,6 @@
 "Confirm" = "Confirmați";
 
 /* No comment provided by engineer. */
-"Confirm Deletion" = "Confirmare ștergere";
-
-/* No comment provided by engineer. */
 "Connections" = "Conexiuni";
 
 /* No comment provided by engineer. */
@@ -183,6 +180,9 @@
 
 /* No comment provided by engineer. */
 "Delete Link" = "Ștergeți linkul";
+
+/* No comment provided by engineer. */
+"Delete confirmation" = "Confirmare ștergere";
 
 /* No comment provided by engineer. */
 "Deleting Link" = "Se șterge linkul";

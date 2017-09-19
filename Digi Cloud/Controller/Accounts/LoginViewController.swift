@@ -105,6 +105,12 @@ final class LoginViewController: UIViewController {
         usernameTextField.becomeFirstResponder()
     }
 
+    override var shouldAutorotate: Bool {
+        return traitCollection.horizontalSizeClass != .compact &&
+               traitCollection.verticalSizeClass != .compact &&
+               self.view.bounds.width > self.view.bounds.height
+    }
+
     // MARK: - Helper Functions
 
     private func registerForKeyboardNotifications() {

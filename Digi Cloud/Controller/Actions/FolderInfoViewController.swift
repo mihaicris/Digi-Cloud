@@ -143,8 +143,6 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
         super.init(nibName: nil, bundle: nil)
     }
 
-    deinit { DEINITLog(self) }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -360,10 +358,16 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
             }
         }
 
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.permittedArrowDirections = .up
-        controller.popoverPresentationController?.sourceView = deleteButton
-        controller.popoverPresentationController?.sourceRect = deleteButton.bounds
-        present(controller, animated: true, completion: nil)
+        if let horizontalSizeClass = navigationController?.presentingViewController?.traitCollection.horizontalSizeClass,
+            horizontalSizeClass == .regular {
+            controller.modalPresentationStyle = .popover
+            controller.popoverPresentationController?.permittedArrowDirections = .up
+            controller.popoverPresentationController?.sourceView = deleteButton
+            controller.popoverPresentationController?.sourceRect = deleteButton.bounds
+            present(controller, animated: true, completion: nil)
+        } else {
+            let navController = UINavigationController(rootViewController: controller)
+            present(navController, animated: true, completion: nil)
+        }
     }
 }
