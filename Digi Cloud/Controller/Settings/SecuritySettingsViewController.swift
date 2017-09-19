@@ -33,6 +33,7 @@ class SecuritySettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.rowHeight = AppSettings.textFieldRowHeight
         title = NSLocalizedString("Security", comment: "")
     }
 

@@ -63,10 +63,6 @@ final class ManageAccountsViewController: UITableViewController {
         setupViews()
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 55.0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
@@ -117,6 +113,7 @@ final class ManageAccountsViewController: UITableViewController {
 
     private func setupViews() {
         preferredContentSize.width = 350
+        preferredContentSize.height = tableView.contentSize.height - 1
         title = NSLocalizedString("Accounts", comment: "")
         tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: String(describing: AccountTableViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true

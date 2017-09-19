@@ -142,13 +142,12 @@ final class MoreActionsViewController: UITableViewController {
             headerView.addSubview(separator)
             headerView.addConstraints(with: "H:|[v0]|", views: separator)
             headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
-
+            tableView.rowHeight = AppSettings.tableViewRowHeight
             tableView.tableHeaderView = headerView
 
         }
 
         tableView.isScrollEnabled = false
-        tableView.rowHeight = 50
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 

@@ -219,16 +219,15 @@ final class LocationsViewController: UITableViewController {
     }
 
     @objc private func handleShowSettings() {
+
         if let user = AppSettings.userLogged {
             let controller = SettingsViewController(user: user)
-            if traitCollection.horizontalSizeClass == .regular {
-                controller.modalPresentationStyle = .popover
-                controller.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
-                present(controller, animated: true, completion: nil)
-            } else {
-                let navigationController = UINavigationController(rootViewController: controller)
-                present(navigationController, animated: true, completion: nil)
-            }
+
+            let navController = UINavigationController(rootViewController: controller)
+            navController.modalPresentationStyle = .popover
+            navController.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
+
+            present(navController, animated: true, completion: nil)
         }
     }
 

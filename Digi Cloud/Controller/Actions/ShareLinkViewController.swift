@@ -317,7 +317,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         if sections[indexPath.section] == .validity && validityDateAndTimePicker.isHidden == false {
             return 150
         } else {
-            return UITableViewAutomaticDimension
+            return AppSettings.textFieldRowHeight
         }
     }
 

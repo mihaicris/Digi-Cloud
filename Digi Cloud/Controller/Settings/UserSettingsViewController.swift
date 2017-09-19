@@ -47,7 +47,7 @@ class UserSettingsViewController: UITableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         title = NSLocalizedString("User details", comment: "")
-
+        tableView.rowHeight = AppSettings.textFieldRowHeight
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""),
                                                             style: .done, target: self, action: #selector(handleSaveUserName))
     }

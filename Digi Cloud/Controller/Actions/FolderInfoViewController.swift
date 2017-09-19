@@ -185,7 +185,8 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 2:     return 70
-        default:    return UITableViewAutomaticDimension
+        case 3:     return AppSettings.tableViewRowHeight
+        default:    return AppSettings.textFieldRowHeight
         }
     }
 

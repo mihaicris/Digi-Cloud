@@ -18,7 +18,6 @@ final class SettingsViewController: UITableViewController {
 
     // MARK: - Properties
 
-    private var isExecuting = false
     private var user: User
     private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
     private var settings: [SettingType] = [.user, .security, .data]
@@ -110,10 +109,10 @@ final class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch settings[indexPath.section] {
         case .user:
-            return indexPath.row == 0 ? 80 : UITableViewAutomaticDimension
+            return indexPath.row == 0 ? 80 : AppSettings.textFieldRowHeight
 
         default:
-            return UITableViewAutomaticDimension
+            return AppSettings.textFieldRowHeight
         }
     }
 
@@ -359,22 +358,19 @@ final class SettingsViewController: UITableViewController {
         UIApplication.shared.beginIgnoringInteractionEvents()
         defer { UIApplication.shared.endIgnoringInteractionEvents() }
 
-        let navController = self.navigationController?.presentingViewController  ?? self.presentingViewController
-
-        guard let mainNavigationvController = navController as? MainNavigationController else {
-            return
-        }
-
-        dismiss(animated: true) {
+        if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
             AppSettings.loggedUserID = nil
 
-            if let controller = mainNavigationvController.visibleViewController as? LocationsViewController {
-                controller.activityIndicator.startAnimating()
-            }
+            dismiss(animated: true) {
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                mainNavigationvController.viewControllers = []
-                mainNavigationvController.onLogout?()
+                if let controller = navController.visibleViewController as? LocationsViewController {
+                    controller.activityIndicator.startAnimating()
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    navController.viewControllers = []
+                    navController.onLogout?()
+                }
             }
         }
     }

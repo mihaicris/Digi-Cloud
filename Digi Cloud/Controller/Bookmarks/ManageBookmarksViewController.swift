@@ -74,7 +74,6 @@ final class ManageBookmarksViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.registerForNotificationCenter()
-        self.title = NSLocalizedString("Bookmarks", comment: "")
         self.setupViews()
     }
 
@@ -90,10 +89,6 @@ final class ManageBookmarksViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.updateButtonsToMatchTableState()
         getBookmarksAndMounts()
-    }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 55.0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -148,10 +143,12 @@ final class ManageBookmarksViewController: UITableViewController {
     // MARK: - Helper Functions
 
     private func setupViews() {
+        self.title = NSLocalizedString("Bookmarks", comment: "")
 
         tableView.register(BookmarkViewCell.self, forCellReuseIdentifier: String(describing: BookmarkViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        tableView.rowHeight = AppSettings.tableViewRowHeight
 
         view.addSubview(activityIndicator)
         view.addSubview(messageLabel)

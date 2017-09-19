@@ -37,6 +37,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         t.isUserInteractionEnabled = false
         t.delegate = self
         t.dataSource = self
+        t.rowHeight = AppSettings.textFieldRowHeight
         t.tag = TableViewType.location.rawValue
         return t
     }()
@@ -47,6 +48,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         t.alwaysBounceVertical = true
         t.delegate = self
         t.dataSource = self
+        t.rowHeight = AppSettings.textFieldRowHeight
         t.tag = TableViewType.users.rawValue
         t.register(MountUserCell.self, forCellReuseIdentifier: String(describing: MountUserCell.self))
         return t
@@ -318,7 +320,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         }
 
         navigationController?.pushViewController(controller, animated: true)
-
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {

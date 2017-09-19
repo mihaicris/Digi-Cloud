@@ -37,6 +37,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         let t = UITableView(frame: frame, style: .grouped)
         t.translatesAutoresizingMaskIntoConstraints = false
+        t.rowHeight = AppSettings.textFieldRowHeight
         t.delegate = self
         t.dataSource = self
         return t

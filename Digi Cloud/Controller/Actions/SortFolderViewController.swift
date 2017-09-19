@@ -45,10 +45,6 @@ final class SortFolderViewController: UITableViewController {
         return sortingActions.count
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return AppSettings.tableViewRowHeight
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         // check if user selected the same sort method

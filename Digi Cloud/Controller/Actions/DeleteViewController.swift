@@ -40,6 +40,7 @@ final class DeleteViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.preferredContentSize.width = 350
         self.preferredContentSize.height = tableView.contentSize.height - 1
     }
 
@@ -120,8 +121,8 @@ final class DeleteViewController: UITableViewController {
         self.title = NSLocalizedString("Delete confirmation", comment: "")
 
         tableView.isScrollEnabled = false
-        tableView.rowHeight = 50
         tableView.tableHeaderView = headerView
+        tableView.rowHeight = AppSettings.tableViewRowHeight
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 

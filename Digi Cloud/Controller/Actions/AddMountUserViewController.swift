@@ -109,6 +109,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
                                                style: .done, target: self, action: #selector(handleSaveMember))
         navigationItem.rightBarButtonItem = saveMemberButton
         navigationController?.isToolbarHidden = true
+        tableView.rowHeight = AppSettings.tableViewRowHeight
     }
 
     override func viewDidAppear(_ animated: Bool) {

@@ -13,6 +13,7 @@ class AppSettings {
     // MARK: - Properties
 
     static var tableViewRowHeight: CGFloat = 50
+    static var textFieldRowHeight: CGFloat = 44
 
     static var hasRunBefore: Bool {
         get {
