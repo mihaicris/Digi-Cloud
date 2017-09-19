@@ -356,22 +356,25 @@ final class SettingsViewController: UITableViewController {
 
     @objc private func handleLogoutConfirmed() {
 
-        guard !isExecuting else { return }
-        isExecuting = true
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        defer { UIApplication.shared.endIgnoringInteractionEvents() }
 
-        if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
+        let navController = self.navigationController?.presentingViewController  ?? self.presentingViewController
+
+        guard let mainNavigationvController = navController as? MainNavigationController else {
+            return
+        }
+
+        dismiss(animated: true) {
             AppSettings.loggedUserID = nil
 
-            dismiss(animated: true) {
+            if let controller = mainNavigationvController.visibleViewController as? LocationsViewController {
+                controller.activityIndicator.startAnimating()
+            }
 
-                if let controller = navController.visibleViewController as? LocationsViewController {
-                    controller.activityIndicator.startAnimating()
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    navController.viewControllers = []
-                    navController.onLogout?()
-                }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                mainNavigationvController.viewControllers = []
+                mainNavigationvController.onLogout?()
             }
         }
     }
