@@ -123,12 +123,15 @@ UICollectionViewDelegateFlowLayout {
 
     // MARK: - Initializers and Deinitializers
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerForNotificationCenterNotifications()
         collectionView.register(AccountCollectionCell.self,
                                 forCellWithReuseIdentifier: String(describing: AccountCollectionCell.self))
         getPersistedUsers()
@@ -138,7 +141,7 @@ UICollectionViewDelegateFlowLayout {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        changeStackViewAxis(for: self.view.bounds.size)
+        updateStackViewAxis()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -282,6 +285,14 @@ UICollectionViewDelegateFlowLayout {
 
     // MARK: - Helper Functions
 
+    private func registerForNotificationCenterNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateStackViewAxis),
+            name: .UIApplicationWillEnterForeground,
+            object: nil)
+    }
+
     private func setupViews() {
 
         collectionView.delegate = self
@@ -339,6 +350,10 @@ UICollectionViewDelegateFlowLayout {
         }
 
         collectionView.reloadData()
+    }
+
+    @objc func updateStackViewAxis() {
+        changeStackViewAxis(for: self.view.bounds.size)
     }
 
     @objc private func handleShowLogin() {
