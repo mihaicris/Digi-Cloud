@@ -21,15 +21,16 @@ final class ContentViewController: UIViewController {
     var session: URLSession?
 
     private lazy var webView: WKWebView = {
-        let view = WKWebView()
-        view.navigationDelegate = self
-        return view
+        let v = WKWebView()
+        v.navigationDelegate = self
+        return v
     }()
 
     fileprivate let progressView: UIProgressView = {
-        let view = UIProgressView(progressViewStyle: .default)
-        view.progress = 0
-        return view
+        let v = UIProgressView(progressViewStyle: .default)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.progress = 0
+        return v
     }()
 
     fileprivate let handImageView: UIImageView = {
@@ -213,10 +214,13 @@ final class ContentViewController: UIViewController {
 
         view.addSubview(progressView)
         view.addSubview(busyIndicator)
-        view.addConstraints(with: "H:|[v0]|", views: progressView)
-        view.addConstraints(with: "V:|-64-[v0(2)]", views: progressView)
 
         NSLayoutConstraint.activate([
+            progressView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            progressView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            progressView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            progressView.heightAnchor.constraint(equalToConstant: 2.0),
+
             busyIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             busyIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
