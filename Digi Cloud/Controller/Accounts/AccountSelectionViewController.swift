@@ -183,16 +183,6 @@ UICollectionViewDelegateFlowLayout {
         return .lightContent
     }
 
-    private func changeStackViewAxis(for size: CGSize) {
-        if self.traitCollection.horizontalSizeClass == .compact && size.width < size.height {
-            self.stackView.axis = .vertical
-            self.stackView.spacing = 10
-        } else {
-            self.stackView.axis = .horizontal
-            self.stackView.spacing = 40
-        }
-    }
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         changeStackViewAxis(for: size)
@@ -327,7 +317,7 @@ UICollectionViewDelegateFlowLayout {
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
-            stackView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10)
+            stackView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20)
         ])
 
     }
@@ -352,7 +342,17 @@ UICollectionViewDelegateFlowLayout {
         collectionView.reloadData()
     }
 
-    @objc func updateStackViewAxis() {
+    private func changeStackViewAxis(for size: CGSize) {
+        if self.traitCollection.horizontalSizeClass == .compact && size.width < size.height {
+            self.stackView.axis = .vertical
+            self.stackView.spacing = 10
+        } else {
+            self.stackView.axis = .horizontal
+            self.stackView.spacing = 40
+        }
+    }
+
+    @objc private func updateStackViewAxis() {
         changeStackViewAxis(for: self.view.bounds.size)
     }
 

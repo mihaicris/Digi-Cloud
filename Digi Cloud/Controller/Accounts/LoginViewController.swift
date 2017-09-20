@@ -60,7 +60,7 @@ final class LoginViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle("✕", for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.HelveticaNeue(size: 22)
+        b.titleLabel?.font = UIFont.HelveticaNeue(size: 24)
         b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
         return b
     }()
@@ -166,8 +166,8 @@ final class LoginViewController: UIViewController {
         usernameTextFieldCenterYAnchorConstraint = usernameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
 
         NSLayoutConstraint.activate([
-            cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
-            cancelButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 10),
+            cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -2),
+            cancelButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 5),
 
             titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleTextView.bottomAnchor.constraint(equalTo: usernameTextField.topAnchor, constant: -10),
@@ -231,7 +231,6 @@ final class LoginViewController: UIViewController {
             let forgotButtonBottomY = forgotButtonFrame.origin.y + forgotButtonFrame.height
 
             let difference = keyboardFrameEnd.origin.y - forgotButtonBottomY
-            print(difference)
             if difference < 0 {
                 usernameTextFieldCenterYAnchorConstraint.constant = -40 + difference
             }
