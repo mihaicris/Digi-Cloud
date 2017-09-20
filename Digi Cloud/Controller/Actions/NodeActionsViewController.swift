@@ -82,7 +82,7 @@ final class NodeActionsViewController: UITableViewController {
 
         case .bookmark:
             cell.textLabel?.text = self.node.bookmark == nil
-                ? NSLocalizedString("Set Bookmark", comment: "")
+                ? NSLocalizedString("Add Bookmark", comment: "")
                 : NSLocalizedString("Remove Bookmark", comment: "")
 
         case .rename:

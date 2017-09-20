@@ -79,7 +79,7 @@ final class MoreActionsViewController: UITableViewController {
 
         case .bookmark:
             cell.textLabel?.text = self.rootNode.bookmark == nil
-                ? NSLocalizedString("Set Bookmark", comment: "")
+                ? NSLocalizedString("Add Bookmark", comment: "")
                 : NSLocalizedString("Remove Bookmark", comment: "")
 
         case .createFolder:
