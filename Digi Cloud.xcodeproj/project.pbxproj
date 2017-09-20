@@ -49,8 +49,6 @@
 		8302F31F1E8D8C7B008BA834 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */; };
 		8302F3201E8D8C7B008BA834 /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3161E8D8C7B008BA834 /* RenameViewController.swift */; };
 		8302F3221E8D8C9D008BA834 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3211E8D8C9D008BA834 /* SearchResultController.swift */; };
-		8302F3261E8D8CC9008BA834 /* SecuritySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3231E8D8CC9008BA834 /* SecuritySettingsViewController.swift */; };
-		8302F3271E8D8CC9008BA834 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3241E8D8CC9008BA834 /* UserSettingsViewController.swift */; };
 		8302F3281E8D8CC9008BA834 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */; };
 		8302F3391E8D8D5D008BA834 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32A1E8D8D5D008BA834 /* CustomNavBar.swift */; };
 		8302F33A1E8D8D5D008BA834 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32B1E8D8D5D008BA834 /* RenameUtilitiesButton.swift */; };
@@ -138,8 +136,6 @@
 		8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareMountViewController.swift; path = Controller/Actions/ShareMountViewController.swift; sourceTree = "<group>"; };
 		8302F3161E8D8C7B008BA834 /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RenameViewController.swift; path = Controller/Actions/RenameViewController.swift; sourceTree = "<group>"; };
 		8302F3211E8D8C9D008BA834 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchResultController.swift; path = Controller/Search/SearchResultController.swift; sourceTree = "<group>"; };
-		8302F3231E8D8CC9008BA834 /* SecuritySettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SecuritySettingsViewController.swift; path = Controller/Settings/SecuritySettingsViewController.swift; sourceTree = "<group>"; };
-		8302F3241E8D8CC9008BA834 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSettingsViewController.swift; path = Controller/Settings/UserSettingsViewController.swift; sourceTree = "<group>"; };
 		8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Controller/Settings/SettingsViewController.swift; sourceTree = "<group>"; };
 		8302F32A1E8D8D5D008BA834 /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavBar.swift; path = Controller/Views/CustomNavBar.swift; sourceTree = "<group>"; };
 		8302F32B1E8D8D5D008BA834 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RenameUtilitiesButton.swift; path = Controller/Views/RenameUtilitiesButton.swift; sourceTree = "<group>"; };
@@ -391,8 +387,6 @@
 		83EC31451E29154F009E12B6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				8302F3231E8D8CC9008BA834 /* SecuritySettingsViewController.swift */,
-				8302F3241E8D8CC9008BA834 /* UserSettingsViewController.swift */,
 				8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */,
 			);
 			name = Settings;
@@ -607,7 +601,6 @@
 				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
 				83F1FFD31E6979040079F56F /* Enums.swift in Sources */,
 				8302F2DF1E8D7006008BA834 /* Mount.swift in Sources */,
-				8302F3261E8D8CC9008BA834 /* SecuritySettingsViewController.swift in Sources */,
 				8302F33D1E8D8D5D008BA834 /* BookmarkViewCell.swift in Sources */,
 				8302F3451E8D8D5E008BA834 /* MountUserCell.swift in Sources */,
 				8302F2E01E8D7006008BA834 /* Node.swift in Sources */,
@@ -627,7 +620,6 @@
 				8302F33C1E8D8D5D008BA834 /* URLHashTextField.swift in Sources */,
 				8302F33F1E8D8D5D008BA834 /* AccountTableViewCell.swift in Sources */,
 				8302F2E81E8D735A008BA834 /* AccountSelectionViewController.swift in Sources */,
-				8302F3271E8D8CC9008BA834 /* UserSettingsViewController.swift in Sources */,
 				8302F3401E8D8D5D008BA834 /* BaseListCell.swift in Sources */,
 				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
 				8302F2EA1E8D7372008BA834 /* FlowController.swift in Sources */,

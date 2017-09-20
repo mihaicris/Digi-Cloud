@@ -12,7 +12,6 @@ final class SettingsViewController: UITableViewController {
 
     enum SettingType {
         case user
-        case security
         case data
     }
 
@@ -20,7 +19,7 @@ final class SettingsViewController: UITableViewController {
 
     private var user: User
     private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
-    private var settings: [SettingType] = [.user, .security, .data]
+    private var settings: [SettingType] = [.user, .data]
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -82,9 +81,6 @@ final class SettingsViewController: UITableViewController {
         case .user:
             return 2
 
-        case .security:
-            return 1
-
         case .data:
 
             return FileManager.sizeOfFilesCacheFolder() == 0 ? 1 : 2
@@ -97,9 +93,6 @@ final class SettingsViewController: UITableViewController {
         switch settings[section] {
         case .user:
             return NSLocalizedString("User", comment: "")
-
-        case .security:
-            return NSLocalizedString("Security", comment: "")
 
         case .data:
             return NSLocalizedString("Data", comment: "")
@@ -125,8 +118,6 @@ final class SettingsViewController: UITableViewController {
         case .user:
 
             if indexPath.row == 0 {
-
-                cell.accessoryType = .disclosureIndicator
 
                 let profileImageView: UIImageView = {
                     let iv = UIImageView()
@@ -184,11 +175,6 @@ final class SettingsViewController: UITableViewController {
                     confirmButtonHorizontalConstraint])
             }
 
-        case .security:
-
-            cell.textLabel?.text = NSLocalizedString("Links Password", comment: "")
-            cell.accessoryType = .disclosureIndicator
-
         case .data:
 
             switch indexPath.row {
@@ -237,19 +223,10 @@ final class SettingsViewController: UITableViewController {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
 
         switch settings[indexPath.section] {
-
         case .user:
-            if indexPath.row == 0 {
-                let controller = UserSettingsViewController(user: user)
-                navigationController?.pushViewController(controller, animated: true)
-            } else {
+            if indexPath.row == 1 {
                 handleLogout(cell)
             }
-
-        case .security:
-            let controller = SecuritySettingsViewController(style: .grouped)
-            navigationController?.pushViewController(controller, animated: true)
-
         case .data:
             if indexPath.row == 1 {
                 handleClearCache()
@@ -262,8 +239,6 @@ final class SettingsViewController: UITableViewController {
     private func setupViews() {
 
         title = NSLocalizedString("Settings", comment: "")
-        preferredContentSize = CGSize(width: 350, height: 490)
-
         if navigationController != nil {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""),
                                                                     style: .done,
