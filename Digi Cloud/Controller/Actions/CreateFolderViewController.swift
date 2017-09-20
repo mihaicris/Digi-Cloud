@@ -84,6 +84,8 @@ final class CreateFolderViewController: UITableViewController {
         }()
 
         tableView.addSubview(messageLabel)
+        tableView.rowHeight = AppSettings.textFieldRowHeight
+
         tableView.addConstraints(with: "V:|-100-[v0]|", views: messageLabel)
         tableView.centerXAnchor.constraint(equalTo: messageLabel.centerXAnchor).isActive = true
 
