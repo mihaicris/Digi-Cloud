@@ -34,10 +34,12 @@ final class ManageAccountsViewController: UITableViewController {
         return b
     }()
 
-    lazy var cancelButton: UIBarButtonItem = {
+    lazy var cancelEditButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEdit))
         return b
     }()
+
+    let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     // MARK: - Initializers and Deinitializers
 
@@ -59,7 +61,9 @@ final class ManageAccountsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.registerForNotificationCenter()
+        navigationController?.isToolbarHidden = false
+        updateButtonsToMatchTableState()
+        registerForNotificationCenter()
         setupViews()
     }
 
@@ -117,7 +121,10 @@ final class ManageAccountsViewController: UITableViewController {
         title = NSLocalizedString("Accounts", comment: "")
         tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: String(describing: AccountTableViewCell.self))
         tableView.allowsMultipleSelectionDuringEditing = true
-        updateButtonsToMatchTableState()
+        navigationItem.rightBarButtonItem =  UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
+                                                             style: .done,
+                                                             target: self,
+                                                             action: #selector(handleDismiss))
     }
 
     private func dismissIfNoMoreUsers() {
@@ -165,18 +172,15 @@ final class ManageAccountsViewController: UITableViewController {
                 subtitle: NSLocalizedString("The app will now close", comment: "")
             )
         }
-
     }
 
     private func updateButtonsToMatchTableState() {
         if self.tableView.isEditing {
-            self.navigationItem.rightBarButtonItem = self.cancelButton
+            setToolbarItems([deleteButton, flexibleSpace, cancelEditButton], animated: false)
             self.updateDeleteButtonTitle()
-            self.navigationItem.leftBarButtonItem = self.deleteButton
         } else {
             // Not in editing mode.
-            self.navigationItem.leftBarButtonItem = self.addButton
-            self.navigationItem.rightBarButtonItem = self.editButton
+            setToolbarItems([addButton, flexibleSpace, editButton], animated: false)
         }
     }
 
@@ -194,19 +198,12 @@ final class ManageAccountsViewController: UITableViewController {
     }
 
     @objc private func handleToggleEditMode() {
-        var button: UIBarButtonItem
         if tableView.isEditing {
-            button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""),
-                                     style: UIBarButtonItemStyle.plain,
-                                     target: self,
-                                     action: #selector(handleToggleEditMode))
+            setToolbarItems([deleteButton, flexibleSpace], animated: false)
         } else {
-            button = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
-                                     style: UIBarButtonItemStyle.plain,
-                                     target: self,
-                                     action: #selector(handleToggleEditMode))
+            setToolbarItems([deleteButton, flexibleSpace], animated: false)
         }
-        navigationItem.setRightBarButton(button, animated: false)
+
         tableView.setEditing(!tableView.isEditing, animated: true)
     }
 
