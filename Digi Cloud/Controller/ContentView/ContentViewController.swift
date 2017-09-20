@@ -271,8 +271,8 @@ final class ContentViewController: UIViewController {
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.view.addSubview(self.handImageView)
-                self.handImageView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor, constant: 110).isActive = true
-                self.handImageView.centerXAnchor.constraint(equalTo: self.view.layoutMarginsGuide.rightAnchor, constant: -50).isActive = true
+                self.handImageView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor, constant: 50).isActive = true
+                self.handImageView.centerXAnchor.constraint(equalTo: self.view.layoutMarginsGuide.rightAnchor, constant: -70).isActive = true
 
                 let initialPosition = self.handImageView.center
                 let endPosition = CGPoint(x: initialPosition.x + 20, y: initialPosition.y - 20)
