@@ -32,12 +32,15 @@ final class MoreActionsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerForNotificationCenter()
         setupViews()
         setupActions()
     }
@@ -100,8 +103,15 @@ final class MoreActionsViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
-    private func setupViews() {
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCancel),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
 
+    private func setupViews() {
         if navigationController != nil {
             title = NSLocalizedString("More actions", comment: "")
 

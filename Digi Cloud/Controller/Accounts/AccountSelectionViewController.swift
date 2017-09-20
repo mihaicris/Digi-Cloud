@@ -131,7 +131,7 @@ UICollectionViewDelegateFlowLayout {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerForNotificationCenterNotifications()
+        registerForNotificationCenter()
         collectionView.register(AccountCollectionCell.self,
                                 forCellWithReuseIdentifier: String(describing: AccountCollectionCell.self))
         getPersistedUsers()
@@ -275,11 +275,11 @@ UICollectionViewDelegateFlowLayout {
 
     // MARK: - Helper Functions
 
-    private func registerForNotificationCenterNotifications() {
+    private func registerForNotificationCenter() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(updateStackViewAxis),
-            name: .UIApplicationWillEnterForeground,
+            name: .UIApplicationWillResignActive,
             object: nil)
     }
 

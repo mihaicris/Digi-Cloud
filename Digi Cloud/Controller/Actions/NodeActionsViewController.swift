@@ -32,12 +32,15 @@ final class NodeActionsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerForNotificationCenter()
         setupViews()
         setupPermittedActions()
     }
@@ -111,6 +114,14 @@ final class NodeActionsViewController: UITableViewController {
     }
 
     // MARK: - Helper Functions
+
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCancel),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
 
     private func setupViews() {
 

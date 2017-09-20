@@ -81,7 +81,7 @@ final class DeleteViewController: UITableViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleDismiss),
-            name: .UIApplicationDidEnterBackground,
+            name: .UIApplicationWillResignActive,
             object: nil)
     }
 
