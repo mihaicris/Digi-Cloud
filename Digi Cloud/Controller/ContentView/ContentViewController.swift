@@ -22,6 +22,7 @@ final class ContentViewController: UIViewController {
 
     private lazy var webView: WKWebView = {
         let v = WKWebView()
+        v.translatesAutoresizingMaskIntoConstraints = false
         v.navigationDelegate = self
         return v
     }()
@@ -92,9 +93,6 @@ final class ContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        self.title = (self.location.path as NSString).lastPathComponent
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleAction))
-        navigationItem.rightBarButtonItem?.isEnabled = false
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -125,6 +123,10 @@ final class ContentViewController: UIViewController {
 
     private func setupViews() {
         view.backgroundColor = .white
+        self.title = (self.location.path as NSString).lastPathComponent
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleExportAction))
+        navigationItem.rightBarButtonItem?.isEnabled = false
+
     }
 
     private func fetchNode() {
@@ -161,8 +163,12 @@ final class ContentViewController: UIViewController {
 
         // Add WKWebView
         view.addSubview(webView)
-        view.addConstraints(with: "H:|[v0]|", views: webView)
-        view.addConstraints(with: "V:|[v0]|", views: webView)
+        NSLayoutConstraint.activate([
+            webView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            webView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            webView.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
 
         // load file in the view
         self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL)
@@ -229,11 +235,25 @@ final class ContentViewController: UIViewController {
         session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
     }
 
-    @objc private func handleAction() {
+    @objc private func handleExportAction() {
+        handImageView.isHidden = true
 
-        handleFileNotOpen(isVisible: false)
+        // check if inputs are available
+        guard let url = fileURL, let fileName = node?.name else { return }
 
-        let controller = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+        // prepare a file url by replacing the hash name with the actual file name
+
+        let exportFolderURL = FileManager.filesCacheFolderURL.appendingPathComponent("Export", isDirectory: true)
+        FileManager.deleteFolder(at: exportFolderURL)
+        FileManager.createFolder(at: exportFolderURL)
+
+        let exportFileURL = exportFolderURL.appendingPathComponent(fileName)
+
+        guard let _ = try? FileManager.default.copyItem(at: url, to: exportFileURL) else {
+            return
+        }
+
+        let controller = UIActivityViewController(activityItems: [exportFileURL], applicationActivities: nil)
         controller.excludedActivityTypes = nil
         controller.modalPresentationStyle = .popover
         controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
@@ -248,16 +268,13 @@ final class ContentViewController: UIViewController {
     }
 
     fileprivate func handleFileNotOpen(isVisible: Bool) {
-
         if isVisible {
-
             webView.removeFromSuperview()
             view.addSubview(noPreviewImageView)
             view.addSubview(noPreviewLabel)
             view.addSubview(noPreviewMessageLabel)
 
             NSLayoutConstraint.activate([
-
                 noPreviewImageView.bottomAnchor.constraint(equalTo: noPreviewLabel.topAnchor, constant: -20),
                 noPreviewImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
@@ -266,10 +283,9 @@ final class ContentViewController: UIViewController {
 
                 noPreviewMessageLabel.topAnchor.constraint(equalTo: noPreviewLabel.bottomAnchor, constant: 10),
                 noPreviewMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+                ])
 
-            ])
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.view.addSubview(self.handImageView)
                 self.handImageView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor, constant: 50).isActive = true
                 self.handImageView.centerXAnchor.constraint(equalTo: self.view.layoutMarginsGuide.rightAnchor, constant: -70).isActive = true
@@ -277,15 +293,15 @@ final class ContentViewController: UIViewController {
                 let initialPosition = self.handImageView.center
                 let endPosition = CGPoint(x: initialPosition.x + 20, y: initialPosition.y - 20)
 
-                UIView.animate(withDuration: 1.2,
-                               delay: 0.3,
-                               options: [.autoreverse, .repeat],
-                               animations: {
-                                    self.handImageView.center = endPosition
-                               },
-                               completion: nil)
+                UIView.animate(
+                    withDuration: 1.2,
+                    delay: 0.3,
+                    options: [.autoreverse, .repeat],
+                    animations: {
+                        self.handImageView.center = endPosition
+                },
+                    completion: nil)
             }
-
         } else {
             handImageView.removeFromSuperview()
         }
