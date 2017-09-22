@@ -61,7 +61,7 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
                 let text1 = String.localizedStringWithFormat(filesString, folderInfo.files)
                 let text2 = String.localizedStringWithFormat(foldersString, folderInfo.folders)
                 let attributedText = NSMutableAttributedString(string: text1 + text2,
-                                                               attributes: [NSParagraphStyleAttributeName: paragraph])
+                                                               attributes: [NSAttributedStringKey.paragraphStyle: paragraph])
                 label.attributedText = attributedText
 
                 return label
@@ -143,8 +143,6 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
         super.init(nibName: nil, bundle: nil)
     }
 
-    deinit { DEINITLog(self) }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -152,17 +150,10 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        setupViews()
-
-        configureWaitingView(type: .started, message: NSLocalizedString("Please wait...", comment: ""))
-
-        updateFolderInfo()
         super.viewDidLoad()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        setupViews()
+        configureWaitingView(type: .started, message: NSLocalizedString("Please wait...", comment: ""))
+        updateFolderInfo()
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -194,7 +185,8 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 2:     return 70
-        default:    return UITableViewAutomaticDimension
+        case 3:     return AppSettings.tableViewRowHeight
+        default:    return AppSettings.textFieldRowHeight
         }
     }
 
@@ -284,7 +276,7 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
         ])
 
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
-                                         style: .plain,
+                                         style: .done,
                                          target: self,
                                          action: #selector(handleDone))
         self.navigationItem.setRightBarButton(rightBarButton, animated: false)
@@ -367,10 +359,16 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
             }
         }
 
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.permittedArrowDirections = .up
-        controller.popoverPresentationController?.sourceView = deleteButton
-        controller.popoverPresentationController?.sourceRect = deleteButton.bounds
-        present(controller, animated: true, completion: nil)
+        if let horizontalSizeClass = navigationController?.presentingViewController?.traitCollection.horizontalSizeClass,
+            horizontalSizeClass == .regular {
+            controller.modalPresentationStyle = .popover
+            controller.popoverPresentationController?.permittedArrowDirections = .up
+            controller.popoverPresentationController?.sourceView = deleteButton
+            controller.popoverPresentationController?.sourceRect = deleteButton.bounds
+            present(controller, animated: true, completion: nil)
+        } else {
+            let navController = UINavigationController(rootViewController: controller)
+            present(navController, animated: true, completion: nil)
+        }
     }
 }

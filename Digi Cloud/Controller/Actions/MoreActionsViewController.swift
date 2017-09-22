@@ -32,20 +32,23 @@ final class MoreActionsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+        registerForNotificationCenter()
         setupViews()
         setupActions()
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        preferredContentSize.width = 250
-        preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
+        self.preferredContentSize.width = 350
+        self.preferredContentSize.height = tableView.contentSize.height - 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -76,7 +79,7 @@ final class MoreActionsViewController: UITableViewController {
 
         case .bookmark:
             cell.textLabel?.text = self.rootNode.bookmark == nil
-                ? NSLocalizedString("Set Bookmark", comment: "")
+                ? NSLocalizedString("Add Bookmark", comment: "")
                 : NSLocalizedString("Remove Bookmark", comment: "")
 
         case .createFolder:
@@ -100,38 +103,61 @@ final class MoreActionsViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCancel),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
+
     private func setupViews() {
-        let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
-            view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-            return view
-        }()
+        if navigationController != nil {
+            title = NSLocalizedString("More actions", comment: "")
 
-        let message: UILabel = {
-            let label = UILabel()
-            label.textAlignment = .center
-            label.text = NSLocalizedString("More actions", comment: "")
-            label.font = UIFont.systemFont(ofSize: 14)
-            return label
-        }()
+            let closeButton: UIBarButtonItem = {
+                let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
+                return b
+            }()
 
-        let separator: UIView = {
-            let view = UIView()
-            view.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return view
-        }()
+            self.navigationItem.rightBarButtonItem = closeButton
 
-        headerView.addSubview(message)
-        headerView.addConstraints(with: "H:|-10-[v0]-10-|", views: message)
-        message.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        } else {
 
-        headerView.addSubview(separator)
-        headerView.addConstraints(with: "H:|[v0]|", views: separator)
-        headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+            let headerView: UIView = {
+                let view = UIView(frame: CGRect(x: 0, y: 0, width:400, height: 40))
+                view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+                return view
+            }()
+
+            let titleName: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.textAlignment = .center
+                l.text = NSLocalizedString("More actions", comment: "")
+                l.font = UIFont.boldSystemFont(ofSize: 16)
+                return l
+            }()
+
+            let separator: UIView = {
+                let v = UIView()
+                v.backgroundColor = UIColor(white: 0.8, alpha: 1)
+                return v
+            }()
+
+            headerView.addSubview(titleName)
+            titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+            titleName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+
+            headerView.addSubview(separator)
+            headerView.addConstraints(with: "H:|[v0]|", views: separator)
+            headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+            tableView.rowHeight = AppSettings.tableViewRowHeight
+            tableView.tableHeaderView = headerView
+
+        }
 
         tableView.isScrollEnabled = false
-        tableView.rowHeight = 50
-        tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 
@@ -179,5 +205,9 @@ final class MoreActionsViewController: UITableViewController {
         if childs > 1 {
             actions.append(.selectionMode)
         }
+    }
+
+    @objc private func handleCancel() {
+        dismiss(animated: true, completion: nil)
     }
 }

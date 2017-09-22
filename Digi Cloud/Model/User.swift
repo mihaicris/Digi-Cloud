@@ -15,19 +15,15 @@ struct User {
 }
 
 extension User {
+    init?(object: Any?) {
+        guard
+            let jsonDictionary = object as? [String: Any],
+            let id = jsonDictionary["id"] as? String,
+            let name = jsonDictionary["name"] as? String,
+            let email = jsonDictionary["email"] as? String
+            else { return nil }
 
-    init?(JSON: Any?) {
-        if JSON == nil { return nil }
-        guard let JSON = JSON as? [String: Any],
-            let id = JSON["id"] as? String,
-            let name = JSON["name"] as? String,
-            let email = JSON["email"] as? String
-            else {
-                print("Error at parsing of User JSON.")
-                return nil
-        }
-
-        if let permissions = Permissions(JSON: JSON["permissions"]) {
+        if let permissions = Permissions(object: jsonDictionary["permissions"]) {
             self.permissions = permissions
         } else {
             return nil
@@ -44,8 +40,8 @@ extension User {
             self.firstName = nameComponents.first!
             self.lastName = nameComponents.last!
         } else {
-           self.firstName = nameComponents.first!
-           self.lastName = nameComponents.dropFirst().joined(separator: " ")
+            self.firstName = nameComponents.first!
+            self.lastName = nameComponents.dropFirst().joined(separator: " ")
         }
 
         self.email = email

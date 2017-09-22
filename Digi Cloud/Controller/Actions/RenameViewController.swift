@@ -37,8 +37,11 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         let t = UITableView(frame: frame, style: .grouped)
         t.translatesAutoresizingMaskIntoConstraints = false
+        t.rowHeight = AppSettings.textFieldRowHeight
         t.delegate = self
         t.dataSource = self
+        let gr = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        t.addGestureRecognizer(gr)
         return t
     }()
 
@@ -59,18 +62,13 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        setupViews()
         super.viewDidLoad()
+        setupViews()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.textField.becomeFirstResponder()
         super.viewDidAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        self.textField.becomeFirstResponder()
     }
 
     // MARK: - TableView Delegate
@@ -109,6 +107,14 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         return cell
     }
 
+    @objc private func dismissKeyboard() {
+        textField?.resignFirstResponder()
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
+
     // MARK: - Helper Functions
 
     private func setupViews() {
@@ -126,6 +132,8 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             let v = UIView()
             v.translatesAutoresizingMaskIntoConstraints = false
             v.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 1.0, alpha: 1.0)
+            let gr = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            v.addGestureRecognizer(gr)
             return v
         }()
 
@@ -207,17 +215,17 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             actionsListLabel.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20),
 
             actionButtonsStackview.topAnchor.constraint(equalTo: actionsContainerView.topAnchor, constant: 40),
-            actionButtonsStackview.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20),
+            actionButtonsStackview.leftAnchor.constraint(equalTo: actionsContainerView.leftAnchor, constant: 20)
         ])
 
-        tableView.isScrollEnabled = false
+        tableView.isScrollEnabled = true
 
         leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                                        style: .plain,
+                                        style: .done,
                                         target: self,
                                         action: #selector(handleCancel))
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Rename", comment: ""),
-                                         style: .plain,
+                                         style: .done,
                                          target: self,
                                          action: #selector(handleRename))
 

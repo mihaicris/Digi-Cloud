@@ -53,7 +53,7 @@ final class LoginField: UITextField {
 
         addSubview(label)
 
-        label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8).isActive = true
+        label.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
         label.topAnchor.constraint(equalTo: self.topAnchor, constant: 8).isActive = true
     }
 

@@ -103,26 +103,23 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
     }
 
     override func viewDidLoad() {
-
+        super.viewDidLoad()
         title = NSLocalizedString("Add member", comment: "")
-
         let saveMemberButton = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""),
-                                               style: .plain, target: self, action: #selector(handleSaveMember))
-
+                                               style: .done, target: self, action: #selector(handleSaveMember))
         navigationItem.rightBarButtonItem = saveMemberButton
         navigationController?.isToolbarHidden = true
-
-        super.viewDidLoad()
+        tableView.rowHeight = AppSettings.tableViewRowHeight
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.usernameTextField.becomeFirstResponder()
         super.viewDidAppear(animated)
+        self.usernameTextField.becomeFirstResponder()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        navigationController?.isToolbarHidden = false
         super.viewDidDisappear(animated)
+        navigationController?.isToolbarHidden = false
     }
 
     // MARK: - Table view data source

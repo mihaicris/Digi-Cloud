@@ -164,7 +164,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             NSLocalizedString("Custom", comment: "")
         ])
         sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12)], for: .normal)
+        sc.setTitleTextAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12)], for: .normal)
         sc.addTarget(self, action: #selector(handleValiditySelectorValueChanged(_:)), for: .valueChanged)
         sc.isHidden = true
         return sc
@@ -263,19 +263,13 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupViews()
-        setupTableViewHeaderView()
         setupNavigationItems()
         setupToolBarItems()
         addViewTapGestureRecognizer()
         configureWaitingView(type: .started, message: NSLocalizedString("Preparing Link", comment: ""))
         requestLink()
-        super.viewDidLoad()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -322,7 +316,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         if sections[indexPath.section] == .validity && validityDateAndTimePicker.isHidden == false {
             return 150
         } else {
-            return UITableViewAutomaticDimension
+            return AppSettings.textFieldRowHeight
         }
     }
 
@@ -362,11 +356,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             cell.contentView.addSubview(locationPathLabel)
 
             NSLayoutConstraint.activate([
-                locationPathLabel.leadingAnchor.constraint(equalTo: mountNameLabel.trailingAnchor, constant: 2),
-                locationPathLabel.trailingAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.trailingAnchor),
+                locationPathLabel.leftAnchor.constraint(equalTo: mountNameLabel.rightAnchor, constant: 2),
+                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.rightAnchor),
                 locationPathLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
 
-                mountNameLabel.leadingAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leadingAnchor),
+                mountNameLabel.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
                 mountNameLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
 
         case .link:
@@ -376,23 +370,23 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 cell.contentView.addSubview(hashTextField)
                 cell.contentView.addSubview(saveHashButton)
 
-                rightTextFieldConstraintDefault = hashTextField.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor)
-                rightTextFieldConstraintInEditMode = hashTextField.trailingAnchor.constraint(equalTo: saveHashButton.leadingAnchor, constant: -8)
+                rightTextFieldConstraintDefault = hashTextField.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor)
+                rightTextFieldConstraintInEditMode = hashTextField.rightAnchor.constraint(equalTo: saveHashButton.leftAnchor, constant: -8)
 
                 NSLayoutConstraint.activate([
                     baseLinkLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                    baseLinkLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                    baseLinkLabel.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                     baseLinkLabel.heightAnchor.constraint(equalToConstant: 30),
 
                     saveHashButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                    saveHashButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                    saveHashButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
 
-                    hashTextField.leadingAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.trailingAnchor, constant: 2),
+                    hashTextField.leftAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.rightAnchor, constant: 2),
                     rightTextFieldConstraintDefault!,
                     hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     hashTextField.heightAnchor.constraint(equalToConstant: 30)])
 
-                hashTextField.setContentHuggingPriority(249, for: .horizontal)
+                hashTextField.setContentHuggingPriority(UILayoutPriority(rawValue: 249), for: .horizontal)
 
             } else if linkType == .upload {
                 let label: UILabel = {
@@ -406,9 +400,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 cell.contentView.addSubview(uploadNotificationSwitch)
 
                 NSLayoutConstraint.activate([
-                    label.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                    label.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                     label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                    uploadNotificationSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                    uploadNotificationSwitch.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                     uploadNotificationSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
             }
         case .password:
@@ -418,11 +412,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             cell.contentView.addSubview(enablePasswordSwitch)
 
             NSLayoutConstraint.activate([
-                passwordLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                passwordLabel.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                 passwordLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                passwordResetButton.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 90),
+                passwordResetButton.leftAnchor.constraint(equalTo: cell.contentView.leftAnchor, constant: 90),
                 passwordResetButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                enablePasswordSwitch.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                enablePasswordSwitch.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 enablePasswordSwitch.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
 
         case .validity:
@@ -435,18 +429,18 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             cell.contentView.addSubview(spinner)
 
             NSLayoutConstraint.activate([
-                validityLabel.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validityLabel.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                 validityLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                changeValidityButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                changeValidityButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 changeValidityButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                validitySegmentedControl.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validitySegmentedControl.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                 validitySegmentedControl.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                spinner.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                spinner.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 spinner.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                validityDateAndTimePicker.leadingAnchor.constraint(equalTo: cell.layoutMarginsGuide.leadingAnchor),
+                validityDateAndTimePicker.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
                 validityDateAndTimePicker.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 validityDateAndTimePicker.heightAnchor.constraint(equalTo: cell.contentView.heightAnchor),
-                saveCustomDateButton.trailingAnchor.constraint(equalTo: cell.layoutMarginsGuide.trailingAnchor),
+                saveCustomDateButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
         }
 
@@ -516,13 +510,32 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
     private func setupViews() {
 
+        let headerView: UIImageView = {
+            let iv = UIImageView(frame: CGRect.zero)
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            iv.image = linkType == .download ? #imageLiteral(resourceName: "share_download_link_background") : #imageLiteral(resourceName: "share_upload_link_background")
+            iv.contentMode = .scaleAspectFill
+            return iv
+        }()
+
         tableView.alwaysBounceVertical = false
+
+        view.addSubview(headerView)
+        headerView.addSubview(counterLabel)
 
         view.addSubview(tableView)
         view.addSubview(waitingView)
 
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+
+            headerView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor),
+            headerView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            headerView.rightAnchor.constraint(equalTo: view.rightAnchor),
+
+            counterLabel.rightAnchor.constraint(equalTo: headerView.layoutMarginsGuide.rightAnchor),
+            counterLabel.bottomAnchor.constraint(equalTo: headerView.layoutMarginsGuide.bottomAnchor),
+
+            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
@@ -536,20 +549,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         sections = [.location, .link, .password, .validity]
     }
 
-    private func setupTableViewHeaderView() {
-
-        let frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 85)
-        let headerView = UIImageView(frame: frame)
-
-        headerView.addSubview(counterLabel)
-        counterLabel.rightAnchor.constraint(equalTo: counterLabel.superview!.layoutMarginsGuide.rightAnchor).isActive = true
-        counterLabel.bottomAnchor.constraint(equalTo: counterLabel.superview!.layoutMarginsGuide.bottomAnchor).isActive = true
-
-        headerView.image = linkType == .download ? #imageLiteral(resourceName: "share_download_link_background") : #imageLiteral(resourceName: "share_upload_link_background")
-        headerView.contentMode = .scaleAspectFit
-        tableView.tableHeaderView = headerView
-    }
-
     private func setupNavigationItems() {
 
         if linkType == .download {
@@ -558,9 +557,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             title = NSLocalizedString("Receive Files", comment: "")
         }
 
-        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .plain, target: self, action: #selector(handleDone))
+        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(handleDone))
         navigationItem.setRightBarButton(doneButton, animated: false)
-        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .done, target: nil, action: nil)
     }
 
     private func setupToolBarItems() {

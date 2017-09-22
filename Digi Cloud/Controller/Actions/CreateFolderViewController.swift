@@ -37,18 +37,13 @@ final class CreateFolderViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        setupViews()
         super.viewDidLoad()
+        setupViews()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.textField.becomeFirstResponder()
         super.viewDidAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        self.textField.becomeFirstResponder()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -89,18 +84,20 @@ final class CreateFolderViewController: UITableViewController {
         }()
 
         tableView.addSubview(messageLabel)
+        tableView.rowHeight = AppSettings.textFieldRowHeight
+
         tableView.addConstraints(with: "V:|-100-[v0]|", views: messageLabel)
         tableView.centerXAnchor.constraint(equalTo: messageLabel.centerXAnchor).isActive = true
 
         tableView.isScrollEnabled = false
 
         leftBarButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                                        style: .plain,
+                                        style: .done,
                                         target: self,
                                         action: #selector(handleCancel))
 
         rightBarButton = UIBarButtonItem(title: NSLocalizedString("Create", comment: ""),
-                                         style: .plain,
+                                         style: .done,
                                          target: self,
                                          action: #selector(handleCreateFolder))
 

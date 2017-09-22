@@ -13,6 +13,7 @@ class AppSettings {
     // MARK: - Properties
 
     static var tableViewRowHeight: CGFloat = 50
+    static var textFieldRowHeight: CGFloat = 44
 
     static var hasRunBefore: Bool {
         get {
@@ -271,14 +272,14 @@ class AppSettings {
             }()
 
             let okButton: UIButton = {
-                let b = UIButton(type: UIButtonType.system)
+                let b = UIButton(type: UIButtonType.custom)
                 b.translatesAutoresizingMaskIntoConstraints = false
                 b.backgroundColor = UIColor(red: 0.9, green: 0.0, blue: 0.0, alpha: 1.0)
                 b.layer.cornerRadius = 10
                 b.layer.masksToBounds = true
                 b.setTitle(NSLocalizedString("OK", comment: ""), for: .normal)
-                b.setTitleColor(UIColor.white, for: .normal)
-                b.contentEdgeInsets = UIEdgeInsets(top: 2, left: 15, bottom: 3, right: 15)
+                b.setTitleColor(.white, for: [.normal, .selected])
+                b.contentEdgeInsets = UIEdgeInsets(top: 5, left: 35, bottom: 5, right: 35)
                 b.addTarget(self, action: #selector(handleCrash), for: .touchUpInside)
                 return b
             }()
@@ -291,8 +292,8 @@ class AppSettings {
             NSLayoutConstraint.activate([
                 frameAlert.centerXAnchor.constraint(equalTo: blackView.centerXAnchor),
                 frameAlert.centerYAnchor.constraint(equalTo: blackView.centerYAnchor),
-                frameAlert.widthAnchor.constraint(equalToConstant: 600),
-                frameAlert.heightAnchor.constraint(equalToConstant: 200),
+                frameAlert.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.9),
+                frameAlert.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.4),
 
                 titleMessageLabel.leftAnchor.constraint(equalTo: frameAlert.layoutMarginsGuide.leftAnchor),
                 titleMessageLabel.rightAnchor.constraint(equalTo: frameAlert.layoutMarginsGuide.rightAnchor),

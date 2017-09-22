@@ -84,7 +84,9 @@ final class DigiClient {
                      completion: @escaping(_ data: Any?, _ response: Int?, _ error: Error?) -> Void) {
 
         #if DEBUG
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            }
         #endif
 
         /* 1. Build the URL, Configure the request */
@@ -510,7 +512,7 @@ final class DigiClient {
                     return
             }
 
-            let bookmarks = bookmarkJSONArray.flatMap { Bookmark(JSON: $0) }
+            let bookmarks = bookmarkJSONArray.flatMap { Bookmark(object: $0) }
 
             completion(bookmarks, nil)
         }
@@ -651,7 +653,7 @@ final class DigiClient {
                     return
             }
 
-            let mounts = mountsList.flatMap { Mount(JSON: $0) }
+            let mounts = mountsList.flatMap { Mount(object: $0) }
             completion(mounts, nil)
         }
     }
@@ -684,7 +686,7 @@ final class DigiClient {
                 return
             }
 
-            guard let mount = Mount(JSON: json) else {
+            guard let mount = Mount(object: json) else {
                 completion(nil, JSONError.parse("Error parsing Mount JSON."))
                 return
             }
@@ -718,7 +720,7 @@ final class DigiClient {
                 return
             }
 
-            guard let mount = Mount(JSON: json) else {
+            guard let mount = Mount(object: json) else {
                 completion(nil, JSONError.parse("Error parsing Mount JSON."))
                 return
             }
@@ -811,7 +813,7 @@ final class DigiClient {
                     return
                 }
 
-                guard let user = User(JSON: json) else {
+                guard let user = User(object: json) else {
                     completion(nil, JSONError.parse("Error parsing User JSON."))
                     return
                 }
@@ -878,7 +880,7 @@ final class DigiClient {
                 return
             }
 
-            guard let node = Node(JSON: jsonData) else {
+            guard let node = Node(object: jsonData) else {
                 completion(nil, JSONError.parse("Error parsing Node JSON."))
                 return
             }
@@ -1147,14 +1149,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = DownloadLink(JSON: json) else {
+                guard let link = DownloadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON data for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = UploadLink(JSON: json) else {
+                guard let receiver = UploadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON data for Receiver."))
                     return
                 }
@@ -1208,14 +1210,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = DownloadLink(JSON: json) else {
+                guard let link = DownloadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = UploadLink(JSON: json) else {
+                guard let receiver = UploadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON for receiver."))
                     return
                 }
@@ -1257,14 +1259,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = DownloadLink(JSON: json) else {
+                guard let link = DownloadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = UploadLink(JSON: json) else {
+                guard let receiver = UploadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON for Receiver."))
                     return
                 }
@@ -1306,14 +1308,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = DownloadLink(JSON: json) else {
+                guard let link = DownloadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = UploadLink(JSON: json) else {
+                guard let receiver = UploadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON for Receiver."))
                     return
                 }
@@ -1389,7 +1391,7 @@ final class DigiClient {
                 return
             }
 
-            guard let receiver = UploadLink(JSON: json) else {
+            guard let receiver = UploadLink(object: json) else {
                 completion(nil, JSONError.parse("Could not parce the JSON for Receiver."))
                 return
             }
@@ -1439,14 +1441,14 @@ final class DigiClient {
 
             switch type {
             case .download:
-                guard let link = DownloadLink(JSON: json) else {
+                guard let link = DownloadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON for Link."))
                     return
                 }
                 completion(link, nil)
 
             case .upload:
-                guard let receiver = UploadLink(JSON: json) else {
+                guard let receiver = UploadLink(object: json) else {
                     completion(nil, JSONError.parse("Could not parce the JSON for Receiver."))
                     return
                 }
@@ -1491,8 +1493,8 @@ final class DigiClient {
                     return
             }
 
-            let nodes = nodesListJSON.flatMap { Node(JSON: $0) }
-            let rootNode = Node(JSON: rootNodeJSON)
+            let nodes = nodesListJSON.flatMap { Node(object: $0) }
+            let rootNode = Node(object: rootNodeJSON)
 
             completion(nodes, rootNode, nil)
         }
@@ -1533,12 +1535,12 @@ final class DigiClient {
                     return
             }
 
-            let nodeHits = hitsJSON.flatMap { NodeHit(JSON: $0) }
+            let nodeHits = hitsJSON.flatMap { NodeHit(object: $0) }
 
             var mountsDictionary: [String: Mount] = [:]
 
             for (mountId, mountAny) in mountsJSON {
-                if let mount = Mount(JSON: mountAny) {
+                if let mount = Mount(object: mountAny) {
                     mountsDictionary[mountId] = mount
                 } else {
                     completion(nil, nil, JSONError.parse("Couldn't extract mount from results."))

@@ -25,20 +25,23 @@ final class SortFolderViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+        registerForNotificationCenter()
         setupActions()
         setupViews()
-        super.viewDidLoad()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.preferredContentSize.width = 350
         self.preferredContentSize.height = tableView.contentSize.height - 1
-        self.preferredContentSize.width = 250
-        super.viewWillAppear(animated)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -103,39 +106,59 @@ final class SortFolderViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCancel),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
+
     private func setupViews() {
+        if navigationController != nil {
+            title = NSLocalizedString("Sort folder", comment: "")
 
-        let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
-            view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-            return view
-        }()
+            let closeButton: UIBarButtonItem = {
+                let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
+                return b
+            }()
 
-        let titleName: UILabel = {
-            let label = UILabel()
-            label.text = NSLocalizedString("Sort folder", comment: "")
-            label.font = UIFont.systemFont(ofSize: 14)
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
+            self.navigationItem.rightBarButtonItem = closeButton
 
-        let separator: UIView = {
-            let view = UIView()
-            view.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return view
-        }()
+        } else {
 
-        headerView.addSubview(titleName)
-        titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-        titleName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+            let headerView: UIView = {
+                let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
+                view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+                return view
+            }()
 
-        headerView.addSubview(separator)
-        headerView.addConstraints(with: "H:|[v0]|", views: separator)
-        headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+            let titleName: UILabel = {
+                let l = UILabel()
+                l.text = NSLocalizedString("Sort folder", comment: "")
+                l.font = UIFont.boldSystemFont(ofSize: 16)
+                l.translatesAutoresizingMaskIntoConstraints = false
+                return l
+            }()
 
+            let separator: UIView = {
+                let v = UIView()
+                v.backgroundColor = UIColor(white: 0.8, alpha: 1)
+                return v
+            }()
+
+            headerView.addSubview(titleName)
+            titleName.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+            titleName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+
+            headerView.addSubview(separator)
+            headerView.addConstraints(with: "H:|[v0]|", views: separator)
+            headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+
+            tableView.tableHeaderView = headerView
+        }
         tableView.isScrollEnabled = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
-        tableView.tableHeaderView = headerView
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 
@@ -147,6 +170,10 @@ final class SortFolderViewController: UITableViewController {
             NSLocalizedString("Sort by Size", comment: ""),
             NSLocalizedString("Sort by Type", comment: "")
         ]
+    }
+
+    @objc private func handleCancel() {
+        dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleOnSwitchValueChanged(_ sender: UISwitch) {

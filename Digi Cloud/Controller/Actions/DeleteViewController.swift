@@ -27,50 +27,63 @@ final class DeleteViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        setupViews()
         super.viewDidLoad()
+        setupViews()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        self.preferredContentSize.width = 350
+        self.preferredContentSize.height = tableView.contentSize.height - 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
-
         cell.selectionStyle = .blue
         cell.textLabel?.textAlignment = .center
-        cell.textLabel?.textColor = .red
-        cell.textLabel?.text = NSLocalizedString("Delete", comment: "")
         cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
+
+        if indexPath.row == 1 {
+            cell.textLabel?.textColor = .defaultColor
+            cell.textLabel?.text = NSLocalizedString("Cancel", comment: "")
+
+        } else {
+            cell.textLabel?.textColor = .red
+            cell.textLabel?.text = NSLocalizedString("Delete", comment: "")
+        }
 
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        dismiss(animated: true) {
-            self.onSelection?()
+        dismiss(animated: false) {
+            if indexPath.row == 0 {
+                self.onSelection?()
+            }
         }
     }
 
     // MARK: - Helper Functions
+
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDismiss),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
 
     private func setupViews() {
         let headerView: UIView = {
@@ -105,10 +118,16 @@ final class DeleteViewController: UITableViewController {
         headerView.addConstraints(with: "H:|[v0]|", views: separator)
         headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
 
+        self.title = NSLocalizedString("Delete confirmation", comment: "")
+
         tableView.isScrollEnabled = false
-        tableView.rowHeight = 50
         tableView.tableHeaderView = headerView
+        tableView.rowHeight = AppSettings.tableViewRowHeight
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+    }
+
+    @objc private func handleDismiss() {
+        self.dismiss(animated: false, completion: nil)
     }
 
 }

@@ -64,20 +64,15 @@ final class LocationsViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupNavigationBar()
         setupActivityIndicatorView()
         setupTableView()
-        super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.getMounts()
         super.viewDidAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        self.getMounts()
     }
 
     // MARK: - Helper Functions
@@ -101,13 +96,13 @@ final class LocationsViewController: UITableViewController {
         if action == .copy || action == .move {
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
             let rightButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                    style: .plain,
+                    style: .done,
                     target: self,
                     action: #selector(handleDone))
             navigationItem.setRightBarButton(rightButton, animated: false)
 
         } else {
-            let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings_icon"), style: .plain, target: self, action: #selector(handleShowSettings))
+            let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings_icon"), style: .done, target: self, action: #selector(handleShowSettings))
             self.navigationItem.setLeftBarButton(settingsButton, animated: false)
         }
         self.title = NSLocalizedString("Locations", comment: "")

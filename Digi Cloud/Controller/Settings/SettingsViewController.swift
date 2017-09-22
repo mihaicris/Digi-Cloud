@@ -12,19 +12,14 @@ final class SettingsViewController: UITableViewController {
 
     enum SettingType {
         case user
-        case security
         case data
     }
 
     // MARK: - Properties
 
-    private var isExecuting = false
-
     private var user: User
-
     private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
-
-    private var settings: [SettingType] = [.user, .security, .data]
+    private var settings: [SettingType] = [.user, .data]
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -58,67 +53,22 @@ final class SettingsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        title = NSLocalizedString("Settings", comment: "")
-        preferredContentSize = CGSize(width: 350, height: 490)
-        setupViews()
         super.viewDidLoad()
+        self.registerForNotificationCenter()
+        setupViews()
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchUserData()
         tableView.reloadData()
-        super.viewWillAppear(animated)
-    }
-
-    private func setupViews() {
-
-        let tableFooterView: UIView = {
-            let v = UIView()
-            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 70)
-
-            let versionLabel: UILabel = {
-                let l = UILabel()
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.textAlignment = .center
-                let str = "Digi Cloud\n" + NSLocalizedString("Version", comment: "")
-                l.text = "\(str) \(UIApplication.Version).\(UIApplication.Build)"
-                l.numberOfLines = 2
-                l.textColor = UIColor.gray
-                l.font = UIFont.HelveticaNeue(size: 12)
-                return l
-            }()
-
-            v.addSubview(versionLabel)
-
-            NSLayoutConstraint.activate([
-                versionLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 10),
-                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
-            ])
-
-            return v
-        }()
-
-        tableView.tableFooterView = tableFooterView
-    }
-
-    private func fetchUserData() {
-
-        if let user = AppSettings.userLogged {
-
-            self.user = user
-
-            let cache = Cache()
-            let key = self.user.id + ".png"
-
-            if let data = cache.load(type: .profile, key: key) {
-                self.profileImage = UIImage(data: data, scale: UIScreen.main.scale)
-            }
-        }
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -130,9 +80,6 @@ final class SettingsViewController: UITableViewController {
         switch settings[section] {
         case .user:
             return 2
-
-        case .security:
-            return 1
 
         case .data:
 
@@ -147,9 +94,6 @@ final class SettingsViewController: UITableViewController {
         case .user:
             return NSLocalizedString("User", comment: "")
 
-        case .security:
-            return NSLocalizedString("Security", comment: "")
-
         case .data:
             return NSLocalizedString("Data", comment: "")
         }
@@ -158,10 +102,10 @@ final class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch settings[indexPath.section] {
         case .user:
-            return indexPath.row == 0 ? 80 : UITableViewAutomaticDimension
+            return indexPath.row == 0 ? 80 : AppSettings.textFieldRowHeight
 
         default:
-            return UITableViewAutomaticDimension
+            return AppSettings.textFieldRowHeight
         }
     }
 
@@ -174,8 +118,6 @@ final class SettingsViewController: UITableViewController {
         case .user:
 
             if indexPath.row == 0 {
-
-                cell.accessoryType = .disclosureIndicator
 
                 let profileImageView: UIImageView = {
                     let iv = UIImageView()
@@ -233,11 +175,6 @@ final class SettingsViewController: UITableViewController {
                     confirmButtonHorizontalConstraint])
             }
 
-        case .security:
-
-            cell.textLabel?.text = NSLocalizedString("Links Password", comment: "")
-            cell.accessoryType = .disclosureIndicator
-
         case .data:
 
             switch indexPath.row {
@@ -286,19 +223,10 @@ final class SettingsViewController: UITableViewController {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
 
         switch settings[indexPath.section] {
-
         case .user:
-            if indexPath.row == 0 {
-                let controller = UserSettingsViewController(user: user)
-                navigationController?.pushViewController(controller, animated: true)
-            } else {
+            if indexPath.row == 1 {
                 handleLogout(cell)
             }
-
-        case .security:
-            let controller = SecuritySettingsViewController(style: .grouped)
-            navigationController?.pushViewController(controller, animated: true)
-
         case .data:
             if indexPath.row == 1 {
                 handleClearCache()
@@ -307,6 +235,73 @@ final class SettingsViewController: UITableViewController {
     }
 
     // MARK: - Helper Functions
+
+    private func setupViews() {
+
+        title = NSLocalizedString("Settings", comment: "")
+        if navigationController != nil {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""),
+                                                                    style: .done,
+                                                                    target: self,
+                                                                    action: #selector(handleDismiss))
+        }
+
+        let tableFooterView: UIView = {
+            let v = UIView()
+            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 70)
+
+            let versionLabel: UILabel = {
+                let l = UILabel()
+                l.numberOfLines = 0
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.textAlignment = .center
+                l.text = Bundle.main.prettyVersionString
+                l.textColor = UIColor.gray
+                l.font = UIFont.HelveticaNeue(size: 12)
+                return l
+            }()
+
+            v.addSubview(versionLabel)
+
+            NSLayoutConstraint.activate([
+                versionLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 10),
+                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
+            ])
+
+            return v
+        }()
+
+        tableView.tableFooterView = tableFooterView
+
+    }
+
+    private func fetchUserData() {
+
+        if let user = AppSettings.userLogged {
+
+            self.user = user
+
+            let cache = Cache()
+            let key = self.user.id + ".png"
+
+            if let data = cache.load(type: .profile, key: key) {
+                self.profileImage = UIImage(data: data, scale: UIScreen.main.scale)
+            }
+        }
+    }
+
+    private func handleClearCache() {
+        FileManager.emptyFilesCache()
+        tableView.reloadSections(IndexSet(integer: 2), with: .fade)
+    }
+
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDismiss),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
 
     @objc private func toggleAllowingCellularAccessSetting() {
         AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
@@ -335,8 +330,8 @@ final class SettingsViewController: UITableViewController {
 
     @objc private func handleLogoutConfirmed() {
 
-        guard !isExecuting else { return }
-        isExecuting = true
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        defer { UIApplication.shared.endIgnoringInteractionEvents() }
 
         if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
             AppSettings.loggedUserID = nil
@@ -368,8 +363,8 @@ final class SettingsViewController: UITableViewController {
         }
     }
 
-    private func handleClearCache() {
-        FileManager.emptyFilesCache()
-        tableView.reloadSections(IndexSet(integer: 2), with: .fade)
+    @objc private func handleDismiss() {
+        self.dismiss(animated: true, completion: nil)
     }
+
 }

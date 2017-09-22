@@ -18,19 +18,14 @@ struct Bookmark {
 }
 
 extension Bookmark {
-    init?(JSON: Any?) {
-        if JSON == nil { return nil }
-        guard let JSON = JSON as? [String: Any],
-            let name = JSON["name"] as? String,
-            let path = JSON["path"] as? String
-            else {
-                print("Couldnt parse JSON")
-                return nil
-        }
-
+    init?(object: Any?) {
+        guard
+            let jsonDictionary = object as? [String: Any],
+            let name = jsonDictionary["name"] as? String,
+            let path = jsonDictionary["path"] as? String
+            else { return nil }
         self.name = name
-        self.mountId = JSON["mountId"] as? String ?? ""
-
+        self.mountId = jsonDictionary["mountId"] as? String ?? ""
         self.path = path
     }
 }

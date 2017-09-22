@@ -30,24 +30,20 @@ struct DownloadLink: Link {
 }
 
 extension DownloadLink {
-    init?(JSON: Any?) {
-        if JSON == nil { return nil }
-        guard let JSON = JSON as? [String: Any],
-            let id = JSON["id"] as? String,
-            let name = JSON["name"] as? String,
-            let path = JSON["path"] as? String,
-            let counter = JSON["counter"] as? Int,
-            let url = JSON["url"] as? String,
-            let shortUrl = JSON["shortUrl"] as? String,
-            let hash = JSON["hash"] as? String,
-            let host = JSON["host"] as? String,
-            let hasPassword = JSON["hasPassword"] as? Bool,
-            let passwordRequired = JSON["passwordRequired"] as? Bool
-            else {
-                print("Couldnt parse DownloadLink JSON.")
-                return nil
-        }
-
+    init?(object: Any?) {
+        guard
+            let jsonDictionary = object as? [String: Any],
+            let id = jsonDictionary["id"] as? String,
+            let name = jsonDictionary["name"] as? String,
+            let path = jsonDictionary["path"] as? String,
+            let counter = jsonDictionary["counter"] as? Int,
+            let url = jsonDictionary["url"] as? String,
+            let shortUrl = jsonDictionary["shortUrl"] as? String,
+            let hash = jsonDictionary["hash"] as? String,
+            let host = jsonDictionary["host"] as? String,
+            let hasPassword = jsonDictionary["hasPassword"] as? Bool,
+            let passwordRequired = jsonDictionary["passwordRequired"] as? Bool
+            else { return nil }
         self.id = id
         self.name = name
         self.path = path
@@ -57,9 +53,9 @@ extension DownloadLink {
         self.hash = hash
         self.host = host
         self.hasPassword = hasPassword
-        self.password = JSON["password"] as? String
+        self.password = jsonDictionary["password"] as? String
         self.passwordRequired =  passwordRequired
-        self.validFrom = JSON["validFrom"] as? TimeInterval
-        self.validTo = JSON["validTo"] as? TimeInterval
+        self.validFrom = jsonDictionary["validFrom"] as? TimeInterval
+        self.validTo = jsonDictionary["validTo"] as? TimeInterval
     }
 }

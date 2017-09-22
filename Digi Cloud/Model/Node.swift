@@ -26,29 +26,26 @@ struct Node {
 }
 
 extension Node {
-    init?(JSON: Any?) {
-        guard let JSON = JSON as? [String: Any],
-            let name = JSON["name"] as? String,
-            let type = JSON["type"] as? String,
-            let modified = JSON["modified"] as? TimeInterval,
-            let size = JSON["size"] as? Int64,
-            let contentType = JSON["contentType"] as? String
-            else {
-                print("Couldnt parse JSON")
-                return nil
-        }
-
+    init?(object: Any?) {
+        guard
+            let jsonDictionary = object as? [String: Any],
+            let name = jsonDictionary["name"] as? String,
+            let type = jsonDictionary["type"] as? String,
+            let modified = jsonDictionary["modified"] as? TimeInterval,
+            let size = jsonDictionary["size"] as? Int64,
+            let contentType = jsonDictionary["contentType"] as? String
+            else { return nil }
         self.name = name
         self.type = type
         self.modified = modified
         self.size = size
         self.contentType = contentType
-        self.hash = JSON["hash"] as? String
-        self.mount = Mount(JSON: JSON["mount"])
-        self.mountPath = JSON["mountPath"] as? String
-        self.link = DownloadLink(JSON: JSON["link"])
-        self.receiver = UploadLink(JSON: JSON["receiver"])
-        self.bookmark = Bookmark(JSON: JSON["bookmark"])
+        self.hash = jsonDictionary["hash"] as? String
+        self.mount = Mount(object: jsonDictionary["mount"])
+        self.mountPath = jsonDictionary["mountPath"] as? String
+        self.link = DownloadLink(object: jsonDictionary["link"])
+        self.receiver = UploadLink(object: jsonDictionary["receiver"])
+        self.bookmark = Bookmark(object: jsonDictionary["bookmark"])
     }
 }
 

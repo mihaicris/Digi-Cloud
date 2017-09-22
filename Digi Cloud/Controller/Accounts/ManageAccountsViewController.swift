@@ -25,19 +25,21 @@ final class ManageAccountsViewController: UITableViewController {
     }()
 
     lazy var editButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .plain, target: self, action: #selector(handleEnterEditMode))
+        let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .done, target: self, action: #selector(handleEnterEditMode))
         return b
     }()
 
     lazy var deleteButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .plain, target: self, action: #selector(handleAskDeleteConfirmation))
+        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleAskDeleteConfirmation))
         return b
     }()
 
-    lazy var cancelButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancelEdit))
+    lazy var cancelEditButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEdit))
         return b
     }()
+
+    let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     // MARK: - Initializers and Deinitializers
 
@@ -51,19 +53,18 @@ final class ManageAccountsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
-        tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: String(describing: AccountTableViewCell.self))
-        tableView.allowsMultipleSelectionDuringEditing = true
-        setupViews()
         super.viewDidLoad()
-    }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 55.0
+        navigationController?.isToolbarHidden = false
+        updateButtonsToMatchTableState()
+        registerForNotificationCenter()
+        setupViews()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -94,20 +95,36 @@ final class ManageAccountsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 
         if editingStyle == .delete {
-
             self.wipeAccount(atIndexPath: indexPath)
-            self.dismissIfNoMoreUsers()
+            controller.users = self.users
+            controller.configureViews()
+            controller.collectionView.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.dismissIfNoMoreUsers()
+            }
         }
     }
 
     // MARK: - Helper Functions
 
-    private func setupViews() {
-        preferredContentSize.height = 400
-        preferredContentSize.width = 350
-        title = NSLocalizedString("Accounts", comment: "")
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDismiss),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
 
-        updateButtonsToMatchTableState()
+    private func setupViews() {
+        preferredContentSize.width = 350
+        preferredContentSize.height = tableView.contentSize.height - 1
+        title = NSLocalizedString("Accounts", comment: "")
+        tableView.register(AccountTableViewCell.self, forCellReuseIdentifier: String(describing: AccountTableViewCell.self))
+        tableView.allowsMultipleSelectionDuringEditing = true
+        navigationItem.rightBarButtonItem =  UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
+                                                             style: .done,
+                                                             target: self,
+                                                             action: #selector(handleDismiss))
     }
 
     private func dismissIfNoMoreUsers() {
@@ -155,18 +172,15 @@ final class ManageAccountsViewController: UITableViewController {
                 subtitle: NSLocalizedString("The app will now close", comment: "")
             )
         }
-
     }
 
     private func updateButtonsToMatchTableState() {
         if self.tableView.isEditing {
-            self.navigationItem.rightBarButtonItem = self.cancelButton
+            setToolbarItems([deleteButton, flexibleSpace, cancelEditButton], animated: false)
             self.updateDeleteButtonTitle()
-            self.navigationItem.leftBarButtonItem = self.deleteButton
         } else {
             // Not in editing mode.
-            self.navigationItem.leftBarButtonItem = self.addButton
-            self.navigationItem.rightBarButtonItem = self.editButton
+            setToolbarItems([addButton, flexibleSpace, editButton], animated: false)
         }
     }
 
@@ -184,19 +198,12 @@ final class ManageAccountsViewController: UITableViewController {
     }
 
     @objc private func handleToggleEditMode() {
-        var button: UIBarButtonItem
         if tableView.isEditing {
-            button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""),
-                                     style: UIBarButtonItemStyle.plain,
-                                     target: self,
-                                     action: #selector(handleToggleEditMode))
+            setToolbarItems([deleteButton, flexibleSpace], animated: false)
         } else {
-            button = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
-                                     style: UIBarButtonItemStyle.plain,
-                                     target: self,
-                                     action: #selector(handleToggleEditMode))
+            setToolbarItems([deleteButton, flexibleSpace], animated: false)
         }
-        navigationItem.setRightBarButton(button, animated: false)
+
         tableView.setEditing(!tableView.isEditing, animated: true)
     }
 
@@ -220,7 +227,7 @@ final class ManageAccountsViewController: UITableViewController {
             messageString = NSLocalizedString("Are you sure you want to remove these accounts?", comment: "")
         }
 
-        let alertController = UIAlertController(title: NSLocalizedString("Confirm Deletion", comment: ""),
+        let alertController = UIAlertController(title: NSLocalizedString("Delete confirmation", comment: ""),
                                                 message: messageString,
                                                 preferredStyle: .alert)
 
@@ -277,6 +284,10 @@ final class ManageAccountsViewController: UITableViewController {
         controller.collectionView.reloadData()
 
         dismissIfNoMoreUsers()
+    }
+
+    @objc private func handleDismiss() {
+        self.dismiss(animated: true, completion: nil)
     }
 
     @objc private func handleCancelEdit() {

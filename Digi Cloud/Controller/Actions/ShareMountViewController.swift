@@ -37,6 +37,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         t.isUserInteractionEnabled = false
         t.delegate = self
         t.dataSource = self
+        t.rowHeight = AppSettings.textFieldRowHeight
         t.tag = TableViewType.location.rawValue
         return t
     }()
@@ -47,6 +48,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         t.alwaysBounceVertical = true
         t.delegate = self
         t.dataSource = self
+        t.rowHeight = AppSettings.textFieldRowHeight
         t.tag = TableViewType.users.rawValue
         t.register(MountUserCell.self, forCellReuseIdentifier: String(describing: MountUserCell.self))
         return t
@@ -144,35 +146,25 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupViews()
         setupNavigationItems()
         setupToolBarItems()
         configureWaitingView(type: .started, message: NSLocalizedString("Please wait...", comment: ""))
-
         if let mount = sharedNode.mount {
-
             if mount.root == nil && sharedNode.mountPath != "/" {
-
                 createMount()
-
             } else {
                 refreshMount()
             }
         } else {
             createMount()
         }
-
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.isToolbarHidden = false
         super.viewWillAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
+        navigationController?.isToolbarHidden = false
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -261,11 +253,11 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             cell.contentView.addSubview(locationPathLabel)
 
             NSLayoutConstraint.activate([
-                locationPathLabel.leadingAnchor.constraint(equalTo: mountNameLabel.trailingAnchor, constant: 2),
-                locationPathLabel.trailingAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.trailingAnchor),
+                locationPathLabel.leftAnchor.constraint(equalTo: mountNameLabel.rightAnchor, constant: 2),
+                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.rightAnchor),
                 locationPathLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
 
-                mountNameLabel.leadingAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leadingAnchor),
+                mountNameLabel.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
                 mountNameLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
                 ])
 
@@ -328,7 +320,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         }
 
         navigationController?.pushViewController(controller, animated: true)
-
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -372,21 +363,21 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             tableViewForLocation.rightAnchor.constraint(equalTo: view.rightAnchor),
 
             usersLabel.bottomAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor, constant: -10),
-            usersLabel.leadingAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.leadingAnchor),
+            usersLabel.leftAnchor.constraint(equalTo: tableViewForLocation.layoutMarginsGuide.leftAnchor),
 
             tableViewForUsers.topAnchor.constraint(equalTo: tableViewForLocation.bottomAnchor),
             tableViewForUsers.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewForUsers.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableViewForUsers.rightAnchor.constraint(equalTo: view.rightAnchor)
-            ])
+        ])
     }
 
     private func setupNavigationItems() {
 
         title = NSLocalizedString("Members", comment: "")
-        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .done, target: nil, action: nil)
 
-        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .plain, target: self, action: #selector(handleDone))
+        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(handleDone))
         navigationItem.setRightBarButton(doneButton, animated: false)
     }
 

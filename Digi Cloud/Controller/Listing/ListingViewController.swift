@@ -93,18 +93,18 @@ final class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .plain, target: self, action: #selector(showCreateFolderViewController))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .done, target: self, action: #selector(showCreateFolderViewController))
         return b
     }()
 
     private lazy var copyInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .plain, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
+        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .done, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
         b.tag = ActionType.copy.rawValue
         return b
     }()
 
     private lazy var moveInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .plain, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
+        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .done, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
         b.tag = ActionType.move.rawValue
         return b
     }()
@@ -129,7 +129,7 @@ final class ListingViewController: UITableViewController {
     }()
 
     private lazy var cancelInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancelEditMode))
+        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEditMode))
         return b
     }()
 
@@ -153,14 +153,15 @@ final class ListingViewController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupTableView()
         setupSearchController()
         updateNavigationBarItems()
         setupToolBarButtonItems()
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if [ActionType.noAction, ActionType.showSearchResult].contains(self.action) {
             updateNavigationBarRightButtonItems()
             tableView.tableHeaderView = nil
@@ -171,17 +172,17 @@ final class ListingViewController: UITableViewController {
             emptyFolderLabel.text = NSLocalizedString("Loading ...", comment: "")
             tableView.reloadData()
         }
-        super.viewWillAppear(animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         if needRefresh {
             self.getContent()
         }
-        super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
 
         #if DEBUG
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -190,8 +191,6 @@ final class ListingViewController: UITableViewController {
         if tableView.isEditing {
             handleCancelEditMode()
         }
-        DigiClient.shared.task?.cancel()
-        super.viewWillDisappear(animated)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -259,14 +258,14 @@ final class ListingViewController: UITableViewController {
             if cell.hasLink {
                 // http://fontawesome.io/icon/cloud-upload/
                 let attributedString = NSAttributedString(string: "  \u{f0aa}",
-                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                                                          attributes: [NSAttributedStringKey.font: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
             if cell.hasReceiver {
                 // http://fontawesome.io/icon/cloud-download/
                 let attributedString = NSAttributedString(string: "  \u{f0ab}",
-                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                                                          attributes: [NSAttributedStringKey.font: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
@@ -302,7 +301,7 @@ final class ListingViewController: UITableViewController {
             if cell.hasLink {
                 // http://fontawesome.io/icon/cloud-upload/
                 let attributedString = NSAttributedString(string: "  \u{f0aa}",
-                                                          attributes: [NSFontAttributeName: UIFont.fontAwesome(size: 12)])
+                                                          attributes: [NSAttributedStringKey.font: UIFont.fontAwesome(size: 12)])
                 detailAttributtedString.append(attributedString)
             }
 
@@ -397,7 +396,7 @@ final class ListingViewController: UITableViewController {
         case .copy, .move:
             self.navigationItem.prompt = NSLocalizedString("Choose a destination", comment: "")
 
-            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(handleCancelCopyOrMoveAction))
+            let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelCopyOrMoveAction))
 
             navigationItem.rightBarButtonItem = cancelButton
 
@@ -418,7 +417,7 @@ final class ListingViewController: UITableViewController {
                 NSLocalizedString("Save copy", comment: "") :
                 NSLocalizedString("Move", comment: "")
 
-            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(handleCopyOrMoveAction))
+            let copyMoveButton = UIBarButtonItem(title: buttonTitle, style: .done, target: self, action: #selector(handleCopyOrMoveAction))
             copyMoveButton.isEnabled = true
 
             self.toolbarItems = [createFolderBarButton, flexibleBarButton, bookmarksBarButton, flexibleBarButton, copyMoveButton]
@@ -616,10 +615,10 @@ final class ListingViewController: UITableViewController {
             rightBarButtonItems.append(cancelInEditModeButton)
         } else {
 
-            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .plain, target: self, action: #selector(handleShowMoreActionsViewController(_:)))
+            let moreActionsBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more_icon"), style: .done, target: self, action: #selector(handleShowMoreActionsViewController(_:)))
             moreActionsBarButton.tag = 0
 
-            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .plain, target: self, action: #selector(handleShowSortingSelectionViewController(_:)))
+            let sortBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sort_icon"), style: .done, target: self, action: #selector(handleShowSortingSelectionViewController(_:)))
             sortBarButton.tag = 1
 
             let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleShowSearchViewController(_:)))
@@ -826,10 +825,8 @@ final class ListingViewController: UITableViewController {
             self?.sortContent()
             self?.tableView.reloadData()
         }
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = buttonView
-        controller.popoverPresentationController?.sourceRect = buttonView.bounds
-        present(controller, animated: true, completion: nil)
+
+        presentController(controller, sender: buttonView)
     }
 
     @objc private func handleShowMoreActionsViewController(_ sender: UIBarButtonItem) {
@@ -874,10 +871,7 @@ final class ListingViewController: UITableViewController {
             }
         }
 
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = buttonView
-        controller.popoverPresentationController?.sourceRect = buttonView.bounds
-        present(controller, animated: true, completion: nil)
+        presentController(controller, sender: buttonView)
     }
 
     @objc private func handleShowSearchViewController(_ sender: UIBarButtonItem) {
@@ -939,6 +933,18 @@ final class ListingViewController: UITableViewController {
 
     }
 
+    fileprivate func presentController(_ controller: UIViewController, sender: UIView) {
+        if traitCollection.horizontalSizeClass == .regular {
+            controller.modalPresentationStyle = .popover
+            controller.popoverPresentationController?.sourceView = sender
+            controller.popoverPresentationController?.sourceRect = sender.bounds
+            present(controller, animated: true, completion: nil)
+        } else {
+            let navigationController = UINavigationController(rootViewController: controller)
+            present(navigationController, animated: true, completion: nil)
+        }
+    }
+
     @objc private func handleShowNodeActionsController(_ sender: UIButton) {
 
         self.animateActionButton(sender)
@@ -982,10 +988,7 @@ final class ListingViewController: UITableViewController {
                 }
         }
 
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = sender
-        controller.popoverPresentationController?.sourceRect = sender.bounds
-        present(controller, animated: true, completion: nil)
+        presentController(controller, sender: sender)
     }
 
     @objc private func handleCancelEditMode() {
@@ -1370,10 +1373,7 @@ final class ListingViewController: UITableViewController {
             self?.executeDeletion(at: location, index: index)
         }
 
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.sourceView = sourceView
-        controller.popoverPresentationController?.sourceRect = sourceView.bounds
-        self.present(controller, animated: true, completion: nil)
+        presentController(controller, sender: sourceView)
     }
 
     private func showCopyOrMoveViewController(action: ActionType, sourceLocations: [Location]) {

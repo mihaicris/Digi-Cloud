@@ -32,20 +32,23 @@ final class NodeActionsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+        registerForNotificationCenter()
         setupViews()
         setupPermittedActions()
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.preferredContentSize.width = 250
-        self.preferredContentSize.height = tableView.contentSize.height - 1
         super.viewWillAppear(animated)
+        self.preferredContentSize.width = 350
+        self.preferredContentSize.height = tableView.contentSize.height - 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,7 +82,7 @@ final class NodeActionsViewController: UITableViewController {
 
         case .bookmark:
             cell.textLabel?.text = self.node.bookmark == nil
-                ? NSLocalizedString("Set Bookmark", comment: "")
+                ? NSLocalizedString("Add Bookmark", comment: "")
                 : NSLocalizedString("Remove Bookmark", comment: "")
 
         case .rename:
@@ -112,50 +115,84 @@ final class NodeActionsViewController: UITableViewController {
 
     // MARK: - Helper Functions
 
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCancel),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
+
     private func setupViews() {
 
-        let headerView: UIView = {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
-            view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-            return view
-        }()
+        if navigationController != nil {
+            title = node.name
 
-        let iconImage: UIImageView = {
-            let image = node.type == "dir" ? #imageLiteral(resourceName: "folder_icon") : #imageLiteral(resourceName: "file_icon")
-            let iv = UIImageView(image: image)
-            iv.contentMode = .scaleAspectFit
-            return iv
-        }()
+            let closeButton: UIBarButtonItem = {
+                let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
+                return b
+            }()
 
-        let elementName: UILabel = {
-            let label = UILabel()
-            label.text = node.name
-            label.font = UIFont.systemFont(ofSize: 14)
-            return label
-        }()
+            self.navigationItem.rightBarButtonItem = closeButton
 
-        let separator: UIView = {
-            let view = UIView()
-            view.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return view
-        }()
+        } else {
 
-        headerView.addSubview(iconImage)
-        headerView.addSubview(elementName)
+            let headerView: UIView = {
+                let v = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
+                v.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+                return v
+            }()
 
-        let offset = node.type == "dir" ? 22 : 20
-        headerView.addConstraints(with: "H:|-\(offset)-[v0(26)]-10-[v1]-10-|", views: iconImage, elementName)
-        headerView.addConstraints(with: "V:[v0(26)]", views: iconImage)
-        iconImage.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        elementName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+            let iconImage: UIImageView = {
+                let image = node.type == "dir" ? #imageLiteral(resourceName: "folder_icon") : #imageLiteral(resourceName: "file_icon")
+                let iv = UIImageView(image: image)
+                iv.contentMode = .scaleAspectFit
+                iv.translatesAutoresizingMaskIntoConstraints = false
+                return iv
+            }()
 
-        headerView.addSubview(separator)
-        headerView.addConstraints(with: "H:|[v0]|", views: separator)
-        headerView.addConstraints(with: "V:[v0(\(1 / UIScreen.main.scale))]|", views: separator)
+            let elementName: UILabel = {
+                let l = UILabel()
+                l.translatesAutoresizingMaskIntoConstraints = false
+                l.text = node.name
+                l.font = UIFont.boldSystemFont(ofSize: 16)
+                return l
+            }()
+
+            let separator: UIView = {
+                let v = UIView()
+                v.translatesAutoresizingMaskIntoConstraints = false
+                v.backgroundColor = UIColor(white: 0.8, alpha: 1)
+                return v
+            }()
+
+            headerView.addSubview(iconImage)
+            headerView.addSubview(elementName)
+            headerView.addSubview(separator)
+
+            let offset: CGFloat = node.type == "dir" ? 20 : 18
+
+            NSLayoutConstraint.activate([
+
+                iconImage.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: offset),
+                iconImage.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+                iconImage.widthAnchor.constraint(equalToConstant: 26),
+                iconImage.heightAnchor.constraint(equalToConstant: 26),
+
+                elementName.leftAnchor.constraint(equalTo: iconImage.rightAnchor, constant: 10),
+                elementName.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: -10),
+                elementName.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+
+                separator.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+                separator.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+                separator.heightAnchor.constraint(equalToConstant: 1 / UIScreen.main.scale)
+            ])
+
+            tableView.tableHeaderView = headerView
+        }
 
         tableView.isScrollEnabled = false
-        tableView.rowHeight = 50
-        tableView.tableHeaderView = headerView
+        tableView.rowHeight = AppSettings.tableViewRowHeight
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
     }
 
@@ -202,7 +239,6 @@ final class NodeActionsViewController: UITableViewController {
 
             if location.mount.permissions.create_link {
                 actions.append(.sendDownloadLink)
-//                actions.append(.makeOffline)
             }
 
             if location.mount.canWrite {
@@ -220,6 +256,10 @@ final class NodeActionsViewController: UITableViewController {
                 actions.append(.delete)
             }
         }
+    }
+
+    @objc private func handleCancel() {
+        dismiss(animated: true, completion: nil)
     }
 
 }

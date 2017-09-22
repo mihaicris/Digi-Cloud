@@ -13,10 +13,18 @@ UICollectionViewDelegateFlowLayout {
 
     // MARK: - Properties
 
-    let cellWidth: CGFloat = 200
-    let cellHeight: CGFloat = 100
-    let spacingHoriz: CGFloat = 20
-    let spacingVert: CGFloat = 20
+    var cellWidth: CGFloat { return 200 * factor}
+    var cellHeight: CGFloat { return 100 * factor }
+    var spacingHoriz: CGFloat { return 100 * factor * 0.8 }
+    var spacingVert: CGFloat { return 100 * factor }
+
+    var factor: CGFloat {
+        if traitCollection.horizontalSizeClass == .compact && self.view.bounds.width < self.view.bounds.height {
+            return 0.7
+        } else {
+            return 1
+        }
+    }
 
     private var isExecuting = false
 
@@ -64,9 +72,7 @@ UICollectionViewDelegateFlowLayout {
     private let stackView: UIStackView = {
         let st = UIStackView()
         st.translatesAutoresizingMaskIntoConstraints = false
-        st.axis = .horizontal
         st.distribution = .fillEqually
-        st.spacing = 50
         return st
     }()
 
@@ -87,19 +93,19 @@ UICollectionViewDelegateFlowLayout {
         l.textAlignment = .center
         l.numberOfLines = 3
         let color = UIColor.init(red: 48/255, green: 133/255, blue: 243/255, alpha: 1.0)
-        let attributedText = NSMutableAttributedString(string: "Cloud",
-                                                       attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 48) as Any])
+        let attributedText = NSMutableAttributedString(string: "Digi Cloud",
+                                                       attributes: [NSAttributedStringKey.font: UIFont(name: "PingFangSC-Semibold", size: 34) as Any])
         let word = NSLocalizedString("for", comment: "")
 
         attributedText.append(NSAttributedString(string: "\n\(word)  ",
-            attributes: [NSFontAttributeName: UIFont(name: "Didot-Italic", size: 20) as Any]))
+            attributes: [NSAttributedStringKey.font: UIFont(name: "Didot-Italic", size: 20) as Any]))
 
         attributedText.append(NSAttributedString(string: "Digi Storage",
-                                                 attributes: [NSFontAttributeName: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
+                                                 attributes: [NSAttributedStringKey.font: UIFont(name: "PingFangSC-Semibold", size: 20) as Any]))
 
         let nsString = NSString(string: attributedText.string)
         let nsRange = nsString.range(of: "Storage")
-        attributedText.addAttributes([NSForegroundColorAttributeName: color], range: nsRange)
+        attributedText.addAttributes([NSAttributedStringKey.foregroundColor: color], range: nsRange)
 
         l.attributedText = attributedText
         return l
@@ -117,25 +123,30 @@ UICollectionViewDelegateFlowLayout {
 
     // MARK: - Initializers and Deinitializers
 
-    deinit { DEINITLog(self) }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+        registerForNotificationCenter()
         collectionView.register(AccountCollectionCell.self,
                                 forCellWithReuseIdentifier: String(describing: AccountCollectionCell.self))
         getPersistedUsers()
         setupViews()
         configureViews()
-        super.viewDidLoad()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateStackViewAxis()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-
-        updateUsers {
-            self.configureViews()
-        }
         super.viewDidAppear(animated)
+        getAccountsFromKeychain()
     }
 
     private func getPersistedUsers() {
@@ -174,6 +185,7 @@ UICollectionViewDelegateFlowLayout {
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        changeStackViewAxis(for: size)
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.invalidateLayout()
         }
@@ -246,7 +258,10 @@ UICollectionViewDelegateFlowLayout {
         bottomInset = topInset
         rightInset = leftInset
 
-        return UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        return UIEdgeInsets(top: topInset,
+                            left: leftInset,
+                            bottom: bottomInset,
+                            right: rightInset)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -259,6 +274,14 @@ UICollectionViewDelegateFlowLayout {
     }
 
     // MARK: - Helper Functions
+
+    private func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateStackViewAxis),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
 
     private func setupViews() {
 
@@ -277,27 +300,25 @@ UICollectionViewDelegateFlowLayout {
 
         NSLayoutConstraint.activate([
             logoBigLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
             NSLayoutConstraint(item: logoBigLabel, attribute: .centerY, relatedBy: .equal,
-                               toItem: view, attribute: .bottom, multiplier: 0.15, constant: 0.0),
+                               toItem: view, attribute: .bottom, multiplier: 0.13, constant: 0.0),
 
             collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
             collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-
             NSLayoutConstraint(item: collectionView, attribute: .height, relatedBy: .equal,
                                toItem: view, attribute: .height, multiplier: 0.5, constant: 0.0),
 
             spinner.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
-
             NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal,
                                toItem: collectionView, attribute: .centerY, multiplier: 1.25, constant: 0.0),
 
             noAccountsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             noAccountsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
-            stackView.centerYAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.height * 0.035)
-            ])
+            stackView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20)
+        ])
 
     }
 
@@ -321,6 +342,20 @@ UICollectionViewDelegateFlowLayout {
         collectionView.reloadData()
     }
 
+    private func changeStackViewAxis(for size: CGSize) {
+        if self.traitCollection.horizontalSizeClass == .compact && size.width < size.height {
+            self.stackView.axis = .vertical
+            self.stackView.spacing = 10
+        } else {
+            self.stackView.axis = .horizontal
+            self.stackView.spacing = 40
+        }
+    }
+
+    @objc private func updateStackViewAxis() {
+        changeStackViewAxis(for: self.view.bounds.size)
+    }
+
     @objc private func handleShowLogin() {
         let controller = LoginViewController()
         controller.modalPresentationStyle = .formSheet
@@ -339,10 +374,6 @@ UICollectionViewDelegateFlowLayout {
 
         controller.onAddAccount = { [weak self] in
             self?.handleShowLogin()
-        }
-
-        controller.onFinish = { [weak self] in
-            self?.getAccountsFromKeychain()
         }
 
         let navController = UINavigationController(rootViewController: controller)
@@ -450,7 +481,8 @@ UICollectionViewDelegateFlowLayout {
         let user = users[userIndexPath.item]
 
         // get indexPaths of all users except the one selected
-        let indexPaths = users.enumerated().flatMap({ (offset, element) -> IndexPath? in
+        let indexPaths = users.enumerated().flatMap({ (arg) -> IndexPath? in
+            let (offset, element) = arg
             if element.id == user.id {
                 return nil
             }

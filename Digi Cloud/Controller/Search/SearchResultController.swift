@@ -47,9 +47,9 @@ final class SearchResultController: UITableViewController {
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         self.edgesForExtendedLayout = .bottom
         setupTableView()
-        super.viewDidLoad()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -102,7 +102,7 @@ final class SearchResultController: UITableViewController {
         let nsRange = nsString.range(of: searchedText.lowercased())
 
         let backGrdColor = UIColor.init(red: 1.0, green: 0.88, blue: 0.88, alpha: 1.0)
-        attributedText.addAttributes([NSBackgroundColorAttributeName: backGrdColor], range: nsRange)
+        attributedText.addAttributes([NSAttributedStringKey.backgroundColor: backGrdColor], range: nsRange)
         cell.nodeNameLabel.attributedText = attributedText
 
         // Identification of the button's row that tapped

@@ -96,7 +96,7 @@ class MountUserCell: UITableViewCell {
 
         NSLayoutConstraint.activate([
             profileImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            profileImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
             profileImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
             profileImageView.widthAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
 
@@ -109,7 +109,7 @@ class MountUserCell: UITableViewCell {
             emailLabel.rightAnchor.constraint(equalTo: nameLabel.rightAnchor),
 
             permissionsLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
-            permissionsLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            permissionsLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor)
         ])
     }
 
