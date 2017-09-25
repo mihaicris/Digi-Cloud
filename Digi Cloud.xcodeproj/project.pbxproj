@@ -660,6 +660,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -711,6 +712,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -724,6 +726,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
+				COMPILER_INDEX_STORE_ENABLE = YES;
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -748,6 +751,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
+				COMPILER_INDEX_STORE_ENABLE = YES;
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -816,6 +820,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug Compile Time";
@@ -828,6 +833,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
+				COMPILER_INDEX_STORE_ENABLE = YES;
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -898,6 +904,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG DEBUGCONTROLLERS";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug ViewControllers";
@@ -910,6 +917,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
+				COMPILER_INDEX_STORE_ENABLE = YES;
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
