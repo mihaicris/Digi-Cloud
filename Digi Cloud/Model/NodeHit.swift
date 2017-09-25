@@ -36,10 +36,14 @@ extension NodeHit {
             let contentType = jsonDictionary["contentType"] as? String
             else { return nil }
         self.mountId = mountId
-        self.path = path
         self.score = score
         self.name = name
         self.type = type
+        if type == "dir" {
+            self.path = path + "/"
+        } else {
+            self.path = path
+        }
         self.modified = modified
         self.size = size
         self.contentType = contentType
