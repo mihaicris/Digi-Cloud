@@ -21,13 +21,13 @@ class BaseListCell: UITableViewCell {
     var hasLink: Bool = false
 
     var actionsButton: UIButton = {
-        let button = UIButton(type: UIButtonType.system)
-        button.setTitle("⋯", for: .normal)
-        button.tag = 1
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        button.contentHorizontalAlignment = .center
-        button.setTitleColor(UIColor.darkGray, for: .normal)
-        return button
+        let b = UIButton(type: UIButtonType.system)
+        b.setTitle("⋯", for: .normal)
+        b.tag = 1
+        b.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        b.contentHorizontalAlignment = .center
+        b.setTitleColor(UIColor.darkGray, for: .normal)
+        return b
     }()
 
     var iconImageView: UIImageView = {

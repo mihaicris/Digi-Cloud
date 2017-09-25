@@ -39,10 +39,10 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
     private var folderInfo = FolderInfo() {
         didSet {
             self.noElementsLabel = {
-                let label = UILabel()
+                let l = UILabel()
                 let paragraph = NSMutableParagraphStyle()
                 paragraph.lineHeightMultiple = 1.3
-                label.numberOfLines = 2
+                l.numberOfLines = 2
 
                 let filesString: String
                 if folderInfo.files == 1 {
@@ -62,9 +62,9 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
                 let text2 = String.localizedStringWithFormat(foldersString, folderInfo.folders)
                 let attributedText = NSMutableAttributedString(string: text1 + text2,
                                                                attributes: [NSAttributedStringKey.paragraphStyle: paragraph])
-                label.attributedText = attributedText
+                l.attributedText = attributedText
 
-                return label
+                return l
             }()
             self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: folderInfo.size)
             self.tableView.reloadData()
@@ -210,9 +210,9 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
             }()
 
             let folderName: UILabel = {
-                let label = UILabel()
-                label.text = (self.location.path as NSString).lastPathComponent
-                return label
+                let l = UILabel()
+                l.text = (self.location.path as NSString).lastPathComponent
+                return l
             }()
 
             cell.contentView.addSubview(folderIcon)

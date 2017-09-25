@@ -15,44 +15,44 @@ final class LoginViewController: UIViewController {
     var onSuccess: ((User) -> Void)?
 
     private let spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.hidesWhenStopped = true
-        return spinner
+        let s = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        s.translatesAutoresizingMaskIntoConstraints = false
+        s.hidesWhenStopped = true
+        return s
     }()
 
     private lazy var usernameTextField: LoginField = {
-        let field = LoginField()
-        field.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "").uppercased()
+        let f = LoginField()
+        f.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "").uppercased()
 
         #if DEBUG
             let dict = ProcessInfo.processInfo.environment
-            field.text = dict["USERNAME"] ?? ""
+            f.text = dict["USERNAME"] ?? ""
         #endif
 
-        field.delegate = self
-        return field
+        f.delegate = self
+        return f
     }()
 
     private lazy var passwordTextField: LoginField = {
-        let field = LoginField()
-        field.textFieldName = NSLocalizedString("PASSWORD", comment: "").uppercased()
+        let f = LoginField()
+        f.textFieldName = NSLocalizedString("PASSWORD", comment: "").uppercased()
 
         #if DEBUG
             let dict = ProcessInfo.processInfo.environment
-            field.text = dict["PASSWORD"] ?? ""
+            f.text = dict["PASSWORD"] ?? ""
         #endif
 
-        field.isSecureTextEntry = true
-        field.delegate = self
-        return field
+        f.isSecureTextEntry = true
+        f.delegate = self
+        return f
     }()
 
     private let loginButton: LoginButton = {
-        let button = LoginButton()
-        button.setTitle(NSLocalizedString("LOGIN", comment: ""), for: .normal)
-        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
-        return button
+        let b = LoginButton()
+        b.setTitle(NSLocalizedString("LOGIN", comment: ""), for: .normal)
+        b.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        return b
     }()
 
     private let cancelButton: UIButton = {

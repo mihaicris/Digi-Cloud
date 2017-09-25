@@ -26,13 +26,13 @@ final class SearchCell: UITableViewCell {
     }()
 
     let nodeMountLabel: UILabelWithPadding = {
-        let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
-        label.font = UIFont.HelveticaNeue(size: 11)
-        label.textColor = .white
-        label.layer.cornerRadius = 4
-        label.clipsToBounds = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+        let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
+        l.font = UIFont.HelveticaNeue(size: 11)
+        l.textColor = .white
+        l.layer.cornerRadius = 4
+        l.clipsToBounds = true
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
     }()
 
     var nodePathLabel: UILabel = {
