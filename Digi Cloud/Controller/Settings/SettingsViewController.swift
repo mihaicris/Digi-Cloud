@@ -292,7 +292,7 @@ final class SettingsViewController: UITableViewController {
 
     private func handleClearCache() {
         FileManager.emptyFilesCache()
-        tableView.reloadSections(IndexSet(integer: 2), with: .fade)
+        tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     }
 
     private func registerForNotificationCenter() {
