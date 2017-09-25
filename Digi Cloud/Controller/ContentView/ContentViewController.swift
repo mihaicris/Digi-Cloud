@@ -97,8 +97,8 @@ final class ContentViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let node = self.node {
-            processFileURL(node: node)
+        if self.node != nil {
+            processNode()
         } else {
             fetchNode()
         }
@@ -154,7 +154,8 @@ final class ContentViewController: UIViewController {
             }
 
             if let node = node {
-                self.processFileURL(node: node)
+                self.node = node
+                self.processNode()
             }
         }
     }
@@ -177,9 +178,11 @@ final class ContentViewController: UIViewController {
         self.navigationItem.rightBarButtonItem?.isEnabled = true
     }
 
-    private func processFileURL(node: Node) {
+    private func processNode() {
 
-        let fileName = node.name
+        guard let fileName = self.node?.name else {
+            return
+        }
         var fileExtension = (fileName as NSString).pathExtension
 
         // For WKWebView to try to open files without extension, we assume they are text.
@@ -189,7 +192,7 @@ final class ContentViewController: UIViewController {
         }
 
         let key: String
-        if let hash = node.hash {
+        if let hash = self.node?.hash, !hash.isEmpty {
             key = "\(hash).\(fileExtension)"
         } else {
             key = "TEMPORARY.\(fileExtension)"
@@ -197,14 +200,13 @@ final class ContentViewController: UIViewController {
 
         self.fileURL = FileManager.filesCacheFolderURL.appendingPathComponent(key)
 
-        if node.hash != nil {
+        if let hash = node?.hash, !hash.isEmpty {
             if FileManager.default.fileExists(atPath: self.fileURL.path) {
                 self.loadFileContent()
             } else {
                 self.downloadFile()
             }
         } else {
-
             if FileManager.default.fileExists(atPath: self.fileURL.path) {
                 do {
                     try FileManager.default.removeItem(at: fileURL)
