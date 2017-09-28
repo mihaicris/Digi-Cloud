@@ -1,7 +1,13 @@
-lane :appstore do
+lane :send_to_appstore do
     scan
     snapshot
     frameit
     sigh
     deliver
+end
+
+lane :screenshots do
+  snapshot
+  frameit(white: true)
+  # deliver
 end

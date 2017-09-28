@@ -12,12 +12,18 @@ class Digi_Cloud_UITests: XCTestCase {
         
     override func setUp() {
         super.setUp()
+        let app = XCUIApplication()
         continueAfterFailure = false
-        XCUIApplication().launch()
+        setupSnapshot(app)
+        app.launch()
     }
     
     override func tearDown() {
         super.tearDown()
+    }
+    
+    func testFirst() {
+        snapshot("0Launch")
     }
     
 }

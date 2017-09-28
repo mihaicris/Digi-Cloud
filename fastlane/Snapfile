@@ -2,27 +2,28 @@
 
 # A list of devices you want to take the screenshots from
 devices([
-  "iPhone 5",
-  "iPhone 8",
+  # "iPhone 5s",
+  # "iPhone 8",
   "iPhone 8 Plus",
-  "iPad Pro (7.9-inch)",
-  "iPad Pro (9.7-inch)",
-  "iPad Pro (10.5-inch)",
-  "iPad Pro (12.9-inch)"
+  # "iPad Pro (9.7-inch)",
+  # "iPad Pro (10.5-inch)",
+  # "iPad Pro (12.9-inch)"
 ])
 
 languages([
   "en-US",
-  "ro-RO"
+  # "ro-RO"
 ])
 
 # The name of the scheme which contains the UI Tests
-# scheme "SchemeName"
+scheme "Digi Cloud UI Test"
 
 # Where should the resulting screenshots be stored?
-output_directory "./screenshots_snapshot"
+# output_directory "./screenshots_snapshot"
 
-# clear_previous_screenshots true # remove the '#' to clear all previously generated screenshots before creating new ones
+clear_previous_screenshots true # remove the '#' to clear all previously generated screenshots before creating new ones
+erase_simulator true
+# reinstall_app true
 
 # Choose which project/workspace to use
 # project "./Project.xcodeproj"
