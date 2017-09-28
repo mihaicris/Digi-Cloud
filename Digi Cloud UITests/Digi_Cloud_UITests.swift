@@ -38,17 +38,17 @@ class Digi_Cloud_UITests: XCTestCase {
         let exists = NSPredicate(format: "exists == 1")
         
         expectation(for: exists, evaluatedWith: cellForDemoAccount, handler: nil)
-        waitForExpectations(timeout: 3, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
         cellForDemoAccount.tap()
         
         // LOGGED IN WITH DEMO ACCOUNT
-        snapshot("-1-Locations-Overview")
+        snapshot("1-Locations-Overview")
     }
     
     func stub() {
-        snapshot("-2-File-manager")
-        snapshot("-3-Links")
-        snapshot("-4-Share-in-DIGI-Storage")
-        snapshot("-5-Content-preview")
+        snapshot("2-File-manager")
+        snapshot("3-Links")
+        snapshot("4-Share-in-DIGI-Storage")
+        snapshot("5-Content-preview")
     }
 }
