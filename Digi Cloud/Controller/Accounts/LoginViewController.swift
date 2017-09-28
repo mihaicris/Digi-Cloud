@@ -30,6 +30,7 @@ final class LoginViewController: UIViewController {
             f.text = dict["USERNAME"] ?? ""
         #endif
 
+        f.accessibilityLabel = "Username"
         f.delegate = self
         return f
     }()
@@ -44,6 +45,7 @@ final class LoginViewController: UIViewController {
         #endif
 
         f.isSecureTextEntry = true
+        f.accessibilityLabel = "Password"
         f.delegate = self
         return f
     }()
