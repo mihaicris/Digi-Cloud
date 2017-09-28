@@ -16,7 +16,7 @@ class MountUserCell: UITableViewCell {
         didSet {
             if let user = user {
                 nameLabel.text = "\(user.firstName) \(user.lastName)"
-                emailLabel.text = "demo@account.com"
+                emailLabel.text = user.email
 
                 if isOwner {
                     permissionsLabel.text = NSLocalizedString("OWNER", comment: "")
