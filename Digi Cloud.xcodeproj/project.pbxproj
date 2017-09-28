@@ -79,7 +79,18 @@
 		83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D39A1E13DCF4005258B3 /* Localizable.strings */; };
 		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
 		83F1FFD31E6979040079F56F /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1FFD21E6979040079F56F /* Enums.swift */; };
+		83F52F391F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F52F381F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		83F52F3B1F7CF5BF00E18A09 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8370410A1D8B1DED000EDBAE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 837041111D8B1DED000EDBAE;
+			remoteInfo = "Digi Cloud";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		8302F2CB1E8D7006008BA834 /* FolderInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderInfo.swift; path = Model/FolderInfo.swift; sourceTree = "<group>"; };
@@ -158,10 +169,20 @@
 		83B6D3991E13DCF4005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		83F1FFD21E6979040079F56F /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		83F52F361F7CF5BF00E18A09 /* Digi Cloud UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Digi Cloud UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		83F52F381F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Digi_Cloud_UITests.swift; sourceTree = "<group>"; };
+		83F52F3A1F7CF5BF00E18A09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8370410F1D8B1DED000EDBAE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83F52F331F7CF5BF00E18A09 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -287,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				837041141D8B1DED000EDBAE /* Digi Cloud */,
+				83F52F371F7CF5BF00E18A09 /* Digi Cloud UITests */,
 				837041131D8B1DED000EDBAE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -295,6 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				837041121D8B1DED000EDBAE /* Digi Cloud.app */,
+				83F52F361F7CF5BF00E18A09 /* Digi Cloud UITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -385,6 +408,15 @@
 			name = Enums;
 			sourceTree = "<group>";
 		};
+		83F52F371F7CF5BF00E18A09 /* Digi Cloud UITests */ = {
+			isa = PBXGroup;
+			children = (
+				83F52F381F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift */,
+				83F52F3A1F7CF5BF00E18A09 /* Info.plist */,
+			);
+			path = "Digi Cloud UITests";
+			sourceTree = "<group>";
+		};
 		83F824771EDF894E001A5A09 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -448,6 +480,24 @@
 			productReference = 837041121D8B1DED000EDBAE /* Digi Cloud.app */;
 			productType = "com.apple.product-type.application";
 		};
+		83F52F351F7CF5BF00E18A09 /* Digi Cloud UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83F52F411F7CF5BF00E18A09 /* Build configuration list for PBXNativeTarget "Digi Cloud UITests" */;
+			buildPhases = (
+				83F52F321F7CF5BF00E18A09 /* Sources */,
+				83F52F331F7CF5BF00E18A09 /* Frameworks */,
+				83F52F341F7CF5BF00E18A09 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				83F52F3C1F7CF5BF00E18A09 /* PBXTargetDependency */,
+			);
+			name = "Digi Cloud UITests";
+			productName = "Digi Cloud UITests";
+			productReference = 83F52F361F7CF5BF00E18A09 /* Digi Cloud UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -455,7 +505,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = "";
-				LastSwiftUpdateCheck = 0820;
+				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Mihai Cristescu";
 				TargetAttributes = {
@@ -464,6 +514,12 @@
 						DevelopmentTeam = S8V3V9GFN2;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
+					};
+					83F52F351F7CF5BF00E18A09 = {
+						CreatedOnToolsVersion = 9.0;
+						DevelopmentTeam = S8V3V9GFN2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 837041111D8B1DED000EDBAE;
 					};
 				};
 			};
@@ -481,6 +537,7 @@
 			projectRoot = "";
 			targets = (
 				837041111D8B1DED000EDBAE /* Digi Cloud */,
+				83F52F351F7CF5BF00E18A09 /* Digi Cloud UITests */,
 			);
 		};
 /* End PBXProject section */
@@ -495,6 +552,13 @@
 				8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */,
 				83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */,
 				8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83F52F341F7CF5BF00E18A09 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,7 +639,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83F52F321F7CF5BF00E18A09 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83F52F391F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		83F52F3C1F7CF5BF00E18A09 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 837041111D8B1DED000EDBAE /* Digi Cloud */;
+			targetProxy = 83F52F3B1F7CF5BF00E18A09 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */ = {
@@ -934,6 +1014,94 @@
 			};
 			name = "Debug ViewControllers";
 		};
+		83F52F3D1F7CF5BF00E18A09 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S8V3V9GFN2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Digi Cloud UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Digi Cloud";
+			};
+			name = Debug;
+		};
+		83F52F3E1F7CF5BF00E18A09 /* Debug ViewControllers */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S8V3V9GFN2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Digi Cloud UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Digi Cloud";
+			};
+			name = "Debug ViewControllers";
+		};
+		83F52F3F1F7CF5BF00E18A09 /* Debug Compile Time */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S8V3V9GFN2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Digi Cloud UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Digi Cloud";
+			};
+			name = "Debug Compile Time";
+		};
+		83F52F401F7CF5BF00E18A09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S8V3V9GFN2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Digi Cloud UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Digi Cloud";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -955,6 +1123,17 @@
 				83F1FFD51E697B220079F56F /* Debug ViewControllers */,
 				83BC04011E6813DE0057B38E /* Debug Compile Time */,
 				837041261D8B1DEE000EDBAE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		83F52F411F7CF5BF00E18A09 /* Build configuration list for PBXNativeTarget "Digi Cloud UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83F52F3D1F7CF5BF00E18A09 /* Debug */,
+				83F52F3E1F7CF5BF00E18A09 /* Debug ViewControllers */,
+				83F52F3F1F7CF5BF00E18A09 /* Debug Compile Time */,
+				83F52F401F7CF5BF00E18A09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

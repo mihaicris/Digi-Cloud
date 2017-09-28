@@ -40,6 +40,16 @@
                ReferencedContainer = "container:Digi Cloud.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "83F52F351F7CF5BF00E18A09"
+               BuildableName = "Digi Cloud UITests.xctest"
+               BlueprintName = "Digi Cloud UITests"
+               ReferencedContainer = "container:Digi Cloud.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
