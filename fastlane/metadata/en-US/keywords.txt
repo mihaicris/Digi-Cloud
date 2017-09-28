@@ -1,1 +1,0 @@
-digi,storage,cloud,file,viewer,manager,organizer,multiple,accounts,share,download,upload,link,export
