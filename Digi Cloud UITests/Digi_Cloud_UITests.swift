@@ -10,11 +10,10 @@ import XCTest
 
 class Digi_Cloud_UITests: XCTestCase {
     
-    var app: XCUIApplication!
+    var app: XCUIApplication = XCUIApplication()
     
     override func setUp() {
         super.setUp()
-        app = XCUIApplication()
         continueAfterFailure = false
         setupSnapshot(app)
         app.launch()
@@ -25,18 +24,25 @@ class Digi_Cloud_UITests: XCTestCase {
     }
     
     func testAddAccount() {
-        app.buttons["Add Account"].tap()
-
+  
+        let addAccountButton = app.buttons["Add Account"]
+        
+        addAccountButton.tap()
         app.textFields["Username"].tap()
         app.textFields["Username"].typeText("mcristesc@yahoo.com")
         app.secureTextFields["Password"].tap()
         app.secureTextFields["Password"].typeText("Demo99!")
         app.buttons["LOGIN"].tap()
+
+        let cellForDemoAccount = app.collectionViews.children(matching: .cell).containing(.staticText, identifier: "Demo Account").element
+        let exists = NSPredicate(format: "exists == 1")
         
-        app.otherElements.containing(.staticText, identifier:"Digi Cloud for  Digi Storage").children(matching: .collectionView).element.tap()
+        expectation(for: exists, evaluatedWith: cellForDemoAccount, handler: nil)
+        waitForExpectations(timeout: 3, handler: nil)
+        cellForDemoAccount.tap()
+        
+        // LOGGED IN WITH DEMO ACCOUNT
         snapshot("-1-Locations-Overview")
-       
-        
     }
     
     func stub() {
