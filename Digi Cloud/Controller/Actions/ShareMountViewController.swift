@@ -327,6 +327,15 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             removeUser(at: indexPath)
         }
     }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        let user = users[indexPath.row]
+        if user.permissions.owner {
+            return .none
+        } else {
+            return .delete
+        }
+    }
 
     // MARK: - Helper Functions
 

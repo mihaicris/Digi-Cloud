@@ -318,7 +318,6 @@ final class ListingViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
         if tableView.isEditing {
             updateToolBarButtonItemsToMatchTableState()
             return
@@ -330,7 +329,6 @@ final class ListingViewController: UITableViewController {
         let selectedNode = nodes[indexPath.row]
 
         let newLocation = self.rootLocation.appendingPathComponentFrom(node: selectedNode)
-
         if selectedNode.type == "dir" {
 
             // This is a Folder
@@ -460,21 +458,14 @@ final class ListingViewController: UITableViewController {
         didReceivedNetworkError = false
 
         DigiClient.shared.getBundle(for: self.rootLocation) { nodesResult, rootNodeResult, error in
-
             self.isUpdating = false
-
             guard error == nil else {
-
                 self.didReceivedNetworkError = true
-
                 switch error! {
-
                 case NetworkingError.internetOffline(let msg):
                     self.errorMessage = msg
-
                 case NetworkingError.requestTimedOut(let msg):
                     self.errorMessage = msg
-
                 default:
                     self.errorMessage = NSLocalizedString("There was an error while refreshing the locations.", comment: "")
                 }
