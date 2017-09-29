@@ -434,6 +434,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 changeValidityButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 changeValidityButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 validitySegmentedControl.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
+                validitySegmentedControl.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 validitySegmentedControl.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 spinner.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 spinner.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
@@ -441,9 +442,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 validityDateAndTimePicker.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 validityDateAndTimePicker.heightAnchor.constraint(equalTo: cell.contentView.heightAnchor),
                 saveCustomDateButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
-                saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
+                saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
         }
-
         return cell
     }
 
