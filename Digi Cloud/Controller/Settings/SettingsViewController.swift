@@ -76,24 +76,18 @@ final class SettingsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
         switch settings[section] {
         case .user:
             return 2
-
         case .data:
-
             return FileManager.sizeOfFilesCacheFolder() == 0 ? 1 : 2
-
         }
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-
         switch settings[section] {
         case .user:
             return NSLocalizedString("User", comment: "")
-
         case .data:
             return NSLocalizedString("Data", comment: "")
         }
@@ -103,7 +97,6 @@ final class SettingsViewController: UITableViewController {
         switch settings[indexPath.section] {
         case .user:
             return indexPath.row == 0 ? 80 : AppSettings.textFieldRowHeight
-
         default:
             return AppSettings.textFieldRowHeight
         }
