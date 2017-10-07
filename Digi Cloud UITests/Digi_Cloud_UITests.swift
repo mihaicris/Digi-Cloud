@@ -41,6 +41,10 @@ class Digi_Cloud_UITests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
         cellForDemoAccount.tap()
         
+        let settingsButton = app.buttons["settings icon"]
+        expectation(for: exists, evaluatedWith: settingsButton, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
+        
         // LOGGED IN WITH DEMO ACCOUNT
         snapshot("1-Locations-Overview")
     }
