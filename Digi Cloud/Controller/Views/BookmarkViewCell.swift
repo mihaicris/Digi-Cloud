@@ -46,6 +46,7 @@ final class BookmarkViewCell: UITableViewCell {
             bookmarkNameLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
             bookmarkNameLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
             pathLabel.leftAnchor.constraint(equalTo: bookmarkNameLabel.leftAnchor),
+            pathLabel.rightAnchor.constraint(equalTo: bookmarkNameLabel.rightAnchor),
             pathLabel.topAnchor.constraint(equalTo: bookmarkNameLabel.bottomAnchor, constant: 2)
         ])
     }
