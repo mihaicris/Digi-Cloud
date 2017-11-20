@@ -185,7 +185,7 @@ final class SearchResultController: UITableViewController {
              tags: Seq[String] // format: tag=nameoftag=value
          */
 
-        let count = searchText.characters.count
+        let count = searchText.count
         if count < 3 {
             if count == 0 {
                 self.filteredContent.removeAll()

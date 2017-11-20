@@ -112,7 +112,7 @@ final class CreateFolderViewController: UITableViewController {
 
     private func hasInvalidCharacters(name: String) -> Bool {
         let charset: Set<Character> = ["\\", "/", ":", "?", "<", ">", "\"", "|"]
-        return !charset.isDisjoint(with: name.characters)
+        return !charset.isDisjoint(with: name)
     }
 
     fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {

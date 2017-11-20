@@ -187,7 +187,7 @@ final class ContentViewController: UIViewController {
 
         // For WKWebView to try to open files without extension, we assume they are text.
 
-        if fileExtension.characters.isEmpty {
+        if fileExtension.isEmpty {
             fileExtension = "txt"
         }
 

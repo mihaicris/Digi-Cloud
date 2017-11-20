@@ -156,7 +156,7 @@ final class LoginViewController: UIViewController {
             let aPar = NSMutableParagraphStyle()
             aPar.alignment = .center
 
-            let range = NSRange(location: 0, length: aText.string.characters.count)
+            let range = NSRange(location: 0, length: aText.string.count)
             aText.addAttributes([NSAttributedStringKey.paragraphStyle: aPar], range: range)
 
             tv.textContainerInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
@@ -280,8 +280,8 @@ final class LoginViewController: UIViewController {
 
         guard let username = usernameTextField.text?.lowercased(),
             let password = passwordTextField.text,
-            username.characters.count > 0,
-            password.characters.count > 0
+            username.count > 0,
+            password.count > 0
             else {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
                                               message: NSLocalizedString("Please fill in the fields.", comment: ""),

@@ -103,7 +103,7 @@ final class ManageBookmarksViewController: UITableViewController {
 
         if let mountName = mountsMapping[bookmarks[indexPath.row].mountId]?.name {
             cell.bookmarkNameLabel.text = bookmarks[indexPath.row].name
-            cell.pathLabel.text = mountName + String(bookmarks[indexPath.row].path.characters.dropLast())
+            cell.pathLabel.text = mountName + String(bookmarks[indexPath.row].path.dropLast())
         }
 
         return cell

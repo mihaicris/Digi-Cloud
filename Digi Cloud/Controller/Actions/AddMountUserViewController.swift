@@ -225,7 +225,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
         usernameTextField.resignFirstResponder()
 
-        guard let username = usernameTextField.text, username.characters.count > 3 else {
+        guard let username = usernameTextField.text, username.count > 3 else {
 
             self.showAlert(message: NSLocalizedString("Please provide the email address of the Digi Storage user.", comment: ""))
 

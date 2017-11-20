@@ -345,7 +345,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
                 l.textColor = .darkGray
-                l.text = location.path.hasSuffix("/") ? String(location.path.characters.dropLast()) : location.path
+                l.text = location.path.hasSuffix("/") ? String(location.path.dropLast()) : location.path
                 l.numberOfLines = 2
                 l.font = UIFont.HelveticaNeue(size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
@@ -478,7 +478,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         let textFieldText: NSString = (textField.text ?? "") as NSString
         let newHash = textFieldText.replacingCharacters(in: range, with: string)
 
-        if newHash.characters.count == 0 || newHash == originalLinkHash || hasInvalidCharacters(name: newHash) {
+        if newHash.count == 0 || newHash == originalLinkHash || hasInvalidCharacters(name: newHash) {
             saveHashButton.isHidden = true
             setTextFieldConstraintInEditMode(active: false)
         } else {

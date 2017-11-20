@@ -1169,7 +1169,7 @@ final class ListingViewController: UITableViewController {
     private func executeCopyOrMove(sourceLocation: Location) {
 
         let sourceName = (sourceLocation.path as NSString).lastPathComponent
-        let isFolder = sourceName.characters.last == "/"
+        let isFolder = sourceName.last == "/"
         let index = sourceName.getIndexBeforeExtension()
 
         // Start with initial destination location.
@@ -1201,7 +1201,7 @@ final class ListingViewController: UITableViewController {
 
                         // If name has an extension, we introduce the count number
                         if index != nil {
-                            destinationName.insert(contentsOf: countString.characters, at: index!)
+                            destinationName.insert(contentsOf: countString, at: index!)
                         } else {
                             destinationName = sourceName + countString
                         }
@@ -1258,7 +1258,7 @@ final class ListingViewController: UITableViewController {
 
             let string: String
             if locations.count == 1 {
-                if locations.first!.path.characters.last == "/" {
+                if locations.first!.path.last == "/" {
                     string = NSLocalizedString("Are you sure you want to delete this folder?", comment: "")
                 } else {
                     string = NSLocalizedString("Are you sure you want to delete this file?", comment: "")

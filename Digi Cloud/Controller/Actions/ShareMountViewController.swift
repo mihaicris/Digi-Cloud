@@ -242,7 +242,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
                 l.textColor = .darkGray
-                l.text = String(location.path.characters.dropLast())
+                l.text = String(location.path.dropLast())
                 l.numberOfLines = 2
                 l.font = UIFont.HelveticaNeue(size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
