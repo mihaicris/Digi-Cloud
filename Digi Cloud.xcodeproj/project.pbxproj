@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06519F2ED2100EC34DD3541D /* Pods_Digi_Cloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B27C67A95E07D2466A888367 /* Pods_Digi_Cloud.framework */; };
+		5BBA29E184903433B3AC0218 /* Pods_Digi_Cloud_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EAE1D6E7A4E9E0A6D7608D /* Pods_Digi_Cloud_UITests.framework */; };
 		8302F2D71E8D7006008BA834 /* FolderInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CB1E8D7006008BA834 /* FolderInfo.swift */; };
 		8302F2D81E8D7006008BA834 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CC1E8D7006008BA834 /* DownloadLink.swift */; };
 		8302F2D91E8D7006008BA834 /* NodeHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CD1E8D7006008BA834 /* NodeHit.swift */; };
@@ -94,6 +96,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0196F525ED0451A6990CD69A /* Pods-Digi Cloud.debug viewcontrollers.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.debug viewcontrollers.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.debug viewcontrollers.xcconfig"; sourceTree = "<group>"; };
+		0CE508509239C3D68A9C710B /* Pods-Digi Cloud UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.release.xcconfig"; sourceTree = "<group>"; };
+		18EAE1D6E7A4E9E0A6D7608D /* Pods_Digi_Cloud_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Digi_Cloud_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C4AD24EEFB2CBD73727BDF9 /* Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig"; sourceTree = "<group>"; };
+		4482CB5EC88128FB7C25E95B /* Pods-Digi Cloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.release.xcconfig"; sourceTree = "<group>"; };
 		8302F2CB1E8D7006008BA834 /* FolderInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderInfo.swift; path = Model/FolderInfo.swift; sourceTree = "<group>"; };
 		8302F2CC1E8D7006008BA834 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadLink.swift; path = Model/DownloadLink.swift; sourceTree = "<group>"; };
 		8302F2CD1E8D7006008BA834 /* NodeHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeHit.swift; path = Model/NodeHit.swift; sourceTree = "<group>"; };
@@ -174,6 +181,11 @@
 		83F52F381F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Digi_Cloud_UITests.swift; sourceTree = "<group>"; };
 		83F52F3A1F7CF5BF00E18A09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83F52F441F7CF79300E18A09 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
+		94FCF6A671256A45CA0D00E4 /* Pods-Digi Cloud UITests.debug compile time.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.debug compile time.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.debug compile time.xcconfig"; sourceTree = "<group>"; };
+		AC5DC6EA5177031CE35BC3D8 /* Pods-Digi Cloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.debug.xcconfig"; sourceTree = "<group>"; };
+		B27C67A95E07D2466A888367 /* Pods_Digi_Cloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Digi_Cloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B339F5052F54F024A3F8C8E7 /* Pods-Digi Cloud UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B61E9D01BF3B8EF343FAEEA4 /* Pods-Digi Cloud.debug compile time.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.debug compile time.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.debug compile time.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +193,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06519F2ED2100EC34DD3541D /* Pods_Digi_Cloud.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,12 +201,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BBA29E184903433B3AC0218 /* Pods_Digi_Cloud_UITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		54F9DD8A17015D44F32C2A84 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B27C67A95E07D2466A888367 /* Pods_Digi_Cloud.framework */,
+				18EAE1D6E7A4E9E0A6D7608D /* Pods_Digi_Cloud_UITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8302F3291E8D8D4F008BA834 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -312,6 +335,8 @@
 				837041141D8B1DED000EDBAE /* Digi Cloud */,
 				83F52F371F7CF5BF00E18A09 /* Digi Cloud UITests */,
 				837041131D8B1DED000EDBAE /* Products */,
+				EE2BA4C88BDEBF31796F1D84 /* Pods */,
+				54F9DD8A17015D44F32C2A84 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -463,6 +488,21 @@
 			name = ContentView;
 			sourceTree = "<group>";
 		};
+		EE2BA4C88BDEBF31796F1D84 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AC5DC6EA5177031CE35BC3D8 /* Pods-Digi Cloud.debug.xcconfig */,
+				0196F525ED0451A6990CD69A /* Pods-Digi Cloud.debug viewcontrollers.xcconfig */,
+				B61E9D01BF3B8EF343FAEEA4 /* Pods-Digi Cloud.debug compile time.xcconfig */,
+				4482CB5EC88128FB7C25E95B /* Pods-Digi Cloud.release.xcconfig */,
+				B339F5052F54F024A3F8C8E7 /* Pods-Digi Cloud UITests.debug.xcconfig */,
+				3C4AD24EEFB2CBD73727BDF9 /* Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig */,
+				94FCF6A671256A45CA0D00E4 /* Pods-Digi Cloud UITests.debug compile time.xcconfig */,
+				0CE508509239C3D68A9C710B /* Pods-Digi Cloud UITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -470,9 +510,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 837041241D8B1DEE000EDBAE /* Build configuration list for PBXNativeTarget "Digi Cloud" */;
 			buildPhases = (
+				B8759DA6FD004ACF0F4A0AC1 /* [CP] Check Pods Manifest.lock */,
 				8370410E1D8B1DED000EDBAE /* Sources */,
 				8370410F1D8B1DED000EDBAE /* Frameworks */,
 				837041101D8B1DED000EDBAE /* Resources */,
+				97B72DAC76AE3828F49A6018 /* [CP] Embed Pods Frameworks */,
+				02ED0B6F82909A62849447BB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -487,9 +530,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83F52F411F7CF5BF00E18A09 /* Build configuration list for PBXNativeTarget "Digi Cloud UITests" */;
 			buildPhases = (
+				4A0FF040B2B831273905C95D /* [CP] Check Pods Manifest.lock */,
 				83F52F321F7CF5BF00E18A09 /* Sources */,
 				83F52F331F7CF5BF00E18A09 /* Frameworks */,
 				83F52F341F7CF5BF00E18A09 /* Resources */,
+				0B0FF79C0839C8539BB981FE /* [CP] Embed Pods Frameworks */,
+				496DFAFB3EEE16AB7E5C29CF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -566,6 +612,105 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		02ED0B6F82909A62849447BB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0B0FF79C0839C8539BB981FE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		496DFAFB3EEE16AB7E5C29CF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4A0FF040B2B831273905C95D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Digi Cloud UITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		97B72DAC76AE3828F49A6018 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B8759DA6FD004ACF0F4A0AC1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Digi Cloud-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8370410E1D8B1DED000EDBAE /* Sources */ = {
@@ -804,6 +949,7 @@
 		};
 		837041251D8B1DEE000EDBAE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AC5DC6EA5177031CE35BC3D8 /* Pods-Digi Cloud.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CLANG_ENABLE_MODULES = YES;
@@ -829,6 +975,7 @@
 		};
 		837041261D8B1DEE000EDBAE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4482CB5EC88128FB7C25E95B /* Pods-Digi Cloud.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -911,6 +1058,7 @@
 		};
 		83BC04011E6813DE0057B38E /* Debug Compile Time */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B61E9D01BF3B8EF343FAEEA4 /* Pods-Digi Cloud.debug compile time.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CLANG_ENABLE_MODULES = YES;
@@ -995,6 +1143,7 @@
 		};
 		83F1FFD51E697B220079F56F /* Debug ViewControllers */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0196F525ED0451A6990CD69A /* Pods-Digi Cloud.debug viewcontrollers.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CLANG_ENABLE_MODULES = YES;
@@ -1020,6 +1169,7 @@
 		};
 		83F52F3D1F7CF5BF00E18A09 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B339F5052F54F024A3F8C8E7 /* Pods-Digi Cloud UITests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1042,6 +1192,7 @@
 		};
 		83F52F3E1F7CF5BF00E18A09 /* Debug ViewControllers */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C4AD24EEFB2CBD73727BDF9 /* Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1064,6 +1215,7 @@
 		};
 		83F52F3F1F7CF5BF00E18A09 /* Debug Compile Time */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 94FCF6A671256A45CA0D00E4 /* Pods-Digi Cloud UITests.debug compile time.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1086,6 +1238,7 @@
 		};
 		83F52F401F7CF5BF00E18A09 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0CE508509239C3D68A9C710B /* Pods-Digi Cloud UITests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
