@@ -19,9 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
+        #if !DEBUG
         // Start Crashlytics
         Fabric.with([Crashlytics.self])
-        
+        #endif
+            
         // Get a window
         window = UIWindow(frame: UIScreen.main.bounds)
 
