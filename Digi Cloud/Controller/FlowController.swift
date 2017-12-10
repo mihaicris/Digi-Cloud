@@ -9,37 +9,37 @@
 import UIKit
 
 final class FlowController {
-    
+
     // MARK: - Properties
-    
+
     private var window: UIWindow
-    
+
     // MARK: - Initializers and Deinitializers
-    
+
     init(window: UIWindow) {
         self.window = window
         INITLog(self)
     }
-    
+
     deinit { DEINITLog(self) }
-    
+
     // MARK: - Overridden Methods and Properties
-    
+
     // MARK: - Helper Functions
-    
+
     func rootController() -> UIViewController {
-        
+
         var controller: UIViewController
-        
+
         if AppSettings.hasRunBefore {
             if let userID = AppSettings.loggedUserID {
-                
+
                 let account = Account(userID: userID)
-                
+
                 DigiClient.shared.loggedAccount = account
-                
+
                 controller = self.createMainNavigationController()
-                
+
             } else {
                 controller = self.createAccountSelectionController()
             }
@@ -50,7 +50,7 @@ final class FlowController {
         }
         return controller
     }
-    
+
     private func createAccountSelectionController() -> UIViewController {
         let controller = AccountSelectionViewController()
         controller.onSelect = { [weak self] in
@@ -58,7 +58,7 @@ final class FlowController {
         }
         return controller
     }
-    
+
     private func createMainNavigationController() -> UIViewController {
         let controller = MainNavigationController()
         controller.onLogout = { [weak self] in

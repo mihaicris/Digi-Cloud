@@ -1171,10 +1171,10 @@ class ListingViewController: UITableViewController {
         let sourceName = (sourceLocation.path as NSString).lastPathComponent
         let isFolder = sourceName.last == "/"
         let index = sourceName.getIndexBeforeExtension()
-        
+
         // Start with initial destination location.
         var destinationLocation = self.rootLocation.appendingPathComponent(sourceName, isFolder: isFolder)
-        
+
         if self.action == .copy {
             var destinationName = sourceName
             var copyCount: Int = 0
@@ -1183,32 +1183,32 @@ class ListingViewController: UITableViewController {
             repeat {
                 // reset before check of all nodes
                 wasFound = false
-                
+
                 // check all nodes for the initial name or new name incremented
                 for node in self.nodes where node.name == destinationName {
                     // set the flags
                     wasFound = true
-                    
+
                     // increment counter in the new file name
                     copyCount += 1
-                    
+
                     // reset name to original
                     destinationName = sourceName
-                    
+
                     // Pad number (using Foundation Method)
                     let countString = String(format: " (%d)", copyCount)
-                    
+
                     // If name has an extension, we introduce the count number
                     if index != nil {
                         destinationName.insert(contentsOf: countString, at: index!)
                     } else {
                         destinationName = sourceName + countString
                     }
-                    
+
                     wasRenamed = true
                 }
             } while (wasRenamed && wasFound)
-            
+
             // change the file/folder name with incremented one
             destinationLocation = self.rootLocation.appendingPathComponent(destinationName, isFolder: isFolder)
         }

@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Start Crashlytics
         Fabric.with([Crashlytics.self])
         #endif
-            
+
         // Get a window
         window = UIWindow(frame: UIScreen.main.bounds)
 

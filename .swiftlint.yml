@@ -1,6 +1,5 @@
 disabled_rules:
   - file_length
-  - trailing_whitespace
   - line_length 
   - type_name
   - identifier_name
