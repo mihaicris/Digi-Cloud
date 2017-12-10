@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0910"
+   LastUpgradeVersion = "0920"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -20,6 +20,34 @@
                ReferencedContainer = "container:Digi Cloud.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "83F7EEFC1E369A7D0033F03D"
+               BuildableName = "Digi Cloud Tests.xctest"
+               BlueprintName = "Digi Cloud Tests"
+               ReferencedContainer = "container:Digi Cloud.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "83F52F351F7CF5BF00E18A09"
+               BuildableName = "Digi Cloud UITests.xctest"
+               BlueprintName = "Digi Cloud UITests"
+               ReferencedContainer = "container:Digi Cloud.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -30,26 +58,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83F7EEFC1E369A7D0033F03D"
-               BuildableName = "Digi Cloud Tests.xctest"
-               BlueprintName = "Digi Cloud Tests"
-               ReferencedContainer = "container:Digi Cloud.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83F52F351F7CF5BF00E18A09"
-               BuildableName = "Digi Cloud UITests.xctest"
-               BlueprintName = "Digi Cloud UITests"
-               ReferencedContainer = "container:Digi Cloud.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

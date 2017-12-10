@@ -13,7 +13,7 @@ import UIKit
     var taskFinished: Int = 0
 #endif
 
-final class ListingViewController: UITableViewController {
+class ListingViewController: UITableViewController {
 
     // MARK: - Properties
 
