@@ -1391,9 +1391,11 @@ class ListingViewController: UITableViewController {
 
             } else {
 
-                let aLocation = (controller as! ListingViewController).rootLocation
+                guard let  rootLocation = (controller as? ListingViewController)?.rootLocation else {
+                    continue
+                }
 
-                let c = ListingViewController(location: aLocation, action: action, sourceLocations: sourceLocations)
+                let c = ListingViewController(location: rootLocation, action: action, sourceLocations: sourceLocations)
                 c.title = controller.title
 
                 c.onFinish = { [weak self] in
