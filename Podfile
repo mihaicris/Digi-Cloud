@@ -4,6 +4,7 @@ use_frameworks!
 target 'Digi Cloud' do
   pod 'Fabric'
   pod 'Crashlytics'
+  pod 'SwiftLint'
 
   target 'Digi Cloud UITests' do
     inherit! :search_paths
