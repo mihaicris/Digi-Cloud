@@ -27,8 +27,8 @@ final class LocationCell: UITableViewCell {
                 }
 
                 if var spaceUsed = mount.spaceUsed, var spaceTotal = mount.spaceTotal {
-                    spaceUsed = spaceUsed / 1024
-                    spaceTotal = spaceTotal / 1024
+                    spaceUsed /= 1024
+                    spaceTotal /= 1024
                     spaceUsedValueLabel.text = "\(spaceUsed) / \(spaceTotal) GB"
                 }
 
