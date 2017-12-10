@@ -7,7 +7,6 @@ disabled_rules:
   - function_body_length
   - todo
   - multiple_closures_with_trailing_closure
-  - unused_optional_binding
   - unused_enumerated
   - cyclomatic_complexity
   - switch_case_alignment

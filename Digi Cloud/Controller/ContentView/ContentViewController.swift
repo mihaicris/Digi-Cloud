@@ -251,7 +251,9 @@ final class ContentViewController: UIViewController {
 
         let exportFileURL = exportFolderURL.appendingPathComponent(fileName)
 
-        guard let _ = try? FileManager.default.copyItem(at: url, to: exportFileURL) else {
+        do {
+            try FileManager.default.copyItem(at: url, to: exportFileURL)
+        } catch {
             return
         }
 
@@ -285,7 +287,7 @@ final class ContentViewController: UIViewController {
 
                 noPreviewMessageLabel.topAnchor.constraint(equalTo: noPreviewLabel.bottomAnchor, constant: 10),
                 noPreviewMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-                ])
+            ])
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.view.addSubview(self.handImageView)
