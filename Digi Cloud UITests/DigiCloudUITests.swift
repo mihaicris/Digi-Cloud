@@ -8,7 +8,7 @@
 
 import XCTest
 
-class Digi_Cloud_UITests: XCTestCase {
+class DigiCloudUITests: XCTestCase {
 
     var app: XCUIApplication = XCUIApplication()
 
