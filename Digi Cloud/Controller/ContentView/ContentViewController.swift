@@ -343,12 +343,15 @@ extension ContentViewController: URLSessionTaskDelegate {
 
     fileprivate func removeProgressView() {
 
-        UIView.animate(withDuration: 0.5, animations: {
-            self.progressView.alpha = 0.0
-
-        }) { _ in
+        UIView.animate(
+            withDuration: 0.5,
+            animations: {
+                self.progressView.alpha = 0.0
+            },
+            completion: { _ in
             self.progressView.removeFromSuperview()
-        }
+            }
+        )
     }
 }
 

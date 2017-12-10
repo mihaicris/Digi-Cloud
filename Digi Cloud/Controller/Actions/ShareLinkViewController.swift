@@ -954,19 +954,24 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func spinWithOptions(options: UIViewAnimationOptions) {
-        UIView.animate(withDuration: 0.5, delay: 0, options: options, animations: { () -> Void in
-            let val = CGFloat(Double.pi)
-            self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
-        }) { (finished: Bool) -> Void in
-            if finished {
-                if self.isAnimatingReset {
-                    self.spinWithOptions(options: .curveLinear)
-                } else if options != .curveEaseOut {
-                    self.spinWithOptions(options: .curveEaseOut)
-                } else {
-                    self.updateValues()
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            options: options,
+            animations: { () -> Void in
+                let val = CGFloat(Double.pi)
+                self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
+            },
+            completion: { (finished: Bool) -> Void in
+                if finished {
+                    if self.isAnimatingReset {
+                        self.spinWithOptions(options: .curveLinear)
+                    } else if options != .curveEaseOut {
+                        self.spinWithOptions(options: .curveEaseOut)
+                    } else {
+                        self.updateValues()
+                    }
                 }
-            }
-        }
+            })
     }
 }
