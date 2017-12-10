@@ -291,8 +291,7 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
                 var errorMessage: String
 
                 switch error! {
-                    case NetworkingError.internetOffline(let message),
-                         NetworkingError.requestTimedOut(let message):
+                case NetworkingError.internetOffline(let message), NetworkingError.requestTimedOut(let message):
                     errorMessage = message
                 default:
                     errorMessage = NSLocalizedString("There was an error while calculating the folder size.", comment: "")

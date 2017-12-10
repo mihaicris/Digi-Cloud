@@ -9,7 +9,6 @@ disabled_rules:
   - multiple_closures_with_trailing_closure
   - unused_enumerated
   - cyclomatic_complexity
-  - switch_case_alignment
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
   - Pods

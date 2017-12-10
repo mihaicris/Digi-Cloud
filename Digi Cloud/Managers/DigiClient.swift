@@ -129,14 +129,13 @@ final class DigiClient {
                     LogNSError(nserror)
 
                     switch nserror.code {
-
-                        case -999:
-                            // Don't call completion if request was cancelled.
-                            break
-                        case -1001:
-                            completion(nil, nil, NetworkingError.requestTimedOut(NSLocalizedString("The request timed out.", comment: "")))
-                        case -1009:
-                            completion(nil, nil, NetworkingError.internetOffline(NSLocalizedString("The internet appears to be offline.", comment: "")))
+                    case -999:
+                        // Don't call completion if request was cancelled.
+                        break
+                    case -1001:
+                        completion(nil, nil, NetworkingError.requestTimedOut(NSLocalizedString("The request timed out.", comment: "")))
+                    case -1009:
+                        completion(nil, nil, NetworkingError.internetOffline(NSLocalizedString("The internet appears to be offline.", comment: "")))
                     default:
                         completion(nil, nil, error)
                     }
