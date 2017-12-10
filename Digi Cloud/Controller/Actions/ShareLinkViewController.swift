@@ -357,7 +357,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
             NSLayoutConstraint.activate([
                 locationPathLabel.leftAnchor.constraint(equalTo: mountNameLabel.rightAnchor, constant: 2),
-                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.rightAnchor),
+                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo: cell.contentView.layoutMarginsGuide.rightAnchor),
                 locationPathLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
 
                 mountNameLabel.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),

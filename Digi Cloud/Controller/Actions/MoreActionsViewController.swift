@@ -125,7 +125,7 @@ final class MoreActionsViewController: UITableViewController {
         } else {
 
             let headerView: UIView = {
-                let v = UIView(frame: CGRect(x: 0, y: 0, width:400, height: 40))
+                let v = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 40))
                 v.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
                 return v
             }()

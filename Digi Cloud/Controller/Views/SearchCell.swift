@@ -97,14 +97,14 @@ final class SearchCell: UITableViewCell {
             nodeIcon.heightAnchor.constraint(equalToConstant: 26),
 
             nodeNameLabel.leftAnchor.constraint(equalTo: nodeIcon.rightAnchor, constant: 10),
-            nodeNameLabel.rightAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.rightAnchor, constant: -30),
+            nodeNameLabel.rightAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.rightAnchor, constant: -30),
             nodeNameLabel.topAnchor.constraint(equalTo: nodeIcon.topAnchor, constant: -7),
 
             nodeMountLabel.leftAnchor.constraint(equalTo: nodeNameLabel.leftAnchor),
             nodeMountLabel.topAnchor.constraint(equalTo: nodeNameLabel.bottomAnchor, constant: 2),
 
             nodePathLabel.leftAnchor.constraint(equalTo: nodeMountLabel.rightAnchor, constant: 2),
-            nodePathLabel.rightAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.rightAnchor, constant: -30),
+            nodePathLabel.rightAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.rightAnchor, constant: -30),
             nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor),
 
             seeInFolderButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

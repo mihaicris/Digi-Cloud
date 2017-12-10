@@ -141,7 +141,7 @@ final class LocationCell: UITableViewCell {
             locationNameLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
 
             statusLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor),
-            statusLabel.leftAnchor.constraint(equalTo:locationNameLabel.rightAnchor, constant: 10),
+            statusLabel.leftAnchor.constraint(equalTo: locationNameLabel.rightAnchor, constant: 10),
 
             leftView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             leftView.topAnchor.constraint(equalTo: contentView.topAnchor),

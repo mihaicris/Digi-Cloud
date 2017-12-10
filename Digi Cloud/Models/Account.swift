@@ -55,7 +55,7 @@ struct Account {
         guard status == noErr else { throw AccountError.unhandledError(status: status) }
 
         // Parse the password string from the query result.
-        guard let existingItem = queryResult as? [String : AnyObject],
+        guard let existingItem = queryResult as? [String: AnyObject],
             let passwordData = existingItem[kSecValueData as String] as? Data,
             let password = String(data: passwordData, encoding: String.Encoding.utf8)
             else {
@@ -141,7 +141,7 @@ struct Account {
         guard status == noErr else { throw AccountError.unhandledError(status: status) }
 
         // Cast the query result to an array of dictionaries.
-        guard let resultData = queryResult as? [[String : AnyObject]] else { throw AccountError.unexpectedItemData }
+        guard let resultData = queryResult as? [[String: AnyObject]] else { throw AccountError.unexpectedItemData }
 
         // Create a `KeychainPasswordItem` for each dictionary in the query result.
         var passwordItems: [Account] = []
@@ -158,7 +158,7 @@ struct Account {
 
     // MARK: Convenience
 
-    private static func keychainQuery(account: String? = nil, accessGroup: String? = nil) -> [String : AnyObject] {
+    private static func keychainQuery(account: String? = nil, accessGroup: String? = nil) -> [String: AnyObject] {
 
         var query: [String: AnyObject] = [:]
 
