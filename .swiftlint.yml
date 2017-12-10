@@ -7,7 +7,6 @@ disabled_rules:
   - function_body_length
   - todo
   - multiple_closures_with_trailing_closure
-  - unused_enumerated
   - cyclomatic_complexity
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage

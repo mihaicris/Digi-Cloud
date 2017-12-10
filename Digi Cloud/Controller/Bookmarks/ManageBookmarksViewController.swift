@@ -322,7 +322,7 @@ final class ManageBookmarksViewController: UITableViewController {
         } else {
 
             // No rows selected, means all rows.
-            for (index, _ ) in bookmarks.enumerated() {
+            for index in bookmarks.indices {
                 indexPaths.append(IndexPath(row: index, section: 0))
             }
         }
