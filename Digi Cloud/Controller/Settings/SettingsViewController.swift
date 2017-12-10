@@ -126,7 +126,7 @@ final class SettingsViewController: UITableViewController {
                     let l = UILabel()
                     l.translatesAutoresizingMaskIntoConstraints = false
                     l.text = "\(user.firstName) \(user.lastName)"
-                    l.font = UIFont.HelveticaNeueMedium(size: 16)
+                    l.font = UIFont.fontHelveticaNeueMedium(size: 16)
                     return l
                 }()
 
@@ -135,7 +135,7 @@ final class SettingsViewController: UITableViewController {
                     l.translatesAutoresizingMaskIntoConstraints = false
                     l.text = self.user.email
                     l.textColor = UIColor.gray
-                    l.font = UIFont.HelveticaNeue(size: 14)
+                    l.font = UIFont.fontHelveticaNeue(size: 14)
                     return l
                 }()
 
@@ -192,7 +192,7 @@ final class SettingsViewController: UITableViewController {
                 cell.textLabel?.text = NSLocalizedString("Clear Cache", comment: "")
                 cell.textLabel?.textColor = .defaultColor
 
-                cell.detailTextLabel?.font = UIFont.HelveticaNeue(size: 14)
+                cell.detailTextLabel?.font = UIFont.fontHelveticaNeue(size: 14)
 
                 let str = NSLocalizedString("Total:", comment: "")
 
@@ -250,7 +250,7 @@ final class SettingsViewController: UITableViewController {
                 l.textAlignment = .center
                 l.text = Bundle.main.prettyVersionString
                 l.textColor = UIColor.gray
-                l.font = UIFont.HelveticaNeue(size: 12)
+                l.font = UIFont.fontHelveticaNeue(size: 12)
                 return l
             }()
 
@@ -275,7 +275,7 @@ final class SettingsViewController: UITableViewController {
             self.user = user
 
             let cache = Cache()
-            let key = self.user.id + ".png"
+            let key = self.user.identifier + ".png"
 
             if let data = cache.load(type: .profile, key: key) {
                 self.profileImage = UIImage(data: data, scale: UIScreen.main.scale)

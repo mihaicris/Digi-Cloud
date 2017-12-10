@@ -23,7 +23,7 @@ final class FileCell: BaseListCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         iconImageView.image = #imageLiteral(resourceName: "file_icon")
-        nodeNameLabel.font = UIFont.HelveticaNeue(size: 15)
+        nodeNameLabel.font = UIFont.fontHelveticaNeue(size: 15)
     }
 
     required init?(coder aDecoder: NSCoder) {

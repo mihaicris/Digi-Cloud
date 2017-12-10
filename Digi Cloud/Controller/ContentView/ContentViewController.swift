@@ -52,7 +52,7 @@ final class ContentViewController: UIViewController {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("No Preview Available", comment: "")
-        l.font = UIFont.HelveticaNeueMedium(size: 16)
+        l.font = UIFont.fontHelveticaNeueMedium(size: 16)
         return l
     }()
 
@@ -60,7 +60,7 @@ final class ContentViewController: UIViewController {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("This file type can't be viewed.", comment: "")
-        l.font = UIFont.HelveticaNeue(size: 14)
+        l.font = UIFont.fontHelveticaNeue(size: 14)
         l.textColor = UIColor.gray
         return l
     }()

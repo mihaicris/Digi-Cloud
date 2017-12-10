@@ -21,24 +21,24 @@ public func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ func
     #endif
 }
 
-func addressHeap<T: AnyObject>(o: T) -> String {
-    let address = unsafeBitCast(o, to: Int.self)
+func addressHeap<T: AnyObject>(object: T) -> String {
+    let address = unsafeBitCast(object, to: Int.self)
     return String(format: "%p", address)
 }
 
 public func INITLog(_ object: AnyObject) {
     #if DEBUGCONTROLLERS
-        print(addressHeap(o: object), "✅", String(describing: type(of: object)))
+        print(addressHeap(object: object), "✅", String(describing: type(of: object)))
     #endif
 }
 
 public func DEINITLog(_ object: AnyObject) {
     #if DEBUGCONTROLLERS
-        print(addressHeap(o: object), "❌", String(describing: type(of: object)))
+        print(addressHeap(object: object), "❌", String(describing: type(of: object)))
     #endif
 }
 
-func LogNSError(_ nserror: NSError) {
+func logNSError(_ nserror: NSError) {
     print("\n_____________________________________________________\n")
     print("Domain:\t\t\t\t\t\t", nserror.domain)
     print("Code:\t\t\t\t\t\t", nserror.code)

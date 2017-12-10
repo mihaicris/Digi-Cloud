@@ -168,11 +168,11 @@ final class MoreActionsViewController: UITableViewController {
             return
         }
 
-        if mount.permissions.create_link {
+        if mount.permissions.createLink {
             actions.append(.sendDownloadLink)
         }
 
-        if mount.permissions.create_receiver {
+        if mount.permissions.createReceiver {
             actions.append(.sendUploadLink)
         }
 

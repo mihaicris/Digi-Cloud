@@ -12,7 +12,7 @@ struct UploadLink: Link {
 
     // MARK: - Properties
 
-    let id: String
+    let identifier: String
     let name: String
     let path: String
     let counter: Int
@@ -44,7 +44,7 @@ extension UploadLink {
             let hasPassword = jsonDictionary["hasPassword"] as? Bool,
             let alert = jsonDictionary["alert"] as? Bool
             else { return nil }
-        self.id = id
+        self.identifier = id
         self.name = name
         self.path = path
         self.counter = counter

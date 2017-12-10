@@ -202,11 +202,11 @@ final class NodeActionsViewController: UITableViewController {
 
         if node.type == "dir" {
 
-            if location.mount.permissions.create_link {
+            if location.mount.permissions.createLink {
                 actions.append(.sendDownloadLink)
             }
 
-            if location.mount.permissions.create_receiver {
+            if location.mount.permissions.createReceiver {
                 actions.append(.sendUploadLink)
             }
 
@@ -237,7 +237,7 @@ final class NodeActionsViewController: UITableViewController {
 
         } else {
 
-            if location.mount.permissions.create_link {
+            if location.mount.permissions.createLink {
                 actions.append(.sendDownloadLink)
             }
 

@@ -208,7 +208,7 @@ final class ManageBookmarksViewController: UITableViewController {
 
             guard error == nil, result != nil else {
                 hasFetchedSuccessfully = false
-                LogNSError(error! as NSError)
+                logNSError(error! as NSError)
                 return
             }
 
@@ -224,7 +224,7 @@ final class ManageBookmarksViewController: UITableViewController {
 
             guard error == nil, result != nil else {
                 hasFetchedSuccessfully = false
-                LogNSError(error! as NSError)
+                logNSError(error! as NSError)
                 return
             }
 
@@ -238,7 +238,7 @@ final class ManageBookmarksViewController: UITableViewController {
 
             if hasFetchedSuccessfully {
 
-                let mountsIDs = resultMounts.map { $0.id }
+                let mountsIDs = resultMounts.map { $0.identifier }
 
                 for bookmark in resultBookmarks.enumerated().reversed() {
 
@@ -248,7 +248,7 @@ final class ManageBookmarksViewController: UITableViewController {
                 }
 
                 for mount in resultMounts {
-                    self.mountsMapping[mount.id] = mount
+                    self.mountsMapping[mount.identifier] = mount
                 }
 
                 self.bookmarks = resultBookmarks
@@ -284,7 +284,7 @@ final class ManageBookmarksViewController: UITableViewController {
             guard error == nil else {
 
                 // TODO: Show error to user
-                LogNSError(error! as NSError)
+                logNSError(error! as NSError)
                 return
             }
 

@@ -27,7 +27,7 @@ final class SearchCell: UITableViewCell {
 
     let nodeMountLabel: UILabelWithPadding = {
         let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
-        l.font = UIFont.HelveticaNeue(size: 11)
+        l.font = UIFont.fontHelveticaNeue(size: 11)
         l.textColor = .white
         l.layer.cornerRadius = 4
         l.clipsToBounds = true
@@ -39,7 +39,7 @@ final class SearchCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = .darkGray
-        l.font = UIFont.HelveticaNeue(size: 11)
+        l.font = UIFont.fontHelveticaNeue(size: 11)
         l.lineBreakMode = .byTruncatingMiddle
         return l
     }()

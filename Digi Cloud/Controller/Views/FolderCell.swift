@@ -50,7 +50,7 @@ final class FolderCell: BaseListCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         iconImageView.image = #imageLiteral(resourceName: "folder_icon")
-        nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 15)
+        nodeNameLabel.font = UIFont.fontHelveticaNeueMedium(size: 15)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -1095,7 +1095,7 @@ class ListingViewController: UITableViewController {
 
         if var bookmark = node.bookmark {
 
-            bookmark.mountId = location.mount.id
+            bookmark.mountId = location.mount.identifier
 
             // Bookmark is set, removing it:
             DigiClient.shared.removeBookmark(bookmark: bookmark) { error in
@@ -1109,7 +1109,7 @@ class ListingViewController: UITableViewController {
         } else {
 
             // Bookmark is not set, adding it:
-            let bookmark = Bookmark(name: node.name, mountId: location.mount.id, path: location.path)
+            let bookmark = Bookmark(name: node.name, mountId: location.mount.identifier, path: location.path)
 
             DigiClient.shared.addBookmark(bookmark: bookmark) { error in
                 guard error == nil else {

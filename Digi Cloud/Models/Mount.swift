@@ -12,7 +12,7 @@ struct Mount {
 
     // MARK: - Properties
 
-    let id: String
+    let identifier: String
     let name: String
     let type: String
     let origin: String
@@ -36,7 +36,7 @@ extension Mount {
     init?(object: Any?) {
         guard
             let jsonDictionary = object as? [String: Any],
-            let id = jsonDictionary["id"] as? String,
+            let identifier = jsonDictionary["id"] as? String,
             let name = jsonDictionary["name"] as? String,
             let type = jsonDictionary["type"] as? String,
             let origin = jsonDictionary["origin"] as? String,
@@ -59,7 +59,7 @@ extension Mount {
             return nil
         }
 
-        self.id = id
+        self.identifier = identifier
         self.name = name
         self.type = type
         self.origin = origin
@@ -78,6 +78,6 @@ extension Mount {
     }
 
     static func == (lhs: Mount, rhs: Mount) -> Bool {
-        return lhs.id == rhs.id && lhs.name == rhs.name
+        return lhs.identifier == rhs.identifier && lhs.name == rhs.name
     }
 }

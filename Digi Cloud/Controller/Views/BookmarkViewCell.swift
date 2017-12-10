@@ -22,14 +22,14 @@ final class BookmarkViewCell: UITableViewCell {
     let bookmarkNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeueMedium(size: 14)
+        l.font = UIFont.fontHelveticaNeueMedium(size: 14)
         return l
     }()
 
     let pathLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 12)
+        l.font = UIFont.fontHelveticaNeue(size: 12)
         l.textColor = .darkGray
         return l
     }()

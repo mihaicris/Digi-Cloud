@@ -12,7 +12,7 @@ struct RootMount {
 
     // MARK: - Properties
 
-    let id: String
+    let identifier: String
     let name: String
     let path: String
 }
@@ -21,11 +21,11 @@ extension RootMount {
     init?(object: Any?) {
         guard
             let jsonDictionary = object as? [String: Any],
-            let id = jsonDictionary["id"] as? String,
+            let identifier = jsonDictionary["id"] as? String,
             let name = jsonDictionary["name"] as? String,
             let path = jsonDictionary["path"] as? String
             else { return nil }
-        self.id = id
+        self.identifier = identifier
         self.name = name
         self.path = path
     }

@@ -129,7 +129,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private let counterLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 14)
+        l.font = UIFont.fontHelveticaNeue(size: 14)
         l.textColor = UIColor.white
         return l
     }()
@@ -330,7 +330,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
             let mountNameLabel: UILabelWithPadding = {
                 let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
-                l.font = UIFont.HelveticaNeue(size: 12)
+                l.font = UIFont.fontHelveticaNeue(size: 12)
                 l.adjustsFontSizeToFitWidth = true
                 l.textColor = .darkGray
                 l.backgroundColor = UIColor.black.withAlphaComponent(0.1)
@@ -347,7 +347,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 l.textColor = .darkGray
                 l.text = location.path.hasSuffix("/") ? String(location.path.dropLast()) : location.path
                 l.numberOfLines = 2
-                l.font = UIFont.HelveticaNeue(size: 12)
+                l.font = UIFont.fontHelveticaNeue(size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
                 return l
             }()
@@ -683,7 +683,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             return
         }
 
-        DigiClient.shared.setLinkCustomShortUrl(mount: location.mount, linkId: link.id, type: linkType, hash: hash) { result, error in
+        DigiClient.shared.setLinkCustomShortUrl(mount: location.mount, linkId: link.identifier, type: linkType, hash: hash) { result, error in
 
             guard error == nil else {
 
@@ -723,7 +723,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         configureWaitingView(type: .started, message: NSLocalizedString("Deleting Link", comment: ""))
 
-        DigiClient.shared.deleteLink(mount: location.mount, linkId: link.id, type: linkType) { error in
+        DigiClient.shared.deleteLink(mount: location.mount, linkId: link.identifier, type: linkType) { error in
             guard error == nil else {
                 self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
                 return
@@ -744,7 +744,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             handleResetPassword()
         } else {
 
-            DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.id, type: linkType) { result, error in
+            DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType) { result, error in
 
                 self.stopSpinning()
 
@@ -765,7 +765,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         resetAllFields()
         startSpinning()
 
-        DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.id, type: linkType, completion: { result, error in
+        DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType, completion: { result, error in
             guard error == nil, result != nil else {
 
                 print(error!.localizedDescription)
@@ -844,7 +844,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         resetAllFields()
 
-        DigiClient.shared.setReceiverAlert(isOn: sender.isOn, mount: location.mount, linkId: link.id) { result, error in
+        DigiClient.shared.setReceiverAlert(isOn: sender.isOn, mount: location.mount, linkId: link.identifier) { result, error in
 
             guard error == nil, result != nil else {
                 sender.setOn(!sender.isOn, animated: true)
@@ -872,7 +872,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         spinner.startAnimating()
 
-        DigiClient.shared.setLinkCustomValidity(mount: location.mount, linkId: link.id, type: linkType, validTo: validTo) { result, error in
+        DigiClient.shared.setLinkCustomValidity(mount: location.mount, linkId: link.identifier, type: linkType, validTo: validTo) { result, error in
 
             self.spinner.stopAnimating()
 

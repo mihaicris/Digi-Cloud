@@ -24,7 +24,7 @@ final class AccountCollectionCell: UICollectionViewCell {
     let accountNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeueMedium(size: 14)
+        l.font = UIFont.fontHelveticaNeueMedium(size: 14)
         l.textColor = UIColor.white
         l.textAlignment = .center
         l.numberOfLines = 2

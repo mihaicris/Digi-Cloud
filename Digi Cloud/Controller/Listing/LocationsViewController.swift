@@ -344,11 +344,11 @@ final class LocationsViewController: UITableViewController {
                 var substituteMount: Mount?
 
                 if mount.origin == "hosted" {
-                    if let index = mainMounts.index (where: { $0.id == rootMount.id }) {
+                    if let index = mainMounts.index (where: { $0.identifier == rootMount.identifier }) {
                         substituteMount = mainMounts[index]
                     }
                 } else if mount.origin == "desktop" {
-                    if let index = connectionMounts.index (where: { $0.id == rootMount.id }) {
+                    if let index = connectionMounts.index (where: { $0.identifier == rootMount.identifier }) {
                         substituteMount = connectionMounts[index]
                     }
                 }

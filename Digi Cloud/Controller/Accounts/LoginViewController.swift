@@ -62,7 +62,7 @@ final class LoginViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle("✕", for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.HelveticaNeue(size: 24)
+        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 24)
         b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
         return b
     }()
@@ -72,7 +72,7 @@ final class LoginViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Forgot password?", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
+        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
         return b
     }()
@@ -150,7 +150,7 @@ final class LoginViewController: UIViewController {
             aText.append(NSAttributedString(string: "\n"))
 
             aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: ""),
-                                            attributes: [NSAttributedStringKey.font: UIFont.HelveticaNeue(size: 16),
+                                            attributes: [NSAttributedStringKey.font: UIFont.fontHelveticaNeue(size: 16),
                                                          NSAttributedStringKey.foregroundColor: UIColor.white]))
 
             let aPar = NSMutableParagraphStyle()
