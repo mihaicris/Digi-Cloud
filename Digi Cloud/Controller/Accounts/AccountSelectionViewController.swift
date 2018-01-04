@@ -55,7 +55,7 @@ UICollectionViewDelegateFlowLayout {
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = UIColor(red: 161/255, green: 168/255, blue: 209/255, alpha: 1.0)
         l.text = NSLocalizedString("No accounts", comment: "")
-        l.font = UIFont.HelveticaNeueLight(size: 30)
+        l.font = UIFont.fontHelveticaNeueLight(size: 30)
         return l
     }()
 
@@ -64,7 +64,7 @@ UICollectionViewDelegateFlowLayout {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Add Account", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
+        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
         return b
     }()
@@ -81,7 +81,7 @@ UICollectionViewDelegateFlowLayout {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Log in to Another Account", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
+        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
         return b
     }()
@@ -116,7 +116,7 @@ UICollectionViewDelegateFlowLayout {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Manage Accounts", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
+        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleManageAccounts), for: .touchUpInside)
         return b
     }()
@@ -206,7 +206,7 @@ UICollectionViewDelegateFlowLayout {
 
         let cache = Cache()
 
-        if let data = cache.load(type: .profile, key: user.id + ".png") {
+        if let data = cache.load(type: .profile, key: user.identifier + ".png") {
             cell.profileImage.image = UIImage(data: data, scale: UIScreen.main.scale)
         } else {
             cell.profileImage.image = #imageLiteral(resourceName: "default_profile_image")
@@ -483,7 +483,7 @@ UICollectionViewDelegateFlowLayout {
         // get indexPaths of all users except the one selected
         let indexPaths = users.enumerated().flatMap({ (arg) -> IndexPath? in
             let (offset, element) = arg
-            if element.id == user.id {
+            if element.identifier == user.identifier {
                 return nil
             }
             return IndexPath(item: offset, section: 0)
@@ -509,7 +509,7 @@ UICollectionViewDelegateFlowLayout {
                     self.spinner.startAnimating()
 
                     DispatchQueue.main.async {
-                        let account = Account(userID: user.id)
+                        let account = Account(userID: user.identifier)
 
                         guard let token = try? account.readToken() else {
                             AppSettings.showErrorMessageAndCrash(
@@ -581,7 +581,7 @@ UICollectionViewDelegateFlowLayout {
                             DigiClient.shared.loggedAccount = account
 
                             // Save in Userdefaults this user as logged in
-                            AppSettings.loggedUserID = user.id
+                            AppSettings.loggedUserID = user.identifier
 
                             DigiClient.shared.getSecuritySettings()
 

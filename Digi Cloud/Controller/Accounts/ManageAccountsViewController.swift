@@ -140,7 +140,7 @@ final class ManageAccountsViewController: UITableViewController {
 
         let user = users[indexPath.row]
 
-        let account = Account(userID: user.id)
+        let account = Account(userID: user.identifier)
 
         // Revoke the token
         account.revokeToken()
@@ -149,7 +149,7 @@ final class ManageAccountsViewController: UITableViewController {
         account.deleteProfileImageFromCache()
 
         // Delete the account info (name) from User defaults
-        AppSettings.deletePersistedUserInfo(userID: user.id)
+        AppSettings.deletePersistedUserInfo(userID: user.identifier)
 
         // Delete user from the model
         self.users.remove(at: indexPath.row)

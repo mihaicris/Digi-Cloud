@@ -52,7 +52,7 @@ final class ContentViewController: UIViewController {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("No Preview Available", comment: "")
-        l.font = UIFont.HelveticaNeueMedium(size: 16)
+        l.font = UIFont.fontHelveticaNeueMedium(size: 16)
         return l
     }()
 
@@ -60,7 +60,7 @@ final class ContentViewController: UIViewController {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("This file type can't be viewed.", comment: "")
-        l.font = UIFont.HelveticaNeue(size: 14)
+        l.font = UIFont.fontHelveticaNeue(size: 14)
         l.textColor = UIColor.gray
         return l
     }()
@@ -187,7 +187,7 @@ final class ContentViewController: UIViewController {
 
         // For WKWebView to try to open files without extension, we assume they are text.
 
-        if fileExtension.characters.isEmpty {
+        if fileExtension.isEmpty {
             fileExtension = "txt"
         }
 
@@ -251,7 +251,9 @@ final class ContentViewController: UIViewController {
 
         let exportFileURL = exportFolderURL.appendingPathComponent(fileName)
 
-        guard let _ = try? FileManager.default.copyItem(at: url, to: exportFileURL) else {
+        do {
+            try FileManager.default.copyItem(at: url, to: exportFileURL)
+        } catch {
             return
         }
 
@@ -285,7 +287,7 @@ final class ContentViewController: UIViewController {
 
                 noPreviewMessageLabel.topAnchor.constraint(equalTo: noPreviewLabel.bottomAnchor, constant: 10),
                 noPreviewMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-                ])
+            ])
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.view.addSubview(self.handImageView)
@@ -341,12 +343,15 @@ extension ContentViewController: URLSessionTaskDelegate {
 
     fileprivate func removeProgressView() {
 
-        UIView.animate(withDuration: 0.5, animations: {
-            self.progressView.alpha = 0.0
-
-        }) { _ in
+        UIView.animate(
+            withDuration: 0.5,
+            animations: {
+                self.progressView.alpha = 0.0
+            },
+            completion: { _ in
             self.progressView.removeFromSuperview()
-        }
+            }
+        )
     }
 }
 

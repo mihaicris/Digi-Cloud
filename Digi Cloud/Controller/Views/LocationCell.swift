@@ -27,8 +27,8 @@ final class LocationCell: UITableViewCell {
                 }
 
                 if var spaceUsed = mount.spaceUsed, var spaceTotal = mount.spaceTotal {
-                    spaceUsed = spaceUsed / 1024
-                    spaceTotal = spaceTotal / 1024
+                    spaceUsed /= 1024
+                    spaceTotal /= 1024
                     spaceUsedValueLabel.text = "\(spaceUsed) / \(spaceTotal) GB"
                 }
 
@@ -46,7 +46,7 @@ final class LocationCell: UITableViewCell {
     let locationNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 24)
+        l.font = UIFont.fontHelveticaNeue(size: 24)
         return l
     }()
 
@@ -54,14 +54,14 @@ final class LocationCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("Owner", comment: "")
-        l.font = UIFont.HelveticaNeue(size: 14)
+        l.font = UIFont.fontHelveticaNeue(size: 14)
         return l
     }()
 
     let ownerNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 14)
+        l.font = UIFont.fontHelveticaNeue(size: 14)
         l.textColor = UIColor.defaultColor
         return l
     }()
@@ -70,14 +70,14 @@ final class LocationCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("Usage", comment: "")
-        l.font = UIFont.HelveticaNeue(size: 14)
+        l.font = UIFont.fontHelveticaNeue(size: 14)
         return l
     }()
 
     let spaceUsedValueLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 14)
+        l.font = UIFont.fontHelveticaNeue(size: 14)
         l.textColor = UIColor.defaultColor
         return l
     }()
@@ -86,7 +86,7 @@ final class LocationCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = "●"
-        l.font = UIFont.HelveticaNeue(size: 20)
+        l.font = UIFont.fontHelveticaNeue(size: 20)
         l.textColor = UIColor.white
         return l
     }()
@@ -94,7 +94,7 @@ final class LocationCell: UITableViewCell {
     let desktopLabel: UILabelWithPadding = {
         let l = UILabelWithPadding(paddingTop: 4, paddingLeft: 5, paddingBottom: 4, paddingRight: 5)
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeueMedium(size: 12)
+        l.font = UIFont.fontHelveticaNeueMedium(size: 12)
         l.text = "DESKTOP"
         l.layer.borderWidth = 0.6
         l.layer.borderColor = UIColor.black.cgColor
@@ -141,7 +141,7 @@ final class LocationCell: UITableViewCell {
             locationNameLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
 
             statusLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor),
-            statusLabel.leftAnchor.constraint(equalTo:locationNameLabel.rightAnchor, constant: 10),
+            statusLabel.leftAnchor.constraint(equalTo: locationNameLabel.rightAnchor, constant: 10),
 
             leftView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             leftView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -160,7 +160,7 @@ final class LocationCell: UITableViewCell {
                 spaceUsedLabel.bottomAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 30),
 
                 spaceUsedValueLabel.firstBaselineAnchor.constraint(equalTo: spaceUsedLabel.firstBaselineAnchor),
-                spaceUsedValueLabel.leftAnchor.constraint(equalTo: spaceUsedLabel.rightAnchor, constant: 10),
+                spaceUsedValueLabel.leftAnchor.constraint(equalTo: spaceUsedLabel.rightAnchor, constant: 10)
             ])
 
             if mount.type == "device" && mount.origin == "desktop" {

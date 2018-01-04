@@ -27,7 +27,7 @@ final class SearchCell: UITableViewCell {
 
     let nodeMountLabel: UILabelWithPadding = {
         let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
-        l.font = UIFont.HelveticaNeue(size: 11)
+        l.font = UIFont.fontHelveticaNeue(size: 11)
         l.textColor = .white
         l.layer.cornerRadius = 4
         l.clipsToBounds = true
@@ -39,7 +39,7 @@ final class SearchCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = .darkGray
-        l.font = UIFont.HelveticaNeue(size: 11)
+        l.font = UIFont.fontHelveticaNeue(size: 11)
         l.lineBreakMode = .byTruncatingMiddle
         return l
     }()
@@ -97,14 +97,14 @@ final class SearchCell: UITableViewCell {
             nodeIcon.heightAnchor.constraint(equalToConstant: 26),
 
             nodeNameLabel.leftAnchor.constraint(equalTo: nodeIcon.rightAnchor, constant: 10),
-            nodeNameLabel.rightAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.rightAnchor, constant: -30),
+            nodeNameLabel.rightAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.rightAnchor, constant: -30),
             nodeNameLabel.topAnchor.constraint(equalTo: nodeIcon.topAnchor, constant: -7),
 
             nodeMountLabel.leftAnchor.constraint(equalTo: nodeNameLabel.leftAnchor),
             nodeMountLabel.topAnchor.constraint(equalTo: nodeNameLabel.bottomAnchor, constant: 2),
 
             nodePathLabel.leftAnchor.constraint(equalTo: nodeMountLabel.rightAnchor, constant: 2),
-            nodePathLabel.rightAnchor.constraint(lessThanOrEqualTo : layoutMarginsGuide.rightAnchor, constant: -30),
+            nodePathLabel.rightAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.rightAnchor, constant: -30),
             nodePathLabel.centerYAnchor.constraint(equalTo: nodeMountLabel.centerYAnchor),
 
             seeInFolderButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

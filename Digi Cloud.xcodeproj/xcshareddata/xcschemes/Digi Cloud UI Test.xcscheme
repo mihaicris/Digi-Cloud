@@ -7,11 +7,11 @@
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "837041111D8B1DED000EDBAE"
@@ -21,22 +21,8 @@
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
-            buildForTesting = "NO"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83F7EEFC1E369A7D0033F03D"
-               BuildableName = "Digi Cloud Tests.xctest"
-               BlueprintName = "Digi Cloud Tests"
-               ReferencedContainer = "container:Digi Cloud.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "NO"
-            buildForRunning = "NO"
+            buildForTesting = "YES"
+            buildForRunning = "YES"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
             buildForAnalyzing = "NO">
@@ -55,16 +41,25 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = ""
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "83F52F351F7CF5BF00E18A09"
+               BuildableName = "Digi Cloud UITests.xctest"
+               BlueprintName = "Digi Cloud UITests"
+               ReferencedContainer = "container:Digi Cloud.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "837041111D8B1DED000EDBAE"
-            BuildableName = "Digi Cloud.app"
-            BlueprintName = "Digi Cloud"
+            BlueprintIdentifier = "83F52F351F7CF5BF00E18A09"
+            BuildableName = "Digi Cloud UITests.xctest"
+            BlueprintName = "Digi Cloud UITests"
             ReferencedContainer = "container:Digi Cloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -72,7 +67,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug ViewControllers"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = ""
@@ -82,16 +77,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "837041111D8B1DED000EDBAE"
-            BuildableName = "Digi Cloud.app"
-            BlueprintName = "Digi Cloud"
+            BlueprintIdentifier = "83F52F351F7CF5BF00E18A09"
+            BuildableName = "Digi Cloud UITests.xctest"
+            BlueprintName = "Digi Cloud UITests"
             ReferencedContainer = "container:Digi Cloud.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -101,16 +95,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "837041111D8B1DED000EDBAE"
-            BuildableName = "Digi Cloud.app"
-            BlueprintName = "Digi Cloud"
+            BlueprintIdentifier = "83F52F351F7CF5BF00E18A09"
+            BuildableName = "Digi Cloud UITests.xctest"
+            BlueprintName = "Digi Cloud UITests"
             ReferencedContainer = "container:Digi Cloud.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

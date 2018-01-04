@@ -258,7 +258,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
     private func hasInvalidCharacters(name: String) -> Bool {
         let charset: Set<Character> = ["\\", "/", ":", "?", "<", ">", "\"", "|"]
-        return !charset.isDisjoint(with: name.characters)
+        return !charset.isDisjoint(with: name)
     }
 
     private func setRenameButtonActive(_ value: Bool) {
@@ -367,7 +367,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     @objc private func handleConvert(_ sender: UIButton) {
-        guard let string = textField.text, string.characters.count > 0 else { return }
+        guard let string = textField.text, string.count > 0 else { return }
 
         switch sender.tag {
         case 0:
@@ -395,7 +395,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
         case 21:
             // Sentence
-            textField.text = String(string.characters.first!).capitalized + String(string.characters.dropFirst())
+            textField.text = String(string.first!).capitalized + String(string.dropFirst())
         case 3:
             // Change to lower case
             textField.text = textField.text?.lowercased()

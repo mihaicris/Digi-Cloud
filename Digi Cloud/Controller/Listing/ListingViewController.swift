@@ -13,7 +13,7 @@ import UIKit
     var taskFinished: Int = 0
 #endif
 
-final class ListingViewController: UITableViewController {
+class ListingViewController: UITableViewController {
 
     // MARK: - Properties
 
@@ -441,6 +441,15 @@ final class ListingViewController: UITableViewController {
         searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This folder", comment: ""),
                                                         NSLocalizedString("Everywhere", comment: "")]
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
+
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        self.searchController.searchBar.sizeToFit()
     }
 
     private func presentError(message: String) {
@@ -616,7 +625,11 @@ final class ListingViewController: UITableViewController {
             searchBarButton.tag = 2
 
             rightBarButtonItems.append(moreActionsBarButton)
-            rightBarButtonItems.append(contentsOf: [sortBarButton, searchBarButton, bookmarksBarButton])
+            if #available(iOS 11.0, *) {
+                rightBarButtonItems.append(contentsOf: [sortBarButton, bookmarksBarButton])
+            } else {
+                rightBarButtonItems.append(contentsOf: [sortBarButton, searchBarButton, bookmarksBarButton])
+            }
         }
 
         navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
@@ -879,7 +892,13 @@ final class ListingViewController: UITableViewController {
             _ = self.navigationController?.popToViewController(searchResultsController, animated: true)
         } else {
             nav.searchResultsControllerIndex = nav.viewControllers.count - 1
-            self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
+
+            if #available(iOS 11.0, *) {
+
+            } else {
+                self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
+
+            }
 
             if self.tableView.tableHeaderView == nil {
                 searchController.searchBar.sizeToFit()
@@ -1095,7 +1114,7 @@ final class ListingViewController: UITableViewController {
 
         if var bookmark = node.bookmark {
 
-            bookmark.mountId = location.mount.id
+            bookmark.mountId = location.mount.identifier
 
             // Bookmark is set, removing it:
             DigiClient.shared.removeBookmark(bookmark: bookmark) { error in
@@ -1109,7 +1128,7 @@ final class ListingViewController: UITableViewController {
         } else {
 
             // Bookmark is not set, adding it:
-            let bookmark = Bookmark(name: node.name, mountId: location.mount.id, path: location.path)
+            let bookmark = Bookmark(name: node.name, mountId: location.mount.identifier, path: location.path)
 
             DigiClient.shared.addBookmark(bookmark: bookmark) { error in
                 guard error == nil else {
@@ -1169,7 +1188,7 @@ final class ListingViewController: UITableViewController {
     private func executeCopyOrMove(sourceLocation: Location) {
 
         let sourceName = (sourceLocation.path as NSString).lastPathComponent
-        let isFolder = sourceName.characters.last == "/"
+        let isFolder = sourceName.last == "/"
         let index = sourceName.getIndexBeforeExtension()
 
         // Start with initial destination location.
@@ -1185,29 +1204,27 @@ final class ListingViewController: UITableViewController {
                 wasFound = false
 
                 // check all nodes for the initial name or new name incremented
-                for node in self.nodes {
-                    if node.name == destinationName {
-                        // set the flags
-                        wasFound = true
+                for node in self.nodes where node.name == destinationName {
+                    // set the flags
+                    wasFound = true
 
-                        // increment counter in the new file name
-                        copyCount += 1
+                    // increment counter in the new file name
+                    copyCount += 1
 
-                        // reset name to original
-                        destinationName = sourceName
+                    // reset name to original
+                    destinationName = sourceName
 
-                        // Pad number (using Foundation Method)
-                        let countString = String(format: " (%d)", copyCount)
+                    // Pad number (using Foundation Method)
+                    let countString = String(format: " (%d)", copyCount)
 
-                        // If name has an extension, we introduce the count number
-                        if index != nil {
-                            destinationName.insert(contentsOf: countString.characters, at: index!)
-                        } else {
-                            destinationName = sourceName + countString
-                        }
-
-                        wasRenamed = true
+                    // If name has an extension, we introduce the count number
+                    if index != nil {
+                        destinationName.insert(contentsOf: countString, at: index!)
+                    } else {
+                        destinationName = sourceName + countString
                     }
+
+                    wasRenamed = true
                 }
             } while (wasRenamed && wasFound)
 
@@ -1258,7 +1275,7 @@ final class ListingViewController: UITableViewController {
 
             let string: String
             if locations.count == 1 {
-                if locations.first!.path.characters.last == "/" {
+                if locations.first!.path.last == "/" {
                     string = NSLocalizedString("Are you sure you want to delete this folder?", comment: "")
                 } else {
                     string = NSLocalizedString("Are you sure you want to delete this file?", comment: "")
@@ -1393,9 +1410,11 @@ final class ListingViewController: UITableViewController {
 
             } else {
 
-                let aLocation = (controller as! ListingViewController).rootLocation
+                guard let  rootLocation = (controller as? ListingViewController)?.rootLocation else {
+                    continue
+                }
 
-                let c = ListingViewController(location: aLocation, action: action, sourceLocations: sourceLocations)
+                let c = ListingViewController(location: rootLocation, action: action, sourceLocations: sourceLocations)
                 c.title = controller.title
 
                 c.onFinish = { [weak self] in

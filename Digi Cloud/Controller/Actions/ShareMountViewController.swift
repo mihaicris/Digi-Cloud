@@ -58,7 +58,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("MEMBERS", comment: "")
-        l.font = UIFont(name: ".SFUIText", size: 12) ?? UIFont.HelveticaNeue(size: 12)
+        l.font = UIFont(name: ".SFUIText", size: 12) ?? UIFont.fontHelveticaNeue(size: 12)
         l.textColor = UIColor(red: 0.43, green: 0.43, blue: 0.45, alpha: 1.0)
         return l
     }()
@@ -227,7 +227,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             let mountNameLabel: UILabelWithPadding = {
                 let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
-                l.font = UIFont.HelveticaNeue(size: 12)
+                l.font = UIFont.fontHelveticaNeue(size: 12)
                 l.adjustsFontSizeToFitWidth = true
                 l.textColor = .darkGray
                 l.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
@@ -242,9 +242,9 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
                 l.textColor = .darkGray
-                l.text = String(location.path.characters.dropLast())
+                l.text = String(location.path.dropLast())
                 l.numberOfLines = 2
-                l.font = UIFont.HelveticaNeue(size: 12)
+                l.font = UIFont.fontHelveticaNeue(size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
                 return l
             }()
@@ -254,7 +254,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             NSLayoutConstraint.activate([
                 locationPathLabel.leftAnchor.constraint(equalTo: mountNameLabel.rightAnchor, constant: 2),
-                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.rightAnchor),
+                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo: cell.contentView.layoutMarginsGuide.rightAnchor),
                 locationPathLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
 
                 mountNameLabel.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
@@ -286,7 +286,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             cell.user = user
 
-            if let image = mappingProfileImages[users[indexPath.row].id] {
+            if let image = mappingProfileImages[users[indexPath.row].identifier] {
                 cell.profileImageView.image = image
             } else {
                 cell.profileImageView.image = #imageLiteral(resourceName: "account_icon")
@@ -327,7 +327,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             removeUser(at: indexPath)
         }
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         let user = users[indexPath.row]
         if user.permissions.owner {
@@ -533,7 +533,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         for user in someUsers {
 
             // if profile image already available, skip network request
-            if mappingProfileImages[user.id] != nil {
+            if mappingProfileImages[user.identifier] != nil {
                 continue
             }
 
@@ -548,7 +548,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
                 }
 
                 if let image = image {
-                    self.mappingProfileImages[user.id] = image
+                    self.mappingProfileImages[user.identifier] = image
                 }
             }
         }
@@ -598,7 +598,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             // if the user is not owner and it is the last user, it means user has left the share.
 
-            if DigiClient.shared.loggedAccount.userID == user.id {
+            if DigiClient.shared.loggedAccount.userID == user.identifier {
                 self.dismiss(animated: true) {
                     self.onFinish?(true)
                 }

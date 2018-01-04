@@ -47,7 +47,7 @@ class BaseListCell: UITableViewCell {
     var detailsLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 11)
+        l.font = UIFont.fontHelveticaNeue(size: 11)
         return l
     }()
 

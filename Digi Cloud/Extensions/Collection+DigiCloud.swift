@@ -14,7 +14,7 @@ extension Collection where Iterator.Element == User {
 
         for oldElem in self {
             if let indexF = changedUsers.index(where: { (changedElem) -> Bool in
-                changedElem.id == oldElem.id
+                changedElem.identifier == oldElem.identifier
             }) {
                 updatedUsers.append(changedUsers[indexF])
             } else {

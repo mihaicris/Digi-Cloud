@@ -62,7 +62,7 @@ final class LoginViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle("✕", for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.HelveticaNeue(size: 24)
+        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 24)
         b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
         return b
     }()
@@ -72,7 +72,7 @@ final class LoginViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Forgot password?", comment: ""), for: .normal)
         b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.HelveticaNeue(size: 14)
+        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
         b.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
         return b
     }()
@@ -150,13 +150,13 @@ final class LoginViewController: UIViewController {
             aText.append(NSAttributedString(string: "\n"))
 
             aText.append(NSAttributedString(string: NSLocalizedString("Please provide the credentials for your Digi Storage account.", comment: ""),
-                                            attributes: [NSAttributedStringKey.font: UIFont.HelveticaNeue(size: 16),
+                                            attributes: [NSAttributedStringKey.font: UIFont.fontHelveticaNeue(size: 16),
                                                          NSAttributedStringKey.foregroundColor: UIColor.white]))
 
             let aPar = NSMutableParagraphStyle()
             aPar.alignment = .center
 
-            let range = NSRange(location: 0, length: aText.string.characters.count)
+            let range = NSRange(location: 0, length: aText.string.count)
             aText.addAttributes([NSAttributedStringKey.paragraphStyle: aPar], range: range)
 
             tv.textContainerInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
@@ -280,8 +280,8 @@ final class LoginViewController: UIViewController {
 
         guard let username = usernameTextField.text?.lowercased(),
             let password = passwordTextField.text,
-            username.characters.count > 0,
-            password.characters.count > 0
+            username.count > 0,
+            password.count > 0
             else {
                 let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
                                               message: NSLocalizedString("Please fill in the fields.", comment: ""),

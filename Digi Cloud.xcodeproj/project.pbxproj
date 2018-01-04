@@ -7,80 +7,82 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8302F2D71E8D7006008BA834 /* FolderInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CB1E8D7006008BA834 /* FolderInfo.swift */; };
-		8302F2D81E8D7006008BA834 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CC1E8D7006008BA834 /* DownloadLink.swift */; };
-		8302F2D91E8D7006008BA834 /* NodeHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CD1E8D7006008BA834 /* NodeHit.swift */; };
-		8302F2DA1E8D7006008BA834 /* UploadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CE1E8D7006008BA834 /* UploadLink.swift */; };
-		8302F2DB1E8D7006008BA834 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2CF1E8D7006008BA834 /* Permissions.swift */; };
-		8302F2DC1E8D7006008BA834 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D01E8D7006008BA834 /* Location.swift */; };
-		8302F2DD1E8D7006008BA834 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D11E8D7006008BA834 /* Bookmark.swift */; };
-		8302F2DE1E8D7006008BA834 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D21E8D7006008BA834 /* Account.swift */; };
-		8302F2DF1E8D7006008BA834 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D31E8D7006008BA834 /* Mount.swift */; };
-		8302F2E01E8D7006008BA834 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D41E8D7006008BA834 /* Node.swift */; };
-		8302F2E11E8D7006008BA834 /* RootMount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D51E8D7006008BA834 /* RootMount.swift */; };
-		8302F2E21E8D7006008BA834 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2D61E8D7006008BA834 /* User.swift */; };
-		8302F2E71E8D735A008BA834 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2E41E8D735A008BA834 /* ManageAccountsViewController.swift */; };
-		8302F2E81E8D735A008BA834 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2E51E8D735A008BA834 /* AccountSelectionViewController.swift */; };
-		8302F2EA1E8D7372008BA834 /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2E91E8D7372008BA834 /* FlowController.swift */; };
-		8302F2F51E8D738D008BA834 /* String+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */; };
-		8302F2F61E8D738D008BA834 /* Bundle+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EC1E8D738D008BA834 /* Bundle+DigiCloud.swift */; };
-		8302F2F71E8D738D008BA834 /* UIViewController+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */; };
-		8302F2F81E8D738D008BA834 /* Collection+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */; };
-		8302F2F91E8D738D008BA834 /* UIView+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */; };
-		8302F2FA1E8D738D008BA834 /* UIFont+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F01E8D738D008BA834 /* UIFont+DigiCloud.swift */; };
-		8302F2FB1E8D738D008BA834 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F11E8D738D008BA834 /* FileManager+DigiCloud.swift */; };
-		8302F2FC1E8D738D008BA834 /* UIColor+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F21E8D738D008BA834 /* UIColor+DigiCloud.swift */; };
-		8302F2FD1E8D738D008BA834 /* UserDefaults+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F31E8D738D008BA834 /* UserDefaults+DigiCloud.swift */; };
-		8302F2FE1E8D738D008BA834 /* Date+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F2F41E8D738D008BA834 /* Date+DigiCloud.swift */; };
-		8302F3021E8D8BB3008BA834 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3001E8D8BB3008BA834 /* MainNavigationController.swift */; };
-		8302F3041E8D8BCF008BA834 /* ManageBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3031E8D8BCF008BA834 /* ManageBookmarksViewController.swift */; };
-		8302F3061E8D8BDF008BA834 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3051E8D8BDF008BA834 /* ContentViewController.swift */; };
-		8302F3081E8D8C10008BA834 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3071E8D8C10008BA834 /* IntroductionViewController.swift */; };
-		8302F30B1E8D8C23008BA834 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3091E8D8C23008BA834 /* LocationsViewController.swift */; };
-		8302F30C1E8D8C23008BA834 /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30A1E8D8C23008BA834 /* ListingViewController.swift */; };
-		8302F3171E8D8C7B008BA834 /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */; };
-		8302F3181E8D8C7B008BA834 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30E1E8D8C7B008BA834 /* CreateFolderViewController.swift */; };
-		8302F3191E8D8C7B008BA834 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */; };
-		8302F31A1E8D8C7B008BA834 /* AddMountUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */; };
-		8302F31B1E8D8C7B008BA834 /* MoreActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */; };
-		8302F31C1E8D8C7B008BA834 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3121E8D8C7B008BA834 /* FolderInfoViewController.swift */; };
-		8302F31D1E8D8C7B008BA834 /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */; };
-		8302F31E1E8D8C7B008BA834 /* ShareLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */; };
-		8302F31F1E8D8C7B008BA834 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */; };
-		8302F3201E8D8C7B008BA834 /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3161E8D8C7B008BA834 /* RenameViewController.swift */; };
-		8302F3221E8D8C9D008BA834 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3211E8D8C9D008BA834 /* SearchResultController.swift */; };
-		8302F3281E8D8CC9008BA834 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */; };
-		8302F3391E8D8D5D008BA834 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32A1E8D8D5D008BA834 /* CustomNavBar.swift */; };
-		8302F33A1E8D8D5D008BA834 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32B1E8D8D5D008BA834 /* RenameUtilitiesButton.swift */; };
-		8302F33B1E8D8D5D008BA834 /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32C1E8D8D5D008BA834 /* UILabelWithPadding.swift */; };
-		8302F33C1E8D8D5D008BA834 /* URLHashTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32D1E8D8D5D008BA834 /* URLHashTextField.swift */; };
-		8302F33D1E8D8D5D008BA834 /* BookmarkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32E1E8D8D5D008BA834 /* BookmarkViewCell.swift */; };
-		8302F33E1E8D8D5D008BA834 /* AccountCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F32F1E8D8D5D008BA834 /* AccountCollectionCell.swift */; };
-		8302F33F1E8D8D5D008BA834 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3301E8D8D5D008BA834 /* AccountTableViewCell.swift */; };
-		8302F3401E8D8D5D008BA834 /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3311E8D8D5D008BA834 /* BaseListCell.swift */; };
-		8302F3411E8D8D5D008BA834 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3321E8D8D5D008BA834 /* FileCell.swift */; };
-		8302F3421E8D8D5D008BA834 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3331E8D8D5D008BA834 /* LocationCell.swift */; };
-		8302F3431E8D8D5E008BA834 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3341E8D8D5D008BA834 /* LoginButton.swift */; };
-		8302F3441E8D8D5E008BA834 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3351E8D8D5D008BA834 /* LoginField.swift */; };
-		8302F3451E8D8D5E008BA834 /* MountUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3361E8D8D5D008BA834 /* MountUserCell.swift */; };
-		8302F3461E8D8D5E008BA834 /* FolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3371E8D8D5D008BA834 /* FolderCell.swift */; };
-		8302F3471E8D8D5E008BA834 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3381E8D8D5D008BA834 /* SearchCell.swift */; };
-		8302F3491E8D8DBF008BA834 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8302F3481E8D8DBF008BA834 /* LoginViewController.swift */; };
-		8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8350CDB41E6031030063227E /* fontawesome-webfont.ttf */; };
-		835405FD1D94FCC300019D53 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835405FC1D94FCC300019D53 /* Protocols.swift */; };
-		837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837041151D8B1DED000EDBAE /* AppDelegate.swift */; };
-		8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8370411C1D8B1DEE000EDBAE /* Assets.xcassets */; };
-		837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */; };
-		838C2E5C1E8E2E73000DC325 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C2E581E8E2E73000DC325 /* AppSettings.swift */; };
-		838C2E5D1E8E2E73000DC325 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C2E591E8E2E73000DC325 /* Cache.swift */; };
-		838C2E5E1E8E2E73000DC325 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C2E5A1E8E2E73000DC325 /* DigiClient.swift */; };
-		838C2E5F1E8E2E73000DC325 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C2E5B1E8E2E73000DC325 /* DigiConstants.swift */; };
-		83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D3951E13C781005258B3 /* InfoPlist.strings */; };
-		83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83B6D39A1E13DCF4005258B3 /* Localizable.strings */; };
-		83CD0C661DE34C730078E5FC /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CD0C651DE34C730078E5FC /* Logging.swift */; };
-		83F1FFD31E6979040079F56F /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1FFD21E6979040079F56F /* Enums.swift */; };
-		83F52F391F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F52F381F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift */; };
-		83F52F451F7CF79300E18A09 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F52F441F7CF79300E18A09 /* SnapshotHelper.swift */; };
+		06519F2ED2100EC34DD3541D /* Pods_Digi_Cloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B27C67A95E07D2466A888367 /* Pods_Digi_Cloud.framework */; };
+		5BBA29E184903433B3AC0218 /* Pods_Digi_Cloud_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EAE1D6E7A4E9E0A6D7608D /* Pods_Digi_Cloud_UITests.framework */; };
+		837D55381FD0717700C018A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54E31FD0717700C018A2 /* AppDelegate.swift */; };
+		837D55391FD0717700C018A2 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54E51FD0717700C018A2 /* AppSettings.swift */; };
+		837D553A1FD0717700C018A2 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54E61FD0717700C018A2 /* DigiClient.swift */; };
+		837D553B1FD0717700C018A2 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54E71FD0717700C018A2 /* Cache.swift */; };
+		837D553C1FD0717700C018A2 /* DigiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54E81FD0717700C018A2 /* DigiConstants.swift */; };
+		837D553D1FD0717700C018A2 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54EA1FD0717700C018A2 /* Enums.swift */; };
+		837D553E1FD0717700C018A2 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54EC1FD0717700C018A2 /* Logging.swift */; };
+		837D553F1FD0717700C018A2 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54EE1FD0717700C018A2 /* Location.swift */; };
+		837D55401FD0717700C018A2 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54EF1FD0717700C018A2 /* Permissions.swift */; };
+		837D55411FD0717700C018A2 /* Mount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F01FD0717700C018A2 /* Mount.swift */; };
+		837D55421FD0717700C018A2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F11FD0717700C018A2 /* User.swift */; };
+		837D55431FD0717700C018A2 /* RootMount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F21FD0717700C018A2 /* RootMount.swift */; };
+		837D55441FD0717700C018A2 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F31FD0717700C018A2 /* Bookmark.swift */; };
+		837D55451FD0717700C018A2 /* NodeHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F41FD0717700C018A2 /* NodeHit.swift */; };
+		837D55461FD0717700C018A2 /* DownloadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F51FD0717700C018A2 /* DownloadLink.swift */; };
+		837D55471FD0717700C018A2 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F61FD0717700C018A2 /* Account.swift */; };
+		837D55481FD0717700C018A2 /* UploadLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F71FD0717700C018A2 /* UploadLink.swift */; };
+		837D55491FD0717700C018A2 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F81FD0717700C018A2 /* Node.swift */; };
+		837D554A1FD0717700C018A2 /* FolderInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54F91FD0717700C018A2 /* FolderInfo.swift */; };
+		837D554B1FD0717700C018A2 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54FC1FD0717700C018A2 /* SettingsViewController.swift */; };
+		837D554D1FD0717700C018A2 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55001FD0717700C018A2 /* ContentViewController.swift */; };
+		837D554E1FD0717700C018A2 /* SearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55021FD0717700C018A2 /* SearchResultController.swift */; };
+		837D554F1FD0717700C018A2 /* ManageBookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55041FD0717700C018A2 /* ManageBookmarksViewController.swift */; };
+		837D55501FD0717700C018A2 /* AccountSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55061FD0717700C018A2 /* AccountSelectionViewController.swift */; };
+		837D55511FD0717700C018A2 /* ManageAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55071FD0717700C018A2 /* ManageAccountsViewController.swift */; };
+		837D55521FD0717700C018A2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55081FD0717700C018A2 /* LoginViewController.swift */; };
+		837D55531FD0717700C018A2 /* ShareMountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D550A1FD0717700C018A2 /* ShareMountViewController.swift */; };
+		837D55541FD0717700C018A2 /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D550B1FD0717700C018A2 /* RenameViewController.swift */; };
+		837D55551FD0717700C018A2 /* FolderInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D550C1FD0717700C018A2 /* FolderInfoViewController.swift */; };
+		837D55561FD0717700C018A2 /* NodeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D550D1FD0717700C018A2 /* NodeActionsViewController.swift */; };
+		837D55571FD0717700C018A2 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D550E1FD0717700C018A2 /* DeleteViewController.swift */; };
+		837D55581FD0717700C018A2 /* AddMountUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D550F1FD0717700C018A2 /* AddMountUserViewController.swift */; };
+		837D55591FD0717700C018A2 /* ShareLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55101FD0717700C018A2 /* ShareLinkViewController.swift */; };
+		837D555A1FD0717700C018A2 /* MoreActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55111FD0717700C018A2 /* MoreActionsViewController.swift */; };
+		837D555B1FD0717700C018A2 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55121FD0717700C018A2 /* CreateFolderViewController.swift */; };
+		837D555C1FD0717700C018A2 /* SortFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55131FD0717700C018A2 /* SortFolderViewController.swift */; };
+		837D555D1FD0717700C018A2 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55151FD0717700C018A2 /* LocationsViewController.swift */; };
+		837D555E1FD0717700C018A2 /* ListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55161FD0717700C018A2 /* ListingViewController.swift */; };
+		837D555F1FD0717700C018A2 /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55171FD0717700C018A2 /* FlowController.swift */; };
+		837D55601FD0717700C018A2 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55191FD0717700C018A2 /* FileCell.swift */; };
+		837D55611FD0717700C018A2 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D551A1FD0717700C018A2 /* CustomNavBar.swift */; };
+		837D55621FD0717700C018A2 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D551B1FD0717700C018A2 /* SearchCell.swift */; };
+		837D55631FD0717700C018A2 /* UILabelWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D551C1FD0717700C018A2 /* UILabelWithPadding.swift */; };
+		837D55641FD0717700C018A2 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D551D1FD0717700C018A2 /* AccountTableViewCell.swift */; };
+		837D55651FD0717700C018A2 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D551E1FD0717700C018A2 /* LoginField.swift */; };
+		837D55661FD0717700C018A2 /* FolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D551F1FD0717700C018A2 /* FolderCell.swift */; };
+		837D55671FD0717700C018A2 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55201FD0717700C018A2 /* LocationCell.swift */; };
+		837D55681FD0717700C018A2 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55211FD0717700C018A2 /* LoginButton.swift */; };
+		837D55691FD0717700C018A2 /* BaseListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55221FD0717700C018A2 /* BaseListCell.swift */; };
+		837D556A1FD0717700C018A2 /* BookmarkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55231FD0717700C018A2 /* BookmarkViewCell.swift */; };
+		837D556B1FD0717700C018A2 /* MountUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55241FD0717700C018A2 /* MountUserCell.swift */; };
+		837D556C1FD0717700C018A2 /* RenameUtilitiesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55251FD0717700C018A2 /* RenameUtilitiesButton.swift */; };
+		837D556D1FD0717700C018A2 /* URLHashTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55261FD0717700C018A2 /* URLHashTextField.swift */; };
+		837D556E1FD0717700C018A2 /* AccountCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55271FD0717700C018A2 /* AccountCollectionCell.swift */; };
+		837D556F1FD0717700C018A2 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55281FD0717700C018A2 /* MainNavigationController.swift */; };
+		837D55701FD0717700C018A2 /* UserDefaults+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D552A1FD0717700C018A2 /* UserDefaults+DigiCloud.swift */; };
+		837D55711FD0717700C018A2 /* String+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D552B1FD0717700C018A2 /* String+DigiCloud.swift */; };
+		837D55721FD0717700C018A2 /* Collection+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D552C1FD0717700C018A2 /* Collection+DigiCloud.swift */; };
+		837D55731FD0717700C018A2 /* Date+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D552D1FD0717700C018A2 /* Date+DigiCloud.swift */; };
+		837D55741FD0717700C018A2 /* UIFont+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D552E1FD0717700C018A2 /* UIFont+DigiCloud.swift */; };
+		837D55751FD0717700C018A2 /* UIColor+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D552F1FD0717700C018A2 /* UIColor+DigiCloud.swift */; };
+		837D55761FD0717700C018A2 /* UIViewController+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55301FD0717700C018A2 /* UIViewController+DigiCloud.swift */; };
+		837D55771FD0717700C018A2 /* FileManager+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55311FD0717700C018A2 /* FileManager+DigiCloud.swift */; };
+		837D55781FD0717700C018A2 /* UIView+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55321FD0717700C018A2 /* UIView+DigiCloud.swift */; };
+		837D55791FD0717700C018A2 /* Bundle+DigiCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55331FD0717700C018A2 /* Bundle+DigiCloud.swift */; };
+		837D557A1FD0717700C018A2 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D55371FD0717700C018A2 /* Protocols.swift */; };
+		837D557E1FD0718700C018A2 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D557C1FD0718700C018A2 /* SnapshotHelper.swift */; };
+		837D557F1FD0718700C018A2 /* DigiCloudUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D557D1FD0718700C018A2 /* DigiCloudUITests.swift */; };
+		837D55951FD0769A00C018A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 837D55861FD0768400C018A2 /* Assets.xcassets */; };
+		837D55961FD076A700C018A2 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837D55881FD0768400C018A2 /* LaunchScreen.strings */; };
+		837D55971FD076A700C018A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 837D558A1FD0768400C018A2 /* LaunchScreen.storyboard */; };
+		837D55981FD076A700C018A2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837D558F1FD0768400C018A2 /* Localizable.strings */; };
+		837D55991FD076A700C018A2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 837D55911FD0768400C018A2 /* InfoPlist.strings */; };
+		837D559A1FD076AE00C018A2 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 837D55941FD0768400C018A2 /* fontawesome-webfont.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,86 +96,98 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8302F2CB1E8D7006008BA834 /* FolderInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderInfo.swift; path = Model/FolderInfo.swift; sourceTree = "<group>"; };
-		8302F2CC1E8D7006008BA834 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadLink.swift; path = Model/DownloadLink.swift; sourceTree = "<group>"; };
-		8302F2CD1E8D7006008BA834 /* NodeHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeHit.swift; path = Model/NodeHit.swift; sourceTree = "<group>"; };
-		8302F2CE1E8D7006008BA834 /* UploadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadLink.swift; path = Model/UploadLink.swift; sourceTree = "<group>"; };
-		8302F2CF1E8D7006008BA834 /* Permissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Permissions.swift; path = Model/Permissions.swift; sourceTree = "<group>"; };
-		8302F2D01E8D7006008BA834 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Model/Location.swift; sourceTree = "<group>"; };
-		8302F2D11E8D7006008BA834 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bookmark.swift; path = Model/Bookmark.swift; sourceTree = "<group>"; };
-		8302F2D21E8D7006008BA834 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Account.swift; path = Model/Account.swift; sourceTree = "<group>"; };
-		8302F2D31E8D7006008BA834 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Mount.swift; path = Model/Mount.swift; sourceTree = "<group>"; };
-		8302F2D41E8D7006008BA834 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Node.swift; path = Model/Node.swift; sourceTree = "<group>"; };
-		8302F2D51E8D7006008BA834 /* RootMount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootMount.swift; path = Model/RootMount.swift; sourceTree = "<group>"; };
-		8302F2D61E8D7006008BA834 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Model/User.swift; sourceTree = "<group>"; };
-		8302F2E41E8D735A008BA834 /* ManageAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageAccountsViewController.swift; path = Controller/Accounts/ManageAccountsViewController.swift; sourceTree = "<group>"; };
-		8302F2E51E8D735A008BA834 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSelectionViewController.swift; path = Controller/Accounts/AccountSelectionViewController.swift; sourceTree = "<group>"; };
-		8302F2E91E8D7372008BA834 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FlowController.swift; path = Controller/FlowController.swift; sourceTree = "<group>"; };
-		8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+DigiCloud.swift"; path = "Extensions/String+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2EC1E8D738D008BA834 /* Bundle+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Bundle+DigiCloud.swift"; path = "Extensions/Bundle+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+DigiCloud.swift"; path = "Extensions/UIViewController+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Collection+DigiCloud.swift"; path = "Extensions/Collection+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+DigiCloud.swift"; path = "Extensions/UIView+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2F01E8D738D008BA834 /* UIFont+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIFont+DigiCloud.swift"; path = "Extensions/UIFont+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2F11E8D738D008BA834 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileManager+DigiCloud.swift"; path = "Extensions/FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2F21E8D738D008BA834 /* UIColor+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+DigiCloud.swift"; path = "Extensions/UIColor+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2F31E8D738D008BA834 /* UserDefaults+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UserDefaults+DigiCloud.swift"; path = "Extensions/UserDefaults+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F2F41E8D738D008BA834 /* Date+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Date+DigiCloud.swift"; path = "Extensions/Date+DigiCloud.swift"; sourceTree = "<group>"; };
-		8302F3001E8D8BB3008BA834 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainNavigationController.swift; path = Controller/MainNavigationController.swift; sourceTree = "<group>"; };
-		8302F3031E8D8BCF008BA834 /* ManageBookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageBookmarksViewController.swift; path = Controller/Bookmarks/ManageBookmarksViewController.swift; sourceTree = "<group>"; };
-		8302F3051E8D8BDF008BA834 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentViewController.swift; path = Controller/ContentView/ContentViewController.swift; sourceTree = "<group>"; };
-		8302F3071E8D8C10008BA834 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntroductionViewController.swift; path = Controller/Introduction/IntroductionViewController.swift; sourceTree = "<group>"; };
-		8302F3091E8D8C23008BA834 /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationsViewController.swift; path = Controller/Listing/LocationsViewController.swift; sourceTree = "<group>"; };
-		8302F30A1E8D8C23008BA834 /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListingViewController.swift; path = Controller/Listing/ListingViewController.swift; sourceTree = "<group>"; };
-		8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SortFolderViewController.swift; path = Controller/Actions/SortFolderViewController.swift; sourceTree = "<group>"; };
-		8302F30E1E8D8C7B008BA834 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateFolderViewController.swift; path = Controller/Actions/CreateFolderViewController.swift; sourceTree = "<group>"; };
-		8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteViewController.swift; path = Controller/Actions/DeleteViewController.swift; sourceTree = "<group>"; };
-		8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddMountUserViewController.swift; path = Controller/Actions/AddMountUserViewController.swift; sourceTree = "<group>"; };
-		8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoreActionsViewController.swift; path = Controller/Actions/MoreActionsViewController.swift; sourceTree = "<group>"; };
-		8302F3121E8D8C7B008BA834 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderInfoViewController.swift; path = Controller/Actions/FolderInfoViewController.swift; sourceTree = "<group>"; };
-		8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeActionsViewController.swift; path = Controller/Actions/NodeActionsViewController.swift; sourceTree = "<group>"; };
-		8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareLinkViewController.swift; path = Controller/Actions/ShareLinkViewController.swift; sourceTree = "<group>"; };
-		8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareMountViewController.swift; path = Controller/Actions/ShareMountViewController.swift; sourceTree = "<group>"; };
-		8302F3161E8D8C7B008BA834 /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RenameViewController.swift; path = Controller/Actions/RenameViewController.swift; sourceTree = "<group>"; };
-		8302F3211E8D8C9D008BA834 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchResultController.swift; path = Controller/Search/SearchResultController.swift; sourceTree = "<group>"; };
-		8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Controller/Settings/SettingsViewController.swift; sourceTree = "<group>"; };
-		8302F32A1E8D8D5D008BA834 /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavBar.swift; path = Controller/Views/CustomNavBar.swift; sourceTree = "<group>"; };
-		8302F32B1E8D8D5D008BA834 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RenameUtilitiesButton.swift; path = Controller/Views/RenameUtilitiesButton.swift; sourceTree = "<group>"; };
-		8302F32C1E8D8D5D008BA834 /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UILabelWithPadding.swift; path = Controller/Views/UILabelWithPadding.swift; sourceTree = "<group>"; };
-		8302F32D1E8D8D5D008BA834 /* URLHashTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLHashTextField.swift; path = Controller/Views/URLHashTextField.swift; sourceTree = "<group>"; };
-		8302F32E1E8D8D5D008BA834 /* BookmarkViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarkViewCell.swift; path = Controller/Views/BookmarkViewCell.swift; sourceTree = "<group>"; };
-		8302F32F1E8D8D5D008BA834 /* AccountCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountCollectionCell.swift; path = Controller/Views/AccountCollectionCell.swift; sourceTree = "<group>"; };
-		8302F3301E8D8D5D008BA834 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountTableViewCell.swift; path = Controller/Views/AccountTableViewCell.swift; sourceTree = "<group>"; };
-		8302F3311E8D8D5D008BA834 /* BaseListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseListCell.swift; path = Controller/Views/BaseListCell.swift; sourceTree = "<group>"; };
-		8302F3321E8D8D5D008BA834 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileCell.swift; path = Controller/Views/FileCell.swift; sourceTree = "<group>"; };
-		8302F3331E8D8D5D008BA834 /* LocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationCell.swift; path = Controller/Views/LocationCell.swift; sourceTree = "<group>"; };
-		8302F3341E8D8D5D008BA834 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginButton.swift; path = Controller/Views/LoginButton.swift; sourceTree = "<group>"; };
-		8302F3351E8D8D5D008BA834 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginField.swift; path = Controller/Views/LoginField.swift; sourceTree = "<group>"; };
-		8302F3361E8D8D5D008BA834 /* MountUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MountUserCell.swift; path = Controller/Views/MountUserCell.swift; sourceTree = "<group>"; };
-		8302F3371E8D8D5D008BA834 /* FolderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderCell.swift; path = Controller/Views/FolderCell.swift; sourceTree = "<group>"; };
-		8302F3381E8D8D5D008BA834 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchCell.swift; path = Controller/Views/SearchCell.swift; sourceTree = "<group>"; };
-		8302F3481E8D8DBF008BA834 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = Controller/Accounts/LoginViewController.swift; sourceTree = "<group>"; };
-		830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Digi Cloud-Bridging-Header.h"; sourceTree = "<group>"; };
-		8350CDB41E6031030063227E /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
-		835405FC1D94FCC300019D53 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
-		835982771E680EDC00AA18C9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0196F525ED0451A6990CD69A /* Pods-Digi Cloud.debug viewcontrollers.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.debug viewcontrollers.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.debug viewcontrollers.xcconfig"; sourceTree = "<group>"; };
+		0CE508509239C3D68A9C710B /* Pods-Digi Cloud UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.release.xcconfig"; sourceTree = "<group>"; };
+		18EAE1D6E7A4E9E0A6D7608D /* Pods_Digi_Cloud_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Digi_Cloud_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C4AD24EEFB2CBD73727BDF9 /* Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig"; sourceTree = "<group>"; };
+		4482CB5EC88128FB7C25E95B /* Pods-Digi Cloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.release.xcconfig"; sourceTree = "<group>"; };
+		835982771E680EDC00AA18C9 /* DigiCloud.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DigiCloud.plist; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		837041151D8B1DED000EDBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		8370411C1D8B1DEE000EDBAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8370411F1D8B1DEE000EDBAE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		838C2E581E8E2E73000DC325 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppSettings.swift; path = Managers/AppSettings.swift; sourceTree = "<group>"; };
-		838C2E591E8E2E73000DC325 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cache.swift; path = Managers/Cache.swift; sourceTree = "<group>"; };
-		838C2E5A1E8E2E73000DC325 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DigiClient.swift; path = Managers/DigiClient.swift; sourceTree = "<group>"; };
-		838C2E5B1E8E2E73000DC325 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DigiConstants.swift; path = Managers/DigiConstants.swift; sourceTree = "<group>"; };
-		83B6D3881E13C045005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		83B6D3941E13C781005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		83B6D3991E13DCF4005258B3 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
-		83CD0C651DE34C730078E5FC /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		83F1FFD21E6979040079F56F /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		837D54DD1FD0702A00C018A2 /* DigiCloudUITests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DigiCloudUITests.plist; sourceTree = "<group>"; };
+		837D54E31FD0717700C018A2 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		837D54E51FD0717700C018A2 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		837D54E61FD0717700C018A2 /* DigiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiClient.swift; sourceTree = "<group>"; };
+		837D54E71FD0717700C018A2 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		837D54E81FD0717700C018A2 /* DigiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiConstants.swift; sourceTree = "<group>"; };
+		837D54EA1FD0717700C018A2 /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		837D54EC1FD0717700C018A2 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		837D54EE1FD0717700C018A2 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		837D54EF1FD0717700C018A2 /* Permissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
+		837D54F01FD0717700C018A2 /* Mount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mount.swift; sourceTree = "<group>"; };
+		837D54F11FD0717700C018A2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		837D54F21FD0717700C018A2 /* RootMount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootMount.swift; sourceTree = "<group>"; };
+		837D54F31FD0717700C018A2 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		837D54F41FD0717700C018A2 /* NodeHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeHit.swift; sourceTree = "<group>"; };
+		837D54F51FD0717700C018A2 /* DownloadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadLink.swift; sourceTree = "<group>"; };
+		837D54F61FD0717700C018A2 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		837D54F71FD0717700C018A2 /* UploadLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadLink.swift; sourceTree = "<group>"; };
+		837D54F81FD0717700C018A2 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		837D54F91FD0717700C018A2 /* FolderInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfo.swift; sourceTree = "<group>"; };
+		837D54FC1FD0717700C018A2 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		837D55001FD0717700C018A2 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
+		837D55021FD0717700C018A2 /* SearchResultController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultController.swift; sourceTree = "<group>"; };
+		837D55041FD0717700C018A2 /* ManageBookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageBookmarksViewController.swift; sourceTree = "<group>"; };
+		837D55061FD0717700C018A2 /* AccountSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSelectionViewController.swift; sourceTree = "<group>"; };
+		837D55071FD0717700C018A2 /* ManageAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageAccountsViewController.swift; sourceTree = "<group>"; };
+		837D55081FD0717700C018A2 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		837D550A1FD0717700C018A2 /* ShareMountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareMountViewController.swift; sourceTree = "<group>"; };
+		837D550B1FD0717700C018A2 /* RenameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
+		837D550C1FD0717700C018A2 /* FolderInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderInfoViewController.swift; sourceTree = "<group>"; };
+		837D550D1FD0717700C018A2 /* NodeActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeActionsViewController.swift; sourceTree = "<group>"; };
+		837D550E1FD0717700C018A2 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
+		837D550F1FD0717700C018A2 /* AddMountUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMountUserViewController.swift; sourceTree = "<group>"; };
+		837D55101FD0717700C018A2 /* ShareLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareLinkViewController.swift; sourceTree = "<group>"; };
+		837D55111FD0717700C018A2 /* MoreActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreActionsViewController.swift; sourceTree = "<group>"; };
+		837D55121FD0717700C018A2 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateFolderViewController.swift; sourceTree = "<group>"; };
+		837D55131FD0717700C018A2 /* SortFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortFolderViewController.swift; sourceTree = "<group>"; };
+		837D55151FD0717700C018A2 /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsViewController.swift; sourceTree = "<group>"; };
+		837D55161FD0717700C018A2 /* ListingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingViewController.swift; sourceTree = "<group>"; };
+		837D55171FD0717700C018A2 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
+		837D55191FD0717700C018A2 /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		837D551A1FD0717700C018A2 /* CustomNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
+		837D551B1FD0717700C018A2 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		837D551C1FD0717700C018A2 /* UILabelWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithPadding.swift; sourceTree = "<group>"; };
+		837D551D1FD0717700C018A2 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
+		837D551E1FD0717700C018A2 /* LoginField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
+		837D551F1FD0717700C018A2 /* FolderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderCell.swift; sourceTree = "<group>"; };
+		837D55201FD0717700C018A2 /* LocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		837D55211FD0717700C018A2 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
+		837D55221FD0717700C018A2 /* BaseListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseListCell.swift; sourceTree = "<group>"; };
+		837D55231FD0717700C018A2 /* BookmarkViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkViewCell.swift; sourceTree = "<group>"; };
+		837D55241FD0717700C018A2 /* MountUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MountUserCell.swift; sourceTree = "<group>"; };
+		837D55251FD0717700C018A2 /* RenameUtilitiesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameUtilitiesButton.swift; sourceTree = "<group>"; };
+		837D55261FD0717700C018A2 /* URLHashTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLHashTextField.swift; sourceTree = "<group>"; };
+		837D55271FD0717700C018A2 /* AccountCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCollectionCell.swift; sourceTree = "<group>"; };
+		837D55281FD0717700C018A2 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		837D552A1FD0717700C018A2 /* UserDefaults+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D552B1FD0717700C018A2 /* String+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D552C1FD0717700C018A2 /* Collection+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Collection+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D552D1FD0717700C018A2 /* Date+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D552E1FD0717700C018A2 /* UIFont+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D552F1FD0717700C018A2 /* UIColor+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D55301FD0717700C018A2 /* UIViewController+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D55311FD0717700C018A2 /* FileManager+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D55321FD0717700C018A2 /* UIView+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D55331FD0717700C018A2 /* Bundle+DigiCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+DigiCloud.swift"; sourceTree = "<group>"; };
+		837D55351FD0717700C018A2 /* Digi Cloud-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Digi Cloud-Bridging-Header.h"; sourceTree = "<group>"; };
+		837D55371FD0717700C018A2 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		837D557C1FD0718700C018A2 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
+		837D557D1FD0718700C018A2 /* DigiCloudUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigiCloudUITests.swift; sourceTree = "<group>"; };
+		837D55861FD0768400C018A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		837D55891FD0768400C018A2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		837D558B1FD0768400C018A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		837D558C1FD0768400C018A2 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		837D558D1FD0768400C018A2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		837D558E1FD0768400C018A2 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		837D55901FD0768400C018A2 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		837D55921FD0768400C018A2 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		837D55941FD0768400C018A2 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		83F52F361F7CF5BF00E18A09 /* Digi Cloud UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Digi Cloud UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		83F52F381F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Digi_Cloud_UITests.swift; sourceTree = "<group>"; };
-		83F52F3A1F7CF5BF00E18A09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		83F52F441F7CF79300E18A09 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
+		94FCF6A671256A45CA0D00E4 /* Pods-Digi Cloud UITests.debug compile time.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.debug compile time.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.debug compile time.xcconfig"; sourceTree = "<group>"; };
+		AC5DC6EA5177031CE35BC3D8 /* Pods-Digi Cloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.debug.xcconfig"; sourceTree = "<group>"; };
+		B27C67A95E07D2466A888367 /* Pods_Digi_Cloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Digi_Cloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B339F5052F54F024A3F8C8E7 /* Pods-Digi Cloud UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B61E9D01BF3B8EF343FAEEA4 /* Pods-Digi Cloud.debug compile time.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.debug compile time.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.debug compile time.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06519F2ED2100EC34DD3541D /* Pods_Digi_Cloud.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,130 +203,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BBA29E184903433B3AC0218 /* Pods_Digi_Cloud_UITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8302F3291E8D8D4F008BA834 /* Views */ = {
+		54F9DD8A17015D44F32C2A84 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8302F32A1E8D8D5D008BA834 /* CustomNavBar.swift */,
-				8302F32B1E8D8D5D008BA834 /* RenameUtilitiesButton.swift */,
-				8302F32C1E8D8D5D008BA834 /* UILabelWithPadding.swift */,
-				8302F32D1E8D8D5D008BA834 /* URLHashTextField.swift */,
-				8302F32E1E8D8D5D008BA834 /* BookmarkViewCell.swift */,
-				8302F32F1E8D8D5D008BA834 /* AccountCollectionCell.swift */,
-				8302F3301E8D8D5D008BA834 /* AccountTableViewCell.swift */,
-				8302F3311E8D8D5D008BA834 /* BaseListCell.swift */,
-				8302F3321E8D8D5D008BA834 /* FileCell.swift */,
-				8302F3331E8D8D5D008BA834 /* LocationCell.swift */,
-				8302F3341E8D8D5D008BA834 /* LoginButton.swift */,
-				8302F3351E8D8D5D008BA834 /* LoginField.swift */,
-				8302F3361E8D8D5D008BA834 /* MountUserCell.swift */,
-				8302F3371E8D8D5D008BA834 /* FolderCell.swift */,
-				8302F3381E8D8D5D008BA834 /* SearchCell.swift */,
+				B27C67A95E07D2466A888367 /* Pods_Digi_Cloud.framework */,
+				18EAE1D6E7A4E9E0A6D7608D /* Pods_Digi_Cloud_UITests.framework */,
 			);
-			name = Views;
-			sourceTree = "<group>";
-		};
-		8306C8841E701D9600F8041C /* Actions */ = {
-			isa = PBXGroup;
-			children = (
-				8302F30D1E8D8C7B008BA834 /* SortFolderViewController.swift */,
-				8302F30E1E8D8C7B008BA834 /* CreateFolderViewController.swift */,
-				8302F30F1E8D8C7B008BA834 /* DeleteViewController.swift */,
-				8302F3101E8D8C7B008BA834 /* AddMountUserViewController.swift */,
-				8302F3111E8D8C7B008BA834 /* MoreActionsViewController.swift */,
-				8302F3121E8D8C7B008BA834 /* FolderInfoViewController.swift */,
-				8302F3131E8D8C7B008BA834 /* NodeActionsViewController.swift */,
-				8302F3141E8D8C7B008BA834 /* ShareLinkViewController.swift */,
-				8302F3151E8D8C7B008BA834 /* ShareMountViewController.swift */,
-				8302F3161E8D8C7B008BA834 /* RenameViewController.swift */,
-			);
-			name = Actions;
-			sourceTree = "<group>";
-		};
-		8350CDAF1E602E7B0063227E /* Custom Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				8350CDB41E6031030063227E /* fontawesome-webfont.ttf */,
-			);
-			name = "Custom Fonts";
-			sourceTree = "<group>";
-		};
-		835405FB1D94FCA900019D53 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				835405FC1D94FCC300019D53 /* Protocols.swift */,
-			);
-			name = Protocols;
-			sourceTree = "<group>";
-		};
-		835405FE1D95175E00019D53 /* Application Delegate */ = {
-			isa = PBXGroup;
-			children = (
-				837041151D8B1DED000EDBAE /* AppDelegate.swift */,
-			);
-			name = "Application Delegate";
-			sourceTree = "<group>";
-		};
-		835406001D9517AB00019D53 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				835982771E680EDC00AA18C9 /* Info.plist */,
-				830CCDCC1E2FA9AE006E0846 /* Digi Cloud-Bridging-Header.h */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		835406011D9517BE00019D53 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				8350CDAF1E602E7B0063227E /* Custom Fonts */,
-				8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */,
-				83B6D3951E13C781005258B3 /* InfoPlist.strings */,
-				83B6D39A1E13DCF4005258B3 /* Localizable.strings */,
-				8370411C1D8B1DEE000EDBAE /* Assets.xcassets */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		835406021D95180F00019D53 /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				838C2E581E8E2E73000DC325 /* AppSettings.swift */,
-				838C2E591E8E2E73000DC325 /* Cache.swift */,
-				838C2E5A1E8E2E73000DC325 /* DigiClient.swift */,
-				838C2E5B1E8E2E73000DC325 /* DigiConstants.swift */,
-			);
-			name = Managers;
-			sourceTree = "<group>";
-		};
-		835406031D952FD900019D53 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				8302F2EB1E8D738D008BA834 /* String+DigiCloud.swift */,
-				8302F2EC1E8D738D008BA834 /* Bundle+DigiCloud.swift */,
-				8302F2ED1E8D738D008BA834 /* UIViewController+DigiCloud.swift */,
-				8302F2EE1E8D738D008BA834 /* Collection+DigiCloud.swift */,
-				8302F2EF1E8D738D008BA834 /* UIView+DigiCloud.swift */,
-				8302F2F01E8D738D008BA834 /* UIFont+DigiCloud.swift */,
-				8302F2F11E8D738D008BA834 /* FileManager+DigiCloud.swift */,
-				8302F2F21E8D738D008BA834 /* UIColor+DigiCloud.swift */,
-				8302F2F31E8D738D008BA834 /* UserDefaults+DigiCloud.swift */,
-				8302F2F41E8D738D008BA834 /* Date+DigiCloud.swift */,
-			);
-			name = Extensions;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		837041091D8B1DED000EDBAE = {
 			isa = PBXGroup;
 			children = (
-				837041141D8B1DED000EDBAE /* Digi Cloud */,
-				83F52F371F7CF5BF00E18A09 /* Digi Cloud UITests */,
+				83FA70971FD06B0F004D654E /* Config */,
+				837D54E11FD0717700C018A2 /* Digi Cloud */,
+				837D557B1FD0718700C018A2 /* Digi Cloud UITests */,
+				837D55851FD0768400C018A2 /* Resources */,
 				837041131D8B1DED000EDBAE /* Products */,
+				EE2BA4C88BDEBF31796F1D84 /* Pods */,
+				54F9DD8A17015D44F32C2A84 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -324,143 +241,276 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		837041141D8B1DED000EDBAE /* Digi Cloud */ = {
+		837D54E11FD0717700C018A2 /* Digi Cloud */ = {
 			isa = PBXGroup;
 			children = (
-				835405FE1D95175E00019D53 /* Application Delegate */,
-				839BAE201D8BE00E00A43452 /* Controllers */,
-				83F1FFD11E6978D50079F56F /* Enums */,
-				835406031D952FD900019D53 /* Extensions */,
-				835406021D95180F00019D53 /* Managers */,
-				83EF1D461D8FBDC400ACE008 /* Models */,
-				835405FB1D94FCA900019D53 /* Protocols */,
-				83F824771EDF894E001A5A09 /* Utils */,
-				835406011D9517BE00019D53 /* Resources */,
-				835406001D9517AB00019D53 /* Supporting Files */,
+				837D54E21FD0717700C018A2 /* App Delegate */,
+				837D54E41FD0717700C018A2 /* Managers */,
+				837D54E91FD0717700C018A2 /* Enums */,
+				837D54EB1FD0717700C018A2 /* Utils */,
+				837D54ED1FD0717700C018A2 /* Models */,
+				837D54FA1FD0717700C018A2 /* Controller */,
+				837D55291FD0717700C018A2 /* Extensions */,
+				837D55341FD0717700C018A2 /* Supporting Files */,
+				837D55361FD0717700C018A2 /* Protocols */,
 			);
 			path = "Digi Cloud";
 			sourceTree = "<group>";
 		};
-		839BAE201D8BE00E00A43452 /* Controllers */ = {
+		837D54E21FD0717700C018A2 /* App Delegate */ = {
 			isa = PBXGroup;
 			children = (
-				8302F2E91E8D7372008BA834 /* FlowController.swift */,
-				8302F3001E8D8BB3008BA834 /* MainNavigationController.swift */,
-				83F994471DD093700023FB5D /* Accounts */,
-				8306C8841E701D9600F8041C /* Actions */,
-				83D03F1B1E6DAF8300BA617A /* Bookmarks */,
-				83F9944E1DD094E20023FB5D /* ContentView */,
-				83F994491DD093A00023FB5D /* Introduction */,
-				83F9944B1DD093C90023FB5D /* Listing */,
-				83A9BE191DFFDD9E003FD974 /* Search */,
-				83EC31451E29154F009E12B6 /* Settings */,
-				8302F3291E8D8D4F008BA834 /* Views */,
+				837D54E31FD0717700C018A2 /* AppDelegate.swift */,
 			);
-			name = Controllers;
+			path = "App Delegate";
 			sourceTree = "<group>";
 		};
-		83A9BE191DFFDD9E003FD974 /* Search */ = {
+		837D54E41FD0717700C018A2 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				8302F3211E8D8C9D008BA834 /* SearchResultController.swift */,
+				837D54E51FD0717700C018A2 /* AppSettings.swift */,
+				837D54E61FD0717700C018A2 /* DigiClient.swift */,
+				837D54E71FD0717700C018A2 /* Cache.swift */,
+				837D54E81FD0717700C018A2 /* DigiConstants.swift */,
 			);
-			name = Search;
+			path = Managers;
 			sourceTree = "<group>";
 		};
-		83D03F1B1E6DAF8300BA617A /* Bookmarks */ = {
+		837D54E91FD0717700C018A2 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
-				8302F3031E8D8BCF008BA834 /* ManageBookmarksViewController.swift */,
+				837D54EA1FD0717700C018A2 /* Enums.swift */,
 			);
-			name = Bookmarks;
+			path = Enums;
 			sourceTree = "<group>";
 		};
-		83EC31451E29154F009E12B6 /* Settings */ = {
+		837D54EB1FD0717700C018A2 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				8302F3251E8D8CC9008BA834 /* SettingsViewController.swift */,
+				837D54EC1FD0717700C018A2 /* Logging.swift */,
 			);
-			name = Settings;
+			path = Utils;
 			sourceTree = "<group>";
 		};
-		83EF1D461D8FBDC400ACE008 /* Models */ = {
+		837D54ED1FD0717700C018A2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8302F2CB1E8D7006008BA834 /* FolderInfo.swift */,
-				8302F2CC1E8D7006008BA834 /* DownloadLink.swift */,
-				8302F2CD1E8D7006008BA834 /* NodeHit.swift */,
-				8302F2CE1E8D7006008BA834 /* UploadLink.swift */,
-				8302F2CF1E8D7006008BA834 /* Permissions.swift */,
-				8302F2D01E8D7006008BA834 /* Location.swift */,
-				8302F2D11E8D7006008BA834 /* Bookmark.swift */,
-				8302F2D21E8D7006008BA834 /* Account.swift */,
-				8302F2D31E8D7006008BA834 /* Mount.swift */,
-				8302F2D41E8D7006008BA834 /* Node.swift */,
-				8302F2D51E8D7006008BA834 /* RootMount.swift */,
-				8302F2D61E8D7006008BA834 /* User.swift */,
+				837D54EE1FD0717700C018A2 /* Location.swift */,
+				837D54EF1FD0717700C018A2 /* Permissions.swift */,
+				837D54F01FD0717700C018A2 /* Mount.swift */,
+				837D54F11FD0717700C018A2 /* User.swift */,
+				837D54F21FD0717700C018A2 /* RootMount.swift */,
+				837D54F31FD0717700C018A2 /* Bookmark.swift */,
+				837D54F41FD0717700C018A2 /* NodeHit.swift */,
+				837D54F51FD0717700C018A2 /* DownloadLink.swift */,
+				837D54F61FD0717700C018A2 /* Account.swift */,
+				837D54F71FD0717700C018A2 /* UploadLink.swift */,
+				837D54F81FD0717700C018A2 /* Node.swift */,
+				837D54F91FD0717700C018A2 /* FolderInfo.swift */,
 			);
-			name = Models;
+			path = Models;
 			sourceTree = "<group>";
 		};
-		83F1FFD11E6978D50079F56F /* Enums */ = {
+		837D54FA1FD0717700C018A2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				83F1FFD21E6979040079F56F /* Enums.swift */,
+				837D54FB1FD0717700C018A2 /* Settings */,
+				837D54FF1FD0717700C018A2 /* ContentView */,
+				837D55011FD0717700C018A2 /* Search */,
+				837D55031FD0717700C018A2 /* Bookmarks */,
+				837D55051FD0717700C018A2 /* Accounts */,
+				837D55091FD0717700C018A2 /* Actions */,
+				837D55141FD0717700C018A2 /* Listing */,
+				837D55171FD0717700C018A2 /* FlowController.swift */,
+				837D55181FD0717700C018A2 /* Views */,
+				837D55281FD0717700C018A2 /* MainNavigationController.swift */,
 			);
-			name = Enums;
+			path = Controller;
 			sourceTree = "<group>";
 		};
-		83F52F371F7CF5BF00E18A09 /* Digi Cloud UITests */ = {
+		837D54FB1FD0717700C018A2 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				83F52F441F7CF79300E18A09 /* SnapshotHelper.swift */,
-				83F52F381F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift */,
-				83F52F3A1F7CF5BF00E18A09 /* Info.plist */,
+				837D54FC1FD0717700C018A2 /* SettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		837D54FF1FD0717700C018A2 /* ContentView */ = {
+			isa = PBXGroup;
+			children = (
+				837D55001FD0717700C018A2 /* ContentViewController.swift */,
+			);
+			path = ContentView;
+			sourceTree = "<group>";
+		};
+		837D55011FD0717700C018A2 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				837D55021FD0717700C018A2 /* SearchResultController.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		837D55031FD0717700C018A2 /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				837D55041FD0717700C018A2 /* ManageBookmarksViewController.swift */,
+			);
+			path = Bookmarks;
+			sourceTree = "<group>";
+		};
+		837D55051FD0717700C018A2 /* Accounts */ = {
+			isa = PBXGroup;
+			children = (
+				837D55061FD0717700C018A2 /* AccountSelectionViewController.swift */,
+				837D55071FD0717700C018A2 /* ManageAccountsViewController.swift */,
+				837D55081FD0717700C018A2 /* LoginViewController.swift */,
+			);
+			path = Accounts;
+			sourceTree = "<group>";
+		};
+		837D55091FD0717700C018A2 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				837D550A1FD0717700C018A2 /* ShareMountViewController.swift */,
+				837D550B1FD0717700C018A2 /* RenameViewController.swift */,
+				837D550C1FD0717700C018A2 /* FolderInfoViewController.swift */,
+				837D550D1FD0717700C018A2 /* NodeActionsViewController.swift */,
+				837D550E1FD0717700C018A2 /* DeleteViewController.swift */,
+				837D550F1FD0717700C018A2 /* AddMountUserViewController.swift */,
+				837D55101FD0717700C018A2 /* ShareLinkViewController.swift */,
+				837D55111FD0717700C018A2 /* MoreActionsViewController.swift */,
+				837D55121FD0717700C018A2 /* CreateFolderViewController.swift */,
+				837D55131FD0717700C018A2 /* SortFolderViewController.swift */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		837D55141FD0717700C018A2 /* Listing */ = {
+			isa = PBXGroup;
+			children = (
+				837D55151FD0717700C018A2 /* LocationsViewController.swift */,
+				837D55161FD0717700C018A2 /* ListingViewController.swift */,
+			);
+			path = Listing;
+			sourceTree = "<group>";
+		};
+		837D55181FD0717700C018A2 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				837D55191FD0717700C018A2 /* FileCell.swift */,
+				837D551A1FD0717700C018A2 /* CustomNavBar.swift */,
+				837D551B1FD0717700C018A2 /* SearchCell.swift */,
+				837D551C1FD0717700C018A2 /* UILabelWithPadding.swift */,
+				837D551D1FD0717700C018A2 /* AccountTableViewCell.swift */,
+				837D551E1FD0717700C018A2 /* LoginField.swift */,
+				837D551F1FD0717700C018A2 /* FolderCell.swift */,
+				837D55201FD0717700C018A2 /* LocationCell.swift */,
+				837D55211FD0717700C018A2 /* LoginButton.swift */,
+				837D55221FD0717700C018A2 /* BaseListCell.swift */,
+				837D55231FD0717700C018A2 /* BookmarkViewCell.swift */,
+				837D55241FD0717700C018A2 /* MountUserCell.swift */,
+				837D55251FD0717700C018A2 /* RenameUtilitiesButton.swift */,
+				837D55261FD0717700C018A2 /* URLHashTextField.swift */,
+				837D55271FD0717700C018A2 /* AccountCollectionCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		837D55291FD0717700C018A2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				837D552A1FD0717700C018A2 /* UserDefaults+DigiCloud.swift */,
+				837D552B1FD0717700C018A2 /* String+DigiCloud.swift */,
+				837D552C1FD0717700C018A2 /* Collection+DigiCloud.swift */,
+				837D552D1FD0717700C018A2 /* Date+DigiCloud.swift */,
+				837D552E1FD0717700C018A2 /* UIFont+DigiCloud.swift */,
+				837D552F1FD0717700C018A2 /* UIColor+DigiCloud.swift */,
+				837D55301FD0717700C018A2 /* UIViewController+DigiCloud.swift */,
+				837D55311FD0717700C018A2 /* FileManager+DigiCloud.swift */,
+				837D55321FD0717700C018A2 /* UIView+DigiCloud.swift */,
+				837D55331FD0717700C018A2 /* Bundle+DigiCloud.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		837D55341FD0717700C018A2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				837D55351FD0717700C018A2 /* Digi Cloud-Bridging-Header.h */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		837D55361FD0717700C018A2 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				837D55371FD0717700C018A2 /* Protocols.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		837D557B1FD0718700C018A2 /* Digi Cloud UITests */ = {
+			isa = PBXGroup;
+			children = (
+				837D557C1FD0718700C018A2 /* SnapshotHelper.swift */,
+				837D557D1FD0718700C018A2 /* DigiCloudUITests.swift */,
 			);
 			path = "Digi Cloud UITests";
 			sourceTree = "<group>";
 		};
-		83F824771EDF894E001A5A09 /* Utils */ = {
+		837D55851FD0768400C018A2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				83CD0C651DE34C730078E5FC /* Logging.swift */,
+				837D55861FD0768400C018A2 /* Assets.xcassets */,
+				837D55871FD0768400C018A2 /* Languages */,
+				837D55931FD0768400C018A2 /* Fonts */,
 			);
-			name = Utils;
+			path = Resources;
 			sourceTree = "<group>";
 		};
-		83F994471DD093700023FB5D /* Accounts */ = {
+		837D55871FD0768400C018A2 /* Languages */ = {
 			isa = PBXGroup;
 			children = (
-				8302F3481E8D8DBF008BA834 /* LoginViewController.swift */,
-				8302F2E41E8D735A008BA834 /* ManageAccountsViewController.swift */,
-				8302F2E51E8D735A008BA834 /* AccountSelectionViewController.swift */,
+				837D55881FD0768400C018A2 /* LaunchScreen.strings */,
+				837D558A1FD0768400C018A2 /* LaunchScreen.storyboard */,
+				837D558F1FD0768400C018A2 /* Localizable.strings */,
+				837D55911FD0768400C018A2 /* InfoPlist.strings */,
 			);
-			name = Accounts;
+			path = Languages;
 			sourceTree = "<group>";
 		};
-		83F994491DD093A00023FB5D /* Introduction */ = {
+		837D55931FD0768400C018A2 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				8302F3071E8D8C10008BA834 /* IntroductionViewController.swift */,
+				837D55941FD0768400C018A2 /* fontawesome-webfont.ttf */,
 			);
-			name = Introduction;
+			path = Fonts;
 			sourceTree = "<group>";
 		};
-		83F9944B1DD093C90023FB5D /* Listing */ = {
+		83FA70971FD06B0F004D654E /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				8302F3091E8D8C23008BA834 /* LocationsViewController.swift */,
-				8302F30A1E8D8C23008BA834 /* ListingViewController.swift */,
+				835982771E680EDC00AA18C9 /* DigiCloud.plist */,
+				837D54DD1FD0702A00C018A2 /* DigiCloudUITests.plist */,
 			);
-			name = Listing;
+			path = Config;
 			sourceTree = "<group>";
 		};
-		83F9944E1DD094E20023FB5D /* ContentView */ = {
+		EE2BA4C88BDEBF31796F1D84 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8302F3051E8D8BDF008BA834 /* ContentViewController.swift */,
+				AC5DC6EA5177031CE35BC3D8 /* Pods-Digi Cloud.debug.xcconfig */,
+				0196F525ED0451A6990CD69A /* Pods-Digi Cloud.debug viewcontrollers.xcconfig */,
+				B61E9D01BF3B8EF343FAEEA4 /* Pods-Digi Cloud.debug compile time.xcconfig */,
+				4482CB5EC88128FB7C25E95B /* Pods-Digi Cloud.release.xcconfig */,
+				B339F5052F54F024A3F8C8E7 /* Pods-Digi Cloud UITests.debug.xcconfig */,
+				3C4AD24EEFB2CBD73727BDF9 /* Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig */,
+				94FCF6A671256A45CA0D00E4 /* Pods-Digi Cloud UITests.debug compile time.xcconfig */,
+				0CE508509239C3D68A9C710B /* Pods-Digi Cloud UITests.release.xcconfig */,
 			);
-			name = ContentView;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -470,9 +520,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 837041241D8B1DEE000EDBAE /* Build configuration list for PBXNativeTarget "Digi Cloud" */;
 			buildPhases = (
+				B8759DA6FD004ACF0F4A0AC1 /* [CP] Check Pods Manifest.lock */,
 				8370410E1D8B1DED000EDBAE /* Sources */,
 				8370410F1D8B1DED000EDBAE /* Frameworks */,
 				837041101D8B1DED000EDBAE /* Resources */,
+				97B72DAC76AE3828F49A6018 /* [CP] Embed Pods Frameworks */,
+				02ED0B6F82909A62849447BB /* [CP] Copy Pods Resources */,
+				833CFA851FD0621300E510B7 /* Fabric */,
+				837224B01FDD9AD900662C62 /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -487,9 +542,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83F52F411F7CF5BF00E18A09 /* Build configuration list for PBXNativeTarget "Digi Cloud UITests" */;
 			buildPhases = (
+				4A0FF040B2B831273905C95D /* [CP] Check Pods Manifest.lock */,
 				83F52F321F7CF5BF00E18A09 /* Sources */,
 				83F52F331F7CF5BF00E18A09 /* Frameworks */,
 				83F52F341F7CF5BF00E18A09 /* Resources */,
+				0B0FF79C0839C8539BB981FE /* [CP] Embed Pods Frameworks */,
+				496DFAFB3EEE16AB7E5C29CF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -533,6 +591,10 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				hu,
+				fr,
+				ro,
 			);
 			mainGroup = 837041091D8B1DED000EDBAE;
 			productRefGroup = 837041131D8B1DED000EDBAE /* Products */;
@@ -550,11 +612,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				837041201D8B1DEE000EDBAE /* LaunchScreen.storyboard in Resources */,
-				83B6D3981E13DCF4005258B3 /* Localizable.strings in Resources */,
-				8350CDB51E6031030063227E /* fontawesome-webfont.ttf in Resources */,
-				83B6D3931E13C781005258B3 /* InfoPlist.strings in Resources */,
-				8370411D1D8B1DEE000EDBAE /* Assets.xcassets in Resources */,
+				837D559A1FD076AE00C018A2 /* fontawesome-webfont.ttf in Resources */,
+				837D55961FD076A700C018A2 /* LaunchScreen.strings in Resources */,
+				837D55971FD076A700C018A2 /* LaunchScreen.storyboard in Resources */,
+				837D55981FD076A700C018A2 /* Localizable.strings in Resources */,
+				837D55991FD076A700C018A2 /* InfoPlist.strings in Resources */,
+				837D55951FD0769A00C018A2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,78 +630,204 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		02ED0B6F82909A62849447BB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0B0FF79C0839C8539BB981FE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		496DFAFB3EEE16AB7E5C29CF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4A0FF040B2B831273905C95D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Digi Cloud UITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		833CFA851FD0621300E510B7 /* Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Fabric;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 9ae299de9dd99a73023204eb20b235d7a9cd07c5 5d561537f7aa93ac1a7b70e80e9c8cdfe3035e211617a5e899d8ac3a09a7c05f";
+		};
+		837224B01FDD9AD900662C62 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"";
+		};
+		97B72DAC76AE3828F49A6018 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B8759DA6FD004ACF0F4A0AC1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Digi Cloud-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8370410E1D8B1DED000EDBAE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8302F2E71E8D735A008BA834 /* ManageAccountsViewController.swift in Sources */,
-				8302F2D71E8D7006008BA834 /* FolderInfo.swift in Sources */,
-				8302F2F91E8D738D008BA834 /* UIView+DigiCloud.swift in Sources */,
-				8302F3491E8D8DBF008BA834 /* LoginViewController.swift in Sources */,
-				8302F30C1E8D8C23008BA834 /* ListingViewController.swift in Sources */,
-				8302F2D91E8D7006008BA834 /* NodeHit.swift in Sources */,
-				8302F2FC1E8D738D008BA834 /* UIColor+DigiCloud.swift in Sources */,
-				8302F3081E8D8C10008BA834 /* IntroductionViewController.swift in Sources */,
-				8302F2F61E8D738D008BA834 /* Bundle+DigiCloud.swift in Sources */,
-				8302F2DC1E8D7006008BA834 /* Location.swift in Sources */,
-				8302F3411E8D8D5D008BA834 /* FileCell.swift in Sources */,
-				8302F2FD1E8D738D008BA834 /* UserDefaults+DigiCloud.swift in Sources */,
-				8302F2DB1E8D7006008BA834 /* Permissions.swift in Sources */,
-				8302F3061E8D8BDF008BA834 /* ContentViewController.swift in Sources */,
-				8302F30B1E8D8C23008BA834 /* LocationsViewController.swift in Sources */,
-				838C2E5E1E8E2E73000DC325 /* DigiClient.swift in Sources */,
-				8302F3171E8D8C7B008BA834 /* SortFolderViewController.swift in Sources */,
-				835405FD1D94FCC300019D53 /* Protocols.swift in Sources */,
-				83F1FFD31E6979040079F56F /* Enums.swift in Sources */,
-				8302F2DF1E8D7006008BA834 /* Mount.swift in Sources */,
-				8302F33D1E8D8D5D008BA834 /* BookmarkViewCell.swift in Sources */,
-				8302F3451E8D8D5E008BA834 /* MountUserCell.swift in Sources */,
-				8302F2E01E8D7006008BA834 /* Node.swift in Sources */,
-				8302F3201E8D8C7B008BA834 /* RenameViewController.swift in Sources */,
-				8302F3041E8D8BCF008BA834 /* ManageBookmarksViewController.swift in Sources */,
-				8302F3181E8D8C7B008BA834 /* CreateFolderViewController.swift in Sources */,
-				8302F2DD1E8D7006008BA834 /* Bookmark.swift in Sources */,
-				8302F31C1E8D8C7B008BA834 /* FolderInfoViewController.swift in Sources */,
-				8302F2F71E8D738D008BA834 /* UIViewController+DigiCloud.swift in Sources */,
-				8302F3281E8D8CC9008BA834 /* SettingsViewController.swift in Sources */,
-				8302F2FB1E8D738D008BA834 /* FileManager+DigiCloud.swift in Sources */,
-				8302F2DE1E8D7006008BA834 /* Account.swift in Sources */,
-				8302F2FE1E8D738D008BA834 /* Date+DigiCloud.swift in Sources */,
-				838C2E5F1E8E2E73000DC325 /* DigiConstants.swift in Sources */,
-				8302F3391E8D8D5D008BA834 /* CustomNavBar.swift in Sources */,
-				8302F3431E8D8D5E008BA834 /* LoginButton.swift in Sources */,
-				8302F33C1E8D8D5D008BA834 /* URLHashTextField.swift in Sources */,
-				8302F33F1E8D8D5D008BA834 /* AccountTableViewCell.swift in Sources */,
-				8302F2E81E8D735A008BA834 /* AccountSelectionViewController.swift in Sources */,
-				8302F3401E8D8D5D008BA834 /* BaseListCell.swift in Sources */,
-				837041161D8B1DED000EDBAE /* AppDelegate.swift in Sources */,
-				8302F2EA1E8D7372008BA834 /* FlowController.swift in Sources */,
-				8302F2E11E8D7006008BA834 /* RootMount.swift in Sources */,
-				83CD0C661DE34C730078E5FC /* Logging.swift in Sources */,
-				8302F31B1E8D8C7B008BA834 /* MoreActionsViewController.swift in Sources */,
-				8302F2DA1E8D7006008BA834 /* UploadLink.swift in Sources */,
-				8302F2FA1E8D738D008BA834 /* UIFont+DigiCloud.swift in Sources */,
-				8302F3021E8D8BB3008BA834 /* MainNavigationController.swift in Sources */,
-				8302F33E1E8D8D5D008BA834 /* AccountCollectionCell.swift in Sources */,
-				8302F3471E8D8D5E008BA834 /* SearchCell.swift in Sources */,
-				8302F2F81E8D738D008BA834 /* Collection+DigiCloud.swift in Sources */,
-				8302F3221E8D8C9D008BA834 /* SearchResultController.swift in Sources */,
-				8302F33B1E8D8D5D008BA834 /* UILabelWithPadding.swift in Sources */,
-				8302F3191E8D8C7B008BA834 /* DeleteViewController.swift in Sources */,
-				8302F33A1E8D8D5D008BA834 /* RenameUtilitiesButton.swift in Sources */,
-				838C2E5D1E8E2E73000DC325 /* Cache.swift in Sources */,
-				8302F31D1E8D8C7B008BA834 /* NodeActionsViewController.swift in Sources */,
-				8302F31E1E8D8C7B008BA834 /* ShareLinkViewController.swift in Sources */,
-				8302F31F1E8D8C7B008BA834 /* ShareMountViewController.swift in Sources */,
-				8302F31A1E8D8C7B008BA834 /* AddMountUserViewController.swift in Sources */,
-				8302F2F51E8D738D008BA834 /* String+DigiCloud.swift in Sources */,
-				8302F3441E8D8D5E008BA834 /* LoginField.swift in Sources */,
-				8302F3421E8D8D5D008BA834 /* LocationCell.swift in Sources */,
-				838C2E5C1E8E2E73000DC325 /* AppSettings.swift in Sources */,
-				8302F3461E8D8D5E008BA834 /* FolderCell.swift in Sources */,
-				8302F2D81E8D7006008BA834 /* DownloadLink.swift in Sources */,
-				8302F2E21E8D7006008BA834 /* User.swift in Sources */,
+				837D55581FD0717700C018A2 /* AddMountUserViewController.swift in Sources */,
+				837D55521FD0717700C018A2 /* LoginViewController.swift in Sources */,
+				837D55481FD0717700C018A2 /* UploadLink.swift in Sources */,
+				837D555F1FD0717700C018A2 /* FlowController.swift in Sources */,
+				837D55511FD0717700C018A2 /* ManageAccountsViewController.swift in Sources */,
+				837D555B1FD0717700C018A2 /* CreateFolderViewController.swift in Sources */,
+				837D55671FD0717700C018A2 /* LocationCell.swift in Sources */,
+				837D55611FD0717700C018A2 /* CustomNavBar.swift in Sources */,
+				837D55751FD0717700C018A2 /* UIColor+DigiCloud.swift in Sources */,
+				837D55541FD0717700C018A2 /* RenameViewController.swift in Sources */,
+				837D555E1FD0717700C018A2 /* ListingViewController.swift in Sources */,
+				837D55601FD0717700C018A2 /* FileCell.swift in Sources */,
+				837D55391FD0717700C018A2 /* AppSettings.swift in Sources */,
+				837D55411FD0717700C018A2 /* Mount.swift in Sources */,
+				837D554B1FD0717700C018A2 /* SettingsViewController.swift in Sources */,
+				837D55571FD0717700C018A2 /* DeleteViewController.swift in Sources */,
+				837D55771FD0717700C018A2 /* FileManager+DigiCloud.swift in Sources */,
+				837D55491FD0717700C018A2 /* Node.swift in Sources */,
+				837D55561FD0717700C018A2 /* NodeActionsViewController.swift in Sources */,
+				837D555C1FD0717700C018A2 /* SortFolderViewController.swift in Sources */,
+				837D55781FD0717700C018A2 /* UIView+DigiCloud.swift in Sources */,
+				837D556F1FD0717700C018A2 /* MainNavigationController.swift in Sources */,
+				837D553A1FD0717700C018A2 /* DigiClient.swift in Sources */,
+				837D55461FD0717700C018A2 /* DownloadLink.swift in Sources */,
+				837D556B1FD0717700C018A2 /* MountUserCell.swift in Sources */,
+				837D554F1FD0717700C018A2 /* ManageBookmarksViewController.swift in Sources */,
+				837D55651FD0717700C018A2 /* LoginField.swift in Sources */,
+				837D55451FD0717700C018A2 /* NodeHit.swift in Sources */,
+				837D554D1FD0717700C018A2 /* ContentViewController.swift in Sources */,
+				837D554A1FD0717700C018A2 /* FolderInfo.swift in Sources */,
+				837D55471FD0717700C018A2 /* Account.swift in Sources */,
+				837D55761FD0717700C018A2 /* UIViewController+DigiCloud.swift in Sources */,
+				837D553F1FD0717700C018A2 /* Location.swift in Sources */,
+				837D554E1FD0717700C018A2 /* SearchResultController.swift in Sources */,
+				837D555A1FD0717700C018A2 /* MoreActionsViewController.swift in Sources */,
+				837D553B1FD0717700C018A2 /* Cache.swift in Sources */,
+				837D55691FD0717700C018A2 /* BaseListCell.swift in Sources */,
+				837D55631FD0717700C018A2 /* UILabelWithPadding.swift in Sources */,
+				837D55551FD0717700C018A2 /* FolderInfoViewController.swift in Sources */,
+				837D55661FD0717700C018A2 /* FolderCell.swift in Sources */,
+				837D55591FD0717700C018A2 /* ShareLinkViewController.swift in Sources */,
+				837D55401FD0717700C018A2 /* Permissions.swift in Sources */,
+				837D556D1FD0717700C018A2 /* URLHashTextField.swift in Sources */,
+				837D55731FD0717700C018A2 /* Date+DigiCloud.swift in Sources */,
+				837D55641FD0717700C018A2 /* AccountTableViewCell.swift in Sources */,
+				837D55791FD0717700C018A2 /* Bundle+DigiCloud.swift in Sources */,
+				837D55681FD0717700C018A2 /* LoginButton.swift in Sources */,
+				837D556E1FD0717700C018A2 /* AccountCollectionCell.swift in Sources */,
+				837D55621FD0717700C018A2 /* SearchCell.swift in Sources */,
+				837D556C1FD0717700C018A2 /* RenameUtilitiesButton.swift in Sources */,
+				837D553E1FD0717700C018A2 /* Logging.swift in Sources */,
+				837D55741FD0717700C018A2 /* UIFont+DigiCloud.swift in Sources */,
+				837D557A1FD0717700C018A2 /* Protocols.swift in Sources */,
+				837D55381FD0717700C018A2 /* AppDelegate.swift in Sources */,
+				837D55701FD0717700C018A2 /* UserDefaults+DigiCloud.swift in Sources */,
+				837D55501FD0717700C018A2 /* AccountSelectionViewController.swift in Sources */,
+				837D556A1FD0717700C018A2 /* BookmarkViewCell.swift in Sources */,
+				837D555D1FD0717700C018A2 /* LocationsViewController.swift in Sources */,
+				837D55531FD0717700C018A2 /* ShareMountViewController.swift in Sources */,
+				837D553D1FD0717700C018A2 /* Enums.swift in Sources */,
+				837D55441FD0717700C018A2 /* Bookmark.swift in Sources */,
+				837D55721FD0717700C018A2 /* Collection+DigiCloud.swift in Sources */,
+				837D55431FD0717700C018A2 /* RootMount.swift in Sources */,
+				837D55711FD0717700C018A2 /* String+DigiCloud.swift in Sources */,
+				837D553C1FD0717700C018A2 /* DigiConstants.swift in Sources */,
+				837D55421FD0717700C018A2 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -646,8 +835,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83F52F391F7CF5BF00E18A09 /* Digi_Cloud_UITests.swift in Sources */,
-				83F52F451F7CF79300E18A09 /* SnapshotHelper.swift in Sources */,
+				837D557F1FD0718700C018A2 /* DigiCloudUITests.swift in Sources */,
+				837D557E1FD0718700C018A2 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,29 +851,39 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		8370411E1D8B1DEE000EDBAE /* LaunchScreen.storyboard */ = {
+		837D55881FD0768400C018A2 /* LaunchScreen.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				8370411F1D8B1DEE000EDBAE /* Base */,
-				83B6D3881E13C045005258B3 /* ro */,
+				837D55891FD0768400C018A2 /* de */,
+				837D558C1FD0768400C018A2 /* hu */,
+				837D558D1FD0768400C018A2 /* fr */,
+				837D558E1FD0768400C018A2 /* ro */,
+			);
+			name = LaunchScreen.strings;
+			sourceTree = "<group>";
+		};
+		837D558A1FD0768400C018A2 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				837D558B1FD0768400C018A2 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		83B6D3951E13C781005258B3 /* InfoPlist.strings */ = {
+		837D558F1FD0768400C018A2 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				83B6D3941E13C781005258B3 /* ro */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		83B6D39A1E13DCF4005258B3 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				83B6D3991E13DCF4005258B3 /* ro */,
+				837D55901FD0768400C018A2 /* ro */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		837D55911FD0768400C018A2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				837D55921FD0768400C018A2 /* ro */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -804,6 +1003,7 @@
 		};
 		837041251D8B1DEE000EDBAE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AC5DC6EA5177031CE35BC3D8 /* Pods-Digi Cloud.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CLANG_ENABLE_MODULES = YES;
@@ -811,15 +1011,16 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
 				COMPILER_INDEX_STORE_ENABLE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				INFOPLIST_FILE = "$(SRCROOT)/Config/DigiCloud.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
 				PRODUCT_NAME = "Digi Cloud";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Supporting Files/Digi Cloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -829,6 +1030,7 @@
 		};
 		837041261D8B1DEE000EDBAE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4482CB5EC88128FB7C25E95B /* Pods-Digi Cloud.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -836,14 +1038,15 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
 				COMPILER_INDEX_STORE_ENABLE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				INFOPLIST_FILE = "$(SRCROOT)/Config/DigiCloud.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test;
 				PRODUCT_NAME = "Digi Cloud";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Supporting Files/Digi Cloud-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -911,6 +1114,7 @@
 		};
 		83BC04011E6813DE0057B38E /* Debug Compile Time */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B61E9D01BF3B8EF343FAEEA4 /* Pods-Digi Cloud.debug compile time.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CLANG_ENABLE_MODULES = YES;
@@ -918,15 +1122,16 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
 				COMPILER_INDEX_STORE_ENABLE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				INFOPLIST_FILE = "$(SRCROOT)/Config/DigiCloud.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
 				PRODUCT_NAME = "Digi Cloud";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Supporting Files/Digi Cloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -995,6 +1200,7 @@
 		};
 		83F1FFD51E697B220079F56F /* Debug ViewControllers */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0196F525ED0451A6990CD69A /* Pods-Digi Cloud.debug viewcontrollers.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CLANG_ENABLE_MODULES = YES;
@@ -1002,15 +1208,16 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
 				COMPILER_INDEX_STORE_ENABLE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
-				INFOPLIST_FILE = "$(SRCROOT)/Digi Cloud/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				INFOPLIST_FILE = "$(SRCROOT)/Config/DigiCloud.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
 				PRODUCT_NAME = "Digi Cloud";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Digi Cloud-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Digi Cloud/Supporting Files/Digi Cloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1020,18 +1227,23 @@
 		};
 		83F52F3D1F7CF5BF00E18A09 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B339F5052F54F024A3F8C8E7 /* Pods-Digi Cloud UITests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				"DEBUG_INFORMATION_FORMAT[sdk=iphoneos*]" = "dwarf-with-dsym";
+				"DEBUG_INFORMATION_FORMAT[sdk=iphonesimulator*]" = dwarf;
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Digi Cloud UITests/Info.plist";
+				INFOPLIST_FILE = Config/DigiCloudUITests.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Onone";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1042,18 +1254,23 @@
 		};
 		83F52F3E1F7CF5BF00E18A09 /* Debug ViewControllers */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C4AD24EEFB2CBD73727BDF9 /* Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				"DEBUG_INFORMATION_FORMAT[sdk=iphoneos*]" = "dwarf-with-dsym";
+				"DEBUG_INFORMATION_FORMAT[sdk=iphonesimulator*]" = dwarf;
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Digi Cloud UITests/Info.plist";
+				INFOPLIST_FILE = Config/DigiCloudUITests.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Onone";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1064,18 +1281,23 @@
 		};
 		83F52F3F1F7CF5BF00E18A09 /* Debug Compile Time */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 94FCF6A671256A45CA0D00E4 /* Pods-Digi Cloud UITests.debug compile time.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				"DEBUG_INFORMATION_FORMAT[sdk=iphoneos*]" = "dwarf-with-dsym";
+				"DEBUG_INFORMATION_FORMAT[sdk=iphonesimulator*]" = dwarf;
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Digi Cloud UITests/Info.plist";
+				INFOPLIST_FILE = Config/DigiCloudUITests.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Onone -Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1086,7 +1308,9 @@
 		};
 		83F52F401F7CF5BF00E18A09 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0CE508509239C3D68A9C710B /* Pods-Digi Cloud UITests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1095,7 +1319,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S8V3V9GFN2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Digi Cloud UITests/Info.plist";
+				INFOPLIST_FILE = Config/DigiCloudUITests.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ro.mihaicris.test.dev;

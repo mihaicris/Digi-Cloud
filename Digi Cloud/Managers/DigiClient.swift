@@ -126,17 +126,16 @@ final class DigiClient {
                     */
 
                     let nserror = error! as NSError
-                    LogNSError(nserror)
+                    logNSError(nserror)
 
                     switch nserror.code {
-
-                        case -999:
-                            // Don't call completion if request was cancelled.
-                            break
-                        case -1001:
-                            completion(nil, nil, NetworkingError.requestTimedOut(NSLocalizedString("The request timed out.", comment: "")))
-                        case -1009:
-                            completion(nil, nil, NetworkingError.internetOffline(NSLocalizedString("The internet appears to be offline.", comment: "")))
+                    case -999:
+                        // Don't call completion if request was cancelled.
+                        break
+                    case -1001:
+                        completion(nil, nil, NetworkingError.requestTimedOut(NSLocalizedString("The request timed out.", comment: "")))
+                    case -1009:
+                        completion(nil, nil, NetworkingError.internetOffline(NSLocalizedString("The internet appears to be offline.", comment: "")))
                     default:
                         completion(nil, nil, error)
                     }
@@ -348,7 +347,7 @@ final class DigiClient {
 
     func getUserProfileImage(for user: User, completion: @escaping(_ image: UIImage?, _ error: Error?) -> Void) {
 
-        let method = Methods.UserProfileImage.replacingOccurrences(of: "{userId}", with: user.id)
+        let method = Methods.UserProfileImage.replacingOccurrences(of: "{userId}", with: user.identifier)
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
 
@@ -668,7 +667,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func createSubmount(at location: Location, withName: String, completion: @escaping( _ mount: Mount?, _ error: Error?) -> Void) {
 
-        let method = Methods.MountCreate.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.MountCreate.replacingOccurrences(of: "{id}", with: location.mount.identifier)
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
 
@@ -704,7 +703,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func getMountDetails(for mount: Mount, completion: @escaping(_ mount: Mount?, _ error: Error?) -> Void) {
 
-        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
+        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.identifier)
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
 
@@ -731,7 +730,7 @@ final class DigiClient {
 
     func editMount(for mount: Mount, newName: String, completion: @escaping(_ error: Error?) -> Void) {
 
-        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
+        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.identifier)
         var headers = DefaultHeaders.PutHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
 
@@ -772,22 +771,22 @@ final class DigiClient {
         case .add:
             requestType = .post
             headers = DefaultHeaders.PostHeaders
-            method = Methods.UserAdd.replacingOccurrences(of: "{id}", with: mount.id)
+            method = Methods.UserAdd.replacingOccurrences(of: "{id}", with: mount.identifier)
             json?["email"] = user.email
             json?["permissions"] = user.permissions.json
 
         case .updatePermissions:
             requestType = .put
             headers = DefaultHeaders.PutHeaders
-            method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
-                .replacingOccurrences(of: "{userId}", with: user.id)
+            method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.identifier)
+                .replacingOccurrences(of: "{userId}", with: user.identifier)
             json?["permissions"] = user.permissions.json
 
         case .remove:
             requestType = .delete
             headers = DefaultHeaders.DelHeaders
-            method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.id)
-                .replacingOccurrences(of: "{userId}", with: user.id)
+            method = Methods.UserChange.replacingOccurrences(of: "{mountId}", with: mount.identifier)
+                .replacingOccurrences(of: "{userId}", with: user.identifier)
             json = nil
         }
 
@@ -838,7 +837,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func deleteMount(_ mount: Mount, completion: @escaping (_ error: Error?) -> Void) {
 
-        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.id)
+        let method = Methods.MountEdit.replacingOccurrences(of: "{id}", with: mount.identifier)
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
 
@@ -862,7 +861,7 @@ final class DigiClient {
 
     func fileInfo(atLocation location: Location, completion: @escaping((Node?, Error?) -> Void)) {
 
-        let method = Methods.FilesInfo.replacingOccurrences(of: "{mountId}", with: location.mount.id)
+        let method = Methods.FilesInfo.replacingOccurrences(of: "{mountId}", with: location.mount.identifier)
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
 
@@ -899,7 +898,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func createFolder(at location: Location, named: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
 
-        let method = Methods.FilesFolder.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesFolder.replacingOccurrences(of: "{id}", with: location.mount.identifier)
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
         let parameters = [ParametersKeys.Path: location.path]
@@ -930,7 +929,7 @@ final class DigiClient {
         let session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
 
         // prepare the method string for download file by inserting the current mount
-        let method =  Methods.FilesGet.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method =  Methods.FilesGet.replacingOccurrences(of: "{id}", with: location.mount.identifier)
 
         // prepare the query parameter path with the current File path
         let parameters = [ParametersKeys.Path: location.path]
@@ -965,9 +964,9 @@ final class DigiClient {
 
         switch action {
         case .copy:
-            method = Methods.FilesCopy.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
+            method = Methods.FilesCopy.replacingOccurrences(of: "{id}", with: fromLocation.mount.identifier)
         case .move:
-            method = Methods.FilesMove.replacingOccurrences(of: "{id}", with: fromLocation.mount.id)
+            method = Methods.FilesMove.replacingOccurrences(of: "{id}", with: fromLocation.mount.identifier)
         default:
             return
         }
@@ -977,7 +976,7 @@ final class DigiClient {
 
         let parameters = [ParametersKeys.Path: fromLocation.path]
 
-        let json: [String: String] = ["toMountId": toLocation.mount.id, "toPath": toLocation.path]
+        let json: [String: String] = ["toMountId": toLocation.mount.identifier, "toPath": toLocation.path]
 
         networkTask(requestType: .put, method: method, headers: headers, json: json, parameters: parameters) { (_, statusCode, error) in
 
@@ -1001,7 +1000,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func renameNode(at location: Location, with name: String, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
         // prepare the method string for rename the node by inserting the current mount
-        let method = Methods.FilesRename.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesRename.replacingOccurrences(of: "{id}", with: location.mount.identifier)
 
         // prepare headers
         var headers = DefaultHeaders.PutHeaders
@@ -1034,7 +1033,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func deleteNode(at location: Location, completion: @escaping(_ statusCode: Int?, _ error: Error?) -> Void) {
 
-        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesRemove.replacingOccurrences(of: "{id}", with: location.mount.identifier)
         var headers = DefaultHeaders.DelHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
         let parameters = [ParametersKeys.Path: location.path]
@@ -1085,7 +1084,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func getFolderInfo(at location: Location, completion: @escaping(_ info: FolderInfo?, _ error: Error?) -> Void) {
 
-        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.FilesTree.replacingOccurrences(of: "{id}", with: location.mount.identifier)
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
         let parameters = [ParametersKeys.Path: location.path]
@@ -1129,7 +1128,7 @@ final class DigiClient {
     func getLink(for location: Location, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void) {
 
         let method = Methods.Links
-            .replacingOccurrences(of: "{mountId}", with: location.mount.id)
+            .replacingOccurrences(of: "{mountId}", with: location.mount.identifier)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
         var headers = DefaultHeaders.PostHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
@@ -1187,7 +1186,7 @@ final class DigiClient {
                                completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkCustomURL
-            .replacingOccurrences(of: "{mountId}", with: mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.identifier)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -1238,7 +1237,7 @@ final class DigiClient {
     func setOrResetLinkPassword(mount: Mount, linkId: String, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkResetPassword
-            .replacingOccurrences(of: "{mountId}", with: mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.identifier)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -1287,7 +1286,7 @@ final class DigiClient {
     func removeLinkPassword(mount: Mount, linkId: String, type: LinkType, completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkRemovePassword
-            .replacingOccurrences(of: "{mountId}", with: mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.identifier)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -1335,7 +1334,7 @@ final class DigiClient {
     func deleteLink(mount: Mount, linkId: String, type: LinkType, completion: @escaping (_ error: Error?) -> Void ) {
 
         let method = Methods.LinkDelete
-            .replacingOccurrences(of: "{mountId}", with: mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.identifier)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -1371,7 +1370,7 @@ final class DigiClient {
                           completion: @escaping (_ receiver: UploadLink?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkSetAlert
-            .replacingOccurrences(of: "{mountId}", with: mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.identifier)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
         var headers = DefaultHeaders.PutHeaders
@@ -1414,7 +1413,7 @@ final class DigiClient {
                                completion: @escaping (_ link: Link?, _ error: Error?) -> Void ) {
 
         let method = Methods.LinkValidity
-            .replacingOccurrences(of: "{mountId}", with: mount.id)
+            .replacingOccurrences(of: "{mountId}", with: mount.identifier)
             .replacingOccurrences(of: "{linkType}", with: type.rawValue)
             .replacingOccurrences(of: "{linkId}", with: linkId)
 
@@ -1468,7 +1467,7 @@ final class DigiClient {
     ///   - error: The error occurred in the network request, nil for no error.
     func getBundle(for location: Location, completion: @escaping(_ nodes: [Node]?, _ rootNode: Node?, _ error: Error?) -> Void) {
 
-        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.id)
+        let method = Methods.Bundle.replacingOccurrences(of: "{id}", with: location.mount.identifier)
         var headers = DefaultHeaders.GetHeaders
         headers[HeadersKeys.Authorization] = "Token \(token)"
 

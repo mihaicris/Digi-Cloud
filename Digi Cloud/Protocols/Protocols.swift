@@ -10,7 +10,7 @@ import UIKit
 
 protocol Link {
 
-    var id: String { get }
+    var identifier: String { get }
     var name: String { get }
     var path: String { get }
     var counter: Int { get }

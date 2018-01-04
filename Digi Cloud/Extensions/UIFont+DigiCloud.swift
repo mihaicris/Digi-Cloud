@@ -13,15 +13,15 @@ extension UIFont {
         return UIFont(name: "FontAwesome", size: size)!
     }
 
-    static func HelveticaNeue(size: CGFloat) -> UIFont {
+    static func fontHelveticaNeue(size: CGFloat) -> UIFont {
         return UIFont(name: "HelveticaNeue", size: size)!
     }
 
-    static func HelveticaNeueMedium(size: CGFloat) -> UIFont {
+    static func fontHelveticaNeueMedium(size: CGFloat) -> UIFont {
         return UIFont(name: "HelveticaNeue-Medium", size: size)!
     }
 
-    static func HelveticaNeueLight(size: CGFloat) -> UIFont {
+    static func fontHelveticaNeueLight(size: CGFloat) -> UIFont {
         return UIFont(name: "HelveticaNeue-Light", size: size)!
     }
 

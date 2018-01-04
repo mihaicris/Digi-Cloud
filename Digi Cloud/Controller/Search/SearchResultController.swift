@@ -78,10 +78,10 @@ final class SearchResultController: UITableViewController {
 
         if node.type == "dir" {
             cell.nodeIcon.image = #imageLiteral(resourceName: "folder_icon")
-            cell.nodeNameLabel.font = UIFont.HelveticaNeueMedium(size: 16)
+            cell.nodeNameLabel.font = UIFont.fontHelveticaNeueMedium(size: 16)
         } else {
             cell.nodeIcon.image = #imageLiteral(resourceName: "file_icon")
-            cell.nodeNameLabel.font = UIFont.HelveticaNeue(size: 16)
+            cell.nodeNameLabel.font = UIFont.fontHelveticaNeue(size: 16)
         }
 
         if mountNames[nodeMountName] == nil {
@@ -185,7 +185,7 @@ final class SearchResultController: UITableViewController {
              tags: Seq[String] // format: tag=nameoftag=value
          */
 
-        let count = searchText.characters.count
+        let count = searchText.count
         if count < 3 {
             if count == 0 {
                 self.filteredContent.removeAll()
@@ -200,7 +200,7 @@ final class SearchResultController: UITableViewController {
         ]
 
         if scope == 0 {
-            parameters[ParametersKeys.MountID] = location.mount.id
+            parameters[ParametersKeys.MountID] = location.mount.identifier
             parameters[ParametersKeys.Path] = location.path
         }
 

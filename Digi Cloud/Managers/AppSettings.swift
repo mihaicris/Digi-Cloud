@@ -131,9 +131,9 @@ class AppSettings {
     }
 
     static func persistUserInfo(user: User) {
-        UserDefaults.standard.set(user.firstName, forKey: "firstName-\(user.id)")
-        UserDefaults.standard.set(user.lastName, forKey: "lastName-\(user.id)")
-        UserDefaults.standard.set(user.email, forKey: "email-\(user.id)")
+        UserDefaults.standard.set(user.firstName, forKey: "firstName-\(user.identifier)")
+        UserDefaults.standard.set(user.lastName, forKey: "lastName-\(user.identifier)")
+        UserDefaults.standard.set(user.email, forKey: "email-\(user.identifier)")
         UserDefaults.standard.synchronize()
     }
 
@@ -143,7 +143,7 @@ class AppSettings {
               let email = UserDefaults.standard.string(forKey: "email-\(userID)") else {
             return nil
         }
-        return User(id: userID, firstName: firstName, lastName: lastName, email: email, permissions: Permissions())
+        return User(identifier: userID, firstName: firstName, lastName: lastName, email: email, permissions: Permissions())
     }
 
     static func deletePersistedUserInfo(userID: String) {
@@ -166,7 +166,7 @@ class AppSettings {
                 return
             }
 
-            let account = Account(userID: user.id)
+            let account = Account(userID: user.identifier)
 
             do {
                 try account.save(token: token)
@@ -189,7 +189,7 @@ class AppSettings {
 
                 let cache = Cache()
 
-                let key = user.id + ".png"
+                let key = user.identifier + ".png"
 
                 if let image = image, let data = UIImagePNGRepresentation(image) {
                     cache.save(type: .profile, data: data, for: key)
@@ -251,7 +251,7 @@ class AppSettings {
             let titleMessageLabel: UILabel = {
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
-                l.font = UIFont.HelveticaNeueLight(size: 24)
+                l.font = UIFont.fontHelveticaNeueLight(size: 24)
                 l.textColor = UIColor.white
                 l.text = title
                 l.textAlignment = .center
@@ -262,7 +262,7 @@ class AppSettings {
             let subtitleMessageLabel: UILabel = {
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
-                l.font = UIFont.HelveticaNeueLight(size: 18)
+                l.font = UIFont.fontHelveticaNeueLight(size: 18)
                 l.textColor = UIColor.white
                 l.text = subtitle
                 l.textAlignment = .center

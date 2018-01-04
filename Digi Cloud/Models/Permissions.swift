@@ -12,23 +12,23 @@ struct Permissions {
     let read: Bool
     let owner: Bool
     var mount: Bool
-    var create_receiver: Bool
+    var createReceiver: Bool
     var comment: Bool
     var write: Bool
-    var create_link: Bool
+    var createLink: Bool
 }
 
 extension Permissions {
 
     init(mount: Bool = false, write: Bool = false, comment: Bool = false,
-         create_link: Bool = false, create_receiver: Bool = false) {
+         createLink: Bool = false, createReceiver: Bool = false) {
         self.read = true
         self.owner = false
         self.mount = mount
-        self.create_receiver = create_receiver
+        self.createReceiver = createReceiver
         self.comment = comment
         self.write = write
-        self.create_link = create_link
+        self.createLink = createLink
     }
 
     init?(object: Any?) {
@@ -37,18 +37,18 @@ extension Permissions {
             let read = jsonDictionary["READ"] as? Bool,
             let owner = jsonDictionary["OWNER"] as? Bool,
             let mount = jsonDictionary["MOUNT"] as? Bool,
-            let create_receiver = jsonDictionary["CREATE_RECEIVER"] as? Bool,
+            let createReceiver = jsonDictionary["CREATE_RECEIVER"] as? Bool,
             let comment = jsonDictionary["COMMENT"] as? Bool,
             let write = jsonDictionary["WRITE"] as? Bool,
-            let create_link = jsonDictionary["CREATE_LINK"] as? Bool
+            let createLink = jsonDictionary["CREATE_LINK"] as? Bool
             else { return nil }
         self.read = read
         self.owner = owner
         self.mount = mount
-        self.create_receiver = create_receiver
+        self.createReceiver = createReceiver
         self.comment = comment
         self.write = write
-        self.create_link = create_link
+        self.createLink = createLink
     }
 
     var json: [String: Bool] {
@@ -57,14 +57,14 @@ extension Permissions {
             "READ": self.read,
             "WRITE": self.write,
             "MOUNT": self.mount,
-            "CREATE_LINK": self.create_link,
-            "CREATE_RECEIVER": self.create_receiver,
+            "CREATE_LINK": self.createLink,
+            "CREATE_RECEIVER": self.createReceiver,
             "COMMENT": self.comment
         ]
     }
 
     var isExtended: Bool {
-        return mount || create_receiver || comment || write || create_link
+        return mount || createReceiver || comment || write || createLink
     }
 
 }

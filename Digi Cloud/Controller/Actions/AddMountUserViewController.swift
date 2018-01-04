@@ -17,8 +17,8 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
     enum PermissionType: Int {
         case write
-        case create_link
-        case create_reicever
+        case createLink
+        case createReicever
         case mount
     }
 
@@ -58,7 +58,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
     let permissionCreateLinkSwitch: UISwitch = {
         let sw = UISwitch()
         sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.tag = PermissionType.create_link.rawValue
+        sw.tag = PermissionType.createLink.rawValue
         sw.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
         return sw
     }()
@@ -66,7 +66,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
     let permissionCreateReceiverSwitch: UISwitch = {
         let sw = UISwitch()
         sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.tag = PermissionType.create_reicever.rawValue
+        sw.tag = PermissionType.createReicever.rawValue
         sw.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
         return sw
     }()
@@ -87,14 +87,14 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             self.user = user
         } else {
             isUserEdited = false
-            self.user = User(id: "", firstName: "", lastName: "", email: "", permissions: Permissions())
+            self.user = User(identifier: "", firstName: "", lastName: "", email: "", permissions: Permissions())
         }
 
         super.init(style: .grouped)
 
         self.permissions.append(contentsOf: mount.permissions.write ? [.write] : [])
-        self.permissions.append(contentsOf: mount.permissions.create_link ? [.create_link] : [])
-        self.permissions.append(contentsOf: mount.permissions.create_receiver ? [.create_reicever] : [])
+        self.permissions.append(contentsOf: mount.permissions.createLink ? [.createLink] : [])
+        self.permissions.append(contentsOf: mount.permissions.createReceiver ? [.createReicever] : [])
         self.permissions.append(contentsOf: mount.permissions.mount ? [.mount] : [])
     }
 
@@ -173,14 +173,14 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
                 aSwitch.isOn = user.permissions.write
                 permissionTitle = NSLocalizedString("Can modify", comment: "")
 
-            case .create_link:
+            case .createLink:
                 aSwitch = permissionCreateLinkSwitch
-                aSwitch.isOn = user.permissions.create_link
+                aSwitch.isOn = user.permissions.createLink
                 permissionTitle = NSLocalizedString("Can create download links", comment: "")
 
-            case .create_reicever:
+            case .createReicever:
                 aSwitch = permissionCreateReceiverSwitch
-                aSwitch.isOn = user.permissions.create_receiver
+                aSwitch.isOn = user.permissions.createReceiver
                 permissionTitle = NSLocalizedString("Can create receive links", comment: "")
 
             case .mount:
@@ -214,10 +214,10 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
             user.permissions.write = sender.isOn
         case .mount:
             user.permissions.mount = sender.isOn
-        case .create_link:
-            user.permissions.create_link = sender.isOn
-        case .create_reicever:
-            user.permissions.create_receiver = sender.isOn
+        case .createLink:
+            user.permissions.createLink = sender.isOn
+        case .createReicever:
+            user.permissions.createReceiver = sender.isOn
         }
     }
 
@@ -225,7 +225,7 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
 
         usernameTextField.resignFirstResponder()
 
-        guard let username = usernameTextField.text, username.characters.count > 3 else {
+        guard let username = usernameTextField.text, username.count > 3 else {
 
             self.showAlert(message: NSLocalizedString("Please provide the email address of the Digi Storage user.", comment: ""))
 

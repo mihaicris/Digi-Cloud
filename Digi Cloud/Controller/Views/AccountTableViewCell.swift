@@ -12,7 +12,7 @@ final class AccountTableViewCell: UITableViewCell {
 
     var user: User? {
         didSet {
-            guard let id = user?.id,
+            guard let id = user?.identifier,
                   let firstName = user?.firstName,
                   let lastName = user?.lastName,
                   let username = user?.email else {
@@ -50,14 +50,14 @@ final class AccountTableViewCell: UITableViewCell {
     let accountNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 16)
+        l.font = UIFont.fontHelveticaNeue(size: 16)
         return l
     }()
 
     let accountUsernameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 12)
+        l.font = UIFont.fontHelveticaNeue(size: 12)
         l.textColor = .darkGray
         return l
     }()

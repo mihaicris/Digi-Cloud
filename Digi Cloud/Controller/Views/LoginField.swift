@@ -35,7 +35,7 @@ final class LoginField: UITextField {
         super.init(frame: frame)
 
         textColor = UIColor(red: 80 / 255, green: 80 / 255, blue: 80 / 255, alpha: 1.0)
-        font = UIFont.HelveticaNeueMedium(size: 16)
+        font = UIFont.fontHelveticaNeueMedium(size: 16)
         backgroundColor = .white
         borderStyle = .roundedRect
         autocapitalizationType = .none
@@ -47,7 +47,7 @@ final class LoginField: UITextField {
         clearButtonMode = .whileEditing
 
         label.textColor = UIColor(red: 184 / 255, green: 184 / 255, blue: 184 / 255, alpha: 1)
-        label.font = UIFont.HelveticaNeueMedium(size: 12)
+        label.font = UIFont.fontHelveticaNeueMedium(size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = textFieldName ?? ""
 

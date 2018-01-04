@@ -129,7 +129,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     private let counterLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.HelveticaNeue(size: 14)
+        l.font = UIFont.fontHelveticaNeue(size: 14)
         l.textColor = UIColor.white
         return l
     }()
@@ -330,7 +330,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
             let mountNameLabel: UILabelWithPadding = {
                 let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
-                l.font = UIFont.HelveticaNeue(size: 12)
+                l.font = UIFont.fontHelveticaNeue(size: 12)
                 l.adjustsFontSizeToFitWidth = true
                 l.textColor = .darkGray
                 l.backgroundColor = UIColor.black.withAlphaComponent(0.1)
@@ -345,9 +345,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 let l = UILabel()
                 l.translatesAutoresizingMaskIntoConstraints = false
                 l.textColor = .darkGray
-                l.text = location.path.hasSuffix("/") ? String(location.path.characters.dropLast()) : location.path
+                l.text = location.path.hasSuffix("/") ? String(location.path.dropLast()) : location.path
                 l.numberOfLines = 2
-                l.font = UIFont.HelveticaNeue(size: 12)
+                l.font = UIFont.fontHelveticaNeue(size: 12)
                 l.lineBreakMode = .byTruncatingMiddle
                 return l
             }()
@@ -357,7 +357,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
             NSLayoutConstraint.activate([
                 locationPathLabel.leftAnchor.constraint(equalTo: mountNameLabel.rightAnchor, constant: 2),
-                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo : cell.contentView.layoutMarginsGuide.rightAnchor),
+                locationPathLabel.rightAnchor.constraint(lessThanOrEqualTo: cell.contentView.layoutMarginsGuide.rightAnchor),
                 locationPathLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
 
                 mountNameLabel.leftAnchor.constraint(equalTo: cell.contentView.layoutMarginsGuide.leftAnchor),
@@ -434,6 +434,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 changeValidityButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 changeValidityButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 validitySegmentedControl.leftAnchor.constraint(equalTo: cell.layoutMarginsGuide.leftAnchor),
+                validitySegmentedControl.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 validitySegmentedControl.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 spinner.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
                 spinner.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
@@ -441,9 +442,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                 validityDateAndTimePicker.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                 validityDateAndTimePicker.heightAnchor.constraint(equalTo: cell.contentView.heightAnchor),
                 saveCustomDateButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
-                saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)])
+                saveCustomDateButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
         }
-
         return cell
     }
 
@@ -477,7 +478,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         let textFieldText: NSString = (textField.text ?? "") as NSString
         let newHash = textFieldText.replacingCharacters(in: range, with: string)
 
-        if newHash.characters.count == 0 || newHash == originalLinkHash || hasInvalidCharacters(name: newHash) {
+        if newHash.count == 0 || newHash == originalLinkHash || hasInvalidCharacters(name: newHash) {
             saveHashButton.isHidden = true
             setTextFieldConstraintInEditMode(active: false)
         } else {
@@ -682,7 +683,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             return
         }
 
-        DigiClient.shared.setLinkCustomShortUrl(mount: location.mount, linkId: link.id, type: linkType, hash: hash) { result, error in
+        DigiClient.shared.setLinkCustomShortUrl(mount: location.mount, linkId: link.identifier, type: linkType, hash: hash) { result, error in
 
             guard error == nil else {
 
@@ -722,7 +723,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         configureWaitingView(type: .started, message: NSLocalizedString("Deleting Link", comment: ""))
 
-        DigiClient.shared.deleteLink(mount: location.mount, linkId: link.id, type: linkType) { error in
+        DigiClient.shared.deleteLink(mount: location.mount, linkId: link.identifier, type: linkType) { error in
             guard error == nil else {
                 self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
                 return
@@ -743,7 +744,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             handleResetPassword()
         } else {
 
-            DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.id, type: linkType) { result, error in
+            DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType) { result, error in
 
                 self.stopSpinning()
 
@@ -764,7 +765,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         resetAllFields()
         startSpinning()
 
-        DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.id, type: linkType, completion: { result, error in
+        DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType, completion: { result, error in
             guard error == nil, result != nil else {
 
                 print(error!.localizedDescription)
@@ -843,7 +844,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         resetAllFields()
 
-        DigiClient.shared.setReceiverAlert(isOn: sender.isOn, mount: location.mount, linkId: link.id) { result, error in
+        DigiClient.shared.setReceiverAlert(isOn: sender.isOn, mount: location.mount, linkId: link.identifier) { result, error in
 
             guard error == nil, result != nil else {
                 sender.setOn(!sender.isOn, animated: true)
@@ -871,7 +872,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
 
         spinner.startAnimating()
 
-        DigiClient.shared.setLinkCustomValidity(mount: location.mount, linkId: link.id, type: linkType, validTo: validTo) { result, error in
+        DigiClient.shared.setLinkCustomValidity(mount: location.mount, linkId: link.identifier, type: linkType, validTo: validTo) { result, error in
 
             self.spinner.stopAnimating()
 
@@ -942,7 +943,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func startSpinning() {
-        if(!isAnimatingReset) {
+        if !isAnimatingReset {
             isAnimatingReset = true
             spinWithOptions(options: .curveEaseIn)
         }
@@ -953,19 +954,24 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     private func spinWithOptions(options: UIViewAnimationOptions) {
-        UIView.animate(withDuration: 0.5, delay: 0, options: options, animations: { () -> Void in
-            let val = CGFloat(Double.pi)
-            self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
-        }) { (finished: Bool) -> Void in
-            if(finished) {
-                if(self.isAnimatingReset) {
-                    self.spinWithOptions(options: .curveLinear)
-                } else if (options != .curveEaseOut) {
-                    self.spinWithOptions(options: .curveEaseOut)
-                } else {
-                    self.updateValues()
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            options: options,
+            animations: { () -> Void in
+                let val = CGFloat(Double.pi)
+                self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
+            },
+            completion: { (finished: Bool) -> Void in
+                if finished {
+                    if self.isAnimatingReset {
+                        self.spinWithOptions(options: .curveLinear)
+                    } else if options != .curveEaseOut {
+                        self.spinWithOptions(options: .curveEaseOut)
+                    } else {
+                        self.updateValues()
+                    }
                 }
-            }
-        }
+            })
     }
 }

@@ -125,7 +125,7 @@ final class MoreActionsViewController: UITableViewController {
         } else {
 
             let headerView: UIView = {
-                let v = UIView(frame: CGRect(x: 0, y: 0, width:400, height: 40))
+                let v = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 40))
                 v.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
                 return v
             }()
@@ -168,11 +168,11 @@ final class MoreActionsViewController: UITableViewController {
             return
         }
 
-        if mount.permissions.create_link {
+        if mount.permissions.createLink {
             actions.append(.sendDownloadLink)
         }
 
-        if mount.permissions.create_receiver {
+        if mount.permissions.createReceiver {
             actions.append(.sendUploadLink)
         }
 

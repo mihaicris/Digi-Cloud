@@ -7,7 +7,7 @@
 //
 
 struct User {
-    let id: String
+    let identifier: String
     let firstName: String
     let lastName: String
     var email: String
@@ -18,7 +18,7 @@ extension User {
     init?(object: Any?) {
         guard
             let jsonDictionary = object as? [String: Any],
-            let id = jsonDictionary["id"] as? String,
+            let identifier = jsonDictionary["id"] as? String,
             let name = jsonDictionary["name"] as? String,
             let email = jsonDictionary["email"] as? String
             else { return nil }
@@ -29,7 +29,7 @@ extension User {
             return nil
         }
 
-        self.id = id
+        self.identifier = identifier
 
         let nameComponents = name.components(separatedBy: " ")
 
@@ -59,7 +59,7 @@ extension User {
                 return nil
         }
 
-        self.id = id
+        self.identifier = id
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
@@ -68,7 +68,7 @@ extension User {
 }
 
 extension User: Equatable {
-    static func ==(lhs: User, rhs: User) -> Bool {
+    static func == (lhs: User, rhs: User) -> Bool {
         return lhs.email == rhs.email
     }
 
