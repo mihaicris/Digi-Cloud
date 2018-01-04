@@ -17,3 +17,15 @@ lane :refresh_dsyms do
   upload_symbols_to_crashlytics(api_token: '9ae299de9dd99a73023204eb20b235d7a9cd07c5')   # Upload them to Crashlytics
   clean_build_artifacts           # Delete the local dSYM files
 end
+
+lane :release do
+  build_app(
+    scheme: "DigiCloud",
+    silent: true,
+    clean: true,
+    include_bitcode: true)
+    
+  upload_to_app_store(
+    force: true
+  )
+end
