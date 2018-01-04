@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		06519F2ED2100EC34DD3541D /* Pods_Digi_Cloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B27C67A95E07D2466A888367 /* Pods_Digi_Cloud.framework */; };
 		5BBA29E184903433B3AC0218 /* Pods_Digi_Cloud_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EAE1D6E7A4E9E0A6D7608D /* Pods_Digi_Cloud_UITests.framework */; };
-		8358200B1FD5E65E00D68AAB /* CopyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8358200A1FD5E65E00D68AAB /* CopyViewController.swift */; };
-		8358200D1FD5E66E00D68AAB /* MoveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8358200C1FD5E66E00D68AAB /* MoveViewController.swift */; };
-		8358200F1FD5E6D300D68AAB /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8358200E1FD5E6D300D68AAB /* BrowseViewController.swift */; };
 		837D55381FD0717700C018A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54E31FD0717700C018A2 /* AppDelegate.swift */; };
 		837D55391FD0717700C018A2 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54E51FD0717700C018A2 /* AppSettings.swift */; };
 		837D553A1FD0717700C018A2 /* DigiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D54E61FD0717700C018A2 /* DigiClient.swift */; };
@@ -104,9 +101,6 @@
 		18EAE1D6E7A4E9E0A6D7608D /* Pods_Digi_Cloud_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Digi_Cloud_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C4AD24EEFB2CBD73727BDF9 /* Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests.debug viewcontrollers.xcconfig"; sourceTree = "<group>"; };
 		4482CB5EC88128FB7C25E95B /* Pods-Digi Cloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Digi Cloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud.release.xcconfig"; sourceTree = "<group>"; };
-		8358200A1FD5E65E00D68AAB /* CopyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyViewController.swift; sourceTree = "<group>"; };
-		8358200C1FD5E66E00D68AAB /* MoveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveViewController.swift; sourceTree = "<group>"; };
-		8358200E1FD5E6D300D68AAB /* BrowseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseViewController.swift; sourceTree = "<group>"; };
 		835982771E680EDC00AA18C9 /* DigiCloud.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DigiCloud.plist; sourceTree = "<group>"; };
 		837041121D8B1DED000EDBAE /* Digi Cloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Digi Cloud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837D54DD1FD0702A00C018A2 /* DigiCloudUITests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DigiCloudUITests.plist; sourceTree = "<group>"; };
@@ -398,9 +392,6 @@
 			children = (
 				837D55151FD0717700C018A2 /* LocationsViewController.swift */,
 				837D55161FD0717700C018A2 /* ListingViewController.swift */,
-				8358200A1FD5E65E00D68AAB /* CopyViewController.swift */,
-				8358200C1FD5E66E00D68AAB /* MoveViewController.swift */,
-				8358200E1FD5E6D300D68AAB /* BrowseViewController.swift */,
 			);
 			path = Listing;
 			sourceTree = "<group>";
@@ -772,7 +763,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				837D55581FD0717700C018A2 /* AddMountUserViewController.swift in Sources */,
-				8358200B1FD5E65E00D68AAB /* CopyViewController.swift in Sources */,
 				837D55521FD0717700C018A2 /* LoginViewController.swift in Sources */,
 				837D55481FD0717700C018A2 /* UploadLink.swift in Sources */,
 				837D555F1FD0717700C018A2 /* FlowController.swift in Sources */,
@@ -791,7 +781,6 @@
 				837D55771FD0717700C018A2 /* FileManager+DigiCloud.swift in Sources */,
 				837D55491FD0717700C018A2 /* Node.swift in Sources */,
 				837D55561FD0717700C018A2 /* NodeActionsViewController.swift in Sources */,
-				8358200D1FD5E66E00D68AAB /* MoveViewController.swift in Sources */,
 				837D555C1FD0717700C018A2 /* SortFolderViewController.swift in Sources */,
 				837D55781FD0717700C018A2 /* UIView+DigiCloud.swift in Sources */,
 				837D556F1FD0717700C018A2 /* MainNavigationController.swift in Sources */,
@@ -805,7 +794,6 @@
 				837D554A1FD0717700C018A2 /* FolderInfo.swift in Sources */,
 				837D55471FD0717700C018A2 /* Account.swift in Sources */,
 				837D55761FD0717700C018A2 /* UIViewController+DigiCloud.swift in Sources */,
-				8358200F1FD5E6D300D68AAB /* BrowseViewController.swift in Sources */,
 				837D553F1FD0717700C018A2 /* Location.swift in Sources */,
 				837D554E1FD0717700C018A2 /* SearchResultController.swift in Sources */,
 				837D555A1FD0717700C018A2 /* MoreActionsViewController.swift in Sources */,
