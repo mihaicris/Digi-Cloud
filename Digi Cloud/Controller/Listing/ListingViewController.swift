@@ -441,6 +441,15 @@ class ListingViewController: UITableViewController {
         searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This folder", comment: ""),
                                                         NSLocalizedString("Everywhere", comment: "")]
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
+
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        self.searchController.searchBar.sizeToFit()
     }
 
     private func presentError(message: String) {
@@ -616,7 +625,11 @@ class ListingViewController: UITableViewController {
             searchBarButton.tag = 2
 
             rightBarButtonItems.append(moreActionsBarButton)
-            rightBarButtonItems.append(contentsOf: [sortBarButton, searchBarButton, bookmarksBarButton])
+            if #available(iOS 11.0, *) {
+                rightBarButtonItems.append(contentsOf: [sortBarButton, bookmarksBarButton])
+            } else {
+                rightBarButtonItems.append(contentsOf: [sortBarButton, searchBarButton, bookmarksBarButton])
+            }
         }
 
         navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
@@ -879,7 +892,13 @@ class ListingViewController: UITableViewController {
             _ = self.navigationController?.popToViewController(searchResultsController, animated: true)
         } else {
             nav.searchResultsControllerIndex = nav.viewControllers.count - 1
-            self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
+
+            if #available(iOS 11.0, *) {
+
+            } else {
+                self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
+
+            }
 
             if self.tableView.tableHeaderView == nil {
                 searchController.searchBar.sizeToFit()
