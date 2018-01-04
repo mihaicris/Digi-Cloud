@@ -1,21 +1,27 @@
 lane :send_to_appstore do
-    scan
-    snapshot
+    run_tests
+    capture_ios_screenshots
     frameit
     sigh
     deliver
 end
 
 lane :make_screenshots do
-  snapshot
-  frameit(white: true)
-  # deliver
+  capture_ios_screenshots
+  
+  frameit(
+    white: true
+  )
 end
 
 lane :refresh_dsyms do
-  download_dsyms                  # Download dSYM files from iTC
-  upload_symbols_to_crashlytics(api_token: '9ae299de9dd99a73023204eb20b235d7a9cd07c5')   # Upload them to Crashlytics
-  clean_build_artifacts           # Delete the local dSYM files
+  download_dsyms(
+    version: "latest"
+  )
+  upload_symbols_to_crashlytics(
+    api_token: '9ae299de9dd99a73023204eb20b235d7a9cd07c5'
+  )
+  clean_build_artifacts
 end
 
 lane :release do
@@ -23,7 +29,8 @@ lane :release do
     scheme: "DigiCloud",
     silent: true,
     clean: true,
-    include_bitcode: true)
+    include_bitcode: true
+  )
     
   upload_to_app_store(
     force: true
