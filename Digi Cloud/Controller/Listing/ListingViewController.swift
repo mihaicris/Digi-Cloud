@@ -443,8 +443,12 @@ class ListingViewController: UITableViewController {
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
 
         if #available(iOS 11.0, *) {
-            navigationItem.searchController = searchController
-            navigationItem.hidesSearchBarWhenScrolling = false
+            switch self.action {
+            case .copy, .move: break
+            default:
+                navigationItem.searchController = searchController
+                navigationItem.hidesSearchBarWhenScrolling = false
+            }
         }
     }
 
