@@ -297,7 +297,7 @@ final class LoginViewController: UIViewController {
         DigiClient.shared.authenticate(username: username, password: password) { token, error in
 
             guard error == nil else {
-                
+
                 self.spinner.stopAnimating()
 
                 var message: String
@@ -341,7 +341,7 @@ final class LoginViewController: UIViewController {
             }
 
             AppSettings.saveUser(forToken: token!) { (user, error) in
-                
+
                 self.spinner.stopAnimating()
 
                 guard error == nil else {
