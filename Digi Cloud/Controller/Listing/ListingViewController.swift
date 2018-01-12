@@ -904,11 +904,13 @@ class ListingViewController: UITableViewController {
 
             }
 
-            if self.tableView.tableHeaderView == nil {
-                searchController.searchBar.sizeToFit()
-                self.tableView.tableHeaderView = searchController.searchBar
+            if #available(iOS 11.0, *) {} else {
+                if self.tableView.tableHeaderView == nil {
+                    searchController.searchBar.sizeToFit()
+                    self.tableView.tableHeaderView = searchController.searchBar
+                }
+                searchController.searchBar.becomeFirstResponder()
             }
-            searchController.searchBar.becomeFirstResponder()
         }
     }
 
@@ -1482,9 +1484,11 @@ class ListingViewController: UITableViewController {
 extension ListingViewController: UISearchControllerDelegate {
 
     func willDismissSearchController(_ searchController: UISearchController) {
-        if let nav = navigationController as? MainNavigationController {
-            nav.searchResultsControllerIndex = nil
+        if #available(iOS 11.0, *) {} else {
+            if let nav = navigationController as? MainNavigationController {
+                nav.searchResultsControllerIndex = nil
+            }
+            tableView.tableHeaderView = nil
         }
-        tableView.tableHeaderView = nil
     }
 }
