@@ -26,7 +26,7 @@ extension Bookmark {
             else { return nil }
         self.name = name
         self.mountId = jsonDictionary["mountId"] as? String ?? ""
-        self.path = path
+        self.path = path + "/"
     }
 }
 
