@@ -5,8 +5,9 @@ devices([
   "iPhone 5s",
   "iPhone 8",
   "iPhone 8 Plus",
+  "iPhone X",
   "iPad Pro (9.7-inch)",
-  "iPad Pro (10.5-inch)",
+  # "iPad Pro (10.5-inch)",
   "iPad Pro (12.9-inch)"
 ])
 
@@ -18,13 +19,12 @@ languages([
 # The name of the scheme which contains the UI Tests
 scheme "Digi Cloud UI Test"
 
-# Where should the resulting screenshots be stored?
-# output_directory "./screenshots_snapshot"
+# output_directory "./screenshots_snapshot" # Where should the resulting screenshots be stored?
 
-clear_previous_screenshots true # remove the '#' to clear all previously generated screenshots before creating new ones
+clear_previous_screenshots true
 erase_simulator true
 reinstall_app true
-# concurrent_simulators false
+concurrent_simulators true
 
 # Choose which project/workspace to use
 # project "./Project.xcodeproj"
