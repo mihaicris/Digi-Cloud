@@ -8,7 +8,7 @@
 
 import Foundation
 
-public func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+func DLog<T>(object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
     #if DEBUG
         let queue = Thread.isMainThread ? "Main (UI)" : "Background"
         print("\n_____________________________________________________")
@@ -26,16 +26,12 @@ func addressHeap<T: AnyObject>(object: T) -> String {
     return String(format: "%p", address)
 }
 
-public func INITLog(_ object: AnyObject) {
-    #if DEBUGCONTROLLERS
-        print(addressHeap(object: object), "✅", String(describing: type(of: object)))
-    #endif
+func INITLog(_ object: AnyObject) {
+    print(addressHeap(object: object), "✅", String(describing: type(of: object)))
 }
 
-public func DEINITLog(_ object: AnyObject) {
-    #if DEBUGCONTROLLERS
-        print(addressHeap(object: object), "❌", String(describing: type(of: object)))
-    #endif
+func DEINITLog(_ object: AnyObject) {
+    print(addressHeap(object: object), "❌", String(describing: type(of: object)))
 }
 
 func logNSError(_ nserror: NSError) {

@@ -34,10 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = self.flowController.rootController()
         window?.makeKeyAndVisible()
 
-        #if DEBUGCONTROLLERS
-            print(FileManager.documentsDir().path, "\n")
-        #endif
-
         createWorkingFolders()
 
         return true

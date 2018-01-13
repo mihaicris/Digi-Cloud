@@ -8,11 +8,6 @@
 
 import UIKit
 
-#if DEBUGCONTROLLERS
-    var taskStarted: Int = 0
-    var taskFinished: Int = 0
-#endif
-
 class ListingViewController: UITableViewController {
 
     // MARK: - Properties
@@ -1038,11 +1033,6 @@ class ListingViewController: UITableViewController {
             return
         }
 
-        #if DEBUGCONTROLLERS
-            taskStarted = 0
-            taskFinished = 0
-        #endif
-
         didSucceedCopyOrMove = false
         didReceivedNetworkError = false
         didReceivedStatus400 = false
@@ -1241,11 +1231,6 @@ class ListingViewController: UITableViewController {
         dispatchGroup.enter()
 
         DigiClient.shared.copyOrMove(from: sourceLocation, to: destinationLocation, action: self.action) { statusCode, error in
-
-            #if DEBUGCONTROLLERS
-                print("Task \(taskFinished) finished")
-                taskFinished += 1
-            #endif
 
             self.dispatchGroup.leave()
 
