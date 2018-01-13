@@ -22,7 +22,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
     private var users: [User] = []
 
-    private var isToolBarAlwaisHidden: Bool = false
+    private var isToolBarAlwaysHidden: Bool = false
 
     private var controllerShouldBeDismissed = false
 
@@ -425,7 +425,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             // if no management mount permission, then hide alwais the toolbar which
             // can contains remove share and / or add member buttons.
             if !mount.permissions.mount {
-                isToolBarAlwaisHidden = true
+                isToolBarAlwaysHidden = true
                 return
             }
 
@@ -449,7 +449,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         case .hidden:
             waitingView.isHidden = true
 
-            navigationController?.isToolbarHidden = isToolBarAlwaisHidden
+            navigationController?.isToolbarHidden = isToolBarAlwaysHidden
 
         case .started, .stopped:
             waitingView.isHidden = false
