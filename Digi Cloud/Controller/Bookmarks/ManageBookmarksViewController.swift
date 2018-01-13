@@ -57,7 +57,6 @@ final class ManageBookmarksViewController: UITableViewController {
 
     init() {
         super.init(style: .plain)
-        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -66,7 +65,6 @@ final class ManageBookmarksViewController: UITableViewController {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-        DEINITLog(self)
     }
 
     // MARK: - Overridden Methods and Properties

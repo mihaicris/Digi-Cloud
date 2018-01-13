@@ -18,10 +18,7 @@ final class FlowController {
 
     init(window: UIWindow) {
         self.window = window
-        INITLog(self)
     }
-
-    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 

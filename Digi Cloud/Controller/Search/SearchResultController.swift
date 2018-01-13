@@ -35,14 +35,11 @@ final class SearchResultController: UITableViewController {
     init(location: Location) {
         self.location = location
         super.init(style: .plain)
-        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 

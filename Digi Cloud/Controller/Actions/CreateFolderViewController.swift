@@ -25,14 +25,11 @@ final class CreateFolderViewController: UITableViewController {
     init(parentLocation: Location) {
         self.parentLocation = parentLocation
         super.init(style: .grouped)
-        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 

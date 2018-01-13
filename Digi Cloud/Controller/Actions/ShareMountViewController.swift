@@ -141,8 +141,6 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
-
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

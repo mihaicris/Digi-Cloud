@@ -52,14 +52,11 @@ final class LocationsViewController: UITableViewController {
         self.action = action
         self.sourceLocations = sourceLocations
         super.init(style: .grouped)
-        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 

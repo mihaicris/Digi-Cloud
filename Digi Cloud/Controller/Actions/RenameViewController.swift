@@ -57,8 +57,6 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit { DEINITLog(self) }
-
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

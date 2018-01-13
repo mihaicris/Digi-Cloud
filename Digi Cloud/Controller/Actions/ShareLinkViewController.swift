@@ -250,15 +250,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         self.linkType = linkType
         self.onFinish = onFinish
         super.init(nibName: nil, bundle: nil)
-
-        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 

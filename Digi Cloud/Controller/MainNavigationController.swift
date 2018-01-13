@@ -19,10 +19,6 @@ final class MainNavigationController: UINavigationController {
     // Following search actions will be routed to this view controller
     var searchResultsControllerIndex: Int?
 
-    // MARK: - Initializers and Deinitializers
-
-    deinit { DEINITLog(self) }
-
     // MARK: - Overridden Methods and Properties
 
     override func viewDidLoad() {

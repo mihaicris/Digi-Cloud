@@ -79,14 +79,11 @@ final class ContentViewController: UIViewController {
     init(location: Location) {
         self.location = location
         super.init(nibName: nil, bundle: nil)
-        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    deinit { DEINITLog(self) }
 
     // MARK: - Overridden Methods and Properties
 

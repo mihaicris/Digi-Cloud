@@ -25,7 +25,6 @@ final class NodeActionsViewController: UITableViewController {
         self.location = location
         self.node = node
         super.init(style: .plain)
-        INITLog(self)
     }
 
     required init?(coder aDecoder: NSCoder) {

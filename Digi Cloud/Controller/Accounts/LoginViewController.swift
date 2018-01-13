@@ -83,7 +83,6 @@ final class LoginViewController: UIViewController {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-        DEINITLog(self)
     }
 
     // MARK: - Overridden Methods and Properties
