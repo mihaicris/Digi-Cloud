@@ -41,10 +41,9 @@ class ListingViewController: UITableViewController {
     private var didReceivedStatus400 = false
     private var didReceivedStatus404 = false
     private var didSucceedCopyOrMove = false
-
     private var errorMessage = ""
-
     private var searchResultWasHighlighted = false
+    private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -83,8 +82,6 @@ class ListingViewController: UITableViewController {
         sv.addArrangedSubview(self.emptyFolderLabel)
         return sv
     }()
-
-    private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .done, target: self, action: #selector(handleShowCreateFolderViewController))
@@ -665,16 +662,12 @@ private extension ListingViewController {
 private extension ListingViewController {
 
     func setupTableView() {
-
         definesPresentationContext = true
         tableView.allowsMultipleSelectionDuringEditing = true
-
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(handleUpdateContentOnPullToRefreshGesture), for: UIControlEvents.valueChanged)
-
         tableView.register(FileCell.self, forCellReuseIdentifier: String(describing: FileCell.self))
         tableView.register(FolderCell.self, forCellReuseIdentifier: String(describing: FolderCell.self))
-
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
@@ -702,7 +695,6 @@ private extension ListingViewController {
     }
 
     func setupToolBarButtonItems() {
-
         switch self.action {
 
         case .copy, .move:
