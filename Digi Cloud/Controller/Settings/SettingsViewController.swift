@@ -343,18 +343,6 @@ final class SettingsViewController: UITableViewController {
         }
     }
 
-    @objc private func handleAppStoreReview() {
-
-        if #available(iOS 10.0, *) {
-            let urlstring = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=1173649518"
-            guard let url = URL(string: urlstring) else { return }
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        } else {
-            let urlstring = "https://itunes.apple.com/app/id1173649518"
-            guard let url = URL(string: urlstring) else { return }
-            UIApplication.shared.openURL(url)
-        }
-    }
 
     @objc private func handleDismiss() {
         self.dismiss(animated: true, completion: nil)
