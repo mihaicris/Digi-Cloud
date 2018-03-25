@@ -524,8 +524,6 @@
 				8370410E1D8B1DED000EDBAE /* Sources */,
 				8370410F1D8B1DED000EDBAE /* Frameworks */,
 				837041101D8B1DED000EDBAE /* Resources */,
-				97B72DAC76AE3828F49A6018 /* [CP] Embed Pods Frameworks */,
-				02ED0B6F82909A62849447BB /* [CP] Copy Pods Resources */,
 				833CFA851FD0621300E510B7 /* Fabric */,
 				837224B01FDD9AD900662C62 /* SwiftLint */,
 			);
@@ -546,8 +544,6 @@
 				83F52F321F7CF5BF00E18A09 /* Sources */,
 				83F52F331F7CF5BF00E18A09 /* Frameworks */,
 				83F52F341F7CF5BF00E18A09 /* Resources */,
-				0B0FF79C0839C8539BB981FE /* [CP] Embed Pods Frameworks */,
-				496DFAFB3EEE16AB7E5C29CF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -631,51 +627,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02ED0B6F82909A62849447BB /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		0B0FF79C0839C8539BB981FE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		496DFAFB3EEE16AB7E5C29CF /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud UITests/Pods-Digi Cloud UITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4A0FF040B2B831273905C95D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -721,21 +672,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"";
-		};
-		97B72DAC76AE3828F49A6018 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Digi Cloud/Pods-Digi Cloud-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		B8759DA6FD004ACF0F4A0AC1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
