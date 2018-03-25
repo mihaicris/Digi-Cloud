@@ -236,7 +236,7 @@ final class SettingsViewController: UITableViewController {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""),
                                                                     style: .done,
                                                                     target: self,
-                                                                    action: #selector(handleDismiss))
+                                                                    action: #selector(handleCloseButtonTouched))
         }
 
         let tableFooterView: UIView = {
@@ -291,7 +291,7 @@ final class SettingsViewController: UITableViewController {
     private func registerForNotificationCenter() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleDismiss),
+            selector: #selector(handleCloseButtonTouched),
             name: .UIApplicationWillResignActive,
             object: nil)
     }
@@ -343,8 +343,7 @@ final class SettingsViewController: UITableViewController {
         }
     }
 
-
-    @objc private func handleDismiss() {
+    @objc private func handleCloseButtonTouched() {
         self.dismiss(animated: true, completion: nil)
     }
 
