@@ -10,9 +10,11 @@ import UIKit
 
 class ListingViewController: UITableViewController {
 
-    // MARK: - Properties
+    // MARK: - Internal Properties
 
     var onFinish: (() -> Void)?
+
+    // MARK: - Internal Properties
 
     // Type of action made by controller
     private let action: ActionType
@@ -29,15 +31,12 @@ class ListingViewController: UITableViewController {
     // When coping or moving files/folders, this property will hold the source location which is passed between
     // controllers on navigation stack.
     private var sourceLocations: [Location]?
-
     private var needRefresh: Bool = true
     private let searchResult: String?
     private var isUpdating: Bool = false
     private var isActionConfirmed: Bool = false
     private var searchController: UISearchController!
-
     private let dispatchGroup = DispatchGroup()
-
     private var didReceivedNetworkError = false
     private var didReceivedStatus400 = false
     private var didReceivedStatus404 = false
@@ -88,7 +87,7 @@ class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .done, target: self, action: #selector(showCreateFolderViewController))
+        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .done, target: self, action: #selector(handleShowCreateFolderViewController))
         return b
     }()
 
@@ -141,8 +140,11 @@ class ListingViewController: UITableViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Overridden Methods and Properties
+// MARK: - UIViewController Methods
+
+extension ListingViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,7 +158,6 @@ class ListingViewController: UITableViewController {
         super.viewWillAppear(animated)
         if [ActionType.noAction, ActionType.showSearchResult].contains(self.action) {
             updateNavigationBarRightButtonItems()
-            tableView.tableHeaderView = nil
         }
         if needRefresh {
             nodes.removeAll()
@@ -184,6 +185,11 @@ class ListingViewController: UITableViewController {
             handleCancelEditMode()
         }
     }
+}
+
+// MARK: - UITableView Delegate Conformance
+
+extension ListingViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nodes.isEmpty ? 2 : nodes.count
@@ -191,10 +197,8 @@ class ListingViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if nodes.isEmpty {
-
             let cell = UITableViewCell()
             cell.isUserInteractionEnabled = false
-
             if indexPath.row == 1 {
                 cell.contentView.addSubview(messageStackView)
 
@@ -346,6 +350,11 @@ class ListingViewController: UITableViewController {
             }
         }
     }
+}
+
+// MARK: - UIScrollView delegate Conformance
+
+extension ListingViewController {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if refreshControl?.isRefreshing == true {
@@ -355,10 +364,307 @@ class ListingViewController: UITableViewController {
             endRefreshAndReloadTable()
         }
     }
+}
 
-    // MARK: - Helper Methods
+// MARK: - Target-Action Methods
 
-    private func setupTableView() {
+private extension ListingViewController {
+
+    @objc func handleShowNodeActionsController(_ sender: UIButton) {
+
+        self.animateActionButton(sender)
+
+        let nodeIndex = sender.tag
+        let node = self.nodes[nodeIndex]
+        let nodeLocation = node.location(in: self.rootLocation)
+
+        let controller = NodeActionsViewController(location: nodeLocation, node: node)
+
+        controller.onSelect = { [unowned self] action in
+
+            switch action {
+
+            case .bookmark:
+                self.executeToogleBookmark(location: nodeLocation, node: node, index: nodeIndex)
+
+            case .copy, .move:
+                self.showCopyOrMoveViewController(action: action, sourceLocations: [nodeLocation])
+
+            case .delete:
+                self.showDeleteViewController(location: nodeLocation, sourceView: sender, index: nodeIndex)
+
+            case .folderInfo:
+                self.showFolderInfoViewController(location: nodeLocation, index: nodeIndex)
+
+            case .rename:
+                self.showRenameViewController(nodeLocation: nodeLocation, node: node, index: nodeIndex)
+
+            case .sendDownloadLink:
+                self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .download)
+
+            case .sendUploadLink:
+                self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .upload)
+
+            case .makeShare, .manageShare:
+                self.showShareMountViewController(location: nodeLocation, sharedNode: node)
+
+            default:
+                break
+            }
+        }
+
+        presentController(controller, sender: sender)
+    }
+
+    @objc func handleCancelEditMode() {
+        tableView.setEditing(false, animated: true)
+        navigationController?.setToolbarHidden(true, animated: true)
+        updateNavigationBarRightButtonItems()
+    }
+
+    @objc func handleExecuteActionsInEditMode(_ sender: UIBarButtonItem) {
+
+        guard let chosenAction = ActionType(rawValue: sender.tag) else { return }
+        guard let selectedItemsIndexPaths = tableView.indexPathsForSelectedRows else { return }
+
+        let sourceLocations = selectedItemsIndexPaths.map { nodes[$0.row].location(in: self.rootLocation) }
+
+        switch chosenAction {
+        case .delete:
+            self.executeDeletionInSelectionMode(locations: sourceLocations)
+        case .copy, .move:
+            self.showCopyOrMoveViewController(action: chosenAction, sourceLocations: sourceLocations)
+        default:
+            break
+        }
+    }
+
+    @objc func handleCopyOrMoveAction() {
+
+        setBusyIndicatorView(true)
+
+        guard self.sourceLocations != nil else {
+            return
+        }
+
+        didSucceedCopyOrMove = false
+        didReceivedNetworkError = false
+        didReceivedStatus400 = false
+        didReceivedStatus404 = false
+
+        for sourceLocation in self.sourceLocations! {
+            self.executeCopyOrMove(sourceLocation: sourceLocation)
+        }
+
+        dispatchGroup.notify(queue: .main) {
+
+            self.setBusyIndicatorView(false)
+
+            if self.didReceivedNetworkError {
+                let title = NSLocalizedString("Error", comment: "")
+                let message = NSLocalizedString("An error has occured while processing the request.", comment: "")
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
+                return
+            } else {
+                if self.didReceivedStatus400 {
+                    let message = NSLocalizedString("An error has occured. Some elements already exists at the destination or the destination location no longer exists.", comment: "")
+                    let title = NSLocalizedString("Error", comment: "")
+                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                } else {
+                    if self.didReceivedStatus404 {
+                        let message = NSLocalizedString("An error has occured. Some elements no longer exists.", comment: "")
+                        let title = NSLocalizedString("Error", comment: "")
+                        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                            self.onFinish?()
+                        }))
+                        self.present(alertController, animated: true, completion: nil)
+                        return
+                    }
+                }
+            }
+
+            // Finish multiple edits without issues
+            self.dismiss(animated: true) {
+                self.onFinish?()
+            }
+        }
+    }
+
+    @objc func handleCancelCopyOrMoveAction() {
+        dismiss(animated: true, completion: nil)
+    }
+
+    @objc func handleUpdateContentOnPullToRefreshGesture() {
+        if self.isUpdating {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        self.getContent()
+    }
+
+    @objc func handleShowBookmarksViewController(_ sender: UIBarButtonItem) {
+
+        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 3 else {
+            return
+        }
+
+        let controller = ManageBookmarksViewController()
+        let controllerAction = self.action
+        let controllerSourceLocations = self.sourceLocations
+
+        controller.onFinish = { [weak self] in
+            self?.getContent()
+        }
+
+        controller.onUpdateNeeded = { [weak self] in
+            self?.getContent()
+        }
+
+        controller.onSelect = { [weak self] location in
+            let controller = ListingViewController(location: location, action: controllerAction, sourceLocations: controllerSourceLocations)
+
+            if self?.action != .noAction {
+
+                // It makes sens only if this is a copy or move controller
+                controller.onFinish = { [weak self] in
+                    self?.onFinish?()
+                }
+            }
+
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+
+        let navController = UINavigationController(rootViewController: controller)
+        navController.modalPresentationStyle = .popover
+        navController.popoverPresentationController?.sourceView = buttonView
+        navController.popoverPresentationController?.sourceRect = buttonView.bounds
+        present(navController, animated: true, completion: nil)
+    }
+
+    @objc func handleShowSortingSelectionViewController(_ sender: UIBarButtonItem) {
+
+        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 1 else {
+            return
+        }
+
+        let controller = SortFolderViewController()
+
+        controller.onSelection = { [weak self] in
+            self?.sortContent()
+            self?.tableView.reloadData()
+        }
+
+        presentController(controller, sender: buttonView)
+    }
+
+    @objc func handleShowMoreActionsViewController(_ sender: UIBarButtonItem) {
+
+        guard let rootNode = self.rootNode else {
+            print("No valid root node fetched in updateContent.")
+            return
+        }
+
+        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 0 else {
+            return
+        }
+
+        let controller = MoreActionsViewController(rootNode: rootNode, childs: self.nodes.count)
+
+        controller.onSelect = { [unowned self] selection in
+
+            switch selection {
+
+            case .bookmark:
+                self.setNeedsRefreshInPrevious()
+                self.executeToogleBookmark(location: self.rootLocation, node: rootNode)
+
+            case .createFolder:
+                self.handleShowCreateFolderViewController()
+
+            case .selectionMode:
+                if self.nodes.isEmpty { return }
+                self.activateEditMode()
+
+            case .manageShare, .makeShare, .shareInfo:
+                self.showShareMountViewController(location: self.rootLocation, sharedNode: rootNode)
+
+            case .sendDownloadLink:
+                self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .download)
+
+            case .sendUploadLink:
+                self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .upload)
+
+            default:
+                break
+            }
+        }
+
+        presentController(controller, sender: buttonView)
+    }
+
+    @objc func handleShowSearchViewController(_ sender: UIBarButtonItem) {
+
+        guard let nav = self.navigationController as? MainNavigationController else {
+            print("Could not get the MainNavigationController")
+            return
+        }
+
+        // If index of the search controller is set, and it is different than the current index on
+        // navigation stack, then we pop to the saved index, otherwise we show the search controller.
+        if let index = nav.searchResultsControllerIndex, index != nav.viewControllers.count - 1 {
+            let searchResultsController = nav.viewControllers[index]
+            _ = self.navigationController?.popToViewController(searchResultsController, animated: true)
+        } else {
+            nav.searchResultsControllerIndex = nav.viewControllers.count - 1
+        }
+    }
+
+    @objc func handleShowCreateFolderViewController() {
+
+        let controller = CreateFolderViewController(parentLocation: self.rootLocation)
+
+        controller.onFinish = { [unowned self] (folderName) in
+
+            // Set needRefresh in this list
+            self.needRefresh = true
+
+            // Set needRefresh in the main List
+            if let nav = self.presentingViewController as? UINavigationController {
+                if let cont = nav.topViewController as? ListingViewController {
+                    cont.needRefresh = true
+                }
+            }
+
+            let newLocation = self.rootLocation.appendingPathComponent(folderName, isFolder: true)
+
+            let controller = ListingViewController(location: newLocation, action: self.action, sourceLocations: self.sourceLocations)
+
+            controller.onFinish = { [weak self] in
+                self?.onFinish?()
+            }
+
+            self.navigationController?.pushViewController(controller, animated: true)
+
+        }
+
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = .formSheet
+
+        present(navigationController, animated: true, completion: nil)
+    }
+}
+
+// MARK: - Private Methods
+
+private extension ListingViewController {
+
+    func setupTableView() {
 
         definesPresentationContext = true
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -373,7 +679,7 @@ class ListingViewController: UITableViewController {
         tableView.rowHeight = AppSettings.tableViewRowHeight
     }
 
-    private func updateNavigationBarItems() {
+    func updateNavigationBarItems() {
 
         if self.rootLocation.path == "/" {
             self.title = rootLocation.mount.name
@@ -395,7 +701,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func setupToolBarButtonItems() {
+    func setupToolBarButtonItems() {
 
         switch self.action {
 
@@ -417,7 +723,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func setupSearchController() {
+    func setupSearchController() {
 
         // Pass the location of the current folder
         let src = SearchResultController(location: self.rootLocation)
@@ -439,7 +745,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func presentError(message: String) {
+    func presentError(message: String) {
 
         let title = NSLocalizedString("Error", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -447,7 +753,7 @@ class ListingViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
 
-    private func getContent() {
+    func getContent() {
         needRefresh = false
         isUpdating = true
         didReceivedNetworkError = false
@@ -523,7 +829,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func highlightSearchResultIfNeeded() {
+    func highlightSearchResultIfNeeded() {
 
         if let nameToHighlight = self.searchResult?.lowercased() {
 
@@ -546,12 +852,12 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func updateLocationContentMessage() {
+    func updateLocationContentMessage() {
         busyIndicator.stopAnimating()
         emptyFolderLabel.text = NSLocalizedString("Folder is Empty", comment: "")
     }
 
-    private func endRefreshAndReloadTable() {
+    func endRefreshAndReloadTable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
 
             self.refreshControl?.endRefreshing()
@@ -568,7 +874,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func sortContent() {
+    func sortContent() {
         switch AppSettings.sortMethod {
         case .byName:        sortByName()
         case .byDate:        sortByDate()
@@ -577,7 +883,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func animateActionButton(_ button: UIButton) {
+    func animateActionButton(_ button: UIButton) {
 
         var transform: CGAffineTransform
 
@@ -593,7 +899,7 @@ class ListingViewController: UITableViewController {
                        completion: nil)
     }
 
-    private func updateNavigationBarRightButtonItems() {
+    func updateNavigationBarRightButtonItems() {
 
         var rightBarButtonItems: [UIBarButtonItem] = []
 
@@ -618,7 +924,7 @@ class ListingViewController: UITableViewController {
         navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
     }
 
-    private func updateToolBarButtonItemsToMatchTableState() {
+    func updateToolBarButtonItemsToMatchTableState() {
         if tableView.indexPathsForSelectedRows != nil, toolbarItems != nil {
 
             if rootLocation.mount.canWrite {
@@ -632,7 +938,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func updateTableState() {
+    func updateTableState() {
 
         // Clear source locations
         self.sourceLocations = nil
@@ -650,14 +956,14 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func activateEditMode() {
+    func activateEditMode() {
         tableView.setEditing(true, animated: true)
         navigationController?.setToolbarHidden(false, animated: true)
         updateNavigationBarRightButtonItems()
         updateToolBarButtonItemsToMatchTableState()
     }
 
-    private func sortByName() {
+    func sortByName() {
         if AppSettings.showsFoldersFirst {
             if AppSettings.sortAscending {
                 self.nodes.sort { return $0.type == $1.type ? ($0.name.lowercased() < $1.name.lowercased()) : ($0.type < $1.type) }
@@ -673,7 +979,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func sortByDate() {
+    func sortByDate() {
         if AppSettings.showsFoldersFirst {
             if AppSettings.sortAscending {
                 self.nodes.sort { return $0.type == $1.type ? ($0.modified < $1.modified) : ($0.type < $1.type) }
@@ -689,7 +995,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func sortBySize() {
+    func sortBySize() {
         if AppSettings.sortAscending {
             self.nodes.sort { return $0.type == $1.type ? ($0.size < $1.size) : ($0.type < $1.type) }
         } else {
@@ -697,7 +1003,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func sortByContentType() {
+    func sortByContentType() {
         if AppSettings.sortAscending {
             self.nodes.sort { return $0.type == $1.type ? ($0.ext < $1.ext) : ($0.type < $1.type) }
         } else {
@@ -705,7 +1011,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func setBusyIndicatorView(_ visible: Bool) {
+    func setBusyIndicatorView(_ visible: Bool) {
         guard let navControllerView = navigationController?.view else {
             return
         }
@@ -742,7 +1048,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func setNeedsRefreshInMain() {
+    func setNeedsRefreshInMain() {
         // Set needRefresh true in the main Listing controller
         if let nav = self.presentingViewController as? UINavigationController {
             for controller in nav.viewControllers {
@@ -753,7 +1059,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func setNeedsRefreshInPrevious() {
+    func setNeedsRefreshInPrevious() {
         if let viewControllers = self.navigationController?.viewControllers {
             if let previousVC = viewControllers[viewControllers.count-2] as? ListingViewController {
                 previousVC.needRefresh = true
@@ -761,159 +1067,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    @objc private func handleShowBookmarksViewController(_ sender: UIBarButtonItem) {
-
-        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 3 else {
-            return
-        }
-
-        let controller = ManageBookmarksViewController()
-        let controllerAction = self.action
-        let controllerSourceLocations = self.sourceLocations
-
-        controller.onFinish = { [weak self] in
-            self?.getContent()
-        }
-
-        controller.onUpdateNeeded = { [weak self] in
-            self?.getContent()
-        }
-
-        controller.onSelect = { [weak self] location in
-            let controller = ListingViewController(location: location, action: controllerAction, sourceLocations: controllerSourceLocations)
-
-            if self?.action != .noAction {
-
-                // It makes sens only if this is a copy or move controller
-                controller.onFinish = { [weak self] in
-                    self?.onFinish?()
-                }
-            }
-
-            self?.navigationController?.pushViewController(controller, animated: true)
-        }
-
-        let navController = UINavigationController(rootViewController: controller)
-        navController.modalPresentationStyle = .popover
-        navController.popoverPresentationController?.sourceView = buttonView
-        navController.popoverPresentationController?.sourceRect = buttonView.bounds
-        present(navController, animated: true, completion: nil)
-    }
-
-    @objc private func handleShowSortingSelectionViewController(_ sender: UIBarButtonItem) {
-
-        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 1 else {
-            return
-        }
-
-        let controller = SortFolderViewController()
-
-        controller.onSelection = { [weak self] in
-            self?.sortContent()
-            self?.tableView.reloadData()
-        }
-
-        presentController(controller, sender: buttonView)
-    }
-
-    @objc private func handleShowMoreActionsViewController(_ sender: UIBarButtonItem) {
-
-        guard let rootNode = self.rootNode else {
-            print("No valid root node fetched in updateContent.")
-            return
-        }
-
-        guard let buttonView = sender.value(forKey: "view") as? UIView, sender.tag == 0 else {
-            return
-        }
-
-        let controller = MoreActionsViewController(rootNode: rootNode, childs: self.nodes.count)
-
-        controller.onSelect = { [unowned self] selection in
-
-            switch selection {
-
-            case .bookmark:
-                self.setNeedsRefreshInPrevious()
-                self.executeToogleBookmark(location: self.rootLocation, node: rootNode)
-
-            case .createFolder:
-                self.showCreateFolderViewController()
-
-            case .selectionMode:
-                if self.nodes.isEmpty { return }
-                self.activateEditMode()
-
-            case .manageShare, .makeShare, .shareInfo:
-                self.showShareMountViewController(location: self.rootLocation, sharedNode: rootNode)
-
-            case .sendDownloadLink:
-                self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .download)
-
-            case .sendUploadLink:
-                self.showLinkViewController(location: self.rootLocation, sharedNode: rootNode, linkType: .upload)
-
-            default:
-                break
-            }
-        }
-
-        presentController(controller, sender: buttonView)
-    }
-
-    @objc private func handleShowSearchViewController(_ sender: UIBarButtonItem) {
-
-        guard let nav = self.navigationController as? MainNavigationController else {
-            print("Could not get the MainNavigationController")
-            return
-        }
-
-        // If index of the search controller is set, and it is different than the current index on
-        // navigation stack, then we pop to the saved index, otherwise we show the search controller.
-        if let index = nav.searchResultsControllerIndex, index != nav.viewControllers.count - 1 {
-            let searchResultsController = nav.viewControllers[index]
-            _ = self.navigationController?.popToViewController(searchResultsController, animated: true)
-        } else {
-            nav.searchResultsControllerIndex = nav.viewControllers.count - 1
-        }
-    }
-
-    @objc private func showCreateFolderViewController() {
-
-        let controller = CreateFolderViewController(parentLocation: self.rootLocation)
-
-        controller.onFinish = { [unowned self] (folderName) in
-
-            // Set needRefresh in this list
-            self.needRefresh = true
-
-            // Set needRefresh in the main List
-            if let nav = self.presentingViewController as? UINavigationController {
-                if let cont = nav.topViewController as? ListingViewController {
-                    cont.needRefresh = true
-                }
-            }
-
-            let newLocation = self.rootLocation.appendingPathComponent(folderName, isFolder: true)
-
-            let controller = ListingViewController(location: newLocation, action: self.action, sourceLocations: self.sourceLocations)
-
-            controller.onFinish = { [weak self] in
-                self?.onFinish?()
-            }
-
-            self.navigationController?.pushViewController(controller, animated: true)
-
-        }
-
-        let navigationController = UINavigationController(rootViewController: controller)
-        navigationController.modalPresentationStyle = .formSheet
-
-        present(navigationController, animated: true, completion: nil)
-
-    }
-
-    private func presentController(_ controller: UIViewController, sender: UIView) {
+    func presentController(_ controller: UIViewController, sender: UIView) {
         if traitCollection.horizontalSizeClass == .regular {
             controller.modalPresentationStyle = .popover
             controller.popoverPresentationController?.sourceView = sender
@@ -925,147 +1079,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    @objc private func handleShowNodeActionsController(_ sender: UIButton) {
-
-        self.animateActionButton(sender)
-
-        let nodeIndex = sender.tag
-        let node = self.nodes[nodeIndex]
-        let nodeLocation = node.location(in: self.rootLocation)
-
-        let controller = NodeActionsViewController(location: nodeLocation, node: node)
-
-        controller.onSelect = { [unowned self] action in
-
-                switch action {
-
-                case .bookmark:
-                    self.executeToogleBookmark(location: nodeLocation, node: node, index: nodeIndex)
-
-                case .copy, .move:
-                    self.showCopyOrMoveViewController(action: action, sourceLocations: [nodeLocation])
-
-                case .delete:
-                    self.showDeleteViewController(location: nodeLocation, sourceView: sender, index: nodeIndex)
-
-                case .folderInfo:
-                    self.showFolderInfoViewController(location: nodeLocation, index: nodeIndex)
-
-                case .rename:
-                    self.showRenameViewController(nodeLocation: nodeLocation, node: node, index: nodeIndex)
-
-                case .sendDownloadLink:
-                    self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .download)
-
-                case .sendUploadLink:
-                    self.showLinkViewController(location: nodeLocation, sharedNode: node, linkType: .upload)
-
-                case .makeShare, .manageShare:
-                    self.showShareMountViewController(location: nodeLocation, sharedNode: node)
-
-                default:
-                    break
-                }
-        }
-
-        presentController(controller, sender: sender)
-    }
-
-    @objc private func handleCancelEditMode() {
-        tableView.setEditing(false, animated: true)
-        navigationController?.setToolbarHidden(true, animated: true)
-        updateNavigationBarRightButtonItems()
-    }
-
-    @objc private func handleExecuteActionsInEditMode(_ sender: UIBarButtonItem) {
-
-        guard let chosenAction = ActionType(rawValue: sender.tag) else { return }
-        guard let selectedItemsIndexPaths = tableView.indexPathsForSelectedRows else { return }
-
-        let sourceLocations = selectedItemsIndexPaths.map { nodes[$0.row].location(in: self.rootLocation) }
-
-        switch chosenAction {
-        case .delete:
-            self.executeDeletionInSelectionMode(locations: sourceLocations)
-        case .copy, .move:
-            self.showCopyOrMoveViewController(action: chosenAction, sourceLocations: sourceLocations)
-        default:
-            break
-        }
-    }
-
-    @objc private func handleCopyOrMoveAction() {
-
-        setBusyIndicatorView(true)
-
-        guard self.sourceLocations != nil else {
-            return
-        }
-
-        didSucceedCopyOrMove = false
-        didReceivedNetworkError = false
-        didReceivedStatus400 = false
-        didReceivedStatus404 = false
-
-        for sourceLocation in self.sourceLocations! {
-            self.executeCopyOrMove(sourceLocation: sourceLocation)
-        }
-
-        dispatchGroup.notify(queue: .main) {
-
-            self.setBusyIndicatorView(false)
-
-            if self.didReceivedNetworkError {
-                let title = NSLocalizedString("Error", comment: "")
-                let message = NSLocalizedString("An error has occured while processing the request.", comment: "")
-                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
-                self.present(alertController, animated: true, completion: nil)
-                return
-            } else {
-                if self.didReceivedStatus400 {
-                    let message = NSLocalizedString("An error has occured. Some elements already exists at the destination or the destination location no longer exists.", comment: "")
-                    let title = NSLocalizedString("Error", comment: "")
-                    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
-                    self.present(alertController, animated: true, completion: nil)
-                    return
-                } else {
-                    if self.didReceivedStatus404 {
-                        let message = NSLocalizedString("An error has occured. Some elements no longer exists.", comment: "")
-                        let title = NSLocalizedString("Error", comment: "")
-                        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                        alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
-                            self.onFinish?()
-                        }))
-                        self.present(alertController, animated: true, completion: nil)
-                        return
-                    }
-                }
-            }
-
-            // Finish multiple edits without issues
-            self.dismiss(animated: true) {
-                self.onFinish?()
-            }
-        }
-    }
-
-    @objc private func handleCancelCopyOrMoveAction() {
-        dismiss(animated: true, completion: nil)
-    }
-
-    @objc private func handleUpdateContentOnPullToRefreshGesture() {
-        if self.isUpdating {
-            self.refreshControl?.endRefreshing()
-            return
-        }
-        self.getContent()
-    }
-
-    // MARK: - Action Execution
-
-    private func executeToogleBookmark(location: Location, node: Node, index: Int? = nil) {
+    func executeToogleBookmark(location: Location, node: Node, index: Int? = nil) {
 
         func updateBookmarkIcon(bookmark: Bookmark?) {
             if let index = index {
@@ -1105,10 +1119,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func executeDeletion(at location: Location, index: Int) {
-
-        // TODO: REfactor with user feedback
-
+    func executeDeletion(at location: Location, index: Int) {
         DigiClient.shared.deleteNode(at: location) { (statusCode, error) in
 
             // TODO: Stop spinner
@@ -1150,7 +1161,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func executeCopyOrMove(sourceLocation: Location) {
+    func executeCopyOrMove(sourceLocation: Location) {
 
         let sourceName = (sourceLocation.path as NSString).lastPathComponent
         let isFolder = sourceName.last == "/"
@@ -1229,7 +1240,7 @@ class ListingViewController: UITableViewController {
         }
     }
 
-    private func executeDeletionInSelectionMode(locations: [Location]) {
+    func executeDeletionInSelectionMode(locations: [Location]) {
 
         guard isActionConfirmed else {
 
@@ -1299,7 +1310,7 @@ class ListingViewController: UITableViewController {
 
     }
 
-    private func showRenameViewController(nodeLocation: Location, node: Node, index: Int) {
+    func showRenameViewController(nodeLocation: Location, node: Node, index: Int) {
 
         let controller = RenameViewController(nodeLocation: nodeLocation, node: node)
 
@@ -1320,7 +1331,7 @@ class ListingViewController: UITableViewController {
 
     }
 
-    private func showFolderInfoViewController(location: Location, index: Int) {
+    func showFolderInfoViewController(location: Location, index: Int) {
 
         let controller = FolderInfoViewController(location: location)
 
@@ -1333,7 +1344,7 @@ class ListingViewController: UITableViewController {
         self.present(navController, animated: true, completion: nil)
     }
 
-    private func showDeleteViewController(location: Location, sourceView: UIView, index: Int) {
+    func showDeleteViewController(location: Location, sourceView: UIView, index: Int) {
 
         let controller = DeleteViewController(isFolder: false)
 
@@ -1344,7 +1355,7 @@ class ListingViewController: UITableViewController {
         presentController(controller, sender: sourceView)
     }
 
-    private func showCopyOrMoveViewController(action: ActionType, sourceLocations: [Location]) {
+    func showCopyOrMoveViewController(action: ActionType, sourceLocations: [Location]) {
 
         guard let stackControllers = self.navigationController?.viewControllers else {
             print("Couldn't get the previous navigation controllers!")
@@ -1391,7 +1402,7 @@ class ListingViewController: UITableViewController {
 
     }
 
-    private func showLinkViewController(location: Location, sharedNode: Node, linkType: LinkType) {
+    func showLinkViewController(location: Location, sharedNode: Node, linkType: LinkType) {
 
         let onFinish = { [weak self] (shouldExitMount: Bool) in
 
@@ -1410,7 +1421,7 @@ class ListingViewController: UITableViewController {
         self.present(navController, animated: true, completion: nil)
     }
 
-    private func showShareMountViewController(location: Location, sharedNode: Node) {
+    func showShareMountViewController(location: Location, sharedNode: Node) {
 
         let onFinish = { [weak self] (shouldExitMount: Bool) in
 
