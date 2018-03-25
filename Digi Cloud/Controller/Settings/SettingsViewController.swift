@@ -27,7 +27,7 @@ final class SettingsViewController: UITableViewController {
         b.setTitleColor(.white, for: .normal)
         b.setTitle(NSLocalizedString("Confirm", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        b.addTarget(self, action: #selector(handleLogoutConfirmed), for: .touchUpInside)
+        b.addTarget(self, action: #selector(handleConfirmButtonTouched), for: .touchUpInside)
         b.contentEdgeInsets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
         b.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.25, alpha: 1.0)
         return b
@@ -178,7 +178,7 @@ final class SettingsViewController: UITableViewController {
                     let s = UISwitch()
                     s.isOn = AppSettings.allowsCellularAccess
                     s.translatesAutoresizingMaskIntoConstraints = false
-                    s.addTarget(self, action: #selector(toggleAllowingCellularAccessSetting), for: .valueChanged)
+                    s.addTarget(self, action: #selector(allowCellularSwitchValueChanged), for: .valueChanged)
                     return s
                 }()
 
@@ -296,7 +296,7 @@ final class SettingsViewController: UITableViewController {
             object: nil)
     }
 
-    @objc private func toggleAllowingCellularAccessSetting() {
+    @objc private func allowCellularSwitchValueChanged() {
         AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
         DigiClient.shared.renewSession()
     }
@@ -321,7 +321,7 @@ final class SettingsViewController: UITableViewController {
                        completion: nil)
     }
 
-    @objc private func handleLogoutConfirmed() {
+    @objc private func handleConfirmButtonTouched() {
 
         UIApplication.shared.beginIgnoringInteractionEvents()
         defer { UIApplication.shared.endIgnoringInteractionEvents() }

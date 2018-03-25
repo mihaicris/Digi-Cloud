@@ -79,7 +79,7 @@ final class ShareLinkViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Save", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        b.addTarget(self, action: #selector(handleSaveShortURL), for: .touchUpInside)
+        b.addTarget(self, action: #selector(handleSaveShortURLButtonTouched), for: .touchUpInside)
         b.isHidden = true
         return b
     }()
@@ -88,7 +88,7 @@ final class ShareLinkViewController: UIViewController {
         let sw = UISwitch()
         sw.translatesAutoresizingMaskIntoConstraints = false
         sw.isOn = true
-        sw.addTarget(self, action: #selector(handleEnablePassword(_:)), for: .valueChanged)
+        sw.addTarget(self, action: #selector(handleEnablePasswordSwitchValueChanged(_:)), for: .valueChanged)
         return sw
     }()
 
@@ -96,7 +96,7 @@ final class ShareLinkViewController: UIViewController {
         let sw = UISwitch()
         sw.translatesAutoresizingMaskIntoConstraints = false
         sw.isOn = false
-        sw.addTarget(self, action: #selector(handleToggleEmailNotification(_:)), for: .valueChanged)
+        sw.addTarget(self, action: #selector(handleEmailNotificationSwitchValueChanged(_:)), for: .valueChanged)
         return sw
     }()
 
@@ -112,7 +112,7 @@ final class ShareLinkViewController: UIViewController {
         b.tintColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1.0)
         b.setImage(#imageLiteral(resourceName: "refresh_icon").withRenderingMode(.alwaysTemplate), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.addTarget(self, action: #selector(handleResetPassword), for: .touchUpInside)
+        b.addTarget(self, action: #selector(handleResetPasswordButtonTouched), for: .touchUpInside)
         return b
     }()
 
@@ -128,7 +128,7 @@ final class ShareLinkViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Change", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        b.addTarget(self, action: #selector(handleChangeValidity), for: .touchUpInside)
+        b.addTarget(self, action: #selector(handleChangeValidityButtonTouched), for: .touchUpInside)
         return b
     }()
 
@@ -145,7 +145,7 @@ final class ShareLinkViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitle(NSLocalizedString("Save", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        b.addTarget(self, action: #selector(handleSaveCustomDate), for: .touchUpInside)
+        b.addTarget(self, action: #selector(handleSaveCustomDateButtonTouched), for: .touchUpInside)
         b.isHidden = true
         return b
     }()
@@ -156,7 +156,7 @@ final class ShareLinkViewController: UIViewController {
         dp.locale = .current
         dp.datePickerMode = .dateAndTime
         dp.minuteInterval = 30
-        dp.addTarget(self, action: #selector(handleValidateCustomDate(_:)), for: .valueChanged)
+        dp.addTarget(self, action: #selector(handleDatePickerValueChanged(_:)), for: .valueChanged)
         dp.isHidden = true
         return dp
     }()
@@ -171,7 +171,7 @@ final class ShareLinkViewController: UIViewController {
         ])
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.setTitleTextAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12)], for: .normal)
-        sc.addTarget(self, action: #selector(handleValiditySelectorValueChanged(_:)), for: .valueChanged)
+        sc.addTarget(self, action: #selector(handleValiditySegmentedControlValueChanged(_:)), for: .valueChanged)
         sc.isHidden = true
         return sc
     }()
@@ -202,7 +202,7 @@ final class ShareLinkViewController: UIViewController {
             b.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.9, alpha: 1)
             b.tag = 11
             b.isHidden = true
-            b.addTarget(self, action: #selector(handleButtonOKPressed), for: .touchUpInside)
+            b.addTarget(self, action: #selector(handleOKButtonTouched), for: .touchUpInside)
             return b
         }()
 
@@ -483,7 +483,7 @@ extension ShareLinkViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if saveHashButton.isHidden == false {
-            handleSaveShortURL()
+            handleSaveShortURLButtonTouched()
             return true
         } else {
             return false
@@ -511,7 +511,7 @@ extension ShareLinkViewController: UITextFieldDelegate {
 
 private extension ShareLinkViewController {
 
-    @objc func handleSend() {
+    @objc func handleShareButtonTouched() {
         let title = NSLocalizedString("Digi Storage file share", comment: "")
         var content: String
 
@@ -536,7 +536,7 @@ private extension ShareLinkViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc func handleSaveShortURL() {
+    @objc func handleSaveShortURLButtonTouched() {
         isSaving = true
         guard let hash = hashTextField.text else {
             print("No hash")
@@ -568,7 +568,7 @@ private extension ShareLinkViewController {
         }
     }
 
-    @objc func handleResetPassword() {
+    @objc func handleResetPasswordButtonTouched() {
         resetAllFields()
         startSpinning()
         DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType, completion: { result, error in
@@ -581,7 +581,7 @@ private extension ShareLinkViewController {
         })
     }
 
-    @objc func handleDelete() {
+    @objc func handleDeleteButtonTouched() {
         configureWaitingView(type: .started, message: NSLocalizedString("Deleting Link", comment: ""))
         DigiClient.shared.deleteLink(mount: location.mount, linkId: link.identifier, type: linkType) { error in
             guard error == nil else {
@@ -594,11 +594,11 @@ private extension ShareLinkViewController {
         }
     }
 
-    @objc func handleEnablePassword(_ sender: UISwitch) {
+    @objc func handleEnablePasswordSwitchValueChanged(_ sender: UISwitch) {
         resetAllFields()
         startSpinning()
         if sender.isOn {
-            handleResetPassword()
+            handleResetPasswordButtonTouched()
         } else {
             DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType) { result, error in
                 self.stopSpinning()
@@ -613,22 +613,22 @@ private extension ShareLinkViewController {
         }
     }
 
-    @objc func handleCancelChangeShortURL() {
+    @objc func handleTapGestureRecognized() {
         hashTextField.text = originalLinkHash
         hashTextField.resignFirstResponder()
     }
 
-    @objc func handleDone() {
+    @objc func handleDoneButtonTouched() {
         dismiss(animated: true) {
             self.onFinish?(false)
         }
     }
 
-    @objc func handleButtonOKPressed(_ sender: UIButton) {
+    @objc func handleOKButtonTouched(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
 
-    @objc func handleChangeValidity() {
+    @objc func handleChangeValidityButtonTouched() {
         resetAllFields()
         validityLabel.isHidden = true
         changeValidityButton.isHidden = true
@@ -636,8 +636,8 @@ private extension ShareLinkViewController {
         validitySegmentedControl.selectedSegmentIndex = UISegmentedControlNoSegment
     }
 
-    @objc func handleValiditySelectorValueChanged(_ sender: UISegmentedControl) {
-        var validTo: TimeInterval?
+    @objc func handleValiditySegmentedControlValueChanged(_ sender: UISegmentedControl) {
+        var validityDate: TimeInterval?
         let calendarComponent: Calendar.Component?
         switch sender.selectedSegmentIndex {
         case 0:
@@ -658,12 +658,12 @@ private extension ShareLinkViewController {
         }
         if let calendarComponent = calendarComponent,
             let date = Calendar.current.date(byAdding: calendarComponent, value: 1, to: Date()) {
-            validTo = date.timeIntervalSince1970
+            validityDate = date.timeIntervalSince1970
         }
-        saveCustomValidationDate(validTo: validTo)
+        saveCustomValidationDate(validTo: validityDate)
     }
 
-    @objc func handleValidateCustomDate(_ sender: UIDatePicker) {
+    @objc func handleDatePickerValueChanged(_ sender: UIDatePicker) {
         let customDate = sender.date
         let minimumDate = Calendar.current.date(byAdding: .minute, value: 30, to: Date())!
         if customDate < minimumDate {
@@ -673,14 +673,14 @@ private extension ShareLinkViewController {
         }
     }
 
-    @objc func handleSaveCustomDate() {
+    @objc func handleSaveCustomDateButtonTouched() {
         let customDate = validityDateAndTimePicker.date
         let validTo = customDate.timeIntervalSince1970
         saveCustomDateButton.isHidden = true
         saveCustomValidationDate(validTo: validTo)
     }
 
-    @objc func handleToggleEmailNotification(_ sender: UISwitch) {
+    @objc func handleEmailNotificationSwitchValueChanged(_ sender: UISwitch) {
         resetAllFields()
         DigiClient.shared.setReceiverAlert(isOn: sender.isOn, mount: location.mount, linkId: link.identifier) { result, error in
             guard error == nil, result != nil else {
@@ -753,19 +753,18 @@ private extension ShareLinkViewController {
             title = NSLocalizedString("Receive Files", comment: "")
         }
 
-        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(handleDone))
+        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(handleDoneButtonTouched))
         navigationItem.setRightBarButton(doneButton, animated: false)
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .done, target: nil, action: nil)
     }
 
     func setupToolBarItems() {
-        let sendButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleSend))
         let flexibleButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
         let deleteButton: UIBarButtonItem = {
             let v = UIButton(type: UIButtonType.system)
             v.setTitle(NSLocalizedString("Delete Link", comment: ""), for: .normal)
-            v.addTarget(self, action: #selector(handleDelete), for: .touchUpInside)
+            v.addTarget(self, action: #selector(handleDeleteButtonTouched), for: .touchUpInside)
             v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
             v.setTitleColor(.red, for: .normal)
             v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
@@ -774,11 +773,23 @@ private extension ShareLinkViewController {
             return b
         }()
 
-        setToolbarItems([deleteButton, flexibleButton, sendButton], animated: false)
+        let shareButton: UIBarButtonItem = {
+            let v = UIButton(type: UIButtonType.system)
+            v.setTitle(NSLocalizedString("Share", comment: ""), for: .normal)
+            v.addTarget(self, action: #selector(handleShareButtonTouched), for: .touchUpInside)
+            v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
+            v.setTitleColor(.red, for: .normal)
+            v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+            v.sizeToFit()
+            let b = UIBarButtonItem(customView: v)
+            return b
+        }()
+
+        setToolbarItems([deleteButton, flexibleButton, shareButton], animated: false)
     }
 
     func addViewTapGestureRecognizer() {
-        let tgr = UITapGestureRecognizer(target: self, action: #selector(handleCancelChangeShortURL))
+        let tgr = UITapGestureRecognizer(target: self, action: #selector(handleTapGestureRecognized))
         view.addGestureRecognizer(tgr)
     }
 

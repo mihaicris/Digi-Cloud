@@ -280,7 +280,7 @@ class AppSettings {
                 b.setTitle(NSLocalizedString("OK", comment: ""), for: .normal)
                 b.setTitleColor(.white, for: [.normal, .selected])
                 b.contentEdgeInsets = UIEdgeInsets(top: 5, left: 35, bottom: 5, right: 35)
-                b.addTarget(self, action: #selector(handleCrash), for: .touchUpInside)
+                b.addTarget(self, action: #selector(handleOKButtonTouched), for: .touchUpInside)
                 return b
             }()
 
@@ -312,7 +312,7 @@ class AppSettings {
         }
     }
 
-    @objc private func handleCrash() {
+    @objc private func handleOKButtonTouched() {
         fatalError()
     }
 }
