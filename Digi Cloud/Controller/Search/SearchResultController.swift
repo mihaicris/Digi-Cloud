@@ -205,12 +205,10 @@ final class SearchResultController: UITableViewController {
         DigiClient.shared.task?.cancel()
 
         DigiClient.shared.search(parameters: parameters) { nodeHitsResult, mountsDictionaryResult, error in
-
             guard error == nil else {
                 print("Error: \(error!.localizedDescription)")
                 return
             }
-
             self.filteredContent = nodeHitsResult ?? []
             self.filteredMountsDictionary = mountsDictionaryResult ?? [:]
 

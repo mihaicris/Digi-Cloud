@@ -423,7 +423,6 @@ class ListingViewController: UITableViewController {
         let src = SearchResultController(location: self.rootLocation)
 
         searchController = UISearchController(searchResultsController: src)
-        searchController.delegate = self
         searchController.loadViewIfNeeded()
         searchController.searchResultsUpdater = src
         searchController.searchBar.delegate = src
@@ -433,19 +432,11 @@ class ListingViewController: UITableViewController {
         searchController.searchBar.scopeButtonTitles = [NSLocalizedString("This folder", comment: ""),
                                                         NSLocalizedString("Everywhere", comment: "")]
         searchController.searchBar.setValue(NSLocalizedString("Cancel", comment: ""), forKey: "cancelButtonText")
-
-        if #available(iOS 11.0, *) {
-            switch self.action {
-            case .copy, .move: break
-            default:
-                navigationItem.searchController = searchController
-                navigationItem.hidesSearchBarWhenScrolling = false
-            }
+        switch self.action {
+        case .copy, .move: break
+        default:
+            navigationItem.searchController = searchController
         }
-    }
-
-    override func viewDidLayoutSubviews() {
-        self.searchController.searchBar.sizeToFit()
     }
 
     private func presentError(message: String) {
@@ -457,7 +448,6 @@ class ListingViewController: UITableViewController {
     }
 
     private func getContent() {
-
         needRefresh = false
         isUpdating = true
         didReceivedNetworkError = false
@@ -621,11 +611,8 @@ class ListingViewController: UITableViewController {
             searchBarButton.tag = 2
 
             rightBarButtonItems.append(moreActionsBarButton)
-            if #available(iOS 11.0, *) {
-                rightBarButtonItems.append(contentsOf: [sortBarButton, bookmarksBarButton])
-            } else {
-                rightBarButtonItems.append(contentsOf: [sortBarButton, searchBarButton, bookmarksBarButton])
-            }
+            rightBarButtonItems.append(contentsOf: [sortBarButton, bookmarksBarButton])
+
         }
 
         navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
@@ -888,21 +875,6 @@ class ListingViewController: UITableViewController {
             _ = self.navigationController?.popToViewController(searchResultsController, animated: true)
         } else {
             nav.searchResultsControllerIndex = nav.viewControllers.count - 1
-
-            if #available(iOS 11.0, *) {
-
-            } else {
-                self.tableView.setContentOffset(CGPoint(x: 0, y: -64), animated: false)
-
-            }
-
-            if #available(iOS 11.0, *) {} else {
-                if self.tableView.tableHeaderView == nil {
-                    searchController.searchBar.sizeToFit()
-                    self.tableView.tableHeaderView = searchController.searchBar
-                }
-                searchController.searchBar.becomeFirstResponder()
-            }
         }
     }
 
@@ -1460,17 +1432,5 @@ class ListingViewController: UITableViewController {
         let navController = UINavigationController(rootViewController: controller)
         navController.modalPresentationStyle = .formSheet
         self.present(navController, animated: true, completion: nil)
-    }
-}
-
-extension ListingViewController: UISearchControllerDelegate {
-
-    func willDismissSearchController(_ searchController: UISearchController) {
-        if #available(iOS 11.0, *) {} else {
-            if let nav = navigationController as? MainNavigationController {
-                nav.searchResultsControllerIndex = nil
-            }
-            tableView.tableHeaderView = nil
-        }
     }
 }
