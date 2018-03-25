@@ -104,7 +104,7 @@ final class SearchResultController: UITableViewController {
 
         // Identification of the button's row that tapped
         cell.seeInFolderButton.tag = indexPath.row
-        cell.seeInFolderButton.addTarget(self, action: #selector(handleSeeItemInEnclosedFolder(_:)), for: .touchUpInside)
+        cell.seeInFolderButton.addTarget(self, action: #selector(handleSeeInFolderButtonTouched(_:)), for: .touchUpInside)
 
         return cell
     }
@@ -144,7 +144,7 @@ final class SearchResultController: UITableViewController {
         tableView.separatorStyle = .none
     }
 
-    @objc private func handleSeeItemInEnclosedFolder(_ button: UIButton) {
+    @objc private func handleSeeInFolderButtonTouched(_ button: UIButton) {
 
         let nodeHit = filteredContent[button.tag]
 

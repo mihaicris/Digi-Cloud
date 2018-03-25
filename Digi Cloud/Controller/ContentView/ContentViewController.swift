@@ -121,7 +121,7 @@ final class ContentViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
         self.title = (self.location.path as NSString).lastPathComponent
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleExportAction))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleExportButtonTouched))
         navigationItem.rightBarButtonItem?.isEnabled = false
 
     }
@@ -234,7 +234,7 @@ final class ContentViewController: UIViewController {
         session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
     }
 
-    @objc private func handleExportAction() {
+    @objc private func handleExportButtonTouched() {
         handImageView.isHidden = true
 
         // check if inputs are available

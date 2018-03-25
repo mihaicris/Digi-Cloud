@@ -23,17 +23,17 @@ final class ManageBookmarksViewController: UITableViewController {
     private let dispatchGroup = DispatchGroup()
 
     lazy var deleteButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleAskDeleteConfirmation))
+        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleDeleteAllButtonTouched))
         return b
     }()
 
     lazy var cancelEditButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEdit))
+        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEditButtonTouched))
         return b
     }()
 
     lazy var dismissButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleDismiss))
+        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCloseButtonTouched))
         return b
     }()
 
@@ -78,7 +78,7 @@ final class ManageBookmarksViewController: UITableViewController {
     private func registerForNotificationCenter() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleDismiss),
+            selector: #selector(handleCloseButtonTouched),
             name: .UIApplicationWillResignActive,
             object: nil)
     }
@@ -349,7 +349,7 @@ final class ManageBookmarksViewController: UITableViewController {
         self.updateButtonsToMatchTableState()
     }
 
-    @objc private func handleAskDeleteConfirmation() {
+    @objc private func handleDeleteAllButtonTouched() {
 
         var messageString: String
 
@@ -376,12 +376,12 @@ final class ManageBookmarksViewController: UITableViewController {
         present(alertController, animated: true, completion: nil)
     }
 
-    @objc private func handleCancelEdit() {
+    @objc private func handleCancelEditButtonTouched() {
         self.tableView.setEditing(false, animated: true)
         self.updateButtonsToMatchTableState()
     }
 
-    @objc private func handleDismiss() {
+    @objc private func handleCloseButtonTouched() {
         self.dismiss(animated: true, completion: nil)
     }
 }
