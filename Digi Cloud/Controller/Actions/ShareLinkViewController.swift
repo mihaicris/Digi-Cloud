@@ -8,11 +8,9 @@
 
 import UIKit
 
-final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+final class ShareLinkViewController: UIViewController {
 
-    // MARK: - Properties
-
-    var onFinish: ((Bool) -> Void)?
+    // MARK: - Private types
 
     private enum Sections {
         case location
@@ -21,8 +19,22 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         case validity
     }
 
+    // MARK: - Internal Properties
+
+    var onFinish: ((Bool) -> Void)?
+
+    // MARK: - Internal Properties
+
     private let location: Location
     private let linkType: LinkType
+    private var sections: [Sections] = []
+    private var originalLinkHash: String!
+    private var isSaving: Bool = false
+    private var isAnimatingReset: Bool = false
+    private var errorMessageVerticalConstraint: NSLayoutConstraint!
+    private var rightTextFieldConstraintDefault: NSLayoutConstraint!
+    private var rightTextFieldConstraintInEditMode: NSLayoutConstraint!
+
     private var link: Link! {
         didSet {
             if !isAnimatingReset {
@@ -30,12 +42,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             }
         }
     }
-
-    private var sections: [Sections] = []
-
-    private var originalLinkHash: String!
-    private var isSaving: Bool = false
-    private var isAnimatingReset: Bool = false
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
@@ -170,16 +176,9 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return sc
     }()
 
-    private var errorMessageVerticalConstraint: NSLayoutConstraint!
-
-    private var rightTextFieldConstraintDefault, rightTextFieldConstraintInEditMode: NSLayoutConstraint?
-
     private lazy var waitingView: UIView = {
-
         let v = UIView()
-
         v.isHidden = false
-
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
 
@@ -243,8 +242,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return df
     }()
 
-    // MARK: - Initializers and Deinitializers
-
     init(location: Location, linkType: LinkType, onFinish: @escaping (Bool) -> Void) {
         self.location = location
         self.linkType = linkType
@@ -256,7 +253,11 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Overridden Methods and Properties
+}
+
+// MARK: - View Controller Methods
+
+extension ShareLinkViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -268,33 +269,17 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         requestLink()
     }
 
+}
+
+// MARK: - UITableViewDataSource Conformance
+
+extension ShareLinkViewController: UITableViewDataSource {
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-
-        let headerTitle: String
-
-        switch sections[section] {
-        case .location:
-            headerTitle = NSLocalizedString("LOCATION", comment: "")
-        case .link:
-            headerTitle = NSLocalizedString("LINK", comment: "")
-        case .password:
-            headerTitle = NSLocalizedString("PASSWORD", comment: "")
-        case .validity:
-            headerTitle = NSLocalizedString("VALIDITY", comment: "")
-        }
-        return headerTitle
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 35
-    }
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
         switch sections[section] {
         case .location:
             return 1
@@ -307,17 +292,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
-        if sections[indexPath.section] == .validity && validityDateAndTimePicker.isHidden == false {
-            return 150
-        } else {
-            return AppSettings.textFieldRowHeight
-        }
-    }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         let cell = UITableViewCell()
         cell.selectionStyle = .none
 
@@ -378,7 +353,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                     saveHashButton.rightAnchor.constraint(equalTo: cell.layoutMarginsGuide.rightAnchor),
 
                     hashTextField.leftAnchor.constraint(lessThanOrEqualTo: baseLinkLabel.rightAnchor, constant: 2),
-                    rightTextFieldConstraintDefault!,
+                    rightTextFieldConstraintDefault,
                     hashTextField.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
                     hashTextField.heightAnchor.constraint(equalToConstant: 30)])
 
@@ -444,7 +419,45 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return cell
     }
 
-    // MARK: - UItextFieldDelegate Conformance
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let headerTitle: String
+
+        switch sections[section] {
+        case .location:
+            headerTitle = NSLocalizedString("LOCATION", comment: "")
+        case .link:
+            headerTitle = NSLocalizedString("LINK", comment: "")
+        case .password:
+            headerTitle = NSLocalizedString("PASSWORD", comment: "")
+        case .validity:
+            headerTitle = NSLocalizedString("VALIDITY", comment: "")
+        }
+        return headerTitle
+    }
+
+}
+
+// MARK: - UITableViewDelegate Conformance
+
+extension ShareLinkViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 35
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if sections[indexPath.section] == .validity && validityDateAndTimePicker.isHidden == false {
+            return 150
+        } else {
+            return AppSettings.textFieldRowHeight
+        }
+    }
+
+}
+
+// MARK: - UITextFieldDelegate Conformance
+
+extension ShareLinkViewController: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         setDateAndTimePickerViewVisible(false)
@@ -468,8 +481,16 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return true
     }
 
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if saveHashButton.isHidden == false {
+            handleSaveShortURL()
+            return true
+        } else {
+            return false
+        }
+    }
 
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         // Disable Save hash button if necessary
         let textFieldText: NSString = (textField.text ?? "") as NSString
         let newHash = textFieldText.replacingCharacters(in: range, with: string)
@@ -484,29 +505,208 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         return true
     }
 
-    private func setTextFieldConstraintInEditMode(active: Bool) {
+}
 
-        rightTextFieldConstraintDefault!.isActive = false
-        rightTextFieldConstraintInEditMode!.isActive = false
+// MARK: - Target Actions Methods
 
-        rightTextFieldConstraintDefault!.isActive = !active
-        rightTextFieldConstraintInEditMode!.isActive = active
-        self.hashTextField.superview!.layoutIfNeeded()
+private extension ShareLinkViewController {
+
+    @objc func handleSend() {
+        let title = NSLocalizedString("Digi Storage file share", comment: "")
+        var content: String
+
+        if linkType == .download {
+            content = NSLocalizedString("I am sending you a download link:", comment: "")
+        } else {
+            content = NSLocalizedString("I am sending you an upload link:", comment: "")
+        }
+
+        content += " \(link.shortUrl)\n"
+
+        if let password = link.password {
+            content += NSLocalizedString("Password is: ", comment: "")
+            content += password
+        }
+
+        let controller = UIActivityViewController(activityItems: [content], applicationActivities: nil)
+        controller.setValue(title, forKey: "subject")
+        controller.excludedActivityTypes = nil
+        controller.modalPresentationStyle = .popover
+        controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(controller, animated: true, completion: nil)
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if saveHashButton.isHidden == false {
-            handleSaveShortURL()
-            return true
-        } else {
-            return false
+    @objc func handleSaveShortURL() {
+        isSaving = true
+        guard let hash = hashTextField.text else {
+            print("No hash")
+            return
+        }
+        DigiClient.shared.setLinkCustomShortUrl(mount: location.mount, linkId: link.identifier, type: linkType, hash: hash) { result, error in
+            guard error == nil else {
+                if let error = error as? NetworkingError {
+                    if case NetworkingError.wrongStatus(_) = error {
+                        let title = NSLocalizedString("Error", comment: "")
+                        let message = NSLocalizedString("Sorry, this short URL is not available.", comment: "")
+                        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                        let alertAction = UIAlertAction(title: "Gata", style: .default, handler: { _ in self.isSaving = false })
+                        alertController.addAction(alertAction)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+                return
+            }
+            guard result != nil else {
+                print("No valid link")
+                return
+            }
+            self.isSaving = false
+            self.originalLinkHash = hash
+            self.link = result!
         }
     }
 
-    // MARK: - Helper Functions
+    @objc func handleResetPassword() {
+        resetAllFields()
+        startSpinning()
+        DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType, completion: { result, error in
+            guard error == nil, result != nil else {
+                print(error!.localizedDescription)
+                return
+            }
+            self.link = result!
+            self.stopSpinning()
+        })
+    }
 
-    private func setupViews() {
+    @objc func handleDelete() {
+        configureWaitingView(type: .started, message: NSLocalizedString("Deleting Link", comment: ""))
+        DigiClient.shared.deleteLink(mount: location.mount, linkId: link.identifier, type: linkType) { error in
+            guard error == nil else {
+                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
+                return
+            }
+            self.dismiss(animated: true) {
+                self.onFinish?(false)
+            }
+        }
+    }
 
+    @objc func handleEnablePassword(_ sender: UISwitch) {
+        resetAllFields()
+        startSpinning()
+        if sender.isOn {
+            handleResetPassword()
+        } else {
+            DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType) { result, error in
+                self.stopSpinning()
+                guard error == nil, result != nil else {
+                    self.stopSpinning()
+                    sender.setOn(true, animated: true)
+                    print(error!.localizedDescription)
+                    return
+                }
+                self.link = result!
+            }
+        }
+    }
+
+    @objc func handleCancelChangeShortURL() {
+        hashTextField.text = originalLinkHash
+        hashTextField.resignFirstResponder()
+    }
+
+    @objc func handleDone() {
+        dismiss(animated: true) {
+            self.onFinish?(false)
+        }
+    }
+
+    @objc func handleButtonOKPressed(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    @objc func handleChangeValidity() {
+        resetAllFields()
+        validityLabel.isHidden = true
+        changeValidityButton.isHidden = true
+        validitySegmentedControl.isHidden = false
+        validitySegmentedControl.selectedSegmentIndex = UISegmentedControlNoSegment
+    }
+
+    @objc func handleValiditySelectorValueChanged(_ sender: UISegmentedControl) {
+        var validTo: TimeInterval?
+        let calendarComponent: Calendar.Component?
+        switch sender.selectedSegmentIndex {
+        case 0:
+            calendarComponent = .hour
+        case 1:
+            calendarComponent = .day
+        case 2:
+            calendarComponent = .month
+        case 3:
+            calendarComponent = nil
+        case 4:
+            validitySegmentedControl.isHidden = true
+            setDateAndTimePickerViewVisible(true)
+            tableView.selectRow(at: IndexPath(row: 0, section: 3), animated: true, scrollPosition: .bottom)
+            return
+        default:
+            return
+        }
+        if let calendarComponent = calendarComponent,
+            let date = Calendar.current.date(byAdding: calendarComponent, value: 1, to: Date()) {
+            validTo = date.timeIntervalSince1970
+        }
+        saveCustomValidationDate(validTo: validTo)
+    }
+
+    @objc func handleValidateCustomDate(_ sender: UIDatePicker) {
+        let customDate = sender.date
+        let minimumDate = Calendar.current.date(byAdding: .minute, value: 30, to: Date())!
+        if customDate < minimumDate {
+            saveCustomDateButton.isHidden = true
+        } else {
+            saveCustomDateButton.isHidden = false
+        }
+    }
+
+    @objc func handleSaveCustomDate() {
+        let customDate = validityDateAndTimePicker.date
+        let validTo = customDate.timeIntervalSince1970
+        saveCustomDateButton.isHidden = true
+        saveCustomValidationDate(validTo: validTo)
+    }
+
+    @objc func handleToggleEmailNotification(_ sender: UISwitch) {
+        resetAllFields()
+        DigiClient.shared.setReceiverAlert(isOn: sender.isOn, mount: location.mount, linkId: link.identifier) { result, error in
+            guard error == nil, result != nil else {
+                sender.setOn(!sender.isOn, animated: true)
+                print(error!.localizedDescription)
+                return
+            }
+            self.link = result!
+        }
+    }
+
+}
+
+// MARK: - Private Methods
+
+private extension ShareLinkViewController {
+
+    func setTextFieldConstraintInEditMode(active: Bool) {
+        rightTextFieldConstraintDefault.isActive = false
+        rightTextFieldConstraintInEditMode.isActive = false
+        rightTextFieldConstraintDefault.isActive = !active
+        rightTextFieldConstraintInEditMode.isActive = active
+        self.hashTextField.superview!.layoutIfNeeded()
+    }
+
+    func setupViews() {
         let headerView: UIImageView = {
             let iv = UIImageView(frame: CGRect.zero)
             iv.translatesAutoresizingMaskIntoConstraints = false
@@ -541,13 +741,12 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             waitingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             waitingView.leftAnchor.constraint(equalTo: view.leftAnchor),
             waitingView.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
+            ])
 
         sections = [.location, .link, .password, .validity]
     }
 
-    private func setupNavigationItems() {
-
+    func setupNavigationItems() {
         if linkType == .download {
             title = NSLocalizedString("Send Link", comment: "")
         } else {
@@ -559,8 +758,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Back", comment: ""), style: .done, target: nil, action: nil)
     }
 
-    private func setupToolBarItems() {
-
+    func setupToolBarItems() {
         let sendButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleSend))
         let flexibleButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
@@ -579,13 +777,12 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         setToolbarItems([deleteButton, flexibleButton, sendButton], animated: false)
     }
 
-    private func addViewTapGestureRecognizer() {
+    func addViewTapGestureRecognizer() {
         let tgr = UITapGestureRecognizer(target: self, action: #selector(handleCancelChangeShortURL))
         view.addGestureRecognizer(tgr)
     }
 
-    private func configureWaitingView(type: WaitingType, message: String = "") {
-
+    func configureWaitingView(type: WaitingType, message: String = "") {
         switch type {
         case .hidden:
             waitingView.isHidden = true
@@ -612,248 +809,24 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
 
-    private func requestLink() {
-
+    func requestLink() {
         DigiClient.shared.getLink(for: location, type: linkType) { result, error in
-
             guard error == nil, result != nil else {
-
                 let message = NSLocalizedString("There was an error, please try again later.", comment: "")
                 self.configureWaitingView(type: .stopped, message: message)
-
                 return
             }
-
             self.link = result!
             self.configureWaitingView(type: .hidden)
         }
     }
 
-    private func hasInvalidCharacters(name: String) -> Bool {
+    func hasInvalidCharacters(name: String) -> Bool {
         let charset = CharacterSet.init(charactersIn: name)
         return !charset.isDisjoint(with: CharacterSet.alphanumerics.inverted)
     }
 
-    @objc func handleButtonOKPressed(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
-    }
-
-    @objc private func handleDone() {
-        dismiss(animated: true) {
-            self.onFinish?(false)
-        }
-    }
-
-    @objc private func handleSend() {
-
-        let title = NSLocalizedString("Digi Storage file share", comment: "")
-        var content: String
-
-        if linkType == .download {
-            content = NSLocalizedString("I am sending you a download link:", comment: "")
-        } else {
-            content = NSLocalizedString("I am sending you an upload link:", comment: "")
-        }
-
-        content += " \(link.shortUrl)\n"
-
-        if let password = link.password {
-            content += NSLocalizedString("Password is: ", comment: "")
-            content += password
-        }
-
-        let controller = UIActivityViewController(activityItems: [content], applicationActivities: nil)
-        controller.setValue(title, forKey: "subject")
-        controller.excludedActivityTypes = nil
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
-        present(controller, animated: true, completion: nil)
-    }
-
-    @objc private func handleSaveShortURL() {
-
-        isSaving = true
-
-        guard let hash = hashTextField.text else {
-            print("No hash")
-            return
-        }
-
-        DigiClient.shared.setLinkCustomShortUrl(mount: location.mount, linkId: link.identifier, type: linkType, hash: hash) { result, error in
-
-            guard error == nil else {
-
-                if let error = error as? NetworkingError {
-                    if case NetworkingError.wrongStatus(_) = error {
-                        let title = NSLocalizedString("Error", comment: "")
-                        let message = NSLocalizedString("Sorry, this short URL is not available.", comment: "")
-                        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                        let alertAction = UIAlertAction(title: "Gata", style: .default, handler: { _ in self.isSaving = false })
-                        alertController.addAction(alertAction)
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                } else {
-                    print(error!.localizedDescription)
-                }
-
-                return
-            }
-
-            guard result != nil else {
-                print("No valid link")
-                return
-            }
-
-            self.isSaving = false
-            self.originalLinkHash = hash
-            self.link = result!
-        }
-    }
-
-    @objc private func handleCancelChangeShortURL() {
-        hashTextField.text = originalLinkHash
-        hashTextField.resignFirstResponder()
-    }
-
-    @objc private func handleDelete() {
-
-        configureWaitingView(type: .started, message: NSLocalizedString("Deleting Link", comment: ""))
-
-        DigiClient.shared.deleteLink(mount: location.mount, linkId: link.identifier, type: linkType) { error in
-            guard error == nil else {
-                self.configureWaitingView(type: .stopped, message: NSLocalizedString("There was an error communicating with the network.", comment: ""))
-                return
-            }
-            self.dismiss(animated: true) {
-                self.onFinish?(false)
-            }
-        }
-    }
-
-    @objc private func handleEnablePassword(_ sender: UISwitch) {
-
-        resetAllFields()
-
-        startSpinning()
-
-        if sender.isOn {
-            handleResetPassword()
-        } else {
-
-            DigiClient.shared.removeLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType) { result, error in
-
-                self.stopSpinning()
-
-                guard error == nil, result != nil else {
-                    self.stopSpinning()
-                    sender.setOn(true, animated: true)
-                    print(error!.localizedDescription)
-                    return
-                }
-
-                self.link = result!
-            }
-        }
-    }
-
-    @objc private func handleResetPassword() {
-
-        resetAllFields()
-        startSpinning()
-
-        DigiClient.shared.setOrResetLinkPassword(mount: location.mount, linkId: link.identifier, type: linkType, completion: { result, error in
-            guard error == nil, result != nil else {
-
-                print(error!.localizedDescription)
-                return
-            }
-
-            self.link = result!
-            self.stopSpinning()
-        })
-    }
-
-    @objc private func handleChangeValidity() {
-
-        resetAllFields()
-
-        validityLabel.isHidden = true
-        changeValidityButton.isHidden = true
-        validitySegmentedControl.isHidden = false
-        validitySegmentedControl.selectedSegmentIndex = UISegmentedControlNoSegment
-    }
-
-    @objc private func handleValiditySelectorValueChanged(_ sender: UISegmentedControl) {
-
-        var validTo: TimeInterval?
-        let calendarComponent: Calendar.Component?
-
-        switch sender.selectedSegmentIndex {
-        case 0:
-            calendarComponent = .hour
-        case 1:
-            calendarComponent = .day
-        case 2:
-            calendarComponent = .month
-        case 3:
-            calendarComponent = nil
-        case 4:
-            validitySegmentedControl.isHidden = true
-            setDateAndTimePickerViewVisible(true)
-            tableView.selectRow(at: IndexPath(row: 0, section: 3), animated: true, scrollPosition: .bottom)
-            return
-        default:
-            return
-        }
-
-        if let calendarComponent = calendarComponent,
-            let date = Calendar.current.date(byAdding: calendarComponent, value: 1, to: Date()) {
-            validTo = date.timeIntervalSince1970
-        }
-
-        saveCustomValidationDate(validTo: validTo)
-    }
-
-    @objc private func handleValidateCustomDate(_ sender: UIDatePicker) {
-
-        let customDate = sender.date
-        let minimumDate = Calendar.current.date(byAdding: .minute, value: 30, to: Date())!
-
-        if customDate < minimumDate {
-            saveCustomDateButton.isHidden = true
-        } else {
-            saveCustomDateButton.isHidden = false
-        }
-    }
-
-    @objc private func handleSaveCustomDate() {
-
-        let customDate = validityDateAndTimePicker.date
-        let validTo = customDate.timeIntervalSince1970
-
-        saveCustomDateButton.isHidden = true
-
-        saveCustomValidationDate(validTo: validTo)
-    }
-
-    @objc private func handleToggleEmailNotification(_ sender: UISwitch) {
-
-        resetAllFields()
-
-        DigiClient.shared.setReceiverAlert(isOn: sender.isOn, mount: location.mount, linkId: link.identifier) { result, error in
-
-            guard error == nil, result != nil else {
-                sender.setOn(!sender.isOn, animated: true)
-                print(error!.localizedDescription)
-                return
-            }
-
-            self.link = result!
-        }
-    }
-
-    private func setDateAndTimePickerViewVisible(_ visible: Bool) {
-
+    func setDateAndTimePickerViewVisible(_ visible: Bool) {
         if visible {
             validityDateAndTimePicker.minimumDate = Date()
             validityDateAndTimePicker.isHidden = false
@@ -864,25 +837,20 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         tableView.endUpdates()
     }
 
-    private func saveCustomValidationDate(validTo: TimeInterval?) {
-
+    func saveCustomValidationDate(validTo: TimeInterval?) {
         spinner.startAnimating()
-
         DigiClient.shared.setLinkCustomValidity(mount: location.mount, linkId: link.identifier, type: linkType, validTo: validTo) { result, error in
-
             self.spinner.stopAnimating()
-
             guard error == nil, result != nil else {
                 print(error!.localizedDescription)
                 return
             }
-
             self.resetAllFields()
             self.link = result!
         }
     }
 
-    private func resetAllFields() {
+    func resetAllFields() {
         hashTextField.resignFirstResponder()
         setDateAndTimePickerViewVisible(false)
         validityLabel.isHidden = false
@@ -890,8 +858,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         validitySegmentedControl.isHidden = true
     }
 
-    private func updateValues() {
-
+    func updateValues() {
         originalLinkHash = link.hash
         hashTextField.resignFirstResponder()
         baseLinkLabel.text = String("\(link.host)/")
@@ -918,7 +885,6 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         var counterString: String
 
         if linkType == .download {
-
             if link.counter == 1 {
                 counterString = NSLocalizedString("Seen %d time", comment: "")
             } else {
@@ -934,22 +900,21 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
         }
 
         counterLabel.text = String(format: counterString, link.counter)
-
         waitingView.isHidden = true
     }
 
-    private func startSpinning() {
+    func startSpinning() {
         if !isAnimatingReset {
             isAnimatingReset = true
             spinWithOptions(options: .curveEaseIn)
         }
     }
 
-    private func stopSpinning() {
+    func stopSpinning() {
         isAnimatingReset = false
     }
 
-    private func spinWithOptions(options: UIViewAnimationOptions) {
+    func spinWithOptions(options: UIViewAnimationOptions) {
         UIView.animate(
             withDuration: 0.5,
             delay: 0,
@@ -957,7 +922,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
             animations: { () -> Void in
                 let val = CGFloat(Double.pi)
                 self.passwordResetButton.transform = self.passwordResetButton.transform.rotated(by: val)
-            },
+        },
             completion: { (finished: Bool) -> Void in
                 if finished {
                     if self.isAnimatingReset {
@@ -968,6 +933,7 @@ final class ShareLinkViewController: UIViewController, UITableViewDelegate, UITa
                         self.updateValues()
                     }
                 }
-            })
+        })
     }
+
 }
