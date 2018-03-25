@@ -725,7 +725,7 @@ private extension ShareLinkViewController {
 
         NSLayoutConstraint.activate([
 
-            headerView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerView.leftAnchor.constraint(equalTo: view.leftAnchor),
             headerView.rightAnchor.constraint(equalTo: view.rightAnchor),
 

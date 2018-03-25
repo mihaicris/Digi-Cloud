@@ -360,7 +360,7 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             waitingView.leftAnchor.constraint(equalTo: view.leftAnchor),
             waitingView.rightAnchor.constraint(equalTo: view.rightAnchor),
 
-            headerView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerView.leftAnchor.constraint(equalTo: view.leftAnchor),
             headerView.rightAnchor.constraint(equalTo: view.rightAnchor),
 
