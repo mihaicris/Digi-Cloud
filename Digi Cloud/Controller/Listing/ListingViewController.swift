@@ -721,7 +721,6 @@ private extension ListingViewController {
         let src = SearchResultController(location: self.rootLocation)
 
         searchController = UISearchController(searchResultsController: src)
-        searchController.loadViewIfNeeded()
         searchController.searchResultsUpdater = src
         searchController.searchBar.delegate = src
         searchController.searchBar.autocorrectionType = .no
