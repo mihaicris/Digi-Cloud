@@ -40,8 +40,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera usage permission is needed to take a picture for the profile image.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Photos library access permission is needed to write pictures to photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photos library access permission is needed to select a picture for the profile image.</string>
+	<string>Photos library access permission is needed to read or write pictures to photo library.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fontawesome-webfont.ttf</string>
