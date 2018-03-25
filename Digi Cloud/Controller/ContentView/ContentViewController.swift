@@ -13,12 +13,24 @@ final class ContentViewController: UIViewController {
 
     // MARK: - Properties
 
-    let location: Location
+    internal var node: Node?
 
-    var node: Node?
+    // MARK: - Initializers
 
-    var fileURL: URL!
-    var session: URLSession?
+    init(location: Location) {
+        self.location = location
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Private Properties
+
+    private let location: Location
+    private var fileURL: URL!
+    private var session: URLSession?
 
     private lazy var webView: WKWebView = {
         let v = WKWebView()
@@ -73,19 +85,11 @@ final class ContentViewController: UIViewController {
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
     }()
+}
 
-    // MARK: - Initializers and Deinitializers
+// MARK: - UIVIewController Methods
 
-    init(location: Location) {
-        self.location = location
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Overridden Methods and Properties
+extension ContentViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,10 +119,122 @@ final class ContentViewController: UIViewController {
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return UIStatusBarAnimation.slide
     }
+}
 
-    // MARK: - Helper Functions
+// MARK: - Target-Action Methods
 
-    private func setupViews() {
+private extension ContentViewController {
+
+    @objc func handleExportButtonTouched() {
+        handImageView.isHidden = true
+
+        // check if inputs are available
+        guard let url = fileURL, let fileName = node?.name else { return }
+
+        // prepare a file url by replacing the hash name with the actual file name
+
+        let exportFolderURL = FileManager.filesCacheFolderURL.appendingPathComponent("Export", isDirectory: true)
+        FileManager.deleteFolder(at: exportFolderURL)
+        FileManager.createFolder(at: exportFolderURL)
+
+        let exportFileURL = exportFolderURL.appendingPathComponent(fileName)
+
+        do {
+            try FileManager.default.copyItem(at: url, to: exportFileURL)
+        } catch {
+            return
+        }
+
+        let controller = UIActivityViewController(activityItems: [exportFileURL], applicationActivities: nil)
+        controller.excludedActivityTypes = nil
+        controller.modalPresentationStyle = .popover
+        controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(controller, animated: true, completion: nil)
+    }
+
+}
+
+// MARK: - Delegate Conformance
+
+extension ContentViewController: URLSessionTaskDelegate {
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        DispatchQueue.main.async {
+            // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
+            session.invalidateAndCancel()
+
+            // Stop the spinner
+            self.busyIndicator.stopAnimating()
+
+            guard error == nil else {
+                if (error! as NSError).code != -999 {
+                    // If not cancelled
+                    self.presentError(message: error!.localizedDescription) { (_) in
+                        _ = self.navigationController?.popViewController(animated: true)
+                    }
+                }
+                return
+            }
+            // Load the file in WKWebView
+            self.loadFileContent()
+        }
+    }
+}
+
+extension ContentViewController: URLSessionDownloadDelegate {
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        // get the downloaded file from temp folder
+        do {
+            try FileManager.default.moveItem(at: location, to: self.fileURL)
+
+        } catch {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+
+                let message = NSLocalizedString("There was an error at saving the file. Try again later or reinstall the app.", comment: "")
+
+                self.presentError(message: message) { _ in
+                    _ = self.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
+    }
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
+                    didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+
+        // calculate the progress value
+        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+
+        // Update the progress on screen
+        DispatchQueue.main.async {
+            self.progressView.setProgress(progress, animated: true)
+        }
+    }
+
+}
+
+extension ContentViewController: WKNavigationDelegate {
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        removeProgressView()
+        navigationController?.hidesBarsOnTap = true
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        removeProgressView()
+        navigationController?.hidesBarsOnTap = false
+        fileTypeCanNotBeOpen(isVisible: true)
+    }
+
+}
+
+// MARK: - Private Methods
+
+private extension ContentViewController {
+
+    func setupViews() {
         view.backgroundColor = .white
         self.title = (self.location.path as NSString).lastPathComponent
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(handleExportButtonTouched))
@@ -126,22 +242,16 @@ final class ContentViewController: UIViewController {
 
     }
 
-    private func fetchNode() {
-
+    func fetchNode() {
         DigiClient.shared.fileInfo(atLocation: self.location) { (node, error) in
-
             guard error == nil else {
-
                 var message: String
-
                 switch error! {
-
                 case NetworkingError.internetOffline(let msg), NetworkingError.requestTimedOut(let msg):
                     message = msg
                 default:
                     message = NSLocalizedString("An error has occured, please try again later.", comment: "")
                 }
-
                 self.presentError(message: message) { _ in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         _ = self.navigationController?.popViewController(animated: true)
@@ -149,7 +259,6 @@ final class ContentViewController: UIViewController {
                 }
                 return
             }
-
             if let node = node {
                 self.node = node
                 self.processNode()
@@ -157,8 +266,7 @@ final class ContentViewController: UIViewController {
         }
     }
 
-    private func loadFileContent() {
-
+    func loadFileContent() {
         // Add WKWebView
         view.addSubview(webView)
         NSLayoutConstraint.activate([
@@ -175,7 +283,7 @@ final class ContentViewController: UIViewController {
         self.navigationItem.rightBarButtonItem?.isEnabled = true
     }
 
-    private func processNode() {
+    func processNode() {
 
         guard let fileName = self.node?.name else {
             return
@@ -215,7 +323,7 @@ final class ContentViewController: UIViewController {
         }
     }
 
-    private func downloadFile() {
+    func downloadFile() {
 
         view.addSubview(progressView)
         view.addSubview(busyIndicator)
@@ -228,47 +336,20 @@ final class ContentViewController: UIViewController {
 
             busyIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             busyIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+            ])
 
         // Start downloading File
         session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
     }
 
-    @objc private func handleExportButtonTouched() {
-        handImageView.isHidden = true
-
-        // check if inputs are available
-        guard let url = fileURL, let fileName = node?.name else { return }
-
-        // prepare a file url by replacing the hash name with the actual file name
-
-        let exportFolderURL = FileManager.filesCacheFolderURL.appendingPathComponent("Export", isDirectory: true)
-        FileManager.deleteFolder(at: exportFolderURL)
-        FileManager.createFolder(at: exportFolderURL)
-
-        let exportFileURL = exportFolderURL.appendingPathComponent(fileName)
-
-        do {
-            try FileManager.default.copyItem(at: url, to: exportFileURL)
-        } catch {
-            return
-        }
-
-        let controller = UIActivityViewController(activityItems: [exportFileURL], applicationActivities: nil)
-        controller.excludedActivityTypes = nil
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
-        present(controller, animated: true, completion: nil)
-    }
-
-    private func presentError(message: String, completion: @escaping (UIAlertAction) -> Void) {
+    func presentError(message: String, completion: @escaping (UIAlertAction) -> Void) {
         let title = NSLocalizedString("Error", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: completion))
         self.present(alertController, animated: true, completion: nil)
     }
 
-    private func handleFileNotOpen(isVisible: Bool) {
+    func fileTypeCanNotBeOpen(isVisible: Bool) {
         if isVisible {
             webView.removeFromSuperview()
             view.addSubview(noPreviewImageView)
@@ -284,7 +365,7 @@ final class ContentViewController: UIViewController {
 
                 noPreviewMessageLabel.topAnchor.constraint(equalTo: noPreviewLabel.bottomAnchor, constant: 10),
                 noPreviewMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-            ])
+                ])
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.view.addSubview(self.handImageView)
@@ -308,8 +389,7 @@ final class ContentViewController: UIViewController {
         }
     }
 
-    private func removeProgressView() {
-
+    func removeProgressView() {
         UIView.animate(
             withDuration: 0.5,
             animations: {
@@ -320,81 +400,5 @@ final class ContentViewController: UIViewController {
         }
         )
     }
-}
 
-extension ContentViewController: URLSessionTaskDelegate {
-
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        DispatchQueue.main.async {
-            // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
-            session.invalidateAndCancel()
-
-            // Stop the spinner
-            self.busyIndicator.stopAnimating()
-
-            guard error == nil else {
-
-                if (error! as NSError).code != -999 {
-
-                    // If not cancelled
-                    self.presentError(message: error!.localizedDescription) { (_) in
-                        _ = self.navigationController?.popViewController(animated: true)
-                    }
-                }
-
-                return
-            }
-
-            // Load the file in WKWebView
-            self.loadFileContent()
-        }
-    }
-}
-
-extension ContentViewController: URLSessionDownloadDelegate {
-
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-
-        // get the downloaded file from temp folder
-        do {
-            try FileManager.default.moveItem(at: location, to: self.fileURL)
-
-        } catch {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-
-                let message = NSLocalizedString("There was an error at saving the file. Try again later or reinstall the app.", comment: "")
-
-                self.presentError(message: message) { _ in
-                    _ = self.navigationController?.popViewController(animated: true)
-                }
-            }
-        }
-    }
-
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
-                    didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-
-        // calculate the progress value
-        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-
-        // Update the progress on screen
-        DispatchQueue.main.async {
-            self.progressView.setProgress(progress, animated: true)
-        }
-    }
-}
-
-extension ContentViewController: WKNavigationDelegate {
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        removeProgressView()
-        navigationController?.hidesBarsOnTap = true
-        self.navigationItem.rightBarButtonItem?.isEnabled = true
-    }
-
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        removeProgressView()
-        navigationController?.hidesBarsOnTap = false
-        handleFileNotOpen(isVisible: true)
-    }
 }
