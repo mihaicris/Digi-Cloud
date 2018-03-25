@@ -1071,7 +1071,6 @@ private extension ListingViewController {
     }
 
     func executeToogleBookmark(location: Location, node: Node, index: Int? = nil) {
-
         func updateBookmarkIcon(bookmark: Bookmark?) {
             if let index = index {
                 let indexPath = IndexPath(row: index, section: 0)
@@ -1081,14 +1080,9 @@ private extension ListingViewController {
                 self.rootNode?.bookmark = bookmark
             }
         }
-
         if var bookmark = node.bookmark {
-
             bookmark.mountId = location.mount.identifier
-
-            // Bookmark is set, removing it:
             DigiClient.shared.removeBookmark(bookmark: bookmark) { error in
-
                 guard error == nil else {
                     print(error!.localizedDescription)
                     return
@@ -1096,10 +1090,7 @@ private extension ListingViewController {
                 updateBookmarkIcon(bookmark: nil)
             }
         } else {
-
-            // Bookmark is not set, adding it:
             let bookmark = Bookmark(name: node.name, mountId: location.mount.identifier, path: location.path)
-
             DigiClient.shared.addBookmark(bookmark: bookmark) { error in
                 guard error == nil else {
                     print(error!.localizedDescription)
@@ -1112,11 +1103,7 @@ private extension ListingViewController {
 
     func executeDeletion(at location: Location, index: Int) {
         DigiClient.shared.deleteNode(at: location) { (statusCode, error) in
-
-            // TODO: Stop spinner
             guard error == nil else {
-
-                // TODO: Show message for error
                 print(error!.localizedDescription)
                 return
             }
@@ -1124,8 +1111,6 @@ private extension ListingViewController {
                 switch code {
 
                 case 200:
-                    // Delete successfully completed
-
                     self.nodes.remove(at: index)
                     if self.nodes.isEmpty {
                         self.updateLocationContentMessage()
