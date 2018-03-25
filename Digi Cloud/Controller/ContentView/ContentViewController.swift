@@ -27,28 +27,28 @@ final class ContentViewController: UIViewController {
         return v
     }()
 
-    fileprivate let progressView: UIProgressView = {
+    private let progressView: UIProgressView = {
         let v = UIProgressView(progressViewStyle: .default)
         v.translatesAutoresizingMaskIntoConstraints = false
         v.progress = 0
         return v
     }()
 
-    fileprivate let handImageView: UIImageView = {
+    private let handImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "hand"))
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
 
-    fileprivate let noPreviewImageView: UIImageView = {
+    private let noPreviewImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "no_preview"))
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
 
-    fileprivate let noPreviewLabel: UILabel = {
+    private let noPreviewLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("No Preview Available", comment: "")
@@ -56,7 +56,7 @@ final class ContentViewController: UIViewController {
         return l
     }()
 
-    fileprivate let noPreviewMessageLabel: UILabel = {
+    private let noPreviewMessageLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = NSLocalizedString("This file type can't be viewed.", comment: "")
@@ -65,7 +65,7 @@ final class ContentViewController: UIViewController {
         return l
     }()
 
-    fileprivate let busyIndicator: UIActivityIndicatorView = {
+    private let busyIndicator: UIActivityIndicatorView = {
         let i = UIActivityIndicatorView()
         i.hidesWhenStopped = true
         i.startAnimating()
@@ -157,7 +157,7 @@ final class ContentViewController: UIViewController {
         }
     }
 
-    fileprivate func loadFileContent() {
+    private func loadFileContent() {
 
         // Add WKWebView
         view.addSubview(webView)
@@ -261,14 +261,14 @@ final class ContentViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    fileprivate func presentError(message: String, completion: @escaping (UIAlertAction) -> Void) {
+    private func presentError(message: String, completion: @escaping (UIAlertAction) -> Void) {
         let title = NSLocalizedString("Error", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: completion))
         self.present(alertController, animated: true, completion: nil)
     }
 
-    fileprivate func handleFileNotOpen(isVisible: Bool) {
+    private func handleFileNotOpen(isVisible: Bool) {
         if isVisible {
             webView.removeFromSuperview()
             view.addSubview(noPreviewImageView)
@@ -307,12 +307,24 @@ final class ContentViewController: UIViewController {
             handImageView.removeFromSuperview()
         }
     }
+
+    private func removeProgressView() {
+
+        UIView.animate(
+            withDuration: 0.5,
+            animations: {
+                self.progressView.alpha = 0.0
+        },
+            completion: { _ in
+                self.progressView.removeFromSuperview()
+        }
+        )
+    }
 }
 
 extension ContentViewController: URLSessionTaskDelegate {
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-
         DispatchQueue.main.async {
             // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
             session.invalidateAndCancel()
@@ -336,19 +348,6 @@ extension ContentViewController: URLSessionTaskDelegate {
             // Load the file in WKWebView
             self.loadFileContent()
         }
-    }
-
-    fileprivate func removeProgressView() {
-
-        UIView.animate(
-            withDuration: 0.5,
-            animations: {
-                self.progressView.alpha = 0.0
-            },
-            completion: { _ in
-            self.progressView.removeFromSuperview()
-            }
-        )
     }
 }
 

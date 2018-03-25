@@ -166,7 +166,7 @@ final class SearchResultController: UITableViewController {
         nav?.pushViewController(controller, animated: true)
     }
 
-    fileprivate func filterContentForSearchText(searchText: String, scope: Int) {
+    private func filterContentForSearchText(searchText: String, scope: Int) {
 
         /* 
          Request parameters:

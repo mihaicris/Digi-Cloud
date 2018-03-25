@@ -913,7 +913,7 @@ class ListingViewController: UITableViewController {
 
     }
 
-    fileprivate func presentController(_ controller: UIViewController, sender: UIView) {
+    private func presentController(_ controller: UIViewController, sender: UIView) {
         if traitCollection.horizontalSizeClass == .regular {
             controller.modalPresentationStyle = .popover
             controller.popoverPresentationController?.sourceView = sender

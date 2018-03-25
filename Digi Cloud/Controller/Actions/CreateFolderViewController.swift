@@ -16,7 +16,7 @@ final class CreateFolderViewController: UITableViewController {
 
     private var parentLocation: Location
     private var leftBarButton: UIBarButtonItem!
-    fileprivate var rightBarButton: UIBarButtonItem!
+    private var rightBarButton: UIBarButtonItem!
     private var textField: UITextField!
     private var messageLabel: UILabel!
 
@@ -112,7 +112,7 @@ final class CreateFolderViewController: UITableViewController {
         return !charset.isDisjoint(with: name)
     }
 
-    fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
+    private func setMessage(onScreen: Bool, _ message: String? = nil) {
         if onScreen {
             self.messageLabel.text = message
         }
@@ -125,7 +125,7 @@ final class CreateFolderViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
     }
 
-    @objc fileprivate func handleCreateFolder() {
+    @objc private func handleCreateFolder() {
 
         textField.resignFirstResponder()
 

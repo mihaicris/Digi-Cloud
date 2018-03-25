@@ -18,7 +18,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     private var node: Node
 
     private var leftBarButton: UIBarButtonItem!
-    fileprivate var rightBarButton: UIBarButtonItem!
+    private var rightBarButton: UIBarButtonItem!
     private var textField: UITextField!
 
     private var messageLabel: UILabel = {
@@ -238,7 +238,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
             NSLocalizedString("Rename File", comment: "")
     }
 
-    fileprivate func positionCursor() {
+    private func positionCursor() {
         guard let elementName = textField.text else { return }
 
         // file has an extension?
@@ -264,7 +264,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
     }
 
-    fileprivate func setMessage(onScreen: Bool, _ message: String? = nil) {
+    private func setMessage(onScreen: Bool, _ message: String? = nil) {
         if onScreen {
             self.messageLabel.text = message
         }
@@ -277,7 +277,7 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
         dismiss(animated: true, completion: nil)
     }
 
-    @objc fileprivate func handleRename() {
+    @objc private func handleRename() {
 
         // block a second Rename request
         setRenameButtonActive(false)
