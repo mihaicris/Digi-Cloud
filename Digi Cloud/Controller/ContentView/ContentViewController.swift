@@ -8,6 +8,7 @@
 
 import UIKit
 import WebKit
+import PDFKit
 
 final class ContentViewController: UIViewController {
 
@@ -31,6 +32,14 @@ final class ContentViewController: UIViewController {
     private let location: Location
     private var fileURL: URL!
     private var session: URLSession?
+
+    private lazy var pdfView: PDFView = {
+        let v = PDFView()
+        v.displayMode = .singlePageContinuous
+        v.autoScales = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
 
     private lazy var webView: WKWebView = {
         let v = WKWebView()
@@ -163,9 +172,6 @@ extension ContentViewController: URLSessionTaskDelegate {
             // avoid memory leak (self cannot be deinitialize because it is a delegate of the session)
             session.invalidateAndCancel()
 
-            // Stop the spinner
-            self.busyIndicator.stopAnimating()
-
             guard error == nil else {
                 if (error! as NSError).code != -999 {
                     // If not cancelled
@@ -175,7 +181,6 @@ extension ContentViewController: URLSessionTaskDelegate {
                 }
                 return
             }
-            // Load the file in WKWebView
             self.loadFileContent()
         }
     }
@@ -190,9 +195,7 @@ extension ContentViewController: URLSessionDownloadDelegate {
 
         } catch {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-
                 let message = NSLocalizedString("There was an error at saving the file. Try again later or reinstall the app.", comment: "")
-
                 self.presentError(message: message) { _ in
                     _ = self.navigationController?.popViewController(animated: true)
                 }
@@ -267,17 +270,35 @@ private extension ContentViewController {
     }
 
     func loadFileContent() {
-        // Add WKWebView
-        view.addSubview(webView)
-        NSLayoutConstraint.activate([
-            webView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            webView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            webView.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-        ])
+        if node?.contentType == "application/pdf" {
 
-        // load file in the view
-        self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL)
+            removeProgressView()
+            busyIndicator.stopAnimating()
+            navigationController?.hidesBarsOnTap = false
+
+            view.addSubview(pdfView)
+            NSLayoutConstraint.activate([
+                pdfView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+                pdfView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+                pdfView.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor),
+                pdfView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            ])
+            guard let pdfDocument = PDFDocument(url: self.fileURL) else {
+                fileTypeCanNotBeOpen(isVisible: true)
+                return
+            }
+            navigationController?.hidesBarsOnTap = true
+            pdfView.document = pdfDocument
+        } else {
+            view.addSubview(webView)
+            NSLayoutConstraint.activate([
+                webView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+                webView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+                webView.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor),
+                webView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            ])
+            self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL)
+        }
 
         // enable right bar button for exporting
         self.navigationItem.rightBarButtonItem?.isEnabled = true
@@ -324,10 +345,8 @@ private extension ContentViewController {
     }
 
     func downloadFile() {
-
         view.addSubview(progressView)
         view.addSubview(busyIndicator)
-
         NSLayoutConstraint.activate([
             progressView.leftAnchor.constraint(equalTo: view.leftAnchor),
             progressView.rightAnchor.constraint(equalTo: view.rightAnchor),
@@ -336,7 +355,7 @@ private extension ContentViewController {
 
             busyIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             busyIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-            ])
+        ])
 
         // Start downloading File
         session = DigiClient.shared.startDownloadFile(at: self.location, delegate: self)
@@ -351,7 +370,11 @@ private extension ContentViewController {
 
     func fileTypeCanNotBeOpen(isVisible: Bool) {
         if isVisible {
-            webView.removeFromSuperview()
+            if node?.contentType == "application/pdf" {
+                pdfView.removeFromSuperview()
+            } else {
+                webView.removeFromSuperview()
+            }
             view.addSubview(noPreviewImageView)
             view.addSubview(noPreviewLabel)
             view.addSubview(noPreviewMessageLabel)
@@ -365,7 +388,7 @@ private extension ContentViewController {
 
                 noPreviewMessageLabel.topAnchor.constraint(equalTo: noPreviewLabel.bottomAnchor, constant: 10),
                 noPreviewMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-                ])
+            ])
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.view.addSubview(self.handImageView)
