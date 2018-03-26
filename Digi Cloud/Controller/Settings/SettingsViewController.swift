@@ -10,16 +10,19 @@ import UIKit
 
 final class SettingsViewController: UITableViewController {
 
+    // MARK: - Private Types
+
     enum SettingType {
         case user
         case data
     }
 
-    // MARK: - Properties
+    // MARK: - Private Properties
 
     private var user: User
     private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
     private var settings: [SettingType] = [.user, .data]
+    private var confirmButtonHorizontalConstraint: NSLayoutConstraint!
 
     private let confirmButton: UIButton = {
         let b = UIButton(type: .system)
@@ -40,8 +43,6 @@ final class SettingsViewController: UITableViewController {
         return f
     }()
 
-    private var confirmButtonHorizontalConstraint: NSLayoutConstraint!
-
     // MARK: - Initializers and Deinitializers
 
     init(user: User) {
@@ -57,7 +58,11 @@ final class SettingsViewController: UITableViewController {
         NotificationCenter.default.removeObserver(self)
     }
 
-    // MARK: - Overridden Methods and Properties
+}
+
+// MARK: - UIViewController Methods
+
+extension SettingsViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +75,12 @@ final class SettingsViewController: UITableViewController {
         fetchUserData()
         tableView.reloadData()
     }
+
+}
+
+// MARK: - Delegate Conformances
+
+extension SettingsViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return settings.count
@@ -178,7 +189,7 @@ final class SettingsViewController: UITableViewController {
                     let s = UISwitch()
                     s.isOn = AppSettings.allowsCellularAccess
                     s.translatesAutoresizingMaskIntoConstraints = false
-                    s.addTarget(self, action: #selector(allowCellularSwitchValueChanged), for: .valueChanged)
+                    s.addTarget(self, action: #selector(handleCellularDataSwitchValueChanged), for: .valueChanged)
                     return s
                 }()
 
@@ -218,7 +229,7 @@ final class SettingsViewController: UITableViewController {
         switch settings[indexPath.section] {
         case .user:
             if indexPath.row == 1 {
-                handleLogout(cell)
+                logout(cell)
             }
         case .data:
             if indexPath.row == 1 {
@@ -226,17 +237,55 @@ final class SettingsViewController: UITableViewController {
             }
         }
     }
+}
 
-    // MARK: - Helper Functions
+// MARK: - Target-Action Methods
 
-    private func setupViews() {
+private extension SettingsViewController {
 
+    @objc func handleCellularDataSwitchValueChanged() {
+        AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
+        DigiClient.shared.renewSession()
+    }
+
+    @objc func handleConfirmButtonTouched() {
+
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        defer { UIApplication.shared.endIgnoringInteractionEvents() }
+
+        if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
+            AppSettings.loggedUserID = nil
+
+            dismiss(animated: true) {
+
+                if let controller = navController.visibleViewController as? LocationsViewController {
+                    controller.activityIndicator.startAnimating()
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    navController.viewControllers = []
+                    navController.onLogout?()
+                }
+            }
+        }
+    }
+
+    @objc func handleCloseButtonTouched() {
+        self.dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - Private Methods
+
+private extension SettingsViewController {
+
+    func setupViews() {
         title = NSLocalizedString("Settings", comment: "")
         if navigationController != nil {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""),
-                                                                    style: .done,
-                                                                    target: self,
-                                                                    action: #selector(handleCloseButtonTouched))
+                                                                     style: .done,
+                                                                     target: self,
+                                                                     action: #selector(handleCloseButtonTouched))
         }
 
         let tableFooterView: UIView = {
@@ -259,7 +308,7 @@ final class SettingsViewController: UITableViewController {
             NSLayoutConstraint.activate([
                 versionLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 10),
                 versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
-            ])
+                ])
 
             return v
         }()
@@ -268,27 +317,23 @@ final class SettingsViewController: UITableViewController {
 
     }
 
-    private func fetchUserData() {
-
+    func fetchUserData() {
         if let user = AppSettings.userLogged {
-
             self.user = user
-
             let cache = Cache()
             let key = self.user.identifier + ".png"
-
             if let data = cache.load(type: .profile, key: key) {
                 self.profileImage = UIImage(data: data, scale: UIScreen.main.scale)
             }
         }
     }
 
-    private func handleClearCache() {
+    func handleClearCache() {
         FileManager.emptyFilesCache()
         tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     }
 
-    private func registerForNotificationCenter() {
+    func registerForNotificationCenter() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleCloseButtonTouched),
@@ -296,12 +341,7 @@ final class SettingsViewController: UITableViewController {
             object: nil)
     }
 
-    @objc private func allowCellularSwitchValueChanged() {
-        AppSettings.allowsCellularAccess = !AppSettings.allowsCellularAccess
-        DigiClient.shared.renewSession()
-    }
-
-    @objc private func handleLogout(_ cell: UITableViewCell) {
+    func logout(_ cell: UITableViewCell) {
         confirmButtonHorizontalConstraint.isActive = false
         if confirmButton.tag == 0 {
             confirmButton.tag = 1
@@ -312,39 +352,17 @@ final class SettingsViewController: UITableViewController {
         }
         confirmButtonHorizontalConstraint.isActive = true
 
-        UIView.animate(withDuration: 0.4,
-                       delay: 0,
-                       usingSpringWithDamping: 1,
-                       initialSpringVelocity: 1,
-                       options: .curveEaseOut,
-                       animations: { cell.layoutIfNeeded() },
-                       completion: nil)
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0,
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 1,
+            options: .curveEaseOut,
+            animations: {
+                cell.layoutIfNeeded()
+        },
+            completion: nil
+        )
     }
-
-    @objc private func handleConfirmButtonTouched() {
-
-        UIApplication.shared.beginIgnoringInteractionEvents()
-        defer { UIApplication.shared.endIgnoringInteractionEvents() }
-
-        if let navController = self.navigationController?.presentingViewController as? MainNavigationController {
-            AppSettings.loggedUserID = nil
-
-            dismiss(animated: true) {
-
-                if let controller = navController.visibleViewController as? LocationsViewController {
-                    controller.activityIndicator.startAnimating()
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    navController.viewControllers = []
-                    navController.onLogout?()
-                }
-            }
-        }
-    }
-
-    @objc private func handleCloseButtonTouched() {
-        self.dismiss(animated: true, completion: nil)
-    }
-
 }
+
