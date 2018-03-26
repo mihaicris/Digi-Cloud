@@ -10,34 +10,34 @@ import UIKit
 
 final class ManageBookmarksViewController: UITableViewController {
 
-    // MARK: - Properties
-
-    private var mountsMapping: [String: Mount] = [:]
-
-    private var bookmarks: [Bookmark] = []
+    // MARK: - Internal Properties
 
     var onFinish: (() -> Void)?
     var onSelect: ((Location) -> Void)?
     var onUpdateNeeded: (() -> Void)?
 
+    // MARK: - Private Properties
+
+    private var mountsMapping: [String: Mount] = [:]
+    private var bookmarks: [Bookmark] = []
     private let dispatchGroup = DispatchGroup()
 
-    lazy var deleteButton: UIBarButtonItem = {
+    lazy private var deleteButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleDeleteAllButtonTouched))
         return b
     }()
 
-    lazy var cancelEditButton: UIBarButtonItem = {
+    lazy private var cancelEditButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEditButtonTouched))
         return b
     }()
 
-    lazy var dismissButton: UIBarButtonItem = {
+    lazy private var dismissButton: UIBarButtonItem = {
         let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCloseButtonTouched))
         return b
     }()
 
-    let activityIndicator: UIActivityIndicatorView = {
+    private let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         ai.translatesAutoresizingMaskIntoConstraints = false
         ai.startAnimating()
@@ -45,7 +45,7 @@ final class ManageBookmarksViewController: UITableViewController {
         return ai
     }()
 
-    let messageLabel: UILabel = {
+    private let messageLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = .lightGray
@@ -67,20 +67,16 @@ final class ManageBookmarksViewController: UITableViewController {
         NotificationCenter.default.removeObserver(self)
     }
 
-    // MARK: - Overridden Methods and Properties
+}
+
+// MARK: - UIViewController Methods
+
+extension ManageBookmarksViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.registerForNotificationCenter()
         self.setupViews()
-    }
-
-    private func registerForNotificationCenter() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleCloseButtonTouched),
-            name: .UIApplicationWillResignActive,
-            object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -89,6 +85,12 @@ final class ManageBookmarksViewController: UITableViewController {
         getBookmarksAndMounts()
     }
 
+}
+
+// MARK: - Delegate Confomance
+
+extension ManageBookmarksViewController {
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return bookmarks.count
     }
@@ -96,7 +98,7 @@ final class ManageBookmarksViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BookmarkViewCell.self),
                                                        for: indexPath) as? BookmarkViewCell else {
-            return UITableViewCell()
+                                                        return UITableViewCell()
         }
 
         if let mountName = mountsMapping[bookmarks[indexPath.row].mountId]?.name {
@@ -138,9 +140,103 @@ final class ManageBookmarksViewController: UITableViewController {
         }
     }
 
-    // MARK: - Helper Functions
+}
 
-    private func setupViews() {
+// MARK: - Target-Action Methods
+
+private extension ManageBookmarksViewController {
+
+    @objc func handleDeleteSelectedBookmarks(_ action: UIAlertAction) {
+
+        var indexPaths: [IndexPath] = []
+
+        if let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows {
+
+            // Some or all rows selected
+            indexPaths = indexPathsForSelectedRows
+
+        } else {
+
+            // No rows selected, means all rows.
+            for index in bookmarks.indices {
+                indexPaths.append(IndexPath(row: index, section: 0))
+            }
+        }
+        deleteBookmarks(at: indexPaths)
+    }
+
+    @objc func handleToogleEditMode() {
+        var button: UIBarButtonItem
+        if tableView.isEditing {
+            button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""),
+                                     style: UIBarButtonItemStyle.plain,
+                                     target: self,
+                                     action: #selector(handleToogleEditMode))
+        } else {
+            button = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
+                                     style: UIBarButtonItemStyle.plain,
+                                     target: self,
+                                     action: #selector(handleToogleEditMode))
+        }
+        navigationItem.setRightBarButton(button, animated: false)
+        tableView.setEditing(!tableView.isEditing, animated: true)
+    }
+
+    @objc func handleEnterEditMode() {
+        self.tableView.setEditing(true, animated: true)
+        self.updateButtonsToMatchTableState()
+    }
+
+    @objc func handleDeleteAllButtonTouched() {
+
+        var messageString: String
+
+        if self.tableView.indexPathsForSelectedRows?.count == 1 {
+            messageString = NSLocalizedString("Are you sure you want to remove this bookmark?", comment: "")
+        } else {
+            messageString = NSLocalizedString("Are you sure you want to remove these bookmarks?", comment: "")
+        }
+
+        let alertController = UIAlertController(title: NSLocalizedString("Delete confirmation", comment: ""),
+                                                message: messageString,
+                                                preferredStyle: .alert)
+
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""),
+                                         style: .cancel,
+                                         handler: nil)
+
+        let okAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""),
+                                     style: .destructive,
+                                     handler: handleDeleteSelectedBookmarks)
+
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+
+    @objc func handleCancelEditButtonTouched() {
+        self.tableView.setEditing(false, animated: true)
+        self.updateButtonsToMatchTableState()
+    }
+
+    @objc func handleCloseButtonTouched() {
+        self.dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - Private Methods
+
+private extension ManageBookmarksViewController {
+
+    func registerForNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCloseButtonTouched),
+            name: .UIApplicationWillResignActive,
+            object: nil)
+    }
+
+    func setupViews() {
         self.title = NSLocalizedString("Bookmarks", comment: "")
 
         tableView.register(BookmarkViewCell.self, forCellReuseIdentifier: String(describing: BookmarkViewCell.self))
@@ -159,7 +255,7 @@ final class ManageBookmarksViewController: UITableViewController {
         ])
     }
 
-    private func updateButtonsToMatchTableState() {
+    func updateButtonsToMatchTableState() {
         if self.tableView.isEditing {
             self.navigationItem.rightBarButtonItem = self.cancelEditButton
             self.updateDeleteButtonTitle()
@@ -177,7 +273,7 @@ final class ManageBookmarksViewController: UITableViewController {
         }
     }
 
-    private func updateDeleteButtonTitle() {
+    func updateDeleteButtonTitle() {
         var newTitle = NSLocalizedString("Delete All", comment: "")
         if let indexPathsForSelectedRows = self.tableView.indexPathsForSelectedRows {
             if indexPathsForSelectedRows.count != bookmarks.count {
@@ -190,7 +286,7 @@ final class ManageBookmarksViewController: UITableViewController {
         }
     }
 
-    private func getBookmarksAndMounts() {
+    func getBookmarksAndMounts() {
 
         var resultBookmarks: [Bookmark] = []
         var resultMounts: [Mount] = []
@@ -266,7 +362,7 @@ final class ManageBookmarksViewController: UITableViewController {
         }
     }
 
-    private func deleteBookmarks(at indexPaths: [IndexPath]) {
+    func deleteBookmarks(at indexPaths: [IndexPath]) {
 
         var newBookmarks = bookmarks
 
@@ -308,80 +404,4 @@ final class ManageBookmarksViewController: UITableViewController {
         }
     }
 
-    @objc private func handleDeleteSelectedBookmarks(_ action: UIAlertAction) {
-
-        var indexPaths: [IndexPath] = []
-
-        if let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows {
-
-            // Some or all rows selected
-            indexPaths = indexPathsForSelectedRows
-
-        } else {
-
-            // No rows selected, means all rows.
-            for index in bookmarks.indices {
-                indexPaths.append(IndexPath(row: index, section: 0))
-            }
-        }
-        deleteBookmarks(at: indexPaths)
-    }
-
-    @objc private func handleToogleEditMode() {
-        var button: UIBarButtonItem
-        if tableView.isEditing {
-            button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""),
-                                     style: UIBarButtonItemStyle.plain,
-                                     target: self,
-                                     action: #selector(handleToogleEditMode))
-        } else {
-            button = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
-                                     style: UIBarButtonItemStyle.plain,
-                                     target: self,
-                                     action: #selector(handleToogleEditMode))
-        }
-        navigationItem.setRightBarButton(button, animated: false)
-        tableView.setEditing(!tableView.isEditing, animated: true)
-    }
-
-    @objc private func handleEnterEditMode() {
-        self.tableView.setEditing(true, animated: true)
-        self.updateButtonsToMatchTableState()
-    }
-
-    @objc private func handleDeleteAllButtonTouched() {
-
-        var messageString: String
-
-        if self.tableView.indexPathsForSelectedRows?.count == 1 {
-            messageString = NSLocalizedString("Are you sure you want to remove this bookmark?", comment: "")
-        } else {
-            messageString = NSLocalizedString("Are you sure you want to remove these bookmarks?", comment: "")
-        }
-
-        let alertController = UIAlertController(title: NSLocalizedString("Delete confirmation", comment: ""),
-                                                message: messageString,
-                                                preferredStyle: .alert)
-
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""),
-                                         style: .cancel,
-                                         handler: nil)
-
-        let okAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""),
-                                     style: .destructive,
-                                     handler: handleDeleteSelectedBookmarks)
-
-        alertController.addAction(cancelAction)
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
-    }
-
-    @objc private func handleCancelEditButtonTouched() {
-        self.tableView.setEditing(false, animated: true)
-        self.updateButtonsToMatchTableState()
-    }
-
-    @objc private func handleCloseButtonTouched() {
-        self.dismiss(animated: true, completion: nil)
-    }
 }
