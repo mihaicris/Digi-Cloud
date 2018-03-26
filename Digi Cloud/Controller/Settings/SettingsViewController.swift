@@ -21,7 +21,7 @@ final class SettingsViewController: UITableViewController {
 
     private var user: User
     private var profileImage: UIImage! = #imageLiteral(resourceName: "default_profile_image")
-    private var settings: [SettingType] = [.user, .data]
+    private let settings: [SettingType] = [.user, .data]
     private var confirmButtonHorizontalConstraint: NSLayoutConstraint!
 
     private let confirmButton: UIButton = {
@@ -365,4 +365,3 @@ private extension SettingsViewController {
         )
     }
 }
-

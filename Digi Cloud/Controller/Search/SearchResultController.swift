@@ -10,14 +10,15 @@ import UIKit
 
 final class SearchResultController: UITableViewController {
 
-    // MARK: - Properties
+    // MARK: - Private Properties
 
-    var filteredContent: [NodeHit] = []
-    var filteredMountsDictionary: [String: Mount] = [:]
-
-    weak var searchController: UISearchController?
-
+    private var filteredContent: [NodeHit] = []
+    private var filteredMountsDictionary: [String: Mount] = [:]
+    private weak var searchController: UISearchController?
     private let location: Location
+    private var searchInCurrentMount: Bool = true
+    private var currentColor = UIColor(hue: 0.17, saturation: 0.55, brightness: 0.75, alpha: 1.0)
+    private var mountNames: [String: UIColor] = [:]
 
     private let byteFormatter: ByteCountFormatter = {
         let f = ByteCountFormatter()
@@ -25,10 +26,6 @@ final class SearchResultController: UITableViewController {
         f.allowsNonnumericFormatting = false
         return f
     }()
-
-    private var searchInCurrentMount: Bool = true
-    private var currentColor = UIColor(hue: 0.17, saturation: 0.55, brightness: 0.75, alpha: 1.0)
-    private var mountNames: [String: UIColor] = [:]
 
     // MARK: - Initializers and Deinitializers
 
@@ -41,13 +38,41 @@ final class SearchResultController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Overridden Methods and Properties
+}
+
+// MARK: - UIViewController Methods
+
+extension SearchResultController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.edgesForExtendedLayout = .bottom
         setupTableView()
     }
+
+}
+
+// MARK: - Target-Actions Methods
+
+private extension SearchResultController {
+    @objc func handleSeeInFolderButtonTouched(_ button: UIButton) {
+        let nodeHit = filteredContent[button.tag]
+        guard let nodeHitMount = filteredMountsDictionary[nodeHit.mountId] else {
+            print("Could not select the mount from results.")
+            return
+        }
+        let parentFolderLocation = Location(mount: nodeHitMount, path: nodeHit.path).parentLocation
+        let controller = ListingViewController(location: parentFolderLocation,
+                                               action: .showSearchResult,
+                                               searchResult: nodeHit.name)
+        let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController
+        searchController?.searchBar.resignFirstResponder()
+        nav?.pushViewController(controller, animated: true)
+    }
+
+}
+
+extension SearchResultController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredContent.count
@@ -57,7 +82,7 @@ final class SearchResultController: UITableViewController {
 
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: SearchCell.self),
                                                        for: indexPath) as? SearchCell else {
-            return UITableViewCell()
+                                                        return UITableViewCell()
         }
 
         let node = filteredContent[indexPath.row]
@@ -135,51 +160,52 @@ final class SearchResultController: UITableViewController {
         self.searchController?.searchBar.resignFirstResponder()
     }
 
-    // MARK: - Helper Functions
+}
 
-    private func setupTableView() {
+extension SearchResultController: UISearchResultsUpdating {
+
+    func updateSearchResults(for searchController: UISearchController) {
+        self.searchController = searchController
+        self.view.isHidden = false
+        filterContentForSearchText(searchText: searchController.searchBar.text!, scope: searchController.searchBar.selectedScopeButtonIndex)
+    }
+}
+
+extension SearchResultController: UISearchBarDelegate {
+
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearchText(searchText: searchBar.text!, scope: selectedScope)
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}
+
+// MARK: - Private Methods
+
+private extension SearchResultController {
+
+    func setupTableView() {
         tableView.register(SearchCell.self, forCellReuseIdentifier: String(describing: SearchCell.self))
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.rowHeight = AppSettings.tableViewRowHeight
         tableView.separatorStyle = .none
     }
 
-    @objc private func handleSeeInFolderButtonTouched(_ button: UIButton) {
-
-        let nodeHit = filteredContent[button.tag]
-
-        guard let nodeHitMount = filteredMountsDictionary[nodeHit.mountId] else {
-            print("Could not select the mount from results.")
-            return
-        }
-
-        let parentFolderLocation = Location(mount: nodeHitMount, path: nodeHit.path).parentLocation
-
-        let controller = ListingViewController(location: parentFolderLocation,
-                                               action: .showSearchResult,
-                                               searchResult: nodeHit.name)
-
-        let nav = self.parent?.presentingViewController?.navigationController as? MainNavigationController
-
-        searchController?.searchBar.resignFirstResponder()
-
-        nav?.pushViewController(controller, animated: true)
-    }
-
-    private func filterContentForSearchText(searchText: String, scope: Int) {
-
-        /* 
+    func filterContentForSearchText(searchText: String, scope: Int) {
+        /*
          Request parameters:
-         
-             query: Option[String]
-             offset: Int
-             limit: Int
-             sortField: String
-             sortDir: String // asc or desc
-             mime: String     TODO?
-             mountId: String
-             path: String
-             tags: Seq[String] // format: tag=nameoftag=value
+
+         query: Option[String]
+         offset: Int
+         limit: Int
+         sortField: String
+         sortDir: String // asc or desc
+         mime: String     TODO?
+         mountId: String
+         path: String
+         tags: Seq[String] // format: tag=nameoftag=value
          */
 
         let count = searchText.count
@@ -222,22 +248,5 @@ final class SearchResultController: UITableViewController {
             self.tableView.reloadData()
         }
     }
-}
 
-extension SearchResultController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        self.searchController = searchController
-        self.view.isHidden = false
-        filterContentForSearchText(searchText: searchController.searchBar.text!, scope: searchController.searchBar.selectedScopeButtonIndex)
-    }
-}
-
-extension SearchResultController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        filterContentForSearchText(searchText: searchBar.text!, scope: selectedScope)
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
 }
