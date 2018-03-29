@@ -13,22 +13,22 @@ final class AccountCollectionCell: UICollectionViewCell {
     // MARK: - Properties
 
     let profileImage: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.layer.cornerRadius = 10
-        iv.layer.masksToBounds = true
-        return iv
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
+        return imageView
     }()
 
     let accountNameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeueMedium(size: 14)
-        l.textColor = UIColor.white
-        l.textAlignment = .center
-        l.numberOfLines = 2
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeueMedium(size: 14)
+        label.textColor = UIColor.white
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        return label
     }()
 
     // MARK: - Overridden Methods and Properties

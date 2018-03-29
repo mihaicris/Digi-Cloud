@@ -32,100 +32,100 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     }
 
     private lazy var tableViewForLocation: UITableView = {
-        let t = UITableView(frame: CGRect.zero, style: .grouped)
-        t.translatesAutoresizingMaskIntoConstraints = false
-        t.isUserInteractionEnabled = false
-        t.delegate = self
-        t.dataSource = self
-        t.rowHeight = AppSettings.textFieldRowHeight
-        t.tag = TableViewType.location.rawValue
-        return t
+        let tabelView = UITableView(frame: CGRect.zero, style: .grouped)
+        tabelView.translatesAutoresizingMaskIntoConstraints = false
+        tabelView.isUserInteractionEnabled = false
+        tabelView.delegate = self
+        tabelView.dataSource = self
+        tabelView.rowHeight = AppSettings.textFieldRowHeight
+        tabelView.tag = TableViewType.location.rawValue
+        return tabelView
     }()
 
     private lazy var tableViewForUsers: UITableView = {
-        let t = UITableView(frame: CGRect.zero, style: .plain)
-        t.translatesAutoresizingMaskIntoConstraints = false
-        t.alwaysBounceVertical = true
-        t.delegate = self
-        t.dataSource = self
-        t.rowHeight = AppSettings.textFieldRowHeight
-        t.tag = TableViewType.users.rawValue
-        t.register(MountUserCell.self, forCellReuseIdentifier: String(describing: MountUserCell.self))
-        return t
+        let tableView = UITableView(frame: CGRect.zero, style: .plain)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.alwaysBounceVertical = true
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = AppSettings.textFieldRowHeight
+        tableView.tag = TableViewType.users.rawValue
+        tableView.register(MountUserCell.self, forCellReuseIdentifier: String(describing: MountUserCell.self))
+        return tableView
     }()
 
     let usersLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = NSLocalizedString("MEMBERS", comment: "")
-        l.font = UIFont(name: ".SFUIText", size: 12) ?? UIFont.fontHelveticaNeue(size: 12)
-        l.textColor = UIColor(red: 0.43, green: 0.43, blue: 0.45, alpha: 1.0)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("MEMBERS", comment: "")
+        label.font = UIFont(name: ".SFUIText", size: 12) ?? UIFont.fontHelveticaNeue(size: 12)
+        label.textColor = UIColor(red: 0.43, green: 0.43, blue: 0.45, alpha: 1.0)
+        return label
     }()
 
     private var errorMessageVerticalConstraint: NSLayoutConstraint?
 
     private lazy var waitingView: UIView = {
 
-        let v = UIView()
+        let view = UIView()
 
-        v.isHidden = false
+        view.isHidden = false
 
-        v.backgroundColor = .white
-        v.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
 
         let spinner: UIActivityIndicatorView = {
-            let s = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-            s.translatesAutoresizingMaskIntoConstraints = false
-            s.hidesWhenStopped = true
-            s.tag = 55
-            s.startAnimating()
-            return s
+            let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            activityIndicator.hidesWhenStopped = true
+            activityIndicator.tag = 55
+            activityIndicator.startAnimating()
+            return activityIndicator
         }()
 
         let okButton: UIButton = {
-            let b = UIButton(type: UIButtonType.system)
-            b.translatesAutoresizingMaskIntoConstraints = false
-            b.setTitle(NSLocalizedString("OK", comment: ""), for: UIControlState.normal)
-            b.setTitleColor(.white, for: .normal)
-            b.layer.cornerRadius = 10
-            b.contentEdgeInsets = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
-            b.sizeToFit()
-            b.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.9, alpha: 1)
-            b.tag = 11
-            b.isHidden = false
-            b.addTarget(self, action: #selector(handleHideWaitingView), for: .touchUpInside)
-            return b
+            let button = UIButton(type: UIButtonType.system)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setTitle(NSLocalizedString("OK", comment: ""), for: UIControlState.normal)
+            button.setTitleColor(.white, for: .normal)
+            button.layer.cornerRadius = 10
+            button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
+            button.sizeToFit()
+            button.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.9, alpha: 1)
+            button.tag = 11
+            button.isHidden = false
+            button.addTarget(self, action: #selector(handleHideWaitingView), for: .touchUpInside)
+            return button
         }()
 
         let label: UILabel = {
-            let l = UILabel()
-            l.translatesAutoresizingMaskIntoConstraints = false
-            l.textColor = .gray
-            l.textAlignment = .center
-            l.font = UIFont.systemFont(ofSize: 14)
-            l.tag = 99
-            l.numberOfLines = 0
-            return l
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.textColor = .gray
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.tag = 99
+            label.numberOfLines = 0
+            return label
         }()
 
-        v.addSubview(spinner)
-        v.addSubview(label)
-        v.addSubview(okButton)
+        view.addSubview(spinner)
+        view.addSubview(label)
+        view.addSubview(okButton)
 
-        self.errorMessageVerticalConstraint = label.centerYAnchor.constraint(equalTo: v.centerYAnchor, constant: 40)
+        self.errorMessageVerticalConstraint = label.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 40)
 
         NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: v.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: v.centerYAnchor),
-            label.centerXAnchor.constraint(equalTo: v.centerXAnchor),
-            label.widthAnchor.constraint(equalTo: v.widthAnchor, multiplier: 0.8),
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
             self.errorMessageVerticalConstraint!,
-            okButton.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+            okButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             okButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40)
             ])
 
-        return v
+        return view
     }()
 
     // MARK: - Initializers and Deinitializers
@@ -224,27 +224,27 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
             cell.selectionStyle = .none
 
             let mountNameLabel: UILabelWithPadding = {
-                let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
-                l.font = UIFont.fontHelveticaNeue(size: 12)
-                l.adjustsFontSizeToFitWidth = true
-                l.textColor = .darkGray
-                l.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
-                l.text = location.mount.name
-                l.layer.cornerRadius = 4
-                l.clipsToBounds = true
-                l.translatesAutoresizingMaskIntoConstraints = false
-                return l
+                let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 5, paddingBottom: 2, paddingRight: 5)
+                label.font = UIFont.fontHelveticaNeue(size: 12)
+                label.adjustsFontSizeToFitWidth = true
+                label.textColor = .darkGray
+                label.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
+                label.text = location.mount.name
+                label.layer.cornerRadius = 4
+                label.clipsToBounds = true
+                label.translatesAutoresizingMaskIntoConstraints = false
+                return label
             }()
 
             let locationPathLabel: UILabel = {
-                let l = UILabel()
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.textColor = .darkGray
-                l.text = String(location.path.dropLast())
-                l.numberOfLines = 2
-                l.font = UIFont.fontHelveticaNeue(size: 12)
-                l.lineBreakMode = .byTruncatingMiddle
-                return l
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.textColor = .darkGray
+                label.text = String(location.path.dropLast())
+                label.numberOfLines = 2
+                label.font = UIFont.fontHelveticaNeue(size: 12)
+                label.lineBreakMode = .byTruncatingMiddle
+                return label
             }()
 
             cell.contentView.addSubview(mountNameLabel)
@@ -340,11 +340,11 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
     private func setupViews() {
 
         let headerView: UIImageView = {
-            let iv = UIImageView(frame: CGRect.zero)
-            iv.translatesAutoresizingMaskIntoConstraints = false
-            iv.image = #imageLiteral(resourceName: "share_digi_background")
-            iv.contentMode = .scaleAspectFill
-            return iv
+            let imageView = UIImageView(frame: CGRect.zero)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.image = #imageLiteral(resourceName: "share_digi_background")
+            imageView.contentMode = .scaleAspectFill
+            return imageView
         }()
 
         view.addSubview(headerView)
@@ -395,27 +395,27 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
         let flexibleButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
         let addUserButton: UIBarButtonItem = {
-            let v = UIButton(type: UIButtonType.system)
-            v.setTitle(NSLocalizedString("Add member", comment: ""), for: .normal)
-            v.addTarget(self, action: #selector(showAddUserView), for: .touchUpInside)
-            v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
-            v.setTitleColor(UIColor.defaultColor, for: .normal)
-            v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-            v.sizeToFit()
-            let b = UIBarButtonItem(customView: v)
-            return b
+            let buttonView = UIButton(type: UIButtonType.system)
+            buttonView.setTitle(NSLocalizedString("Add member", comment: ""), for: .normal)
+            buttonView.addTarget(self, action: #selector(showAddUserView), for: .touchUpInside)
+            buttonView.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
+            buttonView.setTitleColor(UIColor.defaultColor, for: .normal)
+            buttonView.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+            buttonView.sizeToFit()
+            let button = UIBarButtonItem(customView: buttonView)
+            return button
         }()
 
         let removeShareButton: UIBarButtonItem = {
-            let v = UIButton(type: UIButtonType.system)
-            v.setTitle(NSLocalizedString("Remove Share", comment: ""), for: .normal)
-            v.addTarget(self, action: #selector(handleRemoveMount), for: .touchUpInside)
-            v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
-            v.setTitleColor(.red, for: .normal)
-            v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-            v.sizeToFit()
-            let b = UIBarButtonItem(customView: v)
-            return b
+            let buttonView = UIButton(type: UIButtonType.system)
+            buttonView.setTitle(NSLocalizedString("Remove Share", comment: ""), for: .normal)
+            buttonView.addTarget(self, action: #selector(handleRemoveMount), for: .touchUpInside)
+            buttonView.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
+            buttonView.setTitleColor(.red, for: .normal)
+            buttonView.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+            buttonView.sizeToFit()
+            let button = UIBarButtonItem(customView: buttonView)
+            return button
         }()
 
         if let mount = sharedNode.mount {
@@ -454,21 +454,21 @@ final class ShareMountViewController: UIViewController, UITableViewDelegate, UIT
 
             navigationController?.isToolbarHidden = true
 
-            if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView,
-                let b = waitingView.viewWithTag(11) as? UIButton {
+            if let activityIndicator = waitingView.viewWithTag(55) as? UIActivityIndicatorView,
+                let button = waitingView.viewWithTag(11) as? UIButton {
                 if type == .started {
-                    v.startAnimating()
+                    activityIndicator.startAnimating()
                     errorMessageVerticalConstraint?.constant = 40
-                    b.isHidden = true
+                    button.isHidden = true
                 } else {
-                    v.stopAnimating()
-                    b.isHidden = false
+                    activityIndicator.stopAnimating()
+                    button.isHidden = false
                     errorMessageVerticalConstraint?.constant = 0
                 }
             }
 
-            if let v = waitingView.viewWithTag(99) as? UILabel {
-                v.text = message
+            if let label = waitingView.viewWithTag(99) as? UILabel {
+                label.text = message
             }
         }
     }

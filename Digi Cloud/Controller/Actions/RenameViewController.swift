@@ -22,27 +22,27 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     private var textField: UITextField!
 
     private var messageLabel: UILabel = {
-            let l = UILabel()
-            l.translatesAutoresizingMaskIntoConstraints = false
-            l.textAlignment = .center
-            l.font = UIFont.systemFont(ofSize: 14)
-            l.textColor = .darkGray
-            l.alpha = 0.0
-            return l
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.textColor = .darkGray
+            label.alpha = 0.0
+            return label
     }()
 
     private var needRefresh: Bool = false
 
     private lazy var tableView: UITableView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
-        let t = UITableView(frame: frame, style: .grouped)
-        t.translatesAutoresizingMaskIntoConstraints = false
-        t.rowHeight = AppSettings.textFieldRowHeight
-        t.delegate = self
-        t.dataSource = self
-        let gr = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        t.addGestureRecognizer(gr)
-        return t
+        let tableView = UITableView(frame: frame, style: .grouped)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = AppSettings.textFieldRowHeight
+        tableView.delegate = self
+        tableView.dataSource = self
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tableView.addGestureRecognizer(gestureRecognizer)
+        return tableView
     }()
 
     // MARK: - Initializers and Deinitializers
@@ -81,9 +81,9 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
 
         let nodeIcon: UIImageView = {
             let image = node.type == "dir" ? #imageLiteral(resourceName: "folder_icon") : #imageLiteral(resourceName: "file_icon")
-            let iv = UIImageView(image: image)
-            iv.contentMode = .scaleAspectFit
-            return iv
+            let imageView = UIImageView(image: image)
+            imageView.contentMode = .scaleAspectFit
+            return imageView
         }()
 
         textField = UITextField()
@@ -118,73 +118,40 @@ final class RenameViewController: UIViewController, UITableViewDelegate, UITable
     private func setupViews() {
 
         let actionsListLabel: UILabel = {
-            let l = UILabel()
-            l.translatesAutoresizingMaskIntoConstraints = false
-            l.textColor = .darkGray
-            l.text = NSLocalizedString("Rename utilities:", comment: "")
-            l.font = UIFont.systemFont(ofSize: 16)
-            return l
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.textColor = .darkGray
+            label.text = NSLocalizedString("Rename utilities:", comment: "")
+            label.font = UIFont.systemFont(ofSize: 16)
+            return label
         }()
 
         let actionsContainerView: UIView = {
-            let v = UIView()
-            v.translatesAutoresizingMaskIntoConstraints = false
-            v.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 1.0, alpha: 1.0)
-            let gr = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            v.addGestureRecognizer(gr)
-            return v
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 1.0, alpha: 1.0)
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            view.addGestureRecognizer(gestureRecognizer)
+            return view
         }()
 
-        let convert_type_0_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace underscores with spaces", comment: ""),
-                                                          delegate: self,
-                                                          selector: #selector(handleConvert(_:)),
-                                                          tag: 0)
-
-        let convert_type_1_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace spaces with underscores", comment: ""),
-                                                          delegate: self,
-                                                          selector: #selector(handleConvert(_:)),
-                                                          tag: 1)
-
-        let convert_type_11_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace points with spaces", comment: ""),
-                                                          delegate: self,
-                                                          selector: #selector(handleConvert(_:)),
-                                                          tag: 11)
-
-        let convert_type_12_Button = RenameUtilitiesButton(title: NSLocalizedString("Replace spaces with points", comment: ""),
-                                                           delegate: self,
-                                                           selector: #selector(handleConvert(_:)),
-                                                           tag: 12)
-
-        let convert_type_2_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to Title Case", comment: ""),
-                                                          delegate: self,
-                                                          selector: #selector(handleConvert(_:)),
-                                                          tag: 2)
-
-        let convert_type_21_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to sentence", comment: ""),
-                                                           delegate: self,
-                                                           selector: #selector(handleConvert(_:)),
-                                                           tag: 21)
-
-        let convert_type_3_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to lower case", comment: ""),
-                                                          delegate: self,
-                                                          selector: #selector(handleConvert(_:)),
-                                                          tag: 3)
-
-        let convert_type_4_Button = RenameUtilitiesButton(title: NSLocalizedString("Change to UPPER CASE", comment: ""),
-                                                          delegate: self,
-                                                          selector: #selector(handleConvert(_:)),
-                                                          tag: 4)
-
         let actionButtonsStackview: UIStackView = {
-            let s = UIStackView(arrangedSubviews: [convert_type_0_Button, convert_type_1_Button,
-                                                   convert_type_11_Button, convert_type_12_Button,
-                                                   convert_type_2_Button, convert_type_21_Button,
-                                                   convert_type_3_Button, convert_type_4_Button])
-            s.translatesAutoresizingMaskIntoConstraints = false
-            s.alignment = .fill
-            s.axis = .vertical
-            s.spacing = 10
-            return s
+            let stackView = UIStackView(arrangedSubviews: [
+                RenameUtilitiesButton(title: NSLocalizedString("Replace underscores with spaces", comment: ""), delegate: self, selector: #selector(handleConvert(_:)), tag: 0),
+                RenameUtilitiesButton(title: NSLocalizedString("Replace spaces with underscores", comment: ""), delegate: self, selector: #selector(handleConvert(_:)), tag: 1),
+                RenameUtilitiesButton(title: NSLocalizedString("Replace points with spaces", comment: ""), delegate: self, selector: #selector(handleConvert(_:)), tag: 11),
+                RenameUtilitiesButton(title: NSLocalizedString("Replace spaces with points", comment: ""), delegate: self, selector: #selector(handleConvert(_:)), tag: 12),
+                RenameUtilitiesButton(title: NSLocalizedString("Change to Title Case", comment: ""), delegate: self, selector: #selector(handleConvert(_:)), tag: 2),
+                RenameUtilitiesButton(title: NSLocalizedString("Change to sentence", comment: ""), delegate: self, selector: #selector(handleConvert(_:)), tag: 21),
+                RenameUtilitiesButton(title: NSLocalizedString("Change to lower case", comment: ""), delegate: self, selector: #selector(handleConvert(_:)), tag: 3),
+                RenameUtilitiesButton(title: NSLocalizedString("Change to UPPER CASE", comment: ""), delegate: self, selector: #selector(handleConvert(_:)), tag: 4)
+            ])
+
+            stackView.translatesAutoresizingMaskIntoConstraints = false
+            stackView.alignment = .fill
+            stackView.axis = .vertical
+            stackView.spacing = 10
+            return stackView
         }()
 
         view.addSubview(tableView)

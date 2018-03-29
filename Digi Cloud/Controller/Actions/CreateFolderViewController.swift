@@ -72,12 +72,12 @@ final class CreateFolderViewController: UITableViewController {
     private func setupViews() {
 
         messageLabel = {
-            let l = UILabel()
-            l.textAlignment = .center
-            l.font = UIFont.systemFont(ofSize: 14)
-            l.textColor = .darkGray
-            l.alpha = 0.0
-            return l
+            let label = UILabel()
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.textColor = .darkGray
+            label.alpha = 0.0
+            return label
         }()
 
         tableView.addSubview(messageLabel)

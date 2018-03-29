@@ -39,11 +39,11 @@ final class LocationsViewController: UITableViewController {
     private var errorMessage = ""
 
     let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView()
-        ai.hidesWhenStopped = true
-        ai.activityIndicatorViewStyle = .gray
-        ai.translatesAutoresizingMaskIntoConstraints = false
-        return ai
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = .gray
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
     }()
 
     // MARK: - Initializers and Deinitializers

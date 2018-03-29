@@ -238,50 +238,50 @@ class AppSettings {
             blackView.alpha = 0.0
 
             let frameAlert: UIView = {
-                let v = UIView()
-                v.translatesAutoresizingMaskIntoConstraints = false
-                v.backgroundColor = UIColor.black.withAlphaComponent(0.85)
-                v.layer.cornerRadius = 10
-                v.layer.borderWidth = 0.6
-                v.layer.borderColor = UIColor(red: 0.8, green: 0.0, blue: 0.0, alpha: 1.0).cgColor
-                v.clipsToBounds = true
-                return v
+                let view = UIView()
+                view.translatesAutoresizingMaskIntoConstraints = false
+                view.backgroundColor = UIColor.black.withAlphaComponent(0.85)
+                view.layer.cornerRadius = 10
+                view.layer.borderWidth = 0.6
+                view.layer.borderColor = UIColor(red: 0.8, green: 0.0, blue: 0.0, alpha: 1.0).cgColor
+                view.clipsToBounds = true
+                return view
             }()
 
             let titleMessageLabel: UILabel = {
-                let l = UILabel()
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.font = UIFont.fontHelveticaNeueLight(size: 24)
-                l.textColor = UIColor.white
-                l.text = title
-                l.textAlignment = .center
-                l.numberOfLines = 2
-                return l
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.font = UIFont.fontHelveticaNeueLight(size: 24)
+                label.textColor = UIColor.white
+                label.text = title
+                label.textAlignment = .center
+                label.numberOfLines = 2
+                return label
             }()
 
             let subtitleMessageLabel: UILabel = {
-                let l = UILabel()
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.font = UIFont.fontHelveticaNeueLight(size: 18)
-                l.textColor = UIColor.white
-                l.text = subtitle
-                l.textAlignment = .center
-                l.textColor = UIColor.lightGray
-                l.numberOfLines = 3
-                return l
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.font = UIFont.fontHelveticaNeueLight(size: 18)
+                label.textColor = UIColor.white
+                label.text = subtitle
+                label.textAlignment = .center
+                label.textColor = UIColor.lightGray
+                label.numberOfLines = 3
+                return label
             }()
 
             let okButton: UIButton = {
-                let b = UIButton(type: UIButtonType.custom)
-                b.translatesAutoresizingMaskIntoConstraints = false
-                b.backgroundColor = UIColor(red: 0.9, green: 0.0, blue: 0.0, alpha: 1.0)
-                b.layer.cornerRadius = 10
-                b.layer.masksToBounds = true
-                b.setTitle(NSLocalizedString("OK", comment: ""), for: .normal)
-                b.setTitleColor(.white, for: [.normal, .selected])
-                b.contentEdgeInsets = UIEdgeInsets(top: 5, left: 35, bottom: 5, right: 35)
-                b.addTarget(self, action: #selector(handleOKButtonTouched), for: .touchUpInside)
-                return b
+                let button = UIButton(type: UIButtonType.custom)
+                button.translatesAutoresizingMaskIntoConstraints = false
+                button.backgroundColor = UIColor(red: 0.9, green: 0.0, blue: 0.0, alpha: 1.0)
+                button.layer.cornerRadius = 10
+                button.layer.masksToBounds = true
+                button.setTitle(NSLocalizedString("OK", comment: ""), for: .normal)
+                button.setTitleColor(.white, for: [.normal, .selected])
+                button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 35, bottom: 5, right: 35)
+                button.addTarget(self, action: #selector(handleOKButtonTouched), for: .touchUpInside)
+                return button
             }()
 
             blackView.addSubview(frameAlert)

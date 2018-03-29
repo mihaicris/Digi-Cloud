@@ -128,8 +128,8 @@ final class NodeActionsViewController: UITableViewController {
             title = node.name
 
             let closeButton: UIBarButtonItem = {
-                let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
-                return b
+                let button = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
+                return button
             }()
 
             self.navigationItem.rightBarButtonItem = closeButton
@@ -137,32 +137,32 @@ final class NodeActionsViewController: UITableViewController {
         } else {
 
             let headerView: UIView = {
-                let v = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
-                v.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-                return v
+                let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: AppSettings.tableViewRowHeight))
+                view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+                return view
             }()
 
             let iconImage: UIImageView = {
                 let image = node.type == "dir" ? #imageLiteral(resourceName: "folder_icon") : #imageLiteral(resourceName: "file_icon")
-                let iv = UIImageView(image: image)
-                iv.contentMode = .scaleAspectFit
-                iv.translatesAutoresizingMaskIntoConstraints = false
-                return iv
+                let imageView = UIImageView(image: image)
+                imageView.contentMode = .scaleAspectFit
+                imageView.translatesAutoresizingMaskIntoConstraints = false
+                return imageView
             }()
 
             let elementName: UILabel = {
-                let l = UILabel()
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.text = node.name
-                l.font = UIFont.boldSystemFont(ofSize: 16)
-                return l
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.text = node.name
+                label.font = UIFont.boldSystemFont(ofSize: 16)
+                return label
             }()
 
             let separator: UIView = {
-                let v = UIView()
-                v.translatesAutoresizingMaskIntoConstraints = false
-                v.backgroundColor = UIColor(white: 0.8, alpha: 1)
-                return v
+                let view = UIView()
+                view.translatesAutoresizingMaskIntoConstraints = false
+                view.backgroundColor = UIColor(white: 0.8, alpha: 1)
+                return view
             }()
 
             headerView.addSubview(iconImage)

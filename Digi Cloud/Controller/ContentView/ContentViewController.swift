@@ -34,65 +34,65 @@ final class ContentViewController: UIViewController {
     private var session: URLSession?
 
     private lazy var pdfView: PDFView = {
-        let v = PDFView()
-        v.displayMode = .singlePageContinuous
-        v.autoScales = true
-        v.translatesAutoresizingMaskIntoConstraints = false
-        return v
+        let view = PDFView()
+        view.displayMode = .singlePageContinuous
+        view.autoScales = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     private lazy var webView: WKWebView = {
-        let v = WKWebView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.navigationDelegate = self
-        return v
+        let view = WKWebView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.navigationDelegate = self
+        return view
     }()
 
     private let progressView: UIProgressView = {
-        let v = UIProgressView(progressViewStyle: .default)
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.progress = 0
-        return v
+        let view = UIProgressView(progressViewStyle: .default)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.progress = 0
+        return view
     }()
 
     private let handImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "hand"))
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "hand"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
 
     private let noPreviewImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "no_preview"))
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "no_preview"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
 
     private let noPreviewLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = NSLocalizedString("No Preview Available", comment: "")
-        l.font = UIFont.fontHelveticaNeueMedium(size: 16)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("No Preview Available", comment: "")
+        label.font = UIFont.fontHelveticaNeueMedium(size: 16)
+        return label
     }()
 
     private let noPreviewMessageLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = NSLocalizedString("This file type can't be viewed.", comment: "")
-        l.font = UIFont.fontHelveticaNeue(size: 14)
-        l.textColor = UIColor.gray
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("This file type can't be viewed.", comment: "")
+        label.font = UIFont.fontHelveticaNeue(size: 14)
+        label.textColor = UIColor.gray
+        return label
     }()
 
     private let busyIndicator: UIActivityIndicatorView = {
-        let i = UIActivityIndicatorView()
-        i.hidesWhenStopped = true
-        i.startAnimating()
-        i.activityIndicatorViewStyle = .gray
-        i.translatesAutoresizingMaskIntoConstraints = false
-        return i
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+        activityIndicator.activityIndicatorViewStyle = .gray
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
     }()
 }
 

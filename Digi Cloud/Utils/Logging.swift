@@ -39,11 +39,11 @@ func logNSError(_ nserror: NSError) {
     print("Domain:\t\t\t\t\t\t", nserror.domain)
     print("Code:\t\t\t\t\t\t", nserror.code)
     print("LocalizedDescription:\t\t", nserror.localizedDescription)
-    for (i, v) in nserror.userInfo.enumerated() {
-        if i == 0 {
-            print("\(v.0):\t", "\(v.1)")
-        } else if i == 1 {
-            print("\(v.0):\t\t", "\(v.1)")
+    for (index, value) in nserror.userInfo.enumerated() {
+        if index == 0 {
+            print("\(value.0):\t", "\(value.1)")
+        } else if index == 1 {
+            print("\(value.0):\t\t", "\(value.1)")
         }
     }
     if let localizedFailureReason = nserror.localizedFailureReason {

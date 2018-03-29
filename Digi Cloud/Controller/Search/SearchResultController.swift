@@ -21,10 +21,10 @@ final class SearchResultController: UITableViewController {
     private var mountNames: [String: UIColor] = [:]
 
     private let byteFormatter: ByteCountFormatter = {
-        let f = ByteCountFormatter()
-        f.countStyle = .binary
-        f.allowsNonnumericFormatting = false
-        return f
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .binary
+        formatter.allowsNonnumericFormatting = false
+        return formatter
     }()
 
     // MARK: - Initializers and Deinitializers

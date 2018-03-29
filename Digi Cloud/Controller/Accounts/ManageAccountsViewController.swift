@@ -20,23 +20,23 @@ final class ManageAccountsViewController: UITableViewController {
     let controller: AccountSelectionViewController
 
     lazy var addButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction))
-        return b
+        let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction))
+        return button
     }()
 
     lazy var editButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .done, target: self, action: #selector(handleEnterEditMode))
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Edit", comment: ""), style: .done, target: self, action: #selector(handleEnterEditMode))
+        return button
     }()
 
     lazy var deleteButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleAskDeleteConfirmation))
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleAskDeleteConfirmation))
+        return button
     }()
 
     lazy var cancelEditButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEdit))
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEdit))
+        return button
     }()
 
     let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

@@ -40,36 +40,36 @@ class MountUserCell: UITableViewCell {
     var isOwner: Bool = false
 
     let profileImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.layer.cornerRadius = 7
-        iv.layer.masksToBounds = true
-        iv.contentMode = .scaleAspectFill
-        return iv
+        let imagView = UIImageView()
+        imagView.translatesAutoresizingMaskIntoConstraints = false
+        imagView.layer.cornerRadius = 7
+        imagView.layer.masksToBounds = true
+        imagView.contentMode = .scaleAspectFill
+        return imagView
     }()
 
     let nameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 16)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 16)
+        return label
     }()
 
     let emailLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 11)
-        l.textColor = .darkGray
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 11)
+        label.textColor = .darkGray
+        return label
     }()
 
     let permissionsLabel: UILabelWithPadding = {
-        let l = UILabelWithPadding(paddingTop: 2, paddingLeft: 4, paddingBottom: 2, paddingRight: 4)
-        l.font = UIFont.systemFont(ofSize: 10)
-        l.layer.cornerRadius = 4
-        l.clipsToBounds = true
-        l.translatesAutoresizingMaskIntoConstraints = false
-        return l
+        let label = UILabelWithPadding(paddingTop: 2, paddingLeft: 4, paddingBottom: 2, paddingRight: 4)
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.layer.cornerRadius = 4
+        label.clipsToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     // MARK: - Initializers and Deinitializers

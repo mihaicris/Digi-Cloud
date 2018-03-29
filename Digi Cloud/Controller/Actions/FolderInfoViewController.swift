@@ -17,18 +17,18 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
     private var location: Location
 
     private let sizeFormatter: ByteCountFormatter = {
-        let f = ByteCountFormatter()
-        f.allowsNonnumericFormatting = false
-        f.countStyle = .binary
-        return f
+        let formatter = ByteCountFormatter()
+        formatter.allowsNonnumericFormatting = false
+        formatter.countStyle = .binary
+        return formatter
     }()
 
     private lazy var tableView: UITableView = {
-        let t = UITableView(frame: CGRect.zero, style: .grouped)
-        t.translatesAutoresizingMaskIntoConstraints = false
-        t.delegate = self
-        t.dataSource = self
-        return t
+        let tableView = UITableView(frame: CGRect.zero, style: .grouped)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        return tableView
     }()
 
     private var rightBarButton: UIBarButtonItem!
@@ -39,10 +39,10 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
     private var folderInfo = FolderInfo() {
         didSet {
             self.noElementsLabel = {
-                let l = UILabel()
+                let label = UILabel()
                 let paragraph = NSMutableParagraphStyle()
                 paragraph.lineHeightMultiple = 1.3
-                l.numberOfLines = 2
+                label.numberOfLines = 2
 
                 let filesString: String
                 if folderInfo.files == 1 {
@@ -62,9 +62,9 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
                 let text2 = String.localizedStringWithFormat(foldersString, folderInfo.folders)
                 let attributedText = NSMutableAttributedString(string: text1 + text2,
                                                                attributes: [NSAttributedStringKey.paragraphStyle: paragraph])
-                l.attributedText = attributedText
+                label.attributedText = attributedText
 
-                return l
+                return label
             }()
             self.folderSizeLabel.text = self.sizeFormatter.string(fromByteCount: folderInfo.size)
             self.tableView.reloadData()
@@ -75,65 +75,65 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
 
     private lazy var waitingView: UIView = {
 
-        let v = UIView()
+        let view = UIView()
 
-        v.isHidden = false
+        view.isHidden = false
 
-        v.backgroundColor = .white
-        v.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
 
         let spinner: UIActivityIndicatorView = {
-            let s = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-            s.translatesAutoresizingMaskIntoConstraints = false
-            s.hidesWhenStopped = true
-            s.tag = 55
-            s.startAnimating()
-            return s
+            let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            activityIndicator.hidesWhenStopped = true
+            activityIndicator.tag = 55
+            activityIndicator.startAnimating()
+            return activityIndicator
         }()
 
         let okButton: UIButton = {
-            let b = UIButton(type: UIButtonType.system)
-            b.translatesAutoresizingMaskIntoConstraints = false
-            b.setTitle(NSLocalizedString("OK", comment: ""), for: UIControlState.normal)
-            b.setTitleColor(.white, for: .normal)
-            b.layer.cornerRadius = 10
-            b.contentEdgeInsets = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
-            b.sizeToFit()
-            b.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.9, alpha: 1)
-            b.tag = 11
-            b.isHidden = false
-            b.addTarget(self, action: #selector(handleHideWaitingView), for: .touchUpInside)
-            return b
+            let button = UIButton(type: UIButtonType.system)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setTitle(NSLocalizedString("OK", comment: ""), for: UIControlState.normal)
+            button.setTitleColor(.white, for: .normal)
+            button.layer.cornerRadius = 10
+            button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
+            button.sizeToFit()
+            button.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.9, alpha: 1)
+            button.tag = 11
+            button.isHidden = false
+            button.addTarget(self, action: #selector(handleHideWaitingView), for: .touchUpInside)
+            return button
         }()
 
         let label: UILabel = {
-            let l = UILabel()
-            l.translatesAutoresizingMaskIntoConstraints = false
-            l.textColor = .gray
-            l.textAlignment = .center
-            l.font = UIFont.systemFont(ofSize: 14)
-            l.tag = 99
-            l.numberOfLines = 0
-            return l
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.textColor = .gray
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.tag = 99
+            label.numberOfLines = 0
+            return label
         }()
 
-        v.addSubview(spinner)
-        v.addSubview(label)
-        v.addSubview(okButton)
+        view.addSubview(spinner)
+        view.addSubview(label)
+        view.addSubview(okButton)
 
-        self.errorMessageVerticalConstraint = label.centerYAnchor.constraint(equalTo: v.centerYAnchor, constant: 40)
+        self.errorMessageVerticalConstraint = label.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 40)
 
         NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: v.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: v.centerYAnchor),
-            label.centerXAnchor.constraint(equalTo: v.centerXAnchor),
-            label.widthAnchor.constraint(equalTo: v.widthAnchor, multiplier: 0.8),
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
             self.errorMessageVerticalConstraint!,
-            okButton.centerXAnchor.constraint(equalTo: v.centerXAnchor),
+            okButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             okButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40)
             ])
 
-        return v
+        return view
     }()
 
     // MARK: - Initializers and Deinitializers
@@ -204,15 +204,15 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
         // Folder name
         case 0:
             let folderIcon: UIImageView = {
-                let iv = UIImageView(image: #imageLiteral(resourceName: "folder_icon"))
-                iv.contentMode = .scaleAspectFit
-                return iv
+                let imageView = UIImageView(image: #imageLiteral(resourceName: "folder_icon"))
+                imageView.contentMode = .scaleAspectFit
+                return imageView
             }()
 
             let folderName: UILabel = {
-                let l = UILabel()
-                l.text = (self.location.path as NSString).lastPathComponent
-                return l
+                let label = UILabel()
+                label.text = (self.location.path as NSString).lastPathComponent
+                return label
             }()
 
             cell.contentView.addSubview(folderIcon)
@@ -322,21 +322,21 @@ final class FolderInfoViewController: UIViewController, UITableViewDelegate, UIT
 
             navigationController?.isToolbarHidden = true
 
-            if let v = waitingView.viewWithTag(55) as? UIActivityIndicatorView,
-                let b = waitingView.viewWithTag(11) as? UIButton {
+            if let waitView = waitingView.viewWithTag(55) as? UIActivityIndicatorView,
+                let button = waitingView.viewWithTag(11) as? UIButton {
                 if type == .started {
-                    v.startAnimating()
+                    waitView.startAnimating()
                     errorMessageVerticalConstraint?.constant = 40
-                    b.isHidden = true
+                    button.isHidden = true
                 } else {
-                    v.stopAnimating()
-                    b.isHidden = false
+                    waitView.stopAnimating()
+                    button.isHidden = false
                     errorMessageVerticalConstraint?.constant = 0
                 }
             }
 
-            if let v = waitingView.viewWithTag(99) as? UILabel {
-                v.text = message
+            if let waitView = waitingView.viewWithTag(99) as? UILabel {
+                waitView.text = message
             }
         }
     }

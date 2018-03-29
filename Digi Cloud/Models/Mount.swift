@@ -65,7 +65,7 @@ extension Mount {
         self.origin = origin
         self.root = RootMount(object: jsonDictionary["root"])
         self.online = online
-        self.users = usersJSON.flatMap { User(object: $0) }
+        self.users = usersJSON.compactMap { User(object: $0) }
         self.isShared = isShared
         self.spaceTotal = jsonDictionary["spaceTotal"] as? Int
         self.spaceUsed = jsonDictionary["spaceUsed"] as? Int

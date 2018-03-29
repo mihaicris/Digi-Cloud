@@ -87,27 +87,27 @@ final class DeleteViewController: UITableViewController {
 
     private func setupViews() {
         let headerView: UIView = {
-            let v = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
-            v.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-            return v
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
+            view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+            return view
         }()
 
         let message: UILabel = {
-            let l = UILabel()
-            l.textAlignment = .center
+            let label = UILabel()
+            label.textAlignment = .center
             if isFolder {
-                l.text = NSLocalizedString("Are you sure you want to delete this folder?", comment: "")
+                label.text = NSLocalizedString("Are you sure you want to delete this folder?", comment: "")
             } else {
-                l.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "")
+                label.text = NSLocalizedString("Are you sure you want to delete this file?", comment: "")
             }
-            l.font = UIFont.systemFont(ofSize: 14)
-            return l
+            label.font = UIFont.systemFont(ofSize: 14)
+            return label
         }()
 
         let separator: UIView = {
-            let v = UIView()
-            v.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            return v
+            let view = UIView()
+            view.backgroundColor = UIColor(white: 0.8, alpha: 1)
+            return view
         }()
 
         headerView.addSubview(message)

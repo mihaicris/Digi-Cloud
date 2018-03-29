@@ -21,34 +21,34 @@ class BaseListCell: UITableViewCell {
     var hasLink: Bool = false
 
     var actionsButton: UIButton = {
-        let b = UIButton(type: UIButtonType.system)
-        b.setTitle("⋯", for: .normal)
-        b.tag = 1
-        b.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        b.contentHorizontalAlignment = .center
-        b.setTitleColor(UIColor.darkGray, for: .normal)
-        return b
+        let button = UIButton(type: UIButtonType.system)
+        button.setTitle("⋯", for: .normal)
+        button.tag = 1
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.contentHorizontalAlignment = .center
+        button.setTitleColor(UIColor.darkGray, for: .normal)
+        return button
     }()
 
     var iconImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFit
-        return iv
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        return imageView
     }()
 
     var nodeNameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.lineBreakMode = .byTruncatingMiddle
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.lineBreakMode = .byTruncatingMiddle
+        return label
     }()
 
     var detailsLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 11)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 11)
+        return label
     }()
 
     var rightPaddingButtonConstraint: NSLayoutConstraint?

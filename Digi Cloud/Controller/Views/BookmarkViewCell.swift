@@ -20,18 +20,18 @@ final class BookmarkViewCell: UITableViewCell {
     }
 
     let bookmarkNameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeueMedium(size: 14)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeueMedium(size: 14)
+        return label
     }()
 
     let pathLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 12)
-        l.textColor = .darkGray
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 12)
+        label.textColor = .darkGray
+        return label
     }()
 
     private func setupViews() {

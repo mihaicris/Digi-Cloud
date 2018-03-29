@@ -34,64 +34,64 @@ UICollectionViewDelegateFlowLayout {
     var users: [User] = []
 
     private let spinner: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView()
-        ai.hidesWhenStopped = true
-        ai.activityIndicatorViewStyle = .white
-        ai.translatesAutoresizingMaskIntoConstraints = false
-        return ai
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = .white
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
     }()
 
     var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.backgroundColor = UIColor.init(white: 0.0, alpha: 0.05)
-        return cv
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = UIColor.init(white: 0.0, alpha: 0.05)
+        return collectionView
     }()
 
     private let noAccountsLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.textColor = UIColor(red: 161/255, green: 168/255, blue: 209/255, alpha: 1.0)
-        l.text = NSLocalizedString("No accounts", comment: "")
-        l.font = UIFont.fontHelveticaNeueLight(size: 30)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor(red: 161/255, green: 168/255, blue: 209/255, alpha: 1.0)
+        label.text = NSLocalizedString("No accounts", comment: "")
+        label.font = UIFont.fontHelveticaNeueLight(size: 30)
+        return label
     }()
 
     private let addAccountButton: UIButton = {
-        let b = UIButton(type: UIButtonType.system)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Add Account", comment: ""), for: .normal)
-        b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
-        b.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
-        return b
+        let button = UIButton(type: UIButtonType.system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(NSLocalizedString("Add Account", comment: ""), for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
+        button.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
+        return button
     }()
 
     private let stackView: UIStackView = {
-        let st = UIStackView()
-        st.translatesAutoresizingMaskIntoConstraints = false
-        st.distribution = .fillEqually
-        return st
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.distribution = .fillEqually
+        return stackView
     }()
 
     private let loginToAnotherAccountButton: UIButton = {
-        let b = UIButton(type: UIButtonType.system)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Log in to Another Account", comment: ""), for: .normal)
-        b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
-        b.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
-        return b
+        let button = UIButton(type: UIButtonType.system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(NSLocalizedString("Log in to Another Account", comment: ""), for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
+        button.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
+        return button
     }()
 
     private let logoBigLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.textColor = .white
-        l.textAlignment = .center
-        l.numberOfLines = 3
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.textAlignment = .center
+        label.numberOfLines = 3
         let color = UIColor.init(red: 48/255, green: 133/255, blue: 243/255, alpha: 1.0)
         let attributedText = NSMutableAttributedString(string: "Digi Cloud",
                                                        attributes: [NSAttributedStringKey.font: UIFont(name: "PingFangSC-Semibold", size: 34) as Any])
@@ -107,18 +107,18 @@ UICollectionViewDelegateFlowLayout {
         let nsRange = nsString.range(of: "Storage")
         attributedText.addAttributes([NSAttributedStringKey.foregroundColor: color], range: nsRange)
 
-        l.attributedText = attributedText
-        return l
+        label.attributedText = attributedText
+        return label
     }()
 
     private let manageAccountsButton: UIButton = {
-        let b = UIButton(type: UIButtonType.system)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Manage Accounts", comment: ""), for: .normal)
-        b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
-        b.addTarget(self, action: #selector(handleManageAccounts), for: .touchUpInside)
-        return b
+        let button = UIButton(type: UIButtonType.system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(NSLocalizedString("Manage Accounts", comment: ""), for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
+        button.addTarget(self, action: #selector(handleManageAccounts), for: .touchUpInside)
+        return button
     }()
 
     // MARK: - Initializers and Deinitializers
@@ -481,7 +481,7 @@ UICollectionViewDelegateFlowLayout {
         let user = users[userIndexPath.item]
 
         // get indexPaths of all users except the one selected
-        let indexPaths = users.enumerated().flatMap({ (arg) -> IndexPath? in
+        let indexPaths = users.enumerated().compactMap({ (arg) -> IndexPath? in
             let (offset, element) = arg
             if element.identifier == user.identifier {
                 return nil

@@ -511,7 +511,7 @@ final class DigiClient {
                     return
             }
 
-            let bookmarks = bookmarkJSONArray.flatMap { Bookmark(object: $0) }
+            let bookmarks = bookmarkJSONArray.compactMap { Bookmark(object: $0) }
 
             completion(bookmarks, nil)
         }
@@ -652,7 +652,7 @@ final class DigiClient {
                     return
             }
 
-            let mounts = mountsList.flatMap { Mount(object: $0) }
+            let mounts = mountsList.compactMap { Mount(object: $0) }
             completion(mounts, nil)
         }
     }
@@ -1492,7 +1492,7 @@ final class DigiClient {
                     return
             }
 
-            let nodes = nodesListJSON.flatMap { Node(object: $0) }
+            let nodes = nodesListJSON.compactMap { Node(object: $0) }
             let rootNode = Node(object: rootNodeJSON)
 
             completion(nodes, rootNode, nil)
@@ -1534,7 +1534,7 @@ final class DigiClient {
                     return
             }
 
-            let nodeHits = hitsJSON.flatMap { NodeHit(object: $0) }
+            let nodeHits = hitsJSON.compactMap { NodeHit(object: $0) }
 
             var mountsDictionary: [String: Mount] = [:]
 

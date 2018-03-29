@@ -116,8 +116,8 @@ final class MoreActionsViewController: UITableViewController {
             title = NSLocalizedString("More actions", comment: "")
 
             let closeButton: UIBarButtonItem = {
-                let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
-                return b
+                let button = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
+                return button
             }()
 
             self.navigationItem.rightBarButtonItem = closeButton
@@ -125,24 +125,24 @@ final class MoreActionsViewController: UITableViewController {
         } else {
 
             let headerView: UIView = {
-                let v = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 40))
-                v.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-                return v
+                let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 40))
+                view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+                return view
             }()
 
             let titleName: UILabel = {
-                let l = UILabel()
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.textAlignment = .center
-                l.text = NSLocalizedString("More actions", comment: "")
-                l.font = UIFont.boldSystemFont(ofSize: 16)
-                return l
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.textAlignment = .center
+                label.text = NSLocalizedString("More actions", comment: "")
+                label.font = UIFont.boldSystemFont(ofSize: 16)
+                return label
             }()
 
             let separator: UIView = {
-                let v = UIView()
-                v.backgroundColor = UIColor(white: 0.8, alpha: 1)
-                return v
+                let view = UIView()
+                view.backgroundColor = UIColor(white: 0.8, alpha: 1)
+                return view
             }()
 
             headerView.addSubview(titleName)

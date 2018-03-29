@@ -12,45 +12,45 @@ final class SearchCell: UITableViewCell {
 
     // MARK: - Properties
     var nodeIcon: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFit
-        return iv
+        let imagView = UIImageView()
+        imagView.translatesAutoresizingMaskIntoConstraints = false
+        imagView.contentMode = .scaleAspectFit
+        return imagView
     }()
 
     var nodeNameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.lineBreakMode = .byTruncatingMiddle
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.lineBreakMode = .byTruncatingMiddle
+        return label
     }()
 
     let nodeMountLabel: UILabelWithPadding = {
-        let l = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
-        l.font = UIFont.fontHelveticaNeue(size: 11)
-        l.textColor = .white
-        l.layer.cornerRadius = 4
-        l.clipsToBounds = true
-        l.translatesAutoresizingMaskIntoConstraints = false
-        return l
+        let label = UILabelWithPadding(paddingTop: 1, paddingLeft: 7, paddingBottom: 2, paddingRight: 7)
+        label.font = UIFont.fontHelveticaNeue(size: 11)
+        label.textColor = .white
+        label.layer.cornerRadius = 4
+        label.clipsToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     var nodePathLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.textColor = .darkGray
-        l.font = UIFont.fontHelveticaNeue(size: 11)
-        l.lineBreakMode = .byTruncatingMiddle
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .darkGray
+        label.font = UIFont.fontHelveticaNeue(size: 11)
+        label.lineBreakMode = .byTruncatingMiddle
+        return label
     }()
 
     var seeInFolderButton: UIButton = {
-        let b = UIButton(type: UIButtonType.system)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle("\u{f115}", for: .normal)
-        b.setTitleColor(UIColor.lightGray, for: .normal)
-        b.titleLabel?.font = UIFont.fontAwesome(size: 18)
-        return b
+        let button = UIButton(type: UIButtonType.system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("\u{f115}", for: .normal)
+        button.setTitleColor(UIColor.lightGray, for: .normal)
+        button.titleLabel?.font = UIFont.fontAwesome(size: 18)
+        return button
     }()
 
     var mountBackgroundColor: UIColor?

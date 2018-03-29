@@ -119,8 +119,8 @@ final class SortFolderViewController: UITableViewController {
             title = NSLocalizedString("Sort folder", comment: "")
 
             let closeButton: UIBarButtonItem = {
-                let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
-                return b
+                let button = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCancel))
+                return button
             }()
 
             self.navigationItem.rightBarButtonItem = closeButton
@@ -134,17 +134,17 @@ final class SortFolderViewController: UITableViewController {
             }()
 
             let titleName: UILabel = {
-                let l = UILabel()
-                l.text = NSLocalizedString("Sort folder", comment: "")
-                l.font = UIFont.boldSystemFont(ofSize: 16)
-                l.translatesAutoresizingMaskIntoConstraints = false
-                return l
+                let label = UILabel()
+                label.text = NSLocalizedString("Sort folder", comment: "")
+                label.font = UIFont.boldSystemFont(ofSize: 16)
+                label.translatesAutoresizingMaskIntoConstraints = false
+                return label
             }()
 
             let separator: UIView = {
-                let v = UIView()
-                v.backgroundColor = UIColor(white: 0.8, alpha: 1)
-                return v
+                let view = UIView()
+                view.backgroundColor = UIColor(white: 0.8, alpha: 1)
+                return view
             }()
 
             headerView.addSubview(titleName)

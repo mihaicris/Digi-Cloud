@@ -25,22 +25,22 @@ final class SettingsViewController: UITableViewController {
     private var confirmButtonHorizontalConstraint: NSLayoutConstraint!
 
     private let confirmButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitleColor(.white, for: .normal)
-        b.setTitle(NSLocalizedString("Confirm", comment: ""), for: .normal)
-        b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        b.addTarget(self, action: #selector(handleConfirmButtonTouched), for: .touchUpInside)
-        b.contentEdgeInsets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
-        b.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.25, alpha: 1.0)
-        return b
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitleColor(.white, for: .normal)
+        button.setTitle(NSLocalizedString("Confirm", comment: ""), for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.addTarget(self, action: #selector(handleConfirmButtonTouched), for: .touchUpInside)
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
+        button.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.25, alpha: 1.0)
+        return button
     }()
 
     private let byteFormatter: ByteCountFormatter = {
-        let f = ByteCountFormatter()
-        f.countStyle = .binary
-        f.allowsNonnumericFormatting = false
-        return f
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .binary
+        formatter.allowsNonnumericFormatting = false
+        return formatter
     }()
 
     // MARK: - Initializers and Deinitializers
@@ -124,30 +124,30 @@ extension SettingsViewController {
             if indexPath.row == 0 {
 
                 let profileImageView: UIImageView = {
-                    let iv = UIImageView()
-                    iv.translatesAutoresizingMaskIntoConstraints = false
-                    iv.layer.cornerRadius = 10
-                    iv.layer.masksToBounds = true
-                    iv.contentMode = .scaleAspectFill
-                    iv.image = self.profileImage
-                    return iv
+                    let imageView = UIImageView()
+                    imageView.translatesAutoresizingMaskIntoConstraints = false
+                    imageView.layer.cornerRadius = 10
+                    imageView.layer.masksToBounds = true
+                    imageView.contentMode = .scaleAspectFill
+                    imageView.image = self.profileImage
+                    return imageView
                 }()
 
                 let usernameLabel: UILabel = {
-                    let l = UILabel()
-                    l.translatesAutoresizingMaskIntoConstraints = false
-                    l.text = "\(user.firstName) \(user.lastName)"
-                    l.font = UIFont.fontHelveticaNeueMedium(size: 16)
-                    return l
+                    let label = UILabel()
+                    label.translatesAutoresizingMaskIntoConstraints = false
+                    label.text = "\(user.firstName) \(user.lastName)"
+                    label.font = UIFont.fontHelveticaNeueMedium(size: 16)
+                    return label
                 }()
 
                 let userloginLabel: UILabel = {
-                    let l = UILabel()
-                    l.translatesAutoresizingMaskIntoConstraints = false
-                    l.text = self.user.email
-                    l.textColor = UIColor.gray
-                    l.font = UIFont.fontHelveticaNeue(size: 14)
-                    return l
+                    let label = UILabel()
+                    label.translatesAutoresizingMaskIntoConstraints = false
+                    label.text = self.user.email
+                    label.textColor = UIColor.gray
+                    label.font = UIFont.fontHelveticaNeue(size: 14)
+                    return label
                 }()
 
                 cell.contentView.addSubview(profileImageView)
@@ -186,11 +186,11 @@ extension SettingsViewController {
             case 0:
                 cell.textLabel?.text = NSLocalizedString("Mobile Data", comment: "")
                 let mobileDataUISwitch: UISwitch = {
-                    let s = UISwitch()
-                    s.isOn = AppSettings.allowsCellularAccess
-                    s.translatesAutoresizingMaskIntoConstraints = false
-                    s.addTarget(self, action: #selector(handleCellularDataSwitchValueChanged), for: .valueChanged)
-                    return s
+                    let uiswitch = UISwitch()
+                    uiswitch.isOn = AppSettings.allowsCellularAccess
+                    uiswitch.translatesAutoresizingMaskIntoConstraints = false
+                    uiswitch.addTarget(self, action: #selector(handleCellularDataSwitchValueChanged), for: .valueChanged)
+                    return uiswitch
                 }()
 
                 cell.contentView.addSubview(mobileDataUISwitch)
@@ -289,28 +289,28 @@ private extension SettingsViewController {
         }
 
         let tableFooterView: UIView = {
-            let v = UIView()
-            v.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 70)
+            let view = UIView()
+            view.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 70)
 
             let versionLabel: UILabel = {
-                let l = UILabel()
-                l.numberOfLines = 0
-                l.translatesAutoresizingMaskIntoConstraints = false
-                l.textAlignment = .center
-                l.text = Bundle.main.prettyVersionString
-                l.textColor = UIColor.gray
-                l.font = UIFont.fontHelveticaNeue(size: 12)
-                return l
+                let label = UILabel()
+                label.numberOfLines = 0
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.textAlignment = .center
+                label.text = Bundle.main.prettyVersionString
+                label.textColor = UIColor.gray
+                label.font = UIFont.fontHelveticaNeue(size: 12)
+                return label
             }()
 
-            v.addSubview(versionLabel)
+            view.addSubview(versionLabel)
 
             NSLayoutConstraint.activate([
-                versionLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 10),
-                versionLabel.centerXAnchor.constraint(equalTo: v.centerXAnchor)
+                versionLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
+                versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
                 ])
 
-            return v
+            return view
         }()
 
         tableView.tableFooterView = tableFooterView

@@ -27,56 +27,56 @@ class AddMountUserViewController: UITableViewController, UITextFieldDelegate {
     private let mount: Mount
 
     private lazy var saveMemberButton: UIButton = {
-        let b = UIButton(type: UIButtonType.contactAdd)
-        b.addTarget(self, action: #selector(handleSaveMember), for: .touchUpInside)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        return b
+        let button = UIButton(type: UIButtonType.contactAdd)
+        button.addTarget(self, action: #selector(handleSaveMember), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 
     private lazy var usernameTextField: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = NSLocalizedString("Email address", comment: "")
-        tf.clearButtonMode = .whileEditing
-        tf.autocapitalizationType = .none
-        tf.autocorrectionType = .no
-        tf.keyboardType = .emailAddress
-        tf.returnKeyType = .send
-        tf.delegate = self
-        tf.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
-        return tf
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.placeholder = NSLocalizedString("Email address", comment: "")
+        textField.clearButtonMode = .whileEditing
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        textField.keyboardType = .emailAddress
+        textField.returnKeyType = .send
+        textField.delegate = self
+        textField.addTarget(self, action: #selector(handleTextFieldChange), for: .editingChanged)
+        return textField
     }()
 
     let permissionWriteSwitch: UISwitch = {
-        let sw = UISwitch()
-        sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.tag = PermissionType.write.rawValue
-        sw.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
-        return sw
+        let uiSwitch = UISwitch()
+        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
+        uiSwitch.tag = PermissionType.write.rawValue
+        uiSwitch.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
+        return uiSwitch
     }()
 
     let permissionCreateLinkSwitch: UISwitch = {
-        let sw = UISwitch()
-        sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.tag = PermissionType.createLink.rawValue
-        sw.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
-        return sw
+        let uiSwitch = UISwitch()
+        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
+        uiSwitch.tag = PermissionType.createLink.rawValue
+        uiSwitch.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
+        return uiSwitch
     }()
 
     let permissionCreateReceiverSwitch: UISwitch = {
-        let sw = UISwitch()
-        sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.tag = PermissionType.createReicever.rawValue
-        sw.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
-        return sw
+        let uiSwitch = UISwitch()
+        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
+        uiSwitch.tag = PermissionType.createReicever.rawValue
+        uiSwitch.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
+        return uiSwitch
     }()
 
     let permissionManageShareSwitch: UISwitch = {
-        let sw = UISwitch()
-        sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.tag = PermissionType.mount.rawValue
-        sw.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
-        return sw
+        let uiSwitch = UISwitch()
+        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
+        uiSwitch.tag = PermissionType.mount.rawValue
+        uiSwitch.addTarget(self, action: #selector(handleUpdateUserPermissions(_:)), for: .valueChanged)
+        return uiSwitch
     }()
 
     init(mount: Mount, user: User? = nil) {

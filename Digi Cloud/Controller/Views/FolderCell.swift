@@ -27,22 +27,22 @@ final class FolderCell: BaseListCell {
     }
 
     let sharedLabel: UILabelWithPadding = {
-        let l = UILabelWithPadding(paddingTop: 2, paddingLeft: 20, paddingBottom: 2, paddingRight: 20)
-        l.text = NSLocalizedString("SHARED", comment: "")
-        l.textColor = .white
-        l.font = UIFont.boldSystemFont(ofSize: 8)
-        l.backgroundColor = UIColor.shareMount
-        l.textAlignment = .center
-        l.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
-        l.translatesAutoresizingMaskIntoConstraints = false
-        return l
+        let label = UILabelWithPadding(paddingTop: 2, paddingLeft: 20, paddingBottom: 2, paddingRight: 20)
+        label.text = NSLocalizedString("SHARED", comment: "")
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 8)
+        label.backgroundColor = UIColor.shareMount
+        label.textAlignment = .center
+        label.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     let bookmarkImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "bookmark_icon"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
 
     // MARK: - Overridden Methods and Properties

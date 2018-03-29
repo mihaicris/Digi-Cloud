@@ -33,7 +33,7 @@ extension UploadLink {
     init?(object: Any?) {
         guard
             let jsonDictionary = object as? [String: Any],
-            let id = jsonDictionary["id"] as? String,
+            let identifier = jsonDictionary["id"] as? String,
             let name = jsonDictionary["name"] as? String,
             let path = jsonDictionary["path"] as? String,
             let counter = jsonDictionary["counter"] as? Int,
@@ -44,7 +44,7 @@ extension UploadLink {
             let hasPassword = jsonDictionary["hasPassword"] as? Bool,
             let alert = jsonDictionary["alert"] as? Bool
             else { return nil }
-        self.identifier = id
+        self.identifier = identifier
         self.name = name
         self.path = path
         self.counter = counter

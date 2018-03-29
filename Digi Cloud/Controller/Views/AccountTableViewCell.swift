@@ -12,7 +12,7 @@ final class AccountTableViewCell: UITableViewCell {
 
     var user: User? {
         didSet {
-            guard let id = user?.identifier,
+            guard let identifier = user?.identifier,
                   let firstName = user?.firstName,
                   let lastName = user?.lastName,
                   let username = user?.email else {
@@ -21,7 +21,7 @@ final class AccountTableViewCell: UITableViewCell {
             self.accountNameLabel.text = "\(firstName) \(lastName)"
             self.accountUsernameLabel.text = username
             let cache = Cache()
-            if let data = cache.load(type: .profile, key: "\(id).png") {
+            if let data = cache.load(type: .profile, key: "\(identifier).png") {
                 self.profileImageView.image = UIImage(data: data, scale: UIScreen.main.scale)
             } else {
                 self.profileImageView.image = #imageLiteral(resourceName: "default_profile_image")
@@ -39,27 +39,27 @@ final class AccountTableViewCell: UITableViewCell {
     }
 
     let profileImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.layer.cornerRadius = 5
-        iv.layer.masksToBounds = true
-        iv.contentMode = .scaleAspectFill
-        return iv
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 5
+        imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        return imageView
     }()
 
     let accountNameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 16)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 16)
+        return label
     }()
 
     let accountUsernameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 12)
-        l.textColor = .darkGray
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 12)
+        label.textColor = .darkGray
+        return label
     }()
 
     private func setupViews() {

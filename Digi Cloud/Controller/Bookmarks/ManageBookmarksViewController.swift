@@ -23,34 +23,34 @@ final class ManageBookmarksViewController: UITableViewController {
     private let dispatchGroup = DispatchGroup()
 
     lazy private var deleteButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleDeleteAllButtonTouched))
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Delete All", comment: ""), style: .done, target: self, action: #selector(handleDeleteAllButtonTouched))
+        return button
     }()
 
     lazy private var cancelEditButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEditButtonTouched))
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEditButtonTouched))
+        return button
     }()
 
     lazy private var dismissButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCloseButtonTouched))
-        return b
+        let  button = UIBarButtonItem(title: NSLocalizedString("Close", comment: ""), style: .done, target: self, action: #selector(handleCloseButtonTouched))
+        return button
     }()
 
     private let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-        ai.translatesAutoresizingMaskIntoConstraints = false
-        ai.startAnimating()
-        ai.hidesWhenStopped = true
-        return ai
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
     }()
 
     private let messageLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.textColor = .lightGray
-        l.isHidden = true
-        return l
+        let lable = UILabel()
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        lable.textColor = .lightGray
+        lable.isHidden = true
+        return lable
     }()
 
     // MARK: - Initializers and Deinitializers

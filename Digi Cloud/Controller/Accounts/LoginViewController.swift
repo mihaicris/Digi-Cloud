@@ -15,66 +15,66 @@ final class LoginViewController: UIViewController {
     var onSuccess: ((User) -> Void)?
 
     private let spinner: UIActivityIndicatorView = {
-        let s = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        s.translatesAutoresizingMaskIntoConstraints = false
-        s.hidesWhenStopped = true
-        return s
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
     }()
 
     private lazy var usernameTextField: LoginField = {
-        let f = LoginField()
-        f.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "").uppercased()
+        let loginField = LoginField()
+        loginField.textFieldName = NSLocalizedString("EMAIL ADDRESS", comment: "").uppercased()
 
         #if DEBUG
             let dict = ProcessInfo.processInfo.environment
-            f.text = dict["USERNAME"] ?? ""
+            loginField.text = dict["USERNAME"] ?? ""
         #endif
 
-        f.accessibilityLabel = "Username"
-        f.delegate = self
-        return f
+        loginField.accessibilityLabel = "Username"
+        loginField.delegate = self
+        return loginField
     }()
 
     private lazy var passwordTextField: LoginField = {
-        let f = LoginField()
-        f.textFieldName = NSLocalizedString("PASSWORD", comment: "").uppercased()
+        let loginField = LoginField()
+        loginField.textFieldName = NSLocalizedString("PASSWORD", comment: "").uppercased()
 
         #if DEBUG
             let dict = ProcessInfo.processInfo.environment
-            f.text = dict["PASSWORD"] ?? ""
+            loginField.text = dict["PASSWORD"] ?? ""
         #endif
 
-        f.isSecureTextEntry = true
-        f.accessibilityLabel = "Password"
-        f.delegate = self
-        return f
+        loginField.isSecureTextEntry = true
+        loginField.accessibilityLabel = "Password"
+        loginField.delegate = self
+        return loginField
     }()
 
     private let loginButton: LoginButton = {
-        let b = LoginButton()
-        b.setTitle(NSLocalizedString("LOGIN", comment: ""), for: .normal)
-        b.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
-        return b
+        let button = LoginButton()
+        button.setTitle(NSLocalizedString("LOGIN", comment: ""), for: .normal)
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        return button
     }()
 
     private let cancelButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle("✕", for: .normal)
-        b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 24)
-        b.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
-        return b
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("✕", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.fontHelveticaNeue(size: 24)
+        button.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
+        return button
     }()
 
     private let forgotPasswordButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle(NSLocalizedString("Forgot password?", comment: ""), for: .normal)
-        b.setTitleColor(.white, for: .normal)
-        b.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
-        b.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
-        return b
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(NSLocalizedString("Forgot password?", comment: ""), for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.fontHelveticaNeue(size: 14)
+        button.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
+        return button
     }()
 
     private var usernameTextFieldCenterYAnchorConstraint: NSLayoutConstraint!
@@ -133,14 +133,14 @@ final class LoginViewController: UIViewController {
         view.backgroundColor = UIColor.iconColor
 
         let titleTextView: UITextView = {
-            let tv = UITextView()
-            tv.backgroundColor = .clear
-            tv.textColor = .white
-            tv.textAlignment = .center
-            tv.isEditable = false
-            tv.isSelectable = false
-            tv.isScrollEnabled = false
-            tv.translatesAutoresizingMaskIntoConstraints = false
+            let textView = UITextView()
+            textView.backgroundColor = .clear
+            textView.textColor = .white
+            textView.textAlignment = .center
+            textView.isEditable = false
+            textView.isSelectable = false
+            textView.isScrollEnabled = false
+            textView.translatesAutoresizingMaskIntoConstraints = false
 
             // TODO: Change fonts?
             let aText = NSMutableAttributedString(string: NSLocalizedString("Hello!", comment: ""),
@@ -158,10 +158,10 @@ final class LoginViewController: UIViewController {
             let range = NSRange(location: 0, length: aText.string.count)
             aText.addAttributes([NSAttributedStringKey.paragraphStyle: aPar], range: range)
 
-            tv.textContainerInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+            textView.textContainerInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
 
-            tv.attributedText = aText
-            return tv
+            textView.attributedText = aText
+            return textView
         }()
 
         view.addSubview(cancelButton)

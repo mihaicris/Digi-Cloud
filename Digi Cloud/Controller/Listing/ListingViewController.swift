@@ -46,82 +46,82 @@ class ListingViewController: UITableViewController {
     private let flexibleBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
     private let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "dd.MM.YYY・HH:mm"
-        return f
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.YYY・HH:mm"
+        return formatter
     }()
 
     private let byteFormatter: ByteCountFormatter = {
-        let f = ByteCountFormatter()
-        f.countStyle = .binary
-        f.allowsNonnumericFormatting = false
-        return f
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .binary
+        formatter.allowsNonnumericFormatting = false
+        return formatter
     }()
 
     private let busyIndicator: UIActivityIndicatorView = {
-        let i = UIActivityIndicatorView()
-        i.hidesWhenStopped = true
-        i.activityIndicatorViewStyle = .gray
-        i.translatesAutoresizingMaskIntoConstraints = false
-        return i
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = .gray
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
     }()
 
     private let emptyFolderLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = UIColor.lightGray
-        l.textAlignment = .center
-        return l
+        let label = UILabel()
+        label.textColor = UIColor.lightGray
+        label.textAlignment = .center
+        return label
     }()
 
     private lazy var messageStackView: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        sv.spacing = 10
-        sv.alignment = .center
-        sv.addArrangedSubview(self.busyIndicator)
-        sv.addArrangedSubview(self.emptyFolderLabel)
-        return sv
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = 10
+        stackView.alignment = .center
+        stackView.addArrangedSubview(self.busyIndicator)
+        stackView.addArrangedSubview(self.emptyFolderLabel)
+        return stackView
     }()
 
     private lazy var createFolderBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .done, target: self, action: #selector(handleShowCreateFolderViewController))
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Create Folder", comment: ""), style: .done, target: self, action: #selector(handleShowCreateFolderViewController))
+        return button
     }()
 
     private lazy var copyInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .done, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
-        b.tag = ActionType.copy.rawValue
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Copy", comment: ""), style: .done, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
+        button.tag = ActionType.copy.rawValue
+        return button
     }()
 
     private lazy var moveInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .done, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
-        b.tag = ActionType.move.rawValue
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Move", comment: ""), style: .done, target: self, action: #selector(handleExecuteActionsInEditMode(_:)))
+        button.tag = ActionType.move.rawValue
+        return button
     }()
 
     private lazy var bookmarksBarButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarksViewController(_:)))
-        b.tag = 3
-        return b
+        let button = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(handleShowBookmarksViewController(_:)))
+        button.tag = 3
+        return button
     }()
 
     private lazy var deleteInEditModeButton: UIBarButtonItem = {
-        let v = UIButton(type: UIButtonType.system)
-        v.setTitle(NSLocalizedString("Delete", comment: ""), for: .normal)
-        v.addTarget(self, action: #selector(handleExecuteActionsInEditMode(_:)), for: .touchUpInside)
-        v.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
-        v.setTitleColor(.red, for: .normal)
-        v.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        v.sizeToFit()
-        v.tag = ActionType.delete.rawValue
-        let b = UIBarButtonItem(customView: v)
-        return b
+        let buttonView = UIButton(type: UIButtonType.system)
+        buttonView.setTitle(NSLocalizedString("Delete", comment: ""), for: .normal)
+        buttonView.addTarget(self, action: #selector(handleExecuteActionsInEditMode(_:)), for: .touchUpInside)
+        buttonView.setTitleColor(UIColor(white: 0.8, alpha: 1), for: .disabled)
+        buttonView.setTitleColor(.red, for: .normal)
+        buttonView.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        buttonView.sizeToFit()
+        buttonView.tag = ActionType.delete.rawValue
+        let button = UIBarButtonItem(customView: buttonView)
+        return button
     }()
 
     private lazy var cancelInEditModeButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEditMode))
-        return b
+        let button = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(handleCancelEditMode))
+        return button
     }()
 
     // MARK: - Initializers and Deinitializers
@@ -1344,15 +1344,15 @@ private extension ListingViewController {
 
             if controller is LocationsViewController {
 
-                let c = LocationsViewController(action: action, sourceLocations: sourceLocations)
+                let locationController = LocationsViewController(action: action, sourceLocations: sourceLocations)
 
-                c.title = NSLocalizedString("Locations", comment: "")
+                locationController.title = NSLocalizedString("Locations", comment: "")
 
-                c.onFinish = { [weak self] in
+                locationController.onFinish = { [weak self] in
                     self?.updateTableState()
                 }
 
-                controllers.append(c)
+                controllers.append(locationController)
                 continue
 
             } else {
@@ -1361,13 +1361,13 @@ private extension ListingViewController {
                     continue
                 }
 
-                let c = ListingViewController(location: rootLocation, action: action, sourceLocations: sourceLocations)
-                c.title = controller.title
+                let listingViewController = ListingViewController(location: rootLocation, action: action, sourceLocations: sourceLocations)
+                listingViewController.title = controller.title
 
-                c.onFinish = { [weak self] in
+                listingViewController.onFinish = { [weak self] in
                     self?.updateTableState()
                 }
-                controllers.append(c)
+                controllers.append(listingViewController)
             }
         }
 

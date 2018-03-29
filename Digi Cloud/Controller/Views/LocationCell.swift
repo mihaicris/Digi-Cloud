@@ -38,68 +38,68 @@ final class LocationCell: UITableViewCell {
     }
 
     let leftView: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        return v
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     let locationNameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 24)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 24)
+        return label
     }()
 
     let ownerLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = NSLocalizedString("Owner", comment: "")
-        l.font = UIFont.fontHelveticaNeue(size: 14)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("Owner", comment: "")
+        label.font = UIFont.fontHelveticaNeue(size: 14)
+        return label
     }()
 
     let ownerNameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 14)
-        l.textColor = UIColor.defaultColor
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 14)
+        label.textColor = UIColor.defaultColor
+        return label
     }()
 
     let spaceUsedLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = NSLocalizedString("Usage", comment: "")
-        l.font = UIFont.fontHelveticaNeue(size: 14)
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("Usage", comment: "")
+        label.font = UIFont.fontHelveticaNeue(size: 14)
+        return label
     }()
 
     let spaceUsedValueLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeue(size: 14)
-        l.textColor = UIColor.defaultColor
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeue(size: 14)
+        label.textColor = UIColor.defaultColor
+        return label
     }()
 
     let statusLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "●"
-        l.font = UIFont.fontHelveticaNeue(size: 20)
-        l.textColor = UIColor.white
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "●"
+        label.font = UIFont.fontHelveticaNeue(size: 20)
+        label.textColor = UIColor.white
+        return label
     }()
 
     let desktopLabel: UILabelWithPadding = {
-        let l = UILabelWithPadding(paddingTop: 4, paddingLeft: 5, paddingBottom: 4, paddingRight: 5)
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.fontHelveticaNeueMedium(size: 12)
-        l.text = "DESKTOP"
-        l.layer.borderWidth = 0.6
-        l.layer.borderColor = UIColor.black.cgColor
-        l.layer.cornerRadius = 5
-        return l
+        let label = UILabelWithPadding(paddingTop: 4, paddingLeft: 5, paddingBottom: 4, paddingRight: 5)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.fontHelveticaNeueMedium(size: 12)
+        label.text = "DESKTOP"
+        label.layer.borderWidth = 0.6
+        label.layer.borderColor = UIColor.black.cgColor
+        label.layer.cornerRadius = 5
+        return label
     }()
 
     // MARK: - Initializers and Deinitializers

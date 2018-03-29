@@ -50,7 +50,7 @@ extension User {
     init?(infoJSON: Any?) {
         if infoJSON == nil { return nil }
         guard let JSON = infoJSON as? [String: Any],
-            let id = JSON["id"] as? String,
+            let identifier = JSON["id"] as? String,
             let firstName = JSON["firstName"] as? String,
             let lastName = JSON["lastName"] as? String,
             let email = JSON["email"] as? String
@@ -59,7 +59,7 @@ extension User {
                 return nil
         }
 
-        self.identifier = id
+        self.identifier = identifier
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
